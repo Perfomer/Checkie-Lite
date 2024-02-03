@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name" translatable="false">BakeMate</string>
+    <string name="app_description">Home Bakery app</string>
+
+    <string name="app_policy_text">Нажимая кнопку “%1$s”, вы соглашаетесь с условиями</string>
+    <string name="app_policy_clickable">политики конфиденциальности.</string>
+</resources>

@@ -1,0 +1,6 @@
+<resources>
+    <string name="main_main">Главная</string>
+    <string name="main_calendar">Календарь</string>
+    <string name="main_production">Производство</string>
+    <string name="main_settings">Настройки</string>
+</resources>

@@ -55,7 +55,7 @@ private fun ToolbarTitle(title: String) {
 
 @Composable
 fun CuiToolbarNavigationIcon(
-    painter: Painter = painterResource(id = R.drawable.ic_exit_cross),
+    painter: Painter = painterResource(id = R.drawable.ic_cross),
     color: Color,
     onBackPress: () -> Unit,
 ) {

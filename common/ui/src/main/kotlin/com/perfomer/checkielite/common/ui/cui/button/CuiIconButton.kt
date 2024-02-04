@@ -45,7 +45,7 @@ private fun CuiIconButtonPreview() {
 			modifier = Modifier.padding(24.dp)
 		) {
 			CuiIconButton(
-				painter = painterResource(id = R.drawable.ic_exit_cross),
+				painter = painterResource(id = R.drawable.ic_cross),
 				onClick = {},
 			)
 		}

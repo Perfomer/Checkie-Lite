@@ -3,7 +3,7 @@ package com.perfomer.checkielite
 import com.perfomer.checkielite.common.android.SingleActivityHolder
 import com.perfomer.checkielite.core.data.dataModule
 import com.perfomer.checkielite.feature.main.mainModules
-import com.perfomer.checkielite.feature.reviewcreation.reviewCreationModule
+import com.perfomer.checkielite.feature.reviewcreation.reviewCreationModules
 import com.perfomer.checkielite.feature.reviewdetails.reviewDetailsModule
 import com.perfomer.checkielite.navigation.SingleStackScreenContent
 import com.perfomer.checkielite.navigation.StartStackScreenProvider
@@ -25,4 +25,4 @@ private val coreModules
     get() = navigationModule + dataModule
 
 private val featureModules
-    get() = mainModules + reviewCreationModule + reviewDetailsModule
+    get() = mainModules + reviewCreationModules + reviewDetailsModule

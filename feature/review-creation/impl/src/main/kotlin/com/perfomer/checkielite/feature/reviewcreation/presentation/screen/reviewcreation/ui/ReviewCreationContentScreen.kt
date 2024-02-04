@@ -1,45 +1,41 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.sp
+import com.perfomer.checkielite.common.tea.compose.TeaComposable
+import com.perfomer.checkielite.common.tea.compose.acceptable
+import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
+import com.perfomer.checkielite.common.ui.util.store
+import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.productinfo.ProductInfoScreen
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationStore
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnBackPress
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnPrimaryButtonClick
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewinfo.ReviewInfoScreen
 import com.perfomer.checkielite.navigation.voyager.BaseScreen
 
+@OptIn(ExperimentalFoundationApi::class)
 internal class ReviewCreationContentScreen : BaseScreen() {
 
     @Composable
-    override fun Screen() {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(state = rememberScrollState())
+    override fun Screen() = TeaComposable(store<ReviewCreationStore>()) { state ->
+        val pagerState = rememberPagerState(pageCount = { state.stepsCount })
+
+        UpdateEffect(state.step) {
+            pagerState.animateScrollToPage(state.step - 1)
+        }
+
+        ReviewCreationScreen(
+            state = state,
+            pagerState = pagerState,
+            onPrimaryButtonClick = acceptable(OnPrimaryButtonClick),
+            onBackPress = acceptable(OnBackPress),
         ) {
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
-            Text(text = "Production", fontSize = 36.sp)
+            when (state.currentPage) {
+                ReviewCreationPage.PRODUCT_INFO -> ProductInfoScreen()
+                ReviewCreationPage.REVIEW_INFO -> ReviewInfoScreen()
+            }
         }
     }
 }

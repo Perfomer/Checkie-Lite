@@ -149,7 +149,7 @@ private fun SearchField(
                 )
             } else {
                 CuiIconButton(
-                    painter = painterResource(id = CommonDrawable.ic_exit_cross),
+                    painter = painterResource(id = CommonDrawable.ic_cross),
                     contentDescription = stringResource(R.string.main_clear),
                     onClick = onSearchQueryClearClick,
                 )

@@ -43,7 +43,7 @@ fun CuiLargeToolbar(
                 navigationIcon = {
                     IconButton(onClick = onNavigationIconCLick) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_exit_cross),
+                            painter = painterResource(id = R.drawable.ic_cross),
                             contentDescription = null,
                             tint = navigationColor,
                         )

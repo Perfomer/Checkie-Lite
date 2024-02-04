@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,10 +36,16 @@ import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
 import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
+import com.perfomer.checkielite.common.ui.util.dpToPx
+import com.perfomer.checkielite.common.ui.util.spToPx
 import com.perfomer.checkielite.core.entity.ReviewReaction
 import kotlin.math.roundToInt
 
-private const val EMOJI_SIZE = 52F
+private val EMOJI_SIZE by lazy { 22.spToPx() }
+private val TEXT_SIZE by lazy { 14.spToPx() }
+private val POINT_SIZE by lazy { 7.dpToPx() }
+private val POINT_BORDER_SIZE by lazy { 2.dpToPx() }
+
 private const val DIVISIONS_AMOUNT = 10
 
 @Composable
@@ -47,9 +55,9 @@ internal fun RatingSlider(
 ) {
     val hapticFeedback = LocalHapticFeedback.current
 
-    var offsetX by remember { mutableStateOf(0F) }
-    var width by remember { mutableStateOf(0F) }
-    var lastSelectedRating by remember { mutableStateOf(rating) }
+    var offsetX by remember { mutableFloatStateOf(0F) }
+    var width by remember { mutableFloatStateOf(0F) }
+    var lastSelectedRating by remember { mutableIntStateOf(rating) }
 
     UpdateEffect(lastSelectedRating) {
         hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -100,7 +108,7 @@ private fun RatingSlideCanvas(
 ) {
     val ratingPaint = remember {
         Paint().apply {
-            textSize = EMOJI_SIZE
+            textSize = TEXT_SIZE
             textAlign = Paint.Align.CENTER
         }
     }
@@ -169,15 +177,15 @@ private fun DrawScope.BreakPoints(offsetX: Float) {
 
         drawCircle(
             color = CuiPalette.Light.BackgroundPrimary,
-            radius = 20F,
+            radius = POINT_SIZE,
             center = Offset(x = breakPoint, y = height / 2)
         )
 
         drawCircle(
             color = pointColor,
-            radius = 20F,
+            radius = POINT_SIZE,
             center = Offset(x = breakPoint, y = height / 2),
-            style = Stroke(width = 5F)
+            style = Stroke(width = POINT_BORDER_SIZE)
         )
 
         breakPoint += onePointLength
@@ -191,12 +199,12 @@ private fun DrawScope.RatingNumbers(offsetX: Float, paint: Paint) {
     var breakPoint = 0F
     val onePointLength = width / DIVISIONS_AMOUNT
 
-    val paddingTop = 75
+    val paddingTop = 72
     val emojiPaddingTop = EMOJI_SIZE.toInt() / 2 + paddingTop
     val offsetRange = (-EMOJI_SIZE)..EMOJI_SIZE
 
     for (number in 0..DIVISIONS_AMOUNT) {
-        drawContext.canvas.nativeCanvas.apply {
+        with(drawContext.canvas.nativeCanvas) {
             val isEmojiNear = offsetX - breakPoint in offsetRange
 
             val offsetY =
@@ -207,6 +215,8 @@ private fun DrawScope.RatingNumbers(offsetX: Float, paint: Paint) {
                 color =
                     if (isEmojiNear) CuiPalette.Light.TextAccent.toArgb()
                     else CuiPalette.Light.TextSecondary.toArgb()
+
+                isFakeBoldText = isEmojiNear
             }
 
             drawText(
@@ -231,7 +241,7 @@ private fun DrawScope.SlidingEmoji(emoji: String, offsetX: Float, paint: Paint) 
     )
 
     drawCircle(
-        color = CuiPalette.Light.BackgroundAccentPrimary,
+        color = CuiPalette.Light.BackgroundAccentPrimary.copy(alpha = 0.5F),
         radius = 50F,
         center = Offset(x = offsetX, y = height / 2),
         style = Stroke(width = 8F)
@@ -241,7 +251,7 @@ private fun DrawScope.SlidingEmoji(emoji: String, offsetX: Float, paint: Paint) 
         drawText(
             emoji,
             offsetX,
-            height / 2 + 15,
+            height / 2 + 20,
             paint
         )
     }

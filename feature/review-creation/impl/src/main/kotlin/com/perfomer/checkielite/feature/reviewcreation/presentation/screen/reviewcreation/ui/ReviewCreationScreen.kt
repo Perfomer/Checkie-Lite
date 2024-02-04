@@ -44,7 +44,6 @@ internal fun ReviewCreationScreen(
     onBackPress: () -> Unit = {},
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val backDrawableResource = remember(state.step) {
         if (state.step == 1) CommonDrawable.ic_cross
         else CommonDrawable.ic_arrow_back

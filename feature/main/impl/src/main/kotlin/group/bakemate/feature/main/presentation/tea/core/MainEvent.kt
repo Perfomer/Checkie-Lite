@@ -1,14 +1,15 @@
 package group.bakemate.feature.main.presentation.tea.core
 
-internal sealed interface MainEvent
+internal sealed interface MainEvent {
+
+    data object Initialize : MainEvent
+}
 
 internal sealed interface MainUiEvent : MainEvent {
 
-    data object Initialize : MainUiEvent
+    class OnReviewClick(val id: String) : MainUiEvent
 
-    class OnReviewClick(id: String) : MainUiEvent
-
-    class OnSearchQueryInput(query: String) : MainUiEvent
+    class OnSearchQueryInput(val query: String) : MainUiEvent
 
     data object OnFabClick : MainUiEvent
 }

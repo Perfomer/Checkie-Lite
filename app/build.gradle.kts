@@ -64,16 +64,10 @@ dependencies {
     implementation("cafe.adriel.voyager:voyager-transitions:1.0.0-rc10")
 
     //  Feature
-    implementation(project(":feature:splash:api"))
-    implementation(project(":feature:splash:impl"))
-    implementation(project(":feature:welcome:impl"))
-    implementation(project(":feature:registration:impl"))
     implementation(project(":feature:main:api"))
     implementation(project(":feature:main:impl"))
     implementation(project(":feature:orders:impl"))
-    implementation(project(":feature:calendar:impl"))
     implementation(project(":feature:production:impl"))
-    implementation(project(":feature:settings:impl"))
 
     //  Common
     implementation(project(":common:ui"))

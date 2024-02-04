@@ -17,7 +17,7 @@ class App : Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(bakemateModules)
+            modules(checkieLiteModules)
         }
     }
 }

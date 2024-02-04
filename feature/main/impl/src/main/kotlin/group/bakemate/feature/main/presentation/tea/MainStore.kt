@@ -5,7 +5,7 @@ import group.bakemate.feature.main.presentation.tea.core.MainEffect
 import group.bakemate.feature.main.presentation.tea.core.MainEvent
 import group.bakemate.feature.main.presentation.tea.core.MainState
 import group.bakemate.feature.main.presentation.tea.core.MainUiEvent
-import group.bakemate.feature.main.presentation.tea.core.MainUiEvent.Initialize
+import group.bakemate.feature.main.presentation.tea.core.MainEvent.Initialize
 import group.bakemate.feature.main.presentation.ui.state.MainUiState
 import group.bakemate.feature.main.presentation.ui.state.MainUiStateMapper
 import group.bakemate.tea.tea.component.Actor
@@ -20,5 +20,5 @@ internal class MainStore(
     reducer = reducer,
     uiStateMapper = uiStateMapper,
     actors = actors,
-    initialEvents = listOf(Initialize)
+    initialEvents = listOf(Initialize),
 )

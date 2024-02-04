@@ -48,9 +48,7 @@ android {
 dependencies {
 	implementation(project(":feature:main:api"))
 	implementation(project(":feature:orders:api"))
-	implementation(project(":feature:calendar:api"))
 	implementation(project(":feature:production:api"))
-	implementation(project(":feature:settings:api"))
 
 	implementation(project(":core:entity"))
 	implementation(project(":core:storage:api"))

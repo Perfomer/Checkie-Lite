@@ -51,7 +51,7 @@ dependencies {
 	implementation(project(":feature:review-details:api"))
 
 	implementation(project(":core:entity"))
-	implementation(project(":core:storage:api"))
+	implementation(project(":core:data:api"))
 
 	implementation(project(":common:pure"))
 

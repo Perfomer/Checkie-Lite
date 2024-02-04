@@ -1,7 +1,7 @@
 package com.perfomer.checkielite
 
 import com.perfomer.checkielite.common.android.SingleActivityHolder
-import com.perfomer.checkielite.core.storage.storageModule
+import com.perfomer.checkielite.core.data.dataModule
 import com.perfomer.checkielite.feature.main.mainModule
 import com.perfomer.checkielite.feature.reviewcreation.reviewCreationModule
 import com.perfomer.checkielite.feature.reviewdetails.reviewDetailsModule
@@ -22,7 +22,7 @@ private val appModule = module {
 }
 
 private val coreModules
-    get() = navigationModule + storageModule
+    get() = navigationModule + dataModule
 
 private val featureModules
     get() = mainModule + reviewCreationModule + reviewDetailsModule

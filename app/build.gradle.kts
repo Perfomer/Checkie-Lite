@@ -76,5 +76,5 @@ dependencies {
     //  Core
     implementation(project(":core:navigation:api"))
     implementation(project(":core:navigation:voyager"))
-    implementation(project(":core:storage:impl"))
+    implementation(project(":core:data:impl"))
 }

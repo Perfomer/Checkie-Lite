@@ -40,7 +40,7 @@ android {
 }
 
 dependencies {
-	implementation(project(":core:storage:api"))
+	implementation(project(":core:data:api"))
 	implementation(project(":core:entity"))
 
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")

@@ -8,7 +8,6 @@ abstract class BaseScreen : Screen, CheckieScreen {
 
 	@Composable
 	final override fun Content() {
-
 		Screen()
 	}
 

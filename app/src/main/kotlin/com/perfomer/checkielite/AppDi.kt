@@ -4,7 +4,7 @@ import group.bakemate.common.android.SingleActivityHolder
 import group.bakemate.core.local.preferences.preferencesModule
 import group.bakemate.core.navigation.voyager.navigationModule
 import group.bakemate.core.storage.impl.storageModule
-import group.bakemate.feature.main.mainModule
+import com.perfomer.checkielite.feature.main.mainModule
 import group.bakemate.feature.orders.ordersModule
 import group.bakemate.feature.production.productionModule
 import com.perfomer.checkielite.navigation.SingleStackScreenContent

@@ -1,4 +1,4 @@
-package group.bakemate.feature.main.presentation.ui
+package com.perfomer.checkielite.feature.main.presentation.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -37,10 +37,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.perfomer.checkielite.feature.main.impl.R
+import com.perfomer.checkielite.feature.main.presentation.ui.state.MainUiState
+import com.perfomer.checkielite.feature.main.presentation.ui.state.ReviewItem
 import group.bakemate.common.ui.theme.ScreenPreview
-import group.bakemate.feature.main.impl.R
-import group.bakemate.feature.main.presentation.ui.state.ReviewItem
-import group.bakemate.feature.main.presentation.ui.state.MainUiState
 
 @Composable
 internal fun MainScreen(
@@ -258,151 +258,6 @@ internal val mockUiState = MainUiState(
             imageUri = "https://images.unsplash.com/photo-1548100535-fe8a16c187ef?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1151&q=80",
             rating = 4,
             emoji = "\uD83D\uDE10", // 😐
-        ),
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
-        ),
-        // ======================
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
-        ),
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
-        ),
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
-        ),
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
-        ),
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
-        ),
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
-        ),
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
-        ),
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
-        ),
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
-        ),
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
-        ),
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
-        ),
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
-        ),
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
-        ),
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
-        ),
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
-        ),
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
-        ),
-        ReviewItem(
-            id = "5",
-            title = "My own dog",
-            brand = null,
-            imageUri = null,
-            rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
         ),
         ReviewItem(
             id = "5",

@@ -1,10 +1,10 @@
-package group.bakemate.feature.main
+package com.perfomer.checkielite.feature.main
 
 import group.bakemate.feature.main.navigation.MainScreenProvider
-import group.bakemate.feature.main.presentation.tea.MainReducer
-import group.bakemate.feature.main.presentation.tea.MainStore
-import group.bakemate.feature.main.presentation.ui.MainContentScreen
-import group.bakemate.feature.main.presentation.ui.state.MainUiStateMapper
+import com.perfomer.checkielite.feature.main.presentation.tea.MainReducer
+import com.perfomer.checkielite.feature.main.presentation.tea.MainStore
+import com.perfomer.checkielite.feature.main.presentation.ui.MainContentScreen
+import com.perfomer.checkielite.feature.main.presentation.ui.state.MainUiStateMapper
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 

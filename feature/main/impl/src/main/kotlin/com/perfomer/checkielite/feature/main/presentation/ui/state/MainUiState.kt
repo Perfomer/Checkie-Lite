@@ -1,4 +1,4 @@
-package group.bakemate.feature.main.presentation.ui.state
+package com.perfomer.checkielite.feature.main.presentation.ui.state
 
 import androidx.compose.runtime.Immutable
 

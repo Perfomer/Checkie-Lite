@@ -16,6 +16,23 @@ internal class ReviewCreationUiStateMapper : UiStateMapper<ReviewCreationState, 
             stepsCount = stepsCount,
             currentPage = state.currentPage,
             primaryButtonText = if (currentStep == stepsCount) "Save" else "Next", // todo resources
+            productInfoState = createProductInfoPageState(state),
+            reviewInfoState = createReviewInfoPageState(state),
+        )
+    }
+
+    private fun createProductInfoPageState(state: ReviewCreationState): ProductInfoPageUiState {
+        return ProductInfoPageUiState(
+            productName = state.productName,
+            brand = state.brand,
+            picturesUri = state.picturesUri,
+        )
+    }
+
+    private fun createReviewInfoPageState(state: ReviewCreationState): ReviewInfoPageUiState {
+        return ReviewInfoPageUiState(
+            rating = state.rating,
+            reviewText = state.reviewText,
         )
     }
 }

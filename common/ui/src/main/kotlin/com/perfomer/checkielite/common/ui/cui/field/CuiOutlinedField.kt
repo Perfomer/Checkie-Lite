@@ -48,7 +48,7 @@ fun CuiOutlinedField(
                 )
             }
         },
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedBorderColor = CuiColorToken.Grey,
             errorBorderColor = CuiColorToken.Red,

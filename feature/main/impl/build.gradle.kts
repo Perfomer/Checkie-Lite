@@ -76,7 +76,6 @@ dependencies {
 	debugImplementation("androidx.compose.ui:ui-tooling")
 	debugImplementation("androidx.compose.ui:ui-test-manifest")
 	implementation("androidx.activity:activity-compose:1.8.1")
-	implementation("io.coil-kt:coil-compose:2.5.0")
 
 	//	Di
 	implementation("io.insert-koin:koin-android:3.5.0")

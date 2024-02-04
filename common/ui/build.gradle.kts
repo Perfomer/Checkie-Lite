@@ -58,6 +58,7 @@ dependencies {
 	debugImplementation("androidx.compose.ui:ui-tooling")
 	debugImplementation("androidx.compose.ui:ui-test-manifest")
 	implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
+	api("io.coil-kt:coil-compose:2.5.0")
 
 //	Navigation
 	implementation("cafe.adriel.voyager:voyager-navigator:1.0.0-rc10")

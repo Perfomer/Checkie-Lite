@@ -10,8 +10,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.Exit
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent
-import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnBackPress
-import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnPrimaryButtonClick
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.*
 import com.perfomer.checkielite.feature.reviewcreation.presentation.util.next
 import com.perfomer.checkielite.feature.reviewcreation.presentation.util.previous
 
@@ -25,6 +24,8 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     }
 
     private fun reduceUi(event: ReviewCreationUiEvent) = when (event) {
+        is ProductInfo -> reduceProductInfoUi(event)
+        is ReviewInfo -> reduceReviewInfoUi(event)
         is OnPrimaryButtonClick -> {
             val next = state.currentPage.next()
 
@@ -34,6 +35,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 // todo commands(CreateReview())
             }
         }
+
         is OnBackPress -> {
             val previous = state.currentPage.previous()
 
@@ -43,6 +45,18 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 commands(Exit)
             }
         }
+    }
+
+    private fun reduceProductInfoUi(event: ProductInfo) = when (event) {
+        is ProductInfo.OnAddPictureClick -> Unit // todo
+        is ProductInfo.OnBrandTextInput -> state { copy(brand = event.text) }
+        is ProductInfo.OnPictureDeleteClick -> state { copy(picturesUri = picturesUri.remove(event.pictureUri)) }
+        is ProductInfo.OnProductNameTextInput -> state { copy(productName = event.text) }
+    }
+
+    private fun reduceReviewInfoUi(event: ReviewInfo) = when (event) {
+        is ReviewInfo.OnRatingSelect -> state { copy(rating = event.rating) }
+        is ReviewInfo.OnReviewTextInput -> state { copy(reviewText = event.text) }
     }
 
     private fun reduceReviewsCreation(event: ReviewCreation) = when (event) {

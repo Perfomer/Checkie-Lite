@@ -1,0 +1,11 @@
+<resources>
+    <string name="reviewcreation_next">Next</string>
+    <string name="reviewcreation_save">Save</string>
+
+    <string name="reviewcreation_productinfo_title">Product</string>
+    <string name="reviewcreation_productinfo_field_product">Product (required)</string>
+    <string name="reviewcreation_productinfo_field_brand">Brand</string>
+
+    <string name="reviewcreation_reviewinfo_title">Review</string>
+    <string name="reviewcreation_reviewinfo_field_review">Share your opinion</string>
+</resources>

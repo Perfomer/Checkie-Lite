@@ -1,24 +1,22 @@
 package com.perfomer.checkielite.common.ui.theme
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.tween
-import androidx.compose.material.ripple.RippleTheme
+import android.app.Activity
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.view.WindowCompat
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.valentinilk.shimmer.defaultShimmerTheme
 
 @Composable
 fun CheckieLiteTheme(
     content: @Composable () -> Unit,
 ) {
+    TransparentSystemBars()
+
     MaterialTheme(
         colorScheme = LightAndroidColorScheme,
         content = { CompositionLocalContent(content) },
@@ -47,8 +45,12 @@ private fun CompositionLocalContent(content: @Composable () -> Unit) {
 
 @Composable
 fun TransparentSystemBars() {
+    val activity = LocalContext.current as Activity
     val systemUiController = rememberSystemUiController()
+
     SideEffect {
+        WindowCompat.setDecorFitsSystemWindows(activity.window, false)
+
         systemUiController.setNavigationBarColor(
             color = Color.White.copy(alpha = 0.01F),
             darkIcons = true,

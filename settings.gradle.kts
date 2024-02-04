@@ -20,7 +20,8 @@ include(":app")
 include(
     ":common:android",
     ":common:pure",
-    ":common:tea",
+    ":common:tea:core",
+    ":common:tea:compose",
     ":common:ui",
 )
 

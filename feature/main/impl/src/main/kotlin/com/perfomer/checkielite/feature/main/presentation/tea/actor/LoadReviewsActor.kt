@@ -6,7 +6,7 @@ import com.perfomer.checkielite.feature.main.presentation.tea.core.MainCommand
 import com.perfomer.checkielite.feature.main.presentation.tea.core.MainCommand.LoadReviews
 import com.perfomer.checkielite.feature.main.presentation.tea.core.MainEvent
 import com.perfomer.checkielite.feature.main.presentation.tea.core.MainEvent.ReviewsLoading
-import com.perfomer.checkielite.tea.tea.component.Actor
+import com.perfomer.checkielite.common.tea.component.Actor
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance

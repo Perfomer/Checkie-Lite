@@ -8,7 +8,7 @@ import com.perfomer.checkielite.feature.main.presentation.tea.core.MainNavigatio
 import com.perfomer.checkielite.feature.main.presentation.tea.core.MainNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationScreenProvider
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsScreenProvider
-import com.perfomer.checkielite.tea.tea.component.Actor
+import com.perfomer.checkielite.common.tea.component.Actor
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance

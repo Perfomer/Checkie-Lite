@@ -5,13 +5,12 @@ import com.perfomer.checkielite.feature.main.presentation.tea.core.MainCommand.L
 import com.perfomer.checkielite.feature.main.presentation.tea.core.MainEffect
 import com.perfomer.checkielite.feature.main.presentation.tea.core.MainEvent
 import com.perfomer.checkielite.feature.main.presentation.tea.core.MainEvent.*
-import com.perfomer.checkielite.feature.main.presentation.tea.core.MainNavigationCommand
 import com.perfomer.checkielite.feature.main.presentation.tea.core.MainNavigationCommand.OpenReviewCreation
 import com.perfomer.checkielite.feature.main.presentation.tea.core.MainNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.main.presentation.tea.core.MainState
 import com.perfomer.checkielite.feature.main.presentation.tea.core.MainUiEvent
 import com.perfomer.checkielite.feature.main.presentation.tea.core.MainUiEvent.*
-import com.perfomer.checkielite.tea.tea.dsl.DslReducer
+import com.perfomer.checkielite.common.tea.dsl.DslReducer
 
 internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, MainState>() {
 

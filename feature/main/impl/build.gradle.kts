@@ -56,7 +56,7 @@ dependencies {
 	implementation(project(":common:pure"))
 
 	//	Tea
-	implementation(project(":common:tea"))
+	implementation(project(":common:tea:compose"))
 
 	//	Ui
 	implementation(project(":common:ui"))

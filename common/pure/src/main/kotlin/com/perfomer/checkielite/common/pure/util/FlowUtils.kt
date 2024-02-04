@@ -1,10 +1,11 @@
 package com.perfomer.checkielite.common.pure.util
 
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 
-@OptIn(FlowPreview::class)
-fun <T> flow(block: suspend () -> T): Flow<T> = block.asFlow()
+fun <T> flowBy(block: suspend () -> T): Flow<T> = block.asFlow()
 
 fun <T> Flow<T>.startWith(value: T): Flow<T> = onStart { emit(value) }
 

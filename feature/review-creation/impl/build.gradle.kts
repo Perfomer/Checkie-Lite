@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-	namespace = "com.perfomer.checkielite.feature.main.impl"
+	namespace = "com.perfomer.checkielite.feature.reviewcreation.impl"
 	compileSdk = 34
 
 	defaultConfig {
@@ -46,28 +46,22 @@ android {
 }
 
 dependencies {
-	implementation(project(":feature:main:api"))
 	implementation(project(":feature:review-creation:api"))
-	implementation(project(":feature:review-details:api"))
-
 	implementation(project(":core:entity"))
-	implementation(project(":core:storage:api"))
 
-	implementation(project(":common:pure"))
-
-	//	Tea
+//	Tea
 	implementation(project(":common:tea"))
 
-	//	Ui
+//	Ui
 	implementation(project(":common:ui"))
 	implementation(project(":common:pure"))
 
-	//	Navigation
+//	Navigation
 	implementation(project(":core:navigation:api"))
 	implementation(project(":core:navigation:voyager"))
 	implementation("cafe.adriel.voyager:voyager-navigator:1.0.0-rc10")
 
-	//	Compose
+//	Compose
 	implementation(platform("androidx.compose:compose-bom:2023.03.00"))
 	implementation("androidx.compose.ui:ui")
 	implementation("androidx.compose.ui:ui-graphics")
@@ -76,9 +70,8 @@ dependencies {
 	debugImplementation("androidx.compose.ui:ui-tooling")
 	debugImplementation("androidx.compose.ui:ui-test-manifest")
 	implementation("androidx.activity:activity-compose:1.8.1")
-	implementation("io.coil-kt:coil-compose:2.5.0")
 
-	//	Di
+//	Di
 	implementation("io.insert-koin:koin-android:3.5.0")
 	implementation("io.insert-koin:koin-core:3.5.0")
     debugImplementation("androidx.compose.ui:ui-tooling:1.5.4")

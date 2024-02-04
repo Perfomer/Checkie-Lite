@@ -1,13 +1,13 @@
 package com.perfomer.checkielite
 
 import com.perfomer.checkielite.common.android.SingleActivityHolder
-import com.perfomer.checkielite.navigation.voyager.navigationModule
 import com.perfomer.checkielite.core.storage.storageModule
 import com.perfomer.checkielite.feature.main.mainModule
-import com.perfomer.checkielite.feature.orders.ordersModule
-import com.perfomer.checkielite.feature.production.productionModule
+import com.perfomer.checkielite.feature.reviewcreation.reviewCreationModule
+import com.perfomer.checkielite.feature.reviewdetails.reviewDetailsModule
 import com.perfomer.checkielite.navigation.SingleStackScreenContent
 import com.perfomer.checkielite.navigation.StartStackScreenProvider
+import com.perfomer.checkielite.navigation.voyager.navigationModule
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -25,4 +25,4 @@ private val coreModules
     get() = navigationModule + storageModule
 
 private val featureModules
-    get() = mainModule + ordersModule + productionModule
+    get() = mainModule + reviewCreationModule + reviewDetailsModule

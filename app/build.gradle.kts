@@ -66,8 +66,8 @@ dependencies {
     //  Feature
     implementation(project(":feature:main:api"))
     implementation(project(":feature:main:impl"))
-    implementation(project(":feature:orders:impl"))
-    implementation(project(":feature:production:impl"))
+    implementation(project(":feature:review-creation:impl"))
+    implementation(project(":feature:review-details:impl"))
 
     //  Common
     implementation(project(":common:ui"))

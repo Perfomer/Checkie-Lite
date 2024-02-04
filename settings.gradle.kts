@@ -28,10 +28,10 @@ include(
 include(
     ":feature:main:api",
     ":feature:main:impl",
-    ":feature:orders:api",
-    ":feature:orders:impl",
-    ":feature:production:api",
-    ":feature:production:impl",
+    ":feature:review-creation:api",
+    ":feature:review-creation:impl",
+    ":feature:review-details:api",
+    ":feature:review-details:impl",
 )
 
 //Core

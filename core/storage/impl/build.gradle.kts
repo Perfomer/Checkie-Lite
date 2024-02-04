@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-	namespace = "group.bakemate.core.storage.impl"
+	namespace = "com.perfomer.checkielite.core.storage"
 	compileSdk = 34
 
 	defaultConfig {
@@ -41,13 +41,8 @@ android {
 
 dependencies {
 	implementation(project(":core:storage:api"))
-	implementation(project(":core:local:api"))
 	implementation(project(":core:entity"))
 
-//  Coroutines
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-
-//	Di
-	implementation("io.insert-koin:koin-android:3.5.0")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 	implementation("io.insert-koin:koin-core:3.5.0")
 }

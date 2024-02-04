@@ -8,8 +8,8 @@ import com.perfomer.checkielite.feature.main.presentation.tea.core.MainUiEvent
 import com.perfomer.checkielite.feature.main.presentation.tea.core.MainEvent.Initialize
 import com.perfomer.checkielite.feature.main.presentation.ui.state.MainUiState
 import com.perfomer.checkielite.feature.main.presentation.ui.state.MainUiStateMapper
-import group.bakemate.tea.tea.component.Actor
-import group.bakemate.tea.tea.impl.ScreenModelStore
+import com.perfomer.checkielite.tea.tea.component.Actor
+import com.perfomer.checkielite.tea.tea.impl.ScreenModelStore
 
 internal class MainStore(
     reducer: MainReducer,

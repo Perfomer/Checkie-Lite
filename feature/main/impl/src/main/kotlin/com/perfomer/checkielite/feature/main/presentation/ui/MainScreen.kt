@@ -40,7 +40,7 @@ import coil.compose.AsyncImage
 import com.perfomer.checkielite.feature.main.impl.R
 import com.perfomer.checkielite.feature.main.presentation.ui.state.MainUiState
 import com.perfomer.checkielite.feature.main.presentation.ui.state.ReviewItem
-import group.bakemate.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 
 @Composable
 internal fun MainScreen(

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-	namespace = "group.bakemate.core.navigation.voyager"
+	namespace = "com.perfomer.checkielite.navigation.voyager"
 	compileSdk = 34
 
 	defaultConfig {
@@ -46,7 +46,7 @@ android {
 }
 
 dependencies {
-	implementation(project(":core:navigation:api"))
+	api(project(":core:navigation:api"))
 	implementation(project(":common:android"))
 
 //	Compose

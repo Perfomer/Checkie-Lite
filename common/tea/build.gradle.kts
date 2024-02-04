@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-	namespace = "group.bakemate.common.tea"
+	namespace = "com.perfomer.checkielite.common.tea"
 	compileSdk = 34
 
 	defaultConfig {

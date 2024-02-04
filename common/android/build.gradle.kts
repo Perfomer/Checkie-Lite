@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-	namespace = "group.bakemate.common.android"
+	namespace = "com.perfomer.checkielite.common.android"
 	compileSdk = 34
 
 	defaultConfig {

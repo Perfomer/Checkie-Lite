@@ -39,8 +39,6 @@ include(
     ":core:entity",
     ":core:navigation:api",
     ":core:navigation:voyager",
-    ":core:local:api",
-    ":core:local:preferences",
     ":core:storage:api",
     ":core:storage:impl",
 )

@@ -1,4 +1,4 @@
-package group.bakemate.feature.main.navigation
+package com.perfomer.checkielite.feature.main.navigation
 
 import com.perfomer.checkielite.core.navigation.api.CheckieScreen
 

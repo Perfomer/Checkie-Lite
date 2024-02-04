@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-	namespace = "group.bakemate.feature.orders.impl"
+	namespace = "com.perfomer.checkielite.feature.orders.impl"
 	compileSdk = 34
 
 	defaultConfig {

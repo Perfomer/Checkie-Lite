@@ -1,6 +1,6 @@
 package com.perfomer.checkielite.feature.main
 
-import group.bakemate.feature.main.navigation.MainScreenProvider
+import com.perfomer.checkielite.feature.main.navigation.MainScreenProvider
 import com.perfomer.checkielite.feature.main.presentation.tea.MainReducer
 import com.perfomer.checkielite.feature.main.presentation.tea.MainStore
 import com.perfomer.checkielite.feature.main.presentation.ui.MainContentScreen

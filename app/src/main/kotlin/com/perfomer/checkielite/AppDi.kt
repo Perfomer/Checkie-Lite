@@ -1,12 +1,11 @@
 package com.perfomer.checkielite
 
-import group.bakemate.common.android.SingleActivityHolder
-import group.bakemate.core.local.preferences.preferencesModule
-import group.bakemate.core.navigation.voyager.navigationModule
-import group.bakemate.core.storage.impl.storageModule
+import com.perfomer.checkielite.common.android.SingleActivityHolder
+import com.perfomer.checkielite.navigation.voyager.navigationModule
+import com.perfomer.checkielite.core.storage.storageModule
 import com.perfomer.checkielite.feature.main.mainModule
-import group.bakemate.feature.orders.ordersModule
-import group.bakemate.feature.production.productionModule
+import com.perfomer.checkielite.feature.orders.ordersModule
+import com.perfomer.checkielite.feature.production.productionModule
 import com.perfomer.checkielite.navigation.SingleStackScreenContent
 import com.perfomer.checkielite.navigation.StartStackScreenProvider
 import org.koin.core.module.Module
@@ -23,7 +22,7 @@ private val appModule = module {
 }
 
 private val coreModules
-    get() = navigationModule + storageModule + preferencesModule
+    get() = navigationModule + storageModule
 
 private val featureModules
     get() = mainModule + ordersModule + productionModule

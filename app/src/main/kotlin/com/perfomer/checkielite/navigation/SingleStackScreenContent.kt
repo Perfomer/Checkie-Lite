@@ -4,12 +4,12 @@ import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.FadeTransition
-import group.bakemate.core.navigation.voyager.impl.NavigatorHolder
-import group.bakemate.feature.main.navigation.MainScreenProvider
+import com.perfomer.checkielite.navigation.voyager.impl.NavigatorHolder
+import com.perfomer.checkielite.feature.main.navigation.MainScreenProvider
 
 class SingleStackScreenContent(
-    private val navigatorHolder: NavigatorHolder,
-    private val mainScreenProvider: MainScreenProvider,
+	private val navigatorHolder: NavigatorHolder,
+	private val mainScreenProvider: MainScreenProvider,
 ) {
 
 	@Composable

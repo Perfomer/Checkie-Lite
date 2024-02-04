@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import group.bakemate.common.android.SingleActivityHolder
-import group.bakemate.common.ui.theme.BakemateTheme
-import group.bakemate.common.ui.theme.TransparentSystemBars
+import com.perfomer.checkielite.common.android.SingleActivityHolder
+import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
+import com.perfomer.checkielite.common.ui.theme.TransparentSystemBars
 import com.perfomer.checkielite.navigation.StartStackScreenProvider
 import org.koin.android.ext.android.inject
 
@@ -25,7 +25,7 @@ class AppActivity : AppCompatActivity() {
         setContent {
             TransparentSystemBars()
 
-            BakemateTheme {
+            CheckieLiteTheme {
                 startStackScreenProvider.Content()
             }
         }

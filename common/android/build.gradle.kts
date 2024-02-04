@@ -41,4 +41,5 @@ android {
 
 dependencies {
 	implementation("androidx.appcompat:appcompat:1.6.1")
+	api("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
 }

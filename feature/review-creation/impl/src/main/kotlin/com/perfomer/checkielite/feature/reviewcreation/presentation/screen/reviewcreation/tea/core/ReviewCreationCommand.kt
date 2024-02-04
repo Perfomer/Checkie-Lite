@@ -10,4 +10,6 @@ internal sealed interface ReviewCreationCommand {
 internal sealed interface ReviewCreationNavigationCommand : ReviewCreationCommand {
 
     data object Exit : ReviewCreationNavigationCommand
+
+    data object OpenPhotoPicker : ReviewCreationNavigationCommand
 }

@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation
 
+import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.core.navigation.api.Router
 import com.perfomer.checkielite.feature.reviewcreation.data.repository.ReviewCreationRepositoryImpl
 import com.perfomer.checkielite.feature.reviewcreation.domain.repository.ReviewCreationRepository
@@ -30,12 +31,13 @@ private val presentationModule  = module {
 internal fun createReviewCreationStore(
     reviewCreationRepository: ReviewCreationRepository,
     router: Router,
+    externalRouter: ExternalRouter,
 ) : ReviewCreationStore{
     return ReviewCreationStore(
         reducer = ReviewCreationReducer(),
         uiStateMapper = ReviewCreationUiStateMapper(),
         actors = setOf(
-            ReviewCreationNavigationActor(router),
+            ReviewCreationNavigationActor(router, externalRouter),
             CreateReviewActor(reviewCreationRepository),
         )
     )

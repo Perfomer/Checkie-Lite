@@ -34,3 +34,8 @@ internal sealed interface ReviewCreationUiEvent : ReviewCreationEvent {
         class OnReviewTextInput(val text: String) : ReviewInfo
     }
 }
+
+internal sealed interface ReviewCreationNavigationEvent : ReviewCreationEvent {
+
+    data class OnPhotoPick(val uri: String) : ReviewCreationNavigationEvent
+}

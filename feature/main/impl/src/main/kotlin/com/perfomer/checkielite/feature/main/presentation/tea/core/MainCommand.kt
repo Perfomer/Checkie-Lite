@@ -1,3 +1,13 @@
 package com.perfomer.checkielite.feature.main.presentation.tea.core
 
-internal sealed interface MainCommand
+internal sealed interface MainCommand {
+
+    class LoadReviews(val searchQuery: String = "") : MainCommand
+}
+
+internal sealed interface MainNavigationCommand : MainCommand {
+
+    class OpenReviewDetails(val reviewId: String) : MainNavigationCommand
+
+    data object OpenReviewCreation : MainNavigationCommand
+}

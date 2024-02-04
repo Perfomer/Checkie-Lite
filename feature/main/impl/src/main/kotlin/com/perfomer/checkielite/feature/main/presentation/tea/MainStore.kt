@@ -14,7 +14,7 @@ import com.perfomer.checkielite.tea.tea.impl.ScreenModelStore
 internal class MainStore(
     reducer: MainReducer,
     uiStateMapper: MainUiStateMapper,
-    actors: Set<Actor<MainCommand, MainEvent>>
+    actors: Set<Actor<MainCommand, MainEvent>>,
 ) : ScreenModelStore<MainCommand, MainEffect, MainEvent, MainUiEvent, MainState, MainUiState>(
     initialState = MainState(),
     reducer = reducer,

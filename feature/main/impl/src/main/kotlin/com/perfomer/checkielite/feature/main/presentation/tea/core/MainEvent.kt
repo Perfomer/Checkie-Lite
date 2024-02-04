@@ -1,8 +1,15 @@
 package com.perfomer.checkielite.feature.main.presentation.tea.core
 
+import com.perfomer.checkielite.core.entity.CheckieReview
+
 internal sealed interface MainEvent {
 
     data object Initialize : MainEvent
+
+    sealed interface ReviewsLoading : MainEvent {
+
+        class Succeed(val reviews: List<CheckieReview>) : ReviewsLoading
+    }
 }
 
 internal sealed interface MainUiEvent : MainEvent {

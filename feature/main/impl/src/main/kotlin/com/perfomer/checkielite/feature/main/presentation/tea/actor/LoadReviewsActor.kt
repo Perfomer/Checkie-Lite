@@ -1,0 +1,30 @@
+package com.perfomer.checkielite.feature.main.presentation.tea.actor
+
+import com.perfomer.checkielite.common.pure.util.flowBy
+import com.perfomer.checkielite.feature.main.domain.repository.ReviewsRepository
+import com.perfomer.checkielite.feature.main.presentation.tea.core.MainCommand
+import com.perfomer.checkielite.feature.main.presentation.tea.core.MainCommand.LoadReviews
+import com.perfomer.checkielite.feature.main.presentation.tea.core.MainEvent
+import com.perfomer.checkielite.feature.main.presentation.tea.core.MainEvent.ReviewsLoading
+import com.perfomer.checkielite.tea.tea.component.Actor
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+
+@OptIn(ExperimentalCoroutinesApi::class)
+internal class LoadReviewsActor(
+    private val repository: ReviewsRepository,
+) : Actor<MainCommand, MainEvent> {
+
+    override fun act(commands: Flow<MainCommand>): Flow<MainEvent> {
+        return commands.filterIsInstance<LoadReviews>()
+            .flatMapLatest(::handleCommand)
+    }
+
+    private fun handleCommand(command: LoadReviews): Flow<ReviewsLoading> {
+        return flowBy { repository.getCheckies(command.searchQuery) }
+            .map(ReviewsLoading::Succeed)
+    }
+}

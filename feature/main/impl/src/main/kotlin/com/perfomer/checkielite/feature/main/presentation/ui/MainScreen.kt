@@ -97,7 +97,7 @@ internal fun MainScreen(
         ) {
             item {
                 Spacer(modifier = Modifier.height(12.dp))
-                SearchField(onSearchQueryInput)
+                SearchField(state.searchQuery, onSearchQueryInput)
                 Spacer(modifier = Modifier.height(16.dp))
             }
 
@@ -109,9 +109,12 @@ internal fun MainScreen(
 }
 
 @Composable
-private fun SearchField(onSearchQueryInput: (query: String) -> Unit) {
+private fun SearchField(
+    searchQuery: String,
+    onSearchQueryInput: (query: String) -> Unit,
+) {
     OutlinedTextField(
-        value = "",
+        value = searchQuery,
         onValueChange = onSearchQueryInput,
         trailingIcon = {
             Icon(
@@ -125,6 +128,7 @@ private fun SearchField(onSearchQueryInput: (query: String) -> Unit) {
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         placeholder = { Text("Search") },
+        singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)

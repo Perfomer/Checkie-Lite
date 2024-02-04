@@ -27,7 +27,10 @@ internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, Main
     private fun reduceUi(event: MainUiEvent) = when (event) {
         is OnFabClick -> commands(OpenReviewCreation)
         is OnReviewClick -> commands(OpenReviewDetails(event.id))
-        is OnSearchQueryInput -> Unit
+        is OnSearchQueryInput -> {
+            state { copy(searchQuery = event.query) }
+            commands(LoadReviews(event.query))
+        }
     }
 
     private fun reduceReviewsLoading(event: ReviewsLoading) = when (event) {

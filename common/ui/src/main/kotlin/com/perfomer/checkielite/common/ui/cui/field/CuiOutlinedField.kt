@@ -19,10 +19,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.R
-import com.perfomer.checkielite.common.ui.theme.Grey
+import com.perfomer.checkielite.common.ui.theme.CuiColorToken
 import com.perfomer.checkielite.common.ui.theme.PreviewTheme
-import com.perfomer.checkielite.common.ui.theme.Red
-import com.perfomer.checkielite.common.ui.theme.RedLight
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
 @Composable
@@ -52,9 +50,9 @@ fun CuiOutlinedField(
         },
         shape = RoundedCornerShape(12.dp),
         colors = OutlinedTextFieldDefaults.colors(
-            unfocusedBorderColor = Grey,
-            errorBorderColor = RedLight,
-            focusedLabelColor = RedLight,
+            unfocusedBorderColor = CuiColorToken.Grey,
+            errorBorderColor = CuiColorToken.Red,
+            focusedLabelColor = CuiColorToken.Red,
         ),
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
@@ -66,7 +64,7 @@ fun CuiOutlinedField(
                 Text(
                     text = errorText,
                     fontSize = 12.sp,
-                    color = Red,
+                    color = CuiColorToken.Red,
                 )
             }
         },

@@ -15,8 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.R
 import com.perfomer.checkielite.common.ui.cui.button.CuiIconButton
-import com.perfomer.checkielite.common.ui.theme.Black
-import com.perfomer.checkielite.common.ui.theme.Orange
+import com.perfomer.checkielite.common.ui.theme.CuiColorToken
 import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
@@ -25,7 +24,7 @@ import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 @Composable
 fun CuiToolbar(
     modifier: Modifier = Modifier,
-    navigationColor: Color = Orange,
+    navigationColor: Color = CuiColorToken.Orange,
     title: String = "",
     onBackPress: () -> Unit,
 ) {
@@ -50,7 +49,7 @@ private fun ToolbarTitle(title: String) {
         text = title,
         fontSize = 24.sp,
         fontWeight = FontWeight.Bold,
-        color = Black,
+        color = CuiColorToken.Black,
     )
 }
 

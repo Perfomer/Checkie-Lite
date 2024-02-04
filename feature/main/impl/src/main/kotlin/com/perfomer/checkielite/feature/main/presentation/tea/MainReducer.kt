@@ -30,6 +30,10 @@ internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, Main
             state { copy(searchQuery = event.query) }
             commands(LoadReviews(event.query))
         }
+        is OnSearchQueryClearClick -> {
+            state { copy(searchQuery = "") }
+            commands(LoadReviews())
+        }
     }
 
     private fun reduceReviewsLoading(event: ReviewsLoading) = when (event) {

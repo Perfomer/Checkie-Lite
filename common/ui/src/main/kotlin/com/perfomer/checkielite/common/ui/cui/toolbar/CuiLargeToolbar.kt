@@ -16,10 +16,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import com.perfomer.checkielite.common.ui.R
 import com.perfomer.checkielite.common.ui.cui.text.CuiTitleText
-import com.perfomer.checkielite.common.ui.theme.Black
-import com.perfomer.checkielite.common.ui.theme.Orange
+import com.perfomer.checkielite.common.ui.theme.CuiColorToken
 import com.perfomer.checkielite.common.ui.theme.PreviewTheme
-import com.perfomer.checkielite.common.ui.theme.White
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,8 +36,8 @@ fun CuiLargeToolbar(
         topBar = {
             LargeTopAppBar(
                 colors = TopAppBarDefaults.largeTopAppBarColors(
-                    containerColor = White,
-                    titleContentColor = Black,
+                    containerColor = CuiColorToken.White,
+                    titleContentColor = CuiColorToken.Black,
                 ),
                 title = { title() },
                 navigationIcon = {
@@ -67,7 +65,7 @@ private fun CuiLargeToolbarPreview() {
     PreviewTheme {
         CuiLargeToolbar(
             title = { CuiTitleText(text = "Регистрация")},
-            navigationColor = Orange,
+            navigationColor = CuiColorToken.Orange,
             onNavigationIconCLick = {},
             actions = {}
         ) {}

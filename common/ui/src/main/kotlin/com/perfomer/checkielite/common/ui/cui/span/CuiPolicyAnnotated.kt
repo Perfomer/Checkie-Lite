@@ -7,7 +7,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextDecoration
 import com.perfomer.checkielite.common.ui.R
-import com.perfomer.checkielite.common.ui.theme.OrangeDark
+import com.perfomer.checkielite.common.ui.theme.CuiColorToken
 
 @Composable
 fun cuiPolicyAnnotated(@StringRes text: Int): AnnotatedString {
@@ -20,6 +20,6 @@ fun cuiPolicyAnnotated(@StringRes text: Int): AnnotatedString {
             AnnotatedString(text = " ") +
             AnnotatedString(
                 text = stringResource(id = R.string.app_policy_clickable),
-                spanStyle = SpanStyle(color = OrangeDark, textDecoration = TextDecoration.Underline)
+                spanStyle = SpanStyle(color = CuiColorToken.OrangeDark, textDecoration = TextDecoration.Underline)
             )
 }

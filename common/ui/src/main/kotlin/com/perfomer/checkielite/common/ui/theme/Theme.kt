@@ -62,14 +62,16 @@ fun TransparentSystemBars() {
 }
 
 private val LightAndroidColorScheme = lightColorScheme(
-    primary = Orange,
-    onPrimary = White,
-    secondary = GreyLight,
-    onSecondary = Black,
-    background = White,
-    onBackground = Black,
-    surface = White,
-    onSurface = Black,
-    error = Red,
-    onError = White,
+    primary = CuiPalette.Light.BackgroundAccentPrimary,
+    onPrimary = CuiPalette.Light.BackgroundPrimary,
+    secondary = CuiPalette.Light.TextSecondary,
+    onSecondary = CuiPalette.Light.TextPrimary,
+    background = CuiPalette.Light.BackgroundPrimary,
+    onBackground = CuiPalette.Light.TextPrimary,
+    surface = CuiPalette.Light.BackgroundPrimary,
+    onSurface = CuiPalette.Light.TextPrimary,
+    error = CuiPalette.Light.TextNegative,
+    onError = CuiPalette.Light.BackgroundPrimary,
+    primaryContainer = CuiPalette.Light.BackgroundAccentPrimary,
+    onPrimaryContainer = CuiPalette.Light.BackgroundPrimary,
 )

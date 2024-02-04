@@ -14,10 +14,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -31,77 +29,63 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.cui.button.CuiFloatingActionButton
+import com.perfomer.checkielite.common.ui.cui.button.CuiIconButton
+import com.perfomer.checkielite.common.ui.theme.CuiPalette
+import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.main.impl.R
 import com.perfomer.checkielite.feature.main.presentation.ui.state.MainUiState
 import com.perfomer.checkielite.feature.main.presentation.ui.state.ReviewItem
-import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 
 @Composable
 internal fun MainScreen(
     state: MainUiState,
     onSearchQueryInput: (query: String) -> Unit = {},
+    onSearchQueryClearClick: () -> Unit = {},
     onReviewClick: (id: String) -> Unit = {},
     onFabClick: () -> Unit = {},
 ) {
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
-                containerColor = Color(0xFFF17A54),
-                contentColor = Color.White,
-                shape = CircleShape,
+            CuiFloatingActionButton(
+                painter = painterResource(id = R.drawable.ic_plus),
+                contentDescription = stringResource(R.string.main_add_checkie),
                 onClick = onFabClick,
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_plus),
-                    contentDescription = null,
-                )
-            }
+            )
         },
-        topBar = {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .background(
-                        Brush.verticalGradient(
-                            listOf(
-                                Color.White,
-                                Color.White,
-                                Color.White,
-                                Color.White.copy(alpha = 0F)
-                            )
-                        ),
-                    )
-                    .statusBarsPadding()
-            ) {
-                Text(
-                    text = "checkie lite",
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 20.sp,
-                    color = Color(0xFF222B39),
-                )
-            }
-        },
+        topBar = { TopAppBar() },
     ) { contentPadding ->
         LazyColumn(
             contentPadding = contentPadding,
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             item {
                 Spacer(modifier = Modifier.height(12.dp))
-                SearchField(state.searchQuery, onSearchQueryInput)
+
+                SearchField(
+                    searchQuery = state.searchQuery,
+                    onSearchQueryInput = onSearchQueryInput,
+                    onSearchQueryClearClick = onSearchQueryClearClick,
+                )
+
                 Spacer(modifier = Modifier.height(16.dp))
             }
 
-            items(state.reviews.size) { i ->
+            items(
+                count = state.reviews.size,
+                key = { i -> state.reviews[i].id },
+            ) { i ->
                 CheckieHorizontalItem(state.reviews[i], onReviewClick)
             }
         }
@@ -109,25 +93,74 @@ internal fun MainScreen(
 }
 
 @Composable
+private fun TopAppBar() {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .background(
+                Brush.verticalGradient(
+                    listOf(
+                        Color.White,
+                        Color.White,
+                        Color.White,
+                        Color.White.copy(alpha = 0F)
+                    )
+                ),
+            )
+            .statusBarsPadding()
+    ) {
+        Text(
+            text = buildAnnotatedString {
+                append(
+                    AnnotatedString(
+                        text = stringResource(id = R.string.app_name_checkie),
+                        spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+                    )
+                )
+                append(" ")
+                append(
+                    AnnotatedString(
+                        text = stringResource(id = R.string.app_name_lite),
+                        spanStyle = SpanStyle(fontWeight = FontWeight.Normal)
+                    )
+                )
+            },
+            fontSize = 20.sp,
+        )
+    }
+}
+
+@Composable
 private fun SearchField(
     searchQuery: String,
     onSearchQueryInput: (query: String) -> Unit,
+    onSearchQueryClearClick: () -> Unit,
 ) {
     OutlinedTextField(
         value = searchQuery,
         onValueChange = onSearchQueryInput,
         trailingIcon = {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_search),
-                contentDescription = null,
-            )
+            if (searchQuery.isBlank()) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_search),
+                    contentDescription = null,
+                )
+            } else {
+                CuiIconButton(
+                    painter = painterResource(id = CommonDrawable.ic_exit_cross),
+                    contentDescription = stringResource(R.string.main_clear),
+                    onClick = onSearchQueryClearClick,
+                )
+            }
         },
         shape = RoundedCornerShape(16.dp),
         colors = OutlinedTextFieldDefaults.colors(
-            unfocusedBorderColor = Color(0xFFE6E6E6),
+            unfocusedBorderColor = CuiPalette.Light.OutlineSecondary,
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-        placeholder = { Text("Search") },
+        placeholder = { Text(stringResource(R.string.main_search)) },
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
@@ -152,7 +185,7 @@ internal fun CheckieHorizontalItem(
             modifier = Modifier
                 .size(48.dp)
                 .clip(RoundedCornerShape(16.dp))
-                .background(Color(0xFFEDEDED))
+                .background(CuiPalette.Light.BackgroundSecondary)
         ) {
             if (item.imageUri != null) {
                 AsyncImage(
@@ -164,7 +197,7 @@ internal fun CheckieHorizontalItem(
             } else {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_image),
-                    tint = Color(0xFFC1C0CC),
+                    tint = CuiPalette.Light.IconSecondary,
                     contentDescription = null,
                     modifier = Modifier.size(24.dp)
                 )
@@ -179,7 +212,6 @@ internal fun CheckieHorizontalItem(
                 fontSize = 16.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = Color(0xFF222B39),
             )
 
             if (item.brand != null) {
@@ -189,7 +221,7 @@ internal fun CheckieHorizontalItem(
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    color = Color(0xFFDB4819),
+                    color = CuiPalette.Light.TextAccent,
                 )
             }
         }
@@ -206,14 +238,13 @@ private fun CheckieRating(rating: Int, emoji: String) {
         Text(
             text = rating.toString(),
             fontWeight = FontWeight.Medium,
-            color = Color(0xFF222B39),
         )
 
         Text(
             text = "/10",
             fontSize = 10.sp,
             fontWeight = FontWeight.Medium,
-            color = Color(0xFF656160),
+            color = CuiPalette.Light.TextSecondary,
         )
 
         Spacer(modifier = Modifier.width(8.dp))

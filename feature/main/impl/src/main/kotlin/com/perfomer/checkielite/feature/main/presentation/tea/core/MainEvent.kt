@@ -18,5 +18,7 @@ internal sealed interface MainUiEvent : MainEvent {
 
     class OnSearchQueryInput(val query: String) : MainUiEvent
 
+    data object OnSearchQueryClearClick : MainUiEvent
+
     data object OnFabClick : MainUiEvent
 }

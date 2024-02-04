@@ -12,17 +12,17 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.R
-import com.perfomer.checkielite.common.ui.theme.Black
+import com.perfomer.checkielite.common.ui.theme.CuiColorToken
 import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
 @Composable
 fun CuiIconButton(
-    modifier: Modifier = Modifier,
-    painter: Painter,
-    onClick: () -> Unit,
-    tint: Color = Black,
-    contentDescription: String? = null,
+	modifier: Modifier = Modifier,
+	painter: Painter,
+	onClick: () -> Unit,
+	tint: Color = CuiColorToken.Black,
+	contentDescription: String? = null,
 ) {
 	IconButton(
 		modifier = modifier,

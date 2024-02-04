@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.feature.main.presentation.tea.core
+package com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core
 
 internal sealed interface MainCommand {
 

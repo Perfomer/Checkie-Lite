@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.feature.reviewcreation.presentation
+package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

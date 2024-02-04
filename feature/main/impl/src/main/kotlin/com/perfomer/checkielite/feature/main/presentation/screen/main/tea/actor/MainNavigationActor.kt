@@ -1,11 +1,11 @@
-package com.perfomer.checkielite.feature.main.presentation.tea.actor
+package com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor
 
 import com.perfomer.checkielite.core.navigation.api.Router
-import com.perfomer.checkielite.feature.main.presentation.tea.core.MainCommand
-import com.perfomer.checkielite.feature.main.presentation.tea.core.MainEvent
-import com.perfomer.checkielite.feature.main.presentation.tea.core.MainNavigationCommand
-import com.perfomer.checkielite.feature.main.presentation.tea.core.MainNavigationCommand.OpenReviewCreation
-import com.perfomer.checkielite.feature.main.presentation.tea.core.MainNavigationCommand.OpenReviewDetails
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenReviewCreation
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationScreenProvider
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsScreenProvider
 import com.perfomer.checkielite.common.tea.component.Actor

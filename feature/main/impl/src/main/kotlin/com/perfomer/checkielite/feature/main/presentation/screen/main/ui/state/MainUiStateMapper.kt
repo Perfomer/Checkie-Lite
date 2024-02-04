@@ -1,7 +1,7 @@
-package com.perfomer.checkielite.feature.main.presentation.ui.state
+package com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state
 
 import com.perfomer.checkielite.core.entity.CheckieReview
-import com.perfomer.checkielite.feature.main.presentation.tea.core.MainState
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainState
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
 
 internal class MainUiStateMapper : UiStateMapper<MainState, MainUiState> {

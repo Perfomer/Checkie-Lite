@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.feature.main.presentation.ui
+package com.perfomer.checkielite.feature.main.presentation.screen.main.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,8 +45,8 @@ import com.perfomer.checkielite.common.ui.cui.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.main.impl.R
-import com.perfomer.checkielite.feature.main.presentation.ui.state.MainUiState
-import com.perfomer.checkielite.feature.main.presentation.ui.state.ReviewItem
+import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiState
+import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.ReviewItem
 
 @Composable
 internal fun MainScreen(

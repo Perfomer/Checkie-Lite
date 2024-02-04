@@ -10,7 +10,7 @@ import org.koin.dsl.module
 
 val mainModule = module {
     factoryOf(::mainCreationStore)
-    factory { MainScreenProvider { MainContentScreen(get(), get(), get(), get()) } }
+    factory { MainScreenProvider { MainContentScreen() } }
 }
 
 internal fun mainCreationStore(): MainStore {

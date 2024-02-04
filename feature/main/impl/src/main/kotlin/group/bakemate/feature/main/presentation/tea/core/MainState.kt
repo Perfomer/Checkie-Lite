@@ -4,5 +4,5 @@ import group.bakemate.feature.main.presentation.entity.ContentType
 import group.bakemate.feature.main.presentation.entity.ContentType.ORDERS
 
 internal data class MainState(
-    val currentContentType: ContentType = ORDERS
+    val searchQuery: String = "",
 )

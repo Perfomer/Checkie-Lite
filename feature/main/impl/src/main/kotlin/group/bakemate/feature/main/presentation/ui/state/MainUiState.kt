@@ -4,11 +4,12 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 internal data class MainUiState(
-    val items: List<CheckieItem>,
+    val searchQuery: String,
+    val reviews: List<ReviewItem>,
 )
 
 @Immutable
-internal data class CheckieItem(
+internal data class ReviewItem(
     val id: String,
     val title: String,
     val brand: String?,

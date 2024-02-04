@@ -39,13 +39,13 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import group.bakemate.common.ui.theme.ScreenPreview
 import group.bakemate.feature.main.impl.R
-import group.bakemate.feature.main.presentation.ui.state.CheckieItem
+import group.bakemate.feature.main.presentation.ui.state.ReviewItem
 import group.bakemate.feature.main.presentation.ui.state.MainUiState
 
 @Composable
 internal fun MainScreen(
     state: MainUiState,
-    onSearchTextInput: (query: String) -> Unit = {},
+    onSearchQueryInput: (query: String) -> Unit = {},
     onReviewClick: (id: String) -> Unit = {},
     onFabClick: () -> Unit = {},
 ) {
@@ -71,7 +71,12 @@ internal fun MainScreen(
                     .height(56.dp)
                     .background(
                         Brush.verticalGradient(
-                            listOf(Color.White, Color.White, Color.White, Color.White.copy(alpha = 0F))
+                            listOf(
+                                Color.White,
+                                Color.White,
+                                Color.White,
+                                Color.White.copy(alpha = 0F)
+                            )
                         ),
                     )
                     .statusBarsPadding()
@@ -92,22 +97,22 @@ internal fun MainScreen(
         ) {
             item {
                 Spacer(modifier = Modifier.height(12.dp))
-                SearchField()
+                SearchField(onSearchQueryInput)
                 Spacer(modifier = Modifier.height(16.dp))
             }
 
-            items(state.items.size) { i ->
-                CheckieHorizontalItem(state.items[i], onReviewClick)
+            items(state.reviews.size) { i ->
+                CheckieHorizontalItem(state.reviews[i], onReviewClick)
             }
         }
     }
 }
 
 @Composable
-private fun SearchField() {
+private fun SearchField(onSearchQueryInput: (query: String) -> Unit) {
     OutlinedTextField(
         value = "",
-        onValueChange = {},
+        onValueChange = onSearchQueryInput,
         trailingIcon = {
             Icon(
                 painter = painterResource(id = R.drawable.ic_search),
@@ -128,7 +133,7 @@ private fun SearchField() {
 
 @Composable
 internal fun CheckieHorizontalItem(
-    item: CheckieItem,
+    item: ReviewItem,
     onClick: (id: String) -> Unit,
 ) {
     Row(
@@ -220,8 +225,9 @@ private fun MainScreenPreview() {
 }
 
 internal val mockUiState = MainUiState(
-    listOf(
-        CheckieItem(
+    searchQuery = "",
+    reviews = listOf(
+        ReviewItem(
             id = "1",
             title = "Chicken toasts with poached eggs",
             brand = "Lui Bidon",
@@ -229,7 +235,7 @@ internal val mockUiState = MainUiState(
             rating = 8,
             emoji = "\uD83D\uDE0D", // 😍
         ),
-        CheckieItem(
+        ReviewItem(
             id = "2",
             title = "Lemonblast",
             brand = "Darkside",
@@ -237,7 +243,7 @@ internal val mockUiState = MainUiState(
             rating = 0,
             emoji = "\uD83D\uDCA9", // 💩
         ),
-        CheckieItem(
+        ReviewItem(
             id = "3",
             title = "One Flew Over the Cuckoos Next",
             brand = "Key Kesey",
@@ -245,7 +251,7 @@ internal val mockUiState = MainUiState(
             rating = 10,
             emoji = "\uD83D\uDC8E", // 💎
         ),
-        CheckieItem(
+        ReviewItem(
             id = "4",
             title = "The Wolf of Wall Street",
             brand = null,
@@ -253,7 +259,7 @@ internal val mockUiState = MainUiState(
             rating = 4,
             emoji = "\uD83D\uDE10", // 😐
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -262,7 +268,7 @@ internal val mockUiState = MainUiState(
             emoji = "\uD83D\uDE2D", // 😭
         ),
         // ======================
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -270,7 +276,7 @@ internal val mockUiState = MainUiState(
             rating = 3,
             emoji = "\uD83D\uDE2D", // 😭
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -278,7 +284,7 @@ internal val mockUiState = MainUiState(
             rating = 3,
             emoji = "\uD83D\uDE2D", // 😭
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -286,7 +292,7 @@ internal val mockUiState = MainUiState(
             rating = 3,
             emoji = "\uD83D\uDE2D", // 😭
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -294,7 +300,7 @@ internal val mockUiState = MainUiState(
             rating = 3,
             emoji = "\uD83D\uDE2D", // 😭
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -302,7 +308,7 @@ internal val mockUiState = MainUiState(
             rating = 3,
             emoji = "\uD83D\uDE2D", // 😭
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -310,7 +316,7 @@ internal val mockUiState = MainUiState(
             rating = 3,
             emoji = "\uD83D\uDE2D", // 😭
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -318,7 +324,7 @@ internal val mockUiState = MainUiState(
             rating = 3,
             emoji = "\uD83D\uDE2D", // 😭
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -326,7 +332,7 @@ internal val mockUiState = MainUiState(
             rating = 3,
             emoji = "\uD83D\uDE2D", // 😭
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -334,7 +340,7 @@ internal val mockUiState = MainUiState(
             rating = 3,
             emoji = "\uD83D\uDE2D", // 😭
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -342,7 +348,7 @@ internal val mockUiState = MainUiState(
             rating = 3,
             emoji = "\uD83D\uDE2D", // 😭
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -350,7 +356,7 @@ internal val mockUiState = MainUiState(
             rating = 3,
             emoji = "\uD83D\uDE2D", // 😭
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -358,7 +364,7 @@ internal val mockUiState = MainUiState(
             rating = 3,
             emoji = "\uD83D\uDE2D", // 😭
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -366,7 +372,7 @@ internal val mockUiState = MainUiState(
             rating = 3,
             emoji = "\uD83D\uDE2D", // 😭
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -374,7 +380,7 @@ internal val mockUiState = MainUiState(
             rating = 3,
             emoji = "\uD83D\uDE2D", // 😭
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -382,7 +388,7 @@ internal val mockUiState = MainUiState(
             rating = 3,
             emoji = "\uD83D\uDE2D", // 😭
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -390,7 +396,7 @@ internal val mockUiState = MainUiState(
             rating = 3,
             emoji = "\uD83D\uDE2D", // 😭
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,
@@ -398,7 +404,7 @@ internal val mockUiState = MainUiState(
             rating = 3,
             emoji = "\uD83D\uDE2D", // 😭
         ),
-        CheckieItem(
+        ReviewItem(
             id = "5",
             title = "My own dog",
             brand = null,

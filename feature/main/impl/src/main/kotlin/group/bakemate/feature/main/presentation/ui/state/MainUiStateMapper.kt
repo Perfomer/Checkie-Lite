@@ -7,7 +7,8 @@ internal class MainUiStateMapper : UiStateMapper<MainState, MainUiState> {
 
     override fun map(state: MainState): MainUiState {
         return MainUiState(
-            items = emptyList()
+            searchQuery = state.searchQuery,
+            reviews = emptyList()
         )
     }
 

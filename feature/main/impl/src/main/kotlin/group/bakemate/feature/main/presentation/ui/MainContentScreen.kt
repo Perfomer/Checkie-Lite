@@ -2,26 +2,23 @@ package group.bakemate.feature.main.presentation.ui
 
 import androidx.compose.runtime.Composable
 import group.bakemate.common.ui.tea.TeaComposable
+import group.bakemate.common.ui.tea.acceptable
 import group.bakemate.common.ui.tea.store
 import group.bakemate.core.navigation.voyager.BaseScreen
-import group.bakemate.feature.calendar.navigation.CalendarScreenProvider
 import group.bakemate.feature.main.presentation.tea.MainStore
-import group.bakemate.feature.production.navigation.ProductionScreenProvider
-import group.bakemate.feature.settings.navigation.SettingsScreenProvider
-import group.balemate.feature.orders.navigation.OrdersScreenProvider
+import group.bakemate.feature.main.presentation.tea.core.MainUiEvent.OnFabClick
+import group.bakemate.feature.main.presentation.tea.core.MainUiEvent.OnReviewClick
+import group.bakemate.feature.main.presentation.tea.core.MainUiEvent.OnSearchQueryInput
 
-internal class MainContentScreen(
-    private val ordersScreenProvider: OrdersScreenProvider,
-    private val calendarScreenProvider: CalendarScreenProvider,
-    private val productionScreenProvider: ProductionScreenProvider,
-    private val settingsScreenProvider: SettingsScreenProvider,
-) : BaseScreen() {
+internal class MainContentScreen : BaseScreen() {
 
     @Composable
     override fun Screen() = TeaComposable(store<MainStore>()) { state ->
         MainScreen(
-            state = mockUiState,
-            onReviewClick = {}
+            state = state,
+            onReviewClick = acceptable(::OnReviewClick),
+            onSearchQueryInput = acceptable(::OnSearchQueryInput),
+            onFabClick = acceptable(OnFabClick),
         )
     }
 }

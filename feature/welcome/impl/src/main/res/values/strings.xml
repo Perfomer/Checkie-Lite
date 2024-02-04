@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="welcome_description">Управление кондитерской это просто с</string>
-    <string name="welcome_account">У меня есть аккаунт</string>
-    <string name="welcome_registration">Зарегистрироваться</string>
-</resources>

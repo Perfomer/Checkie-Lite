@@ -26,22 +26,12 @@ include(
 
 //Feature
 include(
-    ":feature:splash:api",
-    ":feature:splash:impl",
-    ":feature:welcome:api",
-    ":feature:welcome:impl",
-    ":feature:registration:api",
-    ":feature:registration:impl",
     ":feature:main:api",
     ":feature:main:impl",
-    ":feature:calendar:api",
-    ":feature:calendar:impl",
     ":feature:orders:api",
     ":feature:orders:impl",
     ":feature:production:api",
     ":feature:production:impl",
-    ":feature:settings:api",
-    ":feature:settings:impl",
 )
 
 //Core

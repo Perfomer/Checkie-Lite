@@ -13,7 +13,10 @@ import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.productinfo.ProductInfoScreen
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationStore
-import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.*
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnBackPress
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnPrimaryButtonClick
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ProductInfo
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ReviewInfo
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewinfo.ReviewInfoScreen
 import com.perfomer.checkielite.navigation.voyager.BaseScreen
 import kotlinx.coroutines.coroutineScope
@@ -43,6 +46,7 @@ internal class ReviewCreationContentScreen : BaseScreen() {
                     onAddPictureClick = acceptable(ProductInfo.OnAddPictureClick),
                     onPictureDeleteClick = acceptable(ProductInfo::OnPictureDeleteClick),
                 )
+
                 ReviewCreationPage.REVIEW_INFO -> ReviewInfoScreen(
                     state = state.reviewInfoState,
                     onRatingSelect = acceptable(ReviewInfo::OnRatingSelect),

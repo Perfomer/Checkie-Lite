@@ -1,7 +1,9 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea
 
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
+import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.CreateReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.Initialize
@@ -18,6 +20,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ReviewInfo
 import com.perfomer.checkielite.feature.reviewcreation.presentation.util.next
 import com.perfomer.checkielite.feature.reviewcreation.presentation.util.previous
+import kotlinx.datetime.Clock
 
 internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewCreationEffect, ReviewCreationEvent, ReviewCreationState>() {
 
@@ -36,9 +39,23 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             val next = state.currentPage.next()
 
             if (next != null) {
-                state { copy(currentPage = next) }
+                val isProductNameValid = state.productName.isNotBlank()
+                if (isProductNameValid) state { copy(currentPage = next) }
+                state { copy(isProductNameValid = isProductNameValid) }
             } else {
-                // todo commands(CreateReview())
+                commands(
+                    CreateReview(
+                        CheckieReview(
+                            id = "",
+                            productName = state.productName,
+                            productBrand = state.brand.ifBlank { null },
+                            rating = state.rating,
+                            imagesUri = state.picturesUri,
+                            reviewText = state.reviewText.ifBlank { null },
+                            creationDate = Clock.System.now(),
+                        )
+                    )
+                )
             }
         }
 

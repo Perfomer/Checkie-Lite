@@ -8,6 +8,7 @@ internal data class ReviewCreationState(
     val currentPage: ReviewCreationPage = ReviewCreationPage.PRODUCT_INFO,
 
     val productName: String = "",
+    val isProductNameValid: Boolean = true,
     val brand: String = "",
     val picturesUri: PersistentList<String> = emptyPersistentList(),
 

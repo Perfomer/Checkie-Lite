@@ -26,6 +26,7 @@ internal class ReviewCreationUiStateMapper : UiStateMapper<ReviewCreationState, 
             productName = state.productName,
             brand = state.brand,
             picturesUri = state.picturesUri,
+            productNameErrorText = "Product name cannot be empty".takeUnless { state.isProductNameValid },
         )
     }
 

@@ -71,6 +71,7 @@ internal fun ProductInfoScreen(
 
         CuiOutlinedField(
             text = state.productName,
+            errorText = state.productNameErrorText,
             title = stringResource(R.string.reviewcreation_productinfo_field_product),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             onValueChange = onProductNameTextInput,
@@ -191,6 +192,7 @@ private fun ProductInfoScreenPreview() {
     ProductInfoScreen(
         state = ProductInfoPageUiState(
             productName = "Aboba",
+            productNameErrorText = null,
             brand = "Abobov",
             picturesUri = persistentListOf(
                 "https://habrastorage.org/r/w780/getpro/habr/upload_files/746/2ab/27c/7462ab27cca552ce31ee9cba01387692.jpeg",

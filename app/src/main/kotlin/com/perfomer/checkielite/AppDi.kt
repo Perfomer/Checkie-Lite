@@ -5,7 +5,7 @@ import com.perfomer.checkielite.core.data.dataModule
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.feature.main.mainModules
 import com.perfomer.checkielite.feature.reviewcreation.reviewCreationModules
-import com.perfomer.checkielite.feature.reviewdetails.reviewDetailsModule
+import com.perfomer.checkielite.feature.reviewdetails.reviewDetailsModules
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.SingleStackScreenContent
 import com.perfomer.checkielite.navigation.StartStackScreenProvider
@@ -29,4 +29,4 @@ private val coreModules
     get() = navigationModule + dataModule
 
 private val featureModules
-    get() = mainModules + reviewCreationModules + reviewDetailsModule
+    get() = mainModules + reviewCreationModules + reviewDetailsModules

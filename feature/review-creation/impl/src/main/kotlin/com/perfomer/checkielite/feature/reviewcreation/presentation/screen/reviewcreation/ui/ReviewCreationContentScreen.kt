@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
@@ -26,6 +27,8 @@ internal class ReviewCreationContentScreen : BaseScreen() {
 
     @Composable
     override fun Screen() = TeaComposable(store<ReviewCreationStore>()) { state ->
+        BackHandler { accept(OnBackPress) }
+
         val pagerState = rememberPagerState(pageCount = { state.stepsCount })
 
         ReviewCreationScreen(

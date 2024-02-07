@@ -20,7 +20,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ReviewInfo
 import com.perfomer.checkielite.feature.reviewcreation.presentation.util.next
 import com.perfomer.checkielite.feature.reviewcreation.presentation.util.previous
-import kotlinx.datetime.Clock
+import java.util.Date
 
 internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewCreationEffect, ReviewCreationEvent, ReviewCreationState>() {
 
@@ -50,9 +50,9 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                             productName = state.productName,
                             productBrand = state.brand.ifBlank { null },
                             rating = state.rating,
-                            imagesUri = state.picturesUri,
+                            picturesUri = state.picturesUri,
                             reviewText = state.reviewText.ifBlank { null },
-                            creationDate = Clock.System.now(),
+                            creationDate = Date(),
                         )
                     )
                 )

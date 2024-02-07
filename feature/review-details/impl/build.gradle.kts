@@ -46,33 +46,34 @@ android {
 }
 
 dependencies {
+	implementation(project(":feature:review-creation:api"))
 	implementation(project(":feature:review-details:api"))
 	implementation(project(":core:entity"))
 
-//	Tea
+	//	Tea
 	implementation(project(":common:tea:compose"))
 
-//	Ui
+	//	Ui
 	implementation(project(":common:ui"))
 	implementation(project(":common:pure"))
 
-//	Navigation
+	//	Navigation
 	implementation(project(":core:navigation:api"))
 	implementation(project(":core:navigation:voyager"))
 	implementation("cafe.adriel.voyager:voyager-navigator:1.0.0-rc10")
 
-//	Compose
+	//	Compose
 	implementation(platform("androidx.compose:compose-bom:2023.03.00"))
 	implementation("androidx.compose.ui:ui")
 	implementation("androidx.compose.ui:ui-graphics")
 	implementation("androidx.compose.ui:ui-tooling-preview")
 	implementation("androidx.compose.material3:material3")
-	debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+	debugImplementation("androidx.compose.ui:ui-tooling:1.5.4")
 	debugImplementation("androidx.compose.ui:ui-test-manifest")
 	implementation("androidx.activity:activity-compose:1.8.1")
 
-//	Di
+	//	Di
 	implementation("io.insert-koin:koin-android:3.5.0")
 	implementation("io.insert-koin:koin-core:3.5.0")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.5.4")
 }

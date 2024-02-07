@@ -15,7 +15,7 @@ internal class ReviewCreationRepositoryImpl(
 ) : ReviewCreationRepository {
 
     override suspend fun createReview(review: CheckieReview) {
-        review.imagesUri.forEach { uri ->
+        review.picturesUri.forEach { uri ->
             val sourceFile = File(uri)
             val destinationFile = File(applicationContext.filesDir, sourceFile.nameWithoutExtension + ".webp")
 

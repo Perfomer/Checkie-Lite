@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state
 
 import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 internal sealed interface ReviewDetailsUiState {
@@ -13,7 +14,7 @@ internal sealed interface ReviewDetailsUiState {
         val date: String,
         val rating: Int,
         val emoji: String,
-        val picturesUri: List<String>,
+        val picturesUri: ImmutableList<String>,
         val currentPicturePosition: Int,
         val reviewText: String?,
     ) : ReviewDetailsUiState

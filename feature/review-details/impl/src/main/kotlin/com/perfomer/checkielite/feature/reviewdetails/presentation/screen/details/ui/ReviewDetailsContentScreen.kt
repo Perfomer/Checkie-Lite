@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detai
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
+import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsParams
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsStore
@@ -19,6 +20,7 @@ internal class ReviewDetailsContentScreen(
 
         ReviewDetailsScreen(
             state = state,
+            onNavigationIconClick = acceptable(OnBackPress),
         )
     }
 }

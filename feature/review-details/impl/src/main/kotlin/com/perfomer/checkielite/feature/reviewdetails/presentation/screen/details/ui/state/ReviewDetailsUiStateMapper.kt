@@ -14,7 +14,7 @@ internal class ReviewDetailsUiStateMapper : UiStateMapper<ReviewDetailsState, Re
     override fun map(state: ReviewDetailsState): ReviewDetailsUiState {
         return when (state.review) {
             is Lce.Content -> ReviewDetailsUiState.Content(
-                brandName = state.review.content.productBrand,
+                brandName = state.review.content.productBrand?.uppercase(),
                 productName = state.review.content.productName,
                 date = dateFormat.format(state.review.content.creationDate),
                 rating = state.review.content.rating,

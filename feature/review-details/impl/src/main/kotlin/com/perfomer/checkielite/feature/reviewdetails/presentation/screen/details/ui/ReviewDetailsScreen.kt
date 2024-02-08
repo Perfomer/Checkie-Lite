@@ -1,17 +1,15 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui
 
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,8 +25,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -37,16 +40,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.button.CuiIconButton
+import com.perfomer.checkielite.common.ui.cui.pager.CuiHorizontalPagerIndicator
+import com.perfomer.checkielite.common.ui.cui.pager.offsetForPage
+import com.perfomer.checkielite.common.ui.cui.pager.scaleHorizontalNeighbors
 import com.perfomer.checkielite.common.ui.theme.CuiColorToken
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlin.math.absoluteValue
 
-private const val HORIZONTAL_PADDING_DP = 24
+private const val HORIZONTAL_PADDING = 24
 
 @Composable
 internal fun ReviewDetailsScreen(
@@ -62,14 +70,14 @@ internal fun ReviewDetailsScreen(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(contentPadding)
-                .padding(bottom = 8.dp)
+                .padding(bottom = 16.dp)
         ) {
             if (state.brandName != null) {
                 Text(
                     text = state.brandName,
                     color = CuiPalette.Light.TextAccent,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(horizontal = HORIZONTAL_PADDING_DP.dp),
+                    modifier = Modifier.padding(horizontal = HORIZONTAL_PADDING.dp),
                 )
 
                 Spacer(Modifier.height(8.dp))
@@ -79,7 +87,7 @@ internal fun ReviewDetailsScreen(
                 text = state.productName,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = HORIZONTAL_PADDING_DP.dp)
+                modifier = Modifier.padding(horizontal = HORIZONTAL_PADDING.dp)
             )
 
             Spacer(Modifier.height(24.dp))
@@ -88,7 +96,7 @@ internal fun ReviewDetailsScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = HORIZONTAL_PADDING_DP.dp)
+                    .padding(horizontal = HORIZONTAL_PADDING.dp)
             ) {
                 Text(
                     text = state.date,
@@ -98,8 +106,6 @@ internal fun ReviewDetailsScreen(
 
                 CheckieRating(rating = state.rating, emoji = state.emoji)
             }
-
-            Spacer(Modifier.height(24.dp))
 
             PicturesCarousel(
                 currentPictureIndex = state.currentPicturePosition,
@@ -112,7 +118,7 @@ internal fun ReviewDetailsScreen(
                 Text(
                     text = state.reviewText,
                     fontSize = 16.sp,
-                    modifier = Modifier.padding(horizontal = HORIZONTAL_PADDING_DP.dp)
+                    modifier = Modifier.padding(horizontal = HORIZONTAL_PADDING.dp)
                 )
             }
         }
@@ -125,8 +131,9 @@ private fun PicturesCarousel(
     currentPictureIndex: Int,
     picturesUri: ImmutableList<String>,
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Box(
+        contentAlignment = Alignment.BottomCenter,
+        modifier = Modifier.fillMaxSize()
     ) {
         val pagerState = rememberPagerState(
             initialPage = currentPictureIndex,
@@ -135,64 +142,56 @@ private fun PicturesCarousel(
 
         HorizontalPager(
             state = pagerState,
-            contentPadding = PaddingValues(horizontal = HORIZONTAL_PADDING_DP.dp),
             pageSpacing = 12.dp,
+            contentPadding = PaddingValues(
+                horizontal = HORIZONTAL_PADDING.dp,
+                vertical = 24.dp
+            ),
         ) { i ->
-            AsyncImage(
-                model = picturesUri[i],
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1F)
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(CuiPalette.Light.BackgroundSecondary)
-            )
+            Box(
+                modifier = Modifier.scaleHorizontalNeighbors(pagerState = pagerState, page = i)
+            ) {
+                var pictureState: AsyncImagePainter.State by remember(i) { mutableStateOf(AsyncImagePainter.State.Empty) }
+
+                if (pictureState is AsyncImagePainter.State.Success) {
+                    Image(
+                        painter = requireNotNull(pictureState.painter),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1F)
+                            .blur(40.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
+                            .alpha((1F - pagerState.offsetForPage(i).absoluteValue) * 0.8F)
+                            .clip(RoundedCornerShape(24.dp))
+                            .background(CuiPalette.Light.BackgroundSecondary)
+                    )
+                }
+
+                AsyncImage(
+                    model = picturesUri[i],
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    onState = { state -> pictureState = state },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1F)
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(CuiPalette.Light.BackgroundSecondary)
+                )
+            }
         }
 
         Spacer(Modifier.height(20.dp))
 
-        HorizontalPagerIndicator(
-            currentItem = pagerState.currentPage,
-            itemsCount = pagerState.pageCount,
+        CuiHorizontalPagerIndicator(
+            state = pagerState,
+            selectedWidth = 20.dp,
+            defaultWidth = 6.dp,
+            selectedColor = CuiPalette.Light.BackgroundAccentPrimary,
+            defaultColor = CuiColorToken.GreyOrange,
         )
     }
-}
-
-@Composable
-private fun HorizontalPagerIndicator(
-    currentItem: Int,
-    itemsCount: Int,
-) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        repeat(itemsCount) { i -> Indicator(isSelected = currentItem == i) }
-    }
-}
-
-@Composable
-private fun Indicator(isSelected: Boolean) {
-    val width by animateDpAsState(
-        targetValue = if (isSelected) 20.dp else 6.dp,
-        animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy),
-        label = "Indicator selecting",
-    )
-
-    val color = if (isSelected) {
-        CuiPalette.Light.BackgroundAccentPrimary
-    } else {
-        CuiColorToken.GreyOrange
-    }
-
-    Box(
-        modifier = Modifier
-            .width(width)
-            .height(6.dp)
-            .clip(CircleShape)
-            .background(color)
-    )
 }
 
 @Composable
@@ -201,7 +200,7 @@ private fun AppBar(
     onNavigationIconClick: () -> Unit,
 ) {
     TopAppBar(
-        title = { "" },
+        title = {},
         navigationIcon = {
             CuiIconButton(
                 painter = painterResource(CommonDrawable.ic_arrow_back),

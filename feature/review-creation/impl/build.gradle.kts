@@ -47,12 +47,11 @@ android {
 
 dependencies {
 	implementation(project(":feature:review-creation:api"))
+
 	implementation(project(":core:entity"))
+	implementation(project(":core:datasource:local:api"))
 
-	//	Tea
 	implementation(project(":common:tea:compose"))
-
-	//	Ui
 	implementation(project(":common:ui"))
 	implementation(project(":common:pure"))
 

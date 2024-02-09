@@ -40,6 +40,6 @@ include(
     ":core:entity",
     ":core:navigation:api",
     ":core:navigation:voyager",
-    ":core:data:api",
-    ":core:data:impl",
+    ":core:datasource:local:api",
+    ":core:datasource:local:impl",
 )

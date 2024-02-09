@@ -2,6 +2,8 @@
 
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,6 +18,7 @@ import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,9 +75,18 @@ internal fun ReviewCreationScreen(
                 .padding(bottom = 20.dp)
                 .padding(horizontal = 20.dp)
         ) {
+            val isLastPage = pagerState.currentPage == pagerState.pageCount - 1
+            val targetButtonColor = if (isLastPage) CuiPalette.Light.BackgroundPositive else CuiPalette.Light.BackgroundAccentPrimary
+            val animatedColor by animateColorAsState(
+                targetValue = targetButtonColor,
+                animationSpec = tween(durationMillis = 250),
+                label = "AnimatedButtonColor",
+            )
+
             CuiPrimaryButton(
                 text = state.primaryButtonText,
                 onClick = onPrimaryButtonClick,
+                activeButtonColor = animatedColor,
             )
         }
     }

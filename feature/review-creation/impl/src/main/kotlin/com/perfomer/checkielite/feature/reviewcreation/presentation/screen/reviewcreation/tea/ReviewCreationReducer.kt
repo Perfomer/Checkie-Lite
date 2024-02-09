@@ -21,6 +21,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.util.next
 import com.perfomer.checkielite.feature.reviewcreation.presentation.util.previous
 import java.util.Date
+import java.util.UUID
 
 internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewCreationEffect, ReviewCreationEvent, ReviewCreationState>() {
 
@@ -46,7 +47,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 commands(
                     CreateReview(
                         CheckieReview(
-                            id = "",
+                            id = UUID.randomUUID().toString(),
                             productName = state.productName,
                             productBrand = state.brand.ifBlank { null },
                             rating = state.rating,
@@ -87,6 +88,6 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     }
 
     private fun reduceReviewsCreation(event: ReviewCreation) = when (event) {
-        is ReviewCreation.Succeed -> Unit
+        is ReviewCreation.Succeed -> commands(Exit)
     }
 }

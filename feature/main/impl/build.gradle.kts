@@ -51,14 +51,11 @@ dependencies {
 	implementation(project(":feature:review-details:api"))
 
 	implementation(project(":core:entity"))
-	implementation(project(":core:data:api"))
+	implementation(project(":core:datasource:local:api"))
 
 	implementation(project(":common:pure"))
 
-	//	Tea
 	implementation(project(":common:tea:compose"))
-
-	//	Ui
 	implementation(project(":common:ui"))
 	implementation(project(":common:pure"))
 

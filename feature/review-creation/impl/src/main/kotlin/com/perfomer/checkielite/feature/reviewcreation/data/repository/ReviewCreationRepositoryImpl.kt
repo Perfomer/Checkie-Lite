@@ -2,6 +2,7 @@ package com.perfomer.checkielite.feature.reviewcreation.data.repository
 
 import android.content.Context
 import android.graphics.Bitmap
+import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.feature.reviewcreation.domain.repository.ReviewCreationRepository
 import id.zelory.compressor.Compressor
@@ -12,10 +13,11 @@ import java.io.File
 
 internal class ReviewCreationRepositoryImpl(
     private val applicationContext: Context,
+    private val localDataSource: CheckieLocalDataSource,
 ) : ReviewCreationRepository {
 
     override suspend fun createReview(review: CheckieReview) {
-        review.picturesUri.forEach { uri ->
+        val picturesUri = review.picturesUri.map { uri ->
             val sourceFile = File(uri)
             val destinationFile = File(applicationContext.filesDir, sourceFile.nameWithoutExtension + ".webp")
 
@@ -24,7 +26,15 @@ internal class ReviewCreationRepositoryImpl(
                 destination(destinationFile)
                 size(COMPRESS_TARGET_SIZE)
             }
+
+            destinationFile.absolutePath
         }
+
+        localDataSource.createReview(
+            review = review.copy(
+                picturesUri = picturesUri,
+            )
+        )
     }
 
     private companion object {

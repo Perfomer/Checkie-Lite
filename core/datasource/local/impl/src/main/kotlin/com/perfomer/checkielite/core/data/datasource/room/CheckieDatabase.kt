@@ -1,0 +1,43 @@
+package com.perfomer.checkielite.core.data.datasource.room
+
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.perfomer.checkielite.core.data.datasource.room.converter.DateConverter
+import com.perfomer.checkielite.core.data.datasource.room.dao.CheckieReviewDao
+import com.perfomer.checkielite.core.data.datasource.room.entity.CheckieReviewDb
+import com.perfomer.checkielite.core.data.datasource.room.entity.CheckieReviewPictureDb
+
+@Database(
+    version = 1,
+    entities = [
+        CheckieReviewDb::class,
+        CheckieReviewPictureDb::class,
+    ],
+)
+@TypeConverters(DateConverter::class)
+internal abstract class CheckieDatabase : RoomDatabase() {
+
+    abstract fun reviewDao(): CheckieReviewDao
+
+    companion object {
+
+        @Synchronized
+        internal fun getInstance(
+            appContext: Context,
+            databaseName: String,
+            inMemory: Boolean = false,
+        ): CheckieDatabase {
+            return if (inMemory) {
+                Room.inMemoryDatabaseBuilder(appContext, CheckieDatabase::class.java).build()
+            } else {
+                Room.databaseBuilder(appContext, CheckieDatabase::class.java, databaseName)
+                    .fallbackToDestructiveMigration()
+                    .build()
+            }
+        }
+
+    }
+}

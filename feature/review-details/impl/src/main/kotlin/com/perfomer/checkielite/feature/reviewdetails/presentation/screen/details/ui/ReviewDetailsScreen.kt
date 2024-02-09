@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui
 
+import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -154,6 +155,8 @@ private fun PicturesCarousel(
                 var pictureState: AsyncImagePainter.State by remember(i) { mutableStateOf(AsyncImagePainter.State.Empty) }
 
                 if (pictureState is AsyncImagePainter.State.Success) {
+                    val alpha = (1F - pagerState.offsetForPage(i).absoluteValue) * 0.8F
+                    val interpolatedAlpha = FastOutLinearInEasing.transform(alpha)
                     Image(
                         painter = requireNotNull(pictureState.painter),
                         contentDescription = null,
@@ -162,7 +165,7 @@ private fun PicturesCarousel(
                             .fillMaxWidth()
                             .aspectRatio(1F)
                             .blur(40.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
-                            .alpha((1F - pagerState.offsetForPage(i).absoluteValue) * 0.8F)
+                            .alpha(interpolatedAlpha)
                             .clip(RoundedCornerShape(24.dp))
                             .background(CuiPalette.Light.BackgroundSecondary)
                     )

@@ -9,7 +9,6 @@ internal data class ReviewCreationUiState(
     val step: Int,
     val stepsCount: Int,
     val currentPage: ReviewCreationPage,
-    val primaryButtonText: String,
 
     val productInfoState: ProductInfoPageUiState,
     val reviewInfoState: ReviewInfoPageUiState,

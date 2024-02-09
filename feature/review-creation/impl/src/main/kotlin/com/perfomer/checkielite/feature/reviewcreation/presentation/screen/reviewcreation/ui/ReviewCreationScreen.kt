@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.ui.CommonDrawable
@@ -30,6 +31,7 @@ import com.perfomer.checkielite.common.ui.cui.button.CuiPrimaryButton
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
+import com.perfomer.checkielite.feature.reviewcreation.impl.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ProductInfoPageUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewCreationUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewInfoPageUiState
@@ -83,8 +85,10 @@ internal fun ReviewCreationScreen(
                 label = "AnimatedButtonColor",
             )
 
+            val buttonText = if (isLastPage) stringResource(R.string.reviewcreation_save) else stringResource(R.string.reviewcreation_next)
+
             CuiPrimaryButton(
-                text = state.primaryButtonText,
+                text = buttonText,
                 onClick = onPrimaryButtonClick,
                 activeButtonColor = animatedColor,
             )
@@ -100,7 +104,6 @@ private fun ReviewCreationScreenPreview() {
             step = 1,
             stepsCount = 2,
             currentPage = ReviewCreationPage.PRODUCT_INFO,
-            primaryButtonText = "Next",
             productInfoState = ProductInfoPageUiState(
                 productName = "",
                 productNameErrorText = null,

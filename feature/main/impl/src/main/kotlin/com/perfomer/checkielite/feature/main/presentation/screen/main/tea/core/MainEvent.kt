@@ -22,3 +22,8 @@ internal sealed interface MainUiEvent : MainEvent {
 
     data object OnFabClick : MainUiEvent
 }
+
+internal sealed interface MainNavigationEvent : MainEvent {
+
+    data object ReviewCreated : MainNavigationEvent
+}

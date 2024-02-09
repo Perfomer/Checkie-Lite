@@ -9,6 +9,6 @@ internal class ReviewsRepositoryImpl(
 ) : ReviewsRepository {
 
     override suspend fun getCheckies(searchQuery: String): List<CheckieReview> {
-        return localDataSource.getReviews()
+        return localDataSource.getReviews(searchQuery)
     }
 }

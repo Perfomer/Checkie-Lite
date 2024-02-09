@@ -17,6 +17,7 @@ internal class ReviewCreationUiStateMapper : UiStateMapper<ReviewCreationState, 
             currentPage = state.currentPage,
             productInfoState = createProductInfoPageState(state),
             reviewInfoState = createReviewInfoPageState(state),
+            isPrimaryButtonLoading = state.isSavingInProgress,
         )
     }
 

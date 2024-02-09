@@ -6,6 +6,8 @@ internal sealed interface ReviewCreationEvent {
 
     sealed interface ReviewCreation : ReviewCreationEvent {
 
+        data object Started : ReviewCreation
+
         data object Succeed : ReviewCreation
     }
 }

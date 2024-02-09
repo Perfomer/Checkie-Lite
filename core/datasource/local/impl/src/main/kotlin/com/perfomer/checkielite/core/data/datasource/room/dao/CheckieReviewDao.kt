@@ -19,9 +19,9 @@ internal interface CheckieReviewDao {
     @Query(
         """
         SELECT * FROM CheckieReviewDb
-        WHERE productName LIKE :query
-            OR brandName LIKE :query
-            OR reviewText LIKE :query
+        WHERE productName LIKE '%' || :query || '%'
+            OR brandName LIKE '%' || :query || '%'
+            OR reviewText LIKE '%' || :query || '%'
         ORDER BY creationDate DESC
         """
     )

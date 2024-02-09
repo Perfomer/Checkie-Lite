@@ -40,8 +40,8 @@ fun CuiOutlinedField(
         value = text,
         onValueChange = onValueChange,
         singleLine = singleLine,
-        trailingIcon = {
-            if (!errorText.isNullOrBlank()) {
+        trailingIcon = errorText?.let {
+            {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_error),
                     contentDescription = null,
@@ -68,7 +68,7 @@ fun CuiOutlinedField(
                 )
             }
         },
-        visualTransformation = if(isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
         modifier = modifier.fillMaxWidth()
     )
 }

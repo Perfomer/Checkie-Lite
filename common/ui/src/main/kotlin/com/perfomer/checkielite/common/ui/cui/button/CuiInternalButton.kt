@@ -67,7 +67,7 @@ internal fun CuiInternalButton(
 @Composable
 private fun CuiButtonLoader() {
     CircularProgressIndicator(
-        color = CuiColorToken.White,
+        color = CuiColorToken.Green,
         strokeWidth = 2.dp,
         modifier = Modifier.size(24.dp),
     )

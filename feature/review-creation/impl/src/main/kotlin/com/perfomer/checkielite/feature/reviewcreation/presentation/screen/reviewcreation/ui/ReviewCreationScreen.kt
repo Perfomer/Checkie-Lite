@@ -45,8 +45,8 @@ internal fun ReviewCreationScreen(
     onBackPress: () -> Unit = {},
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
-    val backDrawableResource = remember(state.step) {
-        if (state.step == 1) CommonDrawable.ic_cross
+    val backDrawableResource = remember(pagerState.currentPage) {
+        if (pagerState.currentPage == 0) CommonDrawable.ic_cross
         else CommonDrawable.ic_arrow_back
     }
 
@@ -91,6 +91,7 @@ internal fun ReviewCreationScreen(
                 text = buttonText,
                 onClick = onPrimaryButtonClick,
                 activeButtonColor = animatedColor,
+                loading = state.isPrimaryButtonLoading,
             )
         }
     }
@@ -113,7 +114,8 @@ private fun ReviewCreationScreenPreview() {
             reviewInfoState = ReviewInfoPageUiState(
                 rating = 5,
                 reviewText = "",
-            )
+            ),
+            isPrimaryButtonLoading = false,
         ),
         pagerState = rememberPagerState { 1 },
         content = {},

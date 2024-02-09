@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor
 
 import com.perfomer.checkielite.common.pure.util.flowBy
+import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.feature.reviewcreation.domain.repository.ReviewCreationRepository
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
@@ -26,5 +27,6 @@ internal class CreateReviewActor(
     private fun handleCommand(command: CreateReview): Flow<ReviewCreation> {
         return flowBy { repository.createReview(command.review) }
             .map { ReviewCreation.Succeed }
+            .startWith(ReviewCreation.Started)
     }
 }

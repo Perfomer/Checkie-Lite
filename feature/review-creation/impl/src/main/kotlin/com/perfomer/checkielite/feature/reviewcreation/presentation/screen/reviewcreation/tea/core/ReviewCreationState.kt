@@ -14,4 +14,6 @@ internal data class ReviewCreationState(
 
     val rating: Int = 5,
     val reviewText: String = "",
+
+    val isSavingInProgress: Boolean = false,
 )

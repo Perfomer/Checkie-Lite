@@ -12,6 +12,8 @@ internal data class ReviewCreationUiState(
 
     val productInfoState: ProductInfoPageUiState,
     val reviewInfoState: ReviewInfoPageUiState,
+
+    val isPrimaryButtonLoading: Boolean,
 )
 
 @Immutable

@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -73,7 +74,10 @@ internal fun ProductInfoScreen(
             text = state.productName,
             errorText = state.productNameErrorText,
             title = stringResource(R.string.reviewcreation_productinfo_field_product),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next,
+                capitalization = KeyboardCapitalization.Sentences,
+            ),
             onValueChange = onProductNameTextInput,
         )
 
@@ -82,7 +86,10 @@ internal fun ProductInfoScreen(
         CuiOutlinedField(
             text = state.brand,
             title = stringResource(R.string.reviewcreation_productinfo_field_brand),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                capitalization = KeyboardCapitalization.Sentences,
+            ),
             onValueChange = onBrandTextInput,
         )
 

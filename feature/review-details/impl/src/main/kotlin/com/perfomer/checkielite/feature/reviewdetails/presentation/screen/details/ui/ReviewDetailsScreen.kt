@@ -114,7 +114,9 @@ internal fun ReviewDetailsScreen(
             )
 
             if (state.reviewText != null) {
-                Spacer(Modifier.height(24.dp))
+                if (state.picturesUri.isNotEmpty()) {
+                    Spacer(Modifier.height(24.dp))
+                }
 
                 Text(
                     text = state.reviewText,
@@ -187,13 +189,15 @@ private fun PicturesCarousel(
 
         Spacer(Modifier.height(20.dp))
 
-        CuiHorizontalPagerIndicator(
-            state = pagerState,
-            selectedWidth = 20.dp,
-            defaultWidth = 6.dp,
-            selectedColor = CuiPalette.Light.BackgroundAccentPrimary,
-            defaultColor = CuiColorToken.GreyOrange,
-        )
+        if (pagerState.pageCount > 1) {
+            CuiHorizontalPagerIndicator(
+                state = pagerState,
+                selectedWidth = 20.dp,
+                defaultWidth = 6.dp,
+                selectedColor = CuiPalette.Light.BackgroundAccentPrimary,
+                defaultColor = CuiColorToken.GreyOrange,
+            )
+        }
     }
 }
 

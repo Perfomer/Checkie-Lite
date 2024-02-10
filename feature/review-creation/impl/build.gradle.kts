@@ -74,5 +74,4 @@ dependencies {
 	implementation("io.insert-koin:koin-android:3.5.0")
 	implementation("io.insert-koin:koin-core:3.5.0")
     debugImplementation("androidx.compose.ui:ui-tooling:1.5.4")
-	implementation("id.zelory:compressor:3.0.1")
 }

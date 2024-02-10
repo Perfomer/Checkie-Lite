@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.core.data.datasource.room.entity
+package com.perfomer.checkielite.core.data.datasource.database.room.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

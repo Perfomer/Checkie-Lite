@@ -1,8 +1,8 @@
-package com.perfomer.checkielite.core.data.datasource.room.mapper
+package com.perfomer.checkielite.core.data.datasource.database.room.mapper
 
-import com.perfomer.checkielite.core.data.datasource.room.entity.CheckieReviewDb
-import com.perfomer.checkielite.core.data.datasource.room.entity.CheckieReviewPictureDb
-import com.perfomer.checkielite.core.data.datasource.room.entity.relation.CheckieReviewWithPictures
+import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewDb
+import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewPictureDb
+import com.perfomer.checkielite.core.data.datasource.database.room.entity.relation.CheckieReviewWithPictures
 import com.perfomer.checkielite.core.entity.CheckieReview
 
 internal fun CheckieReviewWithPictures.toDomain(): CheckieReview {

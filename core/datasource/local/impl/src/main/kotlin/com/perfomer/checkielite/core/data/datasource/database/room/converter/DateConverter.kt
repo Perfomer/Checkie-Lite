@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.core.data.datasource.room.converter
+package com.perfomer.checkielite.core.data.datasource.database.room.converter
 
 import androidx.room.TypeConverter
 import java.util.Date

@@ -1,14 +1,14 @@
-package com.perfomer.checkielite.core.data.datasource.room
+package com.perfomer.checkielite.core.data.datasource.database.room
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.perfomer.checkielite.core.data.datasource.room.converter.DateConverter
-import com.perfomer.checkielite.core.data.datasource.room.dao.CheckieReviewDao
-import com.perfomer.checkielite.core.data.datasource.room.entity.CheckieReviewDb
-import com.perfomer.checkielite.core.data.datasource.room.entity.CheckieReviewPictureDb
+import com.perfomer.checkielite.core.data.datasource.database.room.converter.DateConverter
+import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieReviewDao
+import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewDb
+import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewPictureDb
 
 @Database(
     version = 1,

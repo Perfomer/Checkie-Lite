@@ -45,6 +45,7 @@ import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.button.CuiFloatingActionButton
 import com.perfomer.checkielite.common.ui.cui.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
+import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.main.impl.R
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiState
@@ -253,7 +254,7 @@ private fun CheckieRating(rating: Int, emoji: String) {
 
 @ScreenPreview
 @Composable
-private fun MainScreenPreview() {
+private fun MainScreenPreview() = PreviewTheme {
     MainScreen(state = mockUiState)
 }
 

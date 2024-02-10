@@ -1,12 +1,12 @@
-package com.perfomer.checkielite.core.data.datasource.room.dao
+package com.perfomer.checkielite.core.data.datasource.database.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import com.perfomer.checkielite.core.data.datasource.room.entity.CheckieReviewDb
-import com.perfomer.checkielite.core.data.datasource.room.entity.CheckieReviewPictureDb
-import com.perfomer.checkielite.core.data.datasource.room.entity.relation.CheckieReviewWithPictures
+import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewDb
+import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewPictureDb
+import com.perfomer.checkielite.core.data.datasource.database.room.entity.relation.CheckieReviewWithPictures
 
 @Dao
 internal interface CheckieReviewDao {

@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.common.tea.impl
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.perfomer.checkielite.common.tea.Store
 import com.perfomer.checkielite.common.tea.TeaEngine
 import com.perfomer.checkielite.common.tea.component.Actor
@@ -29,6 +29,6 @@ abstract class ScreenModelStore<Command : Any, Effect : Any, Event : Any, UiEven
 	) : this(engine = TeaEngine(initialState, initialEvents, reducer, uiStateMapper, combineActors(actors)))
 
 	init {
-		engine.launch(coroutineScope + Dispatchers.Main.immediate)
+		engine.launch(screenModelScope + Dispatchers.Main.immediate)
 	}
 }

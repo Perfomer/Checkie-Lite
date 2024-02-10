@@ -28,9 +28,12 @@ android {
 
         release {
             setMinifyEnabled(false)
+            signingConfig = signingConfigs.getByName("debug")
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
-
-    buildFeatures.compose = true
-    composeOptions.kotlinCompilerExtensionVersion = "1.5.2"
 }

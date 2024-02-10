@@ -7,6 +7,9 @@ applyCommonAndroid()
 
 android {
 	namespace = "com.perfomer.checkielite.feature.main.impl"
+
+	buildFeatures.compose = true
+	composeOptions.kotlinCompilerExtensionVersion = "1.5.2"
 }
 
 dependencies {

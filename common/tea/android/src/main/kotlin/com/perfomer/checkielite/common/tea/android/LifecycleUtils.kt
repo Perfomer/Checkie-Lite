@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.common.tea.util
+package com.perfomer.checkielite.common.tea.android
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner

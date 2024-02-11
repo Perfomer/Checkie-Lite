@@ -46,7 +46,7 @@ interface CuiPalette {
 
         override val IconPrimary: Color = CuiColorToken.Black
         override val IconSecondary: Color = CuiColorToken.Grey
-        override val IconAccent: Color = CuiColorToken.OrangeDark
+        override val IconAccent: Color = CuiColorToken.Orange
     }
 }
 
@@ -58,7 +58,7 @@ object CuiColorToken {
     val White = Color(0xFFFFFFFF)
     val Black = Color(0xFF222B39)
 
-    val GreyLight = Color(0xFFEDEDED)
+    val GreyLight = Color(0xFFF5F5F5)
     val GreyLight2 = Color(0xFFE6E6E6)
     val Grey = Color(0xFFC1C0CC)
     val GreyOrange = Color(0xFFB6A6A2)

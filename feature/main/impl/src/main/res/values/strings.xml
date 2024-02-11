@@ -5,4 +5,7 @@
     <string name="main_search">Search</string>
     <string name="main_add_checkie">Add Checkie</string>
     <string name="main_clear">Clear</string>
+
+    <string name="main_empty_title">There are no Checkies yet</string>
+    <string name="main_empty_description">Would you like to add one?</string>
 </resources>

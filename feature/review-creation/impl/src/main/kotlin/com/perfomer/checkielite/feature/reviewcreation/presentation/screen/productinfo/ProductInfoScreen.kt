@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.field.CuiOutlinedField
+import com.perfomer.checkielite.common.ui.theme.CuiColorToken
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.impl.R
@@ -125,9 +126,9 @@ internal fun AddPicture(
     modifier: Modifier = Modifier,
 ) {
     Icon(
-        painter = painterResource(id = R.drawable.ic_add_picture),
+        painter = painterResource(id = CommonDrawable.ic_add_picture),
         contentDescription = null,
-        tint = CuiPalette.Light.IconAccent,
+        tint = CuiColorToken.OrangeDark,
         modifier = modifier
             .size(56.dp)
             .clip(RoundedCornerShape(16.dp))
@@ -144,9 +145,7 @@ private fun DeletablePicture(
     onClick: () -> Unit = {},
     onDeletePictureClick: () -> Unit,
 ) {
-    Box(
-        contentAlignment = Alignment.TopEnd,
-    ) {
+    Box(contentAlignment = Alignment.TopEnd) {
         Picture(
             pictureUrl = pictureUrl,
             onClick = onClick,

@@ -1,12 +1,14 @@
 package com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor
 
 import com.perfomer.checkielite.common.pure.util.flowBy
+import com.perfomer.checkielite.common.pure.util.onCatchReturn
+import com.perfomer.checkielite.common.pure.util.startWith
+import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.feature.main.domain.repository.ReviewsRepository
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand.LoadReviews
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent.ReviewsLoading
-import com.perfomer.checkielite.common.tea.component.Actor
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -26,5 +28,7 @@ internal class LoadReviewsActor(
     private fun handleCommand(command: LoadReviews): Flow<ReviewsLoading> {
         return flowBy { repository.getCheckies(command.searchQuery) }
             .map(ReviewsLoading::Succeed)
+            .startWith(ReviewsLoading.Started)
+            .onCatchReturn(ReviewsLoading::Failed)
     }
 }

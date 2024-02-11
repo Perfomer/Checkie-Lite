@@ -19,7 +19,6 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -45,17 +44,12 @@ internal fun ReviewCreationScreen(
     onBackPress: () -> Unit = {},
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
-    val backDrawableResource = remember(pagerState.currentPage) {
-        if (pagerState.currentPage == 0) CommonDrawable.ic_cross
-        else CommonDrawable.ic_arrow_back
-    }
-
     Box(modifier = Modifier.background(CuiPalette.Light.BackgroundPrimary)) {
         Column(modifier = Modifier.fillMaxSize()) {
             ProgressAppBar(
-                step = state.step,
-                stepsCount = state.stepsCount,
-                trailingIconPainter = painterResource(backDrawableResource),
+                pagerState = pagerState,
+                navigationIconPainter = painterResource(CommonDrawable.ic_arrow_back),
+                firstStepNavigationIconPainter = painterResource(CommonDrawable.ic_cross),
                 onBackPress = onBackPress,
                 modifier = Modifier.statusBarsPadding()
             )

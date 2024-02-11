@@ -8,6 +8,8 @@ import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsParams
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsStore
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnBackPress
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnEditClick
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnPictureSelect
 import com.perfomer.checkielite.navigation.voyager.BaseScreen
 
 internal class ReviewDetailsContentScreen(
@@ -21,6 +23,9 @@ internal class ReviewDetailsContentScreen(
         ReviewDetailsScreen(
             state = state,
             onNavigationIconClick = acceptable(OnBackPress),
+            onPageChange = acceptable(::OnPictureSelect),
+            onEmptyImageClick = acceptable(OnEditClick),
+            onEmptyReviewTextClick = acceptable(OnEditClick),
         )
     }
 }

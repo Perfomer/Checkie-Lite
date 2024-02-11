@@ -1,16 +1,33 @@
 package com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state
 
+import com.perfomer.checkielite.common.pure.state.Lce
+import com.perfomer.checkielite.common.pure.state.requireContent
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
 import com.perfomer.checkielite.core.entity.CheckieReview
+import com.perfomer.checkielite.core.entity.ReviewReaction
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainState
 
 internal class MainUiStateMapper : UiStateMapper<MainState, MainUiState> {
 
     override fun map(state: MainState): MainUiState {
-        return MainUiState(
-            searchQuery = state.searchQuery,
-            reviews = state.reviews.map { it.toUiItem() },
-        )
+        return when (state.reviews) {
+            is Lce.Content -> createContent(state)
+            is Lce.Error -> MainUiState.Loading // todo
+            is Lce.Loading -> MainUiState.Loading
+        }
+    }
+
+    private fun createContent(state: MainState): MainUiState {
+        val reviews = state.reviews.requireContent()
+
+        return if (reviews.isEmpty() && state.searchQuery.isBlank()) {
+            MainUiState.Empty
+        } else {
+            MainUiState.Content(
+                searchQuery = state.searchQuery,
+                reviews = reviews.map { it.toUiItem() },
+            )
+        }
     }
 
     private fun CheckieReview.toUiItem(): ReviewItem {
@@ -20,16 +37,7 @@ internal class MainUiStateMapper : UiStateMapper<MainState, MainUiState> {
             brand = productBrand,
             imageUri = picturesUri.firstOrNull(),
             rating = rating,
-            emoji = defineRatingEmoji(rating),
+            emoji = ReviewReaction.createFromRating(rating).emoji,
         )
-    }
-
-    private fun defineRatingEmoji(rating: Int): String = when (rating) {
-        0 -> "💩"
-        1, 2, 3 -> "😭"
-        4, 5, 6 -> "😐"
-        7, 8, 9 -> "😍"
-        10 -> "💎"
-        else -> throw IllegalArgumentException("Rating must be between 0 and 10")
     }
 }

@@ -4,6 +4,8 @@ import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -21,8 +24,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,19 +42,22 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import com.perfomer.checkielite.common.ui.CommonDrawable
-import com.perfomer.checkielite.common.ui.cui.button.CuiIconButton
+import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.cui.pager.CuiHorizontalPagerIndicator
 import com.perfomer.checkielite.common.ui.cui.pager.offsetForPage
 import com.perfomer.checkielite.common.ui.cui.pager.scaleHorizontalNeighbors
+import com.perfomer.checkielite.common.ui.cui.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CuiColorToken
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.feature.reviewdetails.impl.R
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -61,6 +69,9 @@ private const val HORIZONTAL_PADDING = 24
 internal fun ReviewDetailsScreen(
     state: ReviewDetailsUiState,
     onNavigationIconClick: () -> Unit = {},
+    onEmptyImageClick: () -> Unit = {},
+    onEmptyReviewTextClick: () -> Unit = {},
+    onPageChange: (pageIndex: Int) -> Unit = {},
 ) {
     Scaffold(
         topBar = { AppBar(onNavigationIconClick) },
@@ -78,6 +89,7 @@ internal fun ReviewDetailsScreen(
                     text = state.brandName,
                     color = CuiPalette.Light.TextAccent,
                     fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
                     modifier = Modifier.padding(horizontal = HORIZONTAL_PADDING.dp),
                 )
 
@@ -102,29 +114,84 @@ internal fun ReviewDetailsScreen(
                 Text(
                     text = state.date,
                     color = CuiPalette.Light.TextSecondary,
+                    fontSize = 14.sp,
                     modifier = Modifier.weight(1F),
                 )
 
                 CheckieRating(rating = state.rating, emoji = state.emoji)
             }
 
-            PicturesCarousel(
-                currentPictureIndex = state.currentPicturePosition,
-                picturesUri = state.picturesUri,
-            )
-
-            if (state.reviewText != null) {
-                if (state.picturesUri.isNotEmpty()) {
-                    Spacer(Modifier.height(24.dp))
-                }
-
-                Text(
-                    text = state.reviewText,
-                    fontSize = 16.sp,
-                    modifier = Modifier.padding(horizontal = HORIZONTAL_PADDING.dp)
+            if (state.picturesUri.isEmpty()) {
+                EmptyImage(onEmptyImageClick = onEmptyImageClick)
+            } else {
+                PicturesCarousel(
+                    currentPictureIndex = state.currentPicturePosition,
+                    picturesUri = state.picturesUri,
+                    onPageChange = onPageChange,
                 )
             }
+
+            Column(
+                modifier = Modifier.padding(top = 24.dp)
+            ) {
+                if (state.reviewText != null) {
+                    Text(
+                        text = state.reviewText,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(horizontal = HORIZONTAL_PADDING.dp)
+                    )
+                } else {
+                    Text(
+                        text = stringResource(R.string.reviewdetails_empty_review_text),
+                        fontSize = 16.sp,
+                        color = CuiPalette.Light.TextSecondary,
+                        modifier = Modifier.padding(horizontal = HORIZONTAL_PADDING.dp)
+                    )
+
+                    TextButton(onClick = onEmptyReviewTextClick) {
+                        Text(
+                            text = stringResource(R.string.reviewdetails_add_review_text),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = CuiPalette.Light.TextAccent,
+                            modifier = Modifier.padding(horizontal = 12.dp)
+                        )
+                    }
+                }
+            }
         }
+    }
+}
+
+@Composable
+private fun EmptyImage(onEmptyImageClick: () -> Unit) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .padding(top = 24.dp)
+            .padding(horizontal = HORIZONTAL_PADDING.dp)
+            .fillMaxWidth()
+            .aspectRatio(1F)
+            .clip(RoundedCornerShape(24.dp))
+            .background(CuiPalette.Light.BackgroundSecondary)
+            .clickable(onClick = onEmptyImageClick)
+    ) {
+        Icon(
+            painter = painterResource(id = CommonDrawable.ic_add_picture),
+            tint = CuiPalette.Light.IconAccent,
+            contentDescription = null,
+            modifier = Modifier.size(64.dp),
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        Text(
+            text = stringResource(R.string.reviewdetails_add_image),
+            color = CuiPalette.Light.TextAccent,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Medium,
+        )
     }
 }
 
@@ -133,6 +200,7 @@ internal fun ReviewDetailsScreen(
 private fun PicturesCarousel(
     currentPictureIndex: Int,
     picturesUri: ImmutableList<String>,
+    onPageChange: (pageIndex: Int) -> Unit,
 ) {
     Box(
         contentAlignment = Alignment.BottomCenter,
@@ -142,6 +210,8 @@ private fun PicturesCarousel(
             initialPage = currentPictureIndex,
             pageCount = { picturesUri.size },
         )
+
+        UpdateEffect(pagerState.currentPage) { onPageChange(pagerState.currentPage) }
 
         HorizontalPager(
             state = pagerState,
@@ -209,9 +279,10 @@ private fun AppBar(
     TopAppBar(
         title = {},
         navigationIcon = {
-            CuiIconButton(
+            CuiToolbarNavigationIcon(
                 painter = painterResource(CommonDrawable.ic_arrow_back),
-                onClick = onNavigationIconClick,
+                color = CuiPalette.Light.IconPrimary,
+                onBackPress = onNavigationIconClick,
             )
         },
     )
@@ -222,6 +293,7 @@ private fun CheckieRating(rating: Int, emoji: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = rating.toString(),
+            fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
         )
 

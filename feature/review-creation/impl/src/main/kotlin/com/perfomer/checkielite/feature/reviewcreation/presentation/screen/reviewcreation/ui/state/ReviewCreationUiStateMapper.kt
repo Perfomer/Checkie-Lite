@@ -7,7 +7,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 internal class ReviewCreationUiStateMapper : UiStateMapper<ReviewCreationState, ReviewCreationUiState> {
 
     override fun map(state: ReviewCreationState): ReviewCreationUiState {
-        val pages = enumValues<ReviewCreationPage>()
+        val pages = ReviewCreationPage.entries
         val currentStep = pages.indexOf(state.currentPage) + 1
         val stepsCount = pages.size
 

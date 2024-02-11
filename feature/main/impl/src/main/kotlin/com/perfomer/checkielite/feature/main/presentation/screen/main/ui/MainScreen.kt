@@ -1,9 +1,12 @@
 package com.perfomer.checkielite.feature.main.presentation.screen.main.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -69,31 +72,85 @@ internal fun MainScreen(
         },
         topBar = { TopAppBar() },
     ) { contentPadding ->
-        LazyColumn(
-            contentPadding = contentPadding,
-            modifier = Modifier
-                .fillMaxWidth()
-                .imePadding()
-        ) {
-            item {
-                Spacer(modifier = Modifier.height(4.dp))
+        when (state) {
+            is MainUiState.Loading -> Unit
 
-                SearchField(
-                    searchQuery = state.searchQuery,
-                    onSearchQueryInput = onSearchQueryInput,
-                    onSearchQueryClearClick = onSearchQueryClearClick,
-                )
+            is MainUiState.Content -> Content(
+                state = state,
+                contentPadding = contentPadding,
+                onSearchQueryInput = onSearchQueryInput,
+                onSearchQueryClearClick = onSearchQueryClearClick,
+                onReviewClick = onReviewClick,
+            )
 
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            items(
-                count = state.reviews.size,
-                key = { i -> state.reviews[i].id },
-            ) { i ->
-                CheckieHorizontalItem(state.reviews[i], onReviewClick)
-            }
+            is MainUiState.Empty -> Empty()
         }
+    }
+}
+
+@Composable
+private fun Content(
+    state: MainUiState.Content,
+    contentPadding: PaddingValues,
+    onSearchQueryInput: (query: String) -> Unit = {},
+    onSearchQueryClearClick: () -> Unit = {},
+    onReviewClick: (id: String) -> Unit = {},
+) {
+    LazyColumn(
+        contentPadding = contentPadding,
+        modifier = Modifier
+            .fillMaxWidth()
+            .imePadding()
+    ) {
+        item {
+            Spacer(modifier = Modifier.height(4.dp))
+
+            SearchField(
+                searchQuery = state.searchQuery,
+                onSearchQueryInput = onSearchQueryInput,
+                onSearchQueryClearClick = onSearchQueryClearClick,
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        items(
+            count = state.reviews.size,
+            key = { i -> state.reviews[i].id },
+        ) { i ->
+            CheckieHorizontalItem(state.reviews[i], onReviewClick)
+        }
+    }
+}
+
+@Composable
+private fun Empty() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Image(
+            painter = painterResource(CommonDrawable.ill_empty),
+            contentDescription = null,
+            modifier = Modifier.width(184.dp),
+        )
+
+        Spacer(Modifier.height(32.dp))
+
+        Text(
+            text = stringResource(R.string.main_empty_title),
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        Text(
+            text = stringResource(R.string.main_empty_description),
+            fontSize = 14.sp,
+            color = CuiPalette.Light.TextSecondary,
+        )
     }
 }
 
@@ -236,6 +293,7 @@ private fun CheckieRating(rating: Int, emoji: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = rating.toString(),
+            fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
         )
 
@@ -258,7 +316,7 @@ private fun MainScreenPreview() = PreviewTheme {
     MainScreen(state = mockUiState)
 }
 
-internal val mockUiState = MainUiState(
+internal val mockUiState = MainUiState.Content(
     searchQuery = "",
     reviews = listOf(
         ReviewItem(

@@ -8,7 +8,11 @@ internal sealed interface MainEvent {
 
     sealed interface ReviewsLoading : MainEvent {
 
+        data object Started : ReviewsLoading
+
         class Succeed(val reviews: List<CheckieReview>) : ReviewsLoading
+
+        class Failed(val error: Throwable) : ReviewsLoading
     }
 }
 

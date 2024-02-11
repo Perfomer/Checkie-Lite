@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="reviewdetails_add_image">Add photo</string>
+    <string name="reviewdetails_empty_review_text">No review text.</string>
+    <string name="reviewdetails_add_review_text">Would you like to add it?</string>
+</resources>

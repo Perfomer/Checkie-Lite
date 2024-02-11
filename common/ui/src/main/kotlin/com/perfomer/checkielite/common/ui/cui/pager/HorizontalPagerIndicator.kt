@@ -38,7 +38,7 @@ fun CuiHorizontalPagerIndicator(
         repeat(state.pageCount) { i ->
             val offset = state.indicatorOffsetForPage(i)
             val widthDifference = selectedWidth - defaultWidth
-            val additionalWidth = (widthDifference * offset)
+            val additionalWidth = widthDifference * offset
 
             val targetColor = if (state.currentPage == i) selectedColor else defaultColor
 

@@ -3,10 +3,17 @@ package com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state
 import androidx.compose.runtime.Immutable
 
 @Immutable
-internal data class MainUiState(
-    val searchQuery: String,
-    val reviews: List<ReviewItem>,
-)
+internal sealed interface MainUiState {
+
+    data object Loading : MainUiState
+
+    data class Content(
+        val searchQuery: String,
+        val reviews: List<ReviewItem>,
+    ) : MainUiState
+
+    data object Empty : MainUiState
+}
 
 @Immutable
 internal data class ReviewItem(

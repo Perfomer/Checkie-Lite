@@ -38,7 +38,7 @@ internal class ReviewCreationContentScreen : BaseScreen() {
             onBackPress = acceptable(OnBackPress),
         ) { pageIndex ->
             val reviewCreationPage by remember(pageIndex) {
-                derivedStateOf { enumValues<ReviewCreationPage>()[pageIndex] }
+                derivedStateOf { ReviewCreationPage.entries[pageIndex] }
             }
 
             when (reviewCreationPage) {

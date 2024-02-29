@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-	implementation("cafe.adriel.voyager:voyager-navigator:1.0.0-rc10")
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+	implementation(libs.voyager.navigator)
+	implementation(libs.kotlinx.coroutines)
 }

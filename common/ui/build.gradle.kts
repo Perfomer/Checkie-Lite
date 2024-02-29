@@ -39,5 +39,5 @@ dependencies {
 	implementation("io.insert-koin:koin-core:3.5.0")
 
 	//	Lifecycle
-	implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+	implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
 }

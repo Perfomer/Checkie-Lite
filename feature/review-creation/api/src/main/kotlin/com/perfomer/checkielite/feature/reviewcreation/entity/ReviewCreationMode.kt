@@ -1,6 +1,8 @@
 package com.perfomer.checkielite.feature.reviewcreation.entity
 
-sealed interface ReviewCreationMode {
+import java.io.Serializable
+
+sealed interface ReviewCreationMode : Serializable {
 
     val initialPage: ReviewCreationPage
 

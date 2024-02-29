@@ -7,7 +7,9 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.Companion.isPhotoPickerAvailable
 import androidx.appcompat.app.AppCompatActivity
 import com.perfomer.checkielite.common.android.SingleActivityHolder
 import com.perfomer.checkielite.common.android.SuspendableActivityResultHandler
@@ -27,6 +29,7 @@ internal class AndroidExternalRouter(
 
     private lateinit var permissionResultHandler: SuspendableActivityResultHandler<String, Boolean>
     private lateinit var cameraResultHandler: SuspendableActivityResultHandler<Uri, Boolean>
+    private lateinit var photoPickerResultHandler: SuspendableActivityResultHandler<PickVisualMediaRequest, Uri?>
     private lateinit var commonActivityResultHandler: SuspendableActivityResultHandler<Intent, ActivityResult>
 
     fun register() {
@@ -37,6 +40,10 @@ internal class AndroidExternalRouter(
         cameraResultHandler = SuspendableActivityResultHandler(
             singleActivityHolder = singleActivityHolder,
             contract = ActivityResultContracts.TakePicture(),
+        )
+        photoPickerResultHandler = SuspendableActivityResultHandler(
+            singleActivityHolder = singleActivityHolder,
+            contract = ActivityResultContracts.PickVisualMedia(),
         )
         commonActivityResultHandler = SuspendableActivityResultHandler(
             singleActivityHolder = singleActivityHolder,
@@ -69,9 +76,28 @@ internal class AndroidExternalRouter(
     }
 
     private suspend fun pickPhoto(): ExternalResult {
-        val isPermissionGranted = permissionResultHandler.awaitResultFor(Manifest.permission.READ_EXTERNAL_STORAGE)
+        val uri = if (isPhotoPickerAvailable(activity)) {
+            pickPhotoViaPhotoPicker()
+        } else {
+            pickPhotoViaFileSystem()
+        }
 
-        if (!isPermissionGranted) return ExternalResult.Cancel
+        return if (uri != null) {
+            ExternalResult.Success(uri.getRealPath(activity))
+        } else {
+            ExternalResult.Cancel
+        }
+    }
+
+    private suspend fun pickPhotoViaPhotoPicker(): Uri? {
+        return photoPickerResultHandler.awaitResultFor(
+            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+        )
+    }
+
+    private suspend fun pickPhotoViaFileSystem(): Uri? {
+        val isPermissionGranted = permissionResultHandler.awaitResultFor(Manifest.permission.READ_EXTERNAL_STORAGE)
+        if (!isPermissionGranted) return null
 
         val intent = Intent().apply {
             action = Intent.ACTION_PICK
@@ -82,10 +108,6 @@ internal class AndroidExternalRouter(
 
         val uri = activityResult.data?.data
 
-        return if (activityResult.resultCode == Activity.RESULT_OK && uri != null) {
-            ExternalResult.Success(uri.getRealPath(activity))
-        } else {
-            ExternalResult.Cancel
-        }
+        return uri.takeIf { activityResult.resultCode == Activity.RESULT_OK }
     }
 }

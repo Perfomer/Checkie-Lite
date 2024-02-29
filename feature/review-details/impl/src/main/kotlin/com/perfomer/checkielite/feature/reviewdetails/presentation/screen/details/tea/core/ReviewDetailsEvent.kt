@@ -18,6 +18,10 @@ internal sealed interface ReviewDetailsUiEvent : ReviewDetailsEvent {
 
     class OnPictureSelect(val position: Int) : ReviewDetailsUiEvent
 
+    data object OnEmptyImageClick : ReviewDetailsUiEvent
+
+    data object OnEmptyReviewTextClick : ReviewDetailsUiEvent
+
     data object OnEditClick : ReviewDetailsUiEvent
 
     data object OnDeleteClick : ReviewDetailsUiEvent

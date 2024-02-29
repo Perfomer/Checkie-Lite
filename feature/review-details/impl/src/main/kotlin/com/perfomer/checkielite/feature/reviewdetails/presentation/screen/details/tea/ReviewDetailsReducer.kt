@@ -2,6 +2,7 @@ package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detai
 
 import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
+import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand.LoadReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect
@@ -24,11 +25,17 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
     private fun reduceUi(event: ReviewDetailsUiEvent) = when (event) {
         is ReviewDetailsUiEvent.OnBackPress -> commands(Exit)
         is ReviewDetailsUiEvent.OnDeleteClick -> Unit
-        is ReviewDetailsUiEvent.OnEditClick -> commands(OpenReviewEdit(state.reviewId))
+        is ReviewDetailsUiEvent.OnEmptyImageClick -> reduceOnEditClick(initialPage = ReviewCreationPage.PRODUCT_INFO)
+        is ReviewDetailsUiEvent.OnEmptyReviewTextClick -> reduceOnEditClick(initialPage = ReviewCreationPage.REVIEW_INFO)
+        is ReviewDetailsUiEvent.OnEditClick -> reduceOnEditClick(initialPage = ReviewCreationPage.PRODUCT_INFO)
         is ReviewDetailsUiEvent.OnPictureSelect -> state { copy(currentPicturePosition = event.position) }
     }
 
     private fun reduceReviewsLoading(event: ReviewLoading) = when (event) {
         is ReviewLoading.Succeed -> state { copy(review = Lce.Content(event.review)) }
+    }
+
+    private fun reduceOnEditClick(initialPage: ReviewCreationPage) {
+        commands(OpenReviewEdit(reviewId = state.reviewId, initialPage = initialPage))
     }
 }

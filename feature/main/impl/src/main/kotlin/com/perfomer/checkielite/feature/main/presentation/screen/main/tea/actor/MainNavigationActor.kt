@@ -8,6 +8,8 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenReviewCreation
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationEvent.ReviewCreated
+import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
+import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationScreenProvider
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsParams
@@ -34,12 +36,14 @@ internal class MainNavigationActor(
     private suspend fun handleCommand(command: MainNavigationCommand): MainEvent? = with(router) {
         when (command) {
             is OpenReviewCreation -> {
-                navigateForResult<ReviewCreationResult>(reviewCreationScreenProvider())
+                val params = ReviewCreationParams(ReviewCreationMode.Creation)
+                navigateForResult<ReviewCreationResult>(reviewCreationScreenProvider(params))
                 return ReviewCreated
             }
 
             is OpenReviewDetails -> {
-                navigate(reviewDetailsScreenProvider(ReviewDetailsParams(command.reviewId)))
+                val params = ReviewDetailsParams(command.reviewId)
+                navigate(reviewDetailsScreenProvider(params))
             }
         }
 

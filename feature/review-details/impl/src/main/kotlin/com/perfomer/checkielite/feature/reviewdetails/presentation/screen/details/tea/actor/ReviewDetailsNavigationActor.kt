@@ -2,6 +2,8 @@ package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detai
 
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.navigation.api.Router
+import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
+import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationScreenProvider
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent
@@ -28,8 +30,14 @@ internal class ReviewDetailsNavigationActor(
 
     private fun handleCommand(command: ReviewDetailsNavigationCommand): ReviewDetailsEvent? = with(router) {
         when (command) {
-            is Exit -> exit()
-            is OpenReviewEdit -> navigate(reviewCreationScreenProvider())
+            is Exit -> {
+                exit()
+            }
+
+            is OpenReviewEdit -> {
+                val params = ReviewCreationParams(mode = ReviewCreationMode.Modification(reviewId = command.reviewId, initialPage = command.initialPage))
+                navigate(reviewCreationScreenProvider(params))
+            }
         }
 
         return null

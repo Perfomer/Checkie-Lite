@@ -12,6 +12,7 @@ import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
+import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.productinfo.ProductInfoScreen
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationStore
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnBackPress
@@ -23,10 +24,12 @@ import com.perfomer.checkielite.navigation.voyager.BaseScreen
 import kotlinx.coroutines.coroutineScope
 
 @OptIn(ExperimentalFoundationApi::class)
-internal class ReviewCreationContentScreen : BaseScreen() {
+internal class ReviewCreationContentScreen(
+    private val params: ReviewCreationParams,
+) : BaseScreen() {
 
     @Composable
-    override fun Screen() = TeaComposable(store<ReviewCreationStore>()) { state ->
+    override fun Screen() = TeaComposable(store<ReviewCreationStore>(params)) { state ->
         BackHandler { accept(OnBackPress) }
 
         val pagerState = rememberPagerState(pageCount = { state.stepsCount })

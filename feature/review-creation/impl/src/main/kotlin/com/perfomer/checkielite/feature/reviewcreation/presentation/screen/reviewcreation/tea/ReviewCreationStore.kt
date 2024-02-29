@@ -2,6 +2,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.impl.ScreenModelStore
+import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
@@ -12,11 +13,12 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewCreationUiStateMapper
 
 internal class ReviewCreationStore(
+    params: ReviewCreationParams,
     reducer: ReviewCreationReducer,
     uiStateMapper: ReviewCreationUiStateMapper,
     actors: Set<Actor<ReviewCreationCommand, ReviewCreationEvent>>,
 ) : ScreenModelStore<ReviewCreationCommand, ReviewCreationEffect, ReviewCreationEvent, ReviewCreationUiEvent, ReviewCreationState, ReviewCreationUiState>(
-    initialState = ReviewCreationState(),
+    initialState = ReviewCreationState(mode = params.mode),
     reducer = reducer,
     uiStateMapper = uiStateMapper,
     actors = actors,

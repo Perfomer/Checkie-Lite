@@ -28,6 +28,7 @@ internal class FileDataSourceImpl(
     private val applicationContext: Context,
 ) : FileDataSource {
 
+    @Suppress("DEPRECATION")
     override suspend fun cacheCompressedPicture(
         uri: String,
         compressTargetSizeBytes: Long,

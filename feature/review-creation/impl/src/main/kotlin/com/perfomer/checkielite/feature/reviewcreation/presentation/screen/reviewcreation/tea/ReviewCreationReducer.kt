@@ -20,8 +20,8 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnPrimaryButtonClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ProductInfo
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ReviewInfo
-import com.perfomer.checkielite.feature.reviewcreation.presentation.util.next
-import com.perfomer.checkielite.feature.reviewcreation.presentation.util.previous
+import com.perfomer.checkielite.common.pure.util.next
+import com.perfomer.checkielite.common.pure.util.previous
 import java.util.Date
 import java.util.UUID
 

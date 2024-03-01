@@ -47,7 +47,6 @@ fun CuiProgressBar(
 		progress = animatedProgress.value,
 		trackColor = backgroundColor,
 		color = animatedProgressColor.value,
-		strokeCap = StrokeCap.Round,
 		modifier = modifier.height(8.dp)
 	)
 }

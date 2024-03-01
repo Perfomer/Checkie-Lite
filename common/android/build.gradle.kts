@@ -1,6 +1,6 @@
 plugins {
-	id("com.android.library")
-	id("org.jetbrains.kotlin.android")
+	alias(libs.plugins.android.library)
+	alias(libs.plugins.kotlin.android)
 }
 
 applyCommonAndroid()
@@ -10,6 +10,6 @@ android {
 }
 
 dependencies {
-	implementation("androidx.appcompat:appcompat:1.6.1")
-	api("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+	implementation(libs.appcompat)
+	api(libs.lifecycle.ktx)
 }

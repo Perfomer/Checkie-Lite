@@ -9,6 +9,7 @@ internal data class ReviewCreationState(
     val mode: ReviewCreationMode,
     val currentPage: ReviewCreationPage = mode.initialPage,
 
+    val reviewId: String = "",
     val productName: String = "",
     val isProductNameValid: Boolean = true,
     val brand: String = "",
@@ -17,5 +18,6 @@ internal data class ReviewCreationState(
     val rating: Int = 5,
     val reviewText: String = "",
 
+    val isReviewLoading: Boolean = false,
     val isSavingInProgress: Boolean = false,
 )

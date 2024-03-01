@@ -8,9 +8,7 @@ interface CheckieLocalDataSource {
 
     suspend fun getReview(reviewId: String): CheckieReview
 
-    suspend fun createReview(review: CheckieReview)
-
-    suspend fun updateReview(review: CheckieReview)
+    suspend fun saveReview(review: CheckieReview)
 
     suspend fun deleteReview(reviewId: String)
 }

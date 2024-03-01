@@ -2,6 +2,7 @@ package com.perfomer.checkielite.core.data.datasource.database.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewDb
@@ -31,7 +32,7 @@ internal interface CheckieReviewDao {
     @Query("SELECT * FROM CheckieReviewDb WHERE id = :id")
     suspend fun getReview(id: String): CheckieReviewWithPictures
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertReview(review: CheckieReviewDb)
 
     @Insert

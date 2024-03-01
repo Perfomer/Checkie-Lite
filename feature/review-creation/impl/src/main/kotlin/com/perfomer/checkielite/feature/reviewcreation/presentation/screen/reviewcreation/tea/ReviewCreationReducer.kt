@@ -1,14 +1,19 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea
 
+import com.perfomer.checkielite.common.pure.util.next
+import com.perfomer.checkielite.common.pure.util.previous
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.core.entity.CheckieReview
+import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
-import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.CreateReview
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadReview
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.SaveReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.Initialize
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.ReviewCreation
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.ReviewLoading
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.Exit
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.ExitWithResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenPhotoPicker
@@ -20,19 +25,25 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnPrimaryButtonClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ProductInfo
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ReviewInfo
-import com.perfomer.checkielite.common.pure.util.next
-import com.perfomer.checkielite.common.pure.util.previous
+import kotlinx.collections.immutable.toPersistentList
 import java.util.Date
 import java.util.UUID
 
 internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewCreationEffect, ReviewCreationEvent, ReviewCreationState>() {
 
     override fun reduce(event: ReviewCreationEvent) = when (event) {
-        is Initialize -> Unit
+        is Initialize -> reduceInitialize()
 
         is ReviewCreationUiEvent -> reduceUi(event)
         is ReviewCreationNavigationEvent -> reduceNavigation(event)
+
+        is ReviewLoading -> reduceReviewLoading(event)
         is ReviewCreation -> reduceReviewsCreation(event)
+    }
+
+    private fun reduceInitialize() {
+        val mode = state.mode as? ReviewCreationMode.Modification ?: return
+        commands(LoadReview(mode.reviewId))
     }
 
     private fun reduceUi(event: ReviewCreationUiEvent) = when (event) {
@@ -47,9 +58,9 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 state { copy(isProductNameValid = isProductNameValid) }
             } else {
                 commands(
-                    CreateReview(
+                    SaveReview(
                         CheckieReview(
-                            id = UUID.randomUUID().toString(),
+                            id = state.reviewId.ifEmpty { UUID.randomUUID().toString() },
                             productName = state.productName,
                             productBrand = state.brand.takeIf { it.isNotBlank() },
                             rating = state.rating,
@@ -92,5 +103,20 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     private fun reduceReviewsCreation(event: ReviewCreation) = when (event) {
         is ReviewCreation.Started -> state { copy(isSavingInProgress = true) }
         is ReviewCreation.Succeed -> commands(ExitWithResult(ReviewCreationResult.Success))
+    }
+
+    private fun reduceReviewLoading(event: ReviewLoading) = when (event) {
+        is ReviewLoading.Started -> state { copy(isReviewLoading = true) }
+        is ReviewLoading.Succeed -> state {
+            copy(
+                reviewId = event.review.id,
+                productName = event.review.productName,
+                brand = event.review.productBrand.orEmpty(),
+                picturesUri = event.review.picturesUri.toPersistentList(),
+                reviewText = event.review.reviewText.orEmpty(),
+                rating = event.review.rating,
+            )
+        }
+        is ReviewLoading.Failed -> TODO()
     }
 }

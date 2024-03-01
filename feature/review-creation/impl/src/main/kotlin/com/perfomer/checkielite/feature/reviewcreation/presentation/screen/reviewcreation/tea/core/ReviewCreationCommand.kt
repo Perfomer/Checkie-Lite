@@ -5,7 +5,9 @@ import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreation
 
 internal sealed interface ReviewCreationCommand {
 
-    class CreateReview(val review: CheckieReview) : ReviewCreationCommand
+    class LoadReview(val reviewId: String) : ReviewCreationCommand
+
+    class SaveReview(val review: CheckieReview) : ReviewCreationCommand
 }
 
 internal sealed interface ReviewCreationNavigationCommand : ReviewCreationCommand {

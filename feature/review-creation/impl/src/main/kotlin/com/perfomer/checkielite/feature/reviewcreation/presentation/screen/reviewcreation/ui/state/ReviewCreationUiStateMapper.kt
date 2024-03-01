@@ -8,7 +8,7 @@ internal class ReviewCreationUiStateMapper : UiStateMapper<ReviewCreationState, 
 
     override fun map(state: ReviewCreationState): ReviewCreationUiState {
         val pages = ReviewCreationPage.entries
-        val currentStep = pages.indexOf(state.currentPage) + 1
+        val currentStep = pages.indexOf(state.currentPage)
         val stepsCount = pages.size
 
         return ReviewCreationUiState(

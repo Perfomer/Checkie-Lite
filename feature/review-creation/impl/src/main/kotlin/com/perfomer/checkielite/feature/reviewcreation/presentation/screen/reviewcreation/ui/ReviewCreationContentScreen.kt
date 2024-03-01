@@ -32,7 +32,10 @@ internal class ReviewCreationContentScreen(
     override fun Screen() = TeaComposable(store<ReviewCreationStore>(params)) { state ->
         BackHandler { accept(OnBackPress) }
 
-        val pagerState = rememberPagerState(pageCount = { state.stepsCount })
+        val pagerState = rememberPagerState(
+            initialPage = state.step,
+            pageCount = { state.stepsCount },
+        )
 
         ReviewCreationScreen(
             state = state,
@@ -62,7 +65,7 @@ internal class ReviewCreationContentScreen(
         }
 
         UpdateEffect(state.step) {
-            coroutineScope { pagerState.animateScrollToPage(state.step - 1) }
+            coroutineScope { pagerState.animateScrollToPage(state.step) }
         }
     }
 }

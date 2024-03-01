@@ -18,7 +18,7 @@ internal class CheckieLocalDataSourceImpl(
         return databaseDataSource.getReview(reviewId)
     }
 
-    override suspend fun createReview(review: CheckieReview) {
+    override suspend fun saveReview(review: CheckieReview) {
         val picturesUri = review.picturesUri.mapAsync { uri ->
             fileDataSource.cacheCompressedPicture(uri)
         }
@@ -26,10 +26,6 @@ internal class CheckieLocalDataSourceImpl(
         databaseDataSource.createReview(
             review.copy(picturesUri = picturesUri)
         )
-    }
-
-    override suspend fun updateReview(review: CheckieReview) {
-        TODO("Not yet implemented")
     }
 
     override suspend fun deleteReview(reviewId: String) {

@@ -16,9 +16,10 @@ dependencyResolutionManagement {
 rootProject.name = "Checkie Lite"
 include(":app")
 
-//Common
 include(
     ":common:android",
+    ":common:navigation:api",
+    ":common:navigation:voyager",
     ":common:pure",
     ":common:tea:android",
     ":common:tea:compose",
@@ -26,7 +27,6 @@ include(
     ":common:ui",
 )
 
-//Feature
 include(
     ":feature:main:api",
     ":feature:main:impl",
@@ -36,11 +36,8 @@ include(
     ":feature:review-details:impl",
 )
 
-//Core
 include(
-    ":core:entity",
-    ":core:navigation:api",
-    ":core:navigation:voyager",
     ":core:datasource:local:api",
     ":core:datasource:local:impl",
+    ":core:entity",
 )

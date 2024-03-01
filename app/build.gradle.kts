@@ -18,11 +18,11 @@ dependencies {
     implementation(project(":feature:review-creation:impl"))
     implementation(project(":feature:review-details:impl"))
 
-    implementation(project(":common:android"))
-    implementation(project(":common:ui"))
-
     implementation(project(":core:datasource:local:impl"))
-    implementation(project(":core:navigation:voyager"))
+
+    implementation(project(":common:android"))
+    implementation(project(":common:navigation:voyager"))
+    implementation(project(":common:ui"))
 
     implementation(libs.activity.compose)
     implementation(libs.core.ktx)

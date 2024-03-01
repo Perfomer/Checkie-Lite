@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-	implementation(project(":core:navigation:api"))
+	implementation(project(":common:navigation:api"))
 }

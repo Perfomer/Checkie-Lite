@@ -13,7 +13,7 @@ android {
 }
 
 dependencies {
-	api(project(":core:navigation:api"))
+	api(project(":common:navigation:api"))
 	implementation(project(":common:android"))
 
 	api(libs.voyager.navigator)

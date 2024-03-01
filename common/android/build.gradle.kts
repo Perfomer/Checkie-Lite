@@ -10,6 +10,6 @@ android {
 }
 
 dependencies {
-	implementation(libs.appcompat)
 	api(libs.lifecycle.ktx)
+	implementation(libs.appcompat)
 }

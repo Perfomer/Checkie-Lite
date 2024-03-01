@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-	implementation(libs.voyager.navigator)
 	implementation(libs.kotlinx.coroutines)
+	implementation(libs.voyager.navigator)
 }

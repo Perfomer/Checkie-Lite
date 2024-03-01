@@ -18,10 +18,9 @@ dependencies {
     api(project(":core:datasource:local:api"))
     implementation(project(":common:pure"))
 
-    implementation(libs.koin.android)
     implementation(libs.compressor)
-
-    implementation(libs.room.runtime)
+    implementation(libs.koin.android)
     implementation(libs.room.ktx)
+    implementation(libs.room.runtime)
     ksp(libs.room.compiler)
 }

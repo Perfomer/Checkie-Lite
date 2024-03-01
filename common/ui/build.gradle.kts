@@ -9,7 +9,7 @@ android {
 	namespace = "com.perfomer.checkielite.common.ui"
 
 	buildFeatures.compose = true
-	composeOptions.kotlinCompilerExtensionVersion = "1.5.2"
+	composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
 }
 
 dependencies {
@@ -17,13 +17,13 @@ dependencies {
 	implementation(project(":common:tea:compose"))
 
 	api(libs.coil)
-	implementation(platform(libs.compose.bom))
-	implementation(libs.compose.material3)
-	implementation(libs.accompanist.systemuicontroller)
-	implementation(libs.voyager.navigator)
-	implementation(libs.voyager.koin)
-	implementation(libs.appcompat)
-	implementation(libs.lifecycle.ktx)
-	implementation(libs.koin.core)
 	debugImplementation(libs.compose.ui.tooling)
+	implementation(libs.accompanist.systemuicontroller)
+	implementation(libs.appcompat)
+	implementation(libs.compose.material3)
+	implementation(libs.koin.core)
+	implementation(libs.lifecycle.ktx)
+	implementation(libs.voyager.koin)
+	implementation(libs.voyager.navigator)
+	implementation(platform(libs.compose.bom))
 }

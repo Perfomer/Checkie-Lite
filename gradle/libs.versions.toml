@@ -1,46 +1,46 @@
 [versions]
+accompanist-systemuicontroller = "0.32.0"
 activity-compose = "1.8.1"
 agp = "8.2.2"
+appcompat = "1.6.1"
+coil = "2.5.0"
+compose-bom = "2023.03.00"
+compressor = "3.0.1"
 core-ktx = "1.12.0"
 koin = "3.5.0"
 kotlin = "1.9.0"
-ksp = "1.9.0-1.0.13"
-lifecycle-runtime-ktx = "2.7.0"
-voyager = "1.0.0-rc10"
-compose-bom = "2023.03.00"
-room = "2.6.1"
-compressor = "3.0.1"
-kotlinx-coroutines = "1.7.3"
 kotlinx-collections-immutable = "0.3.7"
-appcompat = "1.6.1"
+kotlinx-coroutines = "1.7.3"
+ksp = "1.9.0-1.0.13"
 lifecycle-ktx = "2.7.0"
-coil = "2.5.0"
-accompanist-systemuicontroller = "0.32.0"
+lifecycle-runtime-ktx = "2.7.0"
+room = "2.6.1"
+voyager = "1.0.0-rc10"
+compose-compiler = "1.5.2"
 
 [libraries]
-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
-lifecycle-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-ktx" }
-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
-coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist-systemuicontroller" }
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
-compose-material3 = { module = "androidx.compose.material3:material3" }
+compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
+core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
-voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
-voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
-voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+lifecycle-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-ktx" }
+lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
+voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

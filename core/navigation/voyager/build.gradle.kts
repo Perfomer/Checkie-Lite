@@ -9,7 +9,7 @@ android {
 	namespace = "com.perfomer.checkielite.navigation.voyager"
 
 	buildFeatures.compose = true
-	composeOptions.kotlinCompilerExtensionVersion = "1.5.2"
+	composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
 }
 
 dependencies {
@@ -17,9 +17,9 @@ dependencies {
 	implementation(project(":common:android"))
 
 	api(libs.voyager.navigator)
-	implementation(platform(libs.compose.bom))
-	implementation(libs.compose.ui)
 	implementation(libs.appcompat)
-	implementation(libs.kotlinx.coroutines)
+	implementation(libs.compose.ui)
 	implementation(libs.koin.core)
+	implementation(libs.kotlinx.coroutines)
+	implementation(platform(libs.compose.bom))
 }

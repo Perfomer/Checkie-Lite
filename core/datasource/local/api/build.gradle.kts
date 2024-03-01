@@ -4,5 +4,6 @@ plugins {
 
 dependencies {
 	api(project(":core:entity"))
+
 	api(libs.kotlinx.coroutines)
 }

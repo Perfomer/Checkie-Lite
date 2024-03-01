@@ -9,7 +9,7 @@ android {
 	namespace = "com.perfomer.checkielite.feature.main.impl"
 
 	buildFeatures.compose = true
-	composeOptions.kotlinCompilerExtensionVersion = "1.5.2"
+	composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
 }
 
 dependencies {
@@ -17,16 +17,16 @@ dependencies {
 	implementation(project(":feature:review-creation:api"))
 	implementation(project(":feature:review-details:api"))
 
-	implementation(project(":core:entity"))
 	implementation(project(":core:datasource:local:api"))
+	implementation(project(":core:entity"))
 	implementation(project(":core:navigation:voyager"))
 
 	implementation(project(":common:pure"))
 	implementation(project(":common:tea:compose"))
 	implementation(project(":common:ui"))
 
-	implementation(platform(libs.compose.bom))
-	implementation(libs.compose.ui)
 	implementation(libs.compose.material3)
+	implementation(libs.compose.ui)
 	implementation(libs.koin.core)
+	implementation(platform(libs.compose.bom))
 }

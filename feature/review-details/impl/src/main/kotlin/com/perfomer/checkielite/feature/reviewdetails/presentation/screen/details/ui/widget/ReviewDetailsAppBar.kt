@@ -11,7 +11,7 @@ import com.perfomer.checkielite.common.ui.cui.dropdown.CuiDropdownMenuItem
 import com.perfomer.checkielite.common.ui.cui.modifier.debounced
 import com.perfomer.checkielite.common.ui.cui.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
-import com.perfomer.checkielite.feature.reviewdetails.impl.R
+import com.perfomer.checkielite.feature.reviewdetails.R
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)

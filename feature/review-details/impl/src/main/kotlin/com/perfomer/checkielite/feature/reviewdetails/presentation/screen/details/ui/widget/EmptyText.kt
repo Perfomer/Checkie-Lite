@@ -11,7 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
-import com.perfomer.checkielite.feature.reviewdetails.impl.R
+import com.perfomer.checkielite.feature.reviewdetails.R
 
 @Composable
 internal fun EmptyText(

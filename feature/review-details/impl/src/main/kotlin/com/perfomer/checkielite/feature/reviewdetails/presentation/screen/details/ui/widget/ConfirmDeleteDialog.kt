@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.CommonString
-import com.perfomer.checkielite.feature.reviewdetails.impl.R
+import com.perfomer.checkielite.feature.reviewdetails.R
 
 @Composable
 internal fun ConfirmDeleteDialog(

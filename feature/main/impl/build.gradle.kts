@@ -6,7 +6,7 @@ plugins {
 applyCommonAndroid()
 
 android {
-	namespace = "com.perfomer.checkielite.feature.main.impl"
+	namespace = "com.perfomer.checkielite.feature.main"
 
 	buildFeatures.compose = true
 	composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()

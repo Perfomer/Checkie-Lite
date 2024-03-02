@@ -3,7 +3,7 @@ package com.perfomer.checkielite.navigation
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.transitions.SlideTransition
+import cafe.adriel.voyager.transitions.FadeTransition
 import com.perfomer.checkielite.feature.main.navigation.MainScreenProvider
 import com.perfomer.checkielite.navigation.voyager.impl.NavigatorHolder
 
@@ -20,7 +20,7 @@ class SingleStackScreenContent(
         ) { navigator ->
             navigatorHolder.navigator = navigator
 
-            SlideTransition(navigator = navigator) { screen ->
+            FadeTransition(navigator = navigator) { screen ->
                 screen.Content()
             }
         }

@@ -1,0 +1,67 @@
+package com.perfomer.checkielite.common.ui.cui.dropdown
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.dp
+import com.perfomer.checkielite.common.ui.R
+import com.perfomer.checkielite.common.ui.cui.button.CuiIconButton
+
+@Composable
+fun CuiDropdownIcon(
+    painter: Painter = painterResource(R.drawable.ic_menu),
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    var isExpanded by remember { mutableStateOf(false) }
+
+    CuiIconButton(
+        painter = painter,
+        onClick = { isExpanded = !isExpanded },
+    )
+
+    DropdownMenu(
+        expanded = isExpanded,
+        onDismissRequest = { isExpanded = false },
+        content = content,
+        offset = DpOffset(x = (-12).dp, y = 0.dp),
+        modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+    )
+}
+
+@Composable
+fun CuiDropdownMenuItem(
+    text: String,
+    modifier: Modifier = Modifier,
+    iconPainter: Painter? = null,
+    iconContentDescription: String? = null,
+    onClick: () -> Unit,
+) {
+    DropdownMenuItem(
+        text = { Text(text) },
+        leadingIcon = iconPainter?.let {
+            {
+                Icon(
+                    painter = iconPainter,
+                    contentDescription = iconContentDescription,
+                )
+            }
+        },
+        onClick = onClick,
+        contentPadding = PaddingValues(horizontal = 12.dp),
+        modifier = modifier,
+    )
+}

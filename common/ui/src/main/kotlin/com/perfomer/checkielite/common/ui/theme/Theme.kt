@@ -1,13 +1,16 @@
 package com.perfomer.checkielite.common.ui.theme
 
 import android.app.Activity
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -19,6 +22,7 @@ fun CheckieLiteTheme(
 
     MaterialTheme(
         colorScheme = LightAndroidColorScheme,
+        shapes = CheckieShapes,
         content = { CompositionLocalContent(content) },
     )
 }
@@ -29,6 +33,7 @@ fun PreviewTheme(
 ) {
     MaterialTheme(
         colorScheme = LightAndroidColorScheme,
+        shapes = CheckieShapes,
         content = { CompositionLocalContent(content) },
     )
 }
@@ -62,6 +67,14 @@ fun TransparentSystemBars() {
         )
     }
 }
+
+private val CheckieShapes = Shapes(
+    extraSmall = RoundedCornerShape(16.dp),
+    small = RoundedCornerShape(16.dp),
+    medium = RoundedCornerShape(16.dp),
+    large = RoundedCornerShape(24.dp),
+    extraLarge = RoundedCornerShape(24.dp),
+)
 
 private val LightAndroidColorScheme = lightColorScheme(
     primary = CuiPalette.Light.BackgroundAccentPrimary,

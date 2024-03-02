@@ -49,7 +49,10 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.cui.dropdown.CuiDropdownIcon
+import com.perfomer.checkielite.common.ui.cui.dropdown.CuiDropdownMenuItem
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
+import com.perfomer.checkielite.common.ui.cui.modifier.debounced
 import com.perfomer.checkielite.common.ui.cui.pager.CuiHorizontalPagerIndicator
 import com.perfomer.checkielite.common.ui.cui.pager.offsetForPage
 import com.perfomer.checkielite.common.ui.cui.pager.scaleHorizontalNeighbors
@@ -69,12 +72,20 @@ private const val HORIZONTAL_PADDING = 24
 internal fun ReviewDetailsScreen(
     state: ReviewDetailsUiState,
     onNavigationIconClick: () -> Unit = {},
+    onEditClick: () -> Unit = {},
+    onDeleteClick: () -> Unit = {},
     onEmptyImageClick: () -> Unit = {},
     onEmptyReviewTextClick: () -> Unit = {},
     onPageChange: (pageIndex: Int) -> Unit = {},
 ) {
     Scaffold(
-        topBar = { AppBar(onNavigationIconClick) },
+        topBar = {
+            AppBar(
+                onNavigationIconClick = onNavigationIconClick,
+                onEditClick = onEditClick,
+                onDeleteClick = onDeleteClick,
+            )
+        },
     ) { contentPadding ->
         if (state !is ReviewDetailsUiState.Content) return@Scaffold
 
@@ -275,6 +286,8 @@ private fun PicturesCarousel(
 @OptIn(ExperimentalMaterial3Api::class)
 private fun AppBar(
     onNavigationIconClick: () -> Unit,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit,
 ) {
     TopAppBar(
         title = {},
@@ -285,6 +298,21 @@ private fun AppBar(
                 onBackPress = onNavigationIconClick,
             )
         },
+        actions = {
+            CuiDropdownIcon {
+                CuiDropdownMenuItem(
+                    text = stringResource(R.string.reviewdetails_action_edit),
+                    iconPainter = painterResource(CommonDrawable.ic_pencil),
+                    onClick = debounced(onEditClick),
+                )
+
+                CuiDropdownMenuItem(
+                    text = stringResource(R.string.reviewdetails_action_delete),
+                    iconPainter = painterResource(CommonDrawable.ic_delete),
+                    onClick = debounced(onDeleteClick),
+                )
+            }
+        }
     )
 }
 

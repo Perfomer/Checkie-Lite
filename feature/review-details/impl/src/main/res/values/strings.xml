@@ -3,4 +3,6 @@
     <string name="reviewdetails_add_image">Add photo</string>
     <string name="reviewdetails_empty_review_text">No review text.</string>
     <string name="reviewdetails_add_review_text">Would you like to add it?</string>
+    <string name="reviewdetails_action_edit">Edit</string>
+    <string name="reviewdetails_action_delete">Delete</string>
 </resources>

@@ -24,7 +24,7 @@ internal class ReviewCreationUiStateMapper : UiStateMapper<ReviewCreationState, 
     private fun createProductInfoPageState(state: ReviewCreationState): ProductInfoPageUiState {
         return ProductInfoPageUiState(
             productName = state.productName,
-            brand = state.brand,
+            brand = state.productBrand,
             picturesUri = state.picturesUri,
             productNameErrorText = "Product name cannot be empty".takeUnless { state.isProductNameValid },
         )

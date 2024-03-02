@@ -8,9 +8,10 @@ import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreation
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationScreenProvider
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationReducer
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationStore
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.CreateReviewActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.LoadReviewActor
-import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.SaveReviewActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.ReviewCreationNavigationActor
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.UpdateReviewActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.ReviewCreationContentScreen
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewCreationUiStateMapper
 import org.koin.core.module.dsl.factoryOf
@@ -42,7 +43,8 @@ internal fun createReviewCreationStore(
         uiStateMapper = ReviewCreationUiStateMapper(),
         actors = setOf(
             ReviewCreationNavigationActor(router, externalRouter),
-            SaveReviewActor(reviewCreationRepository),
+            CreateReviewActor(reviewCreationRepository),
+            UpdateReviewActor(reviewCreationRepository),
             LoadReviewActor(reviewCreationRepository),
         )
     )

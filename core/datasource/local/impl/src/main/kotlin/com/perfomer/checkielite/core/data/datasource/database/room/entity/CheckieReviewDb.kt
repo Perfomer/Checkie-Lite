@@ -12,4 +12,5 @@ internal data class CheckieReviewDb(
     val rating: Int,
     val reviewText: String?,
     val creationDate: Date,
+    val modificationDate: Date,
 )

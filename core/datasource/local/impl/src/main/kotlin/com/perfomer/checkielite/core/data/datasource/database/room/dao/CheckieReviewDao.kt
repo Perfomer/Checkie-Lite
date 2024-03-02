@@ -32,9 +32,18 @@ internal interface CheckieReviewDao {
     @Query("SELECT * FROM CheckieReviewDb WHERE id = :id")
     suspend fun getReview(id: String): CheckieReviewWithPictures
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun insertReview(review: CheckieReviewDb)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateReview(review: CheckieReviewDb)
+
+    @Query("DELETE FROM CheckieReviewDb WHERE id = :id")
+    suspend fun deleteReview(id: String)
 
     @Insert
     suspend fun insertPictures(pictures: List<CheckieReviewPictureDb>)
+
+    @Query("DELETE FROM CheckieReviewPictureDb WHERE uri IN (:picturesUri)")
+    suspend fun deletePictures(picturesUri: List<String>)
 }

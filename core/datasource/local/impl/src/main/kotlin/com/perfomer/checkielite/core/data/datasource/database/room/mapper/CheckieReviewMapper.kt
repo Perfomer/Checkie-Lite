@@ -1,7 +1,6 @@
 package com.perfomer.checkielite.core.data.datasource.database.room.mapper
 
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewDb
-import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewPictureDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.relation.CheckieReviewWithPictures
 import com.perfomer.checkielite.core.entity.CheckieReview
 
@@ -14,24 +13,18 @@ internal fun CheckieReviewWithPictures.toDomain(): CheckieReview {
         picturesUri = picturesUri.map { it.uri },
         reviewText = review.reviewText,
         creationDate = review.creationDate,
+        modificationDate = review.modificationDate,
     )
 }
 
-internal fun CheckieReview.toDb(): CheckieReviewWithPictures {
-    return CheckieReviewWithPictures(
-        review = CheckieReviewDb(
-            id = id,
-            productName = productName,
-            brandName = productBrand,
-            rating = rating,
-            reviewText = reviewText,
-            creationDate = creationDate,
-        ),
-        picturesUri = picturesUri.map { uri ->
-            CheckieReviewPictureDb(
-                reviewId = id,
-                uri = uri,
-            )
-        }
+internal fun CheckieReview.toDb(): CheckieReviewDb {
+    return CheckieReviewDb(
+        id = id,
+        productName = productName,
+        brandName = productBrand?.takeIf { it.isNotBlank() },
+        rating = rating,
+        reviewText = reviewText?.takeIf { it.isNotBlank() },
+        creationDate = creationDate,
+        modificationDate = modificationDate,
     )
 }

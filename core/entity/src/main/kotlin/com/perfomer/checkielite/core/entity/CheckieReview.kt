@@ -10,4 +10,5 @@ data class CheckieReview(
     val picturesUri: List<String>,
     val reviewText: String?,
     val creationDate: Date,
+    val modificationDate: Date,
 )

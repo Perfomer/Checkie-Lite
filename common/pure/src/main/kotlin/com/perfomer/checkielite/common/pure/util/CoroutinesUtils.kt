@@ -11,3 +11,11 @@ suspend fun <T, R> Iterable<T>.mapAsync(
         .map { async { transformation(it) } }
         .awaitAll()
 }
+
+suspend fun <T> Iterable<T>.forEachAsync(
+    block: suspend (T) -> Unit
+): Unit = coroutineScope {
+    this@forEachAsync
+        .map { async { block(it) } }
+        .awaitAll()
+}

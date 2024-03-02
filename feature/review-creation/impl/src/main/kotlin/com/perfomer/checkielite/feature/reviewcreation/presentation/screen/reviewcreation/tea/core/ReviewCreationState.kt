@@ -12,7 +12,7 @@ internal data class ReviewCreationState(
     val reviewId: String = "",
     val productName: String = "",
     val isProductNameValid: Boolean = true,
-    val brand: String = "",
+    val productBrand: String = "",
     val picturesUri: PersistentList<String> = emptyPersistentList(),
 
     val rating: Int = 5,

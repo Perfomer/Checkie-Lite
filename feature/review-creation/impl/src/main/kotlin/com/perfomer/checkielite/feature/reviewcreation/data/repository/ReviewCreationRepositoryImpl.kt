@@ -8,8 +8,38 @@ internal class ReviewCreationRepositoryImpl(
     private val localDataSource: CheckieLocalDataSource,
 ) : ReviewCreationRepository {
 
-    override suspend fun saveReview(review: CheckieReview) {
-        localDataSource.saveReview(review)
+    override suspend fun createReview(
+        productName: String,
+        productBrand: String?,
+        rating: Int,
+        picturesUri: List<String>,
+        reviewText: String?
+    ) {
+        localDataSource.createReview(
+            productName = productName,
+            productBrand = productBrand,
+            rating = rating,
+            picturesUri = picturesUri,
+            reviewText = reviewText
+        )
+    }
+
+    override suspend fun updateReview(
+        reviewId: String,
+        productName: String,
+        productBrand: String?,
+        rating: Int,
+        picturesUri: List<String>,
+        reviewText: String?
+    ) {
+        localDataSource.updateReview(
+            reviewId = reviewId,
+            productName = productName,
+            productBrand = productBrand,
+            rating = rating,
+            picturesUri = picturesUri,
+            reviewText = reviewText
+        )
     }
 
     override suspend fun getReview(reviewId: String): CheckieReview {

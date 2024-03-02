@@ -12,9 +12,10 @@ internal sealed interface ReviewCreationEvent {
         class Failed(val error: Throwable) : ReviewLoading
     }
 
-    sealed interface ReviewCreation : ReviewCreationEvent {
-        data object Started : ReviewCreation
-        data object Succeed : ReviewCreation
+    sealed interface ReviewSaving : ReviewCreationEvent {
+        data object Started : ReviewSaving
+        data object Succeed : ReviewSaving
+        data object Failed : ReviewSaving
     }
 }
 

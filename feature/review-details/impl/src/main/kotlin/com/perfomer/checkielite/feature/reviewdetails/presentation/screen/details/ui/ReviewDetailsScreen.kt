@@ -28,6 +28,7 @@ internal fun ReviewDetailsScreen(
     onNavigationIconClick: () -> Unit = {},
     onEditClick: () -> Unit = {},
     onDeleteClick: () -> Unit = {},
+    onPictureClick: () -> Unit = {},
     onEmptyImageClick: () -> Unit = {},
     onEmptyReviewTextClick: () -> Unit = {},
     onPageChange: (pageIndex: Int) -> Unit = {},
@@ -61,6 +62,7 @@ internal fun ReviewDetailsScreen(
                 picturesUri = state.picturesUri,
                 currentPicturePosition = state.currentPicturePosition,
                 onEmptyImageClick = onEmptyImageClick,
+                onPictureClick = onPictureClick,
                 onPageChange = onPageChange
             )
 

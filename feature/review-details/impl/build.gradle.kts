@@ -14,6 +14,7 @@ android {
 
 dependencies {
 	api(project(":feature:review-details:api"))
+	implementation(project(":feature:gallery:api"))
 	implementation(project(":feature:review-creation:api"))
 
 	implementation(project(":core:datasource:local:api"))

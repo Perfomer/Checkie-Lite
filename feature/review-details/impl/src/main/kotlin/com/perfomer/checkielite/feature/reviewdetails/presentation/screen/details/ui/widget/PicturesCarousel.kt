@@ -4,6 +4,7 @@ import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -44,6 +45,7 @@ internal fun PicturesCarousel(
     currentPictureIndex: Int,
     picturesUri: ImmutableList<String>,
     onPageChange: (pageIndex: Int) -> Unit,
+    onPictureClick: () -> Unit,
 ) {
     Box(
         contentAlignment = Alignment.BottomCenter,
@@ -96,6 +98,7 @@ internal fun PicturesCarousel(
                         .aspectRatio(1F)
                         .clip(RoundedCornerShape(24.dp))
                         .background(CuiPalette.Light.BackgroundSecondary)
+                        .clickable(onClick = onPictureClick)
                 )
             }
         }

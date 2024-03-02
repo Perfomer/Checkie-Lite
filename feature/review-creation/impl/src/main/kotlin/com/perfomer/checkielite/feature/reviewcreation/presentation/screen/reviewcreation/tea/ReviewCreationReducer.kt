@@ -16,6 +16,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.ReviewSaving
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.Exit
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.ExitWithResult
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenGallery
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenPhotoPicker
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnPhotoPick
@@ -93,10 +94,17 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     }
 
     private fun reduceProductInfoUi(event: ProductInfo) = when (event) {
-        is ProductInfo.OnAddPictureClick -> commands(OpenPhotoPicker)
-        is ProductInfo.OnBrandTextInput -> state { copy(productBrand = event.text) }
-        is ProductInfo.OnPictureDeleteClick -> state { copy(picturesUri = picturesUri.remove(event.pictureUri)) }
         is ProductInfo.OnProductNameTextInput -> state { copy(productName = event.text) }
+        is ProductInfo.OnBrandTextInput -> state { copy(productBrand = event.text) }
+        is ProductInfo.OnAddPictureClick -> commands(OpenPhotoPicker)
+        is ProductInfo.OnPictureClick -> commands(
+            OpenGallery(
+                picturesUri = state.picturesUri,
+                currentPicturePosition = state.picturesUri.indexOf(event.pictureUri).coerceAtLeast(0),
+            )
+        )
+
+        is ProductInfo.OnPictureDeleteClick -> state { copy(picturesUri = picturesUri.remove(event.pictureUri)) }
     }
 
     private fun reduceReviewInfoUi(event: ReviewInfo) = when (event) {

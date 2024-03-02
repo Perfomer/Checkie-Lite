@@ -31,4 +31,9 @@ internal sealed interface ReviewCreationNavigationCommand : ReviewCreationComman
     data class ExitWithResult(val result: ReviewCreationResult) : ReviewCreationNavigationCommand
 
     data object OpenPhotoPicker : ReviewCreationNavigationCommand
+
+    data class OpenGallery(
+        val picturesUri: List<String>,
+        val currentPicturePosition: Int,
+    ) : ReviewCreationNavigationCommand
 }

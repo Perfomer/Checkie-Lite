@@ -19,6 +19,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnEditClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnEmptyImageClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnEmptyReviewTextClick
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnPictureClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnPictureSelect
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnStart
 import com.perfomer.checkielite.navigation.voyager.BaseScreen
@@ -52,6 +53,7 @@ internal class ReviewDetailsContentScreen(
             onPageChange = acceptable(::OnPictureSelect),
             onEditClick = acceptable(OnEditClick),
             onDeleteClick = acceptable(OnDeleteClick),
+            onPictureClick = acceptable(OnPictureClick),
             onEmptyImageClick = acceptable(OnEmptyImageClick),
             onEmptyReviewTextClick = acceptable(OnEmptyReviewTextClick),
         )

@@ -52,6 +52,7 @@ internal fun ProductInfoScreen(
     onProductNameTextInput: (String) -> Unit = {},
     onBrandTextInput: (String) -> Unit = {},
     onAddPictureClick: () -> Unit = {},
+    onPictureClick: (String) -> Unit = {},
     onPictureDeleteClick: (String) -> Unit = {},
 ) {
     Column(
@@ -112,6 +113,7 @@ internal fun ProductInfoScreen(
                 key(pictureUri) {
                     DeletablePicture(
                         pictureUrl = pictureUri,
+                        onClick = { onPictureClick(pictureUri) },
                         onDeletePictureClick = { onPictureDeleteClick(pictureUri) },
                     )
                 }
@@ -142,7 +144,7 @@ internal fun AddPicture(
 @Composable
 private fun DeletablePicture(
     pictureUrl: String,
-    onClick: () -> Unit = {},
+    onClick: () -> Unit,
     onDeletePictureClick: () -> Unit,
 ) {
     Box(contentAlignment = Alignment.TopEnd) {

@@ -9,6 +9,7 @@ internal fun ColumnScope.ReviewDetailsImage(
     picturesUri: ImmutableList<String>,
     currentPicturePosition: Int,
     onEmptyImageClick: () -> Unit,
+    onPictureClick: () -> Unit,
     onPageChange: (pageIndex: Int) -> Unit,
 ) {
     if (picturesUri.isEmpty()) {
@@ -18,6 +19,7 @@ internal fun ColumnScope.ReviewDetailsImage(
             currentPictureIndex = currentPicturePosition,
             picturesUri = picturesUri,
             onPageChange = onPageChange,
+            onPictureClick = onPictureClick,
         )
     }
 }

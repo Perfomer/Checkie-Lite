@@ -53,6 +53,7 @@ internal class ReviewCreationContentScreen(
                     onProductNameTextInput = acceptable(ProductInfo::OnProductNameTextInput),
                     onBrandTextInput = acceptable(ProductInfo::OnBrandTextInput),
                     onAddPictureClick = acceptable(ProductInfo.OnAddPictureClick),
+                    onPictureClick = acceptable(ProductInfo::OnPictureClick),
                     onPictureDeleteClick = acceptable(ProductInfo::OnPictureDeleteClick),
                 )
 

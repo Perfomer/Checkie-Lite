@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewdetails
 
 import com.perfomer.checkielite.core.navigation.api.Router
+import com.perfomer.checkielite.feature.gallery.navigation.GalleryScreenProvider
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationScreenProvider
 import com.perfomer.checkielite.feature.reviewdetails.data.repository.ReviewRepositoryImpl
 import com.perfomer.checkielite.feature.reviewdetails.domain.repository.ReviewRepository
@@ -35,13 +36,14 @@ internal fun createReviewDetailsStore(
     reviewDetailsRepository: ReviewRepository,
     router: Router,
     reviewCreationScreenProvider: ReviewCreationScreenProvider,
+    galleryScreenProvider: GalleryScreenProvider,
 ): ReviewDetailsStore {
     return ReviewDetailsStore(
         params = params,
         reducer = ReviewDetailsReducer(),
         uiStateMapper = ReviewDetailsUiStateMapper(),
         actors = setOf(
-            ReviewDetailsNavigationActor(router, reviewCreationScreenProvider),
+            ReviewDetailsNavigationActor(router, reviewCreationScreenProvider, galleryScreenProvider),
             LoadReviewActor(reviewDetailsRepository),
             DeleteReviewActor(reviewDetailsRepository),
         ),

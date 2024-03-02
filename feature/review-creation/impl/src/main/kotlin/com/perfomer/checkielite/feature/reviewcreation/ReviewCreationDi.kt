@@ -2,6 +2,7 @@ package com.perfomer.checkielite.feature.reviewcreation
 
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.core.navigation.api.Router
+import com.perfomer.checkielite.feature.gallery.navigation.GalleryScreenProvider
 import com.perfomer.checkielite.feature.reviewcreation.data.repository.ReviewCreationRepositoryImpl
 import com.perfomer.checkielite.feature.reviewcreation.domain.repository.ReviewCreationRepository
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
@@ -36,13 +37,14 @@ internal fun createReviewCreationStore(
     reviewCreationRepository: ReviewCreationRepository,
     router: Router,
     externalRouter: ExternalRouter,
+    galleryScreenProvider: GalleryScreenProvider,
 ) : ReviewCreationStore{
     return ReviewCreationStore(
         params = params,
         reducer = ReviewCreationReducer(),
         uiStateMapper = ReviewCreationUiStateMapper(),
         actors = setOf(
-            ReviewCreationNavigationActor(router, externalRouter),
+            ReviewCreationNavigationActor(router, externalRouter, galleryScreenProvider),
             CreateReviewActor(reviewCreationRepository),
             UpdateReviewActor(reviewCreationRepository),
             LoadReviewActor(reviewCreationRepository),

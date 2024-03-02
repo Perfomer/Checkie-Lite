@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
+	api(libs.voyager.screenmodel)
 	implementation(libs.kotlinx.coroutines)
-	implementation(libs.voyager.navigator)
 }

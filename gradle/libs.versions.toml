@@ -1,6 +1,6 @@
 [versions]
-accompanist-systemuicontroller = "0.32.0"
-activity-compose = "1.8.1"
+accompanist-systemuicontroller = "0.34.0"
+activity-compose = "1.8.2"
 agp = "8.3.0"
 appcompat = "1.6.1"
 coil = "2.5.0"
@@ -8,15 +8,15 @@ compose-bom = "2024.02.01"
 compressor = "3.0.1"
 core-ktx = "1.12.0"
 koin = "3.5.0"
-kotlin = "1.9.0"
+kotlin = "1.9.20"
 kotlinx-collections-immutable = "0.3.7"
 kotlinx-coroutines = "1.7.3"
-ksp = "1.9.0-1.0.13"
+ksp = "1.9.20-1.0.14"
 lifecycle-ktx = "2.7.0"
 lifecycle-runtime-ktx = "2.7.0"
 room = "2.6.1"
-voyager = "1.0.0-rc10"
-compose-compiler = "1.5.2"
+voyager = "1.0.0"
+compose-compiler = "1.5.5"
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist-systemuicontroller" }
@@ -41,6 +41,7 @@ room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
+voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

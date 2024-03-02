@@ -14,11 +14,10 @@ internal class RouterImpl(
 ) : Router {
 
     private val navigator: Navigator
-        get() = navigatorHolder.navigator ?: error("navigator is not initialized")
+        get() = navigatorHolder.navigator ?: error("Navigator is not initialized")
 
     private val screenKey: ScreenKey
         get() = navigator.lastItem.key
-
 
     override fun navigate(screen: CheckieScreen) {
         navigator.push(screen as Screen)
@@ -34,9 +33,8 @@ internal class RouterImpl(
     }
 
     override fun exit() {
-        if (!navigator.pop()) {
-            applicationExitProvider.exit()
-        }
+        if (navigator.pop()) return
+        applicationExitProvider.exit()
     }
 
     override fun exitWithResult(result: Any?) {

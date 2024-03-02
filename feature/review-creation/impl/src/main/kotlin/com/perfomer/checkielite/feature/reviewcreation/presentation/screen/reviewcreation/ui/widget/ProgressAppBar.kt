@@ -12,7 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
-import com.perfomer.checkielite.common.ui.CuiProgressBar
+import com.perfomer.checkielite.common.ui.cui.CuiProgressBar
 import com.perfomer.checkielite.common.ui.cui.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CuiColorToken
 

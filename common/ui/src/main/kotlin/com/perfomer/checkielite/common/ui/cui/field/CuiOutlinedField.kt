@@ -7,16 +7,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.R
@@ -24,7 +21,6 @@ import com.perfomer.checkielite.common.ui.theme.CuiColorToken
 import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CuiOutlinedField(
     modifier: Modifier = Modifier,
@@ -34,7 +30,6 @@ fun CuiOutlinedField(
     isEnabled: Boolean = true,
     onValueChange: (String) -> Unit = {},
     singleLine: Boolean = true,
-    isPassword: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
@@ -51,7 +46,7 @@ fun CuiOutlinedField(
             }
         },
         shape = RoundedCornerShape(16.dp),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
+        colors = OutlinedTextFieldDefaults.colors(
             unfocusedBorderColor = CuiColorToken.Grey,
             errorBorderColor = CuiColorToken.Red,
             focusedLabelColor = CuiColorToken.Red,
@@ -70,7 +65,6 @@ fun CuiOutlinedField(
                 )
             }
         },
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
         modifier = modifier.fillMaxWidth()
     )
 }

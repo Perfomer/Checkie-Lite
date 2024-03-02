@@ -65,7 +65,6 @@ import kotlin.math.absoluteValue
 
 private const val HORIZONTAL_PADDING = 24
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ReviewDetailsScreen(
     state: ReviewDetailsUiState,

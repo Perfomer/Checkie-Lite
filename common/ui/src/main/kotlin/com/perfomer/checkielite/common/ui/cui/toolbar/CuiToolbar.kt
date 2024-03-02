@@ -36,7 +36,7 @@ fun CuiToolbar(
                 color = navigationColor
             )
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Transparent
         ),
         modifier = modifier

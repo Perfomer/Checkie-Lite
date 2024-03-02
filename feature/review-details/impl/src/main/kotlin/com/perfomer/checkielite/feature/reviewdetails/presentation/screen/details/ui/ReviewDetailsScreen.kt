@@ -227,7 +227,7 @@ private fun PicturesCarousel(
                 var pictureState: AsyncImagePainter.State by remember(i) { mutableStateOf(AsyncImagePainter.State.Empty) }
 
                 if (pictureState is AsyncImagePainter.State.Success) {
-                    val alpha = (1F - pagerState.offsetForPage(i).absoluteValue) * 0.9F
+                    val alpha = (1F - pagerState.offsetForPage(i).absoluteValue) * 0.75F
                     val interpolatedAlpha = FastOutLinearInEasing.transform(alpha)
                     Image(
                         painter = requireNotNull(pictureState.painter),

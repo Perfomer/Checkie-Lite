@@ -8,8 +8,6 @@ import com.perfomer.checkielite.feature.main.mainModules
 import com.perfomer.checkielite.feature.reviewcreation.reviewCreationModules
 import com.perfomer.checkielite.feature.reviewdetails.reviewDetailsModules
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
-import com.perfomer.checkielite.navigation.SingleStackScreenContent
-import com.perfomer.checkielite.navigation.StartStackScreenProvider
 import com.perfomer.checkielite.navigation.voyager.navigationModule
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
@@ -20,9 +18,7 @@ val checkieLiteModules: List<Module>
     get() = appModule + coreModules + commonModules + featureModules
 
 private val appModule = module {
-    singleOf(::SingleStackScreenContent)
     singleOf(::SingleActivityHolder)
-    singleOf(::StartStackScreenProvider)
     singleOf(::AndroidExternalRouter) bind ExternalRouter::class
 }
 

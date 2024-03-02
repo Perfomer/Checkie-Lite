@@ -4,5 +4,6 @@ import cafe.adriel.voyager.navigator.Navigator
 
 class NavigatorHolder {
 
-	var navigator: Navigator? = null
+	var usualNavigator: Navigator? = null
+	var overlayNavigator: Navigator? = null
 }

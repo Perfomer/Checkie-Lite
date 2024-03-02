@@ -14,8 +14,7 @@ interface TeaScope<in UiEvent : Any, out Effect : Any> {
 	fun accept(event: UiEvent)
 
 	@Composable
-	@SuppressLint("ComposableNaming")
-	fun renderEffect(renderer: suspend CoroutineScope.(Effect) -> Unit)
+	fun EffectHandler(renderer: suspend CoroutineScope.(Effect) -> Unit)
 }
 
 @Composable
@@ -39,7 +38,7 @@ private class TeaScopeImpl<in UiEvent : Any, out Effect : Any>(
 
 	@Composable
 	@SuppressLint("ComposableNaming")
-	override fun renderEffect(renderer: suspend CoroutineScope.(Effect) -> Unit) {
+	override fun EffectHandler(renderer: suspend CoroutineScope.(Effect) -> Unit) {
 		store.effects.collectOnLifecycle(lifecycleState, renderer)
 	}
 }

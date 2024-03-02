@@ -24,6 +24,7 @@ dependencies {
     implementation(project(":common:navigation:voyager"))
     implementation(project(":common:ui"))
 
+    implementation(libs.activity)
     implementation(libs.activity.compose)
     implementation(libs.core.ktx)
     implementation(libs.koin.android)

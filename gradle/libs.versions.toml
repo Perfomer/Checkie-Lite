@@ -1,6 +1,5 @@
 [versions]
-accompanist-systemuicontroller = "0.34.0"
-activity-compose = "1.8.2"
+activity = "1.8.2"
 agp = "8.3.0"
 appcompat = "1.6.1"
 coil = "2.5.0"
@@ -20,8 +19,8 @@ voyager = "1.0.0"
 zoomable = "1.6.0"
 
 [libraries]
-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist-systemuicontroller" }
-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
+activity = { module = "androidx.activity:activity", version.ref = "activity" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
@@ -41,8 +40,8 @@ room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
-voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
+voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 zoomable = { module = "net.engawapg.lib:zoomable", version.ref = "zoomable"}
 
 [plugins]

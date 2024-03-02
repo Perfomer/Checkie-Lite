@@ -4,8 +4,6 @@ import com.perfomer.checkielite.core.entity.CheckieReview
 
 internal sealed interface MainEvent {
 
-    data object Initialize : MainEvent
-
     sealed interface ReviewsLoading : MainEvent {
 
         data object Started : ReviewsLoading
@@ -17,6 +15,8 @@ internal sealed interface MainEvent {
 }
 
 internal sealed interface MainUiEvent : MainEvent {
+
+    data object OnStart : MainUiEvent
 
     class OnReviewClick(val id: String) : MainUiEvent
 

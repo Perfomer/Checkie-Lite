@@ -4,8 +4,6 @@ import com.perfomer.checkielite.core.entity.CheckieReview
 
 internal sealed interface ReviewDetailsEvent {
 
-    data object Initialize : ReviewDetailsEvent
-
     sealed interface ReviewLoading : ReviewDetailsEvent {
 
         class Succeed(val review: CheckieReview) : ReviewLoading
@@ -18,6 +16,8 @@ internal sealed interface ReviewDetailsEvent {
 }
 
 internal sealed interface ReviewDetailsUiEvent : ReviewDetailsEvent {
+
+    data object OnStart : ReviewDetailsUiEvent
 
     data object OnBackPress : ReviewDetailsUiEvent
 

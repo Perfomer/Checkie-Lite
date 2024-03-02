@@ -7,7 +7,6 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand.LoadReviews
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEffect
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent
-import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent.Initialize
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent.ReviewsLoading
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenReviewCreation
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenReviewDetails
@@ -19,20 +18,18 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnReviewClick
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnSearchQueryClearClick
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnSearchQueryInput
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnStart
 
 internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, MainState>() {
 
     override fun reduce(event: MainEvent) = when (event) {
-        is Initialize -> {
-            commands(LoadReviews())
-        }
-
         is MainUiEvent -> reduceUi(event)
         is MainNavigationEvent -> reduceNavigation(event)
         is ReviewsLoading -> reduceReviewsLoading(event)
     }
 
     private fun reduceUi(event: MainUiEvent) = when (event) {
+        is OnStart -> commands(LoadReviews())
         is OnFabClick -> commands(OpenReviewCreation)
         is OnReviewClick -> commands(OpenReviewDetails(event.id))
         is OnSearchQueryInput -> {

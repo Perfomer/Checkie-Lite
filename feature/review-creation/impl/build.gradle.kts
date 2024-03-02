@@ -13,7 +13,7 @@ android {
 }
 
 dependencies {
-	implementation(project(":feature:review-creation:api"))
+	api(project(":feature:review-creation:api"))
 
 	implementation(project(":core:datasource:local:api"))
 	implementation(project(":core:entity"))

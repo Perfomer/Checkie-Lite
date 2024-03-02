@@ -6,18 +6,14 @@ plugins {
 applyCommonAndroid()
 
 android {
-	namespace = "com.perfomer.checkielite.feature.reviewdetails"
+	namespace = "com.perfomer.checkielite.feature.gallery"
 
 	buildFeatures.compose = true
 	composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
 }
 
 dependencies {
-	api(project(":feature:review-details:api"))
-	implementation(project(":feature:review-creation:api"))
-
-	implementation(project(":core:datasource:local:api"))
-	implementation(project(":core:entity"))
+	api(project(":feature:gallery:api"))
 
 	implementation(project(":common:navigation:voyager"))
 	implementation(project(":common:pure"))

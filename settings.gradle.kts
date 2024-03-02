@@ -28,6 +28,8 @@ include(
 )
 
 include(
+    ":feature:gallery:api",
+    ":feature:gallery:impl",
     ":feature:main:api",
     ":feature:main:impl",
     ":feature:review-creation:api",

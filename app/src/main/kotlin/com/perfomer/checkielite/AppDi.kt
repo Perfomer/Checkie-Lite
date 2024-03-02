@@ -3,6 +3,7 @@ package com.perfomer.checkielite
 import com.perfomer.checkielite.common.android.SingleActivityHolder
 import com.perfomer.checkielite.core.data.datasource.localDataSourceModule
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
+import com.perfomer.checkielite.feature.gallery.galleryModules
 import com.perfomer.checkielite.feature.main.mainModules
 import com.perfomer.checkielite.feature.reviewcreation.reviewCreationModules
 import com.perfomer.checkielite.feature.reviewdetails.reviewDetailsModules
@@ -16,7 +17,7 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val checkieLiteModules: List<Module>
-    get() = appModule + coreModules + featureModules
+    get() = appModule + coreModules + commonModules + featureModules
 
 private val appModule = module {
     singleOf(::SingleStackScreenContent)
@@ -26,7 +27,19 @@ private val appModule = module {
 }
 
 private val coreModules
-    get() = navigationModule + localDataSourceModule
+    get() = listOf(
+        localDataSourceModule,
+    )
+
+private val commonModules
+    get() = listOf(
+        navigationModule,
+    )
 
 private val featureModules
-    get() = mainModules + reviewCreationModules + reviewDetailsModules
+    get() = listOf(
+        galleryModules,
+        mainModules,
+        reviewCreationModules,
+        reviewDetailsModules,
+    ).flatten()

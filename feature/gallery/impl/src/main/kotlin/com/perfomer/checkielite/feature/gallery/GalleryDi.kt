@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.gallery
 
+import android.content.Context
 import com.perfomer.checkielite.core.navigation.api.Router
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryParams
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryScreenProvider
@@ -20,13 +21,14 @@ private val presentationModule = module {
 }
 
 internal fun createGalleryStore(
+    context: Context,
     params: GalleryParams,
     router: Router,
 ): GalleryStore {
     return GalleryStore(
         params = params,
         reducer = GalleryReducer(),
-        uiStateMapper = GalleryUiStateMapper(),
+        uiStateMapper = GalleryUiStateMapper(context),
         actors = setOf(
             GalleryNavigationActor(router),
         ),

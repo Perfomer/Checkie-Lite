@@ -8,6 +8,7 @@ import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryParams
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.GalleryStore
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryUiEvent.OnBackPress
+import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryUiEvent.OnPictureSelect
 import com.perfomer.checkielite.navigation.voyager.BaseScreen
 
 internal class GalleryContentScreen(
@@ -21,6 +22,7 @@ internal class GalleryContentScreen(
         GalleryScreen(
             state = state,
             onNavigationIconClick = acceptable(OnBackPress),
+            onPageChange = acceptable(::OnPictureSelect),
         )
     }
 }

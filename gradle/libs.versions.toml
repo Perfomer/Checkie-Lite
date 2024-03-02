@@ -5,6 +5,7 @@ agp = "8.3.0"
 appcompat = "1.6.1"
 coil = "2.5.0"
 compose-bom = "2024.02.01"
+compose-compiler = "1.5.5"
 compressor = "3.0.1"
 core-ktx = "1.12.0"
 koin = "3.5.0"
@@ -16,7 +17,7 @@ lifecycle-ktx = "2.7.0"
 lifecycle-runtime-ktx = "2.7.0"
 room = "2.6.1"
 voyager = "1.0.0"
-compose-compiler = "1.5.5"
+zoomable = "1.6.0"
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist-systemuicontroller" }
@@ -42,6 +43,7 @@ voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voy
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
+zoomable = { module = "net.engawapg.lib:zoomable", version.ref = "zoomable"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

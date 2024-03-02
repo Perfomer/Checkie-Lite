@@ -25,4 +25,5 @@ dependencies {
 	implementation(libs.compose.ui)
 	implementation(libs.koin.core)
 	implementation(platform(libs.compose.bom))
+	implementation(libs.zoomable)
 }

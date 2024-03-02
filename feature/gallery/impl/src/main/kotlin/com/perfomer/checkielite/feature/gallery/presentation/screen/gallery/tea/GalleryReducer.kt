@@ -9,6 +9,7 @@ import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryState
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryUiEvent
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryUiEvent.OnBackPress
+import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryUiEvent.OnPictureSelect
 
 internal class GalleryReducer : DslReducer<GalleryCommand, GalleryEffect, GalleryEvent, GalleryState>() {
 
@@ -19,5 +20,6 @@ internal class GalleryReducer : DslReducer<GalleryCommand, GalleryEffect, Galler
 
     private fun reduceUi(event: GalleryUiEvent) = when (event) {
         is OnBackPress -> commands(Exit)
+        is OnPictureSelect -> state { copy(currentPicturePosition = event.position) }
     }
 }

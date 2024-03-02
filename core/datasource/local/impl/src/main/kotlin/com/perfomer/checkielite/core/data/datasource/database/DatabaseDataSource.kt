@@ -71,7 +71,7 @@ internal class DatabaseDataSourceImpl(
     }
 
     override suspend fun deleteReview(reviewId: String, deletedPicturesUri: List<String>) = database.withTransaction {
-        checkieReviewDao.deleteReview(reviewId)
         checkieReviewDao.deletePictures(deletedPicturesUri)
+        checkieReviewDao.deleteReview(reviewId)
     }
 }

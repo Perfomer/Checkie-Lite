@@ -11,4 +11,8 @@ internal class ReviewRepositoryImpl(
     override suspend fun getReview(reviewId: String): CheckieReview {
         return localDataSource.getReview(reviewId)
     }
+
+    override suspend fun deleteReview(reviewId: String) {
+        localDataSource.deleteReview(reviewId)
+    }
 }

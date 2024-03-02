@@ -5,4 +5,7 @@
     <string name="reviewdetails_add_review_text">Would you like to add it?</string>
     <string name="reviewdetails_action_edit">Edit</string>
     <string name="reviewdetails_action_delete">Delete</string>
+    <string name="reviewdetails_dialog_confirmdelete_title">Delete the review</string>
+    <string name="reviewdetails_dialog_confirmdelete_message">Are you sure you want to delete the review?</string>
+    <string name="reviewdetails_dialog_confirmdelete_confirm">Delete</string>
 </resources>

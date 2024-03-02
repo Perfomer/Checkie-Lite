@@ -1,3 +1,6 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core
 
-internal sealed interface ReviewDetailsEffect
+internal sealed interface ReviewDetailsEffect {
+
+    data object ShowConfirmDeleteDialog : ReviewDetailsEffect
+}

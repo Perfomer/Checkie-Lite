@@ -10,6 +10,11 @@ internal sealed interface ReviewDetailsEvent {
 
         class Succeed(val review: CheckieReview) : ReviewLoading
     }
+
+    sealed interface ReviewDeletion : ReviewDetailsEvent {
+
+        data object Succeed : ReviewDeletion
+    }
 }
 
 internal sealed interface ReviewDetailsUiEvent : ReviewDetailsEvent {
@@ -25,4 +30,6 @@ internal sealed interface ReviewDetailsUiEvent : ReviewDetailsEvent {
     data object OnEditClick : ReviewDetailsUiEvent
 
     data object OnDeleteClick : ReviewDetailsUiEvent
+
+    data object OnConfirmDeleteClick : ReviewDetailsUiEvent
 }

@@ -5,4 +5,6 @@ import com.perfomer.checkielite.core.entity.CheckieReview
 internal interface ReviewRepository {
 
     suspend fun getReview(reviewId: String): CheckieReview
+
+    suspend fun deleteReview(reviewId: String)
 }

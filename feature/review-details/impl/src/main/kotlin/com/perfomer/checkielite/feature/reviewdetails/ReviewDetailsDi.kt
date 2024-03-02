@@ -8,6 +8,7 @@ import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsPa
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsScreenProvider
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsReducer
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsStore
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.actor.DeleteReviewActor
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.actor.LoadReviewActor
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.actor.ReviewDetailsNavigationActor
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.ReviewDetailsContentScreen
@@ -34,7 +35,7 @@ internal fun createReviewDetailsStore(
     reviewDetailsRepository: ReviewRepository,
     router: Router,
     reviewCreationScreenProvider: ReviewCreationScreenProvider,
-) : ReviewDetailsStore {
+): ReviewDetailsStore {
     return ReviewDetailsStore(
         params = params,
         reducer = ReviewDetailsReducer(),
@@ -42,6 +43,7 @@ internal fun createReviewDetailsStore(
         actors = setOf(
             ReviewDetailsNavigationActor(router, reviewCreationScreenProvider),
             LoadReviewActor(reviewDetailsRepository),
+            DeleteReviewActor(reviewDetailsRepository),
         ),
     )
 }

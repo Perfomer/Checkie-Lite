@@ -1,8 +1,13 @@
 package com.perfomer.checkielite.feature.main.presentation.screen.main.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +23,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -64,6 +71,8 @@ internal fun MainScreen(
     onReviewClick: (id: String) -> Unit = {},
     onFabClick: () -> Unit = {},
 ) {
+    val scrollState = rememberLazyListState()
+
     Scaffold(
         floatingActionButton = {
             CuiFloatingActionButton(
@@ -72,13 +81,14 @@ internal fun MainScreen(
                 onClick = onFabClick,
             )
         },
-        topBar = { TopAppBar() },
+        topBar = { TopAppBar(scrollState) },
     ) { contentPadding ->
         when (state) {
             is MainUiState.Loading -> Unit
 
             is MainUiState.Content -> Content(
                 state = state,
+                scrollState = scrollState,
                 contentPadding = contentPadding,
                 onSearchQueryInput = onSearchQueryInput,
                 onSearchQueryClearClick = onSearchQueryClearClick,
@@ -93,6 +103,7 @@ internal fun MainScreen(
 @Composable
 private fun Content(
     state: MainUiState.Content,
+    scrollState: LazyListState,
     contentPadding: PaddingValues,
     onSearchQueryInput: (query: String) -> Unit = {},
     onSearchQueryClearClick: () -> Unit = {},
@@ -100,6 +111,7 @@ private fun Content(
 ) {
     LazyColumn(
         contentPadding = contentPadding,
+        state = scrollState,
         modifier = Modifier
             .fillMaxWidth()
             .imePadding()
@@ -158,33 +170,47 @@ private fun Empty() {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun TopAppBar() {
-    CenterAlignedTopAppBar(
-        title = {
-            Text(
-                text = buildAnnotatedString {
-                    append(
-                        AnnotatedString(
-                            text = stringResource(id = R.string.app_name_checkie),
-                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+private fun TopAppBar(scrollState: ScrollableState) {
+    Box {
+        CenterAlignedTopAppBar(
+            title = {
+                Text(
+                    text = buildAnnotatedString {
+                        append(
+                            AnnotatedString(
+                                text = stringResource(id = R.string.app_name_checkie),
+                                spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+                            )
                         )
-                    )
-                    append(" ")
-                    append(
-                        AnnotatedString(
-                            text = stringResource(id = R.string.app_name_lite),
-                            spanStyle = SpanStyle(fontWeight = FontWeight.Normal)
+                        append(" ")
+                        append(
+                            AnnotatedString(
+                                text = stringResource(id = R.string.app_name_lite),
+                                spanStyle = SpanStyle(fontWeight = FontWeight.Normal)
+                            )
                         )
-                    )
-                },
-                fontSize = 20.sp,
+                    },
+                    fontSize = 20.sp,
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(CuiPalette.Light.BackgroundPrimary)
+                .statusBarsPadding()
+        )
+
+        AnimatedVisibility(
+            visible = scrollState.canScrollBackward, enter = fadeIn(tween(250)), exit = fadeOut(tween(250)),
+            modifier = Modifier.align(Alignment.BottomCenter)
+        ) {
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(CuiPalette.Light.OutlineSecondary)
             )
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(CuiPalette.Light.BackgroundPrimary)
-            .statusBarsPadding()
-    )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

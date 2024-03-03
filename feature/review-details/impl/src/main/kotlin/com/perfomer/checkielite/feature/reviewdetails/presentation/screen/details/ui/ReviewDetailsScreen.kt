@@ -33,9 +33,12 @@ internal fun ReviewDetailsScreen(
     onEmptyReviewTextClick: () -> Unit = {},
     onPageChange: (pageIndex: Int) -> Unit = {},
 ) {
+    val scrollState = rememberScrollState()
+
     Scaffold(
         topBar = {
             ReviewDetailsAppBar(
+                scrollState = scrollState,
                 onNavigationIconClick = onNavigationIconClick,
                 onEditClick = onEditClick,
                 onDeleteClick = onDeleteClick,
@@ -46,7 +49,7 @@ internal fun ReviewDetailsScreen(
 
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
                 .padding(contentPadding)
                 .padding(bottom = 16.dp)
         ) {

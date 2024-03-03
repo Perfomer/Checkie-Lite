@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor
 
+import com.perfomer.checkielite.common.pure.util.toArrayList
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.navigation.api.DestinationMode
 import com.perfomer.checkielite.core.navigation.api.ExternalDestination
@@ -42,7 +43,7 @@ internal class ReviewCreationNavigationActor(
             is ExitWithResult -> exitWithResult(command.result)
             is OpenPhotoPicker -> return openPhotoPicker()
             is OpenGallery -> router.navigate(
-                screen = galleryScreenProvider(GalleryParams(command.picturesUri, command.currentPicturePosition)),
+                screen = galleryScreenProvider(GalleryParams(command.picturesUri.toArrayList(), command.currentPicturePosition)),
                 mode = DestinationMode.OVERLAY,
             )
         }

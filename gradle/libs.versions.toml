@@ -17,7 +17,7 @@ lifecycle-ktx = "2.7.0"
 lifecycle-runtime-ktx = "2.7.0"
 room = "2.6.1"
 voyager = "1.0.0"
-zoomable = "1.6.0"
+zoomable = "1.6.1"
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist-systemuicontroller"}
@@ -44,7 +44,7 @@ voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voy
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
-zoomable = { module = "net.engawapg.lib:zoomable", version.ref = "zoomable"}
+zoomable = { module = "com.mxalbert.zoomable:zoomable", version.ref = "zoomable"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -4,9 +4,12 @@ package com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -17,29 +20,31 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.size.Size
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.mxalbert.zoomable.OverZoomConfig
+import com.mxalbert.zoomable.Zoomable
+import com.mxalbert.zoomable.rememberZoomableState
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui.state.GalleryUiState
-import com.perfomer.checkielite.feature.gallery.presentation.util.resetZoomOnMoveOut
 import kotlinx.collections.immutable.persistentListOf
-import moe.tlaster.swiper.Swiper
-import moe.tlaster.swiper.rememberSwiperState
-import net.engawapg.lib.zoomable.rememberZoomState
-import net.engawapg.lib.zoomable.zoomable
 
 @Composable
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -96,39 +101,61 @@ private fun MainHorizontalPager(
     onDismissProgressChange: (progress: Float) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val swiperState = rememberSwiperState(onDismiss = onDismiss)
-
-    UpdateEffect(swiperState.progress) {
-        onDismissProgressChange(swiperState.progress)
-    }
-
     val pagerState = rememberPagerState(
         pageCount = { state.picturesUri.size },
         initialPage = state.currentPicturePosition,
     )
 
     UpdateEffect(pagerState.currentPage) { onPageChange(pagerState.currentPage) }
+    HorizontalPager(
+        state = pagerState,
+        modifier = Modifier.fillMaxSize()
+    ) { page ->
+        val zoomableState = rememberZoomableState(
+            minScale = 0.8F,
+            maxScale = 6F,
+            overZoomConfig = OverZoomConfig(1F, 4F),
+        )
 
-    Swiper(state = swiperState) {
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.fillMaxSize()
-        ) { page ->
-            val zoomState = rememberZoomState()
+        UpdateEffect(zoomableState.dismissDragProgress) {
+            onDismissProgressChange(zoomableState.dismissDragProgress.coerceIn(0F, 1F))
+        }
 
-            AsyncImage(
-                model = state.picturesUri[page],
-                contentDescription = null,
-                onSuccess = { pictureState -> zoomState.setContentSize(pictureState.painter.intrinsicSize) },
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .zoomable(
-                        zoomState = zoomState,
-                        onTap = { onPagerClick() },
-                    )
-                    .resetZoomOnMoveOut(page, zoomState, pagerState)
+        Zoomable(
+            state = zoomableState,
+            onTap = { onPagerClick() },
+            onDismiss = { onDismiss(); true },
+            dismissGestureEnabled = true,
+        ) {
+            val painter = rememberAsyncImagePainter(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(state.picturesUri[page])
+                    .size(Size.ORIGINAL)
+                    .build()
             )
+
+            if (painter.state is AsyncImagePainter.State.Success) {
+                val size = painter.intrinsicSize
+
+                Image(
+                    painter = painter,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .aspectRatio(size.width / size.height)
+                        .fillMaxSize()
+                )
+            }
+        }
+
+        // Reset zoom state when the page is moved out of the window.
+        val isVisible = page == pagerState.settledPage
+        LaunchedEffect(isVisible) {
+            if (!isVisible) {
+                zoomableState.animateScaleTo(
+                    targetScale = 1F,
+                    animationSpec = tween(0),
+                )
+            }
         }
     }
 }

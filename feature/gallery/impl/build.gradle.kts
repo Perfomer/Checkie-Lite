@@ -20,6 +20,7 @@ dependencies {
 	implementation(project(":common:tea:compose"))
 	implementation(project(":common:ui"))
 
+	implementation(libs.accompanist.systemuicontroller)
 	implementation(libs.activity.compose)
 	implementation(libs.compose.material3)
 	implementation(libs.compose.ui)

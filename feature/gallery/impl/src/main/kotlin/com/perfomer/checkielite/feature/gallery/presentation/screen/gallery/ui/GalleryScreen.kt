@@ -16,15 +16,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
@@ -48,16 +51,20 @@ internal fun GalleryScreen(
     onPagerClick: () -> Unit = {},
 ) {
     var backgroundAlpha by remember { mutableFloatStateOf(1F) }
+    val systemUiController = rememberSystemUiController()
 
-    // TODO: dark status bar
+    UpdateEffect(state.isUiShown) {
+        systemUiController.isSystemBarsVisible = state.isUiShown
+    }
+
+    DisposableEffect(Unit) {
+        systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = false)
+        onDispose { systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = true) } // TODO: color by theme when dark theme will be done
+    }
 
     Scaffold(
         topBar = {
-            AnimatedVisibility(
-                visible = state.isUiShown,
-                enter = fadeIn(),
-                exit = fadeOut(),
-            ) {
+            AnimatedVisibility(visible = state.isUiShown, enter = fadeIn(), exit = fadeOut()) {
                 GalleryTopAppBar(
                     title = state.titleText,
                     onNavigationIconClick = onNavigationIconClick,
@@ -114,7 +121,7 @@ private fun MainHorizontalPager(
                     .zoomable(
                         zoomState = zoomState,
                         onTap = { onPagerClick() },
-                        )
+                    )
                     .resetZoomOnMoveOut(page, zoomState, pagerState)
             )
         }

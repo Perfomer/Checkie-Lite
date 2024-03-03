@@ -4,7 +4,7 @@ import com.perfomer.checkielite.core.navigation.api.CheckieScreen
 import com.perfomer.checkielite.core.navigation.api.Params
 
 data class GalleryParams(
-    val picturesUri: List<String>,
+    val picturesUri: ArrayList<String>,
     val currentPicturePosition: Int,
 ) : Params
 

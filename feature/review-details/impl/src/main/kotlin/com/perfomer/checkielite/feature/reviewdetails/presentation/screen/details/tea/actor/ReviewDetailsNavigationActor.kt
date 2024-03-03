@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.actor
 
+import com.perfomer.checkielite.common.pure.util.toArrayList
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.navigation.api.DestinationMode
 import com.perfomer.checkielite.core.navigation.api.Router
@@ -45,7 +46,7 @@ internal class ReviewDetailsNavigationActor(
             }
 
             is OpenGallery -> {
-                val params = GalleryParams(picturesUri = command.picturesUri, currentPicturePosition = command.currentPicturePosition)
+                val params = GalleryParams(picturesUri = command.picturesUri.toArrayList(), currentPicturePosition = command.currentPicturePosition)
                 navigate(screen = galleryScreenProvider(params), mode = DestinationMode.OVERLAY)
             }
         }

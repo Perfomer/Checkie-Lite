@@ -44,6 +44,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.gigamole.composefadingedges.FadingEdgesGravity
+import com.gigamole.composefadingedges.horizontalFadingEdges
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiFloatingActionButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
@@ -269,6 +271,9 @@ internal fun CheckieHorizontalItem(
                 fontSize = 16.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalFadingEdges(gravity = FadingEdgesGravity.End, length = 64.dp)
             )
 
             if (item.brand != null) {
@@ -279,6 +284,9 @@ internal fun CheckieHorizontalItem(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     color = CuiPalette.Light.TextAccent,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalFadingEdges(gravity = FadingEdgesGravity.End, length = 64.dp)
                 )
             }
         }

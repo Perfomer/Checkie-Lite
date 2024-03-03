@@ -8,6 +8,7 @@ compose-bom = "2024.02.01"
 compose-compiler = "1.5.5"
 compressor = "3.0.1"
 core-ktx = "1.12.0"
+fading-edges = "1.0.4"
 koin = "3.5.0"
 kotlin = "1.9.20"
 kotlinx-collections-immutable = "0.3.7"
@@ -20,7 +21,7 @@ voyager = "1.0.0"
 zoomable = "1.6.1"
 
 [libraries]
-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist-systemuicontroller"}
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist-systemuicontroller" }
 activity = { module = "androidx.activity:activity", version.ref = "activity" }
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -31,6 +32,7 @@ compose-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
+fading-edges = { module = "com.github.GIGAMOLE:ComposeFadingEdges", version.ref = "fading-edges" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
@@ -44,7 +46,7 @@ voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voy
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
-zoomable = { module = "com.mxalbert.zoomable:zoomable", version.ref = "zoomable"}
+zoomable = { module = "com.mxalbert.zoomable:zoomable", version.ref = "zoomable" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

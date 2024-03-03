@@ -83,9 +83,8 @@ internal fun GalleryScreen(
     var backgroundAlpha by remember { mutableFloatStateOf(1F) }
     val systemUiController = rememberSystemUiController()
 
-    UpdateEffect(state.isUiShown) {
-        systemUiController.isSystemBarsVisible = state.isUiShown
-    }
+    UpdateEffect(state.isUiShown) { systemUiController.isSystemBarsVisible = state.isUiShown }
+    UpdateEffect(backgroundAlpha < 1F) { systemUiController.isSystemBarsVisible = true }
 
     DisposableEffect(Unit) {
         systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = false)

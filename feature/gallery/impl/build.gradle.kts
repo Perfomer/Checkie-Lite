@@ -24,6 +24,6 @@ dependencies {
 	implementation(libs.compose.material3)
 	implementation(libs.compose.ui)
 	implementation(libs.koin.core)
-	implementation(platform(libs.compose.bom))
 	implementation(libs.zoomable)
+	implementation(platform(libs.compose.bom))
 }

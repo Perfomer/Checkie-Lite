@@ -4,7 +4,6 @@ package com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -14,6 +13,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -27,6 +30,8 @@ import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui.state.GalleryUiState
 import com.perfomer.checkielite.feature.gallery.presentation.util.resetZoomOnMoveOut
 import kotlinx.collections.immutable.persistentListOf
+import moe.tlaster.swiper.Swiper
+import moe.tlaster.swiper.rememberSwiperState
 import net.engawapg.lib.zoomable.rememberZoomState
 import net.engawapg.lib.zoomable.zoomable
 
@@ -34,9 +39,14 @@ import net.engawapg.lib.zoomable.zoomable
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 internal fun GalleryScreen(
     state: GalleryUiState,
+    onDismiss: () -> Unit = {},
     onNavigationIconClick: () -> Unit = {},
     onPageChange: (pageIndex: Int) -> Unit = {},
 ) {
+    var backgroundAlpha by remember { mutableFloatStateOf(1F) }
+
+    // TODO: dark status bar
+
     Scaffold(
         topBar = {
             GalleryTopAppBar(
@@ -44,19 +54,30 @@ internal fun GalleryScreen(
                 onNavigationIconClick = onNavigationIconClick,
             )
         },
+        containerColor = GalleryPalette.BackgroundColor.copy(alpha = backgroundAlpha)
     ) {
-        Content(
+        MainHorizontalPager(
             state = state,
             onPageChange = onPageChange,
+            onDismiss = onDismiss,
+            onDismissProgressChange = { progress -> backgroundAlpha = 1 - progress }
         )
     }
 }
 
 @Composable
-private fun Content(
+private fun MainHorizontalPager(
     state: GalleryUiState,
     onPageChange: (pageIndex: Int) -> Unit,
+    onDismissProgressChange: (progress: Float) -> Unit,
+    onDismiss: () -> Unit,
 ) {
+    val swiperState = rememberSwiperState(onDismiss = onDismiss)
+
+    UpdateEffect(swiperState.progress) {
+        onDismissProgressChange(swiperState.progress)
+    }
+
     val pagerState = rememberPagerState(
         pageCount = { state.picturesUri.size },
         initialPage = state.currentPicturePosition,
@@ -64,24 +85,25 @@ private fun Content(
 
     UpdateEffect(pagerState.currentPage) { onPageChange(pagerState.currentPage) }
 
-    HorizontalPager(
-        state = pagerState,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(GalleryPalette.BackgroundColor),
-    ) { page ->
-        val zoomState = rememberZoomState()
-
-        AsyncImage(
-            model = state.picturesUri[page],
-            contentDescription = null,
-            onSuccess = { pictureState -> zoomState.setContentSize(pictureState.painter.intrinsicSize) },
-            contentScale = ContentScale.Fit,
+    Swiper(state = swiperState) {
+        HorizontalPager(
+            state = pagerState,
             modifier = Modifier
                 .fillMaxSize()
-                .zoomable(zoomState)
-                .resetZoomOnMoveOut(page, zoomState, pagerState)
-        )
+        ) { page ->
+            val zoomState = rememberZoomState()
+
+            AsyncImage(
+                model = state.picturesUri[page],
+                contentDescription = null,
+                onSuccess = { pictureState -> zoomState.setContentSize(pictureState.painter.intrinsicSize) },
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .zoomable(zoomState)
+                    .resetZoomOnMoveOut(page, zoomState, pagerState)
+            )
+        }
     }
 }
 

@@ -22,6 +22,7 @@ internal class GalleryContentScreen(
         GalleryScreen(
             state = state,
             onNavigationIconClick = acceptable(OnBackPress),
+            onDismiss = acceptable(OnBackPress),
             onPageChange = acceptable(::OnPictureSelect),
         )
     }

@@ -59,7 +59,12 @@ internal fun GalleryScreen(
 
     DisposableEffect(Unit) {
         systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = false)
-        onDispose { systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = true) } // TODO: color by theme when dark theme will be done
+
+        onDispose {
+            // TODO: color by theme when dark theme will be done
+            systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = true)
+            systemUiController.isSystemBarsVisible = true
+        }
     }
 
     Scaffold(

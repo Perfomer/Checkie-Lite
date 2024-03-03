@@ -97,6 +97,7 @@ internal fun GalleryScreen(
     }
 
     Scaffold(
+        containerColor = Color.Transparent,
         topBar = {
             AnimatedVisibility(visible = state.isUiShown, enter = fadeIn(), exit = fadeOut()) {
                 GalleryTopAppBar(
@@ -105,13 +106,18 @@ internal fun GalleryScreen(
                 )
             }
         },
-        containerColor = GalleryPalette.BackgroundColor.copy(alpha = backgroundAlpha)
     ) {
         Box {
             val coroutineScope = rememberCoroutineScope()
             val mainPagerState = rememberPagerState(
                 pageCount = { state.picturesUri.size },
                 initialPage = state.currentPicturePosition,
+            )
+
+            Box(
+                modifier = Modifier.fillMaxSize()
+                    .alpha(backgroundAlpha)
+                    .background(GalleryPalette.BackgroundColor)
             )
 
             MainHorizontalPager(

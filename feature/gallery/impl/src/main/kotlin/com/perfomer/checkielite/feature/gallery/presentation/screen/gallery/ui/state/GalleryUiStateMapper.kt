@@ -14,6 +14,7 @@ internal class GalleryUiStateMapper(
             titleText = context.getString(R.string.gallery_title, state.currentPicturePosition + 1, state.picturesUri.size),
             picturesUri = state.picturesUri,
             currentPicturePosition = state.currentPicturePosition,
+            isUiShown = state.isUiShown,
         )
     }
 }

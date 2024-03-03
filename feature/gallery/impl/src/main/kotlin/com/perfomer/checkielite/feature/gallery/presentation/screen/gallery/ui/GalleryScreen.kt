@@ -3,6 +3,9 @@
 package com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
@@ -42,6 +45,7 @@ internal fun GalleryScreen(
     onDismiss: () -> Unit = {},
     onNavigationIconClick: () -> Unit = {},
     onPageChange: (pageIndex: Int) -> Unit = {},
+    onPagerClick: () -> Unit = {},
 ) {
     var backgroundAlpha by remember { mutableFloatStateOf(1F) }
 
@@ -49,16 +53,23 @@ internal fun GalleryScreen(
 
     Scaffold(
         topBar = {
-            GalleryTopAppBar(
-                title = state.titleText,
-                onNavigationIconClick = onNavigationIconClick,
-            )
+            AnimatedVisibility(
+                visible = state.isUiShown,
+                enter = fadeIn(),
+                exit = fadeOut(),
+            ) {
+                GalleryTopAppBar(
+                    title = state.titleText,
+                    onNavigationIconClick = onNavigationIconClick,
+                )
+            }
         },
         containerColor = GalleryPalette.BackgroundColor.copy(alpha = backgroundAlpha)
     ) {
         MainHorizontalPager(
             state = state,
             onPageChange = onPageChange,
+            onPagerClick = onPagerClick,
             onDismiss = onDismiss,
             onDismissProgressChange = { progress -> backgroundAlpha = 1 - progress }
         )
@@ -69,6 +80,7 @@ internal fun GalleryScreen(
 private fun MainHorizontalPager(
     state: GalleryUiState,
     onPageChange: (pageIndex: Int) -> Unit,
+    onPagerClick: () -> Unit,
     onDismissProgressChange: (progress: Float) -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -88,8 +100,7 @@ private fun MainHorizontalPager(
     Swiper(state = swiperState) {
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) { page ->
             val zoomState = rememberZoomState()
 
@@ -100,7 +111,10 @@ private fun MainHorizontalPager(
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .fillMaxSize()
-                    .zoomable(zoomState)
+                    .zoomable(
+                        zoomState = zoomState,
+                        onTap = { onPagerClick() },
+                        )
                     .resetZoomOnMoveOut(page, zoomState, pagerState)
             )
         }
@@ -139,6 +153,7 @@ private fun GalleryScreenPreview() = PreviewTheme {
 
 internal val mockUiState = GalleryUiState(
     titleText = "3 of 21",
+    isUiShown = true,
     picturesUri = persistentListOf("", ""),
     currentPicturePosition = 0,
 )

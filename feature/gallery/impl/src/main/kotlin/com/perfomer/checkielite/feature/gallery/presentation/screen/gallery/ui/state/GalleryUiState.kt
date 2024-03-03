@@ -6,6 +6,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Immutable
 internal data class GalleryUiState(
     val titleText: String,
+    val isUiShown: Boolean,
     val picturesUri: ImmutableList<String>,
     val currentPicturePosition: Int,
 )

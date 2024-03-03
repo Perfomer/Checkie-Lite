@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,9 +34,15 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -62,6 +67,7 @@ import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.main.R
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiState
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.ReviewItem
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun MainScreen(
@@ -72,6 +78,8 @@ internal fun MainScreen(
     onFabClick: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+    val focusRequester = remember { FocusRequester() }
 
     Scaffold(
         floatingActionButton = {
@@ -81,7 +89,17 @@ internal fun MainScreen(
                 onClick = onFabClick,
             )
         },
-        topBar = { TopAppBar(scrollState) },
+        topBar = {
+            TopAppBar(
+                scrollState = scrollState,
+                onSearchClick = {
+                    coroutineScope.launch {
+                        scrollState.animateScrollToItem(0)
+                        focusRequester.requestFocus()
+                    }
+                },
+            )
+        },
     ) { contentPadding ->
         when (state) {
             is MainUiState.Loading -> Unit
@@ -90,6 +108,7 @@ internal fun MainScreen(
                 state = state,
                 scrollState = scrollState,
                 contentPadding = contentPadding,
+                focusRequester = focusRequester,
                 onSearchQueryInput = onSearchQueryInput,
                 onSearchQueryClearClick = onSearchQueryClearClick,
                 onReviewClick = onReviewClick,
@@ -105,6 +124,7 @@ private fun Content(
     state: MainUiState.Content,
     scrollState: LazyListState,
     contentPadding: PaddingValues,
+    focusRequester: FocusRequester,
     onSearchQueryInput: (query: String) -> Unit = {},
     onSearchQueryClearClick: () -> Unit = {},
     onReviewClick: (id: String) -> Unit = {},
@@ -121,6 +141,7 @@ private fun Content(
 
             SearchField(
                 searchQuery = state.searchQuery,
+                focusRequester = focusRequester,
                 onSearchQueryInput = onSearchQueryInput,
                 onSearchQueryClearClick = onSearchQueryClearClick,
             )
@@ -170,7 +191,10 @@ private fun Empty() {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun TopAppBar(scrollState: ScrollableState) {
+private fun TopAppBar(
+    scrollState: LazyListState,
+    onSearchClick: () -> Unit,
+) {
     Box {
         CenterAlignedTopAppBar(
             title = {
@@ -193,6 +217,12 @@ private fun TopAppBar(scrollState: ScrollableState) {
                     fontSize = 20.sp,
                 )
             },
+            actions = {
+                val shouldShowSearchIcon by remember { derivedStateOf { scrollState.firstVisibleItemIndex > 0 } }
+                AnimatedVisibility(visible = shouldShowSearchIcon, enter = fadeIn(tween(250)), exit = fadeOut(tween(250))) {
+                    CuiIconButton(painter = painterResource(R.drawable.ic_search), onClick = onSearchClick)
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .background(CuiPalette.Light.BackgroundPrimary)
@@ -213,10 +243,10 @@ private fun TopAppBar(scrollState: ScrollableState) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchField(
     searchQuery: String,
+    focusRequester: FocusRequester,
     onSearchQueryInput: (query: String) -> Unit,
     onSearchQueryClearClick: () -> Unit,
 ) {
@@ -250,6 +280,7 @@ private fun SearchField(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
+            .focusRequester(focusRequester)
     )
 }
 

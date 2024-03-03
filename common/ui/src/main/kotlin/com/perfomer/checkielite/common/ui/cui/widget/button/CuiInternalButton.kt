@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.common.ui.cui.button
+package com.perfomer.checkielite.common.ui.cui.widget.button
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth

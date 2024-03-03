@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.common.ui.cui.button
+package com.perfomer.checkielite.common.ui.cui.widget.button
 
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButton

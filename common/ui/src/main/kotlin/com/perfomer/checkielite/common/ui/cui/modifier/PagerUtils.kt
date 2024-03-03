@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalFoundationApi::class)
 
-package com.perfomer.checkielite.common.ui.cui.pager
+package com.perfomer.checkielite.common.ui.cui.modifier
 
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.foundation.ExperimentalFoundationApi

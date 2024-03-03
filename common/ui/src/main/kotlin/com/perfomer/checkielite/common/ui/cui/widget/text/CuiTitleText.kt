@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.common.ui.cui.text
+package com.perfomer.checkielite.common.ui.cui.widget.text
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

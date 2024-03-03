@@ -31,9 +31,9 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
-import com.perfomer.checkielite.common.ui.cui.pager.CuiHorizontalPagerIndicator
-import com.perfomer.checkielite.common.ui.cui.pager.offsetForPage
-import com.perfomer.checkielite.common.ui.cui.pager.scaleHorizontalNeighbors
+import com.perfomer.checkielite.common.ui.cui.modifier.offsetForPage
+import com.perfomer.checkielite.common.ui.cui.modifier.scaleHorizontalNeighbors
+import com.perfomer.checkielite.common.ui.cui.widget.pager.CuiHorizontalPagerIndicator
 import com.perfomer.checkielite.common.ui.theme.CuiColorToken
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
 import kotlinx.collections.immutable.ImmutableList

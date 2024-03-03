@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.common.ui.cui
+package com.perfomer.checkielite.common.ui.cui.widget.progress
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState

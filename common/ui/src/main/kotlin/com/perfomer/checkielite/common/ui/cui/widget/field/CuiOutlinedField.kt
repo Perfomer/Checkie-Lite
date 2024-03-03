@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.common.ui.cui.field
+package com.perfomer.checkielite.common.ui.cui.widget.field
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

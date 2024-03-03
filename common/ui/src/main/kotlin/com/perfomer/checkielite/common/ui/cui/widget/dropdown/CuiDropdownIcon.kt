@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.common.ui.cui.dropdown
+package com.perfomer.checkielite.common.ui.cui.widget.dropdown
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.ColumnScope
@@ -19,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.R
-import com.perfomer.checkielite.common.ui.cui.button.CuiIconButton
+import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 
 @Composable
 fun CuiDropdownIcon(

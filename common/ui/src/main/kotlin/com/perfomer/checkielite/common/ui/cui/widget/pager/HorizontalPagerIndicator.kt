@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.common.ui.cui.pager
+package com.perfomer.checkielite.common.ui.cui.widget.pager
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.perfomer.checkielite.common.ui.cui.modifier.indicatorOffsetForPage
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

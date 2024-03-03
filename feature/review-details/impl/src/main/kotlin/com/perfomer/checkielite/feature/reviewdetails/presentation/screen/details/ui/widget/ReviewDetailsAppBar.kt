@@ -6,10 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.perfomer.checkielite.common.ui.CommonDrawable
-import com.perfomer.checkielite.common.ui.cui.dropdown.CuiDropdownIcon
-import com.perfomer.checkielite.common.ui.cui.dropdown.CuiDropdownMenuItem
 import com.perfomer.checkielite.common.ui.cui.modifier.debounced
-import com.perfomer.checkielite.common.ui.cui.toolbar.CuiToolbarNavigationIcon
+import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiDropdownIcon
+import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiDropdownMenuItem
+import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
 import com.perfomer.checkielite.feature.reviewdetails.R
 

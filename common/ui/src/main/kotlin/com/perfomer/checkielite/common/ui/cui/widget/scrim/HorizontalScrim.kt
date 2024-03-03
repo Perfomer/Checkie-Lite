@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.common.ui.cui.scrim
+package com.perfomer.checkielite.common.ui.cui.widget.scrim
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -9,12 +9,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun VerticalScrim(
+fun HorizontalScrim(
 	modifier: Modifier = Modifier,
 	color: Color = Color.White,
 ) {
 	val brush = remember {
-		Brush.verticalGradient(colors = listOf(color.copy(alpha = 0F), color))
+		Brush.horizontalGradient(colors = listOf(color.copy(alpha = 0F), color))
 	}
 
 	Box(modifier = modifier.background(brush))

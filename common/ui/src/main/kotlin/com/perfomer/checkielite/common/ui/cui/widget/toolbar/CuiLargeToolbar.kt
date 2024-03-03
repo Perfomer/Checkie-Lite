@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.common.ui.cui.toolbar
+package com.perfomer.checkielite.common.ui.cui.widget.toolbar
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import com.perfomer.checkielite.common.ui.R
-import com.perfomer.checkielite.common.ui.cui.text.CuiTitleText
+import com.perfomer.checkielite.common.ui.cui.widget.text.CuiTitleText
 import com.perfomer.checkielite.common.ui.theme.CuiColorToken
 import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview

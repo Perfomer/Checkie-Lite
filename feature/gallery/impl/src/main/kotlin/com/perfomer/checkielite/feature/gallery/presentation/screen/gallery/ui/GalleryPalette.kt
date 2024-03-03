@@ -5,6 +5,6 @@ import androidx.compose.ui.graphics.Color
 internal object GalleryPalette {
 
     val BackgroundColor = Color.Black
-    val BarColor = Color.Black.copy(alpha = 0.5F)
+    val BarColor = Color.Black.copy(alpha = 0.65F)
     val ContentColor = Color.White
 }

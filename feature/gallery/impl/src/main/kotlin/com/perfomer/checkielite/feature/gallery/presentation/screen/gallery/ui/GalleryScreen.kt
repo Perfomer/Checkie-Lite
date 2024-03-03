@@ -12,10 +12,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
@@ -40,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -121,7 +125,9 @@ internal fun GalleryScreen(
             )
 
             AnimatedVisibility(
-                visible = state.isUiShown, enter = fadeIn(), exit = fadeOut(),
+                visible = state.isUiShown,
+                enter = fadeIn(),
+                exit = fadeOut(),
                 modifier = Modifier.align(Alignment.BottomCenter)
             ) {
                 PreviewHorizontalPager(
@@ -151,29 +157,41 @@ private fun PreviewHorizontalPager(
         coroutineScope { pagerState.animateScrollToPage(mainPagerState.currentPage) }
     }
 
-    HorizontalPager(
-        state = pagerState,
-        pageSize = PageSize.Fixed(56.dp),
-        pageSpacing = 8.dp,
-        contentPadding = PaddingValues(vertical = 16.dp, horizontal = 24.dp),
+    Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .background(GalleryPalette.BarColor)
+            .background(
+                Brush.verticalGradient(
+                    0F to Color.Transparent,
+                    0.75F to GalleryPalette.BarColor,
+                    1F to GalleryPalette.BarColor,
+                )
+            )
             .navigationBarsPadding()
-    ) { page ->
-        val offset = mainPagerState.indicatorOffsetForPage(page)
-        val targetAlpha = 0.5F + 0.5F * offset
+    ) {
+        Spacer(Modifier.height(72.dp))
 
-        AsyncImage(
-            model = picturesUri[page],
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
+        HorizontalPager(
+            state = pagerState,
+            pageSize = PageSize.Fixed(56.dp),
+            pageSpacing = 8.dp,
+            contentPadding = PaddingValues(vertical = 16.dp, horizontal = 24.dp),
             modifier = Modifier
-                .size(56.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .clickable { onPictureClick(page) }
-                .alpha(targetAlpha)
-        )
+                .fillMaxWidth()
+        ) { page ->
+            val offset = mainPagerState.indicatorOffsetForPage(page)
+            val targetAlpha = 0.5F + 0.5F * offset
+
+            AsyncImage(
+                model = picturesUri[page],
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(56.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .clickable { onPictureClick(page) }
+                    .alpha(targetAlpha)
+            )
+        }
     }
 }
 
@@ -252,22 +270,35 @@ private fun GalleryTopAppBar(
     title: String,
     onNavigationIconClick: () -> Unit,
 ) {
-    TopAppBar(
-        title = { Text(text = title, fontSize = 18.sp) },
-        navigationIcon = {
-            CuiToolbarNavigationIcon(
-                painter = painterResource(CommonDrawable.ic_arrow_back),
-                color = GalleryPalette.ContentColor,
-                onBackPress = onNavigationIconClick,
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(192.dp)
+            .background(
+                Brush.verticalGradient(
+                    0F to GalleryPalette.BarColor,
+                    0.55F to GalleryPalette.BarColor,
+                    1F to Color.Transparent,
+                )
             )
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = GalleryPalette.BarColor,
-            navigationIconContentColor = GalleryPalette.ContentColor,
-            actionIconContentColor = GalleryPalette.ContentColor,
-            titleContentColor = GalleryPalette.ContentColor,
-        ),
-    )
+    ) {
+        TopAppBar(
+            title = { Text(text = title, fontSize = 18.sp) },
+            navigationIcon = {
+                CuiToolbarNavigationIcon(
+                    painter = painterResource(CommonDrawable.ic_arrow_back),
+                    color = GalleryPalette.ContentColor,
+                    onBackPress = onNavigationIconClick,
+                )
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+                navigationIconContentColor = GalleryPalette.ContentColor,
+                actionIconContentColor = GalleryPalette.ContentColor,
+                titleContentColor = GalleryPalette.ContentColor,
+            ),
+        )
+    }
 }
 
 @ScreenPreview

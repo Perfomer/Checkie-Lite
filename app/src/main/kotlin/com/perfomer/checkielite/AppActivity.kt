@@ -13,6 +13,7 @@ import cafe.adriel.voyager.transitions.FadeTransition
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.perfomer.checkielite.common.android.SingleActivityHolder
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
+import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
 import com.perfomer.checkielite.feature.main.navigation.MainScreenProvider
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.HiddenScreen
@@ -42,6 +43,8 @@ class AppActivity : AppCompatActivity() {
                 UsualNavigator()
                 OverlayNavigator()
             }
+
+            ClearFocusOnKeyboardClose()
         }
     }
 

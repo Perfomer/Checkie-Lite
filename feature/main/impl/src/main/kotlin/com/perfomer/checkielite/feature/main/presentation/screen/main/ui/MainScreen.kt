@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -59,6 +58,7 @@ import coil.compose.AsyncImage
 import com.gigamole.composefadingedges.FadingEdgesGravity
 import com.gigamole.composefadingedges.horizontalFadingEdges
 import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiFloatingActionButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
@@ -91,7 +91,7 @@ internal fun MainScreen(
         },
         topBar = {
             TopAppBar(
-                scrollState = scrollState,
+                scrollableState = scrollState,
                 onSearchClick = {
                     coroutineScope.launch {
                         scrollState.animateScrollToItem(0)
@@ -192,55 +192,43 @@ private fun Empty() {
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun TopAppBar(
-    scrollState: LazyListState,
+    scrollableState: LazyListState,
     onSearchClick: () -> Unit,
 ) {
-    Box {
-        CenterAlignedTopAppBar(
-            title = {
-                Text(
-                    text = buildAnnotatedString {
-                        append(
-                            AnnotatedString(
-                                text = stringResource(id = R.string.app_name_checkie),
-                                spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
-                            )
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = buildAnnotatedString {
+                    append(
+                        AnnotatedString(
+                            text = stringResource(id = R.string.app_name_checkie),
+                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
                         )
-                        append(" ")
-                        append(
-                            AnnotatedString(
-                                text = stringResource(id = R.string.app_name_lite),
-                                spanStyle = SpanStyle(fontWeight = FontWeight.Normal)
-                            )
+                    )
+                    append(" ")
+                    append(
+                        AnnotatedString(
+                            text = stringResource(id = R.string.app_name_lite),
+                            spanStyle = SpanStyle(fontWeight = FontWeight.Normal)
                         )
-                    },
-                    fontSize = 20.sp,
-                )
-            },
-            actions = {
-                val shouldShowSearchIcon by remember { derivedStateOf { scrollState.firstVisibleItemIndex > 0 } }
-                AnimatedVisibility(visible = shouldShowSearchIcon, enter = fadeIn(tween(250)), exit = fadeOut(tween(250))) {
-                    CuiIconButton(painter = painterResource(R.drawable.ic_search), onClick = onSearchClick)
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(CuiPalette.Light.BackgroundPrimary)
-                .statusBarsPadding()
-        )
-
-        AnimatedVisibility(
-            visible = scrollState.canScrollBackward, enter = fadeIn(tween(250)), exit = fadeOut(tween(250)),
-            modifier = Modifier.align(Alignment.BottomCenter)
-        ) {
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(CuiPalette.Light.OutlineSecondary)
+                    )
+                },
+                fontSize = 20.sp,
             )
-        }
-    }
+        },
+        actions = {
+            val shouldShowSearchIcon by remember { derivedStateOf { scrollableState.firstVisibleItemIndex > 0 } }
+            AnimatedVisibility(visible = shouldShowSearchIcon, enter = fadeIn(tween(250)), exit = fadeOut(tween(250))) {
+                CuiIconButton(painter = painterResource(R.drawable.ic_search), onClick = onSearchClick)
+            }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .bottomStrokeOnScroll(
+                scrollableState = scrollableState,
+                strokeColor = CuiPalette.Light.OutlineSecondary,
+            )
+    )
 }
 
 @Composable

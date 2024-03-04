@@ -8,4 +8,6 @@
 
     <string name="main_empty_title">There are no Checkies yet</string>
     <string name="main_empty_description">Would you like to add one?</string>
+
+    <string name="main_copyright">© 2024 Perfomer Development</string>
 </resources>

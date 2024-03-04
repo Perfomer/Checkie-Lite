@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -79,7 +80,7 @@ internal fun MainScreen(
 ) {
     val scrollState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-    val focusRequester = remember { FocusRequester() }
+    val searchFieldFocusRequester = remember { FocusRequester() }
 
     Scaffold(
         floatingActionButton = {
@@ -95,7 +96,7 @@ internal fun MainScreen(
                 onSearchClick = {
                     coroutineScope.launch {
                         scrollState.animateScrollToItem(0)
-                        focusRequester.requestFocus()
+                        searchFieldFocusRequester.requestFocus()
                     }
                 },
             )
@@ -108,7 +109,7 @@ internal fun MainScreen(
                 state = state,
                 scrollState = scrollState,
                 contentPadding = contentPadding,
-                focusRequester = focusRequester,
+                searchFieldFocusRequester = searchFieldFocusRequester,
                 onSearchQueryInput = onSearchQueryInput,
                 onSearchQueryClearClick = onSearchQueryClearClick,
                 onReviewClick = onReviewClick,
@@ -124,10 +125,10 @@ private fun Content(
     state: MainUiState.Content,
     scrollState: LazyListState,
     contentPadding: PaddingValues,
-    focusRequester: FocusRequester,
-    onSearchQueryInput: (query: String) -> Unit = {},
-    onSearchQueryClearClick: () -> Unit = {},
-    onReviewClick: (id: String) -> Unit = {},
+    searchFieldFocusRequester: FocusRequester,
+    onSearchQueryInput: (query: String) -> Unit,
+    onSearchQueryClearClick: () -> Unit,
+    onReviewClick: (id: String) -> Unit,
 ) {
     LazyColumn(
         contentPadding = contentPadding,
@@ -141,7 +142,7 @@ private fun Content(
 
             SearchField(
                 searchQuery = state.searchQuery,
-                focusRequester = focusRequester,
+                focusRequester = searchFieldFocusRequester,
                 onSearchQueryInput = onSearchQueryInput,
                 onSearchQueryClearClick = onSearchQueryClearClick,
             )
@@ -149,11 +150,15 @@ private fun Content(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        items(
-            count = state.reviews.size,
-            key = { i -> state.reviews[i].id },
-        ) { i ->
-            CheckieHorizontalItem(state.reviews[i], onReviewClick)
+        itemsIndexed(
+            items = state.reviews,
+            key = { _, item -> item.id },
+        ) { _, item ->
+            CheckieHorizontalItem(item, onReviewClick)
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(72.dp))
         }
     }
 }

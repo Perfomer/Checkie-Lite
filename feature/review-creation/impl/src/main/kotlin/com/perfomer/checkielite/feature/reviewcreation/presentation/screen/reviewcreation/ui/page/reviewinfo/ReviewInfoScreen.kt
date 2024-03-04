@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewinfo
+package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.reviewinfo
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.reviewinfo.widget.RatingSlider
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewInfoPageUiState
-import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewinfo.widget.RatingSlider
 
 @Composable
 internal fun ReviewInfoScreen(

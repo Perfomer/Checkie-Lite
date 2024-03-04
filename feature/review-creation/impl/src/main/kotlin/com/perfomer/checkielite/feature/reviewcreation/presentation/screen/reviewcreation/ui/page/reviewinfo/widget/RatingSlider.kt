@@ -1,6 +1,6 @@
 @file:Suppress("FunctionName")
 
-package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewinfo.widget
+package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.reviewinfo.widget
 
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier

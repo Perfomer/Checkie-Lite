@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.productinfo
+package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

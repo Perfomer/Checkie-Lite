@@ -21,7 +21,6 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ReviewInfo
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewinfo.ReviewInfoScreen
 import com.perfomer.checkielite.navigation.voyager.BaseScreen
-import kotlinx.coroutines.coroutineScope
 
 @OptIn(ExperimentalFoundationApi::class)
 internal class ReviewCreationContentScreen(
@@ -66,7 +65,7 @@ internal class ReviewCreationContentScreen(
         }
 
         UpdateEffect(state.step) {
-            coroutineScope { pagerState.animateScrollToPage(state.step) }
+            pagerState.animateScrollToPage(state.step)
         }
     }
 }

@@ -71,7 +71,6 @@ import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui.state.GalleryUiState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -162,7 +161,7 @@ private fun PreviewRow(
     val lazyListState = rememberLazyListState()
 
     UpdateEffect(mainPagerState.currentPage) {
-        coroutineScope { lazyListState.animateScrollToItem(mainPagerState.currentPage) }
+        lazyListState.animateScrollToItem(mainPagerState.currentPage)
     }
 
     Column(
@@ -180,7 +179,7 @@ private fun PreviewRow(
 
         LazyRow(
             state = lazyListState,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
             contentPadding = PaddingValues(vertical = 16.dp, horizontal = 24.dp),
             modifier = Modifier
                 .fillMaxWidth()

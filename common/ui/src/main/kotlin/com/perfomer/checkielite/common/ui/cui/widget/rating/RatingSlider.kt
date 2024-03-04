@@ -36,7 +36,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
-import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
 import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
@@ -63,11 +62,7 @@ fun RatingSlider(
 
     var offsetX by remember { mutableFloatStateOf(0F) }
     var width by remember { mutableFloatStateOf(0F) }
-    var lastSelectedRating by remember { mutableIntStateOf(rating) }
-
-    UpdateEffect(lastSelectedRating) {
-        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-    }
+    var lastSelectedRating by remember(rating) { mutableIntStateOf(rating) }
 
     Box(
         modifier = modifier
@@ -82,7 +77,12 @@ fun RatingSlider(
                 orientation = Orientation.Horizontal,
                 state = rememberDraggableState { delta ->
                     offsetX = adjustOffset(offsetX + delta, width)
-                    lastSelectedRating = getRating(offsetX, width)
+                    val newRating = getRating(offsetX, width)
+
+                    if (lastSelectedRating != newRating) {
+                        lastSelectedRating = newRating
+                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                    }
                 },
                 onDragStarted = { touch ->
                     offsetX = adjustOffset(touch.x, width)
@@ -97,6 +97,7 @@ fun RatingSlider(
                     lastSelectedRating = getRating(touch.x, width)
                     offsetX = getOffset(lastSelectedRating, width)
                     onRatingChange(lastSelectedRating)
+                    hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
                 }
             }
     ) {

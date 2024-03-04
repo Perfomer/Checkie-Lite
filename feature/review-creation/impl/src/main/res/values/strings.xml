@@ -9,7 +9,7 @@
     <string name="reviewcreation_reviewinfo_title">Review</string>
     <string name="reviewcreation_reviewinfo_field_review">Share your opinion</string>
 
-    <string name="reviewcreation_dialog_confirmexit_title">You have unsaved data</string>
-    <string name="reviewcreation_dialog_confirmexit_message">Do you really want to exit? Unsaved data will be lost.</string>
+    <string name="reviewcreation_dialog_confirmexit_title">Do you really want to exit?</string>
+    <string name="reviewcreation_dialog_confirmexit_message">If you exit your changes won\'t be saved.</string>
     <string name="reviewcreation_dialog_confirmexit_confirm">Exit</string>
 </resources>

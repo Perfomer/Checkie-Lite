@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.common.ui.cui.widget.dropdown
 
+import android.view.MotionEvent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,14 +14,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.R
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CuiDropdownIcon(
     painter: Painter = painterResource(R.drawable.ic_menu),
@@ -38,7 +42,12 @@ fun CuiDropdownIcon(
         onDismissRequest = { isExpanded = false },
         content = content,
         offset = DpOffset(x = (-12).dp, y = 0.dp),
-        modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.surface)
+            .motionEventSpy { event ->
+                if (event.action != MotionEvent.ACTION_UP) return@motionEventSpy
+                isExpanded = false
+            }
     )
 }
 

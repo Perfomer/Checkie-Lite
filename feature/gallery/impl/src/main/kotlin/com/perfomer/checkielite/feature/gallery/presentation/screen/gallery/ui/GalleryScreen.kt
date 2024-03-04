@@ -133,19 +133,21 @@ internal fun GalleryScreen(
                 onDismiss = onDismiss,
             )
 
-            AnimatedVisibility(
-                visible = state.isUiShown,
-                enter = fadeIn(),
-                exit = fadeOut(),
-                modifier = Modifier.align(Alignment.BottomCenter)
-            ) {
-                PreviewRow(
-                    mainPagerState = mainPagerState,
-                    picturesUri = state.picturesUri,
-                    onPictureClick = { page ->
-                        coroutineScope.launch { mainPagerState.animateScrollToPage(page) }
-                    },
-                )
+            if (state.picturesUri.size > 1) {
+                AnimatedVisibility(
+                    visible = state.isUiShown,
+                    enter = fadeIn(),
+                    exit = fadeOut(),
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                ) {
+                    PreviewRow(
+                        mainPagerState = mainPagerState,
+                        picturesUri = state.picturesUri,
+                        onPictureClick = { page ->
+                            coroutineScope.launch { mainPagerState.animateScrollToPage(page) }
+                        },
+                    )
+                }
             }
         }
     }

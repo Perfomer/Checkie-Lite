@@ -4,6 +4,7 @@ import android.view.MotionEvent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -35,6 +36,7 @@ fun CuiDropdownIcon(
     CuiIconButton(
         painter = painter,
         onClick = { isExpanded = !isExpanded },
+        modifier = Modifier.offset(x = (-4).dp)
     )
 
     DropdownMenu(

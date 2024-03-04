@@ -62,6 +62,7 @@ import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiFloatingActionButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
+import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRating
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
 import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -343,29 +344,7 @@ internal fun CheckieHorizontalItem(
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        CheckieRating(rating = item.rating, emoji = item.emoji)
-    }
-}
-
-@Composable
-private fun CheckieRating(rating: Int, emoji: String) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Text(
-            text = rating.toString(),
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium,
-        )
-
-        Text(
-            text = "/10",
-            fontSize = 10.sp,
-            fontWeight = FontWeight.Medium,
-            color = CuiPalette.Light.TextSecondary,
-        )
-
-        Spacer(modifier = Modifier.width(8.dp))
-
-        Text(text = emoji, fontSize = 24.sp)
+        ReviewRating(rating = item.rating)
     }
 }
 
@@ -384,7 +363,6 @@ internal val mockUiState = MainUiState.Content(
             brand = "Lui Bidon",
             imageUri = "https://habrastorage.org/r/w780/getpro/habr/upload_files/746/2ab/27c/7462ab27cca552ce31ee9cba01387692.jpeg",
             rating = 8,
-            emoji = "\uD83D\uDE0D", // 😍
         ),
         ReviewItem(
             id = "2",
@@ -392,7 +370,6 @@ internal val mockUiState = MainUiState.Content(
             brand = "Darkside",
             imageUri = "https://images.unsplash.com/photo-1483129804960-cb1964499894?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
             rating = 0,
-            emoji = "\uD83D\uDCA9", // 💩
         ),
         ReviewItem(
             id = "3",
@@ -400,7 +377,6 @@ internal val mockUiState = MainUiState.Content(
             brand = "Key Kesey",
             imageUri = "https://images.unsplash.com/photo-1620447875063-19be4e4604bc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=796&q=80",
             rating = 10,
-            emoji = "\uD83D\uDC8E", // 💎
         ),
         ReviewItem(
             id = "4",
@@ -408,7 +384,6 @@ internal val mockUiState = MainUiState.Content(
             brand = null,
             imageUri = "https://images.unsplash.com/photo-1548100535-fe8a16c187ef?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1151&q=80",
             rating = 4,
-            emoji = "\uD83D\uDE10", // 😐
         ),
         ReviewItem(
             id = "5",
@@ -416,7 +391,6 @@ internal val mockUiState = MainUiState.Content(
             brand = null,
             imageUri = null,
             rating = 3,
-            emoji = "\uD83D\uDE2D", // 😭
         ),
     )
 )

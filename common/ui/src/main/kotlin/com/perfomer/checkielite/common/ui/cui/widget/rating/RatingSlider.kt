@@ -1,8 +1,12 @@
 @file:Suppress("FunctionName")
 
-package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.reviewinfo.widget
+package com.perfomer.checkielite.common.ui.cui.widget.rating
 
+import android.graphics.Bitmap
 import android.graphics.Paint
+import android.graphics.RectF
+import android.graphics.drawable.BitmapDrawable
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -29,6 +33,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
@@ -37,20 +42,22 @@ import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 import com.perfomer.checkielite.common.ui.util.dpToPx
 import com.perfomer.checkielite.common.ui.util.spToPx
-import com.perfomer.checkielite.core.entity.ReviewReaction
 import kotlin.math.roundToInt
 
-private val EMOJI_SIZE by lazy { 22.spToPx() }
+private val EMOJI_SIZE by lazy { 26.dpToPx() }
 private val TEXT_SIZE by lazy { 14.spToPx() }
 private val POINT_SIZE by lazy { 7.dpToPx() }
 private val POINT_BORDER_SIZE by lazy { 2.dpToPx() }
 
+private val emojiCoordinates by lazy { RectF() }
+
 private const val DIVISIONS_AMOUNT = 10
 
 @Composable
-internal fun RatingSlider(
+fun RatingSlider(
     rating: Int,
-    onRatingChange: (Int) -> Unit
+    onRatingChange: (Int) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val hapticFeedback = LocalHapticFeedback.current
 
@@ -63,7 +70,7 @@ internal fun RatingSlider(
     }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .height(80.dp)
             .fillMaxWidth()
             .padding(horizontal = 8.dp)
@@ -112,11 +119,10 @@ private fun RatingSlideCanvas(
         }
     }
 
-    val emojiPaint = remember {
-        Paint().apply {
-            textSize = EMOJI_SIZE
-            textAlign = Paint.Align.CENTER
-        }
+    val context = LocalContext.current
+    val reviewReaction = remember(lastSelectedRating) { ReviewReaction.createFromRating(lastSelectedRating) }
+    val bitmap = remember(reviewReaction) {
+        (AppCompatResources.getDrawable(context, reviewReaction.drawable) as BitmapDrawable).bitmap
     }
 
     Canvas(modifier = Modifier.fillMaxSize()) {
@@ -124,9 +130,8 @@ private fun RatingSlideCanvas(
         RatingNumbers(offsetX, ratingPaint)
 
         SlidingEmoji(
-            emoji = ReviewReaction.createFromRating(lastSelectedRating).emoji,
+            emoji = bitmap,
             offsetX = offsetX,
-            paint = emojiPaint
         )
     }
 }
@@ -230,7 +235,7 @@ private fun DrawScope.RatingNumbers(offsetX: Float, paint: Paint) {
     }
 }
 
-private fun DrawScope.SlidingEmoji(emoji: String, offsetX: Float, paint: Paint) {
+private fun DrawScope.SlidingEmoji(emoji: Bitmap, offsetX: Float) {
     val height = size.height
 
     drawCircle(
@@ -246,13 +251,13 @@ private fun DrawScope.SlidingEmoji(emoji: String, offsetX: Float, paint: Paint) 
         style = Stroke(width = 8F)
     )
 
+    emojiCoordinates.left = offsetX - EMOJI_SIZE / 2
+    emojiCoordinates.top = height / 2 - EMOJI_SIZE / 2
+    emojiCoordinates.right = emojiCoordinates.left + EMOJI_SIZE
+    emojiCoordinates.bottom = emojiCoordinates.top + EMOJI_SIZE
+
     drawContext.canvas.nativeCanvas.apply {
-        drawText(
-            emoji,
-            offsetX,
-            height / 2 + 20,
-            paint
-        )
+        drawBitmap(emoji, null, emojiCoordinates, null)
     }
 }
 

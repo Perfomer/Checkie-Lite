@@ -22,5 +22,4 @@ internal data class ReviewItem(
     val brand: String?,
     val imageUri: String?,
     val rating: Int,
-    val emoji: String,
 )

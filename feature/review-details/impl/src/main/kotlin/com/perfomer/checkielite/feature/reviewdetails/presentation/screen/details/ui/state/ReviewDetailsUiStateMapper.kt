@@ -2,7 +2,6 @@ package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detai
 
 import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
-import com.perfomer.checkielite.core.entity.ReviewReaction
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsState
 import kotlinx.collections.immutable.toPersistentList
 import java.text.SimpleDateFormat
@@ -19,7 +18,6 @@ internal class ReviewDetailsUiStateMapper : UiStateMapper<ReviewDetailsState, Re
                 productName = state.review.content.productName,
                 date = dateFormat.format(state.review.content.creationDate),
                 rating = state.review.content.rating,
-                emoji = ReviewReaction.createFromRating(state.review.content.rating).emoji,
                 picturesUri = state.review.content.picturesUri.toPersistentList(),
                 currentPicturePosition = state.currentPicturePosition,
                 reviewText = state.review.content.reviewText,

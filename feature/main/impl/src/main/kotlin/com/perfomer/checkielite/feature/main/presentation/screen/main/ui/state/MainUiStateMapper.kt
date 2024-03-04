@@ -4,7 +4,6 @@ import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.pure.state.requireContent
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
 import com.perfomer.checkielite.core.entity.CheckieReview
-import com.perfomer.checkielite.core.entity.ReviewReaction
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainState
 
 internal class MainUiStateMapper : UiStateMapper<MainState, MainUiState> {
@@ -37,7 +36,6 @@ internal class MainUiStateMapper : UiStateMapper<MainState, MainUiState> {
             brand = productBrand,
             imageUri = picturesUri.firstOrNull(),
             rating = rating,
-            emoji = ReviewReaction.createFromRating(rating).emoji,
         )
     }
 }

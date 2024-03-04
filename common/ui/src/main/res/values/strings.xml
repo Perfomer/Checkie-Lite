@@ -3,4 +3,10 @@
 
     <string name="common_cancel">Cancel</string>
     <string name="common_ok">OK</string>
+
+    <string name="common_reaction_disgusting">Disgusting</string>
+    <string name="common_reaction_disappointed">Disappointed</string>
+    <string name="common_reaction_okay">Okay</string>
+    <string name="common_reaction_like_it">Like it</string>
+    <string name="common_reaction_brilliant">Brilliant</string>
 </resources>

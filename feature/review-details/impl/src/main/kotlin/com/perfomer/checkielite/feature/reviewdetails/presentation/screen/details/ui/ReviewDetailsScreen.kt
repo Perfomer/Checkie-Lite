@@ -57,7 +57,6 @@ internal fun ReviewDetailsScreen(
                 productName = state.productName,
                 brandName = state.brandName,
                 date = state.date,
-                emoji = state.emoji,
                 rating = state.rating
             )
 
@@ -103,7 +102,6 @@ internal val mockUiState = ReviewDetailsUiState.Content(
         "https://images.unsplash.com/photo-1548100535-fe8a16c187ef?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1151&q=80"
     ),
     rating = 8,
-    emoji = "\uD83D\uDE0D", // 😍
     date = "31 May 2023",
     currentPicturePosition = 0,
     reviewText = "Extraordinary. Meets an elite standard by which you judge all other restaurants. The staff is always ready to help, the premises are extremely clean, the atmosphere is lovely, and the food is both delicious and beautifully presented.",

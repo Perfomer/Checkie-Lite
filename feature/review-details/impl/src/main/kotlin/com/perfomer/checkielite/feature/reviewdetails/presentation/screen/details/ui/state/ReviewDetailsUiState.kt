@@ -13,7 +13,6 @@ internal sealed interface ReviewDetailsUiState {
         val productName: String,
         val date: String,
         val rating: Int,
-        val emoji: String,
         val picturesUri: ImmutableList<String>,
         val currentPicturePosition: Int,
         val reviewText: String?,

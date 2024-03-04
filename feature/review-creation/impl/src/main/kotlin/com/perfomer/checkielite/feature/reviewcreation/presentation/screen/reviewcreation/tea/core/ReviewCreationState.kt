@@ -9,6 +9,7 @@ internal data class ReviewCreationState(
     val mode: ReviewCreationMode,
     val currentPage: ReviewCreationPage = mode.initialPage,
 
+    val reviewId: String = "",
     val initialReviewDetails: ReviewDetails = ReviewDetails(),
     val reviewDetails: ReviewDetails = initialReviewDetails,
     val isProductNameValid: Boolean = true,
@@ -18,7 +19,6 @@ internal data class ReviewCreationState(
 )
 
 internal data class ReviewDetails(
-    val reviewId: String = "",
     val productName: String = "",
     val productBrand: String = "",
     val picturesUri: PersistentList<String> = emptyPersistentList(),

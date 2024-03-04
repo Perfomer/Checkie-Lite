@@ -72,7 +72,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
 
                     is ReviewCreationMode.Modification -> commands(
                         UpdateReview(
-                            reviewId = state.reviewDetails.reviewId,
+                            reviewId = state.reviewId,
                             productName = state.reviewDetails.productName,
                             productBrand = state.reviewDetails.productBrand,
                             reviewText = state.reviewDetails.reviewText,
@@ -145,7 +145,6 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         is ReviewLoading.Started -> state { copy(isReviewLoading = true) }
         is ReviewLoading.Succeed -> state {
             val initialReviewDetails = ReviewDetails(
-                reviewId = event.review.id,
                 productName = event.review.productName,
                 productBrand = event.review.productBrand.orEmpty(),
                 picturesUri = event.review.picturesUri.toPersistentList(),
@@ -153,8 +152,9 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 rating = event.review.rating,
             )
             copy(
+                reviewId = event.review.id,
                 initialReviewDetails = initialReviewDetails,
-                reviewDetails = reviewDetails,
+                reviewDetails = initialReviewDetails,
             )
         }
 

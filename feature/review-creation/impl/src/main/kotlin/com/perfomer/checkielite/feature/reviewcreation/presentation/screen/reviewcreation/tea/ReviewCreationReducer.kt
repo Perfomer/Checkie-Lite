@@ -86,17 +86,21 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         }
 
         is OnBackPress -> {
-            val previous = state.currentPage.previous()
+            if (!state.isSavingInProgress) {
+                val previous = state.currentPage.previous()
 
-            if (previous != null) {
-                state { copy(currentPage = previous) }
-            } else {
-                if (state.reviewDetails != state.initialReviewDetails) {
-                    effects(ShowConfirmExitDialog)
+                if (previous != null) {
+                    state { copy(currentPage = previous) }
                 } else {
-                    commands(Exit)
+                    if (state.reviewDetails != state.initialReviewDetails) {
+                        effects(ShowConfirmExitDialog)
+                    } else {
+                        commands(Exit)
+                    }
                 }
             }
+
+            Unit
         }
 
         is OnConfirmExitClick -> commands(Exit)

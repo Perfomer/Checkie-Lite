@@ -118,7 +118,8 @@ internal fun GalleryScreen(
             )
 
             Box(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
                     .alpha(backgroundAlpha)
                     .background(GalleryPalette.BackgroundColor)
             )
@@ -138,7 +139,7 @@ internal fun GalleryScreen(
                 exit = fadeOut(),
                 modifier = Modifier.align(Alignment.BottomCenter)
             ) {
-                PreviewHorizontalPager(
+                PreviewRow(
                     mainPagerState = mainPagerState,
                     picturesUri = state.picturesUri,
                     onPictureClick = { page ->
@@ -151,18 +152,15 @@ internal fun GalleryScreen(
 }
 
 @Composable
-private fun PreviewHorizontalPager(
+private fun PreviewRow(
     mainPagerState: PagerState,
     picturesUri: ImmutableList<String>,
     onPictureClick: (position: Int) -> Unit,
 ) {
-    val pagerState = rememberPagerState(
-        pageCount = { picturesUri.size },
-        initialPage = mainPagerState.currentPage,
-    )
+    val lazyListState = rememberLazyListState()
 
     UpdateEffect(mainPagerState.currentPage) {
-        coroutineScope { pagerState.animateScrollToPage(mainPagerState.currentPage) }
+        coroutineScope { lazyListState.animateScrollToItem(mainPagerState.currentPage) }
     }
 
     Column(
@@ -178,27 +176,31 @@ private fun PreviewHorizontalPager(
     ) {
         Spacer(Modifier.height(128.dp))
 
-        HorizontalPager(
-            state = pagerState,
-            pageSize = PageSize.Fixed(56.dp),
-            pageSpacing = 8.dp,
+        LazyRow(
+            state = lazyListState,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(vertical = 16.dp, horizontal = 24.dp),
             modifier = Modifier
                 .fillMaxWidth()
-        ) { page ->
-            val offset = mainPagerState.indicatorOffsetForPage(page)
-            val targetAlpha = 0.5F + 0.5F * offset
+        ) {
+            itemsIndexed(
+                items = picturesUri,
+                key = { _, item -> item },
+            ) { i, item ->
+                val offset = mainPagerState.indicatorOffsetForPage(i)
+                val targetAlpha = 0.5F + 0.5F * offset
 
-            AsyncImage(
-                model = picturesUri[page],
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(56.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .clickable { onPictureClick(page) }
-                    .alpha(targetAlpha)
-            )
+                AsyncImage(
+                    model = item,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(56.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .clickable { onPictureClick(i) }
+                        .alpha(targetAlpha)
+                )
+            }
         }
     }
 }

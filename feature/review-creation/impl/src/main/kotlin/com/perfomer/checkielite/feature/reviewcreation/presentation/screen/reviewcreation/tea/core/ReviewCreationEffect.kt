@@ -1,3 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core
 
-internal sealed interface ReviewCreationEffect
+internal sealed interface ReviewCreationEffect {
+
+    data object ShowConfirmExitDialog : ReviewCreationEffect
+}

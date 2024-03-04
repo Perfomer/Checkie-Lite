@@ -21,9 +21,11 @@ internal sealed interface ReviewCreationEvent {
 
 internal sealed interface ReviewCreationUiEvent : ReviewCreationEvent {
 
+    data object OnBackPress : ReviewCreationUiEvent
+
     data object OnPrimaryButtonClick : ReviewCreationUiEvent
 
-    data object OnBackPress : ReviewCreationUiEvent
+    data object OnConfirmExitClick : ReviewCreationUiEvent
 
     sealed interface ProductInfo : ReviewCreationUiEvent {
 

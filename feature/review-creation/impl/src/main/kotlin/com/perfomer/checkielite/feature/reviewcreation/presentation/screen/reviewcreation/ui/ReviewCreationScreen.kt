@@ -34,12 +34,16 @@ import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ProductInfoPageUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewCreationUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewInfoPageUiState
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget.ConfirmExitDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget.ProgressAppBar
 
 @Composable
 internal fun ReviewCreationScreen(
     state: ReviewCreationUiState,
     pagerState: PagerState,
+    showExitDialog: Boolean = false,
+    onExitDialogDismiss: () -> Unit = {},
+    onExitDialogConfirm: () -> Unit = {},
     onPrimaryButtonClick: () -> Unit = {},
     onBackPress: () -> Unit = {},
     content: @Composable PagerScope.(page: Int) -> Unit,
@@ -88,6 +92,13 @@ internal fun ReviewCreationScreen(
                 loading = state.isPrimaryButtonLoading,
             )
         }
+    }
+
+    if (showExitDialog) {
+        ConfirmExitDialog(
+            onDismiss = onExitDialogDismiss,
+            onConfirm = onExitDialogConfirm,
+        )
     }
 }
 

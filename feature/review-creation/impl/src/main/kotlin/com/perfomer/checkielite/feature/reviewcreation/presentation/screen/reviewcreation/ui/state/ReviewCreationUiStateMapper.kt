@@ -23,17 +23,17 @@ internal class ReviewCreationUiStateMapper : UiStateMapper<ReviewCreationState, 
 
     private fun createProductInfoPageState(state: ReviewCreationState): ProductInfoPageUiState {
         return ProductInfoPageUiState(
-            productName = state.productName,
-            brand = state.productBrand,
-            picturesUri = state.picturesUri,
+            productName = state.reviewDetails.productName,
+            brand = state.reviewDetails.productBrand,
+            picturesUri = state.reviewDetails.picturesUri,
             productNameErrorText = "Product name cannot be empty".takeUnless { state.isProductNameValid },
         )
     }
 
     private fun createReviewInfoPageState(state: ReviewCreationState): ReviewInfoPageUiState {
         return ReviewInfoPageUiState(
-            rating = state.rating,
-            reviewText = state.reviewText,
+            rating = state.reviewDetails.rating,
+            reviewText = state.reviewDetails.reviewText,
         )
     }
 }

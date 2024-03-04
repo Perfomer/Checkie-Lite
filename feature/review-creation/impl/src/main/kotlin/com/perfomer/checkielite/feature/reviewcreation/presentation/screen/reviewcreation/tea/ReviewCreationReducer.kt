@@ -10,6 +10,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.UpdateReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowConfirmExitDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.Initialize
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.ReviewLoading
@@ -23,9 +24,11 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnBackPress
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnConfirmExitClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnPrimaryButtonClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ProductInfo
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ReviewInfo
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewDetails
 import kotlinx.collections.immutable.toPersistentList
 
 internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewCreationEffect, ReviewCreationEvent, ReviewCreationState>() {
@@ -52,29 +55,29 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             val next = state.currentPage.next()
 
             if (next != null) {
-                val isProductNameValid = state.productName.isNotBlank()
+                val isProductNameValid = state.reviewDetails.productName.isNotBlank()
                 if (isProductNameValid) state { copy(currentPage = next) }
                 state { copy(isProductNameValid = isProductNameValid) }
             } else {
                 when (state.mode) {
                     is ReviewCreationMode.Creation -> commands(
                         CreateReview(
-                            productName = state.productName,
-                            productBrand = state.productBrand,
-                            reviewText = state.reviewText,
-                            rating = state.rating,
-                            picturesUri = state.picturesUri,
+                            productName = state.reviewDetails.productName,
+                            productBrand = state.reviewDetails.productBrand,
+                            reviewText = state.reviewDetails.reviewText,
+                            rating = state.reviewDetails.rating,
+                            picturesUri = state.reviewDetails.picturesUri,
                         )
                     )
 
                     is ReviewCreationMode.Modification -> commands(
                         UpdateReview(
-                            reviewId = state.reviewId,
-                            productName = state.productName,
-                            productBrand = state.productBrand,
-                            reviewText = state.reviewText,
-                            rating = state.rating,
-                            picturesUri = state.picturesUri,
+                            reviewId = state.reviewDetails.reviewId,
+                            productName = state.reviewDetails.productName,
+                            productBrand = state.reviewDetails.productBrand,
+                            reviewText = state.reviewDetails.reviewText,
+                            rating = state.reviewDetails.rating,
+                            picturesUri = state.reviewDetails.picturesUri,
                         )
                     )
                 }
@@ -88,32 +91,44 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             if (previous != null) {
                 state { copy(currentPage = previous) }
             } else {
-                commands(Exit)
+                if (state.reviewDetails != state.initialReviewDetails) {
+                    effects(ShowConfirmExitDialog)
+                } else {
+                    commands(Exit)
+                }
             }
         }
+
+        is OnConfirmExitClick -> commands(Exit)
     }
 
     private fun reduceProductInfoUi(event: ProductInfo) = when (event) {
-        is ProductInfo.OnProductNameTextInput -> state { copy(productName = event.text) }
-        is ProductInfo.OnBrandTextInput -> state { copy(productBrand = event.text) }
+        is ProductInfo.OnProductNameTextInput -> state { copy(reviewDetails = reviewDetails.copy(productName = event.text)) }
+        is ProductInfo.OnBrandTextInput -> state { copy(reviewDetails = reviewDetails.copy(productBrand = event.text)) }
         is ProductInfo.OnAddPictureClick -> commands(OpenPhotoPicker)
         is ProductInfo.OnPictureClick -> commands(
             OpenGallery(
-                picturesUri = state.picturesUri,
-                currentPicturePosition = state.picturesUri.indexOf(event.pictureUri).coerceAtLeast(0),
+                picturesUri = state.reviewDetails.picturesUri,
+                currentPicturePosition = state.reviewDetails.picturesUri.indexOf(event.pictureUri).coerceAtLeast(0),
             )
         )
 
-        is ProductInfo.OnPictureDeleteClick -> state { copy(picturesUri = picturesUri.remove(event.pictureUri)) }
+        is ProductInfo.OnPictureDeleteClick -> state {
+            copy(
+                reviewDetails = reviewDetails.copy(
+                    picturesUri = reviewDetails.picturesUri.remove(event.pictureUri)
+                )
+            )
+        }
     }
 
     private fun reduceReviewInfoUi(event: ReviewInfo) = when (event) {
-        is ReviewInfo.OnRatingSelect -> state { copy(rating = event.rating) }
-        is ReviewInfo.OnReviewTextInput -> state { copy(reviewText = event.text) }
+        is ReviewInfo.OnRatingSelect -> state { copy(reviewDetails = reviewDetails.copy(rating = event.rating)) }
+        is ReviewInfo.OnReviewTextInput -> state { copy(reviewDetails = reviewDetails.copy(reviewText = event.text)) }
     }
 
     private fun reduceNavigation(event: ReviewCreationNavigationEvent) = when (event) {
-        is OnPhotoPick -> state { copy(picturesUri = picturesUri.add(event.uri)) }
+        is OnPhotoPick -> state { copy(reviewDetails = reviewDetails.copy(picturesUri = reviewDetails.picturesUri.add(event.uri))) }
     }
 
     private fun reduceReviewsCreation(event: ReviewSaving) = when (event) {
@@ -125,13 +140,17 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     private fun reduceReviewLoading(event: ReviewLoading) = when (event) {
         is ReviewLoading.Started -> state { copy(isReviewLoading = true) }
         is ReviewLoading.Succeed -> state {
-            copy(
+            val initialReviewDetails = ReviewDetails(
                 reviewId = event.review.id,
                 productName = event.review.productName,
                 productBrand = event.review.productBrand.orEmpty(),
                 picturesUri = event.review.picturesUri.toPersistentList(),
                 reviewText = event.review.reviewText.orEmpty(),
                 rating = event.review.rating,
+            )
+            copy(
+                initialReviewDetails = initialReviewDetails,
+                reviewDetails = reviewDetails,
             )
         }
 

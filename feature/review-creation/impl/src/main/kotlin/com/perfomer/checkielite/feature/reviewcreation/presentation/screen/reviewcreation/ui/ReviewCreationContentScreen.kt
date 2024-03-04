@@ -6,7 +6,9 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
@@ -14,7 +16,9 @@ import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationStore
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowConfirmExitDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnBackPress
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnConfirmExitClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnPrimaryButtonClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ProductInfo
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ReviewInfo
@@ -29,7 +33,15 @@ internal class ReviewCreationContentScreen(
 
     @Composable
     override fun Screen() = TeaComposable(store<ReviewCreationStore>(params)) { state ->
+        var isConfirmExitDialogShown by remember { mutableStateOf(false) }
+
         BackHandler { accept(OnBackPress) }
+
+        EffectHandler { effect ->
+            when (effect) {
+                ShowConfirmExitDialog -> isConfirmExitDialogShown = true
+            }
+        }
 
         val pagerState = rememberPagerState(
             initialPage = state.step,
@@ -39,6 +51,9 @@ internal class ReviewCreationContentScreen(
         ReviewCreationScreen(
             state = state,
             pagerState = pagerState,
+            showExitDialog = isConfirmExitDialogShown,
+            onExitDialogDismiss = { isConfirmExitDialogShown = false },
+            onExitDialogConfirm = acceptable(OnConfirmExitClick),
             onPrimaryButtonClick = acceptable(OnPrimaryButtonClick),
             onBackPress = acceptable(OnBackPress),
         ) { pageIndex ->

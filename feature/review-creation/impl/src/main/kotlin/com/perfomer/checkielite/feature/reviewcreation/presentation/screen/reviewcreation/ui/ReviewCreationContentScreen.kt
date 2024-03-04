@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
@@ -12,6 +11,7 @@ import androidx.compose.runtime.setValue
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
+import com.perfomer.checkielite.common.ui.util.BackHandlerWithLifecycle
 import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
@@ -35,7 +35,7 @@ internal class ReviewCreationContentScreen(
     override fun Screen() = TeaComposable(store<ReviewCreationStore>(params)) { state ->
         var isConfirmExitDialogShown by remember { mutableStateOf(false) }
 
-        BackHandler { accept(OnBackPress) }
+        BackHandlerWithLifecycle { accept(OnBackPress) }
 
         EffectHandler { effect ->
             when (effect) {

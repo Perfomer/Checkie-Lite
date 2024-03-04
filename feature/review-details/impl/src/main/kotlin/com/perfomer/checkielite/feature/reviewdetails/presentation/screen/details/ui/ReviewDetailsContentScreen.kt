@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +8,7 @@ import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
+import com.perfomer.checkielite.common.ui.util.BackHandlerWithLifecycle
 import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsParams
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsStore
@@ -32,7 +32,7 @@ internal class ReviewDetailsContentScreen(
     override fun Screen() = TeaComposable(store<ReviewDetailsStore>(params)) { state ->
         var isConfirmDeleteDialogShown by remember { mutableStateOf(false) }
 
-        BackHandler { accept(OnBackPress) }
+        BackHandlerWithLifecycle { accept(OnBackPress) }
 
         LifecycleEffect(
             onStarted = acceptable(OnStart),

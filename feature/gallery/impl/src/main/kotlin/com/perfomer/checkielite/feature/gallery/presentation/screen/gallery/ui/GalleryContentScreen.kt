@@ -1,9 +1,9 @@
 package com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
+import com.perfomer.checkielite.common.ui.util.BackHandlerWithLifecycle
 import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryParams
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.GalleryStore
@@ -18,7 +18,7 @@ internal class GalleryContentScreen(
 
     @Composable
     override fun Screen() = TeaComposable(store<GalleryStore>(params)) { state ->
-        BackHandler { accept(OnBackPress) }
+        BackHandlerWithLifecycle { accept(OnBackPress) }
 
         GalleryScreen(
             state = state,

@@ -18,6 +18,7 @@ dependencies {
 
 	api(libs.coil)
 	debugImplementation(libs.compose.ui.tooling)
+	implementation(libs.activity.compose)
 	implementation(libs.appcompat)
 	implementation(libs.compose.material3)
 	implementation(libs.koin.core)

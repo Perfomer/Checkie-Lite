@@ -11,6 +11,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -84,6 +85,7 @@ internal fun GalleryScreen(
 ) {
     var backgroundAlpha by remember { mutableFloatStateOf(1F) }
     val systemUiController = rememberSystemUiController()
+    val isSystemInDarkTheme = isSystemInDarkTheme()
 
     UpdateEffect(state.isUiShown) { systemUiController.isSystemBarsVisible = state.isUiShown }
     UpdateEffect(backgroundAlpha < 1F) { systemUiController.isSystemBarsVisible = true }
@@ -92,8 +94,7 @@ internal fun GalleryScreen(
         systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = false)
 
         onDispose {
-            // TODO: color by theme when dark theme will be done
-            systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = true)
+            systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = !isSystemInDarkTheme)
             systemUiController.isSystemBarsVisible = true
         }
     }

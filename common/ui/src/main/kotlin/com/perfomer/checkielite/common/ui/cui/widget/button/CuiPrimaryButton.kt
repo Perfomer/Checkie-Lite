@@ -17,7 +17,7 @@ import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 fun CuiPrimaryButton(
     text: String,
     modifier: Modifier = Modifier,
-    activeButtonColor: Color = CuiColorToken.Orange,
+    activeButtonColor: Color = CuiColorToken.Orange1,
     elevation: ButtonElevation = ButtonDefaults.buttonElevation(
         defaultElevation = 12.dp,
         pressedElevation = 0.dp,
@@ -29,11 +29,11 @@ fun CuiPrimaryButton(
 ) {
     CuiInternalButton(
         text = text,
-        textColor = CuiColorToken.White,
-        textColorDisabled = CuiColorToken.GreyDark,
+        textColor = CuiColorToken.White1,
+        textColorDisabled = CuiColorToken.Grey5,
         colors = ButtonDefaults.buttonColors(
             containerColor = activeButtonColor,
-            disabledContainerColor = CuiColorToken.GreyLight,
+            disabledContainerColor = CuiColorToken.Grey1,
         ),
         elevation = elevation,
         enabled = isEnabled,

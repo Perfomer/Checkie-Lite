@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.perfomer.checkielite.common.ui.theme.CuiPalette
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
@@ -42,7 +42,7 @@ fun ReviewRating(
             text = "/10",
             fontSize = 10.sp,
             fontWeight = FontWeight.Medium,
-            color = CuiPalette.Light.TextSecondary,
+            color = LocalCuiPalette.current.TextSecondary,
         )
 
         Spacer(modifier = Modifier.width(8.dp))

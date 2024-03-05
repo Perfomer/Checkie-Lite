@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -25,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -36,8 +38,9 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
+import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
-import com.perfomer.checkielite.common.ui.theme.PreviewTheme
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 import com.perfomer.checkielite.common.ui.util.dpToPx
 import com.perfomer.checkielite.common.ui.util.spToPx
@@ -52,11 +55,38 @@ private val emojiCoordinates by lazy { RectF() }
 
 private const val DIVISIONS_AMOUNT = 10
 
+@Stable
+data class RatingSliderColors(
+    val fillLineColor: Color,
+    val emptyLineColor: Color,
+    val selectedTextColor: Color,
+    val unselectedTextColor: Color,
+    val pointBackgroundColor: Color,
+    val pointSelectedBorderColor: Color = fillLineColor,
+    val pointUnselectedBorderColor: Color = emptyLineColor,
+    val pointEmojiBorderColor: Color = pointSelectedBorderColor.copy(alpha = 0.5F),
+) {
+    companion object {
+
+        @Composable
+        fun createByPalette(palette: CuiPalette = LocalCuiPalette.current): RatingSliderColors {
+            return RatingSliderColors(
+                selectedTextColor = palette.TextAccent,
+                unselectedTextColor = palette.TextSecondary,
+                pointBackgroundColor = palette.BackgroundPrimary,
+                fillLineColor = palette.BackgroundAccentPrimary,
+                emptyLineColor = palette.BackgroundSecondary,
+            )
+        }
+    }
+}
+
 @Composable
 fun RatingSlider(
     rating: Int,
     onRatingChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
+    colors: RatingSliderColors = RatingSliderColors.createByPalette(),
 ) {
     val hapticFeedback = LocalHapticFeedback.current
 
@@ -104,6 +134,7 @@ fun RatingSlider(
         RatingSlideCanvas(
             offsetX = offsetX,
             lastSelectedRating = lastSelectedRating,
+            colors = colors,
         )
     }
 }
@@ -112,6 +143,7 @@ fun RatingSlider(
 private fun RatingSlideCanvas(
     offsetX: Float,
     lastSelectedRating: Int,
+    colors: RatingSliderColors,
 ) {
     val ratingPaint = remember {
         Paint().apply {
@@ -127,28 +159,50 @@ private fun RatingSlideCanvas(
     }
 
     Canvas(modifier = Modifier.fillMaxSize()) {
-        ProgressLines(offsetX)
-        RatingNumbers(offsetX, ratingPaint)
+        ProgressLines(
+            offsetX = offsetX,
+            emptyLineColor = colors.emptyLineColor,
+            fillLineColor = colors.fillLineColor,
+            pointBackgroundColor = colors.pointBackgroundColor,
+            pointSelectedBorderColor = colors.pointSelectedBorderColor,
+            pointUnselectedBorderColor = colors.pointUnselectedBorderColor,
+        )
+
+        RatingNumbers(
+            offsetX = offsetX,
+            paint = ratingPaint,
+            selectedTextColor = colors.selectedTextColor,
+            unselectedTextColor = colors.unselectedTextColor,
+        )
 
         SlidingEmoji(
             emoji = bitmap,
             offsetX = offsetX,
+            pointBackgroundColor = colors.pointBackgroundColor,
+            pointEmojiBorderColor = colors.pointEmojiBorderColor,
         )
     }
 }
 
-private fun DrawScope.ProgressLines(offsetX: Float) {
-    EmptyLine()
-    FillLine(offsetX)
-    BreakPoints(offsetX)
+private fun DrawScope.ProgressLines(
+    offsetX: Float,
+    emptyLineColor: Color,
+    fillLineColor: Color,
+    pointBackgroundColor: Color,
+    pointSelectedBorderColor: Color,
+    pointUnselectedBorderColor: Color,
+) {
+    EmptyLine(emptyLineColor)
+    FillLine(offsetX, fillLineColor)
+    BreakPoints(offsetX, pointBackgroundColor, pointSelectedBorderColor, pointUnselectedBorderColor)
 }
 
-private fun DrawScope.EmptyLine() {
+private fun DrawScope.EmptyLine(emptyLineColor: Color) {
     val width = size.width
     val height = size.height
 
     drawLine(
-        color = CuiPalette.Light.BackgroundSecondary,
+        color = emptyLineColor,
         start = Offset(0F, height / 2),
         end = Offset(width, height / 2),
         strokeWidth = 30F,
@@ -156,11 +210,14 @@ private fun DrawScope.EmptyLine() {
     )
 }
 
-private fun DrawScope.FillLine(offsetX: Float) {
+private fun DrawScope.FillLine(
+    offsetX: Float,
+    fillLineColor: Color,
+) {
     val height = size.height
 
     drawLine(
-        color = CuiPalette.Light.BackgroundAccentPrimary,
+        color = fillLineColor,
         start = Offset(0F, height / 2),
         end = Offset(offsetX, height / 2),
         strokeWidth = 30F,
@@ -168,7 +225,12 @@ private fun DrawScope.FillLine(offsetX: Float) {
     )
 }
 
-private fun DrawScope.BreakPoints(offsetX: Float) {
+private fun DrawScope.BreakPoints(
+    offsetX: Float,
+    pointBackgroundColor: Color,
+    pointSelectedBorderColor: Color,
+    pointUnselectedBorderColor: Color,
+) {
     val width = size.width
     val height = size.height
 
@@ -177,11 +239,11 @@ private fun DrawScope.BreakPoints(offsetX: Float) {
 
     repeat(DIVISIONS_AMOUNT + 1) {
         val pointColor =
-            if (offsetX < breakPoint) CuiPalette.Light.BackgroundSecondary
-            else CuiPalette.Light.BackgroundAccentPrimary
+            if (offsetX < breakPoint) pointUnselectedBorderColor
+            else pointSelectedBorderColor
 
         drawCircle(
-            color = CuiPalette.Light.BackgroundPrimary,
+            color = pointBackgroundColor,
             radius = POINT_SIZE,
             center = Offset(x = breakPoint, y = height / 2)
         )
@@ -197,7 +259,12 @@ private fun DrawScope.BreakPoints(offsetX: Float) {
     }
 }
 
-private fun DrawScope.RatingNumbers(offsetX: Float, paint: Paint) {
+private fun DrawScope.RatingNumbers(
+    offsetX: Float,
+    paint: Paint,
+    selectedTextColor: Color,
+    unselectedTextColor: Color,
+) {
     val width = size.width
     val height = size.height / 2
 
@@ -218,8 +285,8 @@ private fun DrawScope.RatingNumbers(offsetX: Float, paint: Paint) {
 
             paint.apply {
                 color =
-                    if (isEmojiNear) CuiPalette.Light.TextAccent.toArgb()
-                    else CuiPalette.Light.TextSecondary.toArgb()
+                    if (isEmojiNear) selectedTextColor.toArgb()
+                    else unselectedTextColor.toArgb()
 
                 isFakeBoldText = isEmojiNear
             }
@@ -236,17 +303,22 @@ private fun DrawScope.RatingNumbers(offsetX: Float, paint: Paint) {
     }
 }
 
-private fun DrawScope.SlidingEmoji(emoji: Bitmap, offsetX: Float) {
+private fun DrawScope.SlidingEmoji(
+    emoji: Bitmap,
+    offsetX: Float,
+    pointBackgroundColor: Color,
+    pointEmojiBorderColor: Color,
+) {
     val height = size.height
 
     drawCircle(
-        color = CuiPalette.Light.BackgroundPrimary,
+        color = pointBackgroundColor,
         radius = 50F,
         center = Offset(x = offsetX, y = height / 2)
     )
 
     drawCircle(
-        color = CuiPalette.Light.BackgroundAccentPrimary.copy(alpha = 0.5F),
+        color = pointEmojiBorderColor,
         radius = 50F,
         center = Offset(x = offsetX, y = height / 2),
         style = Stroke(width = 8F)
@@ -283,7 +355,7 @@ private fun adjustOffset(offsetX: Float, width: Float): Float {
 @WidgetPreview
 @Composable
 private fun RatingSliderPreview() {
-    PreviewTheme {
+    CheckieLiteTheme {
         RatingSlider(
             rating = 5,
             onRatingChange = {}

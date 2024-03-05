@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -34,8 +35,7 @@ import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.cui.modifier.offsetForPage
 import com.perfomer.checkielite.common.ui.cui.modifier.scaleHorizontalNeighbors
 import com.perfomer.checkielite.common.ui.cui.widget.pager.CuiHorizontalPagerIndicator
-import com.perfomer.checkielite.common.ui.theme.CuiColorToken
-import com.perfomer.checkielite.common.ui.theme.CuiPalette
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import kotlinx.collections.immutable.ImmutableList
 import kotlin.math.absoluteValue
 
@@ -72,7 +72,9 @@ internal fun PicturesCarousel(
                 var pictureState: AsyncImagePainter.State by remember(i) { mutableStateOf(AsyncImagePainter.State.Empty) }
 
                 if (pictureState is AsyncImagePainter.State.Success) {
-                    val alpha = (1F - pagerState.offsetForPage(i).absoluteValue) * 0.75F
+                    val isSystemInDarkTheme = isSystemInDarkTheme()
+                    val themeCoefficient = if (isSystemInDarkTheme) 0.25F else 0.75F
+                    val alpha = (1F - pagerState.offsetForPage(i).absoluteValue) * themeCoefficient
                     val interpolatedAlpha = FastOutLinearInEasing.transform(alpha)
                     Image(
                         painter = requireNotNull(pictureState.painter),
@@ -84,7 +86,6 @@ internal fun PicturesCarousel(
                             .blur(40.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
                             .alpha(interpolatedAlpha)
                             .clip(RoundedCornerShape(24.dp))
-                            .background(CuiPalette.Light.BackgroundSecondary)
                     )
                 }
 
@@ -97,7 +98,7 @@ internal fun PicturesCarousel(
                         .fillMaxWidth()
                         .aspectRatio(1F)
                         .clip(RoundedCornerShape(24.dp))
-                        .background(CuiPalette.Light.BackgroundSecondary)
+                        .background(LocalCuiPalette.current.BackgroundSecondary)
                         .clickable(onClick = onPictureClick)
                 )
             }
@@ -110,8 +111,8 @@ internal fun PicturesCarousel(
                 state = pagerState,
                 selectedWidth = 20.dp,
                 defaultWidth = 6.dp,
-                selectedColor = CuiPalette.Light.BackgroundAccentPrimary,
-                defaultColor = CuiColorToken.GreyOrange,
+                selectedColor = LocalCuiPalette.current.BackgroundAccentPrimary,
+                defaultColor = LocalCuiPalette.current.BackgroundTertiary,
             )
         }
     }

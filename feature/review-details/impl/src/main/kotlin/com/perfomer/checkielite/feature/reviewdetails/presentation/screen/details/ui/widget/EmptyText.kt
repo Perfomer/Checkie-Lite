@@ -10,7 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.perfomer.checkielite.common.ui.theme.CuiPalette
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.feature.reviewdetails.R
 
 @Composable
@@ -20,7 +20,7 @@ internal fun EmptyText(
     Text(
         text = stringResource(R.string.reviewdetails_empty_review_text),
         fontSize = 16.sp,
-        color = CuiPalette.Light.TextSecondary,
+        color = LocalCuiPalette.current.TextSecondary,
         modifier = Modifier.padding(horizontal = 24.dp)
     )
 
@@ -29,7 +29,7 @@ internal fun EmptyText(
             text = stringResource(R.string.reviewdetails_add_review_text),
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
-            color = CuiPalette.Light.TextAccent,
+            color = LocalCuiPalette.current.TextAccent,
             modifier = Modifier.padding(horizontal = 12.dp)
         )
     }

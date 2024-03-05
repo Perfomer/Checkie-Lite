@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.R
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -36,6 +37,7 @@ fun CuiDropdownIcon(
     CuiIconButton(
         painter = painter,
         onClick = { isExpanded = !isExpanded },
+        tint = LocalCuiPalette.current.IconPrimary,
         modifier = Modifier.offset(x = (-4).dp)
     )
 

@@ -14,7 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRating
-import com.perfomer.checkielite.common.ui.theme.CuiPalette
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 
 @Composable
 internal fun ColumnScope.ReviewDetailsHeader(
@@ -26,7 +26,7 @@ internal fun ColumnScope.ReviewDetailsHeader(
     if (brandName != null) {
         Text(
             text = brandName,
-            color = CuiPalette.Light.TextAccent,
+            color = LocalCuiPalette.current.TextAccent,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
             modifier = Modifier.padding(horizontal = 24.dp),
@@ -52,7 +52,7 @@ internal fun ColumnScope.ReviewDetailsHeader(
     ) {
         Text(
             text = date,
-            color = CuiPalette.Light.TextSecondary,
+            color = LocalCuiPalette.current.TextSecondary,
             fontSize = 14.sp,
             modifier = Modifier.weight(1F),
         )

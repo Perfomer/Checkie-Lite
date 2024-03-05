@@ -15,7 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
-import com.perfomer.checkielite.common.ui.theme.CuiColorToken
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
@@ -25,9 +25,9 @@ private const val ANIMATION_DURATION_MS = 500
 fun CuiProgressBar(
 	progress: Float,
 	modifier: Modifier = Modifier,
-	backgroundColor: Color = CuiColorToken.GreyLight,
-	progressColor: Color = CuiColorToken.Orange,
-	progressFullColor: Color = CuiColorToken.Green,
+	backgroundColor: Color = LocalCuiPalette.current.BackgroundSecondary,
+	progressColor: Color = LocalCuiPalette.current.BackgroundAccentPrimary,
+	progressFullColor: Color = LocalCuiPalette.current.BackgroundPositive,
 ) {
 	val targetProgressColor =
 		if (progress >= 1F) progressFullColor

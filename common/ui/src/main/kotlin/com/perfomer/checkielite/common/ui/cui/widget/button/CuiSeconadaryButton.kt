@@ -29,11 +29,11 @@ fun CuiSecondaryButton(
 ) {
     CuiInternalButton(
         text = text,
-        textColor = CuiColorToken.White,
-        textColorDisabled = CuiColorToken.GreyDark,
+        textColor = CuiColorToken.White1,
+        textColorDisabled = CuiColorToken.Grey5,
         colors = ButtonDefaults.buttonColors(
             containerColor = activeButtonColor,
-            disabledContainerColor = CuiColorToken.GreyLight,
+            disabledContainerColor = CuiColorToken.Grey1,
         ),
         elevation = elevation,
         enabled = enabled,

@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
-import com.perfomer.checkielite.common.ui.theme.CuiPalette
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.feature.reviewdetails.R
 
 @Composable
@@ -37,12 +37,12 @@ internal fun EmptyImage(onEmptyImageClick: () -> Unit) {
             .fillMaxWidth()
             .aspectRatio(1F)
             .clip(RoundedCornerShape(24.dp))
-            .background(CuiPalette.Light.BackgroundSecondary)
+            .background(LocalCuiPalette.current.BackgroundSecondary)
             .clickable(onClick = onEmptyImageClick)
     ) {
         Icon(
             painter = painterResource(id = CommonDrawable.ic_add_picture),
-            tint = CuiPalette.Light.IconAccent,
+            tint = LocalCuiPalette.current.IconAccent,
             contentDescription = null,
             modifier = Modifier.size(64.dp),
         )
@@ -51,7 +51,7 @@ internal fun EmptyImage(onEmptyImageClick: () -> Unit) {
 
         Text(
             text = stringResource(R.string.reviewdetails_add_image),
-            color = CuiPalette.Light.TextAccent,
+            color = LocalCuiPalette.current.TextAccent,
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
         )

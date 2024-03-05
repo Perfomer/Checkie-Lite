@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.perfomer.checkielite.common.ui.theme.CuiPalette
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 
 @Composable
 fun CuiBlock(
@@ -49,7 +49,7 @@ fun CuiBlock(
         Text(
             text = message,
             fontSize = 14.sp,
-            color = CuiPalette.Light.TextSecondary,
+            color = LocalCuiPalette.current.TextSecondary,
         )
     }
 }

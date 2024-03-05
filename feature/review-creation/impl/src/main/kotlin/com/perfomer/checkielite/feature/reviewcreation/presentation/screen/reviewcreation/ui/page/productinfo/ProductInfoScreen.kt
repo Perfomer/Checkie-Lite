@@ -39,7 +39,7 @@ import coil.compose.AsyncImage
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
 import com.perfomer.checkielite.common.ui.theme.CuiColorToken
-import com.perfomer.checkielite.common.ui.theme.CuiPalette
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ProductInfoPageUiState
@@ -67,6 +67,7 @@ internal fun ProductInfoScreen(
         Text(
             text = stringResource(R.string.reviewcreation_productinfo_title),
             fontSize = 24.sp,
+            color = LocalCuiPalette.current.TextPrimary,
             fontWeight = FontWeight.Bold,
         )
 
@@ -130,11 +131,11 @@ internal fun AddPicture(
     Icon(
         painter = painterResource(id = CommonDrawable.ic_add_picture),
         contentDescription = null,
-        tint = CuiColorToken.OrangeDark,
+        tint = CuiColorToken.Orange2,
         modifier = modifier
             .size(56.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(CuiPalette.Light.BackgroundAccentSecondary)
+            .background(LocalCuiPalette.current.BackgroundAccentSecondary)
             .clickable(onClick = onClick)
             .padding(16.dp),
     )
@@ -165,12 +166,12 @@ private fun DeleteIconButton(
 ) {
     Icon(
         painter = painterResource(CommonDrawable.ic_cross),
-        tint = CuiPalette.Light.IconPrimary,
+        tint = LocalCuiPalette.current.IconPrimary,
         contentDescription = null,
         modifier = modifier
             .size(20.dp)
             .clip(CircleShape)
-            .background(CuiPalette.Light.BackgroundSecondary)
+            .background(LocalCuiPalette.current.BackgroundSecondary)
             .clickable(onClick = onClick)
             .padding(3.dp)
     )
@@ -189,7 +190,7 @@ internal fun Picture(
         modifier = modifier
             .size(56.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(CuiPalette.Light.BackgroundSecondary)
+            .background(LocalCuiPalette.current.BackgroundSecondary)
             .clickable(onClick = onClick)
     )
 }

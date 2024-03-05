@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
-import com.perfomer.checkielite.common.ui.theme.CuiPalette
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
@@ -54,7 +54,7 @@ internal fun ReviewCreationScreen(
     onBackPress: () -> Unit = {},
     content: @Composable PagerScope.(page: Int) -> Unit,
 ) {
-    Box(modifier = Modifier.background(CuiPalette.Light.BackgroundPrimary)) {
+    Box(modifier = Modifier.background(LocalCuiPalette.current.BackgroundPrimary)) {
         Column(modifier = Modifier.fillMaxSize()) {
             ProgressAppBar(
                 pagerState = pagerState,
@@ -82,7 +82,7 @@ internal fun ReviewCreationScreen(
                 .padding(horizontal = 20.dp)
         ) {
             val isLastPage = pagerState.currentPage == pagerState.pageCount - 1
-            val targetButtonColor = if (isLastPage) CuiPalette.Light.BackgroundPositive else CuiPalette.Light.BackgroundAccentPrimary
+            val targetButtonColor = if (isLastPage) LocalCuiPalette.current.BackgroundPositive else LocalCuiPalette.current.BackgroundAccentPrimary
             val animatedColor by animateColorAsState(
                 targetValue = targetButtonColor,
                 animationSpec = tween(durationMillis = 250),

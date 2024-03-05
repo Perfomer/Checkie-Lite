@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
 import com.perfomer.checkielite.common.ui.cui.widget.rating.RatingSlider
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewInfoPageUiState
@@ -47,6 +48,7 @@ internal fun ReviewInfoScreen(
         Text(
             text = stringResource(R.string.reviewcreation_reviewinfo_title),
             fontSize = 24.sp,
+            color = LocalCuiPalette.current.TextPrimary,
             fontWeight = FontWeight.Bold,
         )
 

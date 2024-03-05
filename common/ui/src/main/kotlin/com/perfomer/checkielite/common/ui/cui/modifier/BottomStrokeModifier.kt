@@ -3,7 +3,6 @@ package com.perfomer.checkielite.common.ui.cui.modifier
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -33,15 +32,15 @@ fun Modifier.bottomStroke(
 
 @Composable
 fun Modifier.bottomStrokeOnScroll(
-    scrollableState: ScrollableState,
+    show: Boolean,
     strokeColor: Color,
     strokeWidth: Dp = 1.dp,
     animationSpec: AnimationSpec<Float> = tween(250),
 ): Modifier {
     val strokeAlpha = remember { Animatable(1F) }
 
-    LaunchedEffect(scrollableState.canScrollBackward) {
-        val targetAlpha = if (scrollableState.canScrollBackward) 1F else 0F
+    LaunchedEffect(show) {
+        val targetAlpha = if (show) 1F else 0F
         strokeAlpha.animateTo(targetValue = targetAlpha, animationSpec = animationSpec)
     }
 

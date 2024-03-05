@@ -24,7 +24,7 @@ import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 @Composable
 fun CuiToolbar(
     modifier: Modifier = Modifier,
-    navigationColor: Color = CuiColorToken.Orange,
+    navigationColor: Color = CuiColorToken.Orange1,
     title: String = "",
     onBackPress: () -> Unit,
 ) {
@@ -49,7 +49,7 @@ private fun ToolbarTitle(title: String) {
         text = title,
         fontSize = 24.sp,
         fontWeight = FontWeight.Bold,
-        color = CuiColorToken.Black,
+        color = CuiColorToken.Black1,
     )
 }
 

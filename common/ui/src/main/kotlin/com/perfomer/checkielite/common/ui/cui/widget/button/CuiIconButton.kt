@@ -18,11 +18,11 @@ import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
 @Composable
 fun CuiIconButton(
-	modifier: Modifier = Modifier,
-	painter: Painter,
-	onClick: () -> Unit,
-	tint: Color = CuiColorToken.Black,
-	contentDescription: String? = null,
+    modifier: Modifier = Modifier,
+    painter: Painter,
+    onClick: () -> Unit,
+    tint: Color = CuiColorToken.Black1,
+    contentDescription: String? = null,
 ) {
 	IconButton(
 		modifier = modifier,

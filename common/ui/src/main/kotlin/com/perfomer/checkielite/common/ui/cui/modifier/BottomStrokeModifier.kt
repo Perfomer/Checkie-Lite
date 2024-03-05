@@ -3,10 +3,10 @@ package com.perfomer.checkielite.common.ui.cui.modifier
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.tween
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -30,23 +30,24 @@ fun Modifier.bottomStroke(
     }
 }
 
-@Composable
 fun Modifier.bottomStrokeOnScroll(
     show: Boolean,
     strokeColor: Color,
     strokeWidth: Dp = 1.dp,
     animationSpec: AnimationSpec<Float> = tween(250),
 ): Modifier {
-    val strokeAlpha = remember { Animatable(1F) }
+    return this then composed {
+        val strokeAlpha = remember { Animatable(1F) }
 
-    LaunchedEffect(show) {
-        val targetAlpha = if (show) 1F else 0F
-        strokeAlpha.animateTo(targetValue = targetAlpha, animationSpec = animationSpec)
+        LaunchedEffect(show) {
+            val targetAlpha = if (show) 1F else 0F
+            strokeAlpha.animateTo(targetValue = targetAlpha, animationSpec = animationSpec)
+        }
+
+        this then bottomStroke(
+            strokeColor = strokeColor,
+            strokeWidth = strokeWidth,
+            strokeAlpha = strokeAlpha.value,
+        )
     }
-
-    return this then bottomStroke(
-        strokeColor = strokeColor,
-        strokeWidth = strokeWidth,
-        strokeAlpha = strokeAlpha.value,
-    )
 }

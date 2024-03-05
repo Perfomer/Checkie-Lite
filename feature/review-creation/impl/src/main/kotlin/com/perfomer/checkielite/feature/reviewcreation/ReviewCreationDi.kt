@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation
 
+import android.content.Context
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.core.navigation.api.Router
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryScreenProvider
@@ -33,6 +34,7 @@ private val presentationModule  = module {
 }
 
 internal fun createReviewCreationStore(
+    context: Context,
     params: ReviewCreationParams,
     reviewCreationRepository: ReviewCreationRepository,
     router: Router,
@@ -42,7 +44,7 @@ internal fun createReviewCreationStore(
     return ReviewCreationStore(
         params = params,
         reducer = ReviewCreationReducer(),
-        uiStateMapper = ReviewCreationUiStateMapper(),
+        uiStateMapper = ReviewCreationUiStateMapper(context),
         actors = setOf(
             ReviewCreationNavigationActor(router, externalRouter, galleryScreenProvider),
             CreateReviewActor(reviewCreationRepository),

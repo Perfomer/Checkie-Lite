@@ -4,6 +4,7 @@
 
     <string name="reviewcreation_productinfo_title">Product</string>
     <string name="reviewcreation_productinfo_field_product">Title (required)</string>
+    <string name="reviewcreation_productinfo_field_product_error_empty">Product name cannot be empty</string>
     <string name="reviewcreation_productinfo_field_brand">Brand</string>
 
     <string name="reviewcreation_reviewinfo_title">Review</string>

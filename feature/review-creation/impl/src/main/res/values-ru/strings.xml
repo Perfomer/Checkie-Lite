@@ -4,6 +4,7 @@
     <string name="reviewcreation_save">Сохранить</string>
     <string name="reviewcreation_productinfo_title">Продукт</string>
     <string name="reviewcreation_productinfo_field_product">Название (обязательно)</string>
+    <string name="reviewcreation_productinfo_field_product_error_empty">Название продукта нужно заполнить</string>
     <string name="reviewcreation_productinfo_field_brand">Бренд</string>
     <string name="reviewcreation_reviewinfo_title">Отзыв</string>
     <string name="reviewcreation_reviewinfo_field_review">Поделитесь своим мнением</string>

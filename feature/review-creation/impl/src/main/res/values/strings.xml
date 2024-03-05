@@ -3,7 +3,7 @@
     <string name="reviewcreation_save">Save</string>
 
     <string name="reviewcreation_productinfo_title">Product</string>
-    <string name="reviewcreation_productinfo_field_product">Product (required)</string>
+    <string name="reviewcreation_productinfo_field_product">Title (required)</string>
     <string name="reviewcreation_productinfo_field_brand">Brand</string>
 
     <string name="reviewcreation_reviewinfo_title">Review</string>

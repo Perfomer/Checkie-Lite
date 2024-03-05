@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="reviewdetails_add_image">Добавить фото</string>
+    <string name="reviewdetails_empty_review_text">Нет текста отзыва.</string>
+    <string name="reviewdetails_add_review_text">Хотите добавить его?</string>
+    <string name="reviewdetails_action_edit">Редактировать</string>
+    <string name="reviewdetails_action_delete">Удалить</string>
+    <string name="reviewdetails_dialog_confirmdelete_title">Удалить отзыв</string>
+    <string name="reviewdetails_dialog_confirmdelete_message">Вы действительно хотите удалить отзыв?</string>
+    <string name="reviewdetails_dialog_confirmdelete_confirm">Удалить</string>
+</resources>

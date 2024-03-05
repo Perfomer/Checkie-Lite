@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="reviewcreation_next">Дальше</string>
+    <string name="reviewcreation_save">Сохранить</string>
+    <string name="reviewcreation_productinfo_title">Продукт</string>
+    <string name="reviewcreation_productinfo_field_product">Название (обязательно)</string>
+    <string name="reviewcreation_productinfo_field_brand">Бренд</string>
+    <string name="reviewcreation_reviewinfo_title">Отзыв</string>
+    <string name="reviewcreation_reviewinfo_field_review">Поделитесь своим мнением</string>
+    <string name="reviewcreation_dialog_confirmexit_title">Вы действительно хотите выйти?</string>
+    <string name="reviewcreation_dialog_confirmexit_message">Если вы выйдете, то изменения не будут сохранены.</string>
+    <string name="reviewcreation_dialog_confirmexit_confirm">Выйти</string>
+</resources>

@@ -72,6 +72,7 @@ import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.main.R
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiState
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.ReviewItem
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
 @Composable
@@ -377,7 +378,7 @@ private fun MainScreenErrorPreview() = PreviewTheme {
 
 internal val mockUiState = MainUiState.Content(
     searchQuery = "",
-    reviews = listOf(
+    reviews = persistentListOf(
         ReviewItem(
             id = "1",
             title = "Chicken toasts with poached eggs",

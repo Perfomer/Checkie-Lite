@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state
 
 import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 internal sealed interface MainUiState {
@@ -9,7 +10,7 @@ internal sealed interface MainUiState {
 
     data class Content(
         val searchQuery: String,
-        val reviews: List<ReviewItem>,
+        val reviews: ImmutableList<ReviewItem>,
     ) : MainUiState
 
     data object Empty : MainUiState

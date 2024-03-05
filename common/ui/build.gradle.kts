@@ -17,10 +17,11 @@ dependencies {
 	implementation(project(":common:tea:compose"))
 
 	api(libs.coil)
-	implementation(libs.compose.ui.tooling)
 	implementation(libs.activity.compose)
 	implementation(libs.appcompat)
 	implementation(libs.compose.material3)
+	implementation(libs.compose.ui.tooling)
+	implementation(libs.google.fonts)
 	implementation(libs.koin.core)
 	implementation(libs.lifecycle.ktx)
 	implementation(libs.voyager.koin)

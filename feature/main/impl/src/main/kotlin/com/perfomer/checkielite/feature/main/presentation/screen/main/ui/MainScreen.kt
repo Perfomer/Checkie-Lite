@@ -93,6 +93,7 @@ internal fun MainScreen(
                 painter = painterResource(id = R.drawable.ic_plus),
                 contentDescription = stringResource(R.string.main_add_checkie),
                 onClick = onFabClick,
+                modifier = Modifier.imePadding()
             )
         },
         topBar = {

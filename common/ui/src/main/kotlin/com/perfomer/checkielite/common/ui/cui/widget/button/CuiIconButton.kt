@@ -12,8 +12,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.R
-import com.perfomer.checkielite.common.ui.theme.CuiColorToken
-import com.perfomer.checkielite.common.ui.theme.PreviewTheme
+import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
 @Composable
@@ -21,7 +21,7 @@ fun CuiIconButton(
     modifier: Modifier = Modifier,
     painter: Painter,
     onClick: () -> Unit,
-    tint: Color = CuiColorToken.Black1,
+    tint: Color = LocalCuiPalette.current.IconPrimary,
     contentDescription: String? = null,
 ) {
 	IconButton(
@@ -39,7 +39,7 @@ fun CuiIconButton(
 @Composable
 @WidgetPreview
 private fun CuiIconButtonPreview() {
-	PreviewTheme {
+	CheckieLiteTheme {
 		Column(
 			verticalArrangement = Arrangement.spacedBy(8.dp),
 			modifier = Modifier.padding(24.dp)

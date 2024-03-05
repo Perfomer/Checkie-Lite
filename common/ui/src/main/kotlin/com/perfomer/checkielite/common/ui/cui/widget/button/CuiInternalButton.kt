@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.perfomer.checkielite.common.ui.theme.CuiColorToken
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
 @Composable
@@ -67,7 +67,7 @@ internal fun CuiInternalButton(
 @Composable
 private fun CuiButtonLoader() {
     CircularProgressIndicator(
-        color = CuiColorToken.Green,
+        color = LocalCuiPalette.current.BackgroundPositive,
         strokeWidth = 2.dp,
         modifier = Modifier.size(24.dp),
     )

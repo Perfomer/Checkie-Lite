@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.perfomer.checkielite.common.ui.theme.CuiColorToken
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
@@ -17,7 +17,7 @@ import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 fun CuiSecondaryButton(
     text: String,
     modifier: Modifier = Modifier,
-    activeButtonColor: Color = CuiColorToken.Green,
+    activeButtonColor: Color = LocalCuiPalette.current.BackgroundPositive,
     elevation: ButtonElevation = ButtonDefaults.buttonElevation(
         defaultElevation = 12.dp,
         pressedElevation = 0.dp,
@@ -29,11 +29,11 @@ fun CuiSecondaryButton(
 ) {
     CuiInternalButton(
         text = text,
-        textColor = CuiColorToken.White1,
-        textColorDisabled = CuiColorToken.Grey5,
+        textColor = LocalCuiPalette.current.TextPrimary,
+        textColorDisabled = LocalCuiPalette.current.TextSecondary,
         colors = ButtonDefaults.buttonColors(
             containerColor = activeButtonColor,
-            disabledContainerColor = CuiColorToken.Grey1,
+            disabledContainerColor = LocalCuiPalette.current.BackgroundSecondary,
         ),
         elevation = elevation,
         enabled = enabled,

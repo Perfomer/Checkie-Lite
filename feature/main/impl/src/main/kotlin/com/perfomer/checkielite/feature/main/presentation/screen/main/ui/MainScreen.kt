@@ -64,6 +64,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiFloatingActionButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
+import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedFieldDefaults
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRating
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.PreviewTheme
@@ -281,6 +282,9 @@ private fun SearchField(
         ),
         singleLine = true,
         onValueChange = onSearchQueryInput,
+        colors = CuiOutlinedFieldDefaults.colors(
+            unfocusedBorderColor = LocalCuiPalette.current.OutlineSecondary,
+        ),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)

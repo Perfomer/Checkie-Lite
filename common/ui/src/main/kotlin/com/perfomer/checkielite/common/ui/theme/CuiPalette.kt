@@ -48,6 +48,7 @@ interface CuiPalette {
         override val BackgroundPositive: Color = CuiColorToken.Green
         override val BackgroundNegative: Color = CuiColorToken.Red
 
+        override val OutlinePrimary: Color = CuiColorToken.Grey5
         override val OutlineSecondary: Color = CuiColorToken.Grey2
 
         override val IconPrimary: Color = CuiColorToken.Black1

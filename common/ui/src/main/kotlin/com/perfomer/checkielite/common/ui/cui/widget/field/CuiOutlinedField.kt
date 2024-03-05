@@ -10,14 +10,37 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.perfomer.checkielite.common.ui.theme.CuiColorToken
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
+
+object CuiOutlinedFieldDefaults {
+
+    @Composable
+    fun colors(
+        unfocusedBorderColor: Color = LocalCuiPalette.current.OutlinePrimary,
+        errorBorderColor: Color = LocalCuiPalette.current.BackgroundNegative,
+        focusedLabelColor: Color = LocalCuiPalette.current.TextAccent,
+        unfocusedLabelColor: Color = LocalCuiPalette.current.TextSecondary,
+        unfocusedPlaceholderColor: Color = LocalCuiPalette.current.TextSecondary,
+        focusedPlaceholderColor: Color = LocalCuiPalette.current.TextSecondary,
+    ): TextFieldColors {
+        return OutlinedTextFieldDefaults.colors(
+            unfocusedBorderColor = unfocusedBorderColor,
+            errorBorderColor = errorBorderColor,
+            focusedLabelColor = focusedLabelColor,
+            unfocusedLabelColor = unfocusedLabelColor,
+            unfocusedPlaceholderColor = unfocusedPlaceholderColor,
+            focusedPlaceholderColor = focusedPlaceholderColor,
+        )
+    }
+}
 
 @Composable
 fun CuiOutlinedField(
@@ -32,6 +55,7 @@ fun CuiOutlinedField(
     trailingIcon: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    colors: TextFieldColors = CuiOutlinedFieldDefaults.colors(),
 ) {
     OutlinedTextField(
         value = text,
@@ -39,14 +63,7 @@ fun CuiOutlinedField(
         singleLine = singleLine,
         trailingIcon = trailingIcon,
         shape = RoundedCornerShape(16.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            unfocusedBorderColor = LocalCuiPalette.current.OutlinePrimary,
-            errorBorderColor = LocalCuiPalette.current.BackgroundNegative,
-            focusedLabelColor = LocalCuiPalette.current.TextAccent,
-            unfocusedLabelColor = LocalCuiPalette.current.TextSecondary,
-            unfocusedPlaceholderColor = LocalCuiPalette.current.TextSecondary,
-            focusedPlaceholderColor = LocalCuiPalette.current.TextSecondary,
-        ),
+        colors = colors,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         label = title?.let { { Text(title) } },
@@ -58,7 +75,7 @@ fun CuiOutlinedField(
                 Text(
                     text = errorText,
                     fontSize = 12.sp,
-                    color = CuiColorToken.Red,
+                    color = LocalCuiPalette.current.TextNegative,
                 )
             }
         },

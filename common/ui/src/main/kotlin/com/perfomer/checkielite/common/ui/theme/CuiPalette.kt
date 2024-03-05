@@ -11,6 +11,7 @@ val LocalCuiPalette = compositionLocalOf<CuiPalette> { error("Not provided") }
 interface CuiPalette {
 
     val TextPrimary: Color
+    val TextInverted: Color
     val TextSecondary: Color
     val TextAccent: Color
     val TextPositive: Color
@@ -35,6 +36,7 @@ interface CuiPalette {
     object Light : CuiPalette {
 
         override val TextPrimary: Color = CuiColorToken.Black1
+        override val TextInverted: Color = CuiColorToken.White1
         override val TextSecondary: Color = CuiColorToken.Grey5
         override val TextAccent: Color = CuiColorToken.Orange2
         override val TextPositive: Color = CuiColorToken.Green
@@ -59,6 +61,7 @@ interface CuiPalette {
     object Dark : CuiPalette {
 
         override val TextPrimary: Color = CuiColorToken.White2
+        override val TextInverted: Color = CuiColorToken.Black1
         override val TextSecondary: Color = CuiColorToken.Brown1
         override val TextAccent: Color = CuiColorToken.Orange1
         override val TextPositive: Color = CuiColorToken.Green

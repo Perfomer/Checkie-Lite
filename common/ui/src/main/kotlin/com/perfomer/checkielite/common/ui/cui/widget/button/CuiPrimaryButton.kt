@@ -29,7 +29,7 @@ fun CuiPrimaryButton(
 ) {
     CuiInternalButton(
         text = text,
-        textColor = LocalCuiPalette.current.TextPrimary,
+        textColor = LocalCuiPalette.current.TextInverted,
         textColorDisabled = LocalCuiPalette.current.TextSecondary,
         colors = ButtonDefaults.buttonColors(
             containerColor = activeButtonColor,

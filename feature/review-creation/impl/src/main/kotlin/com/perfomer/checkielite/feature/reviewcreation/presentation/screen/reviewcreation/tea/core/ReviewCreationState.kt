@@ -15,7 +15,10 @@ internal data class ReviewCreationState(
     val isProductNameValid: Boolean = true,
 
     val isReviewLoading: Boolean = false,
+    val isReviewLoadingFailed: Boolean = false,
+
     val isSavingInProgress: Boolean = false,
+    val isSavingFailed: Boolean = false,
 )
 
 internal data class ReviewDetails(

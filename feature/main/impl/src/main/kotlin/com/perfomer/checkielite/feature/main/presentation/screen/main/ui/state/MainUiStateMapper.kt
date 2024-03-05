@@ -11,7 +11,7 @@ internal class MainUiStateMapper : UiStateMapper<MainState, MainUiState> {
     override fun map(state: MainState): MainUiState {
         return when (state.reviews) {
             is Lce.Content -> createContent(state)
-            is Lce.Error -> MainUiState.Loading // todo
+            is Lce.Error -> MainUiState.Error
             is Lce.Loading -> MainUiState.Loading
         }
     }

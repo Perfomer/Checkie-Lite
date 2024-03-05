@@ -4,6 +4,9 @@
     <string name="common_cancel">Cancel</string>
     <string name="common_ok">OK</string>
 
+    <string name="common_error_title">Oops!..</string>
+    <string name="common_error_message">Something went wrong</string>
+
     <string name="common_reaction_disgusting">Disgusting</string>
     <string name="common_reaction_disappointed">Disappointed</string>
     <string name="common_reaction_okay">Okay</string>

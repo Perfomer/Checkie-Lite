@@ -11,6 +11,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.UpdateReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowConfirmExitDialog
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowErrorDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.Initialize
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.ReviewLoading
@@ -86,16 +87,19 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         }
 
         is OnBackPress -> {
-            if (!state.isSavingInProgress) {
-                val previous = state.currentPage.previous()
+            when {
+                state.isReviewLoadingFailed || state.isSavingFailed -> commands(Exit)
+                !state.isSavingInProgress -> {
+                    val previous = state.currentPage.previous()
 
-                if (previous != null) {
-                    state { copy(currentPage = previous) }
-                } else {
-                    if (state.reviewDetails != state.initialReviewDetails) {
-                        effects(ShowConfirmExitDialog)
+                    if (previous != null) {
+                        state { copy(currentPage = previous) }
                     } else {
-                        commands(Exit)
+                        if (state.reviewDetails != state.initialReviewDetails) {
+                            effects(ShowConfirmExitDialog)
+                        } else {
+                            commands(Exit)
+                        }
                     }
                 }
             }
@@ -138,7 +142,10 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     private fun reduceReviewsCreation(event: ReviewSaving) = when (event) {
         is ReviewSaving.Started -> state { copy(isSavingInProgress = true) }
         is ReviewSaving.Succeed -> commands(ExitWithResult(ReviewCreationResult.Success))
-        is ReviewSaving.Failed -> TODO()
+        is ReviewSaving.Failed -> {
+            state { copy(isSavingInProgress = false, isSavingFailed = true) }
+            effects(ShowErrorDialog)
+        }
     }
 
     private fun reduceReviewLoading(event: ReviewLoading) = when (event) {
@@ -151,13 +158,18 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 reviewText = event.review.reviewText.orEmpty(),
                 rating = event.review.rating,
             )
+
             copy(
+                isReviewLoading = false,
                 reviewId = event.review.id,
                 initialReviewDetails = initialReviewDetails,
                 reviewDetails = initialReviewDetails,
             )
         }
 
-        is ReviewLoading.Failed -> TODO()
+        is ReviewLoading.Failed -> {
+            state { copy(isReviewLoading = false, isReviewLoadingFailed = true) }
+            effects(ShowErrorDialog)
+        }
     }
 }

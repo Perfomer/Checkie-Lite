@@ -1,8 +1,10 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.actor
 
 import com.perfomer.checkielite.common.pure.util.flowBy
+import com.perfomer.checkielite.common.pure.util.onCatchReturn
+import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.feature.reviewdetails.domain.repository.ReviewRepository
+import com.perfomer.checkielite.feature.reviewdetails.domain.repository.ReviewDetailsRepository
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand.LoadReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent
@@ -15,7 +17,7 @@ import kotlinx.coroutines.flow.map
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class LoadReviewActor(
-    private val repository: ReviewRepository,
+    private val repository: ReviewDetailsRepository,
 ) : Actor<ReviewDetailsCommand, ReviewDetailsEvent> {
 
     override fun act(commands: Flow<ReviewDetailsCommand>): Flow<ReviewDetailsEvent> {
@@ -26,5 +28,7 @@ internal class LoadReviewActor(
     private fun handleCommand(command: LoadReview): Flow<ReviewLoading> {
         return flowBy { repository.getReview(command.reviewId) }
             .map(ReviewLoading::Succeed)
+            .onCatchReturn(ReviewLoading::Failed)
+            .startWith(ReviewLoading.Started)
     }
 }

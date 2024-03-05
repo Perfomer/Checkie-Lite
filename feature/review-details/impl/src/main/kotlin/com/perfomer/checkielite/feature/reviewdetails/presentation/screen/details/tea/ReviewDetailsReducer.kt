@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea
 
 import com.perfomer.checkielite.common.pure.state.Lce
+import com.perfomer.checkielite.common.pure.state.loadingContentAware
 import com.perfomer.checkielite.common.pure.state.requireContent
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
@@ -32,7 +33,7 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
     override fun reduce(event: ReviewDetailsEvent) = when (event) {
         is ReviewDetailsUiEvent -> reduceUi(event)
         is ReviewLoading -> reduceReviewLoading(event)
-        is ReviewDeletion.Succeed -> reduceReviewDeletion(event)
+        is ReviewDeletion -> reduceReviewDeletion(event)
     }
 
     private fun reduceUi(event: ReviewDetailsUiEvent) = when (event) {
@@ -53,11 +54,15 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
     }
 
     private fun reduceReviewLoading(event: ReviewLoading) = when (event) {
+        is ReviewLoading.Started -> state { copy(review = state.review.loadingContentAware) }
         is ReviewLoading.Succeed -> state { copy(review = Lce.Content(event.review)) }
+        is ReviewLoading.Failed -> state { copy(review = Lce.Error()) }
     }
 
     private fun reduceReviewDeletion(event: ReviewDeletion) = when (event) {
+        is ReviewDeletion.Started -> Unit
         is ReviewDeletion.Succeed -> commands(Exit)
+        is ReviewDeletion.Failed -> state { copy(review = Lce.Error()) }
     }
 
     private fun reduceOnEditClick(initialPage: ReviewCreationPage) {

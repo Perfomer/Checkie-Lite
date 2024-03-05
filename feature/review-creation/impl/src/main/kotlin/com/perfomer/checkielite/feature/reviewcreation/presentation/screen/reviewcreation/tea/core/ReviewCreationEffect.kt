@@ -3,4 +3,6 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 internal sealed interface ReviewCreationEffect {
 
     data object ShowConfirmExitDialog : ReviewCreationEffect
+
+    data object ShowErrorDialog : ReviewCreationEffect
 }

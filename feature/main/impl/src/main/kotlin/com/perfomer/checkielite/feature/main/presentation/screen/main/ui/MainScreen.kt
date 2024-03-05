@@ -4,10 +4,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -27,6 +25,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -59,7 +58,9 @@ import coil.compose.AsyncImage
 import com.gigamole.composefadingedges.FadingEdgesGravity
 import com.gigamole.composefadingedges.horizontalFadingEdges
 import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
+import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiFloatingActionButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRating
@@ -104,7 +105,7 @@ internal fun MainScreen(
         },
     ) { contentPadding ->
         when (state) {
-            is MainUiState.Loading -> Unit
+            is MainUiState.Loading -> Loading()
 
             is MainUiState.Content -> Content(
                 state = state,
@@ -117,6 +118,8 @@ internal fun MainScreen(
             )
 
             is MainUiState.Empty -> Empty()
+
+            is MainUiState.Error -> Error()
         }
     }
 }
@@ -165,34 +168,31 @@ private fun Content(
 }
 
 @Composable
-private fun Empty() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+private fun Loading() {
+    Box(
+        contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        Image(
-            painter = painterResource(CommonDrawable.ill_empty),
-            contentDescription = null,
-            modifier = Modifier.width(184.dp),
-        )
-
-        Spacer(Modifier.height(32.dp))
-
-        Text(
-            text = stringResource(R.string.main_empty_title),
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
-        )
-
-        Spacer(Modifier.height(8.dp))
-
-        Text(
-            text = stringResource(R.string.main_empty_description),
-            fontSize = 14.sp,
-            color = CuiPalette.Light.TextSecondary,
-        )
+        CircularProgressIndicator()
     }
+}
+
+@Composable
+private fun Empty() {
+    CuiBlock(
+        title = stringResource(R.string.main_empty_title),
+        message = stringResource(R.string.main_empty_description),
+        illustrationPainter = painterResource(CommonDrawable.ill_empty)
+    )
+}
+
+@Composable
+private fun Error() {
+    CuiBlock(
+        title = stringResource(CommonString.common_error_title),
+        message = stringResource(CommonString.common_error_message),
+        illustrationPainter = painterResource(CommonDrawable.ill_error),
+    )
 }
 
 @Composable
@@ -350,8 +350,14 @@ internal fun CheckieHorizontalItem(
 
 @ScreenPreview
 @Composable
-private fun MainScreenPreview() = PreviewTheme {
+private fun MainScreenContentPreview() = PreviewTheme {
     MainScreen(state = mockUiState)
+}
+
+@ScreenPreview
+@Composable
+private fun MainScreenErrorPreview() = PreviewTheme {
+    MainScreen(state = MainUiState.Error)
 }
 
 internal val mockUiState = MainUiState.Content(

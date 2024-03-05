@@ -13,6 +13,8 @@ internal sealed interface MainUiState {
     ) : MainUiState
 
     data object Empty : MainUiState
+
+    data object Error : MainUiState
 }
 
 @Immutable

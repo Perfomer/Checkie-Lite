@@ -3,8 +3,8 @@ package com.perfomer.checkielite.feature.reviewdetails
 import com.perfomer.checkielite.core.navigation.api.Router
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryScreenProvider
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationScreenProvider
-import com.perfomer.checkielite.feature.reviewdetails.data.repository.ReviewRepositoryImpl
-import com.perfomer.checkielite.feature.reviewdetails.domain.repository.ReviewRepository
+import com.perfomer.checkielite.feature.reviewdetails.data.repository.ReviewDetailsRepositoryImpl
+import com.perfomer.checkielite.feature.reviewdetails.domain.repository.ReviewDetailsRepository
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsParams
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsScreenProvider
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsReducer
@@ -23,7 +23,7 @@ val reviewDetailsModules
     get() = listOf(presentationModule, dataModule)
 
 private val dataModule = module {
-    singleOf(::ReviewRepositoryImpl) bind ReviewRepository::class
+    singleOf(::ReviewDetailsRepositoryImpl) bind ReviewDetailsRepository::class
 }
 
 private val presentationModule = module {
@@ -33,7 +33,7 @@ private val presentationModule = module {
 
 internal fun createReviewDetailsStore(
     params: ReviewDetailsParams,
-    reviewDetailsRepository: ReviewRepository,
+    reviewDetailsRepository: ReviewDetailsRepository,
     router: Router,
     reviewCreationScreenProvider: ReviewCreationScreenProvider,
     galleryScreenProvider: GalleryScreenProvider,

@@ -40,7 +40,7 @@ internal class ReviewDetailsContentScreen(
 
         EffectHandler { effect ->
             when (effect) {
-                ShowConfirmDeleteDialog -> isConfirmDeleteDialogShown = true
+                is ShowConfirmDeleteDialog -> isConfirmDeleteDialogShown = true
             }
         }
 

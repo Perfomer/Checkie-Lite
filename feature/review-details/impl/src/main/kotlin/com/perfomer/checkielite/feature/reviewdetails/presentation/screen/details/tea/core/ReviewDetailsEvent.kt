@@ -6,12 +6,16 @@ internal sealed interface ReviewDetailsEvent {
 
     sealed interface ReviewLoading : ReviewDetailsEvent {
 
+        data object Started : ReviewLoading
         class Succeed(val review: CheckieReview) : ReviewLoading
+        class Failed(val error: Throwable) : ReviewLoading
     }
 
     sealed interface ReviewDeletion : ReviewDetailsEvent {
 
+        data object Started : ReviewDeletion
         data object Succeed : ReviewDeletion
+        data object Failed : ReviewDeletion
     }
 }
 

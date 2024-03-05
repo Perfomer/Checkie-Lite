@@ -35,15 +35,21 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewCreationUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewInfoPageUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget.ConfirmExitDialog
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget.ErrorDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget.ProgressAppBar
 
 @Composable
 internal fun ReviewCreationScreen(
     state: ReviewCreationUiState,
     pagerState: PagerState,
+
     showExitDialog: Boolean = false,
     onExitDialogDismiss: () -> Unit = {},
     onExitDialogConfirm: () -> Unit = {},
+
+    showErrorDialog: Boolean = false,
+    onErrorDialogConfirm: () -> Unit = {},
+
     onPrimaryButtonClick: () -> Unit = {},
     onBackPress: () -> Unit = {},
     content: @Composable PagerScope.(page: Int) -> Unit,
@@ -98,6 +104,13 @@ internal fun ReviewCreationScreen(
         ConfirmExitDialog(
             onDismiss = onExitDialogDismiss,
             onConfirm = onExitDialogConfirm,
+        )
+    }
+
+    if (showErrorDialog) {
+        ErrorDialog(
+            onDismiss = { /* Do nothing */ },
+            onConfirm = onErrorDialogConfirm,
         )
     }
 }

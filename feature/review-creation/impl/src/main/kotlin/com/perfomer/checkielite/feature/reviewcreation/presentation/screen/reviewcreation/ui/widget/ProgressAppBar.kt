@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.cui.widget.progress.CuiProgressBar
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
-import com.perfomer.checkielite.common.ui.theme.CuiColorToken
+import com.perfomer.checkielite.common.ui.theme.CuiPalette
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
@@ -62,7 +62,7 @@ internal fun ProgressAppBar(
 
             CuiToolbarNavigationIcon(
                 painter = iconPainter,
-                color = CuiColorToken.OrangeDark,
+                color = CuiPalette.Light.IconPrimary,
                 onBackPress = onBackPress,
             )
         },

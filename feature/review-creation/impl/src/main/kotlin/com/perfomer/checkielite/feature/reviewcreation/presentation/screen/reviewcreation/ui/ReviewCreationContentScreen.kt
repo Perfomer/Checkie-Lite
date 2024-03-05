@@ -17,6 +17,7 @@ import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationStore
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowConfirmExitDialog
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowErrorDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnConfirmExitClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnPrimaryButtonClick
@@ -34,12 +35,14 @@ internal class ReviewCreationContentScreen(
     @Composable
     override fun Screen() = TeaComposable(store<ReviewCreationStore>(params)) { state ->
         var isConfirmExitDialogShown by remember { mutableStateOf(false) }
+        var isErrorDialogShown by remember { mutableStateOf(false) }
 
         BackHandlerWithLifecycle { accept(OnBackPress) }
 
         EffectHandler { effect ->
             when (effect) {
-                ShowConfirmExitDialog -> isConfirmExitDialogShown = true
+                is ShowConfirmExitDialog -> isConfirmExitDialogShown = true
+                is ShowErrorDialog -> isErrorDialogShown = true
             }
         }
 
@@ -51,9 +54,14 @@ internal class ReviewCreationContentScreen(
         ReviewCreationScreen(
             state = state,
             pagerState = pagerState,
+
             showExitDialog = isConfirmExitDialogShown,
             onExitDialogDismiss = { isConfirmExitDialogShown = false },
             onExitDialogConfirm = acceptable(OnConfirmExitClick),
+
+            showErrorDialog = isErrorDialogShown,
+            onErrorDialogConfirm = acceptable(OnBackPress),
+
             onPrimaryButtonClick = acceptable(OnPrimaryButtonClick),
             onBackPress = acceptable(OnBackPress),
         ) { pageIndex ->

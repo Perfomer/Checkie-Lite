@@ -117,14 +117,14 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         is ProductInfo.OnPictureClick -> commands(
             OpenGallery(
                 picturesUri = state.reviewDetails.picturesUri,
-                currentPicturePosition = state.reviewDetails.picturesUri.indexOf(event.pictureUri).coerceAtLeast(0),
+                currentPicturePosition = event.position,
             )
         )
 
         is ProductInfo.OnPictureDeleteClick -> state {
             copy(
                 reviewDetails = reviewDetails.copy(
-                    picturesUri = reviewDetails.picturesUri.remove(event.pictureUri)
+                    picturesUri = reviewDetails.picturesUri.removeAt(event.position)
                 )
             )
         }

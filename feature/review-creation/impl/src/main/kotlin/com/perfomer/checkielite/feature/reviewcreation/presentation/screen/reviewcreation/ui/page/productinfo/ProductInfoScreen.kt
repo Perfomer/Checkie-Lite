@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -33,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -51,8 +53,8 @@ internal fun ProductInfoScreen(
     onProductNameTextInput: (String) -> Unit = {},
     onBrandTextInput: (String) -> Unit = {},
     onAddPictureClick: () -> Unit = {},
-    onPictureClick: (String) -> Unit = {},
-    onPictureDeleteClick: (String) -> Unit = {},
+    onPictureClick: (position: Int) -> Unit = {},
+    onPictureDeleteClick: (position: Int) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -109,13 +111,16 @@ internal fun ProductInfoScreen(
                 )
             }
 
-            state.picturesUri.forEach { pictureUri ->
+            state.picturesUri.forEachIndexed { i, pictureUri ->
                 key(pictureUri) {
-                    DeletablePicture(
-                        pictureUrl = pictureUri,
-                        onClick = { onPictureClick(pictureUri) },
-                        onDeletePictureClick = { onPictureDeleteClick(pictureUri) },
-                    )
+                    DeletableItem(
+                        onDeletePictureClick = { onPictureDeleteClick(i) },
+                    ) {
+                        Picture(
+                            pictureUrl = pictureUri,
+                            onClick = { onPictureClick(i) },
+                        )
+                    }
                 }
             }
         }
@@ -140,21 +145,22 @@ internal fun AddPicture(
     )
 }
 
-
 @Composable
-private fun DeletablePicture(
-    pictureUrl: String,
-    onClick: () -> Unit,
+private fun DeletableItem(
     onDeletePictureClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    offset: DpOffset = DpOffset(x = 6.dp, y = (-6).dp),
+    content: @Composable () -> Unit
 ) {
-    Box(contentAlignment = Alignment.TopEnd) {
-        Picture(
-            pictureUrl = pictureUrl,
-            onClick = onClick,
-            modifier = Modifier.padding(top = 6.dp, end = 6.dp)
-        )
+    Box(modifier = modifier) {
+        content()
 
-        DeleteIconButton(onClick = onDeletePictureClick)
+        DeleteIconButton(
+            onClick = onDeletePictureClick,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .offset(x = offset.x, y = offset.y)
+        )
     }
 }
 

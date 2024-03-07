@@ -57,7 +57,7 @@ internal class MainUiStateMapper : UiStateMapper<MainState, MainUiState> {
             id = id,
             title = productName,
             brand = productBrand,
-            imageUri = picturesUri.firstOrNull(),
+            imageUri = pictures.firstOrNull()?.uri,
             rating = rating,
         )
     }

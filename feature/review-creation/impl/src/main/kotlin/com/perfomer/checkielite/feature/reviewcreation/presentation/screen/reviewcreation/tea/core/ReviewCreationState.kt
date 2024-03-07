@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core
 
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
+import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import kotlinx.collections.immutable.PersistentList
@@ -24,7 +25,7 @@ internal data class ReviewCreationState(
 internal data class ReviewDetails(
     val productName: String = "",
     val productBrand: String = "",
-    val picturesUri: PersistentList<String> = emptyPersistentList(),
+    val pictures: PersistentList<CheckiePicture> = emptyPersistentList(),
 
     val rating: Int = 5,
     val reviewText: String = "",

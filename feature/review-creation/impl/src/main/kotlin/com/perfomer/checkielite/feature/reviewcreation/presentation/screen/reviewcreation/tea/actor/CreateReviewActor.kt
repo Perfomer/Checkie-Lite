@@ -29,7 +29,7 @@ internal class CreateReviewActor(
                 productName = command.productName,
                 productBrand = command.productBrand,
                 rating = command.rating,
-                picturesUri = command.picturesUri,
+                pictures = command.pictures,
                 reviewText = command.reviewText,
             )
         }

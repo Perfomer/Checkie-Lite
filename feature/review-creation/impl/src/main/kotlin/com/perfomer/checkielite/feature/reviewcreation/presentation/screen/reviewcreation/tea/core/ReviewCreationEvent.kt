@@ -38,6 +38,8 @@ internal sealed interface ReviewCreationUiEvent : ReviewCreationEvent {
         class OnPictureClick(val position: Int) : ProductInfo
 
         class OnPictureDeleteClick(val position: Int) : ProductInfo
+
+        class OnPictureReorder(val fromPosition: Int, val toPosition: Int) : ProductInfo
     }
 
     sealed interface ReviewInfo : ReviewCreationUiEvent {

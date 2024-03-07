@@ -7,7 +7,7 @@ data class CheckieReview(
     val productName: String,
     val productBrand: String?,
     val rating: Int,
-    val picturesUri: List<String>,
+    val pictures: List<CheckiePicture>,
     val reviewText: String?,
     val creationDate: Date,
     val modificationDate: Date,

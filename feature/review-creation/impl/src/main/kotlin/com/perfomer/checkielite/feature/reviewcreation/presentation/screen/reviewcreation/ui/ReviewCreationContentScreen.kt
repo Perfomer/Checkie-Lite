@@ -77,6 +77,7 @@ internal class ReviewCreationContentScreen(
                     onAddPictureClick = acceptable(ProductInfo.OnAddPictureClick),
                     onPictureClick = acceptable(ProductInfo::OnPictureClick),
                     onPictureDeleteClick = acceptable(ProductInfo::OnPictureDeleteClick),
+                    onPictureReorder = acceptable(ProductInfo::OnPictureReorder),
                 )
 
                 ReviewCreationPage.REVIEW_INFO -> ReviewInfoScreen(

@@ -47,7 +47,7 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
         is OnPictureSelect -> state { copy(currentPicturePosition = event.position) }
         is OnPictureClick -> commands(
             OpenGallery(
-                picturesUri = state.review.requireContent().picturesUri,
+                picturesUri = state.review.requireContent().pictures.map { it.uri },
                 currentPicturePosition = state.currentPicturePosition,
             )
         )

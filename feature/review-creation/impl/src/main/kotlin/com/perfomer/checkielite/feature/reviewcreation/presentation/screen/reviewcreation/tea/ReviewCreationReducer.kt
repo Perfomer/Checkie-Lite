@@ -2,7 +2,9 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 
 import com.perfomer.checkielite.common.pure.util.next
 import com.perfomer.checkielite.common.pure.util.previous
+import com.perfomer.checkielite.common.pure.util.swap
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
+import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
@@ -67,7 +69,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                             productBrand = state.reviewDetails.productBrand,
                             reviewText = state.reviewDetails.reviewText,
                             rating = state.reviewDetails.rating,
-                            picturesUri = state.reviewDetails.picturesUri,
+                            pictures = state.reviewDetails.pictures,
                         )
                     )
 
@@ -78,7 +80,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                             productBrand = state.reviewDetails.productBrand,
                             reviewText = state.reviewDetails.reviewText,
                             rating = state.reviewDetails.rating,
-                            picturesUri = state.reviewDetails.picturesUri,
+                            pictures = state.reviewDetails.pictures,
                         )
                     )
                 }
@@ -116,7 +118,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         is ProductInfo.OnAddPictureClick -> commands(OpenPhotoPicker)
         is ProductInfo.OnPictureClick -> commands(
             OpenGallery(
-                picturesUri = state.reviewDetails.picturesUri,
+                picturesUri = state.reviewDetails.pictures.map { it.uri },
                 currentPicturePosition = event.position,
             )
         )
@@ -124,8 +126,16 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         is ProductInfo.OnPictureDeleteClick -> state {
             copy(
                 reviewDetails = reviewDetails.copy(
-                    picturesUri = reviewDetails.picturesUri.removeAt(event.position)
-                )
+                    pictures = reviewDetails.pictures.removeAt(event.position),
+                ),
+            )
+        }
+
+        is ProductInfo.OnPictureReorder -> state {
+            copy(
+                reviewDetails = reviewDetails.copy(
+                    pictures = reviewDetails.pictures.swap(event.fromPosition, event.toPosition).toPersistentList(),
+                ),
             )
         }
     }
@@ -136,7 +146,13 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     }
 
     private fun reduceNavigation(event: ReviewCreationNavigationEvent) = when (event) {
-        is OnPhotoPick -> state { copy(reviewDetails = reviewDetails.copy(picturesUri = reviewDetails.picturesUri.add(event.uri))) }
+        is OnPhotoPick -> state {
+            copy(
+                reviewDetails = reviewDetails.copy(
+                    pictures = reviewDetails.pictures.add(CheckiePicture(uri = event.uri))
+                )
+            )
+        }
     }
 
     private fun reduceReviewsCreation(event: ReviewSaving) = when (event) {
@@ -154,7 +170,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             val initialReviewDetails = ReviewDetails(
                 productName = event.review.productName,
                 productBrand = event.review.productBrand.orEmpty(),
-                picturesUri = event.review.picturesUri.toPersistentList(),
+                pictures = event.review.pictures.toPersistentList(),
                 reviewText = event.review.reviewText.orEmpty(),
                 rating = event.review.rating,
             )

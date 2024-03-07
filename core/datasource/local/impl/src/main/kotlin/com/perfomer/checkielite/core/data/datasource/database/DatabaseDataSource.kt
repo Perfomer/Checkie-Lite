@@ -3,9 +3,9 @@ package com.perfomer.checkielite.core.data.datasource.database
 import androidx.room.withTransaction
 import com.perfomer.checkielite.core.data.datasource.database.room.CheckieDatabase
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieReviewDao
-import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewPictureDb
 import com.perfomer.checkielite.core.data.datasource.database.room.mapper.toDb
 import com.perfomer.checkielite.core.data.datasource.database.room.mapper.toDomain
+import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 
 internal interface DatabaseDataSource {
@@ -18,13 +18,13 @@ internal interface DatabaseDataSource {
 
     suspend fun updateReview(
         review: CheckieReview,
-        deletedPicturesUri: List<String>,
-        addedPicturesUri: List<String>,
+        deletedPictures: List<CheckiePicture>,
+        actualPictures: List<CheckiePicture>,
     )
 
     suspend fun deleteReview(
         reviewId: String,
-        deletedPicturesUri: List<String>,
+        deletedPictures: List<CheckiePicture>,
     )
 }
 
@@ -51,7 +51,9 @@ internal class DatabaseDataSourceImpl(
 
     override suspend fun createReview(review: CheckieReview) = database.withTransaction {
         val reviewDb = review.toDb()
-        val picturesDb = review.picturesUri.map { uri -> CheckieReviewPictureDb(reviewId = review.id, uri = uri) }
+        val picturesDb = review.pictures.mapIndexed { i, picture ->
+            picture.toDb(reviewId = review.id, order = i)
+        }
 
         checkieReviewDao.insertReview(reviewDb)
         checkieReviewDao.insertPictures(picturesDb)
@@ -59,19 +61,24 @@ internal class DatabaseDataSourceImpl(
 
     override suspend fun updateReview(
         review: CheckieReview,
-        deletedPicturesUri: List<String>,
-        addedPicturesUri: List<String>
+        deletedPictures: List<CheckiePicture>,
+        actualPictures: List<CheckiePicture>
     ) = database.withTransaction {
         val reviewDb = review.toDb()
-        val addedPicturesDb = addedPicturesUri.map { uri -> CheckieReviewPictureDb(reviewId = review.id, uri = uri) }
+        val deletedPicturesIds = deletedPictures.map { it.id }
+        val actualPicturesDb = actualPictures.mapIndexed { i, picture ->
+            picture.toDb(reviewId = review.id, order = i)
+        }
 
         checkieReviewDao.updateReview(reviewDb)
-        checkieReviewDao.insertPictures(addedPicturesDb)
-        checkieReviewDao.deletePictures(deletedPicturesUri)
+        checkieReviewDao.insertPictures(actualPicturesDb)
+        checkieReviewDao.deletePictures(deletedPicturesIds)
     }
 
-    override suspend fun deleteReview(reviewId: String, deletedPicturesUri: List<String>) = database.withTransaction {
-        checkieReviewDao.deletePictures(deletedPicturesUri)
+    override suspend fun deleteReview(reviewId: String, deletedPictures: List<CheckiePicture>) = database.withTransaction {
+        val deletedPicturesIds = deletedPictures.map { it.id }
+
+        checkieReviewDao.deletePictures(deletedPicturesIds)
         checkieReviewDao.deleteReview(reviewId)
     }
 }

@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.core.data.datasource.database.room.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -16,7 +17,8 @@ import androidx.room.PrimaryKey
     indices = [Index("reviewId")],
 )
 internal data class CheckieReviewPictureDb(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
+    @PrimaryKey val id: String,
+    @ColumnInfo(defaultValue = "0") val order: Int = 0,
     val reviewId: String,
     val uri: String,
 )

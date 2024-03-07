@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.data.repository
 
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.feature.reviewcreation.domain.repository.ReviewCreationRepository
 
@@ -12,15 +13,15 @@ internal class ReviewCreationRepositoryImpl(
         productName: String,
         productBrand: String?,
         rating: Int,
-        picturesUri: List<String>,
-        reviewText: String?
+        pictures: List<CheckiePicture>,
+        reviewText: String?,
     ) {
         localDataSource.createReview(
             productName = productName,
             productBrand = productBrand,
             rating = rating,
-            picturesUri = picturesUri,
-            reviewText = reviewText
+            pictures = pictures,
+            reviewText = reviewText,
         )
     }
 
@@ -29,16 +30,16 @@ internal class ReviewCreationRepositoryImpl(
         productName: String,
         productBrand: String?,
         rating: Int,
-        picturesUri: List<String>,
-        reviewText: String?
+        pictures: List<CheckiePicture>,
+        reviewText: String?,
     ) {
         localDataSource.updateReview(
             reviewId = reviewId,
             productName = productName,
             productBrand = productBrand,
             rating = rating,
-            picturesUri = picturesUri,
-            reviewText = reviewText
+            pictures = pictures,
+            reviewText = reviewText,
         )
     }
 

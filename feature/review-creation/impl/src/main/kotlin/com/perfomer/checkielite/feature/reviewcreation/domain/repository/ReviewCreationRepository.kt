@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.domain.repository
 
+import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 
 internal interface ReviewCreationRepository {
@@ -8,7 +9,7 @@ internal interface ReviewCreationRepository {
         productName: String,
         productBrand: String?,
         rating: Int,
-        picturesUri: List<String>,
+        pictures: List<CheckiePicture>,
         reviewText: String?
     )
 
@@ -17,7 +18,7 @@ internal interface ReviewCreationRepository {
         productName: String,
         productBrand: String?,
         rating: Int,
-        picturesUri: List<String>,
+        pictures: List<CheckiePicture>,
         reviewText: String?
     )
 

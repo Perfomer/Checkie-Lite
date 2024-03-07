@@ -24,11 +24,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,7 +43,11 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.mohamedrejeb.compose.dnd.reorder.ReorderContainer
+import com.mohamedrejeb.compose.dnd.reorder.ReorderableItem
+import com.mohamedrejeb.compose.dnd.reorder.rememberReorderState
 import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -55,6 +64,7 @@ internal fun ProductInfoScreen(
     onAddPictureClick: () -> Unit = {},
     onPictureClick: (position: Int) -> Unit = {},
     onPictureDeleteClick: (position: Int) -> Unit = {},
+    onPictureReorder: (from: Int, to: Int) -> Unit = { _, _ -> },
 ) {
     Column(
         modifier = Modifier
@@ -97,29 +107,48 @@ internal fun ProductInfoScreen(
             onValueChange = onBrandTextInput,
         )
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(12.dp))
 
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Box {
-                AddPicture(
-                    onClick = onAddPictureClick,
-                    modifier = Modifier.padding(top = 6.dp, end = 6.dp)
-                )
+        val reorderState = rememberReorderState<String>(dragAfterLongPress = true)
+        val hapticFeedback = LocalHapticFeedback.current
+
+        val isDragging by remember { derivedStateOf { reorderState.draggedItem != null } }
+        UpdateEffect(isDragging) {
+            if (isDragging) {
+                hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
             }
+        }
 
-            state.picturesUri.forEachIndexed { i, pictureUri ->
-                key(pictureUri) {
-                    DeletableItem(
-                        onDeletePictureClick = { onPictureDeleteClick(i) },
-                    ) {
-                        Picture(
-                            pictureUrl = pictureUri,
-                            onClick = { onPictureClick(i) },
-                        )
+        ReorderContainer(state = reorderState) {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Box {
+                    AddPicture(
+                        onClick = onAddPictureClick,
+                        modifier = Modifier
+                    )
+                }
+
+                state.picturesUri.forEachIndexed { i, pictureUri ->
+                    key(pictureUri) {
+                        DeletableItem(
+                            onDeletePictureClick = { onPictureDeleteClick(i) },
+                        ) {
+                            ReorderableItem(
+                                state = reorderState,
+                                key = i,
+                                data = pictureUri,
+                                onDrop = { draggedItem -> onPictureReorder(i, draggedItem.key as Int) },
+                            ) {
+                                Picture(
+                                    pictureUrl = pictureUri,
+                                    onClick = { onPictureClick(i) },
+                                )
+                            }
+                        }
                     }
                 }
             }

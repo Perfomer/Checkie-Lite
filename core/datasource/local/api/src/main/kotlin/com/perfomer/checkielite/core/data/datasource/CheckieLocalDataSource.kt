@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.core.data.datasource
 
+import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 
 interface CheckieLocalDataSource {
@@ -12,7 +13,7 @@ interface CheckieLocalDataSource {
         productName: String,
         productBrand: String?,
         rating: Int,
-        picturesUri: List<String>,
+        pictures: List<CheckiePicture>,
         reviewText: String?,
     ) : CheckieReview
 
@@ -21,7 +22,7 @@ interface CheckieLocalDataSource {
         productName: String,
         productBrand: String?,
         rating: Int,
-        picturesUri: List<String>,
+        pictures: List<CheckiePicture>,
         reviewText: String?,
     ) : CheckieReview
 

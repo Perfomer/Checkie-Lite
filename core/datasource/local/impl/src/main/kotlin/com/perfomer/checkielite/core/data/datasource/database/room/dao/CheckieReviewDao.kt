@@ -41,9 +41,9 @@ internal interface CheckieReviewDao {
     @Query("DELETE FROM CheckieReviewDb WHERE id = :id")
     suspend fun deleteReview(id: String)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPictures(pictures: List<CheckieReviewPictureDb>)
 
-    @Query("DELETE FROM CheckieReviewPictureDb WHERE uri IN (:picturesUri)")
-    suspend fun deletePictures(picturesUri: List<String>)
+    @Query("DELETE FROM CheckieReviewPictureDb WHERE id IN (:picturesIds)")
+    suspend fun deletePictures(picturesIds: List<String>)
 }

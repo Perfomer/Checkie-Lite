@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.core.data.datasource.database.room
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -11,11 +12,14 @@ import com.perfomer.checkielite.core.data.datasource.database.room.entity.Checki
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewPictureDb
 
 @Database(
-    version = 1,
+    version = 2,
     entities = [
         CheckieReviewDb::class,
         CheckieReviewPictureDb::class,
     ],
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+    ]
 )
 @TypeConverters(DateConverter::class)
 internal abstract class CheckieDatabase : RoomDatabase() {

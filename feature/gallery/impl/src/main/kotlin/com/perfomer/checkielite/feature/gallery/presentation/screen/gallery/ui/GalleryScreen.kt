@@ -185,10 +185,7 @@ private fun PreviewRow(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            itemsIndexed(
-                items = picturesUri,
-                key = { _, item -> item },
-            ) { i, item ->
+            itemsIndexed(picturesUri) { i, item ->
                 val offset = mainPagerState.indicatorOffsetForPage(i)
                 val targetAlpha = 0.5F + 0.5F * offset
 

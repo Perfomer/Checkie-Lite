@@ -17,6 +17,7 @@ dependencies {
 	implementation(project(":common:tea:compose"))
 
 	api(libs.coil)
+	implementation(libs.accompanist.systemuicontroller)
 	implementation(libs.activity.compose)
 	implementation(libs.appcompat)
 	implementation(libs.compose.material3)

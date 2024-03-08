@@ -1,8 +1,6 @@
 package com.perfomer.checkielite
 
-import android.graphics.Color
 import android.os.Bundle
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +12,7 @@ import cafe.adriel.voyager.transitions.SlideTransition
 import com.perfomer.checkielite.common.android.SingleActivityHolder
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
+import com.perfomer.checkielite.common.ui.util.TransparentSystemBars
 import com.perfomer.checkielite.feature.main.navigation.MainScreenProvider
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.HiddenScreen
@@ -33,12 +32,11 @@ class AppActivity : AppCompatActivity() {
         singleActivityHolder.activity = this
         initExternalRouter()
 
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT),
-            navigationBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT),
-        )
+        enableEdgeToEdge()
 
         setContent {
+            TransparentSystemBars()
+
             CheckieLiteTheme {
                 UsualNavigator()
                 OverlayNavigator()

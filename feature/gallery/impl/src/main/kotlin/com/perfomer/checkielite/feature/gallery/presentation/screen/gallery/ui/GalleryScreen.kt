@@ -69,6 +69,7 @@ import com.perfomer.checkielite.common.ui.cui.modifier.indicatorOffsetForPage
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.util.setTransparentSystemBars
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui.state.GalleryUiState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -91,10 +92,10 @@ internal fun GalleryScreen(
     UpdateEffect(backgroundAlpha < 1F) { systemUiController.isSystemBarsVisible = true }
 
     DisposableEffect(Unit) {
-        systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = false)
+        systemUiController.setTransparentSystemBars(darkIcons = false)
 
         onDispose {
-            systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = !isSystemInDarkTheme)
+            systemUiController.setTransparentSystemBars(darkIcons = !isSystemInDarkTheme)
             systemUiController.isSystemBarsVisible = true
         }
     }

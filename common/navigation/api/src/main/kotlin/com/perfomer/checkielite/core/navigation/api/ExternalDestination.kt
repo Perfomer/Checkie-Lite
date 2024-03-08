@@ -5,14 +5,14 @@ enum class ExternalDestination {
 	GALLERY
 }
 
-sealed class ExternalResult {
+sealed class ExternalResult<T> {
 
-	data class Success(val path: String) : ExternalResult()
+	data class Success<T>(val result: T) : ExternalResult<T>()
 
-	data object Cancel : ExternalResult()
+	data object Cancel : ExternalResult<Nothing>()
 }
 
 interface ExternalRouter {
 
-	suspend fun navigateForResult(destination: ExternalDestination): ExternalResult
+	suspend fun <T> navigateForResult(destination: ExternalDestination): ExternalResult<T>
 }

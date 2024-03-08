@@ -52,9 +52,9 @@ internal class ReviewCreationNavigationActor(
     }
 
     private suspend fun openPhotoPicker(): ReviewCreationNavigationEvent? {
-        val result = externalRouter.navigateForResult(ExternalDestination.GALLERY)
+        val result = externalRouter.navigateForResult<List<String>>(ExternalDestination.GALLERY)
         if (result !is ExternalResult.Success) return null
 
-        return ReviewCreationNavigationEvent.OnPhotoPick(uri = result.path)
+        return ReviewCreationNavigationEvent.OnPhotosPick(uris = result.result)
     }
 }

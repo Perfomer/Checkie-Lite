@@ -52,5 +52,5 @@ internal sealed interface ReviewCreationUiEvent : ReviewCreationEvent {
 
 internal sealed interface ReviewCreationNavigationEvent : ReviewCreationEvent {
 
-    data class OnPhotoPick(val uri: String) : ReviewCreationNavigationEvent
+    data class OnPhotosPick(val uris: List<String>) : ReviewCreationNavigationEvent
 }

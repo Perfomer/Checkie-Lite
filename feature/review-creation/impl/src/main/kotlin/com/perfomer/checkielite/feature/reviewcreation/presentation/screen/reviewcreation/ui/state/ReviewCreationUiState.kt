@@ -28,4 +28,5 @@ internal data class ProductInfoPageUiState(
 internal data class ReviewInfoPageUiState(
     val rating: Int,
     val reviewText: String,
+    val isSaving: Boolean,
 )

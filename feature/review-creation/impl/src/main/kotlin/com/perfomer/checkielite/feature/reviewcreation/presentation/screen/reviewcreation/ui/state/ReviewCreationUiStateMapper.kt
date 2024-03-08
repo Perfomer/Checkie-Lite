@@ -40,6 +40,7 @@ internal class ReviewCreationUiStateMapper(
         return ReviewInfoPageUiState(
             rating = state.reviewDetails.rating,
             reviewText = state.reviewDetails.reviewText,
+            isSaving = state.isSavingInProgress,
         )
     }
 }

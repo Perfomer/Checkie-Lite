@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -38,6 +39,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
+import com.perfomer.checkielite.common.ui.cui.modifier.conditional
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -69,6 +71,7 @@ data class RatingSliderColors(
     companion object {
 
         @Composable
+        @ReadOnlyComposable
         fun createByPalette(palette: CuiPalette = LocalCuiPalette.current): RatingSliderColors {
             return RatingSliderColors(
                 selectedTextColor = palette.TextAccent,
@@ -86,6 +89,7 @@ fun RatingSlider(
     rating: Int,
     onRatingChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
+    isEnabled: Boolean = true,
     colors: RatingSliderColors = RatingSliderColors.createByPalette(),
 ) {
     val hapticFeedback = LocalHapticFeedback.current
@@ -104,9 +108,10 @@ fun RatingSlider(
                 offsetX = getOffset(lastSelectedRating, width)
             }
             .draggable(
+                enabled = isEnabled,
                 orientation = Orientation.Horizontal,
                 state = rememberDraggableState { delta ->
-                    offsetX = adjustOffset(offsetX + delta, width)
+                    offsetX = (offsetX + delta).coerceIn(0F, width)
                     val newRating = getRating(offsetX, width)
 
                     if (lastSelectedRating != newRating) {
@@ -115,19 +120,21 @@ fun RatingSlider(
                     }
                 },
                 onDragStarted = { touch ->
-                    offsetX = adjustOffset(touch.x, width)
+                    offsetX = touch.x.coerceIn(0F, width)
                 },
                 onDragStopped = {
                     offsetX = getOffset(lastSelectedRating, width)
                     onRatingChange(lastSelectedRating)
                 }
             )
-            .pointerInput(Unit) {
-                detectTapGestures { touch ->
-                    lastSelectedRating = getRating(touch.x, width)
-                    offsetX = getOffset(lastSelectedRating, width)
-                    onRatingChange(lastSelectedRating)
-                    hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+            .conditional(isEnabled) {
+                pointerInput(Unit) {
+                    detectTapGestures { touch ->
+                        lastSelectedRating = getRating(touch.x, width)
+                        offsetX = getOffset(lastSelectedRating, width)
+                        onRatingChange(lastSelectedRating)
+                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                    }
                 }
             }
     ) {
@@ -335,21 +342,13 @@ private fun DrawScope.SlidingEmoji(
 }
 
 private fun getRating(offsetX: Float, width: Float): Int {
-    val adjustedOffset = adjustOffset(offsetX, width)
+    val adjustedOffset = offsetX.coerceIn(0F, width)
     return (DIVISIONS_AMOUNT * adjustedOffset / width).roundToInt()
 }
 
 private fun getOffset(rating: Int, width: Float): Float {
     val offset = width * rating / DIVISIONS_AMOUNT
-    return adjustOffset(offset, width)
-}
-
-private fun adjustOffset(offsetX: Float, width: Float): Float {
-    return when {
-        offsetX < 0 -> 0F
-        offsetX > width -> width
-        else -> offsetX
-    }
+    return offset.coerceIn(0F, width)
 }
 
 @WidgetPreview

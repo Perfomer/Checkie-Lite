@@ -57,6 +57,7 @@ internal fun ReviewInfoScreen(
         RatingSlider(
             rating = state.rating,
             onRatingChange = onRatingSelect,
+            isEnabled = !state.isSaving,
         )
 
         Spacer(Modifier.height(24.dp))
@@ -65,9 +66,8 @@ internal fun ReviewInfoScreen(
             text = state.reviewText,
             title = stringResource(R.string.reviewcreation_reviewinfo_field_review),
             singleLine = false,
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Sentences,
-            ),
+            isEnabled = !state.isSaving,
+            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
             onValueChange = onReviewTextInput,
             modifier = Modifier.focusRequester(focusRequester)
         )
@@ -81,6 +81,7 @@ private fun ReviewInfoScreenPreview() {
         state = ReviewInfoPageUiState(
             rating = 5,
             reviewText = "",
+            isSaving = false,
         )
     )
 }

@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.main.presentation.screen.main.tea
 
 import com.perfomer.checkielite.common.pure.state.Lce
-import com.perfomer.checkielite.common.pure.state.toLoading
+import com.perfomer.checkielite.common.pure.state.toLoadingContentAware
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand.LoadReviews
@@ -34,7 +34,7 @@ internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, Main
         is OnReviewClick -> commands(OpenReviewDetails(event.id))
         is OnSearchQueryInput -> {
             state { copy(searchQuery = event.query) }
-            commands(LoadReviews(event.query))
+            commands(LoadReviews(event.query.trim()))
         }
 
         is OnSearchQueryClearClick -> {
@@ -48,8 +48,11 @@ internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, Main
     }
 
     private fun reduceReviewsLoading(event: ReviewsLoading) = when (event) {
-        is ReviewsLoading.Started -> state { copy(reviews = state.reviews.toLoading()) }
-        is ReviewsLoading.Succeed -> state { copy(reviews = Lce.Content(event.reviews)) }
+        is ReviewsLoading.Started -> state { copy(reviews = state.reviews.toLoadingContentAware()) }
+        is ReviewsLoading.Succeed -> state {
+            if (event.searchQuery.isEmpty()) copy(reviews = Lce.Content(event.reviews), searchedReviews = Lce.initial())
+            else copy(searchedReviews = Lce.Content(event.reviews))
+        }
         is ReviewsLoading.Failed -> state { copy(reviews = Lce.Error(event.error)) }
     }
 }

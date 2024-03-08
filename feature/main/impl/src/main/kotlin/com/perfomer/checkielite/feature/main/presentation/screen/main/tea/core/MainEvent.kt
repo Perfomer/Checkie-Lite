@@ -8,7 +8,10 @@ internal sealed interface MainEvent {
 
         data object Started : ReviewsLoading
 
-        class Succeed(val reviews: List<CheckieReview>) : ReviewsLoading
+        class Succeed(
+            val reviews: List<CheckieReview>,
+            val searchQuery: String,
+        ) : ReviewsLoading
 
         class Failed(val error: Throwable) : ReviewsLoading
     }

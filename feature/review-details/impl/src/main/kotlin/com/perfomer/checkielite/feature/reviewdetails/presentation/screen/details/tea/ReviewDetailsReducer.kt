@@ -1,8 +1,8 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea
 
 import com.perfomer.checkielite.common.pure.state.Lce
-import com.perfomer.checkielite.common.pure.state.loadingContentAware
 import com.perfomer.checkielite.common.pure.state.requireContent
+import com.perfomer.checkielite.common.pure.state.toLoadingContentAware
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand
@@ -54,7 +54,7 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
     }
 
     private fun reduceReviewLoading(event: ReviewLoading) = when (event) {
-        is ReviewLoading.Started -> state { copy(review = state.review.loadingContentAware) }
+        is ReviewLoading.Started -> state { copy(review = state.review.toLoadingContentAware()) }
         is ReviewLoading.Succeed -> state { copy(review = Lce.Content(event.review)) }
         is ReviewLoading.Failed -> state { copy(review = Lce.Error()) }
     }

@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.main.presentation.screen.main.tea
 
 import com.perfomer.checkielite.common.pure.state.Lce
-import com.perfomer.checkielite.common.pure.state.content
+import com.perfomer.checkielite.common.pure.state.toLoading
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand.LoadReviews
@@ -29,7 +29,7 @@ internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, Main
     }
 
     private fun reduceUi(event: MainUiEvent) = when (event) {
-        is OnStart -> commands(LoadReviews())
+        is OnStart -> commands(LoadReviews(state.searchQuery))
         is OnFabClick -> commands(OpenReviewCreation)
         is OnReviewClick -> commands(OpenReviewDetails(event.id))
         is OnSearchQueryInput -> {
@@ -48,7 +48,7 @@ internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, Main
     }
 
     private fun reduceReviewsLoading(event: ReviewsLoading) = when (event) {
-        is ReviewsLoading.Started -> state { copy(reviews = Lce.Loading(state.reviews.content)) }
+        is ReviewsLoading.Started -> state { copy(reviews = state.reviews.toLoading()) }
         is ReviewsLoading.Succeed -> state { copy(reviews = Lce.Content(event.reviews)) }
         is ReviewsLoading.Failed -> state { copy(reviews = Lce.Error(event.error)) }
     }

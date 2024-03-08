@@ -10,12 +10,6 @@ val <T : Any> Lce<T>.content: T?
 		return contentState?.content
 	}
 
-val <T : Any> Lce<T>.loadingContentAware: Lce<T>
-	get() {
-		return if (this is Content) this
-		else Loading()
-	}
-
 val <T : Any> Lce<T>.isError: Boolean
 	get() = this is Error
 
@@ -26,3 +20,13 @@ val <T : Any> Lce<T>.isContent: Boolean
 	get() = this is Content
 
 fun <T : Any> Lce<T>.requireContent(): T = requireNotNull(content)
+
+fun <T: Any> Lce<T>.toLoadingContentAware(): Lce<T> {
+	return if (this is Content) this
+	else Loading()
+}
+
+fun <T: Any> Lce<T>.toLoading(): Lce<T> {
+	val currentContent = if (this is Content) content else null
+	return Loading(content = currentContent)
+}

@@ -9,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
-import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
 @Composable
@@ -46,28 +46,26 @@ fun CuiPrimaryButton(
 
 @WidgetPreview
 @Composable
-private fun BuiPrimaryButtonPreview() {
-    PreviewTheme {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(24.dp)
-        ) {
-            CuiPrimaryButton(
-                text = "Next",
-                onClick = {}
-            )
+private fun BuiPrimaryButtonPreview() = CheckieLiteTheme {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(24.dp)
+    ) {
+        CuiPrimaryButton(
+            text = "Next",
+            onClick = {}
+        )
 
-            CuiPrimaryButton(
-                text = "Next",
-                isEnabled = false,
-                onClick = {},
-            )
+        CuiPrimaryButton(
+            text = "Next",
+            isEnabled = false,
+            onClick = {},
+        )
 
-            CuiPrimaryButton(
-                text = "Next",
-                loading = true,
-                onClick = {},
-            )
-        }
+        CuiPrimaryButton(
+            text = "Next",
+            loading = true,
+            onClick = {},
+        )
     }
 }

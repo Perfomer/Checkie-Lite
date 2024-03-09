@@ -15,8 +15,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
+import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
-import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
 private const val ANIMATION_DURATION_MS = 500
@@ -50,24 +50,23 @@ fun CuiProgressBar(
 		trackColor = backgroundColor,
 		color = animatedProgressColor.value,
 		strokeCap = StrokeCap.Round,
-		modifier = modifier.height(8.dp)
+		modifier = modifier
+			.height(8.dp)
 			.clip(CircleShape),
 	)
 }
 
 @WidgetPreview
 @Composable
-private fun CuiProgressBarPreview() {
-	PreviewTheme {
-		Column(
-			verticalArrangement = Arrangement.spacedBy(16.dp),
-			modifier = Modifier.padding(24.dp)
-		) {
-			CuiProgressBar(progress = 0.00F)
-			CuiProgressBar(progress = 0.25F)
-			CuiProgressBar(progress = 0.50F)
-			CuiProgressBar(progress = 0.75F)
-			CuiProgressBar(progress = 1.00F)
-		}
+private fun CuiProgressBarPreview() = CheckieLiteTheme {
+	Column(
+		verticalArrangement = Arrangement.spacedBy(16.dp),
+		modifier = Modifier.padding(24.dp)
+	) {
+		CuiProgressBar(progress = 0.00F)
+		CuiProgressBar(progress = 0.25F)
+		CuiProgressBar(progress = 0.50F)
+		CuiProgressBar(progress = 0.75F)
+		CuiProgressBar(progress = 1.00F)
 	}
 }

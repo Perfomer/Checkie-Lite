@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
-import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
 object CuiOutlinedFieldDefaults {
@@ -85,20 +85,18 @@ fun CuiOutlinedField(
 
 @Composable
 @WidgetPreview
-private fun BuiOutlinedFieldPreview() {
-    PreviewTheme {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(24.dp)
-        ) {
-            CuiOutlinedField(title = "Title 1", text = "Text", onValueChange = {})
+private fun BuiOutlinedFieldPreview() = CheckieLiteTheme {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(24.dp)
+    ) {
+        CuiOutlinedField(title = "Title 1", text = "Text", onValueChange = {})
 
-            CuiOutlinedField(
-                title = "Title 1",
-                text = "Text",
-                errorText = "Никнейм должен содержать хотя бы 6 символов.",
-                onValueChange = {},
-            )
-        }
+        CuiOutlinedField(
+            title = "Title 1",
+            text = "Text",
+            errorText = "Никнейм должен содержать хотя бы 6 символов.",
+            onValueChange = {},
+        )
     }
 }

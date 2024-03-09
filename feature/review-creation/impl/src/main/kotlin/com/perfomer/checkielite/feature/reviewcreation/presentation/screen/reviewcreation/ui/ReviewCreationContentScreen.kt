@@ -2,6 +2,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -51,10 +52,24 @@ internal class ReviewCreationContentScreen(
             pageCount = { state.stepsCount },
         )
 
+        val productInfoScrollState = rememberScrollState()
+        val reviewInfoScrollState = rememberScrollState()
+
+        val currentPageScrollState by remember(pagerState.currentPage) {
+            derivedStateOf {
+                val currentPage = ReviewCreationPage.entries[pagerState.currentPage]
+
+                when (currentPage) {
+                    ReviewCreationPage.PRODUCT_INFO -> productInfoScrollState
+                    ReviewCreationPage.REVIEW_INFO -> reviewInfoScrollState
+                }
+            }
+        }
+
         ReviewCreationScreen(
             state = state,
             pagerState = pagerState,
-
+            currentPageScrollState = currentPageScrollState,
             showExitDialog = isConfirmExitDialogShown,
             onExitDialogDismiss = { isConfirmExitDialogShown = false },
             onExitDialogConfirm = acceptable(OnConfirmExitClick),
@@ -72,6 +87,7 @@ internal class ReviewCreationContentScreen(
             when (reviewCreationPage) {
                 ReviewCreationPage.PRODUCT_INFO -> ProductInfoScreen(
                     state = state.productInfoState,
+                    scrollState = productInfoScrollState,
                     onProductNameTextInput = acceptable(ProductInfo::OnProductNameTextInput),
                     onBrandTextInput = acceptable(ProductInfo::OnBrandTextInput),
                     onAddPictureClick = acceptable(ProductInfo.OnAddPictureClick),
@@ -82,6 +98,7 @@ internal class ReviewCreationContentScreen(
 
                 ReviewCreationPage.REVIEW_INFO -> ReviewInfoScreen(
                     state = state.reviewInfoState,
+                    scrollState = reviewInfoScrollState,
                     onRatingSelect = acceptable(ReviewInfo::OnRatingSelect),
                     onReviewTextInput = acceptable(ReviewInfo::OnReviewTextInput),
                 )

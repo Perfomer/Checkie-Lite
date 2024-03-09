@@ -5,6 +5,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,13 +13,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -26,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -42,6 +46,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 internal fun ReviewCreationScreen(
     state: ReviewCreationUiState,
     pagerState: PagerState,
+    currentPageScrollState: ScrollState,
 
     showExitDialog: Boolean = false,
     onExitDialogDismiss: () -> Unit = {},
@@ -56,12 +61,19 @@ internal fun ReviewCreationScreen(
 ) {
     Box(modifier = Modifier.background(LocalCuiPalette.current.BackgroundPrimary)) {
         Column(modifier = Modifier.fillMaxSize()) {
+            val shouldShowDivider by remember(currentPageScrollState) {
+                derivedStateOf { currentPageScrollState.canScrollBackward }
+            }
+
             ProgressAppBar(
                 pagerState = pagerState,
                 navigationIconPainter = painterResource(CommonDrawable.ic_arrow_back),
                 firstStepNavigationIconPainter = painterResource(CommonDrawable.ic_cross),
                 onBackPress = onBackPress,
-                modifier = Modifier.statusBarsPadding()
+                modifier = Modifier.bottomStrokeOnScroll(
+                    show = shouldShowDivider,
+                    strokeColor = LocalCuiPalette.current.OutlineSecondary,
+                )
             )
 
             HorizontalPager(
@@ -137,6 +149,7 @@ private fun ReviewCreationScreenPreview() {
             isPrimaryButtonLoading = false,
         ),
         pagerState = rememberPagerState { 1 },
+        currentPageScrollState = rememberScrollState(),
         content = {},
     )
 }

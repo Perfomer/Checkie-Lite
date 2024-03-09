@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.reviewinfo
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,7 +8,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,6 +33,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 @Composable
 internal fun ReviewInfoScreen(
     state: ReviewInfoPageUiState,
+    scrollState: ScrollState = rememberScrollState(),
     onRatingSelect: (Int) -> Unit = {},
     onReviewTextInput: (String) -> Unit = {},
 ) {
@@ -40,6 +44,7 @@ internal fun ReviewInfoScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .navigationBarsPadding()
             .imePadding()
             .padding(24.dp)

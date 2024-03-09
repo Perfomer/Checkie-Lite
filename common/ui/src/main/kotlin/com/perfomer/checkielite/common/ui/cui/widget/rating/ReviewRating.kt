@@ -17,8 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
-import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
 @Composable
@@ -57,7 +57,7 @@ fun ReviewRating(
 
 @Composable
 @WidgetPreview
-private fun CheckieRatingPreview() = PreviewTheme {
+private fun CheckieRatingPreview() = CheckieLiteTheme {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {

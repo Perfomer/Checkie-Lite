@@ -67,7 +67,7 @@ import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.cui.modifier.indicatorOffsetForPage
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
-import com.perfomer.checkielite.common.ui.theme.PreviewTheme
+import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.setTransparentSystemBars
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui.state.GalleryUiState
@@ -313,7 +313,7 @@ private fun GalleryTopAppBar(
 
 @ScreenPreview
 @Composable
-private fun GalleryScreenPreview() = PreviewTheme {
+private fun GalleryScreenPreview() = CheckieLiteTheme {
     GalleryScreen(state = mockUiState)
 }
 

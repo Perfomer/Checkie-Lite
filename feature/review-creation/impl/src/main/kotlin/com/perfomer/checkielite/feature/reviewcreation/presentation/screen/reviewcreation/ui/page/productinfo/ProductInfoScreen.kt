@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -59,6 +60,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 internal fun ProductInfoScreen(
     state: ProductInfoPageUiState,
+    scrollState: ScrollState = rememberScrollState(),
     onProductNameTextInput: (String) -> Unit = {},
     onBrandTextInput: (String) -> Unit = {},
     onAddPictureClick: () -> Unit = {},
@@ -69,7 +71,7 @@ internal fun ProductInfoScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
             .navigationBarsPadding()
             .imePadding()
             .padding(24.dp)

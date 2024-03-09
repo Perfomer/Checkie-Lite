@@ -11,13 +11,14 @@ ksp {
 applyCommonAndroid()
 
 android {
-    namespace = "com.perfomer.checkielite.core.storage"
+    namespace = "com.perfomer.checkielite.core.data.datasource"
 }
 
 dependencies {
     api(project(":core:datasource:local:api"))
     implementation(project(":common:pure"))
 
+    implementation(libs.androidx.core)
     implementation(libs.compressor)
     implementation(libs.koin.android)
     implementation(libs.room.ktx)

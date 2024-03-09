@@ -5,7 +5,7 @@ import androidx.room.Relation
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewPictureDb
 
-internal data class CheckieReviewWithPictures(
+internal data class CheckieReviewDetailedDb(
     @Embedded val review: CheckieReviewDb,
 
     @Relation(parentColumn = "id", entityColumn = "reviewId")

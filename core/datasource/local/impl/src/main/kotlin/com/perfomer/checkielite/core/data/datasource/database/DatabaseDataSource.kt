@@ -26,6 +26,10 @@ internal interface DatabaseDataSource {
         reviewId: String,
         deletedPictures: List<CheckiePicture>,
     )
+
+    suspend fun updatePictures(pictures: List<CheckiePicture>)
+
+    suspend fun updateSyncing(reviewId: String, isSyncing: Boolean)
 }
 
 internal class DatabaseDataSourceImpl(
@@ -80,5 +84,15 @@ internal class DatabaseDataSourceImpl(
 
         checkieReviewDao.deletePictures(deletedPicturesIds)
         checkieReviewDao.deleteReview(reviewId)
+    }
+
+    override suspend fun updatePictures(pictures: List<CheckiePicture>) = database.withTransaction {
+        pictures.forEach { picture ->
+            checkieReviewDao.updatePictureUri(picture.id, picture.uri)
+        }
+    }
+
+    override suspend fun updateSyncing(reviewId: String, isSyncing: Boolean) {
+        checkieReviewDao.updateSyncing(reviewId, isSyncing)
     }
 }

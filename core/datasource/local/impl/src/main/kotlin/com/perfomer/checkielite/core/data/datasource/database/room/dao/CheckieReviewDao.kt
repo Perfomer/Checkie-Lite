@@ -7,14 +7,14 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewPictureDb
-import com.perfomer.checkielite.core.data.datasource.database.room.entity.relation.CheckieReviewWithPictures
+import com.perfomer.checkielite.core.data.datasource.database.room.entity.relation.CheckieReviewDetailedDb
 
 @Dao
 internal interface CheckieReviewDao {
 
     @Transaction
     @Query("SELECT * FROM CheckieReviewDb ORDER BY creationDate DESC")
-    suspend fun getReviews(): List<CheckieReviewWithPictures>
+    suspend fun getReviews(): List<CheckieReviewDetailedDb>
 
     @Transaction
     @Query(
@@ -26,11 +26,11 @@ internal interface CheckieReviewDao {
         ORDER BY creationDate DESC
         """
     )
-    suspend fun getReviewsByQuery(query: String): List<CheckieReviewWithPictures>
+    suspend fun getReviewsByQuery(query: String): List<CheckieReviewDetailedDb>
 
     @Transaction
     @Query("SELECT * FROM CheckieReviewDb WHERE id = :id")
-    suspend fun getReview(id: String): CheckieReviewWithPictures
+    suspend fun getReview(id: String): CheckieReviewDetailedDb
 
     @Insert
     suspend fun insertReview(review: CheckieReviewDb)
@@ -43,6 +43,24 @@ internal interface CheckieReviewDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPictures(pictures: List<CheckieReviewPictureDb>)
+
+    @Query(
+        """
+            UPDATE CheckieReviewPictureDb
+            SET uri = :pictureUri
+            WHERE id = :pictureId
+        """
+    )
+    suspend fun updatePictureUri(pictureId: String, pictureUri: String)
+
+    @Query(
+        """
+            UPDATE CheckieReviewDb
+            SET isSyncing = :isSyncing
+            WHERE id = :reviewId
+        """
+    )
+    suspend fun updateSyncing(reviewId: String, isSyncing: Boolean)
 
     @Query("DELETE FROM CheckieReviewPictureDb WHERE id IN (:picturesIds)")
     suspend fun deletePictures(picturesIds: List<String>)

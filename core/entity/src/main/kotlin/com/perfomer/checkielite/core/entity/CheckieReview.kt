@@ -11,4 +11,5 @@ data class CheckieReview(
     val reviewText: String?,
     val creationDate: Date,
     val modificationDate: Date,
+    val isSyncing: Boolean,
 )

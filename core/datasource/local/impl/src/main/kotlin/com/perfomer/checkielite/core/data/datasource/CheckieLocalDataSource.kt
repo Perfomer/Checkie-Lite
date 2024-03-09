@@ -1,8 +1,10 @@
 package com.perfomer.checkielite.core.data.datasource
 
+import android.content.Context
+import androidx.core.content.ContextCompat
 import com.perfomer.checkielite.common.pure.util.forEachAsync
-import com.perfomer.checkielite.common.pure.util.mapAsync
 import com.perfomer.checkielite.common.pure.util.randomUuid
+import com.perfomer.checkielite.common.pure.util.toArrayList
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
 import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
 import com.perfomer.checkielite.core.entity.CheckiePicture
@@ -11,6 +13,7 @@ import kotlinx.coroutines.coroutineScope
 import java.util.Date
 
 internal class CheckieLocalDataSourceImpl(
+    private val context: Context,
     private val databaseDataSource: DatabaseDataSource,
     private val fileDataSource: FileDataSource,
 ) : CheckieLocalDataSource {
@@ -30,14 +33,10 @@ internal class CheckieLocalDataSourceImpl(
         pictures: List<CheckiePicture>,
         reviewText: String?
     ): CheckieReview {
-        val compressedPictures = pictures.mapAsync { picture ->
-            CheckiePicture(
-                id = randomUuid(),
-                uri = fileDataSource.cacheCompressedPicture(picture.uri),
-            )
-        }
-
+        val actualPictures = pictures.map { picture -> picture.copy(id = randomUuid()) }
         val creationDate = Date()
+
+        val isNeedSync = actualPictures.isNotEmpty()
 
         val review = CheckieReview(
             id = randomUuid(),
@@ -45,12 +44,17 @@ internal class CheckieLocalDataSourceImpl(
             productBrand = productBrand,
             rating = rating,
             reviewText = reviewText,
-            pictures = compressedPictures,
+            pictures = actualPictures,
             creationDate = creationDate,
             modificationDate = creationDate,
+            isSyncing = isNeedSync,
         )
 
         databaseDataSource.createReview(review)
+
+        if (isNeedSync) {
+            ContextCompat.startForegroundService(context, CompressorService.createIntent(context, review.id, actualPictures.toArrayList()))
+        }
 
         return review
     }
@@ -70,12 +74,7 @@ internal class CheckieLocalDataSourceImpl(
         deletedPictures.forEachAsync { picture -> fileDataSource.deleteFile(picture.uri) }
 
         val addedPictures = pictures.filter { picture -> picture.id == CheckiePicture.NO_ID }
-        val compressedAddedPictures = addedPictures.mapAsync { picture ->
-            CheckiePicture(
-                id = randomUuid(),
-                uri = fileDataSource.cacheCompressedPicture(picture.uri),
-            )
-        }
+        val actualAddedPictures = addedPictures.map { picture -> picture.copy(id = randomUuid()) }
 
         val actualPictures = mutableListOf<CheckiePicture>()
 
@@ -87,9 +86,11 @@ internal class CheckieLocalDataSourceImpl(
             val isPictureAdded = addedPictureIndex != -1
 
             actualPictures +=
-                if (isPictureAdded) compressedAddedPictures[addedPictureIndex]
+                if (isPictureAdded) actualAddedPictures[addedPictureIndex]
                 else picture
         }
+
+        val isNeedSync = addedPictures.isNotEmpty()
 
         val review = CheckieReview(
             id = reviewId,
@@ -100,6 +101,7 @@ internal class CheckieLocalDataSourceImpl(
             pictures = actualPictures,
             creationDate = initialReview.creationDate,
             modificationDate = Date(),
+            isSyncing = isNeedSync,
         )
 
         databaseDataSource.updateReview(
@@ -107,6 +109,10 @@ internal class CheckieLocalDataSourceImpl(
             deletedPictures = deletedPictures,
             actualPictures = actualPictures,
         )
+
+        if (isNeedSync) {
+            ContextCompat.startForegroundService(context, CompressorService.createIntent(context, review.id, actualAddedPictures.toArrayList()))
+        }
 
         return@coroutineScope review
     }

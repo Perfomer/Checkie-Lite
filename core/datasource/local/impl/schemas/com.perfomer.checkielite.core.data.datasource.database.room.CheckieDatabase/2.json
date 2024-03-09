@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "0ff47d396aadb21ac877c2a94afe8bba",
+    "identityHash": "ca6cf2d1d44515352309b5450e1826a2",
     "entities": [
       {
         "tableName": "CheckieReviewDb",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `productName` TEXT NOT NULL, `brandName` TEXT, `rating` INTEGER NOT NULL, `reviewText` TEXT, `creationDate` INTEGER NOT NULL, `modificationDate` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `productName` TEXT NOT NULL, `brandName` TEXT, `rating` INTEGER NOT NULL, `reviewText` TEXT, `creationDate` INTEGER NOT NULL, `modificationDate` INTEGER NOT NULL, `isSyncing` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -49,6 +49,13 @@
             "columnName": "modificationDate",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "isSyncing",
+            "columnName": "isSyncing",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
           }
         ],
         "primaryKey": {
@@ -125,7 +132,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0ff47d396aadb21ac877c2a94afe8bba')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ca6cf2d1d44515352309b5450e1826a2')"
     ]
   }
 }

@@ -50,6 +50,7 @@ internal class MainUiStateMapper : UiStateMapper<MainState, MainUiState> {
             brand = productBrand,
             imageUri = pictures.firstOrNull()?.uri,
             rating = rating,
+            isSyncing = isSyncing,
         )
     }
 }

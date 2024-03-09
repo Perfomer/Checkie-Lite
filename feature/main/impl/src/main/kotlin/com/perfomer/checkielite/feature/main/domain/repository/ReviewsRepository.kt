@@ -1,8 +1,9 @@
 package com.perfomer.checkielite.feature.main.domain.repository
 
 import com.perfomer.checkielite.core.entity.CheckieReview
+import kotlinx.coroutines.flow.Flow
 
 internal interface ReviewsRepository {
 
-    suspend fun getCheckies(searchQuery: String = ""): List<CheckieReview>
+    fun getCheckies(searchQuery: String = ""): Flow<List<CheckieReview>>
 }

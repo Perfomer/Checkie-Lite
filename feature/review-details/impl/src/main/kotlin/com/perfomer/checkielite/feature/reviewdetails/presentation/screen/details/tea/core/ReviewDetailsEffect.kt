@@ -3,4 +3,6 @@ package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detai
 internal sealed interface ReviewDetailsEffect {
 
     data object ShowConfirmDeleteDialog : ReviewDetailsEffect
+
+    data object ShowSyncingToast : ReviewDetailsEffect
 }

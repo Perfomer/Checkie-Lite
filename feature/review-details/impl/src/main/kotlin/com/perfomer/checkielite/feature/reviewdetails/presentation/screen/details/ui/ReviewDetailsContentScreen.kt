@@ -1,18 +1,22 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.util.BackHandlerWithLifecycle
 import com.perfomer.checkielite.common.ui.util.store
+import com.perfomer.checkielite.feature.reviewdetails.R
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsParams
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsStore
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect.ShowConfirmDeleteDialog
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect.ShowSyncingToast
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnConfirmDeleteClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnDeleteClick
@@ -30,6 +34,7 @@ internal class ReviewDetailsContentScreen(
 
     @Composable
     override fun Screen() = TeaComposable(store<ReviewDetailsStore>(params)) { state ->
+        val context = LocalContext.current
         var isConfirmDeleteDialogShown by remember { mutableStateOf(false) }
 
         BackHandlerWithLifecycle { accept(OnBackPress) }
@@ -41,6 +46,7 @@ internal class ReviewDetailsContentScreen(
         EffectHandler { effect ->
             when (effect) {
                 is ShowConfirmDeleteDialog -> isConfirmDeleteDialogShown = true
+                is ShowSyncingToast -> Toast.makeText(context, R.string.reviewdetails_toast_syncing, Toast.LENGTH_LONG).show()
             }
         }
 

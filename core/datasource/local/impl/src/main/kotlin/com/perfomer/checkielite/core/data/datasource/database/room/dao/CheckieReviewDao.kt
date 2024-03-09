@@ -8,13 +8,14 @@ import androidx.room.Transaction
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewPictureDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.relation.CheckieReviewDetailedDb
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 internal interface CheckieReviewDao {
 
     @Transaction
     @Query("SELECT * FROM CheckieReviewDb ORDER BY creationDate DESC")
-    suspend fun getReviews(): List<CheckieReviewDetailedDb>
+    fun getReviews(): Flow<List<CheckieReviewDetailedDb>>
 
     @Transaction
     @Query(
@@ -26,11 +27,11 @@ internal interface CheckieReviewDao {
         ORDER BY creationDate DESC
         """
     )
-    suspend fun getReviewsByQuery(query: String): List<CheckieReviewDetailedDb>
+    fun getReviewsByQuery(query: String): Flow<List<CheckieReviewDetailedDb>>
 
     @Transaction
     @Query("SELECT * FROM CheckieReviewDb WHERE id = :id")
-    suspend fun getReview(id: String): CheckieReviewDetailedDb
+    fun getReview(id: String): Flow<CheckieReviewDetailedDb>
 
     @Insert
     suspend fun insertReview(review: CheckieReviewDb)

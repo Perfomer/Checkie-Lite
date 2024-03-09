@@ -10,6 +10,8 @@ import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import java.util.Date
 
 internal class CheckieLocalDataSourceImpl(
@@ -18,11 +20,11 @@ internal class CheckieLocalDataSourceImpl(
     private val fileDataSource: FileDataSource,
 ) : CheckieLocalDataSource {
 
-    override suspend fun getReviews(searchQuery: String): List<CheckieReview> {
+    override fun getReviews(searchQuery: String): Flow<List<CheckieReview>> {
         return databaseDataSource.getReviews(searchQuery)
     }
 
-    override suspend fun getReview(reviewId: String): CheckieReview {
+    override fun getReview(reviewId: String): Flow<CheckieReview> {
         return databaseDataSource.getReview(reviewId)
     }
 
@@ -67,7 +69,7 @@ internal class CheckieLocalDataSourceImpl(
         pictures: List<CheckiePicture>,
         reviewText: String?
     ): CheckieReview = coroutineScope {
-        val initialReview = getReview(reviewId)
+        val initialReview = getReview(reviewId).first()
         val initialPictures = initialReview.pictures
 
         val deletedPictures = initialPictures.filterNot(pictures::contains)
@@ -118,7 +120,7 @@ internal class CheckieLocalDataSourceImpl(
     }
 
     override suspend fun deleteReview(reviewId: String) {
-        val review = getReview(reviewId)
+        val review = getReview(reviewId).first()
         review.pictures.forEachAsync { picture ->
             fileDataSource.deleteFile(picture.uri)
         }

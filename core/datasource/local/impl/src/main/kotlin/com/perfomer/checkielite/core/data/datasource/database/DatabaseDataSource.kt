@@ -7,12 +7,14 @@ import com.perfomer.checkielite.core.data.datasource.database.room.mapper.toDb
 import com.perfomer.checkielite.core.data.datasource.database.room.mapper.toDomain
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 internal interface DatabaseDataSource {
 
-    suspend fun getReviews(searchQuery: String = ""): List<CheckieReview>
+    fun getReviews(searchQuery: String = ""): Flow<List<CheckieReview>>
 
-    suspend fun getReview(reviewId: String): CheckieReview
+    fun getReview(reviewId: String): Flow<CheckieReview>
 
     suspend fun createReview(review: CheckieReview)
 
@@ -39,18 +41,19 @@ internal class DatabaseDataSourceImpl(
     private val checkieReviewDao: CheckieReviewDao
         get() = database.reviewDao()
 
-    override suspend fun getReviews(searchQuery: String): List<CheckieReview> {
+    override fun getReviews(searchQuery: String): Flow<List<CheckieReview>> {
         val reviews = if (searchQuery.isBlank()) {
             checkieReviewDao.getReviews()
         } else {
             checkieReviewDao.getReviewsByQuery(searchQuery)
         }
 
-        return reviews.map { it.toDomain() }
+        return reviews.map { reviewDb -> reviewDb.map { it.toDomain() } }
     }
 
-    override suspend fun getReview(reviewId: String): CheckieReview {
-        return checkieReviewDao.getReview(reviewId).toDomain()
+    override fun getReview(reviewId: String): Flow<CheckieReview> {
+        return checkieReviewDao.getReview(reviewId)
+            .map { it.toDomain() }
     }
 
     override suspend fun createReview(review: CheckieReview) = database.withTransaction {

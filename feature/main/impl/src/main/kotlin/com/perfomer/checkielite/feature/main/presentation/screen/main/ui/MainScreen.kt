@@ -66,8 +66,8 @@ import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedFieldDefaults
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRating
+import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
-import com.perfomer.checkielite.common.ui.theme.PreviewTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.main.R
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiState
@@ -328,6 +328,8 @@ internal fun CheckieHorizontalItem(
                     modifier = Modifier.size(24.dp)
                 )
             }
+
+            SyncingBlock(item.isSyncing)
         }
 
         Spacer(modifier = Modifier.width(16.dp))
@@ -364,15 +366,31 @@ internal fun CheckieHorizontalItem(
     }
 }
 
+@Composable
+private fun SyncingBlock(isSyncing: Boolean) {
+    AnimatedVisibility(visible = isSyncing, enter = fadeIn(), exit = fadeOut()) {
+        Box(
+            modifier = Modifier
+                .background(LocalCuiPalette.current.BackgroundPrimary.copy(alpha = 0.5F))
+                .padding(12.dp)
+        ) {
+            CircularProgressIndicator(
+                color = LocalCuiPalette.current.IconPrimary,
+                strokeWidth = 2.dp,
+            )
+        }
+    }
+}
+
 @ScreenPreview
 @Composable
-private fun MainScreenContentPreview() = PreviewTheme {
+private fun MainScreenContentPreview() = CheckieLiteTheme {
     MainScreen(state = mockUiState)
 }
 
 @ScreenPreview
 @Composable
-private fun MainScreenErrorPreview() = PreviewTheme {
+private fun MainScreenErrorPreview() = CheckieLiteTheme {
     MainScreen(state = MainUiState.Error)
 }
 
@@ -385,6 +403,7 @@ internal val mockUiState = MainUiState.Content(
             brand = "Lui Bidon",
             imageUri = "https://habrastorage.org/r/w780/getpro/habr/upload_files/746/2ab/27c/7462ab27cca552ce31ee9cba01387692.jpeg",
             rating = 8,
+            isSyncing = false,
         ),
         ReviewItem(
             id = "2",
@@ -392,6 +411,7 @@ internal val mockUiState = MainUiState.Content(
             brand = "Darkside",
             imageUri = "https://images.unsplash.com/photo-1483129804960-cb1964499894?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
             rating = 0,
+            isSyncing = false,
         ),
         ReviewItem(
             id = "3",
@@ -399,6 +419,7 @@ internal val mockUiState = MainUiState.Content(
             brand = "Key Kesey",
             imageUri = "https://images.unsplash.com/photo-1620447875063-19be4e4604bc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=796&q=80",
             rating = 10,
+            isSyncing = false,
         ),
         ReviewItem(
             id = "4",
@@ -406,6 +427,7 @@ internal val mockUiState = MainUiState.Content(
             brand = null,
             imageUri = "https://images.unsplash.com/photo-1548100535-fe8a16c187ef?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1151&q=80",
             rating = 4,
+            isSyncing = false,
         ),
         ReviewItem(
             id = "5",
@@ -413,6 +435,7 @@ internal val mockUiState = MainUiState.Content(
             brand = null,
             imageUri = null,
             rating = 3,
+            isSyncing = false,
         ),
     )
 )

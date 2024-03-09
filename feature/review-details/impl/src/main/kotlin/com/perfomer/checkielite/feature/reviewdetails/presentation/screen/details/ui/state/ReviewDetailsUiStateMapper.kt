@@ -21,6 +21,7 @@ internal class ReviewDetailsUiStateMapper : UiStateMapper<ReviewDetailsState, Re
                 picturesUri = state.review.content.pictures.map { it.uri }.toPersistentList(),
                 currentPicturePosition = state.currentPicturePosition,
                 reviewText = state.review.content.reviewText,
+                isMenuAvailable = !state.review.content.isSyncing,
             )
 
             is Lce.Loading -> ReviewDetailsUiState.Loading

@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor
 
-import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
@@ -26,7 +25,7 @@ internal class LoadReviewsActor(
     }
 
     private fun handleCommand(command: LoadReviews): Flow<ReviewsLoading> {
-        return flowBy { repository.getCheckies(command.searchQuery) }
+        return repository.getCheckies(command.searchQuery)
             .map { reviews -> ReviewsLoading.Succeed(reviews, command.searchQuery) }
             .startWith(ReviewsLoading.Started)
             .onCatchReturn(ReviewsLoading::Failed)

@@ -4,6 +4,7 @@ import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.feature.reviewcreation.domain.repository.ReviewCreationRepository
+import kotlinx.coroutines.flow.first
 
 internal class ReviewCreationRepositoryImpl(
     private val localDataSource: CheckieLocalDataSource,
@@ -44,6 +45,6 @@ internal class ReviewCreationRepositoryImpl(
     }
 
     override suspend fun getReview(reviewId: String): CheckieReview {
-        return localDataSource.getReview(reviewId)
+        return localDataSource.getReview(reviewId).first()
     }
 }

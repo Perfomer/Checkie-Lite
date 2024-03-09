@@ -6,7 +6,11 @@ import kotlinx.collections.immutable.ImmutableList
 @Immutable
 internal sealed interface ReviewDetailsUiState {
 
-    data object Loading : ReviewDetailsUiState
+    val isMenuAvailable: Boolean
+
+    data object Loading : ReviewDetailsUiState {
+        override val isMenuAvailable: Boolean = false
+    }
 
     data class Content(
         val brandName: String?,
@@ -16,7 +20,10 @@ internal sealed interface ReviewDetailsUiState {
         val picturesUri: ImmutableList<String>,
         val currentPicturePosition: Int,
         val reviewText: String?,
+        override val isMenuAvailable: Boolean,
     ) : ReviewDetailsUiState
 
-    data object Error : ReviewDetailsUiState
+    data object Error : ReviewDetailsUiState {
+        override val isMenuAvailable: Boolean = false
+    }
 }

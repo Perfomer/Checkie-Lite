@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
+import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiState
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ConfirmDeleteDialog
@@ -50,6 +51,7 @@ internal fun ReviewDetailsScreen(
         topBar = {
             ReviewDetailsAppBar(
                 scrollState = scrollState,
+                isMenuAvailable = state.isMenuAvailable,
                 onNavigationIconClick = onNavigationIconClick,
                 onEditClick = onEditClick,
                 onDeleteClick = onDeleteClick,
@@ -141,7 +143,7 @@ private fun Error() {
 
 @ScreenPreview
 @Composable
-private fun ReviewDetailsScreenPreview() {
+private fun ReviewDetailsScreenPreview() = CheckieLiteTheme {
     ReviewDetailsScreen(state = mockUiState)
 }
 
@@ -158,4 +160,5 @@ internal val mockUiState = ReviewDetailsUiState.Content(
     date = "31 May 2023",
     currentPicturePosition = 0,
     reviewText = "Extraordinary. Meets an elite standard by which you judge all other restaurants. The staff is always ready to help, the premises are extremely clean, the atmosphere is lovely, and the food is both delicious and beautifully presented.",
+    isMenuAvailable = true,
 )

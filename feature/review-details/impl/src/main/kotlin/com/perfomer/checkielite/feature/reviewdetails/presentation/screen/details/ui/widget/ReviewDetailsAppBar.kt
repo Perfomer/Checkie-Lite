@@ -1,5 +1,8 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,6 +27,7 @@ import com.perfomer.checkielite.feature.reviewdetails.R
 @OptIn(ExperimentalMaterial3Api::class)
 internal fun ReviewDetailsAppBar(
     scrollState: ScrollableState,
+    isMenuAvailable: Boolean,
     onNavigationIconClick: () -> Unit,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
@@ -40,18 +44,20 @@ internal fun ReviewDetailsAppBar(
             )
         },
         actions = {
-            CuiDropdownIcon {
-                CuiDropdownMenuItem(
-                    text = stringResource(R.string.reviewdetails_action_edit),
-                    iconPainter = painterResource(CommonDrawable.ic_pencil),
-                    onClick = debounced(onEditClick),
-                )
+            AnimatedVisibility(visible = isMenuAvailable, enter = fadeIn(), exit = fadeOut()) {
+                CuiDropdownIcon {
+                    CuiDropdownMenuItem(
+                        text = stringResource(R.string.reviewdetails_action_edit),
+                        iconPainter = painterResource(CommonDrawable.ic_pencil),
+                        onClick = debounced(onEditClick),
+                    )
 
-                CuiDropdownMenuItem(
-                    text = stringResource(R.string.reviewdetails_action_delete),
-                    iconPainter = painterResource(CommonDrawable.ic_delete),
-                    onClick = debounced(onDeleteClick),
-                )
+                    CuiDropdownMenuItem(
+                        text = stringResource(R.string.reviewdetails_action_delete),
+                        iconPainter = painterResource(CommonDrawable.ic_delete),
+                        onClick = debounced(onDeleteClick),
+                    )
+                }
             }
         },
         modifier = Modifier

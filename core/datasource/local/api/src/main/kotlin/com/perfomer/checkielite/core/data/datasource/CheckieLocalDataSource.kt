@@ -2,12 +2,13 @@ package com.perfomer.checkielite.core.data.datasource
 
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
+import kotlinx.coroutines.flow.Flow
 
 interface CheckieLocalDataSource {
 
-    suspend fun getReviews(searchQuery: String = ""): List<CheckieReview>
+    fun getReviews(searchQuery: String = ""): Flow<List<CheckieReview>>
 
-    suspend fun getReview(reviewId: String): CheckieReview
+    fun getReview(reviewId: String): Flow<CheckieReview>
 
     suspend fun createReview(
         productName: String,
@@ -15,7 +16,7 @@ interface CheckieLocalDataSource {
         rating: Int,
         pictures: List<CheckiePicture>,
         reviewText: String?,
-    ) : CheckieReview
+    ): CheckieReview
 
     suspend fun updateReview(
         reviewId: String,
@@ -24,7 +25,7 @@ interface CheckieLocalDataSource {
         rating: Int,
         pictures: List<CheckiePicture>,
         reviewText: String?,
-    ) : CheckieReview
+    ): CheckieReview
 
     suspend fun deleteReview(reviewId: String)
 }

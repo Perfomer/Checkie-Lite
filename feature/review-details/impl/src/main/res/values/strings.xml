@@ -8,4 +8,5 @@
     <string name="reviewdetails_dialog_confirmdelete_title">Delete the review</string>
     <string name="reviewdetails_dialog_confirmdelete_message">Are you sure you want to delete the review?</string>
     <string name="reviewdetails_dialog_confirmdelete_confirm">Delete</string>
+    <string name="reviewdetails_toast_syncing">Try again later. Synchronization is in progress now.</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.actor
 
-import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
@@ -26,7 +25,7 @@ internal class LoadReviewActor(
     }
 
     private fun handleCommand(command: LoadReview): Flow<ReviewLoading> {
-        return flowBy { repository.getReview(command.reviewId) }
+        return repository.getReview(command.reviewId)
             .map(ReviewLoading::Succeed)
             .onCatchReturn(ReviewLoading::Failed)
             .startWith(ReviewLoading.Started)

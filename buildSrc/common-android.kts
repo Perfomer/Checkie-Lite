@@ -28,7 +28,7 @@ android {
         }
 
         release {
-            setMinifyEnabled(false)
+            setMinifyEnabled(true)
             signingConfig = signingConfigs.getByName("debug")
 
             proguardFiles(

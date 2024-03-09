@@ -44,7 +44,7 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
         is OnConfirmDeleteClick -> commands(DeleteReview(state.reviewId))
         is OnEmptyImageClick -> reduceOnEditClick(initialPage = ReviewCreationPage.PRODUCT_INFO)
         is OnEmptyReviewTextClick -> reduceOnEditClick(initialPage = ReviewCreationPage.REVIEW_INFO)
-        is OnEditClick -> reduceOnEditClick(initialPage = ReviewCreationPage.PRODUCT_INFO)
+        is OnEditClick -> reduceOnEditClick(initialPage = ReviewCreationPage.entries.first())
         is OnPictureSelect -> state { copy(currentPicturePosition = event.position) }
         is OnPictureClick -> commands(
             OpenGallery(

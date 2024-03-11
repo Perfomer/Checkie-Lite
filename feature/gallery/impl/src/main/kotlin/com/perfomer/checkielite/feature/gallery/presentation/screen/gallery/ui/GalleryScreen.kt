@@ -162,6 +162,10 @@ private fun PreviewRow(
 ) {
     val lazyListState = rememberLazyListState()
 
+    LaunchedEffect(Unit) {
+        lazyListState.scrollToItem(mainPagerState.currentPage)
+    }
+
     UpdateEffect(mainPagerState.currentPage) {
         lazyListState.animateScrollToItem(mainPagerState.currentPage)
     }

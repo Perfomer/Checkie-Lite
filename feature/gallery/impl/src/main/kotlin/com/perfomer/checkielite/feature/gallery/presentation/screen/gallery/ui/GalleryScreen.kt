@@ -47,7 +47,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -172,13 +171,7 @@ private fun PreviewRow(
 
     Column(
         modifier = Modifier
-            .background(
-                Brush.verticalGradient(
-                    0F to Color.Transparent,
-                    0.75F to GalleryPalette.BarColor,
-                    1F to GalleryPalette.BarColor,
-                )
-            )
+            .background(GalleryPalette.BottomScrim)
             .navigationBarsPadding()
     ) {
         Spacer(Modifier.height(128.dp))
@@ -288,13 +281,7 @@ private fun GalleryTopAppBar(
         modifier = Modifier
             .fillMaxWidth()
             .height(192.dp)
-            .background(
-                Brush.verticalGradient(
-                    0F to GalleryPalette.BarColor,
-                    0.55F to GalleryPalette.BarColor,
-                    1F to Color.Transparent,
-                )
-            )
+            .background(GalleryPalette.TopScrim)
     ) {
         TopAppBar(
             title = { Text(text = title, fontSize = 18.sp) },

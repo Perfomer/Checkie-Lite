@@ -39,6 +39,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.ColorUtils
 import com.perfomer.checkielite.common.ui.cui.modifier.conditional
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
@@ -290,11 +291,10 @@ private fun DrawScope.RatingNumbers(
             val interpolatedOffsetMultiplier = (offsetMultiplier * 1.1F).coerceAtMost(1F)
 
             val offsetY = paddingTop + emojiAdditionalPaddingTop * interpolatedOffsetMultiplier
-            val isEmojiNear = distance.absoluteValue <= EMOJI_SIZE
+            val isEmojiNear = distance.absoluteValue <= EMOJI_SIZE / 2
+            val currentColor = ColorUtils.blendARGB(unselectedTextColor.toArgb(), selectedTextColor.toArgb(), interpolatedOffsetMultiplier)
 
-            paint.color =
-                if (isEmojiNear) selectedTextColor.toArgb()
-                else unselectedTextColor.toArgb()
+            paint.color = currentColor
 
             paint.isFakeBoldText = isEmojiNear
 

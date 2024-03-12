@@ -46,10 +46,12 @@ import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 import com.perfomer.checkielite.common.ui.util.dpToPx
 import com.perfomer.checkielite.common.ui.util.spToPx
+import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
 private val EMOJI_SIZE by lazy { 26.dpToPx() }
 private val TEXT_SIZE by lazy { 14.spToPx() }
+private val TEXT_PADDING_TOP by lazy { 25.spToPx() }
 private val POINT_SIZE by lazy { 7.dpToPx() }
 private val POINT_BORDER_SIZE by lazy { 2.dpToPx() }
 
@@ -278,25 +280,23 @@ private fun DrawScope.RatingNumbers(
     var breakPoint = 0F
     val onePointLength = width / DIVISIONS_AMOUNT
 
-    val paddingTop = 72
-    val emojiPaddingTop = EMOJI_SIZE.toInt() / 2 + paddingTop
-    val offsetRange = (-EMOJI_SIZE)..EMOJI_SIZE
+    val paddingTop = TEXT_PADDING_TOP
+    val emojiAdditionalPaddingTop = EMOJI_SIZE.toInt() / 2
 
     for (number in 0..DIVISIONS_AMOUNT) {
         with(drawContext.canvas.nativeCanvas) {
-            val isEmojiNear = offsetX - breakPoint in offsetRange
+            val distance = offsetX - breakPoint
+            val offsetMultiplier = (EMOJI_SIZE - distance.absoluteValue.coerceAtMost(EMOJI_SIZE)) / EMOJI_SIZE
+            val interpolatedOffsetMultiplier = (offsetMultiplier * 1.1F).coerceAtMost(1F)
 
-            val offsetY =
-                if (isEmojiNear) emojiPaddingTop
-                else paddingTop
+            val offsetY = paddingTop + emojiAdditionalPaddingTop * interpolatedOffsetMultiplier
+            val isEmojiNear = distance.absoluteValue <= EMOJI_SIZE
 
-            paint.apply {
-                color =
-                    if (isEmojiNear) selectedTextColor.toArgb()
-                    else unselectedTextColor.toArgb()
+            paint.color =
+                if (isEmojiNear) selectedTextColor.toArgb()
+                else unselectedTextColor.toArgb()
 
-                isFakeBoldText = isEmojiNear
-            }
+            paint.isFakeBoldText = isEmojiNear
 
             drawText(
                 number.toString(),

@@ -30,6 +30,7 @@ internal class ReviewCreationUiStateMapper(
         return ProductInfoPageUiState(
             productName = state.reviewDetails.productName,
             brand = state.reviewDetails.productBrand,
+            brandSuggestions = state.suggestedBrands.toPersistentList(),
             picturesUri = state.reviewDetails.pictures.map { it.uri }.toPersistentList(),
             productNameErrorText = context.getString(R.string.reviewcreation_productinfo_field_product_error_empty)
                 .takeUnless { state.isProductNameValid },

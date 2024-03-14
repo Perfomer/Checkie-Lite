@@ -15,6 +15,8 @@ internal data class ReviewCreationState(
     val reviewDetails: ReviewDetails = initialReviewDetails,
     val isProductNameValid: Boolean = true,
 
+    val suggestedBrands: List<String> = emptyList(),
+
     val isReviewLoading: Boolean = false,
     val isReviewLoadingFailed: Boolean = false,
 

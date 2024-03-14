@@ -7,6 +7,8 @@ internal sealed interface ReviewCreationCommand {
 
     class LoadReview(val reviewId: String) : ReviewCreationCommand
 
+    class SearchBrands(val query: String) : ReviewCreationCommand
+
     class CreateReview(
         val productName: String,
         val productBrand: String?,

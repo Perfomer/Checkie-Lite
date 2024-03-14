@@ -47,4 +47,8 @@ internal class ReviewCreationRepositoryImpl(
     override suspend fun getReview(reviewId: String): CheckieReview {
         return localDataSource.getReview(reviewId).first()
     }
+
+    override suspend fun searchBrands(query: String): List<String> {
+        return localDataSource.searchBrands(query)
+    }
 }

@@ -6,6 +6,8 @@ internal sealed interface ReviewCreationEvent {
 
     data object Initialize : ReviewCreationEvent
 
+    class BrandsSearchComplete(val brands: List<String>) : ReviewCreationEvent
+
     sealed interface ReviewLoading : ReviewCreationEvent {
         data object Started : ReviewLoading
         class Succeed(val review: CheckieReview) : ReviewLoading

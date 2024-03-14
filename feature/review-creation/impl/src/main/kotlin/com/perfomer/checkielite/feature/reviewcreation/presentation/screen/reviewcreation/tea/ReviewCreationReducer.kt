@@ -10,11 +10,13 @@ import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreation
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.CreateReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadReview
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.SearchBrands
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.UpdateReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowConfirmExitDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowErrorDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.BrandsSearchComplete
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.Initialize
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.ReviewLoading
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.ReviewSaving
@@ -44,6 +46,8 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
 
         is ReviewLoading -> reduceReviewLoading(event)
         is ReviewSaving -> reduceReviewsCreation(event)
+
+        is BrandsSearchComplete -> state { copy(suggestedBrands = event.brands) }
     }
 
     private fun reduceInitialize() {
@@ -114,7 +118,13 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
 
     private fun reduceProductInfoUi(event: ProductInfo) = when (event) {
         is ProductInfo.OnProductNameTextInput -> state { copy(reviewDetails = reviewDetails.copy(productName = event.text)) }
-        is ProductInfo.OnBrandTextInput -> state { copy(reviewDetails = reviewDetails.copy(productBrand = event.text)) }
+        is ProductInfo.OnBrandTextInput -> {
+            state { copy(reviewDetails = reviewDetails.copy(productBrand = event.text)) }
+
+            if (event.text.isBlank()) state { copy(suggestedBrands = emptyList()) }
+            else commands(SearchBrands(event.text.trim()))
+        }
+
         is ProductInfo.OnAddPictureClick -> commands(OpenPhotoPicker)
         is ProductInfo.OnPictureClick -> commands(
             OpenGallery(

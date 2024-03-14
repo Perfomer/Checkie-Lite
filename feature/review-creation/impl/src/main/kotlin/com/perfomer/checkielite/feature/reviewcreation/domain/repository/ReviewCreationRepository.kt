@@ -23,4 +23,6 @@ internal interface ReviewCreationRepository {
     )
 
     suspend fun getReview(reviewId: String): CheckieReview
+
+    suspend fun searchBrands(query: String) : List<String>
 }

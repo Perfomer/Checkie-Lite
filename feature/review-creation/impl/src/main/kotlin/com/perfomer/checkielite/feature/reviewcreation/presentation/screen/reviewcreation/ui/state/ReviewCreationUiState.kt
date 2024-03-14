@@ -21,6 +21,7 @@ internal data class ProductInfoPageUiState(
     val productName: String,
     val productNameErrorText: String?,
     val brand: String,
+    val brandSuggestions: ImmutableList<String>,
     val picturesUri: ImmutableList<String>,
 )
 

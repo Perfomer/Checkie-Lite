@@ -3,6 +3,8 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,18 +24,23 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,8 +54,10 @@ import coil.compose.AsyncImage
 import com.mohamedrejeb.compose.dnd.reorder.ReorderContainer
 import com.mohamedrejeb.compose.dnd.reorder.ReorderableItem
 import com.mohamedrejeb.compose.dnd.reorder.rememberReorderState
+import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
+import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiDropdownMenuItem
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -56,7 +65,7 @@ import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ProductInfoPageUiState
 import kotlinx.collections.immutable.persistentListOf
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 internal fun ProductInfoScreen(
     state: ProductInfoPageUiState,
@@ -68,6 +77,14 @@ internal fun ProductInfoScreen(
     onPictureDeleteClick: (position: Int) -> Unit = {},
     onPictureReorder: (from: Int, to: Int) -> Unit = { _, _ -> },
 ) {
+    val focusManager = LocalFocusManager.current
+    val brandNameInteractionSource = remember { MutableInteractionSource() }
+    val isBrandNameFocused by brandNameInteractionSource.collectIsFocusedAsState()
+
+    var isBrandSuggestionsExpanded by remember(isBrandNameFocused, state.brandSuggestions) {
+        mutableStateOf(isBrandNameFocused && state.brandSuggestions.isNotEmpty())
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -99,15 +116,38 @@ internal fun ProductInfoScreen(
 
         Spacer(Modifier.height(4.dp))
 
-        CuiOutlinedField(
-            text = state.brand,
-            title = stringResource(R.string.reviewcreation_productinfo_field_brand),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                capitalization = KeyboardCapitalization.Sentences,
-            ),
-            onValueChange = onBrandTextInput,
-        )
+        ExposedDropdownMenuBox(
+            expanded = isBrandSuggestionsExpanded,
+            onExpandedChange = { isBrandSuggestionsExpanded = !isBrandSuggestionsExpanded },
+        ) {
+            CuiOutlinedField(
+                text = state.brand,
+                title = stringResource(R.string.reviewcreation_productinfo_field_brand),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    capitalization = KeyboardCapitalization.Sentences,
+                ),
+                onValueChange = onBrandTextInput,
+                interactionSource = brandNameInteractionSource,
+                modifier = Modifier.menuAnchor()
+            )
+
+            ExposedDropdownMenu(
+                expanded = isBrandSuggestionsExpanded,
+                onDismissRequest = { isBrandSuggestionsExpanded = false },
+            ) {
+                state.brandSuggestions.forEach { brand ->
+                    CuiDropdownMenuItem(
+                        text = brand,
+                        onClick = {
+                            onBrandTextInput(brand)
+                            isBrandSuggestionsExpanded = false
+                            focusManager.clearFocus()
+                        },
+                    )
+                }
+            }
+        }
 
         Spacer(Modifier.height(12.dp))
 
@@ -239,6 +279,7 @@ private fun ProductInfoScreenPreview() {
             productName = "Aboba",
             productNameErrorText = null,
             brand = "Abobov",
+            brandSuggestions = emptyPersistentList(),
             picturesUri = persistentListOf(
                 "https://habrastorage.org/r/w780/getpro/habr/upload_files/746/2ab/27c/7462ab27cca552ce31ee9cba01387692.jpeg",
                 "https://images.unsplash.com/photo-1483129804960-cb1964499894?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",

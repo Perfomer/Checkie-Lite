@@ -28,6 +28,10 @@ internal class CheckieLocalDataSourceImpl(
         return databaseDataSource.getReview(reviewId)
     }
 
+    override suspend fun searchBrands(searchQuery: String): List<String> {
+        return databaseDataSource.searchBrands(searchQuery)
+    }
+
     override suspend fun createReview(
         productName: String,
         productBrand: String?,

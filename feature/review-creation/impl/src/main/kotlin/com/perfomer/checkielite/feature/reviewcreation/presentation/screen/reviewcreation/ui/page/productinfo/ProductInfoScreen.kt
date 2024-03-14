@@ -118,7 +118,7 @@ internal fun ProductInfoScreen(
 
         ExposedDropdownMenuBox(
             expanded = isBrandSuggestionsExpanded,
-            onExpandedChange = { isBrandSuggestionsExpanded = !isBrandSuggestionsExpanded },
+            onExpandedChange = { isBrandSuggestionsExpanded = false },
         ) {
             CuiOutlinedField(
                 text = state.brand,

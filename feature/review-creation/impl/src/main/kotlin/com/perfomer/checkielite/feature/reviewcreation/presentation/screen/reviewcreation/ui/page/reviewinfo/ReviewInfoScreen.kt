@@ -14,7 +14,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -38,6 +41,7 @@ internal fun ReviewInfoScreen(
     onReviewTextInput: (String) -> Unit = {},
 ) {
     val focusRequester = remember { FocusRequester() }
+    var reviewTextState by remember { mutableStateOf(state.reviewText) }
 
     LaunchedEffect(Unit) { focusRequester.requestFocus() }
 
@@ -68,12 +72,15 @@ internal fun ReviewInfoScreen(
         Spacer(Modifier.height(24.dp))
 
         CuiOutlinedField(
-            text = state.reviewText,
+            text = reviewTextState,
             title = stringResource(R.string.reviewcreation_reviewinfo_field_review),
             singleLine = false,
             isEnabled = !state.isSaving,
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
-            onValueChange = onReviewTextInput,
+            onValueChange = { value ->
+                reviewTextState = value
+                onReviewTextInput(value)
+            },
             modifier = Modifier.focusRequester(focusRequester)
         )
     }

@@ -138,7 +138,7 @@ private fun ReviewCreationScreenPreview() {
             productInfoState = ProductInfoPageUiState(
                 productName = "",
                 productNameErrorText = null,
-                brand = "",
+                brandName = "",
                 picturesUri = emptyPersistentList(),
             ),
             reviewInfoState = ReviewInfoPageUiState(

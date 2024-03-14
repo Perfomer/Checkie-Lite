@@ -20,7 +20,7 @@ internal data class ReviewCreationUiState(
 internal data class ProductInfoPageUiState(
     val productName: String,
     val productNameErrorText: String?,
-    val brandName: String,
+    val brand: String,
     val picturesUri: ImmutableList<String>,
 )
 

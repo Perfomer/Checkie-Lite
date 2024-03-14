@@ -29,7 +29,7 @@ internal class ReviewCreationUiStateMapper(
     private fun createProductInfoPageState(state: ReviewCreationState): ProductInfoPageUiState {
         return ProductInfoPageUiState(
             productName = state.reviewDetails.productName,
-            brandName = state.reviewDetails.productBrand,
+            brand = state.reviewDetails.productBrand,
             picturesUri = state.reviewDetails.pictures.map { it.uri }.toPersistentList(),
             productNameErrorText = context.getString(R.string.reviewcreation_productinfo_field_product_error_empty)
                 .takeUnless { state.isProductNameValid },

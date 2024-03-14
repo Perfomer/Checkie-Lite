@@ -34,10 +34,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -260,10 +258,8 @@ private fun SearchField(
     onSearchQueryInput: (query: String) -> Unit,
     onSearchQueryClearClick: () -> Unit,
 ) {
-    var searchQueryState by remember { mutableStateOf(searchQuery) }
-
     CuiOutlinedField(
-        text = searchQueryState,
+        text = searchQuery,
         placeholder = stringResource(R.string.main_search),
         trailingIcon = {
             if (searchQuery.isBlank()) {
@@ -287,10 +283,7 @@ private fun SearchField(
             capitalization = KeyboardCapitalization.Sentences
         ),
         singleLine = true,
-        onValueChange = { value ->
-            searchQueryState = value
-            onSearchQueryInput(value)
-        },
+        onValueChange = onSearchQueryInput,
         colors = CuiOutlinedFieldDefaults.colors(
             unfocusedBorderColor = LocalCuiPalette.current.OutlineSecondary,
         ),

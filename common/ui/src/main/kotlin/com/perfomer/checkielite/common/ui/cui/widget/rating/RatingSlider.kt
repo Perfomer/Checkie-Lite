@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -98,6 +99,8 @@ fun RatingSlider(
     val hapticFeedback = LocalHapticFeedback.current
 
     var offsetX by remember { mutableFloatStateOf(0F) }
+    val animatedOffsetX by animateFloatAsState(targetValue = offsetX, label = "OffsetAnimation")
+
     var width by remember { mutableFloatStateOf(0F) }
     var lastSelectedRating by remember(rating) { mutableIntStateOf(rating) }
 
@@ -142,7 +145,7 @@ fun RatingSlider(
             }
     ) {
         RatingSlideCanvas(
-            offsetX = offsetX,
+            offsetX = animatedOffsetX,
             lastSelectedRating = lastSelectedRating,
             colors = colors,
         )

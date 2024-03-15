@@ -81,9 +81,12 @@ internal fun ProductInfoScreen(
     val brandNameInteractionSource = remember { MutableInteractionSource() }
     val isBrandNameFocused by brandNameInteractionSource.collectIsFocusedAsState()
 
-    var isBrandSuggestionsExpanded by remember(isBrandNameFocused, state.brandSuggestions) {
-        mutableStateOf(isBrandNameFocused && state.brandSuggestions.isNotEmpty())
+    var isBrandSuggestionsExpandRequested by remember(state.brand) { mutableStateOf(true) }
+    val isBrandSuggestionsCanBeExpanded by remember(state.brandSuggestions) {
+        derivedStateOf { isBrandNameFocused && state.brandSuggestions.isNotEmpty() }
     }
+
+    val isBrandSuggestionsExpanded = isBrandSuggestionsCanBeExpanded && isBrandSuggestionsExpandRequested
 
     Column(
         modifier = Modifier
@@ -118,7 +121,7 @@ internal fun ProductInfoScreen(
 
         ExposedDropdownMenuBox(
             expanded = isBrandSuggestionsExpanded,
-            onExpandedChange = { isBrandSuggestionsExpanded = false },
+            onExpandedChange = { shouldExpand -> isBrandSuggestionsExpandRequested = shouldExpand },
         ) {
             CuiOutlinedField(
                 text = state.brand,
@@ -134,14 +137,14 @@ internal fun ProductInfoScreen(
 
             ExposedDropdownMenu(
                 expanded = isBrandSuggestionsExpanded,
-                onDismissRequest = { isBrandSuggestionsExpanded = false },
+                onDismissRequest = { isBrandSuggestionsExpandRequested = false },
             ) {
                 state.brandSuggestions.forEach { brand ->
                     CuiDropdownMenuItem(
                         text = brand,
                         onClick = {
                             onBrandTextInput(brand)
-                            isBrandSuggestionsExpanded = false
+                            isBrandSuggestionsExpandRequested = false
                             focusManager.clearFocus()
                         },
                     )

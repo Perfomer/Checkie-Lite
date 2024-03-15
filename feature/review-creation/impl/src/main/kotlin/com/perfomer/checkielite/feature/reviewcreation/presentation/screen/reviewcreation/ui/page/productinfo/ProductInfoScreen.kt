@@ -4,7 +4,6 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,22 +24,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -57,15 +52,16 @@ import com.mohamedrejeb.compose.dnd.reorder.rememberReorderState
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
-import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiDropdownMenuItem
+import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiSuggestionsBox
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ProductInfoPageUiState
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ProductInfoScreen(
     state: ProductInfoPageUiState,
@@ -77,16 +73,7 @@ internal fun ProductInfoScreen(
     onPictureDeleteClick: (position: Int) -> Unit = {},
     onPictureReorder: (from: Int, to: Int) -> Unit = { _, _ -> },
 ) {
-    val focusManager = LocalFocusManager.current
     val brandNameInteractionSource = remember { MutableInteractionSource() }
-    val isBrandNameFocused by brandNameInteractionSource.collectIsFocusedAsState()
-
-    var isBrandSuggestionsExpandRequested by remember(state.brand) { mutableStateOf(true) }
-    val isBrandSuggestionsCanBeExpanded by remember(state.brandSuggestions) {
-        derivedStateOf { isBrandNameFocused && state.brandSuggestions.isNotEmpty() }
-    }
-
-    val isBrandSuggestionsExpanded = isBrandSuggestionsCanBeExpanded && isBrandSuggestionsExpandRequested
 
     Column(
         modifier = Modifier
@@ -119,9 +106,11 @@ internal fun ProductInfoScreen(
 
         Spacer(Modifier.height(4.dp))
 
-        ExposedDropdownMenuBox(
-            expanded = isBrandSuggestionsExpanded,
-            onExpandedChange = { shouldExpand -> isBrandSuggestionsExpandRequested = shouldExpand },
+        CuiSuggestionsBox(
+            currentValue = state.brand,
+            suggestions = state.brandSuggestions,
+            contentInteractionSource = brandNameInteractionSource,
+            onSuggestionSelected = onBrandTextInput
         ) {
             CuiOutlinedField(
                 text = state.brand,
@@ -134,65 +123,68 @@ internal fun ProductInfoScreen(
                 interactionSource = brandNameInteractionSource,
                 modifier = Modifier.menuAnchor()
             )
-
-            ExposedDropdownMenu(
-                expanded = isBrandSuggestionsExpanded,
-                onDismissRequest = { isBrandSuggestionsExpandRequested = false },
-            ) {
-                state.brandSuggestions.forEach { brand ->
-                    CuiDropdownMenuItem(
-                        text = brand,
-                        onClick = {
-                            onBrandTextInput(brand)
-                            isBrandSuggestionsExpandRequested = false
-                            focusManager.clearFocus()
-                        },
-                    )
-                }
-            }
         }
 
         Spacer(Modifier.height(12.dp))
 
-        val reorderState = rememberReorderState<String>(dragAfterLongPress = true)
-        val hapticFeedback = LocalHapticFeedback.current
+        PicturesFlowRow(
+            picturesUri = state.picturesUri,
+            onAddPictureClick = onAddPictureClick,
+            onPictureClick = onPictureClick,
+            onPictureDeleteClick = onPictureDeleteClick,
+            onPictureReorder = onPictureReorder,
+        )
+    }
+}
 
-        val isDragging by remember { derivedStateOf { reorderState.draggedItem != null } }
-        UpdateEffect(isDragging) {
-            if (isDragging) {
-                hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-            }
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun PicturesFlowRow(
+    picturesUri: ImmutableList<String>,
+    onAddPictureClick: () -> Unit,
+    onPictureClick: (position: Int) -> Unit,
+    onPictureDeleteClick: (position: Int) -> Unit,
+    onPictureReorder: (from: Int, to: Int) -> Unit,
+) {
+    val reorderState = rememberReorderState<String>(dragAfterLongPress = true)
+    val hapticFeedback = LocalHapticFeedback.current
+
+    val isDragging by remember { derivedStateOf { reorderState.draggedItem != null } }
+
+    UpdateEffect(isDragging) {
+        if (isDragging) {
+            hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
         }
+    }
 
-        ReorderContainer(state = reorderState) {
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Box {
-                    AddPicture(
-                        onClick = onAddPictureClick,
-                        modifier = Modifier
-                    )
-                }
+    ReorderContainer(state = reorderState) {
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Box {
+                AddPicture(
+                    onClick = onAddPictureClick,
+                    modifier = Modifier
+                )
+            }
 
-                state.picturesUri.forEachIndexed { i, pictureUri ->
-                    key(pictureUri) {
-                        DeletableItem(
-                            onDeletePictureClick = { onPictureDeleteClick(i) },
+            picturesUri.forEachIndexed { i, pictureUri ->
+                key(pictureUri) {
+                    DeletableItem(
+                        onDeletePictureClick = { onPictureDeleteClick(i) },
+                    ) {
+                        ReorderableItem(
+                            state = reorderState,
+                            key = i,
+                            data = pictureUri,
+                            onDrop = { draggedItem -> onPictureReorder(i, draggedItem.key as Int) },
                         ) {
-                            ReorderableItem(
-                                state = reorderState,
-                                key = i,
-                                data = pictureUri,
-                                onDrop = { draggedItem -> onPictureReorder(i, draggedItem.key as Int) },
-                            ) {
-                                Picture(
-                                    pictureUrl = pictureUri,
-                                    onClick = { onPictureClick(i) },
-                                )
-                            }
+                            Picture(
+                                pictureUrl = pictureUri,
+                                onClick = { onPictureClick(i) },
+                            )
                         }
                     }
                 }

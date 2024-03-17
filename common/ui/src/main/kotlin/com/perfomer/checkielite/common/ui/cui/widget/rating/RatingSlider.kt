@@ -21,9 +21,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -98,8 +100,10 @@ fun RatingSlider(
 ) {
     val hapticFeedback = LocalHapticFeedback.current
 
+    var shouldAnimateOffset by remember { mutableStateOf(false) }
     var offsetX by remember { mutableFloatStateOf(0F) }
     val animatedOffsetX by animateFloatAsState(targetValue = offsetX, label = "OffsetAnimation")
+    val actualOffset = if (shouldAnimateOffset) animatedOffsetX else offsetX
 
     var width by remember { mutableFloatStateOf(0F) }
     var lastSelectedRating by remember(rating) { mutableIntStateOf(rating) }
@@ -126,16 +130,20 @@ fun RatingSlider(
                     }
                 },
                 onDragStarted = { touch ->
+                    shouldAnimateOffset = false
                     offsetX = touch.x.coerceIn(0F, width)
                 },
                 onDragStopped = {
                     offsetX = getOffset(lastSelectedRating, width)
                     onRatingChange(lastSelectedRating)
+                    shouldAnimateOffset = true
                 }
             )
             .conditional(isEnabled) {
                 pointerInput(Unit) {
                     detectTapGestures { touch ->
+                        shouldAnimateOffset = true
+
                         lastSelectedRating = getRating(touch.x, width)
                         offsetX = getOffset(lastSelectedRating, width)
                         onRatingChange(lastSelectedRating)
@@ -145,7 +153,7 @@ fun RatingSlider(
             }
     ) {
         RatingSlideCanvas(
-            offsetX = animatedOffsetX,
+            offsetX = actualOffset,
             lastSelectedRating = lastSelectedRating,
             colors = colors,
         )
@@ -158,7 +166,7 @@ private fun RatingSlideCanvas(
     lastSelectedRating: Int,
     colors: RatingSliderColors,
 ) {
-    val ratingPaint = remember {
+    val ratingNumberTextPaint = remember {
         Paint().apply {
             textSize = TEXT_SIZE
             textAlign = Paint.Align.CENTER
@@ -166,8 +174,10 @@ private fun RatingSlideCanvas(
     }
 
     val context = LocalContext.current
-    val reviewReaction = remember(lastSelectedRating) { ReviewReaction.createFromRating(lastSelectedRating) }
-    val bitmap = remember(reviewReaction) {
+    val reviewReaction by remember(lastSelectedRating) {
+        derivedStateOf { ReviewReaction.createFromRating(lastSelectedRating) }
+    }
+    val reactionBitmap = remember(reviewReaction) {
         (AppCompatResources.getDrawable(context, reviewReaction.drawable) as BitmapDrawable).bitmap
     }
 
@@ -183,13 +193,13 @@ private fun RatingSlideCanvas(
 
         RatingNumbers(
             offsetX = offsetX,
-            paint = ratingPaint,
+            paint = ratingNumberTextPaint,
             selectedTextColor = colors.selectedTextColor,
             unselectedTextColor = colors.unselectedTextColor,
         )
 
         SlidingEmoji(
-            emoji = bitmap,
+            emoji = reactionBitmap,
             offsetX = offsetX,
             pointBackgroundColor = colors.pointBackgroundColor,
             pointEmojiBorderColor = colors.pointEmojiBorderColor,

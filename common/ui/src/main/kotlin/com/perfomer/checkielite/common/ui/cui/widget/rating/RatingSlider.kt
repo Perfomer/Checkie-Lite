@@ -102,13 +102,13 @@ fun RatingSlider(
 ) {
     val hapticFeedback = LocalHapticFeedback.current
 
-    var shouldAnimateOffset by remember { mutableStateOf(false) }
+    var width by remember { mutableFloatStateOf(0F) }
+    var lastSelectedRating by remember(rating) { mutableIntStateOf(rating) }
+
+    var shouldAnimateOffset by remember(width) { mutableStateOf(false) }
     var offsetX by remember { mutableFloatStateOf(0F) }
     val animatedOffsetX by animateFloatAsState(targetValue = offsetX, label = "OffsetAnimation")
     val actualOffset = if (shouldAnimateOffset) animatedOffsetX else offsetX
-
-    var width by remember { mutableFloatStateOf(0F) }
-    var lastSelectedRating by remember(rating) { mutableIntStateOf(rating) }
 
     Box(
         modifier = modifier
@@ -132,13 +132,12 @@ fun RatingSlider(
                     }
                 },
                 onDragStarted = { touch ->
-                    shouldAnimateOffset = false
+                    shouldAnimateOffset = true
                     offsetX = touch.x.coerceIn(0F, width)
                 },
                 onDragStopped = {
                     offsetX = getOffset(lastSelectedRating, width)
                     onRatingChange(lastSelectedRating)
-                    shouldAnimateOffset = true
                 }
             )
             .conditional(isEnabled) {

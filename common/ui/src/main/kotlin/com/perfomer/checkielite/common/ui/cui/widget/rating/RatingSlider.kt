@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
@@ -49,6 +50,7 @@ import com.perfomer.checkielite.common.ui.theme.CuiPalette
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 import com.perfomer.checkielite.common.ui.util.dpToPx
+import com.perfomer.checkielite.common.ui.util.rememberTypeface
 import com.perfomer.checkielite.common.ui.util.spToPx
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
@@ -166,10 +168,13 @@ private fun RatingSlideCanvas(
     lastSelectedRating: Int,
     colors: RatingSliderColors,
 ) {
+    val typeface = rememberTypeface(MaterialTheme.typography.bodyMedium)
+
     val ratingNumberTextPaint = remember {
         Paint().apply {
             textSize = TEXT_SIZE
             textAlign = Paint.Align.CENTER
+            setTypeface(typeface)
         }
     }
 

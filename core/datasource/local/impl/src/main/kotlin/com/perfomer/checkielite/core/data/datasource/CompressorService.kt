@@ -60,6 +60,8 @@ internal class CompressorService : Service() {
 
         databaseDataSource.updatePictures(compressedPicturesUri)
         databaseDataSource.updateSyncing(reviewId, false)
+
+        stopSelf()
     }
 
     override fun onDestroy() {

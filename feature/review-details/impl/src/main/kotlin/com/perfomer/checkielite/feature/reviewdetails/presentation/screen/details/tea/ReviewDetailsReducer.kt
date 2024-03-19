@@ -16,6 +16,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent.ReviewLoading
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.Exit
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenGallery
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenReviewEdit
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsState
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent
@@ -27,6 +28,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnEmptyReviewTextClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnPictureClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnPictureSelect
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnRecommendationClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnStart
 
 internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDetailsEffect, ReviewDetailsEvent, ReviewDetailsState>() {
@@ -45,10 +47,11 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
         is OnEmptyImageClick -> reduceOnEditClick(initialPage = ReviewCreationPage.PRODUCT_INFO)
         is OnEmptyReviewTextClick -> reduceOnEditClick(initialPage = ReviewCreationPage.REVIEW_INFO)
         is OnEditClick -> reduceOnEditClick(initialPage = ReviewCreationPage.entries.first())
+        is OnRecommendationClick -> commands(OpenReviewDetails(event.recommendedReviewId))
         is OnPictureSelect -> state { copy(currentPicturePosition = event.position) }
         is OnPictureClick -> commands(
             OpenGallery(
-                picturesUri = state.review.requireContent().pictures.map { it.uri },
+                picturesUri = state.review.requireContent().review.pictures.map { it.uri },
                 currentPicturePosition = state.currentPicturePosition,
             )
         )
@@ -56,7 +59,7 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
 
     private fun reduceReviewLoading(event: ReviewLoading) = when (event) {
         is ReviewLoading.Started -> state { copy(review = state.review.toLoadingContentAware()) }
-        is ReviewLoading.Succeed -> state { copy(review = Lce.Content(event.review)) }
+        is ReviewLoading.Succeed -> state { copy(review = Lce.Content(event.details)) }
         is ReviewLoading.Failed -> state { copy(review = Lce.Error()) }
     }
 
@@ -67,7 +70,7 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
     }
 
     private fun reduceOnEditClick(initialPage: ReviewCreationPage) {
-        if (state.review.requireContent().isSyncing) {
+        if (state.review.requireContent().review.isSyncing) {
             effects(ShowSyncingToast)
         } else {
             commands(OpenReviewEdit(reviewId = state.reviewId, initialPage = initialPage))

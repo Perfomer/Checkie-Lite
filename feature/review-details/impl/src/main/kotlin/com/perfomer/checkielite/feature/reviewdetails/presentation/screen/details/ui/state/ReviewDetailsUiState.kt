@@ -20,6 +20,7 @@ internal sealed interface ReviewDetailsUiState {
         val picturesUri: ImmutableList<String>,
         val currentPicturePosition: Int,
         val reviewText: String?,
+        val recommendations: ImmutableList<RecommendedReview>,
         override val isMenuAvailable: Boolean,
     ) : ReviewDetailsUiState
 
@@ -27,3 +28,12 @@ internal sealed interface ReviewDetailsUiState {
         override val isMenuAvailable: Boolean = false
     }
 }
+
+internal data class RecommendedReview(
+    val reviewId: String,
+    val brandName: String?,
+    val productName: String,
+    val pictureUri: String?,
+    val rating: Int,
+    val isSyncing: Boolean,
+)

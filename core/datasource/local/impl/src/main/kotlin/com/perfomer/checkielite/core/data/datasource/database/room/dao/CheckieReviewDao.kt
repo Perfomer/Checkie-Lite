@@ -30,6 +30,16 @@ internal interface CheckieReviewDao {
     fun getReviewsByQuery(query: String): Flow<List<CheckieReviewDetailedDb>>
 
     @Transaction
+    @Query(
+        """
+        SELECT * FROM CheckieReviewDb
+        WHERE brandName = :brand
+        ORDER BY modificationDate DESC
+        """
+    )
+    fun getReviewsByBrand(brand: String): Flow<List<CheckieReviewDetailedDb>>
+
+    @Transaction
     @Query("SELECT * FROM CheckieReviewDb WHERE id = :id")
     fun getReview(id: String): Flow<CheckieReviewDetailedDb>
 

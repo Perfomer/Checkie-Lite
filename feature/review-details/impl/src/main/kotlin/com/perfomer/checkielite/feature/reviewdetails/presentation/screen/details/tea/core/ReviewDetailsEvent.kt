@@ -1,13 +1,11 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core
 
-import com.perfomer.checkielite.core.entity.CheckieReview
-
 internal sealed interface ReviewDetailsEvent {
 
     sealed interface ReviewLoading : ReviewDetailsEvent {
 
         data object Started : ReviewLoading
-        class Succeed(val review: CheckieReview) : ReviewLoading
+        class Succeed(val details: ReviewDetails) : ReviewLoading
         class Failed(val error: Throwable) : ReviewLoading
     }
 
@@ -38,4 +36,6 @@ internal sealed interface ReviewDetailsUiEvent : ReviewDetailsEvent {
     data object OnDeleteClick : ReviewDetailsUiEvent
 
     data object OnConfirmDeleteClick : ReviewDetailsUiEvent
+
+    class OnRecommendationClick(val recommendedReviewId: String) : ReviewDetailsUiEvent
 }

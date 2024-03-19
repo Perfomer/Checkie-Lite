@@ -322,7 +322,7 @@ internal fun CheckieHorizontalItem(
                 )
             } else {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_image),
+                    painter = painterResource(id = CommonDrawable.ic_image),
                     tint = LocalCuiPalette.current.IconTertiary,
                     contentDescription = null,
                     modifier = Modifier.size(24.dp)

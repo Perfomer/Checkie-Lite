@@ -14,9 +14,11 @@ internal interface DatabaseDataSource {
 
     fun getReviews(searchQuery: String = ""): Flow<List<CheckieReview>>
 
+    fun getReviewsByBrand(brand: String): Flow<List<CheckieReview>>
+
     fun getReview(reviewId: String): Flow<CheckieReview>
 
-    suspend fun searchBrands(searchQuery: String) : List<String>
+    suspend fun searchBrands(searchQuery: String): List<String>
 
     suspend fun createReview(review: CheckieReview)
 
@@ -51,6 +53,11 @@ internal class DatabaseDataSourceImpl(
         }
 
         return reviews.map { reviewDb -> reviewDb.map { it.toDomain() } }
+    }
+
+    override fun getReviewsByBrand(brand: String): Flow<List<CheckieReview>> {
+        return checkieReviewDao.getReviewsByBrand(brand)
+            .map { reviewDb -> reviewDb.map { it.toDomain() } }
     }
 
     override fun getReview(reviewId: String): Flow<CheckieReview> {

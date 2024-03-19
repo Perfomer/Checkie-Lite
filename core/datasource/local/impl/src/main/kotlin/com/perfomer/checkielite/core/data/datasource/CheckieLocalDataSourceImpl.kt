@@ -24,6 +24,10 @@ internal class CheckieLocalDataSourceImpl(
         return databaseDataSource.getReviews(searchQuery)
     }
 
+    override fun getReviewsByBrand(brand: String): Flow<List<CheckieReview>> {
+        return databaseDataSource.getReviewsByBrand(brand)
+    }
+
     override fun getReview(reviewId: String): Flow<CheckieReview> {
         return databaseDataSource.getReview(reviewId)
     }

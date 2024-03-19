@@ -8,9 +8,11 @@ interface CheckieLocalDataSource {
 
     fun getReviews(searchQuery: String = ""): Flow<List<CheckieReview>>
 
+    fun getReviewsByBrand(brand: String): Flow<List<CheckieReview>>
+
     fun getReview(reviewId: String): Flow<CheckieReview>
 
-    suspend fun searchBrands(searchQuery: String) : List<String>
+    suspend fun searchBrands(searchQuery: String): List<String>
 
     suspend fun createReview(
         productName: String,

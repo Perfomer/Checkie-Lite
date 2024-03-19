@@ -36,6 +36,7 @@ internal fun createReviewDetailsStore(
     reviewDetailsRepository: ReviewDetailsRepository,
     router: Router,
     reviewCreationScreenProvider: ReviewCreationScreenProvider,
+    reviewDetailsScreenProvider: ReviewDetailsScreenProvider,
     galleryScreenProvider: GalleryScreenProvider,
 ): ReviewDetailsStore {
     return ReviewDetailsStore(
@@ -43,7 +44,7 @@ internal fun createReviewDetailsStore(
         reducer = ReviewDetailsReducer(),
         uiStateMapper = ReviewDetailsUiStateMapper(),
         actors = setOf(
-            ReviewDetailsNavigationActor(router, reviewCreationScreenProvider, galleryScreenProvider),
+            ReviewDetailsNavigationActor(router, reviewCreationScreenProvider, reviewDetailsScreenProvider, galleryScreenProvider),
             LoadReviewActor(reviewDetailsRepository),
             DeleteReviewActor(reviewDetailsRepository),
         ),

@@ -5,6 +5,11 @@ import com.perfomer.checkielite.core.entity.CheckieReview
 
 internal data class ReviewDetailsState(
     val reviewId: String,
-    val review: Lce<CheckieReview> = Lce.initial(),
+    val review: Lce<ReviewDetails> = Lce.initial(),
     val currentPicturePosition: Int = 0,
+)
+
+internal data class ReviewDetails(
+    val review: CheckieReview,
+    val recommendations: List<CheckieReview>,
 )

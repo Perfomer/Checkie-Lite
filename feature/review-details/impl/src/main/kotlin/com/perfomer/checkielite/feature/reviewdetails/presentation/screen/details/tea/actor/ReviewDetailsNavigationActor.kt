@@ -9,11 +9,14 @@ import com.perfomer.checkielite.feature.gallery.navigation.GalleryScreenProvider
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationScreenProvider
+import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsParams
+import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsScreenProvider
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.Exit
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenGallery
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenReviewEdit
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -25,6 +28,7 @@ import kotlinx.coroutines.flow.mapLatest
 internal class ReviewDetailsNavigationActor(
     private val router: Router,
     private val reviewCreationScreenProvider: ReviewCreationScreenProvider,
+    private val reviewDetailsScreenProvider: ReviewDetailsScreenProvider,
     private val galleryScreenProvider: GalleryScreenProvider,
 ) : Actor<ReviewDetailsCommand, ReviewDetailsEvent> {
 
@@ -43,6 +47,11 @@ internal class ReviewDetailsNavigationActor(
             is OpenReviewEdit -> {
                 val params = ReviewCreationParams(mode = ReviewCreationMode.Modification(reviewId = command.reviewId, initialPage = command.initialPage))
                 navigate(reviewCreationScreenProvider(params))
+            }
+
+            is OpenReviewDetails -> {
+                val params = ReviewDetailsParams(reviewId = command.reviewId)
+                navigate(reviewDetailsScreenProvider(params))
             }
 
             is OpenGallery -> {

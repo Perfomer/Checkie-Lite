@@ -23,11 +23,13 @@ import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.RecommendedReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiState
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ConfirmDeleteDialog
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsAppBar
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsHeader
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsImage
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsRecommendations
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsText
 import kotlinx.collections.immutable.persistentListOf
 
@@ -44,6 +46,7 @@ internal fun ReviewDetailsScreen(
     onEmptyImageClick: () -> Unit = {},
     onEmptyReviewTextClick: () -> Unit = {},
     onPageChange: (pageIndex: Int) -> Unit = {},
+    onRecommendationClick: (recommendedReviewId: String) -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
 
@@ -68,7 +71,9 @@ internal fun ReviewDetailsScreen(
                 onEmptyImageClick = onEmptyImageClick,
                 onEmptyReviewTextClick = onEmptyReviewTextClick,
                 onPageChange = onPageChange,
+                onRecommendationClick = onRecommendationClick,
             )
+
             is ReviewDetailsUiState.Error -> Error()
 
         }
@@ -101,6 +106,7 @@ private fun Content(
     onEmptyImageClick: () -> Unit,
     onEmptyReviewTextClick: () -> Unit,
     onPageChange: (pageIndex: Int) -> Unit,
+    onRecommendationClick: (recommendedReviewId: String) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -128,6 +134,11 @@ private fun Content(
         ReviewDetailsText(
             reviewText = state.reviewText,
             onEmptyReviewTextClick = onEmptyReviewTextClick,
+        )
+
+        ReviewDetailsRecommendations(
+            recommendations = state.recommendations,
+            onRecommendationClick = onRecommendationClick,
         )
     }
 }
@@ -161,4 +172,7 @@ internal val mockUiState = ReviewDetailsUiState.Content(
     currentPicturePosition = 0,
     reviewText = "Extraordinary. Meets an elite standard by which you judge all other restaurants. The staff is always ready to help, the premises are extremely clean, the atmosphere is lovely, and the food is both delicious and beautifully presented.",
     isMenuAvailable = true,
+    recommendations = persistentListOf(
+        RecommendedReview("", "DARKSIDE", "Lemonblast", null, 10, false),
+    )
 )

@@ -2,6 +2,7 @@ package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detai
 
 import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
+import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsState
 import kotlinx.collections.immutable.toPersistentList
 import java.text.SimpleDateFormat
@@ -13,19 +14,36 @@ internal class ReviewDetailsUiStateMapper : UiStateMapper<ReviewDetailsState, Re
 
     override fun map(state: ReviewDetailsState): ReviewDetailsUiState {
         return when (state.review) {
-            is Lce.Content -> ReviewDetailsUiState.Content(
-                brandName = state.review.content.productBrand?.uppercase(),
-                productName = state.review.content.productName,
-                date = dateFormat.format(state.review.content.creationDate),
-                rating = state.review.content.rating,
-                picturesUri = state.review.content.pictures.map { it.uri }.toPersistentList(),
-                currentPicturePosition = state.currentPicturePosition,
-                reviewText = state.review.content.reviewText,
-                isMenuAvailable = !state.review.content.isSyncing,
-            )
+            is Lce.Content -> {
+                val content = state.review.content
+                val review = content.review
+
+                ReviewDetailsUiState.Content(
+                    brandName = review.productBrand?.uppercase(),
+                    productName = review.productName,
+                    date = dateFormat.format(review.creationDate),
+                    rating = review.rating,
+                    picturesUri = review.pictures.map { it.uri }.toPersistentList(),
+                    currentPicturePosition = state.currentPicturePosition,
+                    reviewText = review.reviewText,
+                    isMenuAvailable = !review.isSyncing,
+                    recommendations = content.recommendations.map { it.toRecommendation() }.toPersistentList(),
+                )
+            }
 
             is Lce.Loading -> ReviewDetailsUiState.Loading
             is Lce.Error -> ReviewDetailsUiState.Error
         }
+    }
+
+    private fun CheckieReview.toRecommendation(): RecommendedReview {
+        return RecommendedReview(
+            reviewId = id,
+            brandName = productBrand?.uppercase(),
+            productName = productName,
+            pictureUri = pictures.firstOrNull()?.uri,
+            rating = rating,
+            isSyncing = isSyncing,
+        )
     }
 }

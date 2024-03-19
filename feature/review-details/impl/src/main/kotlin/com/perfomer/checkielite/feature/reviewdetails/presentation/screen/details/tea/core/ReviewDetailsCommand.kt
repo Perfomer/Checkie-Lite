@@ -18,6 +18,8 @@ internal sealed interface ReviewDetailsNavigationCommand : ReviewDetailsCommand 
         val initialPage: ReviewCreationPage,
     ) : ReviewDetailsNavigationCommand
 
+    class OpenReviewDetails(val reviewId: String) : ReviewDetailsNavigationCommand
+
     class OpenGallery(
         val picturesUri: List<String>,
         val currentPicturePosition: Int,

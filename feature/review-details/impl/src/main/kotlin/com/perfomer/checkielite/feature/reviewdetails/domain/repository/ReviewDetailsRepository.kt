@@ -7,5 +7,7 @@ internal interface ReviewDetailsRepository {
 
     fun getReview(reviewId: String): Flow<CheckieReview>
 
+    fun getRecommendations(reviewId: String) : Flow<List<CheckieReview>>
+
     suspend fun deleteReview(reviewId: String)
 }

@@ -53,6 +53,7 @@ private val LightAndroidColorScheme = lightColorScheme(
     onError = CuiPalette.Light.BackgroundPrimary,
     primaryContainer = CuiPalette.Light.BackgroundAccentPrimary,
     onPrimaryContainer = CuiPalette.Light.BackgroundPrimary,
+    outlineVariant = CuiPalette.Light.OutlineSecondary,
 )
 
 private val DarkAndroidColorScheme = darkColorScheme(
@@ -68,4 +69,5 @@ private val DarkAndroidColorScheme = darkColorScheme(
     onError = CuiPalette.Dark.BackgroundPrimary,
     primaryContainer = CuiPalette.Dark.BackgroundAccentPrimary,
     onPrimaryContainer = CuiPalette.Dark.BackgroundPrimary,
+    outlineVariant = CuiPalette.Light.OutlineSecondary,
 )

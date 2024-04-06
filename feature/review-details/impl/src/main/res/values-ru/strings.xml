@@ -10,4 +10,8 @@
     <string name="reviewdetails_dialog_confirmdelete_confirm">Удалить</string>
     <string name="reviewdetails_toast_syncing">Попробуйте позже. Сейчас идёт синхронизация.</string>
     <string name="reviewdetails_recommendations">Рекомендации</string>
+    <string name="reviewdetails_review">Отзыв</string>
+    <string name="reviewdetails_comment">Комментарий</string>
+    <string name="reviewdetails_advantages">Достоинства</string>
+    <string name="reviewdetails_disadvantages">Недостатки</string>
 </resources>

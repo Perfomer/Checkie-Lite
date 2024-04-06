@@ -27,10 +27,12 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiState
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ConfirmDeleteDialog
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsAppBar
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsCommentHeader
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsHeader
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsImage
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsRecommendations
-import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsText
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsTextCard
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsTextEmptyCard
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
@@ -131,10 +133,16 @@ private fun Content(
 
         Spacer(Modifier.height(24.dp))
 
-        ReviewDetailsText(
-            reviewText = state.reviewText,
-            onEmptyReviewTextClick = onEmptyReviewTextClick,
-        )
+        if (state.reviewText != null) {
+            ReviewDetailsTextCard(
+                text = state.reviewText,
+                header = { ReviewDetailsCommentHeader() },
+            )
+        } else {
+            ReviewDetailsTextEmptyCard(
+                onClick = onEmptyReviewTextClick,
+            )
+        }
 
         ReviewDetailsRecommendations(
             recommendations = state.recommendations,

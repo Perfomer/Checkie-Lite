@@ -17,7 +17,7 @@ import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 fun CuiSecondaryButton(
     text: String,
     modifier: Modifier = Modifier,
-    activeButtonColor: Color = LocalCuiPalette.current.BackgroundPositive,
+    activeButtonColor: Color = LocalCuiPalette.current.BackgroundPositivePrimary,
     elevation: ButtonElevation = ButtonDefaults.buttonElevation(
         defaultElevation = 12.dp,
         pressedElevation = 0.dp,

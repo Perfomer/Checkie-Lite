@@ -94,7 +94,7 @@ internal fun ReviewCreationScreen(
                 .padding(horizontal = 20.dp)
         ) {
             val isLastPage = pagerState.currentPage == pagerState.pageCount - 1
-            val targetButtonColor = if (isLastPage) LocalCuiPalette.current.BackgroundPositive else LocalCuiPalette.current.BackgroundAccentPrimary
+            val targetButtonColor = if (isLastPage) LocalCuiPalette.current.BackgroundPositivePrimary else LocalCuiPalette.current.BackgroundAccentPrimary
             val animatedColor by animateColorAsState(
                 targetValue = targetButtonColor,
                 animationSpec = tween(durationMillis = 250),

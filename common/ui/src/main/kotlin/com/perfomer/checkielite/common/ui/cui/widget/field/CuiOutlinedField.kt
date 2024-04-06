@@ -27,7 +27,7 @@ object CuiOutlinedFieldDefaults {
     @Composable
     fun colors(
         unfocusedBorderColor: Color = LocalCuiPalette.current.OutlinePrimary,
-        errorBorderColor: Color = LocalCuiPalette.current.BackgroundNegative,
+        errorBorderColor: Color = LocalCuiPalette.current.BackgroundNegativePrimary,
         focusedLabelColor: Color = LocalCuiPalette.current.TextAccent,
         unfocusedLabelColor: Color = LocalCuiPalette.current.TextSecondary,
         unfocusedPlaceholderColor: Color = LocalCuiPalette.current.TextSecondary,

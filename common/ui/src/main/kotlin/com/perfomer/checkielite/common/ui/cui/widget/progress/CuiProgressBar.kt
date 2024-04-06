@@ -23,11 +23,11 @@ private const val ANIMATION_DURATION_MS = 500
 
 @Composable
 fun CuiProgressBar(
-	progress: Float,
-	modifier: Modifier = Modifier,
-	backgroundColor: Color = LocalCuiPalette.current.BackgroundSecondary,
-	progressColor: Color = LocalCuiPalette.current.BackgroundAccentPrimary,
-	progressFullColor: Color = LocalCuiPalette.current.BackgroundPositive,
+    progress: Float,
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = LocalCuiPalette.current.BackgroundSecondary,
+    progressColor: Color = LocalCuiPalette.current.BackgroundAccentPrimary,
+    progressFullColor: Color = LocalCuiPalette.current.BackgroundPositivePrimary,
 ) {
 	val targetProgressColor =
 		if (progress >= 1F) progressFullColor

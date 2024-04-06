@@ -22,8 +22,10 @@ interface CuiPalette {
     val BackgroundTertiary: Color
     val BackgroundAccentPrimary: Color
     val BackgroundAccentSecondary: Color
-    val BackgroundPositive: Color
-    val BackgroundNegative: Color
+    val BackgroundPositivePrimary: Color
+    val BackgroundPositiveSecondary: Color
+    val BackgroundNegativePrimary: Color
+    val BackgroundNegativeSecondary: Color
 
     val OutlinePrimary: Color get() = BackgroundSecondary
     val OutlineSecondary: Color
@@ -33,6 +35,8 @@ interface CuiPalette {
     val IconSecondary: Color
     val IconTertiary: Color
     val IconAccent: Color
+    val IconPositive: Color get() = BackgroundPositivePrimary
+    val IconNegative: Color get() = BackgroundNegativePrimary
 
     object Light : CuiPalette {
 
@@ -40,16 +44,18 @@ interface CuiPalette {
         override val TextInverted: Color = CuiColorToken.White1
         override val TextSecondary: Color = CuiColorToken.Grey5
         override val TextAccent: Color = CuiColorToken.Orange2
-        override val TextPositive: Color = CuiColorToken.Green
-        override val TextNegative: Color = CuiColorToken.Red
+        override val TextPositive: Color = CuiColorToken.Green1
+        override val TextNegative: Color = CuiColorToken.Red1
 
         override val BackgroundPrimary: Color = CuiColorToken.White1
         override val BackgroundSecondary: Color = CuiColorToken.Grey1
         override val BackgroundTertiary: Color = CuiColorToken.Grey4
         override val BackgroundAccentPrimary: Color = CuiColorToken.Orange1
         override val BackgroundAccentSecondary: Color = CuiColorToken.Orange3
-        override val BackgroundPositive: Color = CuiColorToken.Green
-        override val BackgroundNegative: Color = CuiColorToken.Red
+        override val BackgroundPositivePrimary: Color = CuiColorToken.Green1
+        override val BackgroundPositiveSecondary: Color = CuiColorToken.Green2
+        override val BackgroundNegativePrimary: Color = CuiColorToken.Red1
+        override val BackgroundNegativeSecondary: Color = CuiColorToken.Red2
 
         override val OutlinePrimary: Color = CuiColorToken.Grey5
         override val OutlineSecondary: Color = CuiColorToken.Grey2
@@ -66,16 +72,18 @@ interface CuiPalette {
         override val TextInverted: Color = CuiColorToken.Black1
         override val TextSecondary: Color = CuiColorToken.Brown1
         override val TextAccent: Color = CuiColorToken.Orange1
-        override val TextPositive: Color = CuiColorToken.Green
-        override val TextNegative: Color = CuiColorToken.Red
+        override val TextPositive: Color = CuiColorToken.Green1
+        override val TextNegative: Color = CuiColorToken.Red1
 
         override val BackgroundPrimary: Color = CuiColorToken.Black2
         override val BackgroundSecondary: Color = CuiColorToken.Brown2
         override val BackgroundTertiary: Color = CuiColorToken.Brown5
         override val BackgroundAccentPrimary: Color = CuiColorToken.Orange1
         override val BackgroundAccentSecondary: Color = CuiColorToken.Brown3
-        override val BackgroundPositive: Color = CuiColorToken.Green
-        override val BackgroundNegative: Color = CuiColorToken.Red
+        override val BackgroundPositivePrimary: Color = CuiColorToken.Green1
+        override val BackgroundPositiveSecondary: Color = CuiColorToken.Green2
+        override val BackgroundNegativePrimary: Color = CuiColorToken.Red1
+        override val BackgroundNegativeSecondary: Color = CuiColorToken.Red2
 
         override val OutlineSecondary: Color = CuiColorToken.Brown4
 
@@ -109,6 +117,8 @@ object CuiColorToken {
     val Brown4 = Color(0xFF383838)
     val Brown5 = Color(0xFF6D5852)
 
-    val Green = Color(0xFF59B130)
-    val Red = Color(0xFFDA3224)
+    val Green1 = Color(0xFF59B130)
+    val Green2 = Color(0xFFE2F9D7)
+    val Red1 = Color(0xFFDA3224)
+    val Red2 = Color(0xFFFFE8E8)
 }

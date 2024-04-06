@@ -5,4 +5,6 @@ internal sealed interface ReviewCreationEffect {
     data object ShowConfirmExitDialog : ReviewCreationEffect
 
     data object ShowErrorDialog : ReviewCreationEffect
+
+    data object CloseKeyboard : ReviewCreationEffect
 }

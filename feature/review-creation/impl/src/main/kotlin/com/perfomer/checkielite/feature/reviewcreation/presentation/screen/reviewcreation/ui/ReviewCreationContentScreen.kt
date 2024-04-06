@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalFocusManager
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
@@ -17,6 +18,7 @@ import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationStore
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.CloseKeyboard
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowConfirmExitDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowErrorDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnBackPress
@@ -35,6 +37,8 @@ internal class ReviewCreationContentScreen(
 
     @Composable
     override fun Screen() = TeaComposable(store<ReviewCreationStore>(params)) { state ->
+        val focusManager = LocalFocusManager.current
+
         var isConfirmExitDialogShown by remember { mutableStateOf(false) }
         var isErrorDialogShown by remember { mutableStateOf(false) }
 
@@ -44,6 +48,7 @@ internal class ReviewCreationContentScreen(
             when (effect) {
                 is ShowConfirmExitDialog -> isConfirmExitDialogShown = true
                 is ShowErrorDialog -> isErrorDialogShown = true
+                is CloseKeyboard -> focusManager.clearFocus()
             }
         }
 

@@ -13,6 +13,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.SearchBrands
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.UpdateReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.CloseKeyboard
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowConfirmExitDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowErrorDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
@@ -126,12 +127,17 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         }
 
         is ProductInfo.OnAddPictureClick -> commands(OpenPhotoPicker)
-        is ProductInfo.OnPictureClick -> commands(
-            OpenGallery(
-                picturesUri = state.reviewDetails.pictures.map { it.uri },
-                currentPicturePosition = event.position,
+
+        is ProductInfo.OnPictureClick -> {
+            effects(CloseKeyboard)
+
+            commands(
+                OpenGallery(
+                    picturesUri = state.reviewDetails.pictures.map { it.uri },
+                    currentPicturePosition = event.position,
+                )
             )
-        )
+        }
 
         is ProductInfo.OnPictureDeleteClick -> state {
             copy(

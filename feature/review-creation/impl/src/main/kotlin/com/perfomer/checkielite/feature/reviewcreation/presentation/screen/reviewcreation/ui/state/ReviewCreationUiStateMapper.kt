@@ -40,7 +40,9 @@ internal class ReviewCreationUiStateMapper(
     private fun createReviewInfoPageState(state: ReviewCreationState): ReviewInfoPageUiState {
         return ReviewInfoPageUiState(
             rating = state.reviewDetails.rating,
-            reviewText = state.reviewDetails.reviewText,
+            comment = state.reviewDetails.comment,
+            advantages = state.reviewDetails.advantages,
+            disadvantages = state.reviewDetails.disadvantages,
             isSaving = state.isSavingInProgress,
         )
     }

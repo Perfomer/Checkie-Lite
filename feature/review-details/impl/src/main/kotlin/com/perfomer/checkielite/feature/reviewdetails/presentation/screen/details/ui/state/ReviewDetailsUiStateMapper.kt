@@ -25,7 +25,9 @@ internal class ReviewDetailsUiStateMapper : UiStateMapper<ReviewDetailsState, Re
                     rating = review.rating,
                     picturesUri = review.pictures.map { it.uri }.toPersistentList(),
                     currentPicturePosition = state.currentPicturePosition,
-                    reviewText = review.reviewText,
+                    comment = review.comment,
+                    advantages = review.advantages,
+                    disadvantages = review.disadvantages,
                     isMenuAvailable = !review.isSyncing,
                     recommendations = content.recommendations.map { it.toRecommendation() }.toPersistentList(),
                 )

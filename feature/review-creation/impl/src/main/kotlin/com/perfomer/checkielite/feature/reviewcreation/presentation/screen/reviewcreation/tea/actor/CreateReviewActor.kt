@@ -30,7 +30,9 @@ internal class CreateReviewActor(
                 productBrand = command.productBrand,
                 rating = command.rating,
                 pictures = command.pictures,
-                reviewText = command.reviewText,
+                comment = command.comment,
+                advantages = command.advantages,
+                disadvantages = command.disadvantages,
             )
         }
             .map { ReviewSaving.Succeed }

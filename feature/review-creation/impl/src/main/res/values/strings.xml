@@ -8,7 +8,9 @@
     <string name="reviewcreation_productinfo_field_brand">Brand</string>
 
     <string name="reviewcreation_reviewinfo_title">Review</string>
-    <string name="reviewcreation_reviewinfo_field_review">Share your opinion</string>
+    <string name="reviewcreation_reviewinfo_field_comment">Comment</string>
+    <string name="reviewcreation_reviewinfo_field_advantages">Advantages</string>
+    <string name="reviewcreation_reviewinfo_field_disadvantages">Disadvantages</string>
 
     <string name="reviewcreation_dialog_confirmexit_title">Do you really want to exit?</string>
     <string name="reviewcreation_dialog_confirmexit_message">If you exit your changes won\'t be saved.</string>

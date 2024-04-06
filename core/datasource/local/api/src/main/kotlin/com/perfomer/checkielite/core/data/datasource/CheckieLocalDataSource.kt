@@ -19,7 +19,9 @@ interface CheckieLocalDataSource {
         productBrand: String?,
         rating: Int,
         pictures: List<CheckiePicture>,
-        reviewText: String?,
+        comment: String?,
+        advantages: String?,
+        disadvantages: String?,
     ): CheckieReview
 
     suspend fun updateReview(
@@ -28,7 +30,9 @@ interface CheckieLocalDataSource {
         productBrand: String?,
         rating: Int,
         pictures: List<CheckiePicture>,
-        reviewText: String?,
+        comment: String?,
+        advantages: String?,
+        disadvantages: String?,
     ): CheckieReview
 
     suspend fun deleteReview(reviewId: String)

@@ -19,7 +19,9 @@ internal sealed interface ReviewDetailsUiState {
         val rating: Int,
         val picturesUri: ImmutableList<String>,
         val currentPicturePosition: Int,
-        val reviewText: String?,
+        val comment: String?,
+        val advantages: String?,
+        val disadvantages: String?,
         val recommendations: ImmutableList<RecommendedReview>,
         override val isMenuAvailable: Boolean,
     ) : ReviewDetailsUiState

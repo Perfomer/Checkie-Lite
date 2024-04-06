@@ -12,6 +12,8 @@ internal data class CheckieReviewDb(
     val brandName: String?,
     val rating: Int,
     val reviewText: String?,
+    val advantages: String?,
+    val disadvantages: String?,
     val creationDate: Date,
     val modificationDate: Date,
     @ColumnInfo(defaultValue = "0") val isSyncing: Boolean = false,

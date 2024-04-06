@@ -144,7 +144,9 @@ private fun ReviewCreationScreenPreview() {
             ),
             reviewInfoState = ReviewInfoPageUiState(
                 rating = 5,
-                reviewText = "",
+                comment = "",
+                advantages = "",
+                disadvantages = "",
                 isSaving = false,
             ),
             isPrimaryButtonLoading = false,

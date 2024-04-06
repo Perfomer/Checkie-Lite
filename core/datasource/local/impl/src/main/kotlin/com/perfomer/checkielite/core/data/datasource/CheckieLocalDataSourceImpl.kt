@@ -41,7 +41,9 @@ internal class CheckieLocalDataSourceImpl(
         productBrand: String?,
         rating: Int,
         pictures: List<CheckiePicture>,
-        reviewText: String?
+        comment: String?,
+        advantages: String?,
+        disadvantages: String?
     ): CheckieReview {
         val actualPictures = pictures.map { picture -> picture.copy(id = randomUuid()) }
         val creationDate = Date()
@@ -53,7 +55,9 @@ internal class CheckieLocalDataSourceImpl(
             productName = productName,
             productBrand = productBrand,
             rating = rating,
-            reviewText = reviewText,
+            comment = comment,
+            advantages = advantages,
+            disadvantages = disadvantages,
             pictures = actualPictures,
             creationDate = creationDate,
             modificationDate = creationDate,
@@ -75,7 +79,9 @@ internal class CheckieLocalDataSourceImpl(
         productBrand: String?,
         rating: Int,
         pictures: List<CheckiePicture>,
-        reviewText: String?
+        comment: String?,
+        advantages: String?,
+        disadvantages: String?
     ): CheckieReview = coroutineScope {
         val initialReview = getReview(reviewId).first()
         val initialPictures = initialReview.pictures
@@ -107,7 +113,9 @@ internal class CheckieLocalDataSourceImpl(
             productName = productName,
             productBrand = productBrand,
             rating = rating,
-            reviewText = reviewText,
+            comment = comment,
+            advantages = advantages,
+            disadvantages = disadvantages,
             pictures = actualPictures,
             creationDate = initialReview.creationDate,
             modificationDate = Date(),

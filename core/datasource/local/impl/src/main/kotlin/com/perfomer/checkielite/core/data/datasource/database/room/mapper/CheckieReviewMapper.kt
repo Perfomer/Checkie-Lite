@@ -13,7 +13,9 @@ internal fun CheckieReviewDetailedDb.toDomain(): CheckieReview {
         pictures = picturesUri
             .sortedWith(compareBy({ it.order }, { it.id }))
             .map { it.toDomain() },
-        reviewText = review.reviewText,
+        comment = review.reviewText,
+        advantages = review.advantages,
+        disadvantages = review.disadvantages,
         creationDate = review.creationDate,
         modificationDate = review.modificationDate,
         isSyncing = review.isSyncing,
@@ -26,7 +28,9 @@ internal fun CheckieReview.toDb(): CheckieReviewDb {
         productName = productName,
         brandName = productBrand?.takeIf { it.isNotBlank() },
         rating = rating,
-        reviewText = reviewText?.takeIf { it.isNotBlank() },
+        reviewText = comment?.takeIf { it.isNotBlank() },
+        advantages = advantages?.takeIf { it.isNotBlank() },
+        disadvantages = disadvantages?.takeIf { it.isNotBlank() },
         creationDate = creationDate,
         modificationDate = modificationDate,
         isSyncing = isSyncing,

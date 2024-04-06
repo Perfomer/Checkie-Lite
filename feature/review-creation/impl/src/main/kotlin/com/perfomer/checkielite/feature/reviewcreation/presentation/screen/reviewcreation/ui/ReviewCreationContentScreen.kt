@@ -105,7 +105,9 @@ internal class ReviewCreationContentScreen(
                     state = state.reviewInfoState,
                     scrollState = reviewInfoScrollState,
                     onRatingSelect = acceptable(ReviewInfo::OnRatingSelect),
-                    onReviewTextInput = acceptable(ReviewInfo::OnReviewTextInput),
+                    onCommentInput = acceptable(ReviewInfo::OnCommentInput),
+                    onAdvantagesInput = acceptable(ReviewInfo::OnAdvantagesInput),
+                    onDisadvantagesInput = acceptable(ReviewInfo::OnDisadvantagesInput),
                 )
             }
         }

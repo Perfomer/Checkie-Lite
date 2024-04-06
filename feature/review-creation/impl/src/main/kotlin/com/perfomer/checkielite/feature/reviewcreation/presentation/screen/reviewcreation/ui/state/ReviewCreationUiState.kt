@@ -28,6 +28,8 @@ internal data class ProductInfoPageUiState(
 @Immutable
 internal data class ReviewInfoPageUiState(
     val rating: Int,
-    val reviewText: String,
+    val comment: String,
+    val advantages: String,
+    val disadvantages: String,
     val isSaving: Boolean,
 )

@@ -35,7 +35,9 @@ internal fun ReviewInfoScreen(
     state: ReviewInfoPageUiState,
     scrollState: ScrollState = rememberScrollState(),
     onRatingSelect: (Int) -> Unit = {},
-    onReviewTextInput: (String) -> Unit = {},
+    onCommentInput: (String) -> Unit = {},
+    onAdvantagesInput: (String) -> Unit = {},
+    onDisadvantagesInput: (String) -> Unit = {},
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -68,13 +70,35 @@ internal fun ReviewInfoScreen(
         Spacer(Modifier.height(24.dp))
 
         CuiOutlinedField(
-            text = state.reviewText,
-            title = stringResource(R.string.reviewcreation_reviewinfo_field_review),
+            text = state.comment,
+            title = stringResource(R.string.reviewcreation_reviewinfo_field_comment),
             singleLine = false,
             isEnabled = !state.isSaving,
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
-            onValueChange = onReviewTextInput,
+            onValueChange = onCommentInput,
             modifier = Modifier.focusRequester(focusRequester)
+        )
+
+        Spacer(Modifier.height(4.dp))
+
+        CuiOutlinedField(
+            text = state.advantages,
+            title = stringResource(R.string.reviewcreation_reviewinfo_field_advantages),
+            singleLine = false,
+            isEnabled = !state.isSaving,
+            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+            onValueChange = onAdvantagesInput,
+        )
+
+        Spacer(Modifier.height(4.dp))
+
+        CuiOutlinedField(
+            text = state.disadvantages,
+            title = stringResource(R.string.reviewcreation_reviewinfo_field_disadvantages),
+            singleLine = false,
+            isEnabled = !state.isSaving,
+            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+            onValueChange = onDisadvantagesInput,
         )
     }
 }
@@ -85,7 +109,9 @@ private fun ReviewInfoScreenPreview() {
     ReviewInfoScreen(
         state = ReviewInfoPageUiState(
             rating = 5,
-            reviewText = "",
+            comment = "",
+            advantages = "",
+            disadvantages = "",
             isSaving = false,
         )
     )

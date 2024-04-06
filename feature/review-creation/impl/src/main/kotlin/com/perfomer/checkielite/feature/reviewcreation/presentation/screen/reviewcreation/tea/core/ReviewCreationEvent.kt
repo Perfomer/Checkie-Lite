@@ -48,7 +48,11 @@ internal sealed interface ReviewCreationUiEvent : ReviewCreationEvent {
 
         class OnRatingSelect(val rating: Int) : ReviewInfo
 
-        class OnReviewTextInput(val text: String) : ReviewInfo
+        class OnCommentInput(val text: String) : ReviewInfo
+
+        class OnAdvantagesInput(val text: String) : ReviewInfo
+
+        class OnDisadvantagesInput(val text: String) : ReviewInfo
     }
 }
 

@@ -72,7 +72,9 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                         CreateReview(
                             productName = state.reviewDetails.productName,
                             productBrand = state.reviewDetails.productBrand,
-                            reviewText = state.reviewDetails.reviewText,
+                            comment = state.reviewDetails.comment,
+                            advantages = state.reviewDetails.advantages,
+                            disadvantages = state.reviewDetails.disadvantages,
                             rating = state.reviewDetails.rating,
                             pictures = state.reviewDetails.pictures,
                         )
@@ -83,7 +85,9 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                             reviewId = state.reviewId,
                             productName = state.reviewDetails.productName,
                             productBrand = state.reviewDetails.productBrand,
-                            reviewText = state.reviewDetails.reviewText,
+                            comment = state.reviewDetails.comment,
+                            advantages = state.reviewDetails.advantages,
+                            disadvantages = state.reviewDetails.disadvantages,
                             rating = state.reviewDetails.rating,
                             pictures = state.reviewDetails.pictures,
                         )
@@ -158,7 +162,9 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
 
     private fun reduceReviewInfoUi(event: ReviewInfo) = when (event) {
         is ReviewInfo.OnRatingSelect -> state { copy(reviewDetails = reviewDetails.copy(rating = event.rating)) }
-        is ReviewInfo.OnReviewTextInput -> state { copy(reviewDetails = reviewDetails.copy(reviewText = event.text)) }
+        is ReviewInfo.OnCommentInput -> state { copy(reviewDetails = reviewDetails.copy(comment = event.text)) }
+        is ReviewInfo.OnAdvantagesInput -> state { copy(reviewDetails = reviewDetails.copy(advantages = event.text)) }
+        is ReviewInfo.OnDisadvantagesInput -> state { copy(reviewDetails = reviewDetails.copy(disadvantages = event.text)) }
     }
 
     private fun reduceNavigation(event: ReviewCreationNavigationEvent) = when (event) {
@@ -189,7 +195,9 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 productName = event.review.productName,
                 productBrand = event.review.productBrand.orEmpty(),
                 pictures = event.review.pictures.toPersistentList(),
-                reviewText = event.review.reviewText.orEmpty(),
+                comment = event.review.comment.orEmpty(),
+                advantages = event.review.advantages.orEmpty(),
+                disadvantages = event.review.disadvantages.orEmpty(),
                 rating = event.review.rating,
             )
 

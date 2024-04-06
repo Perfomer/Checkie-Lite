@@ -26,8 +26,10 @@ import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.RecommendedReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiState
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ConfirmDeleteDialog
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsAdvantagesHeader
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsAppBar
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsCommentHeader
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsDisadvantagesHeader
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsHeader
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsImage
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsRecommendations
@@ -133,14 +135,32 @@ private fun Content(
 
         Spacer(Modifier.height(24.dp))
 
-        if (state.reviewText != null) {
+        if (state.comment != null) {
             ReviewDetailsTextCard(
-                text = state.reviewText,
+                text = state.comment,
                 header = { ReviewDetailsCommentHeader() },
             )
         } else {
             ReviewDetailsTextEmptyCard(
                 onClick = onEmptyReviewTextClick,
+            )
+        }
+
+        if (state.advantages != null) {
+            Spacer(Modifier.height(16.dp))
+
+            ReviewDetailsTextCard(
+                text = state.advantages,
+                header = { ReviewDetailsAdvantagesHeader() },
+            )
+        }
+
+        if (state.disadvantages != null) {
+            Spacer(Modifier.height(16.dp))
+
+            ReviewDetailsTextCard(
+                text = state.disadvantages,
+                header = { ReviewDetailsDisadvantagesHeader() },
             )
         }
 
@@ -178,7 +198,9 @@ internal val mockUiState = ReviewDetailsUiState.Content(
     rating = 8,
     date = "31 May 2023",
     currentPicturePosition = 0,
-    reviewText = "Extraordinary. Meets an elite standard by which you judge all other restaurants. The staff is always ready to help, the premises are extremely clean, the atmosphere is lovely, and the food is both delicious and beautifully presented.",
+    comment = "Extraordinary. Meets an elite standard by which you judge all other restaurants. The staff is always ready to help, the premises are extremely clean, the atmosphere is lovely, and the food is both delicious and beautifully presented.",
+    advantages = "Great, but not great.",
+    disadvantages = "It's okay.",
     isMenuAvailable = true,
     recommendations = persistentListOf(
         RecommendedReview("", "DARKSIDE", "Lemonblast", null, 10, false),

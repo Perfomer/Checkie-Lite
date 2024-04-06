@@ -14,7 +14,9 @@ internal sealed interface ReviewCreationCommand {
         val productBrand: String?,
         val rating: Int,
         val pictures: List<CheckiePicture>,
-        val reviewText: String?
+        val comment: String?,
+        val advantages: String?,
+        val disadvantages: String?,
     ) : ReviewCreationCommand
 
     class UpdateReview(
@@ -23,7 +25,9 @@ internal sealed interface ReviewCreationCommand {
         val productBrand: String?,
         val rating: Int,
         val pictures: List<CheckiePicture>,
-        val reviewText: String?
+        val comment: String?,
+        val advantages: String?,
+        val disadvantages: String?,
     ) : ReviewCreationCommand
 }
 

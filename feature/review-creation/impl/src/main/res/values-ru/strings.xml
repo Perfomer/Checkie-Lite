@@ -7,7 +7,9 @@
     <string name="reviewcreation_productinfo_field_product_error_empty">Название продукта нужно заполнить</string>
     <string name="reviewcreation_productinfo_field_brand">Бренд</string>
     <string name="reviewcreation_reviewinfo_title">Отзыв</string>
-    <string name="reviewcreation_reviewinfo_field_review">Поделитесь своим мнением</string>
+    <string name="reviewcreation_reviewinfo_field_comment">Комментарий</string>
+    <string name="reviewcreation_reviewinfo_field_advantages">Достоинства</string>
+    <string name="reviewcreation_reviewinfo_field_disadvantages">Недостатки</string>
     <string name="reviewcreation_dialog_confirmexit_title">Вы действительно хотите выйти?</string>
     <string name="reviewcreation_dialog_confirmexit_message">Если вы выйдете, то изменения не будут сохранены.</string>
     <string name="reviewcreation_dialog_confirmexit_confirm">Выйти</string>

@@ -12,13 +12,14 @@ import com.perfomer.checkielite.core.data.datasource.database.room.entity.Checki
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewPictureDb
 
 @Database(
-    version = 2,
+    version = 3,
     entities = [
         CheckieReviewDb::class,
         CheckieReviewPictureDb::class,
     ],
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
+        AutoMigration(from = 2, to = 3),
     ]
 )
 @TypeConverters(DateConverter::class)

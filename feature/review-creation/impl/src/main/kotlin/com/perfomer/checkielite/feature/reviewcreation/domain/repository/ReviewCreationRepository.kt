@@ -10,7 +10,9 @@ internal interface ReviewCreationRepository {
         productBrand: String?,
         rating: Int,
         pictures: List<CheckiePicture>,
-        reviewText: String?
+        comment: String?,
+        advantages: String?,
+        disadvantages: String?,
     )
 
     suspend fun updateReview(
@@ -19,10 +21,12 @@ internal interface ReviewCreationRepository {
         productBrand: String?,
         rating: Int,
         pictures: List<CheckiePicture>,
-        reviewText: String?
+        comment: String?,
+        advantages: String?,
+        disadvantages: String?,
     )
 
     suspend fun getReview(reviewId: String): CheckieReview
 
-    suspend fun searchBrands(query: String) : List<String>
+    suspend fun searchBrands(query: String): List<String>
 }

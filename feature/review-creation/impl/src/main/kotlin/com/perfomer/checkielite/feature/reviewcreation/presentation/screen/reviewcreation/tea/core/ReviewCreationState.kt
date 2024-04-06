@@ -30,5 +30,7 @@ internal data class ReviewDetails(
     val pictures: PersistentList<CheckiePicture> = emptyPersistentList(),
 
     val rating: Int = 5,
-    val reviewText: String = "",
+    val comment: String = "",
+    val advantages: String = "",
+    val disadvantages: String = "",
 )

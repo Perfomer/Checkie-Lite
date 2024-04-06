@@ -15,14 +15,18 @@ internal class ReviewCreationRepositoryImpl(
         productBrand: String?,
         rating: Int,
         pictures: List<CheckiePicture>,
-        reviewText: String?,
+        comment: String?,
+        advantages: String?,
+        disadvantages: String?
     ) {
         localDataSource.createReview(
             productName = productName,
             productBrand = productBrand,
             rating = rating,
             pictures = pictures,
-            reviewText = reviewText,
+            comment = comment,
+            advantages = advantages,
+            disadvantages = disadvantages,
         )
     }
 
@@ -32,7 +36,9 @@ internal class ReviewCreationRepositoryImpl(
         productBrand: String?,
         rating: Int,
         pictures: List<CheckiePicture>,
-        reviewText: String?,
+        comment: String?,
+        advantages: String?,
+        disadvantages: String?
     ) {
         localDataSource.updateReview(
             reviewId = reviewId,
@@ -40,7 +46,9 @@ internal class ReviewCreationRepositoryImpl(
             productBrand = productBrand,
             rating = rating,
             pictures = pictures,
-            reviewText = reviewText,
+            comment = comment,
+            advantages = advantages,
+            disadvantages = disadvantages,
         )
     }
 

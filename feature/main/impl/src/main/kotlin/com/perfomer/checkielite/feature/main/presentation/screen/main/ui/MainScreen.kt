@@ -339,7 +339,8 @@ internal fun CheckieHorizontalItem(
                 text = item.title,
                 fontSize = 16.sp,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
+                overflow = TextOverflow.Visible,
+                softWrap = false,
                 modifier = Modifier
                     .fillMaxWidth()
                     .horizontalFadingEdges(gravity = FadingEdgesGravity.End, length = 64.dp)

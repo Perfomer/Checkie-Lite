@@ -32,4 +32,6 @@ interface CheckieLocalDataSource {
     ): CheckieReview
 
     suspend fun deleteReview(reviewId: String)
+
+    suspend fun dropSyncing()
 }

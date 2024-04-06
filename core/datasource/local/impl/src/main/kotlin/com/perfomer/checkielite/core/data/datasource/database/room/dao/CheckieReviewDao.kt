@@ -83,6 +83,15 @@ internal interface CheckieReviewDao {
     )
     suspend fun updateSyncing(reviewId: String, isSyncing: Boolean)
 
+    @Query(
+        """
+            UPDATE CheckieReviewDb
+            SET isSyncing = 0
+            WHERE isSyncing = 1
+        """
+    )
+    suspend fun dropSyncing()
+
     @Query("DELETE FROM CheckieReviewPictureDb WHERE id IN (:picturesIds)")
     suspend fun deletePictures(picturesIds: List<String>)
 }

@@ -36,6 +36,8 @@ internal interface DatabaseDataSource {
     suspend fun updatePictures(pictures: List<CheckiePicture>)
 
     suspend fun updateSyncing(reviewId: String, isSyncing: Boolean)
+
+    suspend fun dropSyncing()
 }
 
 internal class DatabaseDataSourceImpl(
@@ -110,5 +112,9 @@ internal class DatabaseDataSourceImpl(
 
     override suspend fun updateSyncing(reviewId: String, isSyncing: Boolean) {
         checkieReviewDao.updateSyncing(reviewId, isSyncing)
+    }
+
+    override suspend fun dropSyncing() {
+        checkieReviewDao.dropSyncing()
     }
 }

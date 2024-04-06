@@ -134,4 +134,8 @@ internal class CheckieLocalDataSourceImpl(
         }
         databaseDataSource.deleteReview(reviewId, review.pictures)
     }
+
+    override suspend fun dropSyncing() {
+        databaseDataSource.dropSyncing()
+    }
 }

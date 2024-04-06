@@ -10,6 +10,29 @@ android {
 
     buildFeatures.compose = true
     composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+
+    buildTypes {
+        debug {
+            isMinifyEnabled = false
+            applicationIdSuffix = ".dev"
+
+            manifestPlaceholders["APP_ICON"] = "@drawable/logo_brand_lite"
+            manifestPlaceholders["APP_NAME"] = "@string/app_name_debug"
+        }
+
+        release {
+            isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("debug")
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
+            manifestPlaceholders["APP_ICON"] = "@drawable/logo_brand"
+            manifestPlaceholders["APP_NAME"] = "@string/app_name"
+        }
+    }
 }
 
 dependencies {

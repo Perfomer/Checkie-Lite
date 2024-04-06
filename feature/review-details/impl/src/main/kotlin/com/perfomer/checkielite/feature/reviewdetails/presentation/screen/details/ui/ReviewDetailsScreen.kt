@@ -32,6 +32,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsDisadvantagesHeader
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsHeader
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsImage
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsInfo
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsRecommendations
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsTextCard
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsTextEmptyCard
@@ -121,8 +122,6 @@ private fun Content(
         ReviewDetailsHeader(
             productName = state.productName,
             brandName = state.brandName,
-            date = state.date,
-            rating = state.rating
         )
 
         ReviewDetailsImage(
@@ -131,6 +130,13 @@ private fun Content(
             onEmptyImageClick = onEmptyImageClick,
             onPictureClick = onPictureClick,
             onPageChange = onPageChange
+        )
+
+        Spacer(Modifier.height(24.dp))
+        
+        ReviewDetailsInfo(
+            date = state.date,
+            rating = state.rating,
         )
 
         Spacer(Modifier.height(24.dp))

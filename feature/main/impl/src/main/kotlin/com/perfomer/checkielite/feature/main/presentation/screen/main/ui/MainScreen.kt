@@ -343,7 +343,7 @@ internal fun CheckieHorizontalItem(
                 softWrap = false,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .horizontalFadingEdges(gravity = FadingEdgesGravity.End, length = 64.dp)
+                    .horizontalFadingEdges(gravity = FadingEdgesGravity.End, length = 40.dp)
             )
 
             if (item.brand != null) {
@@ -356,7 +356,7 @@ internal fun CheckieHorizontalItem(
                     color = LocalCuiPalette.current.TextAccent,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .horizontalFadingEdges(gravity = FadingEdgesGravity.End, length = 64.dp)
+                        .horizontalFadingEdges(gravity = FadingEdgesGravity.End, length = 40.dp)
                 )
             }
         }

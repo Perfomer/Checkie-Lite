@@ -30,6 +30,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.gigamole.composefadingedges.FadingEdgesGravity
+import com.gigamole.composefadingedges.horizontalFadingEdges
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRatingVertical
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
@@ -85,7 +87,11 @@ internal fun RecommendedReviewCard(
                         style = MaterialTheme.typography.bodySmall.copy(
                             platformStyle = PlatformTextStyle(includeFontPadding = false)
                         ),
-                        overflow = TextOverflow.Ellipsis,
+                        overflow = TextOverflow.Visible,
+                        softWrap = false,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalFadingEdges(gravity = FadingEdgesGravity.End, length = 40.dp)
                     )
                 }
 
@@ -98,7 +104,11 @@ internal fun RecommendedReviewCard(
                         platformStyle = PlatformTextStyle(includeFontPadding = false)
                     ),
                     fontWeight = FontWeight.Medium,
-                    overflow = TextOverflow.Ellipsis,
+                    overflow = TextOverflow.Visible,
+                    softWrap = false,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalFadingEdges(gravity = FadingEdgesGravity.End, length = 40.dp)
                 )
             }
         }

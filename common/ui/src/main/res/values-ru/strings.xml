@@ -3,6 +3,10 @@
     <string name="app_name">Checkie Lite</string>
     <string name="common_cancel">Отмена</string>
     <string name="common_ok">ОК</string>
+    <string name="common_clear">Очистить</string>
+    <string name="common_search">Поиск</string>
+    <string name="common_view_all">Смотреть все</string>
+    <string name="common_done">Готово</string>
     <string name="common_error_title">Упс!..</string>
     <string name="common_reaction_disgusting">Отвратительно</string>
     <string name="common_reaction_disappointed">Расстраивает</string>

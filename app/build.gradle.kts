@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":feature:main:impl"))
     implementation(project(":feature:review-creation:impl"))
     implementation(project(":feature:review-details:impl"))
+    implementation(project(":feature:search:impl"))
 
     implementation(project(":core:datasource:local:impl"))
 

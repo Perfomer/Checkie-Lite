@@ -1,9 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Checkie Lite</string>
     <string name="app_name_debug" translatable="false">Checkie Debug</string>
 
     <string name="common_cancel">Cancel</string>
     <string name="common_ok">OK</string>
+
+    <string name="common_clear">Clear</string>
+    <string name="common_search">Search</string>
+    <string name="common_view_all">View all</string>
+    <string name="common_done">Done</string>
 
     <string name="common_error_title">Oops!..</string>
     <string name="common_error_message">Something went wrong</string>

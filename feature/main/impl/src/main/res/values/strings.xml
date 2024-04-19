@@ -1,8 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name_checkie" translatable="false">checkie</string>
     <string name="app_name_lite" translatable="false">lite</string>
 
-    <string name="main_search">Search</string>
     <string name="main_add_checkie">Add Checkie</string>
     <string name="main_clear">Clear</string>
 

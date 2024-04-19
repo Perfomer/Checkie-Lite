@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search_sort">Sort</string>
+    <string name="search_filter">Filter</string>
+    <string name="search_filter_rating">Rating</string>
+    <string name="search_recent_searches">Recent searches</string>
+
+    <string name="search_filters_title">Filters</string>
+    <string name="search_filters_reset">Reset all</string>
+    <string name="search_filters_tags">Tags</string>
+    <string name="search_filters_rating">Rating</string>
+
+    <string name="search_tags_title">Tags</string>
+</resources>

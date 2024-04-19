@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="main_search">Поиск</string>
     <string name="main_add_checkie">Добавить Checkie</string>
     <string name="main_clear">Очистить</string>
     <string name="main_empty_title">Здесь пока нет Checkies</string>

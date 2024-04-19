@@ -260,7 +260,7 @@ private fun SearchField(
 ) {
     CuiOutlinedField(
         text = searchQuery,
-        placeholder = stringResource(R.string.main_search),
+        placeholder = stringResource(CommonString.common_search),
         trailingIcon = {
             if (searchQuery.isBlank()) {
                 Icon(

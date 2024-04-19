@@ -38,6 +38,7 @@ include(
     ":feature:review-details:api",
     ":feature:review-details:impl",
     ":feature:search:api",
+    ":feature:search:impl",
 )
 
 include(

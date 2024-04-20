@@ -4,9 +4,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -81,10 +79,8 @@ class AppActivity : AppCompatActivity() {
                 navigatorHolder.bottomSheetNavigator = navigator
             },
             sheetContent = {
-                Column(modifier = Modifier.statusBarsPadding()) {
-                    CuiDragAnchor()
-                    CurrentScreen()
-                }
+                CuiDragAnchor()
+                CurrentScreen()
             },
             modifier = Modifier.imePadding()
         )

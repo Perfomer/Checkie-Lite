@@ -27,7 +27,7 @@ fun CuiDragAnchor(modifier: Modifier = Modifier) {
         Box(
             modifier = Modifier
                 .size(width = 56.dp, height = 5.dp)
-                .background(LocalCuiPalette.current.BackgroundSecondary, RoundedCornerShape(8.dp))
+                .background(LocalCuiPalette.current.OutlineSecondary, RoundedCornerShape(8.dp))
         )
     }
 }

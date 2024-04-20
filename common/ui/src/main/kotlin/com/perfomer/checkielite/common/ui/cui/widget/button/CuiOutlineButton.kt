@@ -35,7 +35,7 @@ fun CuiOutlineButton(
     OutlinedButton(
         shape = RoundedCornerShape(24.dp),
         onClick = onClick,
-        border = BorderStroke(1.dp, LocalCuiPalette.current.BackgroundSecondary),
+        border = BorderStroke(1.dp, LocalCuiPalette.current.OutlineSecondary),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         modifier = modifier
             .defaultMinSize(minWidth = 128.dp)

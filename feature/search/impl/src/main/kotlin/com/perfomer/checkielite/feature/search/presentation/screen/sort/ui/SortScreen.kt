@@ -5,11 +5,13 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
@@ -30,6 +32,7 @@ import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiOutlineButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.core.data.datasource.sort.ReviewsSortingStrategy
 import com.perfomer.checkielite.feature.search.R
@@ -43,13 +46,21 @@ internal fun SortScreen(
     onOptionClick: (ReviewsSortingStrategy) -> Unit = {},
     onDoneClick: () -> Unit = {},
 ) {
-    Column {
+    Column(
+        modifier = Modifier.navigationBarsPadding()
+    ) {
         Header(
             isAscending = state.isAscending,
             onSortingOrderClick = onSortingOrderClick,
         )
 
-        HorizontalDivider()
+        Spacer(Modifier.height(16.dp))
+
+        HorizontalDivider(
+            color = LocalCuiPalette.current.OutlineSecondary,
+        )
+
+        Spacer(Modifier.height(8.dp))
 
         state.items.forEach { item ->
             key(item.type) {
@@ -65,6 +76,7 @@ internal fun SortScreen(
         CuiPrimaryButton(
             text = stringResource(CommonString.common_done),
             onClick = onDoneClick,
+            modifier = Modifier.padding(horizontal = 24.dp)
         )
 
         Spacer(Modifier.height(16.dp))
@@ -76,15 +88,16 @@ private fun Header(
     isAscending: Boolean,
     onSortingOrderClick: () -> Unit,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp)
     ) {
         Text(
             text = stringResource(R.string.search_sort_title),
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.weight(1F)
+            modifier = Modifier.align(Alignment.CenterStart)
         )
 
         val sortingOrderResource = if (isAscending) {
@@ -103,6 +116,7 @@ private fun Header(
         CuiOutlineButton(
             text = stringResource(sortingOrderResource),
             onClick = onSortingOrderClick,
+            textColor = LocalCuiPalette.current.TextPrimary,
             trailingIcon = {
                 Icon(
                     painter = painterResource(R.drawable.search_ic_arrow_sort),
@@ -113,7 +127,8 @@ private fun Header(
                             rotationZ = animatedSortingArrowRotation.value
                         }
                 )
-            }
+            },
+            modifier = Modifier.align(Alignment.CenterEnd)
         )
     }
 }
@@ -135,13 +150,14 @@ private fun SortingOptionItem(
         Icon(
             painter = painterResource(option.icon),
             contentDescription = null,
+            tint = LocalCuiPalette.current.IconAccent,
             modifier = Modifier.size(24.dp)
         )
 
         Text(
             text = option.text,
             fontSize = 16.sp,
-            fontWeight = if (option.isSelected) FontWeight.Bold else FontWeight.Medium,
+            fontWeight = if (option.isSelected) FontWeight.Bold else FontWeight.Normal,
             modifier = Modifier.weight(1F)
         )
 
@@ -149,6 +165,7 @@ private fun SortingOptionItem(
             Icon(
                 painter = painterResource(CommonDrawable.ic_tick),
                 contentDescription = null,
+                tint = LocalCuiPalette.current.IconPositive,
                 modifier = Modifier.size(16.dp)
             )
         }

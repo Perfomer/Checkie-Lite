@@ -2,7 +2,7 @@ package com.perfomer.checkielite.feature.search.presentation.screen.search.tea.c
 
 internal sealed interface SearchEvent {
 
-    data object OnInitialize : SearchEvent
+    data object Initialize : SearchEvent
 }
 
 internal sealed interface SearchUiEvent : SearchEvent {

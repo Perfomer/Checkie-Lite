@@ -3,7 +3,7 @@ android {
 
     defaultConfig {
         targetSdk = 34
-        minSdk = 24
+        minSdk = 25
 
         versionCode = 4
         versionName = "1.2.0"

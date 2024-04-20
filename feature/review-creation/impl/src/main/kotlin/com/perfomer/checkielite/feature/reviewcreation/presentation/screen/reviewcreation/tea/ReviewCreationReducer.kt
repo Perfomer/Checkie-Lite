@@ -12,6 +12,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.SearchBrands
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.UpdateReview
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.WarmUpEmojis
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.CloseKeyboard
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowConfirmExitDialog
@@ -52,8 +53,10 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     }
 
     private fun reduceInitialize() {
-        val mode = state.mode as? ReviewCreationMode.Modification ?: return
-        commands(LoadReview(mode.reviewId))
+        val modificationMode = state.mode as? ReviewCreationMode.Modification
+        if (modificationMode != null) commands(LoadReview(modificationMode.reviewId))
+
+        commands(WarmUpEmojis)
     }
 
     private fun reduceUi(event: ReviewCreationUiEvent) = when (event) {

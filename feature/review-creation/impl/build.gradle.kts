@@ -28,6 +28,9 @@ dependencies {
 	implementation(libs.compose.material3)
 	implementation(libs.compose.ui)
 	implementation(libs.dnd)
+	implementation(libs.emoji.core)
+	implementation(libs.emoji.repo.map)
+	implementation(libs.emoji.ui.compose)
 	implementation(libs.koin.core)
 	implementation(platform(libs.compose.bom))
 }

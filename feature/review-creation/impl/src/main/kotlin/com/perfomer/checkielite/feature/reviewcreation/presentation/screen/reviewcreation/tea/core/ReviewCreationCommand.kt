@@ -6,6 +6,8 @@ import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreation
 
 internal sealed interface ReviewCreationCommand {
 
+    data object WarmUpEmojis : ReviewCreationCommand
+
     class LoadReview(val reviewId: String) : ReviewCreationCommand
 
     class SearchBrands(val query: String) : ReviewCreationCommand

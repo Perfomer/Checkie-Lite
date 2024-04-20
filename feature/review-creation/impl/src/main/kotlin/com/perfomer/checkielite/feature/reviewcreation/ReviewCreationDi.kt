@@ -1,10 +1,13 @@
 package com.perfomer.checkielite.feature.reviewcreation
 
 import android.content.Context
+import com.chrynan.emoji.repo.map.KotlinMapEmojiRepository
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.core.navigation.api.Router
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryScreenProvider
+import com.perfomer.checkielite.feature.reviewcreation.data.repository.CheckieEmojiRepositoryImpl
+import com.perfomer.checkielite.feature.reviewcreation.domain.repository.CheckieEmojiRepository
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationScreenProvider
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationReducer
@@ -14,13 +17,21 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.ReviewCreationNavigationActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.SearchBrandsActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.UpdateReviewActor
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.WarmUpEmojisActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.ReviewCreationContentScreen
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewCreationUiStateMapper
 import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val reviewCreationModules
-    get() = listOf(presentationModule)
+    get() = listOf(presentationModule, dataModule)
+
+private val dataModule = module {
+    singleOf(::CheckieEmojiRepositoryImpl) bind CheckieEmojiRepository::class
+    singleOf(::KotlinMapEmojiRepository)
+}
 
 private val presentationModule = module {
     factoryOf(::createReviewCreationStore)
@@ -31,6 +42,7 @@ internal fun createReviewCreationStore(
     context: Context,
     params: ReviewCreationParams,
     localDataSource: CheckieLocalDataSource,
+    emojiRepository: CheckieEmojiRepository,
     router: Router,
     externalRouter: ExternalRouter,
     galleryScreenProvider: GalleryScreenProvider,
@@ -45,6 +57,7 @@ internal fun createReviewCreationStore(
             UpdateReviewActor(localDataSource),
             LoadReviewActor(localDataSource),
             SearchBrandsActor(localDataSource),
+            WarmUpEmojisActor(emojiRepository),
         )
     )
 }

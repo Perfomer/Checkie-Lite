@@ -10,6 +10,7 @@ compose-compiler = "1.5.10"
 compressor = "3.0.1"
 core-ktx = "1.12.0"
 dnd = "0.1.0"
+emoji = "0.3.2"
 fading-edges = "1.0.4"
 google-fonts = "1.6.5"
 koin = "3.5.0"
@@ -37,6 +38,9 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 dnd = { module = "com.mohamedrejeb.dnd:compose-dnd", version.ref = "dnd" }
+emoji-core = { module = "com.chrynan.emoji:emoji-core", version.ref = "emoji" }
+emoji-repo-map = { module = "com.chrynan.emoji:emoji-repo-map", version.ref = "emoji" }
+emoji-ui-compose = { module = "com.chrynan.emoji:emoji-ui-compose", version.ref = "emoji" }
 fading-edges = { module = "com.github.GIGAMOLE:ComposeFadingEdges", version.ref = "fading-edges" }
 google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "google-fonts" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }

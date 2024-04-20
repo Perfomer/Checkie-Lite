@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewDb
-import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewPictureDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.relation.CheckieReviewDetailedDb
 import kotlinx.coroutines.flow.Flow
 
@@ -62,18 +61,6 @@ internal interface CheckieReviewDao {
     @Query("DELETE FROM CheckieReviewDb WHERE id = :id")
     suspend fun deleteReview(id: String)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPictures(pictures: List<CheckieReviewPictureDb>)
-
-    @Query(
-        """
-            UPDATE CheckieReviewPictureDb
-            SET uri = :pictureUri
-            WHERE id = :pictureId
-        """
-    )
-    suspend fun updatePictureUri(pictureId: String, pictureUri: String)
-
     @Query(
         """
             UPDATE CheckieReviewDb
@@ -91,7 +78,4 @@ internal interface CheckieReviewDao {
         """
     )
     suspend fun dropSyncing()
-
-    @Query("DELETE FROM CheckieReviewPictureDb WHERE id IN (:picturesIds)")
-    suspend fun deletePictures(picturesIds: List<String>)
 }

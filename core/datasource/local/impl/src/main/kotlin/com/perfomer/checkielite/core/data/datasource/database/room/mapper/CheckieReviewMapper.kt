@@ -13,6 +13,7 @@ internal fun CheckieReviewDetailedDb.toDomain(): CheckieReview {
         pictures = picturesUri
             .sortedWith(compareBy({ it.order }, { it.id }))
             .map { it.toDomain() },
+        tags = tags.map { it.toDomain() },
         comment = review.reviewText,
         advantages = review.advantages,
         disadvantages = review.disadvantages,

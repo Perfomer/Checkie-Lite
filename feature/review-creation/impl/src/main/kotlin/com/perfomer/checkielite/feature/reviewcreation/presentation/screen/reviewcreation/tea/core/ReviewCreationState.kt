@@ -2,6 +2,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.core.entity.CheckiePicture
+import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import kotlinx.collections.immutable.PersistentList
@@ -28,6 +29,8 @@ internal data class ReviewDetails(
     val productName: String = "",
     val productBrand: String = "",
     val pictures: PersistentList<CheckiePicture> = emptyPersistentList(),
+
+    val tags: PersistentList<CheckieTag> = emptyPersistentList(),
 
     val rating: Int = 5,
     val comment: String = "",

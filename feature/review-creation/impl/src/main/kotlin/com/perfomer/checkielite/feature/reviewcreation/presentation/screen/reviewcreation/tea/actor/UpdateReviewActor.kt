@@ -4,7 +4,7 @@ import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.feature.reviewcreation.domain.repository.ReviewCreationRepository
+import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.UpdateReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 internal class UpdateReviewActor(
-    private val repository: ReviewCreationRepository,
+    private val localDataSource: CheckieLocalDataSource,
 ) : Actor<ReviewCreationCommand, ReviewCreationEvent> {
 
     override fun act(commands: Flow<ReviewCreationCommand>): Flow<ReviewCreationEvent> {
@@ -25,12 +25,13 @@ internal class UpdateReviewActor(
 
     private fun handleCommand(command: UpdateReview): Flow<ReviewSaving> {
         return flowBy {
-            repository.updateReview(
+            localDataSource.updateReview(
                 reviewId = command.reviewId,
                 productName = command.productName,
                 productBrand = command.productBrand,
                 rating = command.rating,
                 pictures = command.pictures,
+                tags = command.tags,
                 comment = command.comment,
                 advantages = command.advantages,
                 disadvantages = command.disadvantages,

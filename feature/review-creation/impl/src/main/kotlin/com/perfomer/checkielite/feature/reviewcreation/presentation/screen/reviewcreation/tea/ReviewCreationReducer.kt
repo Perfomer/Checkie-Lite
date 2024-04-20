@@ -77,6 +77,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                             disadvantages = state.reviewDetails.disadvantages,
                             rating = state.reviewDetails.rating,
                             pictures = state.reviewDetails.pictures,
+                            tags = state.reviewDetails.tags,
                         )
                     )
 
@@ -90,6 +91,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                             disadvantages = state.reviewDetails.disadvantages,
                             rating = state.reviewDetails.rating,
                             pictures = state.reviewDetails.pictures,
+                            tags = state.reviewDetails.tags,
                         )
                     )
                 }

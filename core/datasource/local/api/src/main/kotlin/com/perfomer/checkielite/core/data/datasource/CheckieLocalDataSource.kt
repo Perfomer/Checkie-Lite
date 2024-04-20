@@ -2,6 +2,7 @@ package com.perfomer.checkielite.core.data.datasource
 
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
+import com.perfomer.checkielite.core.entity.CheckieTag
 import kotlinx.coroutines.flow.Flow
 
 interface CheckieLocalDataSource {
@@ -19,6 +20,7 @@ interface CheckieLocalDataSource {
         productBrand: String?,
         rating: Int,
         pictures: List<CheckiePicture>,
+        tags: List<CheckieTag>,
         comment: String?,
         advantages: String?,
         disadvantages: String?,
@@ -30,6 +32,7 @@ interface CheckieLocalDataSource {
         productBrand: String?,
         rating: Int,
         pictures: List<CheckiePicture>,
+        tags: List<CheckieTag>,
         comment: String?,
         advantages: String?,
         disadvantages: String?,

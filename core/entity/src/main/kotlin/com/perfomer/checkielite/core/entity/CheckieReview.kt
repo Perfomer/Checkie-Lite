@@ -8,6 +8,7 @@ data class CheckieReview(
     val productBrand: String?,
     val rating: Int,
     val pictures: List<CheckiePicture>,
+    val tags: List<CheckieTag>,
     val comment: String?,
     val advantages: String?,
     val disadvantages: String?,

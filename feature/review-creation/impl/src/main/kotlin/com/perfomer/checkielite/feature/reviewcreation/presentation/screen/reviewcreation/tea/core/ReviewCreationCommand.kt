@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core
 
 import com.perfomer.checkielite.core.entity.CheckiePicture
+import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
 
 internal sealed interface ReviewCreationCommand {
@@ -14,6 +15,7 @@ internal sealed interface ReviewCreationCommand {
         val productBrand: String?,
         val rating: Int,
         val pictures: List<CheckiePicture>,
+        val tags: List<CheckieTag>,
         val comment: String?,
         val advantages: String?,
         val disadvantages: String?,
@@ -25,6 +27,7 @@ internal sealed interface ReviewCreationCommand {
         val productBrand: String?,
         val rating: Int,
         val pictures: List<CheckiePicture>,
+        val tags: List<CheckieTag>,
         val comment: String?,
         val advantages: String?,
         val disadvantages: String?,

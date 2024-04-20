@@ -9,6 +9,7 @@ import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
 import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
+import com.perfomer.checkielite.core.entity.CheckieTag
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -41,6 +42,7 @@ internal class CheckieLocalDataSourceImpl(
         productBrand: String?,
         rating: Int,
         pictures: List<CheckiePicture>,
+        tags: List<CheckieTag>,
         comment: String?,
         advantages: String?,
         disadvantages: String?
@@ -59,6 +61,7 @@ internal class CheckieLocalDataSourceImpl(
             advantages = advantages,
             disadvantages = disadvantages,
             pictures = actualPictures,
+            tags = tags,
             creationDate = creationDate,
             modificationDate = creationDate,
             isSyncing = isNeedSync,
@@ -79,6 +82,7 @@ internal class CheckieLocalDataSourceImpl(
         productBrand: String?,
         rating: Int,
         pictures: List<CheckiePicture>,
+        tags: List<CheckieTag>,
         comment: String?,
         advantages: String?,
         disadvantages: String?
@@ -117,6 +121,7 @@ internal class CheckieLocalDataSourceImpl(
             advantages = advantages,
             disadvantages = disadvantages,
             pictures = actualPictures,
+            tags = tags,
             creationDate = initialReview.creationDate,
             modificationDate = Date(),
             isSyncing = isNeedSync,

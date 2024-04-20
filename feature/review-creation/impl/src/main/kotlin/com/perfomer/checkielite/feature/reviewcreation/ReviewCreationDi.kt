@@ -1,11 +1,10 @@
 package com.perfomer.checkielite.feature.reviewcreation
 
 import android.content.Context
+import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.core.navigation.api.Router
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryScreenProvider
-import com.perfomer.checkielite.feature.reviewcreation.data.repository.ReviewCreationRepositoryImpl
-import com.perfomer.checkielite.feature.reviewcreation.domain.repository.ReviewCreationRepository
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationScreenProvider
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationReducer
@@ -18,18 +17,12 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.ReviewCreationContentScreen
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewCreationUiStateMapper
 import org.koin.core.module.dsl.factoryOf
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val reviewCreationModules
-    get() = listOf(presentationModule, dataModule)
+    get() = listOf(presentationModule)
 
-private val dataModule = module {
-    singleOf(::ReviewCreationRepositoryImpl) bind ReviewCreationRepository::class
-}
-
-private val presentationModule  = module {
+private val presentationModule = module {
     factoryOf(::createReviewCreationStore)
     factory { ReviewCreationScreenProvider(::ReviewCreationContentScreen) }
 }
@@ -37,21 +30,21 @@ private val presentationModule  = module {
 internal fun createReviewCreationStore(
     context: Context,
     params: ReviewCreationParams,
-    reviewCreationRepository: ReviewCreationRepository,
+    localDataSource: CheckieLocalDataSource,
     router: Router,
     externalRouter: ExternalRouter,
     galleryScreenProvider: GalleryScreenProvider,
-) : ReviewCreationStore{
+): ReviewCreationStore {
     return ReviewCreationStore(
         params = params,
         reducer = ReviewCreationReducer(),
         uiStateMapper = ReviewCreationUiStateMapper(context),
         actors = setOf(
             ReviewCreationNavigationActor(router, externalRouter, galleryScreenProvider),
-            CreateReviewActor(reviewCreationRepository),
-            UpdateReviewActor(reviewCreationRepository),
-            LoadReviewActor(reviewCreationRepository),
-            SearchBrandsActor(reviewCreationRepository),
+            CreateReviewActor(localDataSource),
+            UpdateReviewActor(localDataSource),
+            LoadReviewActor(localDataSource),
+            SearchBrandsActor(localDataSource),
         )
     )
 }

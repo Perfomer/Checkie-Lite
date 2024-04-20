@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -24,7 +24,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,22 +34,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -63,8 +56,6 @@ import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiFloatingActionButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
-import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
-import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedFieldDefaults
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRating
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -74,20 +65,15 @@ import com.perfomer.checkielite.feature.main.R
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiState
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.ReviewItem
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun MainScreen(
     state: MainUiState,
-    onSearchQueryInput: (query: String) -> Unit = {},
-    onSearchQueryClearClick: () -> Unit = {},
+    onSearchClick: () -> Unit = {},
     onReviewClick: (id: String) -> Unit = {},
     onFabClick: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
-    val searchFieldFocusRequester = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
 
     Scaffold(
         floatingActionButton = {
@@ -101,12 +87,7 @@ internal fun MainScreen(
         topBar = {
             TopAppBar(
                 scrollableState = scrollState,
-                onSearchClick = {
-                    coroutineScope.launch {
-                        scrollState.animateScrollToItem(0)
-                        searchFieldFocusRequester.requestFocus()
-                    }
-                },
+                onSearchClick = onSearchClick,
             )
         },
     ) { contentPadding ->
@@ -117,12 +98,7 @@ internal fun MainScreen(
                 state = state,
                 scrollState = scrollState,
                 contentPadding = contentPadding,
-                searchFieldFocusRequester = searchFieldFocusRequester,
-                onSearchQueryInput = onSearchQueryInput,
-                onSearchQueryClearClick = {
-                    focusManager.clearFocus()
-                    onSearchQueryClearClick()
-                },
+                onSearchClick = onSearchClick,
                 onReviewClick = onReviewClick,
             )
 
@@ -138,9 +114,7 @@ private fun Content(
     state: MainUiState.Content,
     scrollState: LazyListState,
     contentPadding: PaddingValues,
-    searchFieldFocusRequester: FocusRequester,
-    onSearchQueryInput: (query: String) -> Unit,
-    onSearchQueryClearClick: () -> Unit,
+    onSearchClick: () -> Unit = {},
     onReviewClick: (id: String) -> Unit,
 ) {
     LazyColumn(
@@ -153,12 +127,7 @@ private fun Content(
         item {
             Spacer(modifier = Modifier.height(4.dp))
 
-            SearchField(
-                searchQuery = state.searchQuery,
-                focusRequester = searchFieldFocusRequester,
-                onSearchQueryInput = onSearchQueryInput,
-                onSearchQueryClearClick = onSearchQueryClearClick,
-            )
+            SearchField(onSearchClick = onSearchClick)
 
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -256,45 +225,31 @@ private fun TopAppBar(
 
 @Composable
 private fun SearchField(
-    searchQuery: String,
-    focusRequester: FocusRequester,
-    onSearchQueryInput: (query: String) -> Unit,
-    onSearchQueryClearClick: () -> Unit,
+    onSearchClick: () -> Unit,
 ) {
-    CuiOutlinedField(
-        text = searchQuery,
-        placeholder = stringResource(CommonString.common_search),
-        trailingIcon = {
-            if (searchQuery.isBlank()) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_search),
-                    tint = LocalCuiPalette.current.IconSecondary,
-                    contentDescription = null,
-                )
-            } else {
-                CuiIconButton(
-                    painter = painterResource(id = CommonDrawable.ic_cross),
-                    contentDescription = stringResource(R.string.main_clear),
-                    tint = LocalCuiPalette.current.IconPrimary,
-                    onClick = onSearchQueryClearClick,
-                    modifier = Modifier.offset(x = (-8).dp)
-                )
-            }
-        },
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Search,
-            capitalization = KeyboardCapitalization.Sentences
-        ),
-        singleLine = true,
-        onValueChange = onSearchQueryInput,
-        colors = CuiOutlinedFieldDefaults.colors(
-            unfocusedBorderColor = LocalCuiPalette.current.OutlineSecondary,
-        ),
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
-            .focusRequester(focusRequester)
-    )
+            .clip(RoundedCornerShape(16.dp))
+            .border(1.dp, LocalCuiPalette.current.OutlineSecondary, RoundedCornerShape(16.dp))
+            .clickable(onClick = onSearchClick)
+            .padding(horizontal = 20.dp, vertical = 13.dp)
+    ) {
+        Text(
+            text = stringResource(CommonString.common_search),
+            fontSize = 14.sp,
+            color = LocalCuiPalette.current.TextSecondary,
+            modifier = Modifier.weight(1F)
+        )
+
+        Icon(
+            painter = painterResource(id = R.drawable.ic_search),
+            tint = LocalCuiPalette.current.IconSecondary,
+            contentDescription = null,
+        )
+    }
 }
 
 @Composable

@@ -7,6 +7,7 @@ import com.perfomer.checkielite.feature.gallery.galleryModules
 import com.perfomer.checkielite.feature.main.mainModules
 import com.perfomer.checkielite.feature.reviewcreation.reviewCreationModules
 import com.perfomer.checkielite.feature.reviewdetails.reviewDetailsModules
+import com.perfomer.checkielite.feature.search.searchModules
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.voyager.navigationModule
 import org.koin.core.module.Module
@@ -38,4 +39,5 @@ private val featureModules
         mainModules,
         reviewCreationModules,
         reviewDetailsModules,
+        searchModules,
     ).flatten()

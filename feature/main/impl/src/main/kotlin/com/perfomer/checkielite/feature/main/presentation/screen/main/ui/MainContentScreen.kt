@@ -8,8 +8,7 @@ import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.MainStore
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnFabClick
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnReviewClick
-import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnSearchQueryClearClick
-import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnSearchQueryInput
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnSearchClick
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnStart
 import com.perfomer.checkielite.navigation.voyager.BaseScreen
 
@@ -24,8 +23,7 @@ internal class MainContentScreen : BaseScreen() {
         MainScreen(
             state = state,
             onReviewClick = acceptable(::OnReviewClick),
-            onSearchQueryInput = acceptable(::OnSearchQueryInput),
-            onSearchQueryClearClick = acceptable(OnSearchQueryClearClick),
+            onSearchClick = acceptable(OnSearchClick),
             onFabClick = acceptable(OnFabClick),
         )
     }

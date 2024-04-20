@@ -23,9 +23,7 @@ internal sealed interface MainUiEvent : MainEvent {
 
     class OnReviewClick(val id: String) : MainUiEvent
 
-    class OnSearchQueryInput(val query: String) : MainUiEvent
-
-    data object OnSearchQueryClearClick : MainUiEvent
+    data object OnSearchClick : MainUiEvent
 
     data object OnFabClick : MainUiEvent
 }

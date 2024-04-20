@@ -34,13 +34,14 @@ internal fun createSearchStore(
     context: Context,
     params: SearchParams,
     router: Router,
+    sortScreenProvider: SortScreenProvider,
 ): SearchStore {
     return SearchStore(
         params = params,
         reducer = SearchReducer(),
         uiStateMapper = SearchUiStateMapper(context),
         actors = setOf(
-            SearchNavigationActor(router),
+            SearchNavigationActor(router, sortScreenProvider),
         ),
     )
 }

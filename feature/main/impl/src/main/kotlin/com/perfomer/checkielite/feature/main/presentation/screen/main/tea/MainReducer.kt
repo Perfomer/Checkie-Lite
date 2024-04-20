@@ -10,14 +10,14 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent.ReviewsLoading
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenReviewCreation
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenReviewDetails
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenSearch
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationEvent
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationEvent.ReviewCreated
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainState
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnFabClick
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnReviewClick
-import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnSearchQueryClearClick
-import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnSearchQueryInput
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnSearchClick
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnStart
 
 internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, MainState>() {
@@ -32,15 +32,7 @@ internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, Main
         is OnStart -> commands(LoadReviews(state.searchQuery))
         is OnFabClick -> commands(OpenReviewCreation)
         is OnReviewClick -> commands(OpenReviewDetails(event.id))
-        is OnSearchQueryInput -> {
-            state { copy(searchQuery = event.query) }
-            commands(LoadReviews(event.query.trim()))
-        }
-
-        is OnSearchQueryClearClick -> {
-            state { copy(searchQuery = "") }
-            commands(LoadReviews())
-        }
+        is OnSearchClick -> commands(OpenSearch())
     }
 
     private fun reduceNavigation(event: MainNavigationEvent) = when (event) {

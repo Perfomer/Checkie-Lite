@@ -6,6 +6,7 @@ import com.perfomer.checkielite.feature.search.navigation.SearchParams
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEffect
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.OnInitialize
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchState
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.SearchUiState
@@ -21,4 +22,5 @@ internal class SearchStore(
     reducer = reducer,
     uiStateMapper = uiStateMapper,
     actors = actors,
+    initialEvents = listOf(OnInitialize),
 )

@@ -1,11 +1,15 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor
 
 import com.perfomer.checkielite.common.tea.component.Actor
+import com.perfomer.checkielite.core.navigation.api.DestinationMode
 import com.perfomer.checkielite.core.navigation.api.Router
+import com.perfomer.checkielite.feature.search.presentation.navigation.SortParams
+import com.perfomer.checkielite.feature.search.presentation.navigation.SortScreenProvider
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.Exit
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.OpenSort
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -14,6 +18,7 @@ import kotlinx.coroutines.flow.mapLatest
 
 internal class SearchNavigationActor(
     private val router: Router,
+    private val sortScreenProvider: SortScreenProvider,
 ) : Actor<SearchCommand, SearchEvent> {
 
     override fun act(commands: Flow<SearchCommand>): Flow<SearchEvent> {
@@ -25,6 +30,10 @@ internal class SearchNavigationActor(
     private fun handleCommand(command: SearchNavigationCommand): SearchNavigationEvent? = with(router) {
         when (command) {
             is Exit -> exit()
+            is OpenSort -> router.navigate(
+                screen = sortScreenProvider(params = SortParams(command.order, command.strategy)),
+                mode = DestinationMode.BOTTOM_SHEET,
+            )
         }
 
         return null

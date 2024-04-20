@@ -9,5 +9,7 @@ internal sealed interface MainNavigationCommand : MainCommand {
 
     class OpenReviewDetails(val reviewId: String) : MainNavigationCommand
 
+    class OpenSearch() : MainNavigationCommand
+
     data object OpenReviewCreation : MainNavigationCommand
 }

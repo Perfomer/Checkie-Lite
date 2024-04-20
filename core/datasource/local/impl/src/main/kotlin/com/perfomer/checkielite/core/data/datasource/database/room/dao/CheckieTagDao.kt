@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 internal interface CheckieTagDao {
 
+    @Query("SELECT * FROM CheckieTagDb WHERE id = :id")
+    suspend fun getTag(id: String) : CheckieTagDb
+
     @Query(
         """
             SELECT * FROM CheckieTagDb tag

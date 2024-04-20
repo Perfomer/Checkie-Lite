@@ -41,4 +41,12 @@ interface CheckieLocalDataSource {
     suspend fun deleteReview(reviewId: String)
 
     suspend fun dropSyncing()
+
+    suspend fun getTag(id: String): CheckieTag
+
+    suspend fun createTag(value: String, emoji: String?): CheckieTag
+
+    suspend fun updateTag(id: String, value: String, emoji: String?): CheckieTag
+
+    suspend fun deleteTag(id: String)
 }

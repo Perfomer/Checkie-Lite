@@ -43,6 +43,8 @@ internal interface DatabaseDataSource {
 
     suspend fun dropSyncing()
 
+    suspend fun getTag(id: String): CheckieTag
+
     suspend fun saveTag(tag: CheckieTag)
 
     suspend fun deleteTag(tagId: String)
@@ -135,6 +137,10 @@ internal class DatabaseDataSourceImpl(
 
     override suspend fun dropSyncing() {
         reviewDao.dropSyncing()
+    }
+
+    override suspend fun getTag(id: String): CheckieTag {
+        return tagDao.getTag(id).toDomain()
     }
 
     override suspend fun saveTag(tag: CheckieTag) {

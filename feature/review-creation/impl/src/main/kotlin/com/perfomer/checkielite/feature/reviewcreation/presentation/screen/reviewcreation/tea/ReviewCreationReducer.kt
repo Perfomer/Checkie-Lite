@@ -70,7 +70,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 if (isProductNameValid) state { copy(currentPage = next) }
                 state { copy(isProductNameValid = isProductNameValid) }
             } else {
-                when (state.mode) {
+                when (val mode = state.mode) {
                     is ReviewCreationMode.Creation -> commands(
                         CreateReview(
                             productName = state.reviewDetails.productName,
@@ -86,7 +86,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
 
                     is ReviewCreationMode.Modification -> commands(
                         UpdateReview(
-                            reviewId = state.reviewId,
+                            reviewId = mode.reviewId,
                             productName = state.reviewDetails.productName,
                             productBrand = state.reviewDetails.productBrand,
                             comment = state.reviewDetails.comment,
@@ -208,7 +208,6 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
 
             copy(
                 isReviewLoading = false,
-                reviewId = event.review.id,
                 initialReviewDetails = initialReviewDetails,
                 reviewDetails = initialReviewDetails,
             )

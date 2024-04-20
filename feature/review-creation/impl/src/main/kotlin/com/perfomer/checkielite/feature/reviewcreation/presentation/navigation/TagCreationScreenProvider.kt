@@ -9,7 +9,9 @@ internal class TagCreationParams(val mode: TagCreationMode) : Params
 
 internal sealed interface TagCreationResult {
 
-    data class Success(val tag: CheckieTag) : TagCreationResult
+    data class Created(val tag: CheckieTag) : TagCreationResult
+
+    data class Deleted(val tagId: String) : TagCreationResult
 }
 
 internal fun interface TagCreationScreenProvider {

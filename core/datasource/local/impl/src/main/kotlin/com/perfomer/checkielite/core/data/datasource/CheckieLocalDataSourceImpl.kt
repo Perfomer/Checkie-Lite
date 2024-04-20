@@ -151,4 +151,26 @@ internal class CheckieLocalDataSourceImpl(
     override suspend fun dropSyncing() {
         databaseDataSource.dropSyncing()
     }
+
+    override suspend fun getTag(id: String): CheckieTag {
+        return databaseDataSource.getTag(id)
+    }
+
+    override suspend fun createTag(value: String, emoji: String?): CheckieTag {
+        val tag = CheckieTag(id = randomUuid(), value = value, emoji = emoji)
+        databaseDataSource.saveTag(tag)
+
+        return tag
+    }
+
+    override suspend fun updateTag(id: String, value: String, emoji: String?): CheckieTag {
+        val tag = CheckieTag(id = id, value = value, emoji = emoji)
+        databaseDataSource.saveTag(tag)
+
+        return tag
+    }
+
+    override suspend fun deleteTag(id: String) {
+        databaseDataSource.deleteTag(id)
+    }
 }

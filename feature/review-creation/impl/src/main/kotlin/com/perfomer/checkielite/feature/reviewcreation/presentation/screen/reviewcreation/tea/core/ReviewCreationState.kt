@@ -11,7 +11,6 @@ internal data class ReviewCreationState(
     val mode: ReviewCreationMode,
     val currentPage: ReviewCreationPage = mode.initialPage,
 
-    val reviewId: String = "",
     val initialReviewDetails: ReviewDetails = ReviewDetails(),
     val reviewDetails: ReviewDetails = initialReviewDetails,
     val isProductNameValid: Boolean = true,

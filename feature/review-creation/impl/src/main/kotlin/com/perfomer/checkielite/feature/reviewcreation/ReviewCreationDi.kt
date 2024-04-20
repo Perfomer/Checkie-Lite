@@ -5,7 +5,6 @@ import com.chrynan.emoji.repo.map.KotlinMapEmojiRepository
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.core.navigation.api.Router
-import com.perfomer.checkielite.feature.emojipicker.presentation.screen.emojipicker.ui.state.TagCreationUiStateMapper
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryScreenProvider
 import com.perfomer.checkielite.feature.reviewcreation.data.repository.CheckieEmojiRepositoryImpl
 import com.perfomer.checkielite.feature.reviewcreation.domain.repository.CheckieEmojiRepository
@@ -25,8 +24,14 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewCreationUiStateMapper
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.TagCreationReducer
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.TagCreationStore
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.actor.CreateTagActor
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.actor.DeleteTagActor
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.actor.LoadEmojisActor
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.actor.LoadTagActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.actor.TagCreationNavigationActor
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.actor.UpdateTagActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui.TagCreationContentScreen
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui.state.TagCreationUiStateMapper
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -85,6 +90,11 @@ internal fun createTagCreationStore(
         uiStateMapper = TagCreationUiStateMapper(context),
         actors = setOf(
             TagCreationNavigationActor(router),
+            LoadTagActor(localDataSource),
+            CreateTagActor(localDataSource),
+            DeleteTagActor(localDataSource),
+            UpdateTagActor(localDataSource),
+            LoadEmojisActor(emojiRepository),
         )
     )
 }

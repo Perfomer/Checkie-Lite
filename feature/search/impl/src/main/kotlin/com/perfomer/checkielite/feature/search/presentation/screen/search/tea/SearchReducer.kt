@@ -14,8 +14,8 @@ import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.co
 internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEvent, SearchState>() {
 
     override fun reduce(event: SearchEvent) = when (event) {
-        is SearchUiEvent -> reduceUi(event)
         is Initialize -> commands(OpenSort(state.currentSortOrder, state.currentSortStrategy))
+        is SearchUiEvent -> reduceUi(event)
     }
 
     private fun reduceUi(event: SearchUiEvent) = when (event) {

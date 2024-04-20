@@ -69,6 +69,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRating
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.util.isDebug
 import com.perfomer.checkielite.feature.main.R
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiState
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.ReviewItem
@@ -213,18 +214,20 @@ private fun TopAppBar(
 
     CenterAlignedTopAppBar(
         title = {
+            val textResource = if (isDebug()) R.string.app_name_debug else R.string.app_name_lite
+
             Text(
                 text = buildAnnotatedString {
                     append(
                         AnnotatedString(
-                            text = stringResource(id = R.string.app_name_checkie),
+                            text = stringResource(R.string.app_name_checkie),
                             spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
                         )
                     )
                     append(" ")
                     append(
                         AnnotatedString(
-                            text = stringResource(id = R.string.app_name_lite),
+                            text = stringResource(textResource),
                             spanStyle = SpanStyle(fontWeight = FontWeight.Normal)
                         )
                     )

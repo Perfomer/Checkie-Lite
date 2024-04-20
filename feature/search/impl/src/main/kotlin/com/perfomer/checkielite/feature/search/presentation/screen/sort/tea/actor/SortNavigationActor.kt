@@ -6,6 +6,7 @@ import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortEvent
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortNavigationCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortNavigationCommand.Exit
+import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortNavigationCommand.ExitWithResult
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortNavigationEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -25,6 +26,7 @@ internal class SortNavigationActor(
     private fun handleCommand(command: SortNavigationCommand): SortNavigationEvent? = with(router) {
         when (command) {
             is Exit -> exit()
+            is ExitWithResult -> exitWithResult(command.result)
         }
 
         return null

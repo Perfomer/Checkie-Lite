@@ -10,5 +10,13 @@
     <string name="search_filters_tags">Tags</string>
     <string name="search_filters_rating">Rating</string>
 
+    <string name="search_sort_title">Sorting</string>
+    <string name="search_sort_creationdate">Creation date</string>
+    <string name="search_sort_modificationdate">Modification date</string>
+    <string name="search_sort_rating">Rating</string>
+    <string name="search_sort_name">Name</string>
+    <string name="search_sort_order_ascending">Ascending</string>
+    <string name="search_sort_order_descending">Descending</string>
+
     <string name="search_tags_title">Tags</string>
 </resources>

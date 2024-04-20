@@ -10,5 +10,13 @@
     <string name="search_filters_tags">Теги</string>
     <string name="search_filters_rating">Оценка</string>
 
+    <string name="search_sort_title">Сортировка</string>
+    <string name="search_sort_creationdate">Дата создания</string>
+    <string name="search_sort_modificationdate">Дата изменения</string>
+    <string name="search_sort_rating">Оценка</string>
+    <string name="search_sort_name">Название</string>
+    <string name="search_sort_order_ascending">По возрастанию</string>
+    <string name="search_sort_order_descending">По убыванию</string>
+
     <string name="search_tags_title">Теги</string>
 </resources>

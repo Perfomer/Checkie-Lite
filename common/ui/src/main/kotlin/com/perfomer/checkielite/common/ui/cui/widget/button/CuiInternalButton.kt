@@ -33,6 +33,7 @@ internal fun CuiInternalButton(
     modifier: Modifier = Modifier,
     border: BorderStroke? = null,
     leadingIcon: @Composable (() -> Unit)?,
+    trailingIcon: @Composable (() -> Unit)?,
 ) {
     val actualEnabled = remember(enabled, loading) { enabled && !loading }
     val actualTextColor = if (actualEnabled) textColor else textColorDisabled
@@ -59,6 +60,10 @@ internal fun CuiInternalButton(
                 text = text,
                 textColor = actualTextColor,
             )
+
+            if (trailingIcon != null) {
+                trailingIcon()
+            }
         }
     }
 }
@@ -74,7 +79,7 @@ private fun CuiButtonLoader() {
 }
 
 @Composable
-private fun CuiButtonText(text: String, textColor: Color) {
+internal fun CuiButtonText(text: String, textColor: Color) {
     Text(
         text = text,
         fontWeight = FontWeight.Bold,

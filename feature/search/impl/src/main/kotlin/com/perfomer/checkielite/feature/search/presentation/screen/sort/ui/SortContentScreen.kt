@@ -8,6 +8,9 @@ import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.search.presentation.navigation.SortParams
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.SortStore
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortUiEvent.OnBackPress
+import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortUiEvent.OnDoneClick
+import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortUiEvent.OnSortingOptionClick
+import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortUiEvent.OnSortingOrderClick
 import com.perfomer.checkielite.navigation.voyager.BaseScreen
 
 internal class SortContentScreen(
@@ -20,7 +23,9 @@ internal class SortContentScreen(
 
         SortScreen(
             state = state,
-            onNavigationIconClick = acceptable(OnBackPress),
+            onSortingOrderClick = acceptable(OnSortingOrderClick),
+            onOptionClick = acceptable(::OnSortingOptionClick),
+            onDoneClick = acceptable(OnDoneClick),
         )
     }
 }

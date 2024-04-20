@@ -26,6 +26,7 @@ fun CuiSecondaryButton(
     loading: Boolean = false,
     onClick: () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
 ) {
     CuiInternalButton(
         text = text,
@@ -41,6 +42,7 @@ fun CuiSecondaryButton(
         onClick = onClick,
         modifier = modifier,
         leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
     )
 }
 

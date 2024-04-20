@@ -4,13 +4,23 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import cafe.adriel.voyager.transitions.FadeTransition
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.perfomer.checkielite.common.android.SingleActivityHolder
+import com.perfomer.checkielite.common.ui.cui.widget.sheet.CuiDragAnchor
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
 import com.perfomer.checkielite.common.ui.util.TransparentSystemBars
 import com.perfomer.checkielite.feature.main.navigation.MainScreenProvider
@@ -39,6 +49,7 @@ class AppActivity : AppCompatActivity() {
 
             CheckieLiteTheme {
                 UsualNavigator()
+                CheckieBottomSheetNavigator()
                 OverlayNavigator()
             }
 
@@ -47,7 +58,7 @@ class AppActivity : AppCompatActivity() {
     }
 
     @Composable
-    fun UsualNavigator() {
+    private fun UsualNavigator() {
         Navigator(
             screen = mainScreenProvider() as Screen,
             onBackPressed = { false },
@@ -58,6 +69,25 @@ class AppActivity : AppCompatActivity() {
                 screen.Content()
             }
         }
+    }
+
+    @Composable
+    private fun CheckieBottomSheetNavigator() {
+        BottomSheetNavigator(
+            sheetElevation = 24.dp,
+            sheetBackgroundColor = LocalCuiPalette.current.BackgroundPrimary,
+            sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+            content = { navigator ->
+                navigatorHolder.bottomSheetNavigator = navigator
+            },
+            sheetContent = {
+                Column(modifier = Modifier.statusBarsPadding()) {
+                    CuiDragAnchor()
+                    CurrentScreen()
+                }
+            },
+            modifier = Modifier.imePadding()
+        )
     }
 
     @Composable

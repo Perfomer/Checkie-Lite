@@ -56,5 +56,6 @@ dependencies {
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.transitions)
+    implementation(libs.voyager.bottomsheet)
     implementation(platform(libs.compose.bom))
 }

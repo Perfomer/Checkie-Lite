@@ -21,5 +21,6 @@ dependencies {
 	implementation(libs.compose.ui)
 	implementation(libs.koin.core)
 	implementation(libs.kotlinx.coroutines)
+	implementation(libs.voyager.bottomsheet)
 	implementation(platform(libs.compose.bom))
 }

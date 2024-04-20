@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name_checkie" translatable="false">checkie</string>
     <string name="app_name_lite" translatable="false">lite</string>
-    <string name="app_name_debug" translatable="false">debug</string>
+    <string name="app_name_lite_debug" translatable="false">debug</string>
 
     <string name="main_add_checkie">Add Checkie</string>
     <string name="main_clear">Clear</string>

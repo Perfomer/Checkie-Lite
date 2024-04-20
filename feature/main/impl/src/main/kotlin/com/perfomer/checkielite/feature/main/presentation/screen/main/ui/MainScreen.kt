@@ -214,7 +214,7 @@ private fun TopAppBar(
 
     CenterAlignedTopAppBar(
         title = {
-            val textResource = if (isDebug()) R.string.app_name_debug else R.string.app_name_lite
+            val textResource = if (isDebug()) R.string.app_name_lite_debug else R.string.app_name_lite
 
             Text(
                 text = buildAnnotatedString {

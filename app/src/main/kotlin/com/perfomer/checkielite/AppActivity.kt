@@ -78,6 +78,7 @@ class AppActivity : AppCompatActivity() {
             content = { navigator ->
                 navigatorHolder.bottomSheetNavigator = navigator
             },
+            skipHalfExpanded = false,
             sheetContent = {
                 CuiDragAnchor()
                 CurrentScreen()

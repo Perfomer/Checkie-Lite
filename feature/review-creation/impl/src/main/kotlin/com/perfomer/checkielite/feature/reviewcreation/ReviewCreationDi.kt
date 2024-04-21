@@ -61,13 +61,14 @@ internal fun createReviewCreationStore(
     router: Router,
     externalRouter: ExternalRouter,
     galleryScreenProvider: GalleryScreenProvider,
+    tagCreationScreenProvider: TagCreationScreenProvider,
 ): ReviewCreationStore {
     return ReviewCreationStore(
         params = params,
         reducer = ReviewCreationReducer(),
         uiStateMapper = ReviewCreationUiStateMapper(context),
         actors = setOf(
-            ReviewCreationNavigationActor(router, externalRouter, galleryScreenProvider),
+            ReviewCreationNavigationActor(router, externalRouter, galleryScreenProvider, tagCreationScreenProvider),
             CreateReviewActor(localDataSource),
             UpdateReviewActor(localDataSource),
             LoadReviewActor(localDataSource),

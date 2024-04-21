@@ -1,10 +1,11 @@
 package com.perfomer.checkielite.feature.reviewcreation.domain.repository
 
-import com.chrynan.emoji.core.EmojiCategory
+import com.perfomer.checkielite.feature.reviewcreation.domain.entity.CheckieEmoji
+import com.perfomer.checkielite.feature.reviewcreation.domain.entity.CheckieEmojiCategory
 
-interface CheckieEmojiRepository {
+internal interface CheckieEmojiRepository {
 
     suspend fun warmUp()
 
-    suspend fun getCategorizedEmojis(): List<EmojiCategory>
+    suspend fun getCategorizedEmojis(): List<Pair<CheckieEmojiCategory, List<CheckieEmoji>>>
 }

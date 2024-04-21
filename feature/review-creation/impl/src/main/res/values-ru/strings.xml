@@ -13,4 +13,13 @@
     <string name="reviewcreation_dialog_confirmexit_title">Вы действительно хотите выйти?</string>
     <string name="reviewcreation_dialog_confirmexit_message">Если вы выйдете, то изменения не будут сохранены.</string>
     <string name="reviewcreation_dialog_confirmexit_confirm">Выйти</string>
+
+    <string name="tagcreation_creation_title">Новый тег</string>
+    <string name="tagcreation_modification_title">Редактирование тега</string>
+    <string name="tagcreation_description">Напишите название тега и выберите иконку</string>
+
+    <string name="tagcreation_delete">Удалить</string>
+    <string name="tagcreation_dialog_confirmdelete_title">Вы действительно хотите удалить тег?</string>
+    <string name="tagcreation_dialog_confirmdelete_message">Этот тег будет навсегда удалён из всех продуктов, где он указан.</string>
+    <string name="tagcreation_dialog_confirmdelete_confirm">Удалить</string>
 </resources>

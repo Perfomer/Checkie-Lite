@@ -9,6 +9,9 @@ import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.core.navigation.api.Router
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryParams
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryScreenProvider
+import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagCreationMode
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationParams
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationScreenProvider
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand
@@ -29,6 +32,7 @@ internal class ReviewCreationNavigationActor(
     private val externalRouter: ExternalRouter,
 
     private val galleryScreenProvider: GalleryScreenProvider,
+    private val tagCreationScreenProvider: TagCreationScreenProvider,
 ) : Actor<ReviewCreationCommand, ReviewCreationEvent> {
 
     override fun act(commands: Flow<ReviewCreationCommand>): Flow<ReviewCreationEvent> {
@@ -41,7 +45,10 @@ internal class ReviewCreationNavigationActor(
         when (command) {
             is Exit -> exit()
             is ExitWithResult -> exitWithResult(command.result)
-            is OpenPhotoPicker -> return openPhotoPicker()
+            is OpenPhotoPicker -> router.navigate(
+                screen = tagCreationScreenProvider(TagCreationParams(mode = TagCreationMode.Creation())),
+                mode = DestinationMode.BOTTOM_SHEET,
+            )
             is OpenGallery -> router.navigate(
                 screen = galleryScreenProvider(GalleryParams(command.picturesUri.toArrayList(), command.currentPicturePosition)),
                 mode = DestinationMode.OVERLAY,

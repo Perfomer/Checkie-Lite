@@ -20,6 +20,9 @@
     <string name="tagcreation_creation_title">New tag</string>
     <string name="tagcreation_modification_title">Edit tag</string>
     <string name="tagcreation_description">Type the tag name and select the icon</string>
+    <string name="tagcreation_tag_name">Tag name</string>
+    <string name="tagcreation_tag_name_error_empty">Tag name should not be empty</string>
+    <string name="tagcreation_tag_name_error_exists">Tag with this name already exists</string>
     <string name="tagcreation_delete">Delete</string>
     <string name="tagcreation_dialog_confirmdelete_title">Do you really want to delete the tag?</string>
     <string name="tagcreation_dialog_confirmdelete_message">This tag will be permanently removed from all products where it is listed.</string>

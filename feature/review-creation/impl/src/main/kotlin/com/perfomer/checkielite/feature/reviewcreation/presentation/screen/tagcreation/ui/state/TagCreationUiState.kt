@@ -9,6 +9,7 @@ import kotlinx.collections.immutable.PersistentList
 internal data class TagCreationUiState(
     val title: String,
     val tagValue: String,
+    val tagValueError: String?,
     val isInteractive: Boolean,
     val isDeleteAvailable: Boolean,
     val selectedEmoji: String?,

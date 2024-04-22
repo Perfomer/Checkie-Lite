@@ -27,6 +27,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcr
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnEmojiSelect
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnSelectedEmojiClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnTagValueInput
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagValueFieldError
 import kotlinx.collections.immutable.toPersistentList
 
 internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEffect, TagCreationEvent, TagCreationState>() {
@@ -111,8 +112,10 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
 
     private fun reduceOnDoneClick() {
         if (state.tagValue.isEmpty()) {
-            effects(ShowErrorToast.TagValueIsEmpty)
+            state { copy(tagValueError = TagValueFieldError.FIELD_IS_EMPTY) }
             return
+        } else {
+            state { copy(tagValueError = null) }
         }
 
         when (val mode = state.mode) {

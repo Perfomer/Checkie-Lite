@@ -28,7 +28,6 @@ internal class TagCreationContentScreen(
             when (effect) {
                 ShowErrorToast.DeletionFailed -> Unit // todo
                 ShowErrorToast.SavingFailed -> Unit // todo
-                ShowErrorToast.TagValueIsEmpty -> Unit // todo
             }
         }
 

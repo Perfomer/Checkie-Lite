@@ -2,6 +2,7 @@ package com.perfomer.checkielite.common.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
@@ -26,6 +27,7 @@ fun CheckieLiteTheme(
         content = {
             CompositionLocalProvider(
                 LocalCuiPalette provides palette,
+                LocalContentColor provides MaterialTheme.colorScheme.onBackground,
                 content = content,
             )
         },

@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state
 
 import android.content.Context
+import androidx.compose.ui.util.fastMap
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
@@ -21,6 +22,7 @@ internal class ReviewCreationUiStateMapper(
             stepsCount = stepsCount,
             currentPage = state.currentPage,
             productInfoState = createProductInfoPageState(state),
+            tagsState = createTagsPageState(state),
             reviewInfoState = createReviewInfoPageState(state),
             isPrimaryButtonLoading = state.isSavingInProgress,
         )
@@ -34,6 +36,24 @@ internal class ReviewCreationUiStateMapper(
             picturesUri = state.reviewDetails.pictures.map { it.uri }.toPersistentList(),
             productNameErrorText = context.getString(R.string.reviewcreation_productinfo_field_product_error_empty)
                 .takeUnless { state.isProductNameValid },
+        )
+    }
+
+    private fun createTagsPageState(state: ReviewCreationState): TagsPageUiState {
+        val uiTags = state.tagsSuggestions.fastMap { tag ->
+            TagsPageUiState.Tag(
+                id = tag.id,
+                value = tag.value,
+                emoji = tag.emoji,
+                isSelected = state.reviewDetails.tags.contains(tag),
+            )
+        }
+
+        val (selectedTags, unselectedTags) = uiTags.partition { it.isSelected }
+
+        return TagsPageUiState(
+            searchQuery = state.tagsSearchQuery.takeIf { it.isNotBlank() },
+            tags = (selectedTags + unselectedTags).toPersistentList(),
         )
     }
 

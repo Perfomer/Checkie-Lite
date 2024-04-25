@@ -26,8 +26,10 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnPrimaryButtonClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ProductInfo
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ReviewInfo
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.Tags
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.ProductInfoScreen
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.reviewinfo.ReviewInfoScreen
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.TagsScreen
 import com.perfomer.checkielite.navigation.voyager.BaseScreen
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -58,6 +60,7 @@ internal class ReviewCreationContentScreen(
         )
 
         val productInfoScrollState = rememberScrollState()
+        val tagsScrollState = rememberScrollState()
         val reviewInfoScrollState = rememberScrollState()
 
         val currentPageScrollState by remember(pagerState.currentPage) {
@@ -66,6 +69,7 @@ internal class ReviewCreationContentScreen(
 
                 when (currentPage) {
                     ReviewCreationPage.PRODUCT_INFO -> productInfoScrollState
+                    ReviewCreationPage.TAGS -> tagsScrollState
                     ReviewCreationPage.REVIEW_INFO -> reviewInfoScrollState
                 }
             }
@@ -99,6 +103,15 @@ internal class ReviewCreationContentScreen(
                     onPictureClick = acceptable(ProductInfo::OnPictureClick),
                     onPictureDeleteClick = acceptable(ProductInfo::OnPictureDeleteClick),
                     onPictureReorder = acceptable(ProductInfo::OnPictureReorder),
+                )
+
+                ReviewCreationPage.TAGS -> TagsScreen(
+                    state = state.tagsState,
+                    scrollState = tagsScrollState,
+                    onCreateTagClick = acceptable(Tags.OnCreateTagClick),
+                    onTagClick = acceptable(Tags::OnTagClick),
+                    onTagLongClick = acceptable(Tags::OnTagLongClick),
+                    onSearchQueryInput = acceptable(Tags::OnSearchQueryInput),
                 )
 
                 ReviewCreationPage.REVIEW_INFO -> ReviewInfoScreen(

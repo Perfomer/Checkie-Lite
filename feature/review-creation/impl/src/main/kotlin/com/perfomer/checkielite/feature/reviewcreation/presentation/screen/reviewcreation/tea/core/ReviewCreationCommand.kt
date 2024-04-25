@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
+import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagCreationMode
 
 internal sealed interface ReviewCreationCommand {
 
@@ -34,18 +35,24 @@ internal sealed interface ReviewCreationCommand {
         val advantages: String?,
         val disadvantages: String?,
     ) : ReviewCreationCommand
+
+    class LoadTags(val searchQuery: String = "") : ReviewCreationCommand
 }
 
 internal sealed interface ReviewCreationNavigationCommand : ReviewCreationCommand {
 
     data object Exit : ReviewCreationNavigationCommand
 
-    data class ExitWithResult(val result: ReviewCreationResult) : ReviewCreationNavigationCommand
+    class ExitWithResult(val result: ReviewCreationResult) : ReviewCreationNavigationCommand
 
     data object OpenPhotoPicker : ReviewCreationNavigationCommand
 
-    data class OpenGallery(
+    class OpenGallery(
         val picturesUri: List<String>,
         val currentPicturePosition: Int,
+    ) : ReviewCreationNavigationCommand
+
+    class OpenTagCreation(
+        val mode: TagCreationMode,
     ) : ReviewCreationNavigationCommand
 }

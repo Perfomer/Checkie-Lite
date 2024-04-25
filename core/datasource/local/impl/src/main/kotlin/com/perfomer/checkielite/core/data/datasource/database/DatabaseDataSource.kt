@@ -43,6 +43,8 @@ internal interface DatabaseDataSource {
 
     suspend fun dropSyncing()
 
+    fun getTags(searchQuery: String) : Flow<List<CheckieTag>>
+
     suspend fun getTag(id: String): CheckieTag
 
     suspend fun saveTag(tag: CheckieTag)
@@ -137,6 +139,16 @@ internal class DatabaseDataSourceImpl(
 
     override suspend fun dropSyncing() {
         reviewDao.dropSyncing()
+    }
+
+    override fun getTags(searchQuery: String): Flow<List<CheckieTag>> {
+        val tags = if (searchQuery.isBlank()) {
+            tagDao.getTags()
+        } else {
+            tagDao.getTagsByQuery(searchQuery)
+        }
+
+        return tags.map { tagsDb -> tagsDb.map { it.toDomain() } }
     }
 
     override suspend fun getTag(id: String): CheckieTag {

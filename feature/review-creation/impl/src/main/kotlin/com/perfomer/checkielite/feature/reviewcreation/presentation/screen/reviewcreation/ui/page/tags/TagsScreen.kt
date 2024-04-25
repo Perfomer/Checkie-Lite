@@ -1,0 +1,180 @@
+package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags
+
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
+import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
+import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
+import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedFieldDefaults
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
+import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.feature.reviewcreation.R
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.mockUiState
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.TagsPageUiState
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+internal fun TagsScreen(
+    state: TagsPageUiState,
+    scrollState: ScrollState = rememberScrollState(),
+    onCreateTagClick: () -> Unit = {},
+    onTagClick: (id: String) -> Unit = {},
+    onTagLongClick: (id: String) -> Unit = {},
+    onSearchQueryInput: (text: String) -> Unit = {},
+) {
+    val focusManager = LocalFocusManager.current
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+            .navigationBarsPadding()
+            .imePadding()
+            .padding(24.dp)
+            .padding(bottom = 80.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.reviewcreation_tags_title),
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+        )
+
+        Spacer(Modifier.height(24.dp))
+
+        SearchField(
+            searchQuery = state.searchQuery,
+            onSearchQueryInput = onSearchQueryInput,
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            AddTagChip(
+                searchQuery = state.searchQuery,
+                onCreateTagClick = {
+                    focusManager.clearFocus()
+                    onCreateTagClick()
+                },
+            )
+
+            for (tag in state.tags) {
+                key(tag.id) {
+                    CuiChip(
+                        onClick = { onTagClick(tag.id) },
+                        onLongClick = { onTagLongClick(tag.id) },
+                        leadingIcon = tag.emoji?.let {
+                            {
+                                Text(
+                                    text = it,
+                                    modifier = Modifier.offset(y = (-2).dp)
+                                )
+                            }
+                        },
+                        style = if (tag.isSelected) CuiChipStyle.selected() else CuiChipStyle.default(),
+                    ) {
+                        Text(tag.value)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun AddTagChip(
+    searchQuery: String?,
+    onCreateTagClick: () -> Unit
+) {
+    val palette = LocalCuiPalette.current
+
+    val addTagStyle = remember {
+        CuiChipStyle(
+            iconBackgroundColor = palette.BackgroundAccentSecondary,
+            textBackgroundColor = palette.BackgroundPrimary,
+            borderColor = palette.OutlineAccentSecondary,
+            borderWidth = 1.dp,
+            fontWeight = FontWeight.Medium,
+        )
+    }
+
+    val addTagText = if (searchQuery == null) {
+        stringResource(R.string.reviewcreation_tags_create_tag_generic)
+    } else {
+        stringResource(R.string.reviewcreation_tags_create_tag_specific, searchQuery)
+    }
+
+    CuiChip(
+        leadingIcon = {
+            Icon(
+                painter = painterResource(CommonDrawable.ic_plus),
+                contentDescription = null,
+                tint = palette.TextAccent,
+                modifier = Modifier.size(16.dp),
+            )
+        },
+        style = addTagStyle,
+        onClick = onCreateTagClick,
+    ) {
+        Text(addTagText)
+    }
+}
+
+@Composable
+private fun SearchField(
+    searchQuery: String?,
+    onSearchQueryInput: (text: String) -> Unit,
+) {
+    CuiOutlinedField(
+        text = searchQuery.orEmpty(),
+        placeholder = stringResource(R.string.reviewcreation_tags_field_search),
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Search,
+            capitalization = KeyboardCapitalization.Sentences,
+        ),
+        singleLine = true,
+        onValueChange = onSearchQueryInput,
+        colors = CuiOutlinedFieldDefaults.colors(unfocusedBorderColor = LocalCuiPalette.current.OutlineSecondary),
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+@Composable
+@ScreenPreview
+private fun TagsScreenPreview() {
+    TagsScreen(
+        state = mockUiState.tagsState,
+    )
+}

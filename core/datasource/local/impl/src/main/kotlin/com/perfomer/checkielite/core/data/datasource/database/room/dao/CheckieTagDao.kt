@@ -26,7 +26,27 @@ internal interface CheckieTagDao {
             LIMIT :maxCount
         """
     )
-    fun getTags(maxCount: Int): Flow<List<CheckieTagDb>>
+    fun getTags(
+        maxCount: Int = Int.MAX_VALUE,
+    ): Flow<List<CheckieTagDb>>
+
+    @Query(
+        """
+            SELECT * FROM CheckieTagDb tag
+            WHERE tag.value  LIKE '%' || :query || '%'
+            ORDER BY 
+                (
+                    SELECT COUNT(*) FROM CheckieTagReviewBoundDb
+                    WHERE tagId = tag.id
+                ) DESC,
+                tag.value ASC
+            LIMIT :maxCount
+        """
+    )
+    fun getTagsByQuery(
+        query: String,
+        maxCount: Int = Int.MAX_VALUE,
+    ): Flow<List<CheckieTagDb>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTag(tag: CheckieTagDb)

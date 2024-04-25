@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core
 
 import com.perfomer.checkielite.core.entity.CheckieReview
+import com.perfomer.checkielite.core.entity.CheckieTag
 
 internal sealed interface ReviewCreationEvent {
 
@@ -12,6 +13,12 @@ internal sealed interface ReviewCreationEvent {
         data object Started : ReviewLoading
         class Succeed(val review: CheckieReview) : ReviewLoading
         class Failed(val error: Throwable) : ReviewLoading
+    }
+
+    sealed interface TagsLoading : ReviewCreationEvent {
+        data object Started : TagsLoading
+        class Succeed(val tags: List<CheckieTag>) : TagsLoading
+        class Failed(val error: Throwable) : TagsLoading
     }
 
     sealed interface ReviewSaving : ReviewCreationEvent {
@@ -44,6 +51,17 @@ internal sealed interface ReviewCreationUiEvent : ReviewCreationEvent {
         class OnPictureReorder(val fromPosition: Int, val toPosition: Int) : ProductInfo
     }
 
+    sealed interface Tags : ReviewCreationUiEvent {
+
+        class OnSearchQueryInput(val query: String) : Tags
+
+        data object OnCreateTagClick : Tags
+
+        class OnTagClick(val tagId: String) : Tags
+
+        class OnTagLongClick(val tagId: String) : Tags
+    }
+
     sealed interface ReviewInfo : ReviewCreationUiEvent {
 
         class OnRatingSelect(val rating: Int) : ReviewInfo
@@ -58,5 +76,9 @@ internal sealed interface ReviewCreationUiEvent : ReviewCreationEvent {
 
 internal sealed interface ReviewCreationNavigationEvent : ReviewCreationEvent {
 
-    data class OnPhotosPick(val uris: List<String>) : ReviewCreationNavigationEvent
+    class OnPhotosPick(val uris: List<String>) : ReviewCreationNavigationEvent
+
+    class OnTagCreated(val tag: CheckieTag) : ReviewCreationNavigationEvent
+
+    class OnTagDeleted(val tagId: String) : ReviewCreationNavigationEvent
 }

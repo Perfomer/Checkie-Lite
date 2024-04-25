@@ -7,9 +7,11 @@ import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
+import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.CreateReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadReview
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadTags
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.SearchBrands
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.UpdateReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.WarmUpEmojis
@@ -22,10 +24,12 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.Initialize
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.ReviewLoading
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.ReviewSaving
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.TagsLoading
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.Exit
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.ExitWithResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenGallery
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenPhotoPicker
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenTagCreation
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnPhotosPick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationState
@@ -35,6 +39,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnPrimaryButtonClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ProductInfo
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ReviewInfo
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.Tags
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewDetails
 import kotlinx.collections.immutable.toPersistentList
 
@@ -48,6 +53,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
 
         is ReviewLoading -> reduceReviewLoading(event)
         is ReviewSaving -> reduceReviewsCreation(event)
+        is TagsLoading -> reduceTagsLoading(event)
 
         is BrandsSearchComplete -> state { copy(suggestedBrands = event.brands) }
     }
@@ -56,11 +62,12 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         val modificationMode = state.mode as? ReviewCreationMode.Modification
         if (modificationMode != null) commands(LoadReview(modificationMode.reviewId))
 
-        commands(WarmUpEmojis)
+        commands(WarmUpEmojis, LoadTags())
     }
 
     private fun reduceUi(event: ReviewCreationUiEvent) = when (event) {
         is ProductInfo -> reduceProductInfoUi(event)
+        is Tags -> reduceTagsUi(event)
         is ReviewInfo -> reduceReviewInfoUi(event)
         is OnPrimaryButtonClick -> {
             val next = state.currentPage.next()
@@ -165,6 +172,34 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         }
     }
 
+    private fun reduceTagsUi(event: Tags) = when (event) {
+        is Tags.OnCreateTagClick -> commands(OpenTagCreation(TagCreationMode.Creation(state.tagsSearchQuery.trim())))
+        is Tags.OnSearchQueryInput -> {
+            state { copy(tagsSearchQuery = event.query) }
+            commands(LoadTags(event.query.trim()))
+        }
+
+        is Tags.OnTagClick -> {
+            state {
+                val tag = state.tagsSuggestions.find { it.id == event.tagId } ?: return@state state
+                val isTagSelected = state.reviewDetails.tags.contains(tag)
+
+                copy(
+                    tagsSearchQuery = "",
+                    reviewDetails = reviewDetails.copy(
+                        tags = if (isTagSelected) {
+                            reviewDetails.tags - tag
+                        } else {
+                            reviewDetails.tags + tag
+                        }
+                    )
+                )
+            }
+        }
+
+        is Tags.OnTagLongClick -> commands(OpenTagCreation(TagCreationMode.Modification(event.tagId)))
+    }
+
     private fun reduceReviewInfoUi(event: ReviewInfo) = when (event) {
         is ReviewInfo.OnRatingSelect -> state { copy(reviewDetails = reviewDetails.copy(rating = event.rating)) }
         is ReviewInfo.OnCommentInput -> state { copy(reviewDetails = reviewDetails.copy(comment = event.text)) }
@@ -181,6 +216,26 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                     pictures = reviewDetails.pictures.addAll(addedPictures),
                 ),
             )
+        }
+
+        is ReviewCreationNavigationEvent.OnTagCreated -> {
+            state {
+                copy(
+                    reviewDetails = reviewDetails.copy(
+                        tags = reviewDetails.tags + event.tag,
+                    ),
+                )
+            }
+        }
+
+        is ReviewCreationNavigationEvent.OnTagDeleted -> {
+            state {
+                copy(
+                    reviewDetails = reviewDetails.copy(
+                        tags = reviewDetails.tags.filter { it.id != event.tagId },
+                    ),
+                )
+            }
         }
     }
 
@@ -200,6 +255,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 productName = event.review.productName,
                 productBrand = event.review.productBrand.orEmpty(),
                 pictures = event.review.pictures.toPersistentList(),
+                tags = event.review.tags,
                 comment = event.review.comment.orEmpty(),
                 advantages = event.review.advantages.orEmpty(),
                 disadvantages = event.review.disadvantages.orEmpty(),
@@ -217,5 +273,11 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             state { copy(isReviewLoading = false, isReviewLoadingFailed = true) }
             effects(ShowErrorDialog)
         }
+    }
+
+    private fun reduceTagsLoading(event: TagsLoading) = when (event) {
+        is TagsLoading.Started -> Unit
+        is TagsLoading.Succeed -> state { copy(tagsSuggestions = event.tags) }
+        is TagsLoading.Failed -> Unit
     }
 }

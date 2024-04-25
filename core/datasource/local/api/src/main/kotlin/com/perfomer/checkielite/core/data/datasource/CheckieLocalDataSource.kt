@@ -42,6 +42,8 @@ interface CheckieLocalDataSource {
 
     suspend fun dropSyncing()
 
+    fun getTags(searchQuery: String = "") : Flow<List<CheckieTag>>
+
     suspend fun getTag(id: String): CheckieTag
 
     suspend fun createTag(value: String, emoji: String?): CheckieTag

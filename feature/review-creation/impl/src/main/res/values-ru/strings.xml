@@ -2,24 +2,32 @@
 <resources>
     <string name="reviewcreation_next">Дальше</string>
     <string name="reviewcreation_save">Сохранить</string>
+
     <string name="reviewcreation_productinfo_title">Продукт</string>
     <string name="reviewcreation_productinfo_field_product">Название (обязательно)</string>
     <string name="reviewcreation_productinfo_field_product_error_empty">Название продукта нужно заполнить</string>
     <string name="reviewcreation_productinfo_field_brand">Бренд</string>
+
     <string name="reviewcreation_reviewinfo_title">Отзыв</string>
     <string name="reviewcreation_reviewinfo_field_comment">Комментарий</string>
     <string name="reviewcreation_reviewinfo_field_advantages">Достоинства</string>
     <string name="reviewcreation_reviewinfo_field_disadvantages">Недостатки</string>
+
     <string name="reviewcreation_dialog_confirmexit_title">Вы действительно хотите выйти?</string>
     <string name="reviewcreation_dialog_confirmexit_message">Если вы выйдете, то изменения не будут сохранены.</string>
     <string name="reviewcreation_dialog_confirmexit_confirm">Выйти</string>
+
+    <string name="reviewcreation_tags_title">Теги</string>
+    <string name="reviewcreation_tags_field_search">Введите тег…</string>
+    <string name="reviewcreation_tags_create_tag_generic">Создать тег</string>
+    <string name="reviewcreation_tags_create_tag_specific">Создать \"%s\"</string>
 
     <string name="tagcreation_creation_title">Новый тег</string>
     <string name="tagcreation_modification_title">Редактирование тега</string>
     <string name="tagcreation_description">Напишите название тега и выберите иконку</string>
     <string name="tagcreation_tag_name">Название тега</string>
 
-    <string name="tagcreation_tag_name_error_empty">Название теги нужно заполнить</string>
+    <string name="tagcreation_tag_name_error_empty">Название тега нужно заполнить</string>
     <string name="tagcreation_tag_name_error_exists">Такой тег уже существует</string>
 
     <string name="tagcreation_delete">Удалить</string>

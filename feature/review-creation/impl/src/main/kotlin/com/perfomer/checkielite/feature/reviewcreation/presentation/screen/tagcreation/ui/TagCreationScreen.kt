@@ -27,7 +27,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -59,6 +58,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcr
 @Composable
 internal fun TagCreationScreen(
     state: TagCreationUiState,
+    focusRequester: FocusRequester,
     onSelectedEmojiClick: () -> Unit = {},
     onTagValueInput: (value: String) -> Unit = {},
     onEmojiSelect: (emoji: String) -> Unit = {},
@@ -81,6 +81,7 @@ internal fun TagCreationScreen(
                 tagValueError = state.tagValueError,
                 selectedEmoji = state.selectedEmoji,
                 isDeleteButtonAvailable = state.isDeleteAvailable,
+                focusRequester = focusRequester,
                 onDeleteTagClick = onDeleteTagClick,
                 onSelectedEmojiClick = onSelectedEmojiClick,
                 onTagValueInput = onTagValueInput,
@@ -169,17 +170,12 @@ private fun Header(
     tagValueError: String?,
     selectedEmoji: String?,
     isDeleteButtonAvailable: Boolean,
+    focusRequester: FocusRequester,
     onDeleteTagClick: () -> Unit,
     onSelectedEmojiClick: () -> Unit,
     onTagValueInput: (value: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val focusRequester = remember { FocusRequester() }
-
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
-
     Column(modifier = modifier) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -269,7 +265,7 @@ private fun Header(
 @ScreenPreview
 @Composable
 private fun SearchScreenPreview() = CheckieLiteTheme {
-    TagCreationScreen(state = mockUiState)
+    TagCreationScreen(state = mockUiState, focusRequester = FocusRequester())
 }
 
 internal val mockUiState = TagCreationUiState(

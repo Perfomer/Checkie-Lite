@@ -1,14 +1,16 @@
 package com.perfomer.checkielite.common.ui.cui.widget.chip
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -60,7 +62,7 @@ data class CuiChipStyle(
             return CuiChipStyle(
                 iconBackgroundColor = palette.BackgroundAccentSecondary,
                 textBackgroundColor = palette.BackgroundAccentTertiary,
-                borderColor = palette.OutlineAccent,
+                borderColor = palette.OutlineAccentPrimary,
                 borderWidth = 1.5.dp,
                 fontWeight = FontWeight.Medium,
             )
@@ -68,10 +70,12 @@ data class CuiChipStyle(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CuiChip(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onLongClick: (() -> Unit)? = null,
     leadingIcon: (@Composable BoxScope.() -> Unit)? = null,
     style: CuiChipStyle = CuiChipStyle.default(),
     content: @Composable () -> Unit,
@@ -87,14 +91,18 @@ fun CuiChip(
             .clip(CircleShape)
             .background(style.textBackgroundColor)
             .border(width = style.borderWidth, color = style.borderColor, shape = CircleShape)
-            .clickable(onClick = onClick)
-
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick,
+            )
     ) {
         if (leadingIcon != null) {
             Box(
                 content = leadingIcon,
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .clip(CircleShape)
+                    .height(24.dp)
                     .background(style.iconBackgroundColor)
                     .padding(horizontal = 8.dp)
             )

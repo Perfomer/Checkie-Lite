@@ -38,6 +38,7 @@ import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ProductInfoPageUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewCreationUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewInfoPageUiState
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.TagsPageUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget.ConfirmExitDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget.ErrorDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget.ProgressAppBar
@@ -131,28 +132,34 @@ internal fun ReviewCreationScreen(
 @Composable
 private fun ReviewCreationScreenPreview() {
     ReviewCreationScreen(
-        state = ReviewCreationUiState(
-            step = 1,
-            stepsCount = 2,
-            currentPage = ReviewCreationPage.PRODUCT_INFO,
-            productInfoState = ProductInfoPageUiState(
-                productName = "",
-                productNameErrorText = null,
-                brand = "",
-                brandSuggestions = emptyPersistentList(),
-                picturesUri = emptyPersistentList(),
-            ),
-            reviewInfoState = ReviewInfoPageUiState(
-                rating = 5,
-                comment = "",
-                advantages = "",
-                disadvantages = "",
-                isSaving = false,
-            ),
-            isPrimaryButtonLoading = false,
-        ),
+        state = mockUiState,
         pagerState = rememberPagerState { 1 },
         currentPageScrollState = rememberScrollState(),
         content = {},
     )
 }
+
+internal val mockUiState = ReviewCreationUiState(
+    step = 1,
+    stepsCount = 2,
+    currentPage = ReviewCreationPage.PRODUCT_INFO,
+    productInfoState = ProductInfoPageUiState(
+        productName = "",
+        productNameErrorText = null,
+        brand = "",
+        brandSuggestions = emptyPersistentList(),
+        picturesUri = emptyPersistentList(),
+    ),
+    tagsState = TagsPageUiState(
+        searchQuery = null,
+        tags = emptyPersistentList(),
+    ),
+    reviewInfoState = ReviewInfoPageUiState(
+        rating = 5,
+        comment = "",
+        advantages = "",
+        disadvantages = "",
+        isSaving = false,
+    ),
+    isPrimaryButtonLoading = false,
+)

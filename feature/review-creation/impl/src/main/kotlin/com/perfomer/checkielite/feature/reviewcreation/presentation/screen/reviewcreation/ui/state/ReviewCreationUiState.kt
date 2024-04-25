@@ -11,6 +11,7 @@ internal data class ReviewCreationUiState(
     val currentPage: ReviewCreationPage,
 
     val productInfoState: ProductInfoPageUiState,
+    val tagsState: TagsPageUiState,
     val reviewInfoState: ReviewInfoPageUiState,
 
     val isPrimaryButtonLoading: Boolean,
@@ -24,6 +25,20 @@ internal data class ProductInfoPageUiState(
     val brandSuggestions: ImmutableList<String>,
     val picturesUri: ImmutableList<String>,
 )
+
+@Immutable
+internal data class TagsPageUiState(
+    val searchQuery: String?,
+    val tags: ImmutableList<Tag>,
+) {
+    @Immutable
+    data class Tag(
+        val id: String,
+        val value: String,
+        val emoji: String?,
+        val isSelected: Boolean,
+    )
+}
 
 @Immutable
 internal data class ReviewInfoPageUiState(

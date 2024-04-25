@@ -9,8 +9,8 @@ import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.core.navigation.api.Router
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryParams
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryScreenProvider
-import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationParams
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationScreenProvider
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
@@ -19,7 +19,10 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.ExitWithResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenGallery
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenPhotoPicker
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenTagCreation
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnTagCreated
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnTagDeleted
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -45,14 +48,13 @@ internal class ReviewCreationNavigationActor(
         when (command) {
             is Exit -> exit()
             is ExitWithResult -> exitWithResult(command.result)
-            is OpenPhotoPicker -> router.navigate(
-                screen = tagCreationScreenProvider(TagCreationParams(mode = TagCreationMode.Creation())),
-                mode = DestinationMode.BOTTOM_SHEET,
-            )
+            is OpenPhotoPicker -> openPhotoPicker()
             is OpenGallery -> router.navigate(
                 screen = galleryScreenProvider(GalleryParams(command.picturesUri.toArrayList(), command.currentPicturePosition)),
                 mode = DestinationMode.OVERLAY,
             )
+
+            is OpenTagCreation -> openTagCreation(command)
         }
 
         return null
@@ -63,5 +65,18 @@ internal class ReviewCreationNavigationActor(
         if (result !is ExternalResult.Success) return null
 
         return ReviewCreationNavigationEvent.OnPhotosPick(uris = result.result)
+    }
+
+    private suspend fun openTagCreation(command: OpenTagCreation): ReviewCreationNavigationEvent? {
+        val params = TagCreationParams(mode = command.mode)
+        val result = router.navigateForResult<TagCreationResult>(
+            screen = tagCreationScreenProvider(params),
+            mode = DestinationMode.BOTTOM_SHEET,
+        )
+
+        return when (result) {
+            is TagCreationResult.Created -> OnTagCreated(result.tag)
+            is TagCreationResult.Deleted -> OnTagDeleted(result.tagId)
+        }
     }
 }

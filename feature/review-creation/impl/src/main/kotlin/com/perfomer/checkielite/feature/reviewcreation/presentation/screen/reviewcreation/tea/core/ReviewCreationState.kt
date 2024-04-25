@@ -15,6 +15,9 @@ internal data class ReviewCreationState(
     val reviewDetails: ReviewDetails = initialReviewDetails,
     val isProductNameValid: Boolean = true,
 
+    val tagsSearchQuery: String = "",
+    val tagsSuggestions: List<CheckieTag> = emptyList(),
+
     val suggestedBrands: List<String> = emptyList(),
 
     val isReviewLoading: Boolean = false,
@@ -29,7 +32,7 @@ internal data class ReviewDetails(
     val productBrand: String = "",
     val pictures: PersistentList<CheckiePicture> = emptyPersistentList(),
 
-    val tags: PersistentList<CheckieTag> = emptyPersistentList(),
+    val tags: List<CheckieTag> = emptyPersistentList(),
 
     val rating: Int = 5,
     val comment: String = "",

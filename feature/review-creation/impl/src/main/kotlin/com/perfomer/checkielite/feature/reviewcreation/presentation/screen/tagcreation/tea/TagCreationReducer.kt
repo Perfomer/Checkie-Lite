@@ -10,6 +10,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcr
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationCommand.LoadTag
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationCommand.UpdateTag
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.FocusTagValueField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowErrorToast
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEvent.EmojisLoading
@@ -46,7 +47,10 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
     private fun reduceInitialize() {
         when (val mode = state.mode) {
             is TagCreationMode.Modification -> commands(LoadTag(mode.tagId))
-            is TagCreationMode.Creation -> state { copy(tagValue = mode.initialTagValue) }
+            is TagCreationMode.Creation -> {
+                state { copy(tagValue = mode.initialTagValue) }
+                if (mode.initialTagValue.isBlank()) effects(FocusTagValueField)
+            }
         }
 
         commands(LoadEmojis)
@@ -84,7 +88,14 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
 
     private fun reduceTagLoading(event: TagLoading) = when (event) {
         is TagLoading.Started -> Unit
-        is TagLoading.Succeed -> state { copy(tagValue = event.tag.value, selectedEmoji = event.tag.emoji) }
+        is TagLoading.Succeed -> state {
+            copy(
+                tagValue = event.tag.value,
+                selectedEmoji = event.tag.emoji,
+                hasEmoji = event.tag.emoji != null,
+            )
+        }
+
         is TagLoading.Failed -> commands(Exit)
     }
 

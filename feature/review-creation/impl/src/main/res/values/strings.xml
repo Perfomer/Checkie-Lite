@@ -17,6 +17,11 @@
     <string name="reviewcreation_dialog_confirmexit_message">If you exit your changes won\'t be saved.</string>
     <string name="reviewcreation_dialog_confirmexit_confirm">Exit</string>
 
+    <string name="reviewcreation_tags_title">Tags</string>
+    <string name="reviewcreation_tags_field_search">Enter the tag…</string>
+    <string name="reviewcreation_tags_create_tag_generic">Create tag</string>
+    <string name="reviewcreation_tags_create_tag_specific">Create \"%s\"</string>
+
     <string name="tagcreation_creation_title">New tag</string>
     <string name="tagcreation_modification_title">Edit tag</string>
     <string name="tagcreation_description">Type the tag name and select the icon</string>

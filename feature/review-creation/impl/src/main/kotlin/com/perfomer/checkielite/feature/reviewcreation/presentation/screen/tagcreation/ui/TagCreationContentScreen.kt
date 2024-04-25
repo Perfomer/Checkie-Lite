@@ -1,12 +1,15 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.focus.FocusRequester
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.util.BackHandlerWithLifecycle
 import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.TagCreationStore
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowErrorToast
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnDeleteTagClick
@@ -22,17 +25,21 @@ internal class TagCreationContentScreen(
 
     @Composable
     override fun Screen() = TeaComposable(store<TagCreationStore>(params)) { state ->
+        val focusRequester = remember { FocusRequester() }
+
         BackHandlerWithLifecycle { accept(OnBackPress) }
 
         EffectHandler { effect ->
             when (effect) {
                 ShowErrorToast.DeletionFailed -> Unit // todo
                 ShowErrorToast.SavingFailed -> Unit // todo
+                TagCreationEffect.FocusTagValueField -> focusRequester.requestFocus()
             }
         }
 
         TagCreationScreen(
             state = state,
+            focusRequester = focusRequester,
             onSelectedEmojiClick = acceptable(OnSelectedEmojiClick),
             onTagValueInput = acceptable(::OnTagValueInput),
             onEmojiSelect = acceptable(::OnEmojiSelect),

@@ -174,18 +174,13 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
 
     private fun reduceTagsUi(event: Tags) = when (event) {
         is Tags.OnCreateTagClick -> commands(OpenTagCreation(TagCreationMode.Creation(state.tagsSearchQuery.trim())))
-        is Tags.OnSearchQueryInput -> {
-            state { copy(tagsSearchQuery = event.query) }
-            commands(LoadTags(event.query.trim()))
-        }
-
+        is Tags.OnSearchQueryInput -> onTagsSearchQueryInput(event.query)
         is Tags.OnTagClick -> {
             state {
                 val tag = state.tagsSuggestions.find { it.id == event.tagId } ?: return@state state
                 val isTagSelected = state.reviewDetails.tags.contains(tag)
 
                 copy(
-                    tagsSearchQuery = "",
                     reviewDetails = reviewDetails.copy(
                         tags = if (isTagSelected) {
                             reviewDetails.tags - tag
@@ -195,9 +190,16 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                     )
                 )
             }
+
+            onTagsSearchQueryInput("")
         }
 
         is Tags.OnTagLongClick -> commands(OpenTagCreation(TagCreationMode.Modification(event.tagId)))
+    }
+
+    private fun onTagsSearchQueryInput(query: String) {
+        state { copy(tagsSearchQuery = query) }
+        commands(LoadTags(query.trim()))
     }
 
     private fun reduceReviewInfoUi(event: ReviewInfo) = when (event) {

@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -79,11 +80,15 @@ private fun CuiButtonLoader() {
 }
 
 @Composable
-internal fun CuiButtonText(text: String, textColor: Color) {
+internal fun CuiButtonText(
+    text: String,
+    textColor: Color,
+    fontSize: TextUnit = 16.sp,
+) {
     Text(
         text = text,
         fontWeight = FontWeight.Bold,
-        fontSize = 16.sp,
+        fontSize = fontSize,
         letterSpacing = 0.sp,
         color = textColor,
     )

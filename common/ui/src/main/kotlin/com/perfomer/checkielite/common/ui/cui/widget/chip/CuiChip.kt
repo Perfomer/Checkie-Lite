@@ -78,7 +78,7 @@ fun CuiChip(
     onLongClick: (() -> Unit)? = null,
     leadingIcon: (@Composable BoxScope.() -> Unit)? = null,
     style: CuiChipStyle = CuiChipStyle.default(),
-    content: @Composable () -> Unit,
+    content: @Composable BoxScope.() -> Unit,
 ) {
     val localTextStyle = LocalTextStyle.current
     val textStyle = remember(style) {
@@ -102,7 +102,7 @@ fun CuiChip(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .clip(CircleShape)
-                    .height(24.dp)
+                    .height(28.dp)
                     .background(style.iconBackgroundColor)
                     .padding(horizontal = 8.dp)
             )
@@ -110,10 +110,14 @@ fun CuiChip(
             Spacer(Modifier.width(4.dp))
         }
 
-        Box(modifier = Modifier.padding(start = 8.dp, end = 12.dp)) {
+        Box(
+            modifier = Modifier
+                .padding(start = 8.dp, end = 12.dp)
+                .padding(vertical = 2.dp)
+        ) {
             CompositionLocalProvider(
                 LocalTextStyle provides textStyle,
-                content = content,
+                content = { content() },
             )
         }
     }

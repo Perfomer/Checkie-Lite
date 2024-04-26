@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -48,6 +49,7 @@ fun CuiOutlineButton(
         CuiButtonText(
             text = text,
             textColor = textColor,
+            fontSize = 14.sp,
         )
 
         if (trailingIcon != null) {

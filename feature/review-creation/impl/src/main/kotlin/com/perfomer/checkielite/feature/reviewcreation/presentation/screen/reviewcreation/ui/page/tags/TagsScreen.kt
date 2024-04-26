@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -23,7 +22,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -52,6 +53,7 @@ internal fun TagsScreen(
     onTagLongClick: (id: String) -> Unit = {},
     onSearchQueryInput: (text: String) -> Unit = {},
 ) {
+    val hapticFeedback = LocalHapticFeedback.current
     val focusManager = LocalFocusManager.current
 
     Column(
@@ -78,6 +80,20 @@ internal fun TagsScreen(
 
         Spacer(Modifier.height(16.dp))
 
+        @Composable
+        fun TagChip(tag: TagsPageUiState.Tag) {
+            CuiChip(
+                onClick = { onTagClick(tag.id) },
+                onLongClick = {
+                    hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                    onTagLongClick(tag.id)
+                },
+                leadingIcon = tag.emoji?.let { { Text(it) } },
+                style = if (tag.isSelected) CuiChipStyle.selected() else CuiChipStyle.default(),
+                content = { Text(tag.value) },
+            )
+        }
+
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -90,24 +106,19 @@ internal fun TagsScreen(
                 },
             )
 
-            for (tag in state.tags) {
-                key(tag.id) {
-                    CuiChip(
-                        onClick = { onTagClick(tag.id) },
-                        onLongClick = { onTagLongClick(tag.id) },
-                        leadingIcon = tag.emoji?.let {
-                            {
-                                Text(
-                                    text = it,
-                                    modifier = Modifier.offset(y = (-2).dp)
-                                )
-                            }
-                        },
-                        style = if (tag.isSelected) CuiChipStyle.selected() else CuiChipStyle.default(),
-                    ) {
-                        Text(tag.value)
-                    }
-                }
+            for (tag in state.selectedTags) {
+                key(tag.id) { TagChip(tag) }
+            }
+        }
+
+        Spacer(Modifier.height(16.dp))
+
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            for (tag in state.suggestedTags) {
+                key(tag.id) { TagChip(tag) }
             }
         }
     }

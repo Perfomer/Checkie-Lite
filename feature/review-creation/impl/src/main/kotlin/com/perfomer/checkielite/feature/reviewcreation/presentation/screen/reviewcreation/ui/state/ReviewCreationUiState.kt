@@ -29,7 +29,8 @@ internal data class ProductInfoPageUiState(
 @Immutable
 internal data class TagsPageUiState(
     val searchQuery: String?,
-    val tags: ImmutableList<Tag>,
+    val selectedTags: ImmutableList<Tag>,
+    val suggestedTags: ImmutableList<Tag>,
 ) {
     @Immutable
     data class Tag(

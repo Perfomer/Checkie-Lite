@@ -53,7 +53,8 @@ internal class ReviewCreationUiStateMapper(
 
         return TagsPageUiState(
             searchQuery = state.tagsSearchQuery.takeIf { it.isNotBlank() },
-            tags = (selectedTags + unselectedTags).toPersistentList(),
+            selectedTags = selectedTags.toPersistentList(),
+            suggestedTags = unselectedTags.toPersistentList(),
         )
     }
 

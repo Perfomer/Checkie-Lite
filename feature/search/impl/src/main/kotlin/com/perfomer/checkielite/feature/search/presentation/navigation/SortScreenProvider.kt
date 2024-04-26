@@ -15,7 +15,7 @@ sealed interface SortResult {
     data class Success(
         val order: SortingOrder,
         val strategy: ReviewsSortingStrategy,
-    ) : SortResult
+    ) : FilterResult
 }
 
 internal fun interface SortScreenProvider {

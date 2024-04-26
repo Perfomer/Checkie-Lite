@@ -4,8 +4,15 @@ import android.content.Context
 import com.perfomer.checkielite.core.navigation.api.Router
 import com.perfomer.checkielite.feature.search.navigation.SearchParams
 import com.perfomer.checkielite.feature.search.navigation.SearchScreenProvider
+import com.perfomer.checkielite.feature.search.presentation.navigation.FilterParams
+import com.perfomer.checkielite.feature.search.presentation.navigation.FilterScreenProvider
 import com.perfomer.checkielite.feature.search.presentation.navigation.SortParams
 import com.perfomer.checkielite.feature.search.presentation.navigation.SortScreenProvider
+import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.FilterReducer
+import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.FilterStore
+import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.actor.FilterNavigationActor
+import com.perfomer.checkielite.feature.search.presentation.screen.filter.ui.FilterContentScreen
+import com.perfomer.checkielite.feature.search.presentation.screen.filter.ui.state.FilterUiStateMapper
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.SearchReducer
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.SearchStore
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.SearchNavigationActor
@@ -28,6 +35,9 @@ private val presentationModule = module {
 
     factoryOf(::createSortStore)
     factory { SortScreenProvider(::SortContentScreen) }
+
+    factoryOf(::createFilterStore)
+    factory { FilterScreenProvider(::FilterContentScreen) }
 }
 
 internal fun createSearchStore(
@@ -57,6 +67,21 @@ internal fun createSortStore(
         uiStateMapper = SortUiStateMapper(context),
         actors = setOf(
             SortNavigationActor(router),
+        ),
+    )
+}
+
+internal fun createFilterStore(
+    context: Context,
+    params: FilterParams,
+    router: Router,
+): FilterStore {
+    return FilterStore(
+        params = params,
+        reducer = FilterReducer(),
+        uiStateMapper = FilterUiStateMapper(context),
+        actors = setOf(
+            FilterNavigationActor(router),
         ),
     )
 }

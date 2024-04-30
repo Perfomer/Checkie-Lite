@@ -110,7 +110,7 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
 
         commands(
             SearchCommand.SearchReviews(
-                query = state.searchQuery,
+                query = state.searchQuery.trim(),
                 filters = state.searchFilters,
                 sorting = state.searchSorting,
             )

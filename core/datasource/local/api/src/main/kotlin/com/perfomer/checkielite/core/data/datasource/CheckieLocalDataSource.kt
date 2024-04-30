@@ -56,7 +56,10 @@ interface CheckieLocalDataSource {
 
     suspend fun dropSyncing()
 
-    fun getTags(searchQuery: String = ""): Flow<List<CheckieTag>>
+    fun getTags(
+        searchQuery: String = "",
+        maxCount: Int = Int.MAX_VALUE
+    ): Flow<List<CheckieTag>>
 
     suspend fun getTag(id: String): CheckieTag
 

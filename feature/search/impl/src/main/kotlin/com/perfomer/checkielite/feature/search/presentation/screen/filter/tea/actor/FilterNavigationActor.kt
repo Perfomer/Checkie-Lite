@@ -7,7 +7,9 @@ import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.co
 import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.core.FilterNavigationCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.core.FilterNavigationCommand.Exit
 import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.core.FilterNavigationCommand.ExitWithResult
+import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.core.FilterNavigationCommand.OpenTags
 import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.core.FilterNavigationEvent
+import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.core.FilterNavigationEvent.OnTagsSelected
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNotNull
@@ -23,12 +25,17 @@ internal class FilterNavigationActor(
             .filterNotNull()
     }
 
-    private fun handleCommand(command: FilterNavigationCommand): FilterNavigationEvent? = with(router) {
+    private suspend fun handleCommand(command: FilterNavigationCommand): FilterNavigationEvent? = with(router) {
         when (command) {
             is Exit -> exit()
             is ExitWithResult -> exitWithResult(command.result)
+            is OpenTags -> return openTags()
         }
 
         return null
+    }
+
+    private suspend fun openTags(): OnTagsSelected {
+        TODO()
     }
 }

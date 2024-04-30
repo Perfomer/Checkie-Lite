@@ -13,6 +13,7 @@ import com.perfomer.checkielite.feature.search.presentation.navigation.SortScree
 import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.FilterReducer
 import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.FilterStore
 import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.actor.FilterNavigationActor
+import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.actor.LoadTagsActor
 import com.perfomer.checkielite.feature.search.presentation.screen.filter.ui.FilterContentScreen
 import com.perfomer.checkielite.feature.search.presentation.screen.filter.ui.state.FilterUiStateMapper
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.SearchReducer
@@ -87,6 +88,7 @@ internal fun createSortStore(
 internal fun createFilterStore(
     context: Context,
     params: FilterParams,
+    localDataSource: CheckieLocalDataSource,
     router: Router,
 ): FilterStore {
     return FilterStore(
@@ -95,6 +97,7 @@ internal fun createFilterStore(
         uiStateMapper = FilterUiStateMapper(context),
         actors = setOf(
             FilterNavigationActor(router),
+            LoadTagsActor(localDataSource),
         ),
     )
 }

@@ -17,7 +17,11 @@ internal class FilterStore(
     uiStateMapper: FilterUiStateMapper,
     actors: Set<Actor<FilterCommand, FilterEvent>>,
 ) : ScreenModelStore<FilterCommand, FilterEffect, FilterEvent, FilterUiEvent, FilterState, FilterUiState>(
-    initialState = FilterState(),
+    initialState = FilterState(
+        selectedTags = params.currentFilters.tags,
+        minRating = params.currentFilters.ratingRange.min,
+        maxRating = params.currentFilters.ratingRange.max,
+    ),
     reducer = reducer,
     uiStateMapper = uiStateMapper,
     actors = actors,

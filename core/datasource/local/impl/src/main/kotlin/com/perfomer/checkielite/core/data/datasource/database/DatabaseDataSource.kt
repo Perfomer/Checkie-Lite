@@ -64,7 +64,7 @@ internal interface DatabaseDataSource {
 
     suspend fun dropSyncing()
 
-    fun getTags(searchQuery: String): Flow<List<CheckieTag>>
+    fun getTags(searchQuery: String, maxCount: Int): Flow<List<CheckieTag>>
 
     suspend fun getTag(id: String): CheckieTag
 
@@ -177,11 +177,11 @@ internal class DatabaseDataSourceImpl(
         reviewDao.dropSyncing()
     }
 
-    override fun getTags(searchQuery: String): Flow<List<CheckieTag>> {
+    override fun getTags(searchQuery: String, maxCount: Int): Flow<List<CheckieTag>> {
         val tags = if (searchQuery.isBlank()) {
-            tagDao.getTags()
+            tagDao.getTags(maxCount = maxCount)
         } else {
-            tagDao.getTagsByQuery(searchQuery)
+            tagDao.getTagsByQuery(searchQuery, maxCount)
         }
 
         return tags.map { tagsDb -> tagsDb.map { it.toDomain() } }

@@ -27,7 +27,7 @@ internal interface CheckieTagDao {
         """
     )
     fun getTags(
-        maxCount: Int = Int.MAX_VALUE,
+        maxCount: Int,
     ): Flow<List<CheckieTagDb>>
 
     @Query(
@@ -45,7 +45,7 @@ internal interface CheckieTagDao {
     )
     fun getTagsByQuery(
         query: String,
-        maxCount: Int = Int.MAX_VALUE,
+        maxCount: Int,
     ): Flow<List<CheckieTagDb>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

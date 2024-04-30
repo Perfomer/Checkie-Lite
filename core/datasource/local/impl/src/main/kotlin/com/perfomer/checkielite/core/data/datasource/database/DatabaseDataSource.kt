@@ -5,22 +5,43 @@ import com.perfomer.checkielite.core.data.datasource.database.room.CheckieDataba
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckiePictureDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieReviewDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieTagDao
+import com.perfomer.checkielite.core.data.datasource.database.room.dao.RecentSearchDao
+import com.perfomer.checkielite.core.data.datasource.database.room.dao.createFindReviewsSqliteQuery
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieTagReviewBoundDb
+import com.perfomer.checkielite.core.data.datasource.database.room.entity.RecentSearchedReviewDb
 import com.perfomer.checkielite.core.data.datasource.database.room.mapper.toDb
 import com.perfomer.checkielite.core.data.datasource.database.room.mapper.toDomain
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
+import com.perfomer.checkielite.core.entity.search.SearchFilters
+import com.perfomer.checkielite.core.entity.search.SearchSorting
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.Date
 
 internal interface DatabaseDataSource {
 
-    fun getReviews(searchQuery: String = ""): Flow<List<CheckieReview>>
+    fun getReviews(): Flow<List<CheckieReview>>
+
+    fun findReviews(
+        searchQuery: String,
+        filters: SearchFilters,
+        sorting: SearchSorting,
+    ): Flow<List<CheckieReview>>
 
     fun getReviewsByBrand(brand: String): Flow<List<CheckieReview>>
 
     fun getReview(reviewId: String): Flow<CheckieReview>
+
+    suspend fun getRecentSearches(): List<CheckieReview>
+
+    suspend fun rememberRecentSearch(
+        reviewId: String,
+        searchDate: Date,
+    )
+
+    suspend fun clearRecentSearches()
 
     suspend fun searchBrands(searchQuery: String): List<String>
 
@@ -43,7 +64,7 @@ internal interface DatabaseDataSource {
 
     suspend fun dropSyncing()
 
-    fun getTags(searchQuery: String) : Flow<List<CheckieTag>>
+    fun getTags(searchQuery: String): Flow<List<CheckieTag>>
 
     suspend fun getTag(id: String): CheckieTag
 
@@ -59,15 +80,16 @@ internal class DatabaseDataSourceImpl(
     private val reviewDao: CheckieReviewDao by lazy { database.reviewDao() }
     private val pictureDao: CheckiePictureDao by lazy { database.pictureDao() }
     private val tagDao: CheckieTagDao by lazy { database.tagDao() }
+    private val recentSearchDao: RecentSearchDao by lazy { database.recentSearchDao() }
 
-    override fun getReviews(searchQuery: String): Flow<List<CheckieReview>> {
-        val reviews = if (searchQuery.isBlank()) {
-            reviewDao.getReviews()
-        } else {
-            reviewDao.getReviewsByQuery(searchQuery)
-        }
+    override fun getReviews(): Flow<List<CheckieReview>> {
+        return reviewDao.getReviews()
+            .map { reviewDb -> reviewDb.map { it.toDomain() } }
+    }
 
-        return reviews.map { reviewDb -> reviewDb.map { it.toDomain() } }
+    override fun findReviews(searchQuery: String, filters: SearchFilters, sorting: SearchSorting): Flow<List<CheckieReview>> {
+        return reviewDao.getReviewsByQuery(createFindReviewsSqliteQuery(searchQuery, filters, sorting))
+            .map { reviewDb -> reviewDb.map { it.toDomain() } }
     }
 
     override fun getReviewsByBrand(brand: String): Flow<List<CheckieReview>> {
@@ -78,6 +100,20 @@ internal class DatabaseDataSourceImpl(
     override fun getReview(reviewId: String): Flow<CheckieReview> {
         return reviewDao.getReview(reviewId)
             .map { it.toDomain() }
+    }
+
+    override suspend fun getRecentSearches(): List<CheckieReview> = database.withTransaction {
+        recentSearchDao.trimRecentSearches(leaveLatest = MAX_RECENT_SEARCHES)
+        recentSearchDao.getRecentSearches().map { it.toDomain() }
+    }
+
+    override suspend fun rememberRecentSearch(reviewId: String, searchDate: Date) {
+        val recentSearch = RecentSearchedReviewDb(reviewId, searchDate)
+        recentSearchDao.addRecentSearch(recentSearch)
+    }
+
+    override suspend fun clearRecentSearches() {
+        recentSearchDao.trimRecentSearches(leaveLatest = 0)
     }
 
     override suspend fun searchBrands(searchQuery: String): List<String> {
@@ -161,5 +197,9 @@ internal class DatabaseDataSourceImpl(
 
     override suspend fun deleteTag(tagId: String) {
         tagDao.deleteTag(tagId)
+    }
+
+    private companion object {
+        private const val MAX_RECENT_SEARCHES = 10
     }
 }

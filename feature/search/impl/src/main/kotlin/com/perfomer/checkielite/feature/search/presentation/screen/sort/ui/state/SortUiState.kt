@@ -2,7 +2,7 @@ package com.perfomer.checkielite.feature.search.presentation.screen.sort.ui.stat
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
-import com.perfomer.checkielite.core.data.datasource.sort.ReviewsSortingStrategy
+import com.perfomer.checkielite.core.entity.sort.ReviewsSortingStrategy
 
 @Immutable
 internal data class SortUiState(

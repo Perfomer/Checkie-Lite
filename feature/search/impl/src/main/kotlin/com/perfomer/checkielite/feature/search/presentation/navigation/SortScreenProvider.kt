@@ -1,21 +1,14 @@
 package com.perfomer.checkielite.feature.search.presentation.navigation
 
-import com.perfomer.checkielite.core.data.datasource.sort.ReviewsSortingStrategy
-import com.perfomer.checkielite.core.data.datasource.sort.SortingOrder
+import com.perfomer.checkielite.core.entity.search.SearchSorting
 import com.perfomer.checkielite.core.navigation.api.CheckieScreen
 import com.perfomer.checkielite.core.navigation.api.Params
 
-internal data class SortParams(
-    val order: SortingOrder,
-    val strategy: ReviewsSortingStrategy,
-) : Params
+internal data class SortParams(val sorting: SearchSorting) : Params
 
-sealed interface SortResult {
+internal sealed interface SortResult {
 
-    data class Success(
-        val order: SortingOrder,
-        val strategy: ReviewsSortingStrategy,
-    ) : FilterResult
+    data class Success(val sorting: SearchSorting) : SortResult
 }
 
 internal fun interface SortScreenProvider {

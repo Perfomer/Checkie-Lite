@@ -1,17 +1,23 @@
 package com.perfomer.checkielite.feature.search.presentation.navigation
 
+import com.perfomer.checkielite.core.entity.search.SearchFilters
 import com.perfomer.checkielite.core.navigation.api.CheckieScreen
 import com.perfomer.checkielite.core.navigation.api.Params
+import java.io.Serializable
 
 internal data class FilterParams(
-    val stub: Int = 0,
+    val currentFilters: SearchFilters,
 ) : Params
 
-sealed interface FilterResult {
+internal sealed interface FilterResult : Serializable {
 
-    data class Success(
-        val stub: Int,
+    data class Applied(
+        val filters: SearchFilters,
     ) : FilterResult
+
+    data object Reset : FilterResult {
+        private fun readResolve(): Any = Reset
+    }
 }
 
 internal fun interface FilterScreenProvider {

@@ -25,8 +25,8 @@ internal class LoadReviewsActor(
     }
 
     private fun handleCommand(command: LoadReviews): Flow<ReviewsLoading> {
-        return repository.getCheckies(command.searchQuery)
-            .map { reviews -> ReviewsLoading.Succeed(reviews, command.searchQuery) }
+        return repository.getCheckies()
+            .map(ReviewsLoading::Succeed)
             .startWith(ReviewsLoading.Started)
             .onCatchReturn(ReviewsLoading::Failed)
     }

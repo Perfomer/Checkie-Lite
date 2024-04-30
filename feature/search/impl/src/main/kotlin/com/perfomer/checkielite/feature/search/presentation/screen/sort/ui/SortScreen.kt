@@ -34,7 +34,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
-import com.perfomer.checkielite.core.data.datasource.sort.ReviewsSortingStrategy
+import com.perfomer.checkielite.core.entity.sort.ReviewsSortingStrategy
 import com.perfomer.checkielite.feature.search.R
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.ui.state.SortUiState
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.ui.state.SortingOption

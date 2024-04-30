@@ -29,22 +29,19 @@ internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, Main
     }
 
     private fun reduceUi(event: MainUiEvent) = when (event) {
-        is OnStart -> commands(LoadReviews(state.searchQuery))
+        is OnStart -> commands(LoadReviews)
         is OnFabClick -> commands(OpenReviewCreation)
         is OnReviewClick -> commands(OpenReviewDetails(event.id))
         is OnSearchClick -> commands(OpenSearch())
     }
 
     private fun reduceNavigation(event: MainNavigationEvent) = when (event) {
-        is ReviewCreated -> commands(LoadReviews())
+        is ReviewCreated -> Unit
     }
 
     private fun reduceReviewsLoading(event: ReviewsLoading) = when (event) {
         is ReviewsLoading.Started -> state { copy(reviews = state.reviews.toLoadingContentAware()) }
-        is ReviewsLoading.Succeed -> state {
-            if (event.searchQuery.isEmpty()) copy(reviews = Lce.Content(event.reviews), searchedReviews = Lce.initial())
-            else copy(searchedReviews = Lce.Content(event.reviews))
-        }
+        is ReviewsLoading.Succeed -> state { copy(reviews = Lce.Content(event.reviews)) }
         is ReviewsLoading.Failed -> state { copy(reviews = Lce.Error(event.error)) }
     }
 }

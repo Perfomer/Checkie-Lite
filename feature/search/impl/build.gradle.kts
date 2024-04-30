@@ -14,6 +14,7 @@ android {
 
 dependencies {
 	api(project(":feature:search:api"))
+	implementation(project(":feature:review-details:api"))
 
 	implementation(project(":common:navigation:voyager"))
 	implementation(project(":common:pure"))

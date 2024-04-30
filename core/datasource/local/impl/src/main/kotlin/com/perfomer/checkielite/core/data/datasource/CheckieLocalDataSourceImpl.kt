@@ -10,6 +10,8 @@ import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
+import com.perfomer.checkielite.core.entity.search.SearchFilters
+import com.perfomer.checkielite.core.entity.search.SearchSorting
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -21,8 +23,12 @@ internal class CheckieLocalDataSourceImpl(
     private val fileDataSource: FileDataSource,
 ) : CheckieLocalDataSource {
 
-    override fun getReviews(searchQuery: String): Flow<List<CheckieReview>> {
-        return databaseDataSource.getReviews(searchQuery)
+    override fun getReviews(): Flow<List<CheckieReview>> {
+        return databaseDataSource.getReviews()
+    }
+
+    override fun findReviews(searchQuery: String, filters: SearchFilters, sorting: SearchSorting): Flow<List<CheckieReview>> {
+        return databaseDataSource.findReviews(searchQuery, filters, sorting)
     }
 
     override fun getReviewsByBrand(brand: String): Flow<List<CheckieReview>> {
@@ -31,6 +37,21 @@ internal class CheckieLocalDataSourceImpl(
 
     override fun getReview(reviewId: String): Flow<CheckieReview> {
         return databaseDataSource.getReview(reviewId)
+    }
+
+    override suspend fun getRecentSearches(): List<CheckieReview> {
+        return databaseDataSource.getRecentSearches()
+    }
+
+    override suspend fun rememberRecentSearch(reviewId: String) {
+        return databaseDataSource.rememberRecentSearch(
+            reviewId = reviewId,
+            searchDate = Date(),
+        )
+    }
+
+    override suspend fun clearRecentSearches() {
+        return databaseDataSource.clearRecentSearches()
     }
 
     override suspend fun searchBrands(searchQuery: String): List<String> {
@@ -152,8 +173,8 @@ internal class CheckieLocalDataSourceImpl(
         databaseDataSource.dropSyncing()
     }
 
-    override fun getTags(query: String): Flow<List<CheckieTag>> {
-        return databaseDataSource.getTags(query)
+    override fun getTags(searchQuery: String): Flow<List<CheckieTag>> {
+        return databaseDataSource.getTags(searchQuery)
     }
 
     override suspend fun getTag(id: String): CheckieTag {

@@ -1,18 +1,15 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor
 
-import com.perfomer.checkielite.common.pure.util.flowBy
+import com.perfomer.checkielite.common.pure.util.ignoreResult
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.feature.reviewcreation.domain.repository.CheckieEmojiRepository
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.WarmUpEmojis
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
-import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.ReviewLoading
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class WarmUpEmojisActor(
@@ -21,12 +18,11 @@ internal class WarmUpEmojisActor(
 
     override fun act(commands: Flow<ReviewCreationCommand>): Flow<ReviewCreationEvent> {
         return commands.filterIsInstance<WarmUpEmojis>()
-            .flatMapLatest(::handleCommand)
+            .mapLatest(::handleCommand)
+            .ignoreResult()
     }
 
-    private fun handleCommand(command: WarmUpEmojis): Flow<ReviewLoading> {
-        return flowBy { emojiRepository.warmUp() }
-            .map { null }
-            .filterNotNull()
+    private suspend fun handleCommand(command: WarmUpEmojis) {
+        emojiRepository.warmUp()
     }
 }

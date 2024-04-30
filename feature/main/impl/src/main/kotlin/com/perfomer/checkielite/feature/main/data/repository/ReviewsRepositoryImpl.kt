@@ -10,6 +10,6 @@ internal class ReviewsRepositoryImpl(
 ) : ReviewsRepository {
 
     override fun getCheckies(searchQuery: String): Flow<List<CheckieReview>> {
-        return localDataSource.getReviews(searchQuery)
+        return localDataSource.getReviews()
     }
 }

@@ -354,7 +354,6 @@ private fun MainScreenErrorPreview() = CheckieLiteTheme {
 }
 
 internal val mockUiState = MainUiState.Content(
-    searchQuery = "",
     reviews = persistentListOf(
         ReviewItem(
             id = "1",

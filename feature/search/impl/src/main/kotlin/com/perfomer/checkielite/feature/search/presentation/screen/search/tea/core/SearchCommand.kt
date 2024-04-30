@@ -1,16 +1,30 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core
 
-import com.perfomer.checkielite.core.data.datasource.sort.ReviewsSortingStrategy
-import com.perfomer.checkielite.core.data.datasource.sort.SortingOrder
+import com.perfomer.checkielite.core.entity.search.SearchFilters
+import com.perfomer.checkielite.core.entity.search.SearchSorting
 
-internal sealed interface SearchCommand
+internal sealed interface SearchCommand {
+
+    class SearchReviews(
+        val query: String,
+        val filters: SearchFilters,
+        val sorting: SearchSorting,
+    ) : SearchCommand
+
+    data object LoadRecentSearches : SearchCommand
+
+    data object ClearRecentSearches : SearchCommand
+
+    class RememberRecentSearch(val reviewId: String) : SearchCommand
+}
 
 internal sealed interface SearchNavigationCommand : SearchCommand {
 
     data object Exit : SearchNavigationCommand
 
-    class OpenSort(
-        val order: SortingOrder,
-        val strategy: ReviewsSortingStrategy,
-    ) : SearchNavigationCommand
+    class OpenReviewDetails(val reviewId: String) : SearchNavigationCommand
+
+    class OpenSort(val currentSorting: SearchSorting) : SearchNavigationCommand
+
+    class OpenFilters(val currentFilters: SearchFilters) : SearchNavigationCommand
 }

@@ -5,10 +5,4 @@ import com.perfomer.checkielite.core.entity.CheckieReview
 
 internal data class MainState(
     val reviews: Lce<List<CheckieReview>> = Lce.initial(),
-    val searchedReviews: Lce<List<CheckieReview>> = Lce.initial(),
-    val searchQuery: String = "",
-) {
-    val currentReviews: Lce<List<CheckieReview>> =
-        if (searchQuery.isBlank()) reviews
-        else searchedReviews
-}
+)

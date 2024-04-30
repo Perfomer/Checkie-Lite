@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "fb6c07b0f58dff18bed3de2a5d49c7f2",
+    "identityHash": "c613d17b14ad7bd21cc2908db8722af3",
     "entities": [
       {
         "tableName": "CheckieReviewDb",
@@ -240,12 +240,50 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "RecentSearchedReviewDb",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`reviewId` TEXT NOT NULL, `searchDate` INTEGER NOT NULL, PRIMARY KEY(`reviewId`), FOREIGN KEY(`reviewId`) REFERENCES `CheckieReviewDb`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "reviewId",
+            "columnName": "reviewId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "searchDate",
+            "columnName": "searchDate",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "reviewId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "CheckieReviewDb",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "reviewId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fb6c07b0f58dff18bed3de2a5d49c7f2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c613d17b14ad7bd21cc2908db8722af3')"
     ]
   }
 }

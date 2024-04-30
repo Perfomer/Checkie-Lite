@@ -9,7 +9,6 @@ internal sealed interface MainUiState {
     data object Loading : MainUiState
 
     data class Content(
-        val searchQuery: String,
         val reviews: ImmutableList<ReviewItem>,
     ) : MainUiState
 

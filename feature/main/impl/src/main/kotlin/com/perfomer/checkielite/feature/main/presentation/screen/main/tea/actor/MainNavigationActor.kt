@@ -15,8 +15,8 @@ import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreation
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationScreenProvider
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsParams
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsScreenProvider
-import com.perfomer.checkielite.feature.search.navigation.SearchParams
-import com.perfomer.checkielite.feature.search.navigation.SearchScreenProvider
+import com.perfomer.checkielite.feature.search.presentation.navigation.SearchParams
+import com.perfomer.checkielite.feature.search.presentation.navigation.SearchScreenProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance

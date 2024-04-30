@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
-import com.perfomer.checkielite.core.data.datasource.sort.ReviewsSortingStrategy
-import com.perfomer.checkielite.core.data.datasource.sort.SortingOrder
+import com.perfomer.checkielite.core.entity.sort.ReviewsSortingStrategy
+import com.perfomer.checkielite.core.entity.sort.SortingOrder
 import com.perfomer.checkielite.feature.search.R
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortState
 

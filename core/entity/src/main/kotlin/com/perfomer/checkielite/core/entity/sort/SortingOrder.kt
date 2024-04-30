@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.core.data.datasource.sort
+package com.perfomer.checkielite.core.entity.sort
 
 enum class SortingOrder {
     ASCENDING,

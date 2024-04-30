@@ -12,7 +12,7 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.MainCon
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiStateMapper
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationScreenProvider
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsScreenProvider
-import com.perfomer.checkielite.feature.search.navigation.SearchScreenProvider
+import com.perfomer.checkielite.feature.search.presentation.navigation.SearchScreenProvider
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind

@@ -10,10 +10,12 @@ import com.perfomer.checkielite.core.data.datasource.database.room.converter.Dat
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckiePictureDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieReviewDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieTagDao
+import com.perfomer.checkielite.core.data.datasource.database.room.dao.RecentSearchDao
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewPictureDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieTagDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieTagReviewBoundDb
+import com.perfomer.checkielite.core.data.datasource.database.room.entity.RecentSearchedReviewDb
 
 @Database(
     version = 4,
@@ -22,6 +24,7 @@ import com.perfomer.checkielite.core.data.datasource.database.room.entity.Checki
         CheckieReviewPictureDb::class,
         CheckieTagDb::class,
         CheckieTagReviewBoundDb::class,
+        RecentSearchedReviewDb::class,
     ],
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
@@ -35,6 +38,7 @@ internal abstract class CheckieDatabase : RoomDatabase() {
     abstract fun reviewDao(): CheckieReviewDao
     abstract fun pictureDao(): CheckiePictureDao
     abstract fun tagDao(): CheckieTagDao
+    abstract fun recentSearchDao(): RecentSearchDao
 
     companion object {
 

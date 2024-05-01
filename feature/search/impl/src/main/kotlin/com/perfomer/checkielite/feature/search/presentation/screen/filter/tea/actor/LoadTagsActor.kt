@@ -25,9 +25,13 @@ internal class LoadTagsActor(
     }
 
     private fun handleCommand(command: LoadTags): Flow<FilterEvent> {
-        return localDataSource.getTags()
+        return localDataSource.getTags(maxCount = MAX_TAGS_COUNT)
             .map(TagsLoading::Succeed)
             .startWith(TagsLoading.Started)
             .onCatchReturn(TagsLoading::Failed)
+    }
+
+    private companion object {
+        private const val MAX_TAGS_COUNT: Int = 30
     }
 }

@@ -23,7 +23,7 @@ internal sealed interface FilterUiEvent : FilterEvent {
 
     data object OnViewAllTagsClick : FilterUiEvent
 
-    class OnTagClick(val tadId: String) : FilterUiEvent
+    class OnTagClick(val tagId: String) : FilterUiEvent
 
     class OnMinRatingSelected(val rating: Int) : FilterUiEvent
 

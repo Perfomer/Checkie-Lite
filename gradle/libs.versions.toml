@@ -1,23 +1,23 @@
 [versions]
 accompanist-systemuicontroller = "0.34.0"
-activity = "1.8.2"
+activity = "1.9.0"
 agp = "8.4.0"
-androidx-core = "1.12.0"
+androidx-core = "1.13.0"
 appcompat = "1.6.1"
 coil = "2.6.0"
-compose-bom = "2024.04.00"
-compose-compiler = "1.5.10"
+compose-bom = "2024.04.01"
+compose-compiler = "1.5.12"
 compressor = "3.0.1"
-core-ktx = "1.12.0"
+core-ktx = "1.13.0"
 dnd = "0.1.0"
 emoji = "0.3.2"
 fading-edges = "1.0.4"
-google-fonts = "1.6.5"
+google-fonts = "1.6.6"
 koin = "3.5.0"
-kotlin = "1.9.22"
+kotlin = "1.9.23"
 kotlinx-collections-immutable = "0.3.7"
 kotlinx-coroutines = "1.8.0"
-ksp = "1.9.22-1.0.17"
+ksp = "1.9.23-1.0.20"
 lifecycle-ktx = "2.7.0"
 lifecycle-runtime-ktx = "2.7.0"
 room = "2.6.1"
@@ -40,7 +40,6 @@ core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 dnd = { module = "com.mohamedrejeb.dnd:compose-dnd", version.ref = "dnd" }
 emoji-core = { module = "com.chrynan.emoji:emoji-core", version.ref = "emoji" }
 emoji-repo-map = { module = "com.chrynan.emoji:emoji-repo-map", version.ref = "emoji" }
-emoji-ui-compose = { module = "com.chrynan.emoji:emoji-ui-compose", version.ref = "emoji" }
 fading-edges = { module = "com.github.GIGAMOLE:ComposeFadingEdges", version.ref = "fading-edges" }
 google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "google-fonts" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }

@@ -78,7 +78,7 @@ internal fun MainScreen(
     Scaffold(
         floatingActionButton = {
             CuiFloatingActionButton(
-                painter = painterResource(id = R.drawable.ic_plus),
+                painter = painterResource(id = CommonDrawable.ic_plus),
                 contentDescription = stringResource(R.string.main_add_checkie),
                 onClick = onFabClick,
                 modifier = Modifier.imePadding()
@@ -208,7 +208,7 @@ private fun TopAppBar(
             val shouldShowSearchIcon by remember { derivedStateOf { scrollableState.firstVisibleItemIndex > 0 } }
             AnimatedVisibility(visible = shouldShowSearchIcon, enter = fadeIn(tween(250)), exit = fadeOut(tween(250))) {
                 CuiIconButton(
-                    painter = painterResource(R.drawable.ic_search),
+                    painter = painterResource(CommonDrawable.ic_search),
                     tint = LocalCuiPalette.current.IconPrimary,
                     onClick = onSearchClick,
                 )
@@ -245,7 +245,7 @@ private fun SearchField(
         )
 
         Icon(
-            painter = painterResource(id = R.drawable.ic_search),
+            painter = painterResource(id = CommonDrawable.ic_search),
             tint = LocalCuiPalette.current.IconSecondary,
             contentDescription = null,
         )

@@ -4,24 +4,28 @@ import com.perfomer.checkielite.common.pure.state.Lce.Content
 import com.perfomer.checkielite.common.pure.state.Lce.Error
 import com.perfomer.checkielite.common.pure.state.Lce.Loading
 
-val <T : Any> Lce<T>.content: T?
+val <T> Lce<T>.content: T?
 	get() {
-		val contentState = this as? Content<T>
-		return contentState?.content
+		return when (this) {
+			is Content -> content
+			is Loading -> content
+			is Error -> null
+		}
 	}
 
-val <T : Any> Lce<T>.isError: Boolean
+fun <T> Lce<T>.requireContent(): T = requireNotNull(content)
+
+val <T> Lce<T>.isError: Boolean
 	get() = this is Error
 
-val <T : Any> Lce<T>.isLoading: Boolean
+val <T> Lce<T>.isLoading: Boolean
 	get() = this is Loading
 
-val <T : Any> Lce<T>.isContent: Boolean
+val <T> Lce<T>.isContent: Boolean
 	get() = this is Content
 
-fun <T : Any> Lce<T>.requireContent(): T = requireNotNull(content)
 
-fun <T: Any> Lce<T>.toLoadingContentAware(): Lce<T> {
+fun <T> Lce<T>.toLoadingContentAware(): Lce<T> {
 	return if (this is Content) this
 	else Loading()
 }

@@ -57,7 +57,11 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
         is OnBackPress -> commands(Exit)
         is OnSortClick -> commands(OpenSort(state.searchSorting))
         is OnFilterClick -> commands(OpenFilters(state.searchFilters))
-        is OnReviewClick -> commands(RememberRecentSearch(event.reviewId), OpenReviewDetails(event.reviewId))
+        is OnReviewClick -> commands(
+            RememberRecentSearch(event.reviewId),
+            OpenReviewDetails(event.reviewId),
+        )
+
         is OnRatingRangeFilterClearClick -> {
             updateSearchConditions(filters = state.searchFilters.copy(ratingRange = RatingRange.default))
         }

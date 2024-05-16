@@ -8,6 +8,14 @@ import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchParams
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.SearchStore
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnBackPress
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnFilterClick
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnRatingRangeFilterClearClick
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnRecentSearchesClearClick
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnReviewClick
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnSearchClearClick
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnSearchFieldInput
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnSortClick
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnTagFilterClearClick
 import com.perfomer.checkielite.navigation.voyager.BaseScreen
 
 internal class SearchContentScreen(
@@ -21,6 +29,14 @@ internal class SearchContentScreen(
         SearchScreen(
             state = state,
             onNavigationIconClick = acceptable(OnBackPress),
+            onSearchFieldInput = acceptable(::OnSearchFieldInput),
+            onSearchClearClick = acceptable(OnSearchClearClick),
+            onSortClick = acceptable(OnSortClick),
+            onFilterClick = acceptable(OnFilterClick),
+            onTagFilterClearClick = acceptable(::OnTagFilterClearClick),
+            onRatingRangeFilterClearClick = acceptable(OnRatingRangeFilterClearClick),
+            onReviewClick = acceptable(::OnReviewClick),
+            onRecentSearchesClearClick = acceptable(OnRecentSearchesClearClick),
         )
     }
 }

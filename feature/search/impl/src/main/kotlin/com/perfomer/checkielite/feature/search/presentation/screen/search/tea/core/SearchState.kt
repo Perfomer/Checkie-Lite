@@ -13,7 +13,7 @@ internal data class SearchState(
     val searchSorting: SearchSorting = SearchSorting(),
 ) {
 
-    val hasSearchConditions: Boolean = searchQuery.isNotBlank() || !searchFilters.isEmpty
+    val hasSearchConditions: Boolean = searchQuery.isNotBlank() || !searchFilters.isEmpty || searchSorting != SearchSorting.default
 
     val currentReviews: Lce<List<CheckieReview>> =
         if (hasSearchConditions) searchedReviews

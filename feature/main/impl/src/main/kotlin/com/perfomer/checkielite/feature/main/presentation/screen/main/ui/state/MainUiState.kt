@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state
 
 import androidx.compose.runtime.Immutable
+import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -16,13 +17,3 @@ internal sealed interface MainUiState {
 
     data object Error : MainUiState
 }
-
-@Immutable
-internal data class ReviewItem(
-    val id: String,
-    val title: String,
-    val brand: String?,
-    val imageUri: String?,
-    val rating: Int,
-    val isSyncing: Boolean,
-)

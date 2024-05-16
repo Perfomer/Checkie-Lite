@@ -9,11 +9,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.R
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 
 @Composable
 fun CuiToolbarNavigationIcon(
     painter: Painter = painterResource(id = R.drawable.ic_cross),
-    color: Color,
+    color: Color = LocalCuiPalette.current.IconPrimary,
     onBackPress: () -> Unit,
 ) {
     CuiIconButton(

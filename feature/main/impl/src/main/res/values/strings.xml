@@ -5,7 +5,6 @@
     <string name="app_name_lite_debug" translatable="false">debug</string>
 
     <string name="main_add_checkie">Add Checkie</string>
-    <string name="main_clear">Clear</string>
 
     <string name="main_empty_title">There are no Checkies yet</string>
     <string name="main_empty_description">Would you like to add one?</string>

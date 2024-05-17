@@ -1,10 +1,7 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.ui
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,23 +13,23 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -43,8 +40,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.ui.CommonDrawable
@@ -54,15 +49,13 @@ import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewHorizontalItem
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
-import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
-import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedFieldDefaults
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.search.R
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.SearchUiState
-import kotlinx.coroutines.launch
+import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.widget.OutlinedSearchField
 
 @Composable
 internal fun SearchScreen(
@@ -82,16 +75,21 @@ internal fun SearchScreen(
     val searchFieldFocusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
+    LaunchedEffect(Unit) {
+        searchFieldFocusRequester.requestFocus()
+    }
+
     Scaffold(
         topBar = {
             SearchTopAppBar(
                 scrollableState = scrollState,
                 onNavigationIconClick = onNavigationIconClick,
-                onSearchClick = {
-                    coroutineScope.launch {
-                        scrollState.animateScrollToItem(0)
-                        searchFieldFocusRequester.requestFocus()
-                    }
+                searchFieldFocusRequester = searchFieldFocusRequester,
+                searchQuery = state.searchQuery,
+                onSearchFieldInput = onSearchFieldInput,
+                onSearchClearClick = {
+                    focusManager.clearFocus()
+                    onSearchClearClick()
                 },
             )
         },
@@ -100,12 +98,7 @@ internal fun SearchScreen(
             state = state,
             scrollState = scrollState,
             contentPadding = contentPadding,
-            searchFieldFocusRequester = searchFieldFocusRequester,
-            onSearchFieldInput = onSearchFieldInput,
-            onSearchClearClick = {
-                focusManager.clearFocus()
-                onSearchClearClick()
-            },
+
             onReviewClick = onReviewClick,
             onRatingRangeFilterClearClick = onRatingRangeFilterClearClick,
             onRecentSearchesClearClick = onRecentSearchesClearClick,
@@ -122,9 +115,6 @@ private fun Content(
     state: SearchUiState,
     scrollState: LazyListState,
     contentPadding: PaddingValues,
-    searchFieldFocusRequester: FocusRequester,
-    onSearchFieldInput: (text: String) -> Unit,
-    onSearchClearClick: () -> Unit,
     onSortClick: () -> Unit,
     onFilterClick: () -> Unit,
     onTagFilterClearClick: (tagId: String) -> Unit,
@@ -142,12 +132,7 @@ private fun Content(
         item {
             Spacer(modifier = Modifier.height(4.dp))
 
-            SearchField(
-                searchQuery = state.searchQuery,
-                focusRequester = searchFieldFocusRequester,
-                onSearchQueryInput = onSearchFieldInput,
-                onSearchQueryClearClick = onSearchClearClick,
-            )
+
 
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -155,7 +140,8 @@ private fun Content(
         item {
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 24.dp)
             ) {
                 CuiChip(
@@ -244,12 +230,13 @@ private fun Content(
 @Composable
 private fun SearchField(
     searchQuery: String,
-    focusRequester: FocusRequester,
     onSearchQueryInput: (query: String) -> Unit,
     onSearchQueryClearClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    CuiOutlinedField(
-        text = searchQuery,
+    OutlinedSearchField(
+        value = searchQuery,
+        onValueChange = onSearchQueryInput,
         placeholder = stringResource(CommonString.common_search),
         trailingIcon = {
             if (searchQuery.isBlank()) {
@@ -257,6 +244,7 @@ private fun SearchField(
                     painter = painterResource(id = CommonDrawable.ic_search),
                     tint = LocalCuiPalette.current.IconSecondary,
                     contentDescription = null,
+                    modifier = Modifier.offset(x = (-4).dp)
                 )
             } else {
                 CuiIconButton(
@@ -264,62 +252,56 @@ private fun SearchField(
                     contentDescription = stringResource(CommonString.common_clear),
                     tint = LocalCuiPalette.current.IconPrimary,
                     onClick = onSearchQueryClearClick,
-                    modifier = Modifier.offset(x = (-8).dp)
+                    modifier = Modifier.offset(x = (-4).dp)
                 )
             }
         },
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Search,
-            capitalization = KeyboardCapitalization.Sentences
-        ),
-        singleLine = true,
-        onValueChange = onSearchQueryInput,
-        colors = CuiOutlinedFieldDefaults.colors(
-            unfocusedBorderColor = LocalCuiPalette.current.OutlineSecondary,
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp)
-            .focusRequester(focusRequester)
+        modifier = modifier
     )
 }
 
+
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 private fun SearchTopAppBar(
+    searchFieldFocusRequester: FocusRequester,
     scrollableState: LazyListState,
+    searchQuery: String,
+    onSearchFieldInput: (text: String) -> Unit,
+    onSearchClearClick: () -> Unit,
     onNavigationIconClick: () -> Unit,
-    onSearchClick: () -> Unit,
 ) {
     val shouldShowDivider by remember { derivedStateOf { scrollableState.canScrollBackward } }
 
-    TopAppBar(
-        title = {
-            Text(text = stringResource(CommonString.common_search))
-        },
-        navigationIcon = {
-            CuiToolbarNavigationIcon(
-                painter = painterResource(CommonDrawable.ic_arrow_back),
-                onBackPress = onNavigationIconClick,
-            )
-        },
-        actions = {
-            val shouldShowSearchIcon by remember { derivedStateOf { scrollableState.firstVisibleItemIndex > 0 } }
-            AnimatedVisibility(visible = shouldShowSearchIcon, enter = fadeIn(tween(250)), exit = fadeOut(tween(250))) {
-                CuiIconButton(
-                    painter = painterResource(CommonDrawable.ic_search),
-                    tint = LocalCuiPalette.current.IconPrimary,
-                    onClick = onSearchClick,
-                )
-            }
-        },
+    Column(
+        verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
+            .statusBarsPadding()
             .bottomStrokeOnScroll(
                 show = shouldShowDivider,
                 strokeColor = LocalCuiPalette.current.OutlineSecondary,
             )
-    )
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            CuiToolbarNavigationIcon(
+                painter = painterResource(CommonDrawable.ic_arrow_back),
+                onBackPress = onNavigationIconClick,
+            )
+
+            SearchField(
+                searchQuery = searchQuery,
+                onSearchQueryInput = onSearchFieldInput,
+                onSearchQueryClearClick = onSearchClearClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp, end = 16.dp)
+                    .focusRequester(searchFieldFocusRequester)
+            )
+        }
+    }
 }
 
 @ScreenPreview

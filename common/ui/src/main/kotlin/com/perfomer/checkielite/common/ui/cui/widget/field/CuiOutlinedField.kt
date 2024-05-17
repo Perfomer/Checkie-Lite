@@ -89,7 +89,7 @@ fun CuiOutlinedField(
 
 @Composable
 @WidgetPreview
-private fun BuiOutlinedFieldPreview() = CheckieLiteTheme {
+private fun CuiOutlinedFieldPreview() = CheckieLiteTheme {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.padding(24.dp)

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.RewriteQueriesToDropUnusedColumns
 import androidx.room.Transaction
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.RecentSearchedReviewDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.relation.CheckieReviewDetailedDb
@@ -11,6 +12,7 @@ import com.perfomer.checkielite.core.data.datasource.database.room.entity.relati
 @Dao
 internal interface RecentSearchDao {
 
+    @RewriteQueriesToDropUnusedColumns
     @Transaction
     @Query(
         """

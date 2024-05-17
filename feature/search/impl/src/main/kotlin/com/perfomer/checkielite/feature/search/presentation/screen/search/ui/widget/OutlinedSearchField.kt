@@ -4,6 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -12,8 +13,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text2.BasicTextField2
+import androidx.compose.foundation.text2.input.TextFieldLineLimits
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
@@ -37,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedFieldDefaults
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 internal fun OutlinedSearchField(
     value: String,
@@ -63,7 +65,7 @@ internal fun OutlinedSearchField(
         )
     }
 
-    BasicTextField(
+    BasicTextField2(
         value = value,
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.Sentences,
@@ -71,14 +73,14 @@ internal fun OutlinedSearchField(
         ),
         onValueChange = onValueChange,
         interactionSource = interactionSource,
-        singleLine = singleLine,
         enabled = enabled,
         cursorBrush = cursorBrush,
         textStyle = LocalTextStyle.current.copy(
             fontSize = 14.sp,
             color = colors.focusedTextColor,
         ),
-        decorationBox = { innerTextField ->
+        lineLimits = TextFieldLineLimits.SingleLine,
+        decorator = { innerTextField ->
             TextFieldDefaults.DecorationBox(
                 value = value,
                 visualTransformation = VisualTransformation.None,

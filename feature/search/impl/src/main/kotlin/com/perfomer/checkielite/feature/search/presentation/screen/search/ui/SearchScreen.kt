@@ -79,6 +79,7 @@ internal fun SearchScreen(
     onSearchClearClick: () -> Unit = {},
     onFilterClick: (type: FilterType) -> Unit = {},
     onReviewClick: (id: String) -> Unit = {},
+    onClearAllFiltersClick: () -> Unit = {},
     onRecentSearchesClearClick: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()

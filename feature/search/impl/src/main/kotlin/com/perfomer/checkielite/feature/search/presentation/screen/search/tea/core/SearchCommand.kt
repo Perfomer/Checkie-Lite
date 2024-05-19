@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core
 
+import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.core.entity.search.SearchFilters
 import com.perfomer.checkielite.core.entity.search.SearchSorting
 
@@ -26,5 +27,5 @@ internal sealed interface SearchNavigationCommand : SearchCommand {
 
     class OpenSort(val currentSorting: SearchSorting) : SearchNavigationCommand
 
-    class OpenFilters(val currentFilters: SearchFilters) : SearchNavigationCommand
+    class OpenTags(val selectedTags: List<CheckieTag>) : SearchNavigationCommand
 }

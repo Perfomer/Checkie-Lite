@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core
 
 import com.perfomer.checkielite.core.entity.CheckieReview
-import com.perfomer.checkielite.core.entity.search.SearchFilters
+import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.core.entity.search.SearchSorting
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.FilterType
 
@@ -30,21 +30,17 @@ internal sealed interface SearchUiEvent : SearchEvent {
 
     data object OnSearchClearClick : SearchUiEvent
 
-    data object OnSortClick : SearchUiEvent
-
     class OnFilterClick(val type: FilterType) : SearchUiEvent
-
-    class OnTagFilterClearClick(val tagId: String) : SearchUiEvent
-
-    data object OnRatingRangeFilterClearClick : SearchUiEvent
 
     class OnReviewClick(val reviewId: String) : SearchUiEvent
 
     data object OnRecentSearchesClearClick : SearchUiEvent
+
+    data object OnClearAllFiltersClick : SearchUiEvent
 }
 
 internal sealed interface SearchNavigationEvent : SearchEvent {
 
     class OnSortUpdated(val sorting: SearchSorting) : SearchNavigationEvent
-    class OnFiltersUpdated(val filters: SearchFilters) : SearchNavigationEvent
+    class OnTagsUpdated(val tags: ArrayList<CheckieTag>) : SearchNavigationEvent
 }

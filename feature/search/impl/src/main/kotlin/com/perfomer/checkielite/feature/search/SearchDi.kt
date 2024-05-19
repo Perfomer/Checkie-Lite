@@ -4,18 +4,12 @@ import android.content.Context
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.navigation.api.Router
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsScreenProvider
-import com.perfomer.checkielite.feature.search.presentation.navigation.FilterParams
-import com.perfomer.checkielite.feature.search.presentation.navigation.FilterScreenProvider
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchParams
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchScreenProvider
 import com.perfomer.checkielite.feature.search.presentation.navigation.SortParams
 import com.perfomer.checkielite.feature.search.presentation.navigation.SortScreenProvider
-import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.FilterReducer
-import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.FilterStore
-import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.actor.FilterNavigationActor
-import com.perfomer.checkielite.feature.search.presentation.screen.filter.tea.actor.LoadTagsActor
-import com.perfomer.checkielite.feature.search.presentation.screen.filter.ui.FilterContentScreen
-import com.perfomer.checkielite.feature.search.presentation.screen.filter.ui.state.FilterUiStateMapper
+import com.perfomer.checkielite.feature.search.presentation.navigation.TagsParams
+import com.perfomer.checkielite.feature.search.presentation.navigation.TagsScreenProvider
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.SearchReducer
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.SearchStore
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.ClearRecentSearchesActor
@@ -30,6 +24,12 @@ import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.Sort
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.actor.SortNavigationActor
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.ui.SortContentScreen
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.ui.state.SortUiStateMapper
+import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.TagsReducer
+import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.TagsStore
+import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.actor.LoadTagsActor
+import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.actor.TagsNavigationActor
+import com.perfomer.checkielite.feature.search.presentation.screen.tags.ui.TagsContentScreen
+import com.perfomer.checkielite.feature.search.presentation.screen.tags.ui.state.TagsUiStateMapper
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
@@ -43,8 +43,8 @@ private val presentationModule = module {
     factoryOf(::createSortStore)
     factory { SortScreenProvider(::SortContentScreen) }
 
-    factoryOf(::createFilterStore)
-    factory { FilterScreenProvider(::FilterContentScreen) }
+    factoryOf(::createTagsStore)
+    factory { TagsScreenProvider(::TagsContentScreen) }
 }
 
 internal fun createSearchStore(
@@ -54,14 +54,14 @@ internal fun createSearchStore(
     router: Router,
     reviewDetailsScreenProvider: ReviewDetailsScreenProvider,
     sortScreenProvider: SortScreenProvider,
-    filterScreenProvider: FilterScreenProvider,
+    tagsScreenProvider: TagsScreenProvider,
 ): SearchStore {
     return SearchStore(
         params = params,
         reducer = SearchReducer(),
         uiStateMapper = SearchUiStateMapper(context),
         actors = setOf(
-            SearchNavigationActor(router, reviewDetailsScreenProvider, sortScreenProvider, filterScreenProvider),
+            SearchNavigationActor(router, reviewDetailsScreenProvider, sortScreenProvider, tagsScreenProvider),
             SearchReviewsActor(localDataSource),
             LoadRecentSearchesActor(localDataSource),
             RememberRecentSearchActor(localDataSource),
@@ -85,18 +85,18 @@ internal fun createSortStore(
     )
 }
 
-internal fun createFilterStore(
+internal fun createTagsStore(
     context: Context,
-    params: FilterParams,
+    params: TagsParams,
     localDataSource: CheckieLocalDataSource,
     router: Router,
-): FilterStore {
-    return FilterStore(
+): TagsStore {
+    return TagsStore(
         params = params,
-        reducer = FilterReducer(),
-        uiStateMapper = FilterUiStateMapper(context),
+        reducer = TagsReducer(),
+        uiStateMapper = TagsUiStateMapper(context),
         actors = setOf(
-            FilterNavigationActor(router),
+            TagsNavigationActor(router),
             LoadTagsActor(localDataSource),
         ),
     )

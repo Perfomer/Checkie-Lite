@@ -2,9 +2,7 @@ package com.perfomer.checkielite.feature.search.presentation.screen.search.tea
 
 import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.pure.state.toLoadingContentAware
-import com.perfomer.checkielite.common.pure.util.toArrayList
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
-import com.perfomer.checkielite.core.entity.search.RatingRange
 import com.perfomer.checkielite.core.entity.search.SearchFilters
 import com.perfomer.checkielite.core.entity.search.SearchSorting
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand
@@ -17,23 +15,22 @@ import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.co
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.RecentSearchesLoading
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.Searching
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.Exit
-import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.OpenFilters
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.OpenSort
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.OpenTags
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationEvent
-import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationEvent.OnFiltersUpdated
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationEvent.OnSortUpdated
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationEvent.OnTagsUpdated
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchState
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnBackPress
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnClearAllFiltersClick
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnFilterClick
-import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnRatingRangeFilterClearClick
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnRecentSearchesClearClick
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnReviewClick
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnSearchClearClick
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnSearchFieldInput
-import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnSortClick
-import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnTagFilterClearClick
+import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.FilterType
 
 internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEvent, SearchState>() {
 
@@ -55,24 +52,11 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
 
     private fun reduceUi(event: SearchUiEvent) = when (event) {
         is OnBackPress -> commands(Exit)
-        is OnSortClick -> commands(OpenSort(state.searchSorting))
-        is OnFilterClick -> commands(OpenFilters(state.searchFilters))
+        is OnFilterClick -> reduceOnFilterClick(event)
         is OnReviewClick -> commands(
             RememberRecentSearch(event.reviewId),
             OpenReviewDetails(event.reviewId),
         )
-
-        is OnRatingRangeFilterClearClick -> {
-            updateSearchConditions(filters = state.searchFilters.copy(ratingRange = RatingRange.default))
-        }
-
-        is OnTagFilterClearClick -> {
-            updateSearchConditions(
-                filters = state.searchFilters.copy(
-                    tags = state.searchFilters.tags.filter { it.id == event.tagId }.toArrayList(),
-                )
-            )
-        }
 
         is OnSearchClearClick -> updateSearchConditions(query = "")
         is OnSearchFieldInput -> updateSearchConditions(query = event.text)
@@ -80,10 +64,18 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
             state { copy(recentSearches = Lce.Content(emptyList())) }
             commands(ClearRecentSearches)
         }
+
+        is OnClearAllFiltersClick -> updateSearchConditions(filters = SearchFilters(), sorting = SearchSorting.default)
+    }
+
+    private fun reduceOnFilterClick(event: OnFilterClick) = when (event.type) {
+        FilterType.TAGS -> commands(OpenTags(state.searchFilters.tags))
+        FilterType.RATING -> Unit
+        FilterType.SORT -> commands(OpenSort(state.searchSorting))
     }
 
     private fun reduceNavigation(event: SearchNavigationEvent) = when (event) {
-        is OnFiltersUpdated -> updateSearchConditions(filters = event.filters)
+        is OnTagsUpdated -> updateSearchConditions(filters = state.searchFilters.copy(tags = event.tags))
         is OnSortUpdated -> updateSearchConditions(sorting = event.sorting)
     }
 

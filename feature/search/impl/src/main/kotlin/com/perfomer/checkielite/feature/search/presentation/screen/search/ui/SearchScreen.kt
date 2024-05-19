@@ -1,11 +1,17 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,43 +25,51 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewHorizontalItem
-import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.search.R
+import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter
+import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.FilterType
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.SearchUiState
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.widget.OutlinedSearchField
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 internal fun SearchScreen(
@@ -63,15 +77,11 @@ internal fun SearchScreen(
     onNavigationIconClick: () -> Unit = {},
     onSearchFieldInput: (text: String) -> Unit = {},
     onSearchClearClick: () -> Unit = {},
-    onSortClick: () -> Unit = {},
-    onFilterClick: () -> Unit = {},
-    onTagFilterClearClick: (tagId: String) -> Unit = {},
-    onRatingRangeFilterClearClick: () -> Unit = {},
+    onFilterClick: (type: FilterType) -> Unit = {},
     onReviewClick: (id: String) -> Unit = {},
     onRecentSearchesClearClick: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
     val searchFieldFocusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
@@ -83,10 +93,13 @@ internal fun SearchScreen(
         topBar = {
             SearchTopAppBar(
                 scrollableState = scrollState,
-                onNavigationIconClick = onNavigationIconClick,
                 searchFieldFocusRequester = searchFieldFocusRequester,
                 searchQuery = state.searchQuery,
+                filters = state.filters,
+                onNavigationIconClick = onNavigationIconClick,
                 onSearchFieldInput = onSearchFieldInput,
+                onFilterClick = onFilterClick,
+                onAllFiltersClick = { TODO() },
                 onSearchClearClick = {
                     focusManager.clearFocus()
                     onSearchClearClick()
@@ -98,13 +111,8 @@ internal fun SearchScreen(
             state = state,
             scrollState = scrollState,
             contentPadding = contentPadding,
-
             onReviewClick = onReviewClick,
-            onRatingRangeFilterClearClick = onRatingRangeFilterClearClick,
             onRecentSearchesClearClick = onRecentSearchesClearClick,
-            onTagFilterClearClick = onTagFilterClearClick,
-            onSortClick = onSortClick,
-            onFilterClick = onFilterClick,
         )
     }
 }
@@ -115,10 +123,6 @@ private fun Content(
     state: SearchUiState,
     scrollState: LazyListState,
     contentPadding: PaddingValues,
-    onSortClick: () -> Unit,
-    onFilterClick: () -> Unit,
-    onTagFilterClearClick: (tagId: String) -> Unit,
-    onRatingRangeFilterClearClick: () -> Unit,
     onReviewClick: (id: String) -> Unit,
     onRecentSearchesClearClick: () -> Unit,
 ) {
@@ -129,95 +133,6 @@ private fun Content(
             .fillMaxWidth()
             .imePadding()
     ) {
-        item {
-            Spacer(modifier = Modifier.height(4.dp))
-
-
-
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-
-        item {
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-            ) {
-                CuiChip(
-                    onClick = onSortClick,
-                    leadingIcon = { Icon(painter = painterResource(R.drawable.ic_sort), contentDescription = null) },
-                    content = { Text(stringResource(R.string.search_sort)) },
-                )
-
-                CuiChip(
-                    onClick = onFilterClick,
-                    leadingIcon = { Icon(painter = painterResource(R.drawable.ic_filter), contentDescription = null) },
-                    content = { Text(stringResource(R.string.search_filter)) },
-                )
-            }
-        }
-
-        item {
-            FlowRow(modifier = Modifier.fillMaxWidth()) {
-                if (state.ratingFilter != null) {
-                    CuiChip(
-                        style = CuiChipStyle.selected(),
-                        onClick = onFilterClick,
-                        content = {
-                            Row {
-                                Text(
-                                    text = buildAnnotatedString {
-                                        append(stringResource(R.string.search_filter_rating))
-                                        append(": ")
-                                        append(
-                                            AnnotatedString(
-                                                text = "${state.ratingFilter.minRating}-${state.ratingFilter.maxRating}",
-                                                spanStyle = SpanStyle(fontWeight = FontWeight.Medium),
-                                            )
-                                        )
-                                    }
-                                )
-
-                                Spacer(Modifier.width(8.dp))
-
-                                CuiIconButton(
-                                    painter = painterResource(CommonDrawable.ic_cross),
-                                    onClick = onRatingRangeFilterClearClick,
-                                    tint = LocalCuiPalette.current.IconAccent,
-                                    modifier = Modifier.size(16.dp)
-                                )
-                            }
-                        },
-                    )
-                }
-
-                for (tagFilter in state.tagFilters) {
-                    key(tagFilter.tagId) {
-                        CuiChip(
-                            style = CuiChipStyle.selected(),
-                            onClick = onFilterClick,
-                            leadingIcon = tagFilter.emoji?.let { { Text(tagFilter.emoji) } },
-                            content = {
-                                Row {
-                                    Text(tagFilter.value)
-
-                                    Spacer(Modifier.width(8.dp))
-
-                                    CuiIconButton(
-                                        painter = painterResource(CommonDrawable.ic_cross),
-                                        onClick = { onTagFilterClearClick(tagFilter.tagId) },
-                                        tint = LocalCuiPalette.current.IconAccent,
-                                        modifier = Modifier.size(16.dp)
-                                    )
-                                }
-                            },
-                        )
-                    }
-                }
-            }
-        }
-
         itemsIndexed(
             items = state.reviews,
             key = { _, item -> item.id },
@@ -266,9 +181,12 @@ private fun SearchTopAppBar(
     searchFieldFocusRequester: FocusRequester,
     scrollableState: LazyListState,
     searchQuery: String,
+    filters: ImmutableList<Filter>,
     onSearchFieldInput: (text: String) -> Unit,
     onSearchClearClick: () -> Unit,
     onNavigationIconClick: () -> Unit,
+    onFilterClick: (type: FilterType) -> Unit,
+    onAllFiltersClick: () -> Unit,
 ) {
     val shouldShowDivider by remember { derivedStateOf { scrollableState.canScrollBackward } }
 
@@ -301,6 +219,141 @@ private fun SearchTopAppBar(
                     .focusRequester(searchFieldFocusRequester)
             )
         }
+
+        Spacer(Modifier.height(14.dp))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            val appliedFiltersCount = remember(filters) { filters.count { it.isApplied }}
+            val hasAppliedFilters = appliedFiltersCount > 0
+
+            if (hasAppliedFilters) {
+                Spacer(Modifier.width(20.dp))
+
+                FilterChip(
+                    onClick = onAllFiltersClick,
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_sort),
+                        contentDescription = null,
+                        modifier = Modifier.size(12.dp)
+                    )
+
+                    Spacer(Modifier.width(4.dp))
+
+                    Badge(value = appliedFiltersCount.toString(), LocalCuiPalette.current.IconPrimary)
+                }
+
+                Spacer(Modifier.width(8.dp))
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .weight(1F)
+                    .horizontalScroll(rememberScrollState())
+                    .padding(
+                        start = if (hasAppliedFilters) 0.dp else 20.dp,
+                        end = 20.dp
+                    )
+            ) {
+                filters.forEach { filter ->
+                    key(filter.type) {
+                        val style = if (filter.isApplied) CuiChipStyle.selected() else CuiChipStyle.default()
+
+                        FilterChip(
+                            style = style,
+                            onClick = { onFilterClick(filter.type) },
+                        ) {
+                            filter.leadingIcon?.let { leadingIcon ->
+                                when (leadingIcon.type) {
+                                    Filter.LeadingIconType.BADGE -> Badge(value = leadingIcon.value, LocalCuiPalette.current.IconAccent)
+                                    Filter.LeadingIconType.EMOJI -> Text(text = leadingIcon.value)
+                                }
+                            }
+
+                            Spacer(Modifier.width(4.dp))
+
+                            Text(filter.text)
+
+                            Spacer(Modifier.width(4.dp))
+
+                            Icon(
+                                painter = painterResource(CommonDrawable.ic_chevron_down),
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun Badge(
+    value: String,
+    backgroundColor: Color,
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .size(16.dp)
+            .background(backgroundColor, CircleShape)
+            .padding(end = 0.5.dp, top = 0.5.dp)
+    ) {
+        Text(
+            text = value,
+            fontSize = 12.sp,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Medium,
+            color = Color.White,
+            style = MaterialTheme.typography.bodySmall.copy(
+                platformStyle = PlatformTextStyle(includeFontPadding = false)
+            ),
+        )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun FilterChip(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    onLongClick: (() -> Unit)? = null,
+    style: CuiChipStyle = CuiChipStyle.default(),
+    contentPadding: PaddingValues = PaddingValues(horizontal = 8.dp, vertical = 2.dp),
+    content: @Composable RowScope.() -> Unit,
+) {
+    val localTextStyle = LocalTextStyle.current
+    val textStyle = remember(style) {
+        localTextStyle.copy(fontWeight = style.fontWeight, fontSize = 14.sp)
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .clip(CircleShape)
+            .background(style.textBackgroundColor)
+            .border(width = style.borderWidth, color = style.borderColor, shape = CircleShape)
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick,
+            )
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(contentPadding)
+        ) {
+            CompositionLocalProvider(
+                LocalTextStyle provides textStyle,
+                content = { content() },
+            )
+        }
     }
 }
 
@@ -312,8 +365,7 @@ private fun SearchScreenPreview() = CheckieLiteTheme {
 
 internal val mockUiState = SearchUiState(
     searchQuery = "",
-    ratingFilter = null,
-    tagFilters = emptyPersistentList(),
+    filters = emptyPersistentList(),
     reviews = emptyPersistentList(),
     showRecentSearchesTitle = false,
 )

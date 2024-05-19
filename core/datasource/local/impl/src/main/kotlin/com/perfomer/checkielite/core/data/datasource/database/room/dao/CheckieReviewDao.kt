@@ -130,9 +130,7 @@ internal fun createFindReviewsSqliteQuery(searchQuery: String, filters: SearchFi
 
     val orderingField = when (sorting.strategy) {
         ReviewsSortingStrategy.CREATION_DATE -> "creationDate"
-        ReviewsSortingStrategy.MODIFICATION_DATE -> "modificationDate"
         ReviewsSortingStrategy.RATING -> "rating"
-        ReviewsSortingStrategy.NAME ->"productName"
     }
 
     query += " ORDER BY review.$orderingField $orderingDirection"

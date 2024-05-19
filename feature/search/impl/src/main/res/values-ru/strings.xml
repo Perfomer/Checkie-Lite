@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="search_sort">Сорт.</string>
+    <string name="search_sort">Сортировка</string>
     <string name="search_filter">Фильтр</string>
     <string name="search_filter_rating">Оценка</string>
     <string name="search_recent_searches">Недавно искали</string>
@@ -17,6 +17,11 @@
     <string name="search_sort_name">Название</string>
     <string name="search_sort_order_ascending">По возрастанию</string>
     <string name="search_sort_order_descending">По убыванию</string>
+
+    <string name="search_sort_newest">Самые новые</string>
+    <string name="search_sort_oldest">Самые старые</string>
+    <string name="search_sort_most_rated">С наибольшей оценкой</string>
+    <string name="search_sort_least_rated">С наименьшей оценкой</string>
 
     <string name="search_tags_title">Теги</string>
 </resources>

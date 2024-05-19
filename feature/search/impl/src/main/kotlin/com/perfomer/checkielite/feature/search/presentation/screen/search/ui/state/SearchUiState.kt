@@ -7,21 +7,30 @@ import kotlinx.collections.immutable.ImmutableList
 @Immutable
 internal data class SearchUiState(
     val searchQuery: String,
-    val ratingFilter: RatingFilter?,
-    val tagFilters: ImmutableList<TagFilter>,
+    val filters: ImmutableList<Filter>,
     val reviews: ImmutableList<ReviewItem>,
     val showRecentSearchesTitle: Boolean,
 )
 
 @Immutable
-internal data class RatingFilter(
-    val minRating: Int,
-    val maxRating: Int,
-)
+internal data class Filter(
+    val type: FilterType,
+    val text: String,
+    val isApplied: Boolean,
+    val leadingIcon: LeadingIcon? = null,
+) {
 
-@Immutable
-internal data class TagFilter(
-    val tagId: String,
-    val emoji: String?,
-    val value: String,
-)
+    @Immutable
+    data class LeadingIcon(
+        val value: String,
+        val type: LeadingIconType,
+    )
+
+    enum class LeadingIconType {
+        BADGE, EMOJI
+    }
+
+    enum class FilterType {
+        TAGS, RATING, SORT
+    }
+}

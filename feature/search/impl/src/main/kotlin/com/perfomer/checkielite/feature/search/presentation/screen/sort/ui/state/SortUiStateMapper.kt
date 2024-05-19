@@ -37,18 +37,14 @@ internal class SortUiStateMapper(
         private val ReviewsSortingStrategy.icon: Int
             get() = when (this) {
                 ReviewsSortingStrategy.CREATION_DATE -> R.drawable.search_ic_sort_creationdate
-                ReviewsSortingStrategy.MODIFICATION_DATE -> R.drawable.search_ic_sort_modificationdate
                 ReviewsSortingStrategy.RATING -> R.drawable.search_ic_sort_rating
-                ReviewsSortingStrategy.NAME -> R.drawable.search_ic_sort_name
             }
 
         @get:StringRes
         private val ReviewsSortingStrategy.label: Int
             get() = when (this) {
                 ReviewsSortingStrategy.CREATION_DATE -> R.string.search_sort_creationdate
-                ReviewsSortingStrategy.MODIFICATION_DATE -> R.string.search_sort_modificationdate
                 ReviewsSortingStrategy.RATING -> R.string.search_sort_rating
-                ReviewsSortingStrategy.NAME -> R.string.search_sort_name
             }
     }
 }

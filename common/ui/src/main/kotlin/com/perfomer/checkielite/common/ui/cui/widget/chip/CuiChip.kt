@@ -49,7 +49,7 @@ data class CuiChipStyle(
         fun default(palette: CuiPalette = LocalCuiPalette.current): CuiChipStyle {
             return CuiChipStyle(
                 iconBackgroundColor = palette.BackgroundSecondary,
-                textBackgroundColor = palette.BackgroundPrimary,
+                textBackgroundColor = palette.BackgroundSecondary,
                 borderColor = palette.OutlineSecondary,
                 borderWidth = 1.dp,
                 fontWeight = FontWeight.Normal,
@@ -61,7 +61,7 @@ data class CuiChipStyle(
         fun selected(palette: CuiPalette = LocalCuiPalette.current): CuiChipStyle {
             return CuiChipStyle(
                 iconBackgroundColor = palette.BackgroundAccentSecondary,
-                textBackgroundColor = palette.BackgroundAccentTertiary,
+                textBackgroundColor = palette.BackgroundAccentSecondary,
                 borderColor = palette.OutlineAccentPrimary,
                 borderWidth = 1.5.dp,
                 fontWeight = FontWeight.Medium,

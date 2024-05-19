@@ -188,21 +188,9 @@ internal val mockUiState = SortUiState(
             isSelected = true,
         ),
         SortingOption(
-            type = ReviewsSortingStrategy.MODIFICATION_DATE,
-            text = "Modification date",
-            icon = R.drawable.search_ic_sort_modificationdate,
-            isSelected = false,
-        ),
-        SortingOption(
             type = ReviewsSortingStrategy.RATING,
             text = "Rating",
             icon = R.drawable.search_ic_sort_rating,
-            isSelected = false,
-        ),
-        SortingOption(
-            type = ReviewsSortingStrategy.NAME,
-            text = "Name",
-            icon = R.drawable.search_ic_sort_name,
             isSelected = false,
         ),
     ),

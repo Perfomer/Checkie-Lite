@@ -2,14 +2,13 @@ package com.perfomer.checkielite.feature.search.presentation.screen.tags.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
@@ -17,6 +16,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
@@ -47,14 +47,8 @@ internal fun TagsScreen(
     onTagClick: (tagId: String) -> Unit = {},
     onDoneClick: () -> Unit = {},
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxHeight(0.85F)
-            .fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier.navigationBarsPadding()
-        ) {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.navigationBarsPadding()) {
             Header(
                 onSearchClick = onSortingOrderClick,
                 onSearchQueryTextInput = { },
@@ -70,7 +64,9 @@ internal fun TagsScreen(
             Spacer(Modifier.height(8.dp))
 
             LazyColumn(
-                contentPadding = WindowInsets.navigationBars.asPaddingValues(),
+                contentPadding = PaddingValues(
+                    bottom = 56.dp + WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding(),
+                ),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(
@@ -131,7 +127,6 @@ private fun TagItem(
     modifier: Modifier = Modifier
 ) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
@@ -144,10 +139,14 @@ private fun TagItem(
             fontWeight = if (tag.isSelected) FontWeight.Bold else FontWeight.Normal,
         )
 
-        tag.emoji?.let { Text(it) }
-
+        tag.emoji?.let {
+            Spacer(Modifier.width(8.dp))
+            Text(it)
+        }
 
         Spacer(Modifier.weight(1F))
+
+        Spacer(Modifier.width(16.dp))
 
         AnimatedVisibility(visible = tag.isSelected) {
             Icon(

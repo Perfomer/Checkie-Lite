@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.tags.tea
 
 import com.perfomer.checkielite.common.pure.state.Lce
+import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.common.pure.state.requireContent
 import com.perfomer.checkielite.common.pure.util.toArrayList
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
@@ -53,9 +54,9 @@ internal class TagsReducer : DslReducer<TagsCommand, TagsEffect, TagsEvent, Tags
     }
 
     private fun reduceTagsLoading(event: TagsLoading) = when (event) {
-        is TagsLoading.Started -> Unit
+        is TagsLoading.Started -> state { copy(suggestedTags = Lce.Loading(state.suggestedTags.content)) }
         is TagsLoading.Succeed -> state { copy(suggestedTags = Lce.Content(event.tags)) }
-        is TagsLoading.Failed -> Unit
+        is TagsLoading.Failed -> state { copy(suggestedTags = Lce.Error()) }
     }
 
     private fun updateSearchQuery(searchQuery: String = state.searchQuery) {

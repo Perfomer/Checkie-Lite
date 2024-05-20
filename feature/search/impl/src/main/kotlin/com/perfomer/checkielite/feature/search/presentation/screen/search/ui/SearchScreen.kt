@@ -99,7 +99,10 @@ internal fun SearchScreen(
                 filters = state.filters,
                 onNavigationIconClick = onNavigationIconClick,
                 onSearchFieldInput = onSearchFieldInput,
-                onFilterClick = onFilterClick,
+                onFilterClick = { filterType ->
+                    focusManager.clearFocus()
+                    onFilterClick(filterType)
+                },
                 onAllFiltersClick = { TODO() },
                 onSearchClearClick = {
                     focusManager.clearFocus()
@@ -177,6 +180,7 @@ private fun SearchField(
 }
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SearchTopAppBar(
     searchFieldFocusRequester: FocusRequester,
@@ -227,7 +231,7 @@ private fun SearchTopAppBar(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            val appliedFiltersCount = remember(filters) { filters.count { it.isApplied }}
+            val appliedFiltersCount = remember(filters) { filters.count { it.isApplied } }
             val hasAppliedFilters = appliedFiltersCount > 0
 
             if (hasAppliedFilters) {

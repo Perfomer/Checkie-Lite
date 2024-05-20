@@ -6,6 +6,7 @@ import com.perfomer.checkielite.feature.search.presentation.navigation.TagsParam
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core.TagsCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core.TagsEffect
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core.TagsEvent
+import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core.TagsEvent.Initialize
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core.TagsState
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core.TagsUiEvent
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.ui.state.TagsUiState
@@ -21,4 +22,5 @@ internal class TagsStore(
     reducer = reducer,
     uiStateMapper = uiStateMapper,
     actors = actors,
+    initialEvents = listOf(Initialize),
 )

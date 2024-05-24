@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.perfomer.checkielite.common.ui.util
 
 import androidx.compose.foundation.isSystemInDarkTheme

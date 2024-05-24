@@ -1,12 +1,11 @@
 [versions]
 accompanist-systemuicontroller = "0.34.0"
 activity = "1.9.0"
-agp = "8.4.0"
+agp = "8.4.1"
 androidx-core = "1.13.1"
 appcompat = "1.6.1"
 coil = "2.6.0"
 compose-bom = "2024.05.00"
-compose-compiler = "1.5.12"
 compressor = "3.0.1"
 core-ktx = "1.13.1"
 dnd = "0.1.0"
@@ -14,10 +13,10 @@ emoji = "0.3.2"
 fading-edges = "1.0.4"
 google-fonts = "1.6.7"
 koin = "3.5.0"
-kotlin = "1.9.23"
+kotlin = "2.0.0"
 kotlinx-collections-immutable = "0.3.7"
 kotlinx-coroutines = "1.8.0"
-ksp = "1.9.23-1.0.20"
+ksp = "2.0.0-1.0.21"
 lifecycle-ktx = "2.8.0"
 lifecycle-runtime-ktx = "2.8.0"
 room = "2.6.1"
@@ -61,7 +60,7 @@ zoomable = { module = "com.mxalbert.zoomable:zoomable", version.ref = "zoomable"
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-

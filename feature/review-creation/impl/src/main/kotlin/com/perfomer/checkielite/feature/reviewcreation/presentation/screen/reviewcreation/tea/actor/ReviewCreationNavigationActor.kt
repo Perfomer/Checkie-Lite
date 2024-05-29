@@ -48,13 +48,13 @@ internal class ReviewCreationNavigationActor(
         when (command) {
             is Exit -> exit()
             is ExitWithResult -> exitWithResult(command.result)
-            is OpenPhotoPicker -> openPhotoPicker()
+            is OpenPhotoPicker -> return openPhotoPicker()
             is OpenGallery -> router.navigate(
                 screen = galleryScreenProvider(GalleryParams(command.picturesUri.toArrayList(), command.currentPicturePosition)),
                 mode = DestinationMode.OVERLAY,
             )
 
-            is OpenTagCreation -> openTagCreation(command)
+            is OpenTagCreation -> return openTagCreation(command)
         }
 
         return null
@@ -67,7 +67,7 @@ internal class ReviewCreationNavigationActor(
         return ReviewCreationNavigationEvent.OnPhotosPick(uris = result.result)
     }
 
-    private suspend fun openTagCreation(command: OpenTagCreation): ReviewCreationNavigationEvent? {
+    private suspend fun openTagCreation(command: OpenTagCreation): ReviewCreationNavigationEvent {
         val params = TagCreationParams(mode = command.mode)
         val result = router.navigateForResult<TagCreationResult>(
             screen = tagCreationScreenProvider(params),

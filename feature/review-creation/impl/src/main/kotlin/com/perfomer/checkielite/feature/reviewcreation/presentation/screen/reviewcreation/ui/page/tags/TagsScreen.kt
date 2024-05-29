@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -33,6 +34,8 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.CommonString
+import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
@@ -52,6 +55,7 @@ internal fun TagsScreen(
     onTagClick: (id: String) -> Unit = {},
     onTagLongClick: (id: String) -> Unit = {},
     onSearchQueryInput: (text: String) -> Unit = {},
+    onSearchQueryClearClick: () -> Unit = {},
 ) {
     val hapticFeedback = LocalHapticFeedback.current
     val focusManager = LocalFocusManager.current
@@ -76,6 +80,10 @@ internal fun TagsScreen(
         SearchField(
             searchQuery = state.searchQuery,
             onSearchQueryInput = onSearchQueryInput,
+            onSearchQueryClearClick = {
+                onSearchQueryClearClick()
+                focusManager.clearFocus()
+            },
         )
 
         Spacer(Modifier.height(16.dp))
@@ -99,25 +107,14 @@ internal fun TagsScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             AddTagChip(
-                searchQuery = state.searchQuery,
+                searchQuery = state.searchQuery.takeIf { it.isNotBlank() },
                 onCreateTagClick = {
                     focusManager.clearFocus()
                     onCreateTagClick()
                 },
             )
 
-            for (tag in state.selectedTags) {
-                key(tag.id) { TagChip(tag) }
-            }
-        }
-
-        Spacer(Modifier.height(16.dp))
-
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            for (tag in state.suggestedTags) {
+            for (tag in state.tags) {
                 key(tag.id) { TagChip(tag) }
             }
         }
@@ -165,11 +162,12 @@ private fun AddTagChip(
 
 @Composable
 private fun SearchField(
-    searchQuery: String?,
+    searchQuery: String,
     onSearchQueryInput: (text: String) -> Unit,
+    onSearchQueryClearClick: () -> Unit,
 ) {
     CuiOutlinedField(
-        text = searchQuery.orEmpty(),
+        text = searchQuery,
         placeholder = stringResource(R.string.reviewcreation_tags_field_search),
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Search,
@@ -178,6 +176,24 @@ private fun SearchField(
         singleLine = true,
         onValueChange = onSearchQueryInput,
         colors = CuiOutlinedFieldDefaults.colors(unfocusedBorderColor = LocalCuiPalette.current.OutlineSecondary),
+        trailingIcon = {
+            if (searchQuery.isBlank()) {
+                Icon(
+                    painter = painterResource(id = CommonDrawable.ic_search),
+                    tint = LocalCuiPalette.current.IconSecondary,
+                    contentDescription = null,
+                    modifier = Modifier.offset(x = (-4).dp)
+                )
+            } else {
+                CuiIconButton(
+                    painter = painterResource(id = CommonDrawable.ic_cross),
+                    contentDescription = stringResource(CommonString.common_clear),
+                    tint = LocalCuiPalette.current.IconPrimary,
+                    onClick = onSearchQueryClearClick,
+                    modifier = Modifier.offset(x = (-4).dp)
+                )
+            }
+        },
         modifier = Modifier.fillMaxWidth()
     )
 }

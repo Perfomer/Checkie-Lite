@@ -151,9 +151,8 @@ internal val mockUiState = ReviewCreationUiState(
         picturesUri = emptyPersistentList(),
     ),
     tagsState = TagsPageUiState(
-        searchQuery = null,
-        selectedTags = emptyPersistentList(),
-        suggestedTags = emptyPersistentList(),
+        searchQuery = "",
+        tags = emptyPersistentList(),
     ),
     reviewInfoState = ReviewInfoPageUiState(
         rating = 5,

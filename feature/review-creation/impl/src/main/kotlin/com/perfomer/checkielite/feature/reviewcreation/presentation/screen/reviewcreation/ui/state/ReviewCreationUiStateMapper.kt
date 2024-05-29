@@ -49,12 +49,9 @@ internal class ReviewCreationUiStateMapper(
             )
         }
 
-        val (selectedTags, unselectedTags) = uiTags.partition { it.isSelected }
-
         return TagsPageUiState(
-            searchQuery = state.tagsSearchQuery.takeIf { it.isNotBlank() },
-            selectedTags = selectedTags.toPersistentList(),
-            suggestedTags = unselectedTags.toPersistentList(),
+            searchQuery = state.tagsSearchQuery,
+            tags = uiTags.toPersistentList(),
         )
     }
 

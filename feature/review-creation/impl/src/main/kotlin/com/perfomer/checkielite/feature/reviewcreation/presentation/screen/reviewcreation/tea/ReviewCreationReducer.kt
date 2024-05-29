@@ -172,7 +172,11 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     }
 
     private fun reduceTagsUi(event: Tags) = when (event) {
-        is Tags.OnCreateTagClick -> commands(OpenTagCreation(TagCreationMode.Creation(state.tagsSearchQuery.trim())))
+        is Tags.OnCreateTagClick -> {
+            commands(OpenTagCreation(TagCreationMode.Creation(state.tagsSearchQuery.trim())))
+        }
+
+        is Tags.OnSearchQueryClearClick -> onTagsSearchQueryInput("")
         is Tags.OnSearchQueryInput -> onTagsSearchQueryInput(event.query)
         is Tags.OnTagClick -> {
             state {
@@ -189,8 +193,6 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                     )
                 )
             }
-
-            onTagsSearchQueryInput("")
         }
 
         is Tags.OnTagLongClick -> commands(OpenTagCreation(TagCreationMode.Modification(event.tagId)))
@@ -227,6 +229,8 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                     ),
                 )
             }
+
+            onTagsSearchQueryInput("")
         }
 
         is ReviewCreationNavigationEvent.OnTagDeleted -> {

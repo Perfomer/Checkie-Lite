@@ -112,6 +112,7 @@ internal class ReviewCreationContentScreen(
                     onTagClick = acceptable(Tags::OnTagClick),
                     onTagLongClick = acceptable(Tags::OnTagLongClick),
                     onSearchQueryInput = acceptable(Tags::OnSearchQueryInput),
+                    onSearchQueryClearClick = acceptable(Tags.OnSearchQueryClearClick),
                 )
 
                 ReviewCreationPage.REVIEW_INFO -> ReviewInfoScreen(

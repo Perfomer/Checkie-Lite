@@ -55,6 +55,8 @@ internal sealed interface ReviewCreationUiEvent : ReviewCreationEvent {
 
         class OnSearchQueryInput(val query: String) : Tags
 
+        data object OnSearchQueryClearClick : Tags
+
         data object OnCreateTagClick : Tags
 
         class OnTagClick(val tagId: String) : Tags

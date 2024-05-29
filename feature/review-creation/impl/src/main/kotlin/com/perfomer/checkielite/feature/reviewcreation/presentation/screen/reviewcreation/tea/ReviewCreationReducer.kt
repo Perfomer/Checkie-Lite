@@ -86,7 +86,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                             disadvantages = state.reviewDetails.disadvantages,
                             rating = state.reviewDetails.rating,
                             pictures = state.reviewDetails.pictures,
-                            tags = state.reviewDetails.tags,
+                            tags = state.reviewDetails.tags.toList(),
                         )
                     )
 
@@ -100,7 +100,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                             disadvantages = state.reviewDetails.disadvantages,
                             rating = state.reviewDetails.rating,
                             pictures = state.reviewDetails.pictures,
-                            tags = state.reviewDetails.tags,
+                            tags = state.reviewDetails.tags.toList(),
                         )
                     )
                 }
@@ -237,7 +237,10 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             state {
                 copy(
                     reviewDetails = reviewDetails.copy(
-                        tags = reviewDetails.tags.filter { it.id != event.tagId },
+                        tags = buildSet {
+                            addAll(reviewDetails.tags)
+                            removeIf { it.id != event.tagId }
+                        },
                     ),
                 )
             }
@@ -260,7 +263,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 productName = event.review.productName,
                 productBrand = event.review.productBrand.orEmpty(),
                 pictures = event.review.pictures.toPersistentList(),
-                tags = event.review.tags,
+                tags = event.review.tags.toSet(),
                 comment = event.review.comment.orEmpty(),
                 advantages = event.review.advantages.orEmpty(),
                 disadvantages = event.review.disadvantages.orEmpty(),

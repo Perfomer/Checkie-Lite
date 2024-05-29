@@ -11,6 +11,8 @@ internal sealed interface TagCreationResult {
 
     data class Created(val tag: CheckieTag) : TagCreationResult
 
+    data class Modified(val tag: CheckieTag) : TagCreationResult
+
     data class Deleted(val tagId: String) : TagCreationResult
 }
 

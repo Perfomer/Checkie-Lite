@@ -101,7 +101,15 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
 
     private fun reduceTagSaving(event: TagSaving) = when (event) {
         is TagSaving.Started -> state { copy(isSaving = true) }
-        is TagSaving.Succeed -> commands(ExitWithResult(TagCreationResult.Created(event.tag)))
+        is TagSaving.Succeed -> {
+            val result = when (state.mode) {
+                is TagCreationMode.Creation -> TagCreationResult.Created(event.tag)
+                is TagCreationMode.Modification -> TagCreationResult.Modified(event.tag)
+            }
+
+            commands(ExitWithResult(result))
+        }
+
         is TagSaving.Failed -> {
             state { copy(isSaving = false) }
             effects(ShowErrorToast.SavingFailed)

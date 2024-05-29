@@ -67,7 +67,7 @@ internal class ReviewCreationNavigationActor(
         return ReviewCreationNavigationEvent.OnPhotosPick(uris = result.result)
     }
 
-    private suspend fun openTagCreation(command: OpenTagCreation): ReviewCreationNavigationEvent {
+    private suspend fun openTagCreation(command: OpenTagCreation): ReviewCreationNavigationEvent? {
         val params = TagCreationParams(mode = command.mode)
         val result = router.navigateForResult<TagCreationResult>(
             screen = tagCreationScreenProvider(params),
@@ -76,6 +76,7 @@ internal class ReviewCreationNavigationActor(
 
         return when (result) {
             is TagCreationResult.Created -> OnTagCreated(result.tag)
+            is TagCreationResult.Modified -> null
             is TagCreationResult.Deleted -> OnTagDeleted(result.tagId)
         }
     }

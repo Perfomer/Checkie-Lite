@@ -37,8 +37,6 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 dnd = { module = "com.mohamedrejeb.dnd:compose-dnd", version.ref = "dnd" }
-emoji-core = { module = "com.chrynan.emoji:emoji-core", version.ref = "emoji" }
-emoji-repo-map = { module = "com.chrynan.emoji:emoji-repo-map", version.ref = "emoji" }
 fading-edges = { module = "com.github.GIGAMOLE:ComposeFadingEdges", version.ref = "fading-edges" }
 google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "google-fonts" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }

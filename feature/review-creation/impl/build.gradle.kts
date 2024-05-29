@@ -8,7 +8,11 @@ applyCommonAndroid()
 
 android {
 	namespace = "com.perfomer.checkielite.feature.reviewcreation"
-	buildFeatures.compose = true
+
+	buildFeatures{
+		compose = true
+		viewBinding = true
+	}
 }
 
 dependencies {
@@ -27,8 +31,6 @@ dependencies {
 	implementation(libs.compose.material3)
 	implementation(libs.compose.ui)
 	implementation(libs.dnd)
-	implementation(libs.emoji.core)
-	implementation(libs.emoji.repo.map)
 	implementation(libs.koin.core)
 	implementation(platform(libs.compose.bom))
 }

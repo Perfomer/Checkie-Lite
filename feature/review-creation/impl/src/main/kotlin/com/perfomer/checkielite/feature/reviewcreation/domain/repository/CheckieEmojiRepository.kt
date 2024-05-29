@@ -5,7 +5,5 @@ import com.perfomer.checkielite.feature.reviewcreation.domain.entity.CheckieEmoj
 
 internal interface CheckieEmojiRepository {
 
-    suspend fun warmUp()
-
     suspend fun getCategorizedEmojis(): List<Pair<CheckieEmojiCategory, List<CheckieEmoji>>>
 }

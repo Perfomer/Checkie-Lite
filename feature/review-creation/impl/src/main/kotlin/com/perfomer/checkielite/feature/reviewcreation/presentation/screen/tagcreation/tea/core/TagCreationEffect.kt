@@ -8,4 +8,6 @@ internal sealed interface TagCreationEffect {
         data object DeletionFailed : ShowErrorToast
         data object SavingFailed : ShowErrorToast
     }
+
+    data object ShowTagDeleteConfirmationDialog : TagCreationEffect
 }

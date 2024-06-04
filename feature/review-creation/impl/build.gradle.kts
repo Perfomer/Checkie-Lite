@@ -30,7 +30,7 @@ dependencies {
 	implementation(libs.activity.compose)
 	implementation(libs.compose.material3)
 	implementation(libs.compose.ui)
-	implementation(libs.dnd)
+	implementation(libs.drag.and.drop)
 	implementation(libs.koin.core)
 	implementation(platform(libs.compose.bom))
 }

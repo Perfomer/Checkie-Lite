@@ -31,6 +31,5 @@ fun <T> Lce<T>.toLoadingContentAware(): Lce<T> {
 }
 
 fun <T: Any> Lce<T>.toLoading(): Lce<T> {
-	val currentContent = if (this is Content) content else null
-	return Loading(content = currentContent)
+	return Loading(content)
 }

@@ -6,7 +6,6 @@ import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckiePi
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieReviewDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieTagDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.RecentSearchDao
-import com.perfomer.checkielite.core.data.datasource.database.room.dao.createFindReviewsSqliteQuery
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieTagReviewBoundDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.RecentSearchedReviewDb
 import com.perfomer.checkielite.core.data.datasource.database.room.mapper.toDb
@@ -14,8 +13,6 @@ import com.perfomer.checkielite.core.data.datasource.database.room.mapper.toDoma
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
-import com.perfomer.checkielite.core.entity.search.SearchFilters
-import com.perfomer.checkielite.core.entity.search.SearchSorting
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.Date
@@ -23,12 +20,6 @@ import java.util.Date
 internal interface DatabaseDataSource {
 
     fun getReviews(): Flow<List<CheckieReview>>
-
-    fun findReviews(
-        searchQuery: String,
-        filters: SearchFilters,
-        sorting: SearchSorting,
-    ): Flow<List<CheckieReview>>
 
     fun getReviewsByBrand(brand: String): Flow<List<CheckieReview>>
 
@@ -84,11 +75,6 @@ internal class DatabaseDataSourceImpl(
 
     override fun getReviews(): Flow<List<CheckieReview>> {
         return reviewDao.getReviews()
-            .map { reviewDb -> reviewDb.map { it.toDomain() } }
-    }
-
-    override fun findReviews(searchQuery: String, filters: SearchFilters, sorting: SearchSorting): Flow<List<CheckieReview>> {
-        return reviewDao.getReviewsByQuery(createFindReviewsSqliteQuery(searchQuery, filters, sorting))
             .map { reviewDb -> reviewDb.map { it.toDomain() } }
     }
 

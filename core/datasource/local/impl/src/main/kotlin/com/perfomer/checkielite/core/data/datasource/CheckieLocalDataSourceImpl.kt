@@ -10,8 +10,6 @@ import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
-import com.perfomer.checkielite.core.entity.search.SearchFilters
-import com.perfomer.checkielite.core.entity.search.SearchSorting
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -25,10 +23,6 @@ internal class CheckieLocalDataSourceImpl(
 
     override fun getReviews(): Flow<List<CheckieReview>> {
         return databaseDataSource.getReviews()
-    }
-
-    override fun findReviews(searchQuery: String, filters: SearchFilters, sorting: SearchSorting): Flow<List<CheckieReview>> {
-        return databaseDataSource.findReviews(searchQuery, filters, sorting)
     }
 
     override fun getReviewsByBrand(brand: String): Flow<List<CheckieReview>> {

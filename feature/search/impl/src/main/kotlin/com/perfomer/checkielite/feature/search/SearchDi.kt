@@ -13,10 +13,11 @@ import com.perfomer.checkielite.feature.search.presentation.navigation.TagsScree
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.SearchReducer
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.SearchStore
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.ClearRecentSearchesActor
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.FilterReviewsActor
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.LoadRecentSearchesActor
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.LoadReviewsActor
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.RememberRecentSearchActor
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.SearchNavigationActor
-import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.SearchReviewsActor
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.SearchContentScreen
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.SearchUiStateMapper
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.SortReducer
@@ -62,7 +63,8 @@ internal fun createSearchStore(
         uiStateMapper = SearchUiStateMapper(context),
         actors = setOf(
             SearchNavigationActor(router, reviewDetailsScreenProvider, sortScreenProvider, tagsScreenProvider),
-            SearchReviewsActor(localDataSource),
+            FilterReviewsActor(),
+            LoadReviewsActor(localDataSource),
             LoadRecentSearchesActor(localDataSource),
             RememberRecentSearchActor(localDataSource),
             ClearRecentSearchesActor(localDataSource),

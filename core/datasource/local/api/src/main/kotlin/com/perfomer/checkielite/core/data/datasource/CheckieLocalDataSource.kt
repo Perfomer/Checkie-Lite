@@ -3,19 +3,11 @@ package com.perfomer.checkielite.core.data.datasource
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
-import com.perfomer.checkielite.core.entity.search.SearchFilters
-import com.perfomer.checkielite.core.entity.search.SearchSorting
 import kotlinx.coroutines.flow.Flow
 
 interface CheckieLocalDataSource {
 
     fun getReviews(): Flow<List<CheckieReview>>
-
-    fun findReviews(
-        searchQuery: String,
-        filters: SearchFilters,
-        sorting: SearchSorting,
-    ): Flow<List<CheckieReview>>
 
     fun getReviewsByBrand(brand: String): Flow<List<CheckieReview>>
 

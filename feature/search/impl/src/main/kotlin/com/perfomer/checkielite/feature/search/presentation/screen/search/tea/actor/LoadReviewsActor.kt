@@ -5,9 +5,9 @@ import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand
-import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.SearchReviews
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.LoadReviews
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent
-import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.Searching
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.ReviewsLoading
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -15,23 +15,19 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class SearchReviewsActor(
+internal class LoadReviewsActor(
     private val localDataSource: CheckieLocalDataSource,
 ) : Actor<SearchCommand, SearchEvent> {
 
     override fun act(commands: Flow<SearchCommand>): Flow<SearchEvent> {
-        return commands.filterIsInstance<SearchReviews>()
+        return commands.filterIsInstance<LoadReviews>()
             .flatMapLatest(::handleCommand)
     }
 
-    private fun handleCommand(command: SearchReviews): Flow<Searching> {
-        return localDataSource.findReviews(
-            searchQuery = command.query,
-            filters = command.filters,
-            sorting = command.sorting,
-        )
-            .map { reviews -> Searching.Succeed(reviews) }
-            .startWith(Searching.Started)
-            .onCatchReturn(Searching::Failed)
+    private fun handleCommand(command: LoadReviews): Flow<ReviewsLoading> {
+        return localDataSource.getReviews()
+            .map(ReviewsLoading::Succeed)
+            .startWith(ReviewsLoading.Started)
+            .onCatchReturn(ReviewsLoading::Failed)
     }
 }

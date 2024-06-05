@@ -1,7 +1,6 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state
 
 import android.content.Context
-import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
 import com.perfomer.checkielite.core.entity.CheckieReview
@@ -28,7 +27,7 @@ internal class SearchUiStateMapper(
                 createRatingFilter(state),
                 createSortFilter(state),
             ).toPersistentList(),
-            reviews = state.currentReviews.content.orEmpty()
+            reviews = state.currentReviews
                 .map { it.toUiItem() }
                 .toPersistentList(),
             showRecentSearchesTitle = state.hasSearchConditions,

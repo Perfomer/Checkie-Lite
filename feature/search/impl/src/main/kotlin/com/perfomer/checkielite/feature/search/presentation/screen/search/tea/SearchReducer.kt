@@ -1,19 +1,23 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.tea
 
 import com.perfomer.checkielite.common.pure.state.Lce
-import com.perfomer.checkielite.common.pure.state.toLoadingContentAware
+import com.perfomer.checkielite.common.pure.state.content
+import com.perfomer.checkielite.common.pure.state.toLoading
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.core.entity.search.SearchFilters
 import com.perfomer.checkielite.core.entity.search.SearchSorting
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.ClearRecentSearches
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.FilterReviews
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.LoadRecentSearches
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.LoadReviews
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.RememberRecentSearch
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEffect
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.Initialize
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.RecentSearchesLoading
-import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.Searching
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.ReviewsFiltered
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.ReviewsLoading
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.Exit
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.OpenSort
@@ -39,7 +43,8 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
         is SearchUiEvent -> reduceUi(event)
         is SearchNavigationEvent -> reduceNavigation(event)
         is RecentSearchesLoading -> reduceRecentSearchesLoading(event)
-        is Searching -> reduceSearching(event)
+        is ReviewsLoading -> reduceReviewsLoading(event)
+        is ReviewsFiltered -> reduceReviewsFiltered(event)
     }
 
     private fun reduceInitialize() {
@@ -47,7 +52,7 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
             updateSearchConditions()
         }
 
-        commands(LoadRecentSearches)
+        commands(LoadRecentSearches, LoadReviews)
     }
 
     private fun reduceUi(event: SearchUiEvent) = when (event) {
@@ -57,14 +62,12 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
             RememberRecentSearch(event.reviewId),
             OpenReviewDetails(event.reviewId),
         )
-
         is OnSearchClearClick -> updateSearchConditions(query = "")
         is OnSearchFieldInput -> updateSearchConditions(query = event.text)
         is OnRecentSearchesClearClick -> {
             state { copy(recentSearches = Lce.Content(emptyList())) }
             commands(ClearRecentSearches)
         }
-
         is OnClearAllFiltersClick -> updateSearchConditions(filters = SearchFilters(), sorting = SearchSorting.default)
     }
 
@@ -80,15 +83,22 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
     }
 
     private fun reduceRecentSearchesLoading(event: RecentSearchesLoading) = when (event) {
-        is RecentSearchesLoading.Started -> state { copy(recentSearches = Lce.Loading()) }
+        is RecentSearchesLoading.Started -> state { copy(recentSearches = recentSearches.toLoading()) }
         is RecentSearchesLoading.Succeed -> state { copy(recentSearches = Lce.Content(event.reviews)) }
         is RecentSearchesLoading.Failed -> state { copy(recentSearches = Lce.Error(event.error)) }
     }
 
-    private fun reduceSearching(event: Searching) = when (event) {
-        is Searching.Started -> state { copy(searchedReviews = state.recentSearches.toLoadingContentAware()) }
-        is Searching.Succeed -> state { copy(searchedReviews = Lce.Content(event.reviews)) }
-        is Searching.Failed -> state { copy(recentSearches = Lce.Error(event.error)) }
+    private fun reduceReviewsLoading(event: ReviewsLoading) = when (event) {
+        is ReviewsLoading.Started -> state { copy(allReviews = allReviews.toLoading()) }
+        is ReviewsLoading.Succeed -> {
+            state { copy(allReviews = Lce.Content(event.reviews)) }
+            updateSearchConditions()
+        }
+        is ReviewsLoading.Failed -> state { copy(allReviews = Lce.Error(event.error)) }
+    }
+
+    private fun reduceReviewsFiltered(event: ReviewsFiltered) {
+        state { copy(searchedReviews = event.reviews) }
     }
 
     private fun updateSearchConditions(
@@ -105,8 +115,9 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
         }
 
         commands(
-            SearchCommand.SearchReviews(
-                query = state.searchQuery.trim(),
+            FilterReviews(
+                reviews = state.allReviews.content.orEmpty(),
+                query = state.searchQuery,
                 filters = state.searchFilters,
                 sorting = state.searchSorting,
             )

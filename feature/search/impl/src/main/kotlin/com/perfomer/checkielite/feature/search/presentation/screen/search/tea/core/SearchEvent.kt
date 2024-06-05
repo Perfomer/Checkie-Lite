@@ -9,16 +9,18 @@ internal sealed interface SearchEvent {
 
     data object Initialize : SearchEvent
 
+    class ReviewsFiltered(val reviews: List<CheckieReview>) : SearchEvent
+
     sealed interface RecentSearchesLoading : SearchEvent {
         data object Started : RecentSearchesLoading
         class Succeed(val reviews: List<CheckieReview>) : RecentSearchesLoading
         class Failed(val error: Throwable) : RecentSearchesLoading
     }
 
-    sealed interface Searching : SearchEvent {
-        data object Started : Searching
-        class Succeed(val reviews: List<CheckieReview>) : Searching
-        class Failed(val error: Throwable) : Searching
+    sealed interface ReviewsLoading : SearchEvent {
+        data object Started : ReviewsLoading
+        class Succeed(val reviews: List<CheckieReview>) : ReviewsLoading
+        class Failed(val error: Throwable) : ReviewsLoading
     }
 }
 

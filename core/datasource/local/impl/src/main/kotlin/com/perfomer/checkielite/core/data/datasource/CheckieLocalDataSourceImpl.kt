@@ -33,7 +33,7 @@ internal class CheckieLocalDataSourceImpl(
         return databaseDataSource.getReview(reviewId)
     }
 
-    override suspend fun getRecentSearches(): List<CheckieReview> {
+    override fun getRecentSearches(): Flow<List<CheckieReview>> {
         return databaseDataSource.getRecentSearches()
     }
 

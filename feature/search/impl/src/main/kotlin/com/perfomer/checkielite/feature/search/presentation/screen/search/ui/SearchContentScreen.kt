@@ -7,8 +7,8 @@ import com.perfomer.checkielite.common.ui.util.BackHandlerWithLifecycle
 import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchParams
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.SearchStore
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnAllFiltersClick
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnBackPress
-import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnClearAllFiltersClick
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnFilterClick
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnRecentSearchesClearClick
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnReviewClick
@@ -32,7 +32,7 @@ internal class SearchContentScreen(
             onFilterClick = acceptable(::OnFilterClick),
             onReviewClick = acceptable(::OnReviewClick),
             onRecentSearchesClearClick = acceptable(OnRecentSearchesClearClick),
-            onClearAllFiltersClick = acceptable(OnClearAllFiltersClick),
+            onAllFiltersClick = acceptable(OnAllFiltersClick),
         )
     }
 }

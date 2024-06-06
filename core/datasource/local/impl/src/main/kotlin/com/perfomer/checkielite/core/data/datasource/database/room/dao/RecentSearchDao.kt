@@ -8,6 +8,7 @@ import androidx.room.RewriteQueriesToDropUnusedColumns
 import androidx.room.Transaction
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.RecentSearchedReviewDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.relation.CheckieReviewDetailedDb
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 internal interface RecentSearchDao {
@@ -21,7 +22,7 @@ internal interface RecentSearchDao {
             ORDER BY recentSearch.searchDate DESC
         """
     )
-    suspend fun getRecentSearches(): List<CheckieReviewDetailedDb>
+    fun getRecentSearches(): Flow<List<CheckieReviewDetailedDb>>
 
     @Query(
         """

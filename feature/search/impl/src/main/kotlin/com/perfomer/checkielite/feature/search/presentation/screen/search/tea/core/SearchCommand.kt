@@ -29,6 +29,11 @@ internal sealed interface SearchNavigationCommand : SearchCommand {
 
     class OpenReviewDetails(val reviewId: String) : SearchNavigationCommand
 
+    class OpenAllFilters(
+        val currentFilters: SearchFilters,
+        val currentSorting: SearchSorting,
+    ) : SearchNavigationCommand
+
     class OpenSort(val currentSorting: SearchSorting) : SearchNavigationCommand
 
     class OpenTags(val selectedTags: List<CheckieTag>) : SearchNavigationCommand

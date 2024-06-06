@@ -16,6 +16,7 @@ import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.co
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.Exit
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.OpenAllFilters
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.OpenSort
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.OpenTags
@@ -44,6 +45,7 @@ internal class SearchNavigationActor(
         when (command) {
             is Exit -> router.exit()
             is OpenReviewDetails -> openReviewDetails(command)
+            is OpenAllFilters -> return openAllFilters(command)
             is OpenSort -> return openSort(command)
             is OpenTags -> return openTags(command)
         }
@@ -54,6 +56,10 @@ internal class SearchNavigationActor(
     private fun openReviewDetails(command: OpenReviewDetails) {
         val params = ReviewDetailsParams(command.reviewId)
         router.navigate(reviewDetailsScreenProvider(params))
+    }
+
+    private suspend fun openAllFilters(command: OpenAllFilters): SearchNavigationEvent {
+        TODO()
     }
 
     private suspend fun openSort(command: OpenSort): SearchNavigationEvent {

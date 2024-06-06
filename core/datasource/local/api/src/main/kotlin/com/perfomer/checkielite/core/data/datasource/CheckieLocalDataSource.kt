@@ -13,7 +13,7 @@ interface CheckieLocalDataSource {
 
     fun getReview(reviewId: String): Flow<CheckieReview>
 
-    suspend fun getRecentSearches(): List<CheckieReview>
+    fun getRecentSearches(): Flow<List<CheckieReview>>
 
     suspend fun rememberRecentSearch(reviewId: String)
 

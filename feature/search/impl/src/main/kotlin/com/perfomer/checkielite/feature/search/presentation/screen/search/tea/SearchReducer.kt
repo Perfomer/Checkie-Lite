@@ -23,12 +23,13 @@ import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.co
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.OpenSort
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.OpenTags
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationEvent
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationEvent.OnFiltersUpdated
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationEvent.OnSortUpdated
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationEvent.OnTagsUpdated
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchState
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnAllFiltersClick
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnBackPress
-import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnClearAllFiltersClick
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnFilterClick
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnRecentSearchesClearClick
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnReviewClick
@@ -68,7 +69,7 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
             state { copy(recentSearches = Lce.Content(emptyList())) }
             commands(ClearRecentSearches)
         }
-        is OnClearAllFiltersClick -> updateSearchConditions(filters = SearchFilters(), sorting = SearchSorting.default)
+        is OnAllFiltersClick -> updateSearchConditions(filters = SearchFilters(), sorting = SearchSorting.default)
     }
 
     private fun reduceOnFilterClick(event: OnFilterClick) = when (event.type) {
@@ -80,6 +81,7 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
     private fun reduceNavigation(event: SearchNavigationEvent) = when (event) {
         is OnTagsUpdated -> updateSearchConditions(filters = state.searchFilters.copy(tags = event.tags))
         is OnSortUpdated -> updateSearchConditions(sorting = event.sorting)
+        is OnFiltersUpdated -> updateSearchConditions(filters = event.filters, sorting = event.sorting)
     }
 
     private fun reduceRecentSearchesLoading(event: RecentSearchesLoading) = when (event) {

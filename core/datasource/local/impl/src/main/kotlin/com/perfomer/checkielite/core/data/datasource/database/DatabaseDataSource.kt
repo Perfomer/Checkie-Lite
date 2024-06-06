@@ -25,7 +25,7 @@ internal interface DatabaseDataSource {
 
     fun getReview(reviewId: String): Flow<CheckieReview>
 
-    suspend fun getRecentSearches(): List<CheckieReview>
+    fun getRecentSearches(): Flow<List<CheckieReview>>
 
     suspend fun rememberRecentSearch(
         reviewId: String,
@@ -75,12 +75,12 @@ internal class DatabaseDataSourceImpl(
 
     override fun getReviews(): Flow<List<CheckieReview>> {
         return reviewDao.getReviews()
-            .map { reviewDb -> reviewDb.map { it.toDomain() } }
+            .map { reviewsDb -> reviewsDb.map { it.toDomain() } }
     }
 
     override fun getReviewsByBrand(brand: String): Flow<List<CheckieReview>> {
         return reviewDao.getReviewsByBrand(brand)
-            .map { reviewDb -> reviewDb.map { it.toDomain() } }
+            .map { reviewsDb -> reviewsDb.map { it.toDomain() } }
     }
 
     override fun getReview(reviewId: String): Flow<CheckieReview> {
@@ -88,14 +88,15 @@ internal class DatabaseDataSourceImpl(
             .map { it.toDomain() }
     }
 
-    override suspend fun getRecentSearches(): List<CheckieReview> = database.withTransaction {
-        recentSearchDao.trimRecentSearches(leaveLatest = MAX_RECENT_SEARCHES)
-        recentSearchDao.getRecentSearches().map { it.toDomain() }
+    override fun getRecentSearches(): Flow<List<CheckieReview>> {
+        return recentSearchDao.getRecentSearches()
+            .map { recentSearches -> recentSearches.map { it.toDomain() } }
     }
 
-    override suspend fun rememberRecentSearch(reviewId: String, searchDate: Date) {
+    override suspend fun rememberRecentSearch(reviewId: String, searchDate: Date) = database.withTransaction {
         val recentSearch = RecentSearchedReviewDb(reviewId, searchDate)
         recentSearchDao.addRecentSearch(recentSearch)
+        recentSearchDao.trimRecentSearches(leaveLatest = MAX_RECENT_SEARCHES)
     }
 
     override suspend fun clearRecentSearches() {
@@ -114,10 +115,7 @@ internal class DatabaseDataSourceImpl(
         }
 
         reviewDao.insertReview(reviewDb)
-
         pictureDao.insertPictures(picturesDb)
-
-        tagDao.deleteBoundsForReview(review.id)
         tagDao.insertBounds(tagsBoundsDb)
     }
 

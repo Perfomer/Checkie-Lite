@@ -80,7 +80,7 @@ internal fun SearchScreen(
     onSearchClearClick: () -> Unit = {},
     onFilterClick: (type: FilterType) -> Unit = {},
     onReviewClick: (id: String) -> Unit = {},
-    onClearAllFiltersClick: () -> Unit = {},
+    onAllFiltersClick: () -> Unit = {},
     onRecentSearchesClearClick: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
@@ -104,7 +104,7 @@ internal fun SearchScreen(
                     focusManager.clearFocus()
                     onFilterClick(filterType)
                 },
-                onAllFiltersClick = { TODO() },
+                onAllFiltersClick = onAllFiltersClick,
                 onSearchClearClick = {
                     focusManager.clearFocus()
                     onSearchClearClick()

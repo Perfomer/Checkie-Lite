@@ -29,6 +29,7 @@ fun CuiOutlineButton(
     text: String,
     modifier: Modifier = Modifier,
     textColor: Color = LocalTextStyle.current.color,
+    borderColor: Color = LocalCuiPalette.current.OutlineSecondary,
     onClick: () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
@@ -36,7 +37,7 @@ fun CuiOutlineButton(
     OutlinedButton(
         shape = RoundedCornerShape(24.dp),
         onClick = onClick,
-        border = BorderStroke(1.dp, LocalCuiPalette.current.OutlineSecondary),
+        border = BorderStroke(1.dp, borderColor),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         modifier = modifier
             .defaultMinSize(minWidth = 128.dp)

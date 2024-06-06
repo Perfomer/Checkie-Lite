@@ -8,7 +8,6 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -23,7 +22,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -58,12 +57,14 @@ import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
+import com.perfomer.checkielite.common.ui.cui.widget.button.CuiOutlineButton
 import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewHorizontalItem
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.util.copy
 import com.perfomer.checkielite.feature.search.R
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.FilterType
@@ -121,7 +122,6 @@ internal fun SearchScreen(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun Content(
     state: SearchUiState,
@@ -131,16 +131,28 @@ private fun Content(
     onRecentSearchesClearClick: () -> Unit,
 ) {
     LazyColumn(
-        contentPadding = contentPadding,
+        contentPadding = contentPadding.copy(
+            top = contentPadding.calculateTopPadding() + 12.dp,
+        ),
         state = scrollState,
         modifier = Modifier
             .fillMaxWidth()
             .imePadding()
     ) {
-        itemsIndexed(
+        if (state.showRecentSearchesTitle) {
+            item(
+                key = "RecentSearches",
+                contentType = "RecentSearches",
+            ) {
+                RecentSearchesTitle(onRecentSearchesClearClick = onRecentSearchesClearClick)
+            }
+        }
+
+        items(
             items = state.reviews,
-            key = { _, item -> item.id },
-        ) { _, item ->
+            key = { item -> item.id },
+            contentType = { "Review" },
+        ) { item ->
             CuiReviewHorizontalItem(item, onReviewClick)
         }
     }
@@ -180,7 +192,6 @@ private fun SearchField(
 }
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SearchTopAppBar(
     searchFieldFocusRequester: FocusRequester,
@@ -199,6 +210,7 @@ private fun SearchTopAppBar(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
+            .background(LocalCuiPalette.current.BackgroundPrimary)
             .statusBarsPadding()
             .bottomStrokeOnScroll(
                 show = shouldShowDivider,
@@ -296,11 +308,47 @@ private fun SearchTopAppBar(
                 }
             }
         }
+
+        Spacer(Modifier.height(8.dp))
     }
 }
 
 @Composable
-fun Badge(
+private fun RecentSearchesTitle(
+    onRecentSearchesClearClick: () -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp, end = 8.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.search_recent_searches),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.weight(1F)
+        )
+
+        CuiOutlineButton(
+            text = stringResource(CommonString.common_clear),
+            textColor = LocalCuiPalette.current.TextAccent,
+            borderColor = Color.Transparent,
+            trailingIcon = {
+                Icon(
+                    painter = painterResource(CommonDrawable.ic_cross),
+                    contentDescription = null,
+                    tint = LocalCuiPalette.current.IconAccent,
+                    modifier = Modifier.size(16.dp)
+                )
+            },
+            onClick = onRecentSearchesClearClick,
+        )
+    }
+}
+
+@Composable
+private fun Badge(
     value: String,
     backgroundColor: Color,
 ) {
@@ -326,7 +374,7 @@ fun Badge(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FilterChip(
+private fun FilterChip(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     onLongClick: (() -> Unit)? = null,

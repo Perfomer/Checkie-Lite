@@ -13,6 +13,7 @@ import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.co
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.FilterType
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.LeadingIcon
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.LeadingIconType
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
 internal class SearchUiStateMapper(
@@ -22,16 +23,20 @@ internal class SearchUiStateMapper(
     override fun map(state: SearchState): SearchUiState {
         return SearchUiState(
             searchQuery = state.searchQuery,
-            filters = listOf(
-                createTagFilter(state),
-                createRatingFilter(state),
-                createSortFilter(state),
-            ).toPersistentList(),
+            filters = createFilters(state),
             reviews = state.currentReviews
                 .map { it.toUiItem() }
                 .toPersistentList(),
-            showRecentSearchesTitle = state.hasSearchConditions,
+            showRecentSearchesTitle = !state.hasSearchConditions,
         )
+    }
+
+    private fun createFilters(state: SearchState) : ImmutableList<Filter> {
+        return listOf(
+            createTagFilter(state),
+            createRatingFilter(state),
+            createSortFilter(state),
+        ).toPersistentList()
     }
 
     private fun createSortFilter(state: SearchState): Filter {

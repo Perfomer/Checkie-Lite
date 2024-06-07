@@ -5,6 +5,11 @@
     <string name="search_filter_rating">Rating</string>
     <string name="search_recent_searches">Recent searches</string>
 
+    <string name="search_empty_title">No Checkies found</string>
+    <string name="search_empty_description">Try to modify search request</string>
+    <string name="search_empty_start_title">Start searching!</string>
+    <string name="search_empty_start_description">Type search query and apply some filters</string>
+
     <string name="search_filters_title">Filters</string>
     <string name="search_filters_reset">Reset all</string>
     <string name="search_filters_tags">Tags</string>

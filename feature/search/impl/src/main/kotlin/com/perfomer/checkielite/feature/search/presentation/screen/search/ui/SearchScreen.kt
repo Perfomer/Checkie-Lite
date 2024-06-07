@@ -60,6 +60,7 @@ import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
+import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiOutlineButton
 import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewHorizontalItem
@@ -73,6 +74,7 @@ import com.perfomer.checkielite.common.ui.util.copy
 import com.perfomer.checkielite.feature.search.R
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.FilterType
+import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.SearchContentType
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.SearchUiState
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.widget.OutlinedSearchField
 import kotlinx.collections.immutable.ImmutableList
@@ -86,6 +88,7 @@ internal fun SearchScreen(
     onFilterClick: (type: FilterType) -> Unit = {},
     onReviewClick: (id: String) -> Unit = {},
     onAllFiltersClick: () -> Unit = {},
+    onClearAllFiltersClick: () -> Unit = {},
     onRecentSearchesClearClick: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
@@ -117,13 +120,21 @@ internal fun SearchScreen(
             )
         },
     ) { contentPadding ->
-        Content(
-            state = state,
-            scrollState = scrollState,
-            contentPadding = contentPadding,
-            onReviewClick = onReviewClick,
-            onRecentSearchesClearClick = onRecentSearchesClearClick,
-        )
+        if (state.reviews.isEmpty()) {
+            Empty(
+                contentType = state.contentType,
+                contentPadding = contentPadding,
+                onClearAllFiltersClick = onClearAllFiltersClick,
+            )
+        } else {
+            Content(
+                state = state,
+                scrollState = scrollState,
+                contentPadding = contentPadding,
+                onReviewClick = onReviewClick,
+                onRecentSearchesClearClick = onRecentSearchesClearClick,
+            )
+        }
     }
 }
 
@@ -144,7 +155,7 @@ private fun Content(
             .fillMaxWidth()
             .imePadding()
     ) {
-        if (state.showRecentSearchesTitle) {
+        if (state.contentType == SearchContentType.RECENT_SEARCHES) {
             item(
                 key = "RecentSearches",
                 contentType = "RecentSearches",
@@ -159,6 +170,34 @@ private fun Content(
             contentType = { "Review" },
         ) { item ->
             CuiReviewHorizontalItem(item, onReviewClick)
+        }
+    }
+}
+
+@Composable
+private fun Empty(
+    contentType: SearchContentType,
+    contentPadding: PaddingValues,
+    onClearAllFiltersClick: () -> Unit = {},
+) {
+    when (contentType) {
+        SearchContentType.RECENT_SEARCHES -> {
+            CuiBlock(
+                title = stringResource(R.string.search_empty_start_title),
+                message = stringResource(R.string.search_empty_start_description),
+                illustrationPainter = painterResource(CommonDrawable.ill_empty),
+                modifier = Modifier.imePadding()
+                    .padding(contentPadding)
+            )
+        }
+        SearchContentType.CURRENT_SEARCH -> {
+            CuiBlock(
+                title = stringResource(R.string.search_empty_title),
+                message = stringResource(R.string.search_empty_description),
+                illustrationPainter = painterResource(CommonDrawable.ill_empty),
+                modifier = Modifier.imePadding()
+                    .padding(contentPadding)
+            )
         }
     }
 }
@@ -460,5 +499,5 @@ internal val mockUiState = SearchUiState(
     searchQuery = "",
     filters = emptyPersistentList(),
     reviews = emptyPersistentList(),
-    showRecentSearchesTitle = false,
+    contentType = SearchContentType.CURRENT_SEARCH,
 )

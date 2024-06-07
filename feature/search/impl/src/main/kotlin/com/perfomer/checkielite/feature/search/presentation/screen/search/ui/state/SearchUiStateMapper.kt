@@ -27,11 +27,11 @@ internal class SearchUiStateMapper(
             reviews = state.currentReviews
                 .map { it.toUiItem() }
                 .toPersistentList(),
-            showRecentSearchesTitle = !state.hasSearchConditions,
+            contentType = if (state.hasSearchConditions) SearchContentType.CURRENT_SEARCH else SearchContentType.RECENT_SEARCHES,
         )
     }
 
-    private fun createFilters(state: SearchState) : ImmutableList<Filter> {
+    private fun createFilters(state: SearchState): ImmutableList<Filter> {
         return listOf(
             createTagFilter(state),
             createRatingFilter(state),

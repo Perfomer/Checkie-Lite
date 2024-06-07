@@ -9,8 +9,13 @@ internal data class SearchUiState(
     val searchQuery: String,
     val filters: ImmutableList<Filter>,
     val reviews: ImmutableList<ReviewItem>,
-    val showRecentSearchesTitle: Boolean,
+    val contentType: SearchContentType,
 )
+
+internal enum class SearchContentType {
+    RECENT_SEARCHES,
+    CURRENT_SEARCH
+}
 
 @Immutable
 internal data class Filter(

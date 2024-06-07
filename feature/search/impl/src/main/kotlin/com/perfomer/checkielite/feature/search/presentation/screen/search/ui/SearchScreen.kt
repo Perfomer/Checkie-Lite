@@ -1,5 +1,7 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.ui
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,10 +10,12 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
@@ -60,6 +64,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiOutlineButton
 import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewHorizontalItem
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
+import com.perfomer.checkielite.common.ui.cui.widget.scrim.HorizontalScrim
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -239,39 +244,63 @@ private fun SearchTopAppBar(
 
         Spacer(Modifier.height(14.dp))
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            val appliedFiltersCount = remember(filters) { filters.count { it.isApplied } }
-            val hasAppliedFilters = appliedFiltersCount > 0
+        FiltersRow(
+            filters = filters,
+            onFilterClick = onFilterClick,
+            onAllFiltersClick = onAllFiltersClick,
+        )
 
-            if (hasAppliedFilters) {
-                Spacer(Modifier.width(20.dp))
+        Spacer(Modifier.height(8.dp))
+    }
+}
 
-                FilterChip(
-                    onClick = onAllFiltersClick,
-                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_sort),
-                        contentDescription = null,
-                        modifier = Modifier.size(12.dp)
-                    )
+@Composable
+private fun FiltersRow(
+    filters: ImmutableList<Filter>,
+    onFilterClick: (type: FilterType) -> Unit,
+    onAllFiltersClick: () -> Unit,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min)
+    ) {
+        val filtersScrollState = rememberScrollState()
+        val appliedFiltersCount = remember(filters) { filters.count { it.isApplied } }
+        val hasAppliedFilters = appliedFiltersCount > 0
 
-                    Spacer(Modifier.width(4.dp))
+        if (hasAppliedFilters) {
+            Spacer(Modifier.width(20.dp))
 
-                    Badge(value = appliedFiltersCount.toString(), LocalCuiPalette.current.IconPrimary)
-                }
+            FilterChip(
+                onClick = onAllFiltersClick,
+                modifier = Modifier.fillMaxHeight()
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_sort),
+                    contentDescription = null,
+                    modifier = Modifier.size(12.dp)
+                )
 
-                Spacer(Modifier.width(8.dp))
+                Spacer(Modifier.width(4.dp))
+
+                Badge(value = appliedFiltersCount.toString(), LocalCuiPalette.current.IconPrimary)
             }
 
+            Spacer(Modifier.width(8.dp))
+        }
+
+        Box(
+            modifier = Modifier
+                .weight(1F)
+                .height(IntrinsicSize.Min)
+        ) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier
-                    .weight(1F)
-                    .horizontalScroll(rememberScrollState())
+                    .fillMaxWidth()
+                    .horizontalScroll(filtersScrollState)
                     .padding(
                         start = if (hasAppliedFilters) 0.dp else 20.dp,
                         end = 20.dp
@@ -307,9 +336,20 @@ private fun SearchTopAppBar(
                     }
                 }
             }
-        }
 
-        Spacer(Modifier.height(8.dp))
+            androidx.compose.animation.AnimatedVisibility(
+                visible = hasAppliedFilters && filtersScrollState.canScrollBackward,
+                enter = fadeIn(),
+                exit = fadeOut(),
+            ) {
+                HorizontalScrim(
+                    fromLeft = true,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(16.dp)
+                )
+            }
+        }
     }
 }
 

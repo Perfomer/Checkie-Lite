@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.tags.tea
 
+import androidx.compose.ui.util.fastFirst
 import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.common.pure.state.requireContent
@@ -40,7 +41,7 @@ internal class TagsReducer : DslReducer<TagsCommand, TagsEffect, TagsEvent, Tags
         is OnTagClick -> {
             val allTags = state.suggestedTags.requireContent()
             val isAdding = state.selectedTags.none { it.id == event.tagId }
-            val tag = allTags.first { it.id == event.tagId }
+            val tag = allTags.fastFirst { it.id == event.tagId }
 
             if (isAdding) {
                 state { copy(selectedTags = selectedTags + tag) }

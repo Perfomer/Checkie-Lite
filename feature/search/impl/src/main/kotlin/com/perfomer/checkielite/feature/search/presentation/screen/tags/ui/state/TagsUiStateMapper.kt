@@ -20,7 +20,8 @@ internal class TagsUiStateMapper(
                     emoji = tag.emoji,
                     isSelected = state.selectedTags.any { it.id == tag.id },
                 )
-            }
+            },
+            searchQuery = state.searchQuery,
         )
     }
 }

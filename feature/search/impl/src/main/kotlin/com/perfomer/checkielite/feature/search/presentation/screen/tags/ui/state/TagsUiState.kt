@@ -5,6 +5,7 @@ import androidx.compose.runtime.Immutable
 @Immutable
 internal data class TagsUiState(
     val tags: List<Tag>,
+    val searchQuery: String,
 ) {
 
     @Immutable

@@ -9,6 +9,8 @@ import com.perfomer.checkielite.feature.search.presentation.navigation.TagsParam
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.TagsStore
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core.TagsUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core.TagsUiEvent.OnDoneClick
+import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core.TagsUiEvent.OnSearchQueryClearClick
+import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core.TagsUiEvent.OnSearchQueryInput
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core.TagsUiEvent.OnTagClick
 import com.perfomer.checkielite.navigation.voyager.BaseScreen
 
@@ -23,6 +25,8 @@ internal class TagsContentScreen(
         TagsScreen(
             state = state,
             onTagClick = acceptable(::OnTagClick),
+            onSearchQueryInput = acceptable(::OnSearchQueryInput),
+            onSearchQueryClearClick = acceptable(OnSearchQueryClearClick),
             onDoneClick = acceptable(OnDoneClick),
         )
     }

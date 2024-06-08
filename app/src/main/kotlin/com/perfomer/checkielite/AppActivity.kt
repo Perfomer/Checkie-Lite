@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import cafe.adriel.voyager.transitions.FadeTransition
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.perfomer.checkielite.common.android.SingleActivityHolder
@@ -26,6 +25,7 @@ import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.HiddenScreen
 import com.perfomer.checkielite.navigation.voyager.impl.NavigatorHolder
 import org.koin.android.ext.android.inject
+import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator as VoyagerBottomSheetNavigator
 
 class AppActivity : AppCompatActivity() {
 
@@ -47,7 +47,7 @@ class AppActivity : AppCompatActivity() {
 
             CheckieLiteTheme {
                 UsualNavigator()
-                CheckieBottomSheetNavigator()
+                BottomSheetNavigator()
                 OverlayNavigator()
             }
 
@@ -70,8 +70,8 @@ class AppActivity : AppCompatActivity() {
     }
 
     @Composable
-    private fun CheckieBottomSheetNavigator() {
-        BottomSheetNavigator(
+    private fun BottomSheetNavigator() {
+        VoyagerBottomSheetNavigator(
             sheetElevation = 24.dp,
             sheetBackgroundColor = LocalCuiPalette.current.BackgroundPrimary,
             sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),

@@ -62,6 +62,6 @@ internal class TagsReducer : DslReducer<TagsCommand, TagsEffect, TagsEvent, Tags
 
     private fun updateSearchQuery(searchQuery: String = state.searchQuery) {
         state { copy(searchQuery = searchQuery) }
-        commands(LoadTags(searchQuery = searchQuery))
+        commands(LoadTags(searchQuery = searchQuery.trim()))
     }
 }

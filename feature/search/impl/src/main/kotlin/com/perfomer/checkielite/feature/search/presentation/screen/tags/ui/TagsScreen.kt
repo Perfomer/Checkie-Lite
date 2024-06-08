@@ -31,6 +31,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -59,6 +60,8 @@ internal fun TagsScreen(
     onSearchQueryClearClick: () -> Unit = {},
     onDoneClick: () -> Unit = {},
 ) {
+    val focusManager = LocalFocusManager.current
+
     BoxWithConstraints {
         val maxHeight = remember(constraints.maxHeight) {
             constraints.maxHeight.pxToDp().dp * 0.7F
@@ -117,7 +120,10 @@ internal fun TagsScreen(
             SearchField(
                 searchQuery = state.searchQuery,
                 onSearchQueryInput = onSearchQueryInput,
-                onSearchQueryClearClick = onSearchQueryClearClick,
+                onSearchQueryClearClick = {
+                    focusManager.clearFocus()
+                    onSearchQueryClearClick()
+                },
             )
         }
 

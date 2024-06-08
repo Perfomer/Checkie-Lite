@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -210,7 +211,10 @@ private fun SearchField(
                 )
             }
         },
-        modifier = modifier.background(LocalCuiPalette.current.BackgroundPrimary)
+        modifier = modifier.background(
+            color = LocalCuiPalette.current.BackgroundPrimary,
+            shape = RoundedCornerShape(16.dp),
+        )
     )
 }
 

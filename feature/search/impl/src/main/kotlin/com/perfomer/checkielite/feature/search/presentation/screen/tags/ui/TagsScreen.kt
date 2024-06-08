@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.tags.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -68,6 +69,7 @@ internal fun TagsScreen(
                 .fillMaxWidth()
                 .imePadding()
                 .requiredHeightIn(max = maxHeight)
+                .animateContentSize()
         ) {
             Column {
                 val scrollState = rememberScrollState()

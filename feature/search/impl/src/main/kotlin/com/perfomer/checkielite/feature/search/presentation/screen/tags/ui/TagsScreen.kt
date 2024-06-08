@@ -25,10 +25,13 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -39,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
+import com.perfomer.checkielite.common.ui.cui.modifier.conditional
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
@@ -50,6 +54,7 @@ import com.perfomer.checkielite.common.ui.util.pxToDp
 import com.perfomer.checkielite.feature.search.R
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.widget.OutlinedSearchField
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.ui.state.TagsUiState
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -67,12 +72,19 @@ internal fun TagsScreen(
             constraints.maxHeight.pxToDp().dp * 0.7F
         }
 
+        var shouldAnimateContentSize by remember { mutableStateOf(false) }
+
+        LaunchedEffect(Unit) {
+            delay(1_000L)
+            shouldAnimateContentSize = true
+        }
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .imePadding()
                 .requiredHeightIn(max = maxHeight)
-                .animateContentSize()
+                .conditional(shouldAnimateContentSize) { animateContentSize() }
         ) {
             Column {
                 val scrollState = rememberScrollState()

@@ -35,6 +35,10 @@ android {
     }
 }
 
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
 dependencies {
     implementation(project(":feature:gallery:impl"))
     implementation(project(":feature:main:impl"))
@@ -58,4 +62,6 @@ dependencies {
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.transitions)
     implementation(platform(libs.compose.bom))
+
+    testImplementation(libs.testJunitJupiter)
 }

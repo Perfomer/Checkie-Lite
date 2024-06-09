@@ -18,6 +18,9 @@ kotlinx-coroutines = "1.8.0"
 ksp = "2.0.0-1.0.21"
 lifecycle-ktx = "2.8.1"
 room = "2.6.1"
+testJunitJupiter = "5.9.2"
+testKotestAssertions = "5.6.2"
+testMock = "1.13.5"
 voyager = "1.0.0"
 zoomable = "1.6.1"
 
@@ -46,6 +49,10 @@ lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", v
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+testCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+testJunitJupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "testJunitJupiter" }
+testKotestAssertions = { module = "io.kotest:kotest-assertions-core", version.ref = "testKotestAssertions" }
+testMock = { module = "io.mockk:mockk", version.ref = "testMock" }
 voyager-bottomsheet = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navigator", version.ref = "voyager" }
 voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }

@@ -11,6 +11,10 @@ android {
 	buildFeatures.compose = true
 }
 
+tasks.withType<Test> {
+	useJUnitPlatform()
+}
+
 dependencies {
 	api(project(":feature:main:api"))
 	implementation(project(":feature:review-creation:api"))
@@ -29,4 +33,6 @@ dependencies {
 	implementation(libs.compose.ui)
 	implementation(libs.koin.core)
 	implementation(platform(libs.compose.bom))
+
+	testImplementation(libs.testJunitJupiter)
 }

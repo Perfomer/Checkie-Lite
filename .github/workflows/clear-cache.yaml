@@ -1,18 +1,37 @@
-name: Clear Cache
+# https://github.com/actions/gh-actions-cache?tab=readme-ov-file
+# https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows#force-deleting-cache-entries
+
+name: Cleanup all caches
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0'
 
 permissions:
   actions: write
 
 jobs:
-  remove-old-artifacts:
+  cleanup:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
     steps:
-      - name: Clean all artifacts
-        uses: c-hive/gha-remove-artifacts@v1
-        with:
-          age: '60 seconds'
+      - name: Cleanup
+        run: |
+          gh extension install actions/gh-actions-cache
+
+          echo "Fetching list of cache key"
+          cacheKeys=$(gh actions-cache list -R $REPO -L 1 --sort last-used --order asc | cut -f 1 )
+          
+          ## Setting this to not fail the workflow while deleting cache keys.
+          set +e
+
+          echo "Deleting caches..."
+          for cacheKey in $cacheKeys
+          do
+              gh actions-cache delete $cacheKey -R $REPO --confirm
+          
+          done
+          echo "Done"

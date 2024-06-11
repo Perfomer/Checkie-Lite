@@ -3,6 +3,9 @@ name: Clear Cache
 on:
   workflow_dispatch:
 
+permissions:
+  actions: write
+
 jobs:
   remove-old-artifacts:
     runs-on: ubuntu-latest

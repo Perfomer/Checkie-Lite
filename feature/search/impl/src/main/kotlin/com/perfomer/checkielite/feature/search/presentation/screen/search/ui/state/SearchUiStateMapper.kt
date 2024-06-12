@@ -52,6 +52,7 @@ internal class SearchUiStateMapper(
                 SortingOrder.ASCENDING -> R.string.search_sort_least_rated
                 SortingOrder.DESCENDING -> R.string.search_sort_most_rated
             }
+            ReviewsSortingStrategy.RELEVANCE -> R.string.search_sort_relevant
         }
 
         val postfix = ": " + context.getString(strategyResource)

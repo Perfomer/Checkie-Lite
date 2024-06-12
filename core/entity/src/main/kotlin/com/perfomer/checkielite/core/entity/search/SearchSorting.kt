@@ -6,13 +6,13 @@ import java.io.Serializable
 
 data class SearchSorting(
     val order: SortingOrder = SortingOrder.DESCENDING,
-    val strategy: ReviewsSortingStrategy = ReviewsSortingStrategy.CREATION_DATE,
+    val strategy: ReviewsSortingStrategy = ReviewsSortingStrategy.RELEVANCE,
 ) : Serializable {
 
     companion object {
         val default: SearchSorting = SearchSorting(
             order = SortingOrder.DESCENDING,
-            strategy = ReviewsSortingStrategy.CREATION_DATE,
+            strategy = ReviewsSortingStrategy.RELEVANCE,
         )
     }
 }

@@ -23,6 +23,7 @@
     <string name="search_sort_order_ascending">По возрастанию</string>
     <string name="search_sort_order_descending">По убыванию</string>
 
+    <string name="search_sort_relevant">Релевантные</string>
     <string name="search_sort_newest">Самые новые</string>
     <string name="search_sort_oldest">Самые старые</string>
     <string name="search_sort_most_rated">С наибольшей оценкой</string>

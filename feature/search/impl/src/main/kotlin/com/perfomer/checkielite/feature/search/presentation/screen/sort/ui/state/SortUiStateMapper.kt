@@ -38,6 +38,7 @@ internal class SortUiStateMapper(
             get() = when (this) {
                 ReviewsSortingStrategy.CREATION_DATE -> R.drawable.search_ic_sort_creationdate
                 ReviewsSortingStrategy.RATING -> R.drawable.search_ic_sort_rating
+                ReviewsSortingStrategy.RELEVANCE -> R.drawable.search_ic_sort_rating
             }
 
         @get:StringRes
@@ -45,6 +46,7 @@ internal class SortUiStateMapper(
             get() = when (this) {
                 ReviewsSortingStrategy.CREATION_DATE -> R.string.search_sort_creationdate
                 ReviewsSortingStrategy.RATING -> R.string.search_sort_rating
+                ReviewsSortingStrategy.RELEVANCE -> R.string.search_sort_relevant
             }
     }
 }

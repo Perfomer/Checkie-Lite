@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.common.pure.util
 
+import com.perfomer.checkielite.common.pure.search.damerauLevenshtein
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -21,7 +22,7 @@ class LevenshteinKtTest {
     }
 
     private fun testDistance(a: String, b: String, expectedDistance: Int) {
-        val d = levenshtein(a, b)
+        val d = damerauLevenshtein(a, b)
         assertEquals(expectedDistance, d, "Distance did not match for `$a` and `$b`")
     }
 }

@@ -59,7 +59,9 @@ internal interface DatabaseDataSource {
 
     suspend fun getTag(id: String): CheckieTag
 
-    suspend fun saveTag(tag: CheckieTag)
+    suspend fun createTag(tag: CheckieTag)
+
+    suspend fun updateTag(tag: CheckieTag)
 
     suspend fun deleteTag(tagId: String)
 }
@@ -175,8 +177,12 @@ internal class DatabaseDataSourceImpl(
         return tagDao.getTag(id).toDomain()
     }
 
-    override suspend fun saveTag(tag: CheckieTag) {
+    override suspend fun createTag(tag: CheckieTag) {
         tagDao.insertTag(tag.toDb())
+    }
+
+    override suspend fun updateTag(tag: CheckieTag) {
+        tagDao.updateTag(id = tag.id, value = tag.value, emoji = tag.emoji)
     }
 
     override suspend fun deleteTag(tagId: String) {

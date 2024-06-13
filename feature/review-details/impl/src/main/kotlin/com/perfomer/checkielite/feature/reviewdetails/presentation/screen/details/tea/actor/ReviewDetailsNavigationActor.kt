@@ -18,6 +18,9 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenGallery
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenReviewEdit
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenSearch
+import com.perfomer.checkielite.feature.search.presentation.navigation.SearchParams
+import com.perfomer.checkielite.feature.search.presentation.navigation.SearchScreenProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -30,6 +33,7 @@ internal class ReviewDetailsNavigationActor(
     private val reviewCreationScreenProvider: ReviewCreationScreenProvider,
     private val reviewDetailsScreenProvider: ReviewDetailsScreenProvider,
     private val galleryScreenProvider: GalleryScreenProvider,
+    private val searchScreenProvider: SearchScreenProvider,
 ) : Actor<ReviewDetailsCommand, ReviewDetailsEvent> {
 
     override fun act(commands: Flow<ReviewDetailsCommand>): Flow<ReviewDetailsEvent> {
@@ -57,6 +61,11 @@ internal class ReviewDetailsNavigationActor(
             is OpenGallery -> {
                 val params = GalleryParams(picturesUri = command.picturesUri.toArrayList(), currentPicturePosition = command.currentPicturePosition)
                 navigate(screen = galleryScreenProvider(params), mode = DestinationMode.OVERLAY)
+            }
+
+            is OpenSearch -> {
+                val params = SearchParams(tags = arrayListOf(command.tag))
+                navigate(searchScreenProvider(params))
             }
         }
 

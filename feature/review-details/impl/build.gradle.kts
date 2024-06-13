@@ -15,6 +15,7 @@ dependencies {
 	api(project(":feature:review-details:api"))
 	implementation(project(":feature:gallery:api"))
 	implementation(project(":feature:review-creation:api"))
+	implementation(project(":feature:search:api"))
 
 	implementation(project(":core:datasource:local:api"))
 	implementation(project(":core:entity"))

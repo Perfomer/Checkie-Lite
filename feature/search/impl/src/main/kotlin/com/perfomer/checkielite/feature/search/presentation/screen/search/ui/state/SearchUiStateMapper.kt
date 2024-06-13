@@ -6,9 +6,7 @@ import com.perfomer.checkielite.common.tea.component.UiStateMapper
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.search.RatingRange
-import com.perfomer.checkielite.core.entity.search.SearchSorting
 import com.perfomer.checkielite.core.entity.sort.ReviewsSortingStrategy
-import com.perfomer.checkielite.core.entity.sort.SortingOrder
 import com.perfomer.checkielite.feature.search.R
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchState
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.FilterType
@@ -41,19 +39,15 @@ internal class SearchUiStateMapper(
     }
 
     private fun createSortFilter(state: SearchState): Filter {
-        val sorting = state.searchSorting
-        val isApplied = sorting != SearchSorting.default
+        val sorting = state.sortingStrategy
+        val isApplied = sorting != ReviewsSortingStrategy.RELEVANCE
 
-        val strategyResource = when (sorting.strategy) {
-            ReviewsSortingStrategy.CREATION_DATE -> when (sorting.order) {
-                SortingOrder.ASCENDING -> R.string.search_sort_oldest
-                SortingOrder.DESCENDING -> R.string.search_sort_newest
-            }
-            ReviewsSortingStrategy.RATING -> when (sorting.order) {
-                SortingOrder.ASCENDING -> R.string.search_sort_least_rated
-                SortingOrder.DESCENDING -> R.string.search_sort_most_rated
-            }
+        val strategyResource = when (sorting) {
             ReviewsSortingStrategy.RELEVANCE -> R.string.search_sort_relevant
+            ReviewsSortingStrategy.NEWEST -> R.string.search_sort_newest
+            ReviewsSortingStrategy.OLDEST -> R.string.search_sort_oldest
+            ReviewsSortingStrategy.MOST_RATED -> R.string.search_sort_most_rated
+            ReviewsSortingStrategy.LEAST_RATED -> R.string.search_sort_least_rated
         }
 
         val postfix = ": " + context.getString(strategyResource)

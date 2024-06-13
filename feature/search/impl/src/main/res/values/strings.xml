@@ -15,19 +15,12 @@
     <string name="search_filters_tags">Tags</string>
     <string name="search_filters_rating">Rating</string>
 
-    <string name="search_sort_title">Sorting</string>
-    <string name="search_sort_creationdate">Creation date</string>
-    <string name="search_sort_modificationdate">Modification date</string>
-    <string name="search_sort_rating">Rating</string>
-    <string name="search_sort_name">Name</string>
-    <string name="search_sort_order_ascending">Ascending</string>
-    <string name="search_sort_order_descending">Descending</string>
-
+    <string name="search_sort_title">Show first</string>
     <string name="search_sort_relevant">Relevant</string>
     <string name="search_sort_newest">Newest</string>
     <string name="search_sort_oldest">Oldest</string>
-    <string name="search_sort_most_rated">Most rated</string>
-    <string name="search_sort_least_rated">Least rated</string>
+    <string name="search_sort_most_rated">Most rated first</string>
+    <string name="search_sort_least_rated">Least rated first</string>
 
     <string name="search_tags_title">Tags</string>
     <string name="search_tags_empty">Nothing found.</string>

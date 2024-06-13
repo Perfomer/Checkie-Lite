@@ -5,7 +5,7 @@ import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.core.entity.search.SearchFilters
-import com.perfomer.checkielite.core.entity.search.SearchSorting
+import com.perfomer.checkielite.core.entity.sort.ReviewsSortingStrategy
 
 internal data class SearchState(
     val recentSearches: Lce<List<CheckieReview>> = Lce.initial(),
@@ -14,10 +14,10 @@ internal data class SearchState(
     val searchedReviews: List<CheckieReview> = emptyList(),
     val searchQuery: String = "",
     val searchFilters: SearchFilters = SearchFilters(),
-    val searchSorting: SearchSorting = SearchSorting(),
+    val sortingStrategy: ReviewsSortingStrategy = ReviewsSortingStrategy.RELEVANCE,
 ) {
 
-    val hasSearchConditions: Boolean = searchQuery.isNotBlank() || !searchFilters.isEmpty || searchSorting != SearchSorting.default
+    val hasSearchConditions: Boolean = searchQuery.isNotBlank() || !searchFilters.isEmpty || sortingStrategy != ReviewsSortingStrategy.RELEVANCE
 
     val currentReviews: List<CheckieReview> =
         if (hasSearchConditions) searchedReviews

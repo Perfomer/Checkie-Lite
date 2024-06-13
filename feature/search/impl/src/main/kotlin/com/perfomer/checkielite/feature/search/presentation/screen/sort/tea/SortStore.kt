@@ -18,8 +18,7 @@ internal class SortStore(
     actors: Set<Actor<SortCommand, SortEvent>>,
 ) : ScreenModelStore<SortCommand, SortEffect, SortEvent, SortUiEvent, SortState, SortUiState>(
     initialState = SortState(
-        currentOption = params.sorting.strategy,
-        currentOrder = params.sorting.order,
+        currentOption = params.sorting,
     ),
     reducer = reducer,
     uiStateMapper = uiStateMapper,

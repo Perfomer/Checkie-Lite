@@ -31,6 +31,8 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenTagCreation
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnPhotosPick
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnTagCreated
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnTagDeleted
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnBackPress
@@ -219,7 +221,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             )
         }
 
-        is ReviewCreationNavigationEvent.OnTagCreated -> {
+        is OnTagCreated -> {
             state {
                 copy(
                     reviewDetails = reviewDetails.copy(
@@ -231,14 +233,11 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             onTagsSearchQueryInput("")
         }
 
-        is ReviewCreationNavigationEvent.OnTagDeleted -> {
+        is OnTagDeleted -> {
             state {
                 copy(
                     reviewDetails = reviewDetails.copy(
-                        tagsIds = buildSet {
-                            addAll(reviewDetails.tagsIds)
-                            removeIf { it != event.tagId }
-                        },
+                        tagsIds = reviewDetails.tagsIds - event.tagId,
                     ),
                 )
             }

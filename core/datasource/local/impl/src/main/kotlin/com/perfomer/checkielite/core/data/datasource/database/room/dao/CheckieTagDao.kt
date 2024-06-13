@@ -51,6 +51,15 @@ internal interface CheckieTagDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTag(tag: CheckieTagDb)
 
+    @Query(
+        """
+            UPDATE CheckieTagDb
+            SET value = :value, emoji = :emoji
+            WHERE id = :id
+        """
+    )
+    suspend fun updateTag(id: String, value: String, emoji: String?)
+
     @Query("DELETE FROM CheckieTagDb WHERE id = :tagId")
     suspend fun deleteTag(tagId: String)
 

@@ -177,14 +177,14 @@ internal class CheckieLocalDataSourceImpl(
 
     override suspend fun createTag(value: String, emoji: String?): CheckieTag {
         val tag = CheckieTag(id = randomUuid(), value = value, emoji = emoji)
-        databaseDataSource.saveTag(tag)
+        databaseDataSource.createTag(tag)
 
         return tag
     }
 
     override suspend fun updateTag(id: String, value: String, emoji: String?): CheckieTag {
         val tag = CheckieTag(id = id, value = value, emoji = emoji)
-        databaseDataSource.saveTag(tag)
+        databaseDataSource.updateTag(tag)
 
         return tag
     }

@@ -3,12 +3,14 @@ package com.perfomer.checkielite.feature.search.presentation.screen.search.tea.c
 import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.core.entity.CheckieReview
+import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.core.entity.search.SearchFilters
 import com.perfomer.checkielite.core.entity.search.SearchSorting
 
 internal data class SearchState(
     val recentSearches: Lce<List<CheckieReview>> = Lce.initial(),
     val allReviews: Lce<List<CheckieReview>> = Lce.initial(),
+    val allTags: Lce<List<CheckieTag>> = Lce.initial(),
     val searchedReviews: List<CheckieReview> = emptyList(),
     val searchQuery: String = "",
     val searchFilters: SearchFilters = SearchFilters(),

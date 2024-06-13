@@ -64,7 +64,7 @@ internal class ReviewDetailsNavigationActor(
             }
 
             is OpenSearch -> {
-                val params = SearchParams(tags = arrayListOf(command.tag))
+                val params = SearchParams(tagId = command.tagId)
                 navigate(searchScreenProvider(params))
             }
         }

@@ -1,14 +1,13 @@
 package com.perfomer.checkielite.core.entity.search
 
-import com.perfomer.checkielite.core.entity.CheckieTag
 import java.io.Serializable
 
 data class SearchFilters(
-    val tags: ArrayList<CheckieTag> = arrayListOf(),
+    val tagsIds: List<String> = emptyList(),
     val ratingRange: RatingRange = RatingRange(),
 ) : Serializable {
 
-    val isEmpty: Boolean = tags.isEmpty() && ratingRange == RatingRange.default
+    val isEmpty: Boolean = tagsIds.isEmpty() && ratingRange == RatingRange.default
 }
 
 data class RatingRange(

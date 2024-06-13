@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core
 
-import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 
 internal sealed interface ReviewDetailsCommand {
@@ -21,7 +20,7 @@ internal sealed interface ReviewDetailsNavigationCommand : ReviewDetailsCommand 
 
     class OpenReviewDetails(val reviewId: String) : ReviewDetailsNavigationCommand
 
-    class OpenSearch(val tag: CheckieTag) : ReviewDetailsNavigationCommand
+    class OpenSearch(val tagId: String) : ReviewDetailsNavigationCommand
 
     class OpenGallery(
         val picturesUri: List<String>,

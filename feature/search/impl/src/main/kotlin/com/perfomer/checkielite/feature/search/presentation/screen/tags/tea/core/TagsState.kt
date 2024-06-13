@@ -5,6 +5,6 @@ import com.perfomer.checkielite.core.entity.CheckieTag
 
 internal data class TagsState(
     val suggestedTags: Lce<List<CheckieTag>> = Lce.initial(),
-    val selectedTags: List<CheckieTag> = emptyList(),
+    val selectedTagsIds: List<String> = emptyList(),
     val searchQuery: String = "",
 )

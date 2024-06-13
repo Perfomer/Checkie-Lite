@@ -8,7 +8,6 @@ import com.perfomer.checkielite.common.pure.search.DamerauLevenshteinWeights
 import com.perfomer.checkielite.common.pure.search.score
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.entity.CheckieReview
-import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.core.entity.search.RatingRange
 import com.perfomer.checkielite.core.entity.search.SearchSorting
 import com.perfomer.checkielite.core.entity.sort.ReviewsSortingStrategy
@@ -34,7 +33,7 @@ internal class FilterReviewsActor : Actor<SearchCommand, SearchEvent> {
     private fun handleCommand(command: FilterReviews): SearchEvent {
         val filteredReviews = command.reviews
             .filterByQuery(command.query.trim())
-            .filterByTags(command.filters.tags)
+            .filterByTags(command.filters.tagsIds)
             .filterByRatingRange(command.filters.ratingRange)
             .sortedBy(command.sorting)
 
@@ -77,12 +76,12 @@ internal class FilterReviewsActor : Actor<SearchCommand, SearchEvent> {
                 .fastMap { (review, _) -> review }
         }
 
-        private fun List<CheckieReview>.filterByTags(tags: List<CheckieTag>): List<CheckieReview> {
-            if (tags.isEmpty()) return this
+        private fun List<CheckieReview>.filterByTags(tagsIds: List<String>): List<CheckieReview> {
+            if (tagsIds.isEmpty()) return this
 
             return fastFilter { review ->
-                tags.fastAll { filterTag ->
-                    review.tags.fastAny { reviewTag -> filterTag.id == reviewTag.id }
+                tagsIds.fastAll { filterTagId ->
+                    review.tags.fastAny { reviewTag -> filterTagId == reviewTag.id }
                 }
             }
         }

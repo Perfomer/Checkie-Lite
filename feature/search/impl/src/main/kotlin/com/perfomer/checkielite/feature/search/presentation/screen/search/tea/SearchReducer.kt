@@ -11,6 +11,7 @@ import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.co
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.FilterReviews
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.LoadRecentSearches
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.LoadReviews
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.LoadTags
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.RememberRecentSearch
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEffect
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEffect.ShowKeyboard
@@ -19,6 +20,7 @@ import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.co
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.RecentSearchesLoading
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.ReviewsFiltered
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.ReviewsLoading
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.TagsLoading
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.Exit
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand.OpenSort
@@ -45,6 +47,7 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
         is SearchUiEvent -> reduceUi(event)
         is SearchNavigationEvent -> reduceNavigation(event)
         is RecentSearchesLoading -> reduceRecentSearchesLoading(event)
+        is TagsLoading -> reduceTagsLoading(event)
         is ReviewsLoading -> reduceReviewsLoading(event)
         is ReviewsFiltered -> reduceReviewsFiltered(event)
     }
@@ -56,7 +59,7 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
             effects(ShowKeyboard)
         }
 
-        commands(LoadRecentSearches, LoadReviews)
+        commands(LoadRecentSearches, LoadReviews, LoadTags)
     }
 
     private fun reduceUi(event: SearchUiEvent) = when (event) {
@@ -76,15 +79,21 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
     }
 
     private fun reduceOnFilterClick(event: OnFilterClick) = when (event.type) {
-        FilterType.TAGS -> commands(OpenTags(state.searchFilters.tags))
+        FilterType.TAGS -> commands(OpenTags(state.searchFilters.tagsIds))
         FilterType.RATING -> Unit
         FilterType.SORT -> commands(OpenSort(state.searchSorting))
     }
 
     private fun reduceNavigation(event: SearchNavigationEvent) = when (event) {
-        is OnTagsUpdated -> updateSearchConditions(filters = state.searchFilters.copy(tags = event.tags))
+        is OnTagsUpdated -> updateSearchConditions(filters = state.searchFilters.copy(tagsIds = event.tagsIds))
         is OnSortUpdated -> updateSearchConditions(sorting = event.sorting)
         is OnFiltersUpdated -> updateSearchConditions(filters = event.filters, sorting = event.sorting)
+    }
+
+    private fun reduceTagsLoading(event: TagsLoading) = when (event) {
+        is TagsLoading.Started -> state { copy(allTags = allTags.toLoading()) }
+        is TagsLoading.Succeed -> state { copy(allTags = Lce.Content(event.tags)) }
+        is TagsLoading.Failed -> state { copy(allTags = Lce.Error(event.error)) }
     }
 
     private fun reduceRecentSearchesLoading(event: RecentSearchesLoading) = when (event) {

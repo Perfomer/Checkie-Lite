@@ -18,7 +18,7 @@ internal class TagsUiStateMapper(
                     tagId = tag.id,
                     text = tag.value,
                     emoji = tag.emoji,
-                    isSelected = state.selectedTags.any { it.id == tag.id },
+                    isSelected = state.selectedTagsIds.any { it == tag.id },
                 )
             },
             searchQuery = state.searchQuery,

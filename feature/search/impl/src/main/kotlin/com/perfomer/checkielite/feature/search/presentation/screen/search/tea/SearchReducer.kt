@@ -13,6 +13,7 @@ import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.co
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.LoadReviews
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.RememberRecentSearch
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEffect
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEffect.ShowKeyboard
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.Initialize
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.RecentSearchesLoading
@@ -51,6 +52,8 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
     private fun reduceInitialize() {
         if (state.hasSearchConditions) {
             updateSearchConditions()
+        } else {
+            effects(ShowKeyboard)
         }
 
         commands(LoadRecentSearches, LoadReviews)

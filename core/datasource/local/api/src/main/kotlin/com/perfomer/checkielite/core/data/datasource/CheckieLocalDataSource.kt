@@ -26,11 +26,11 @@ interface CheckieLocalDataSource {
         productBrand: String?,
         rating: Int,
         pictures: List<CheckiePicture>,
-        tags: List<CheckieTag>,
+        tagsIds: Set<String>,
         comment: String?,
         advantages: String?,
         disadvantages: String?,
-    ): CheckieReview
+    )
 
     suspend fun updateReview(
         reviewId: String,
@@ -38,11 +38,11 @@ interface CheckieLocalDataSource {
         productBrand: String?,
         rating: Int,
         pictures: List<CheckiePicture>,
-        tags: List<CheckieTag>,
+        tagsIds: Set<String>,
         comment: String?,
         advantages: String?,
         disadvantages: String?,
-    ): CheckieReview
+    )
 
     suspend fun deleteReview(reviewId: String)
 

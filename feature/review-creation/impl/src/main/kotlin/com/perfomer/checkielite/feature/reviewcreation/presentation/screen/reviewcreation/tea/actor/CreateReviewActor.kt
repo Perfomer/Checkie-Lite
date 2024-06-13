@@ -30,7 +30,7 @@ internal class CreateReviewActor(
                 productBrand = command.productBrand,
                 rating = command.rating,
                 pictures = command.pictures,
-                tags = command.tags,
+                tagsIds = command.tagsIds,
                 comment = command.comment,
                 advantages = command.advantages,
                 disadvantages = command.disadvantages,

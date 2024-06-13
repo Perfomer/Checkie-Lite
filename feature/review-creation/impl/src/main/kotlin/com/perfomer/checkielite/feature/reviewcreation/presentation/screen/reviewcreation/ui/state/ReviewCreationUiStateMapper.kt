@@ -45,7 +45,7 @@ internal class ReviewCreationUiStateMapper(
                 id = tag.id,
                 value = tag.value,
                 emoji = tag.emoji,
-                isSelected = state.reviewDetails.tags.contains(tag),
+                isSelected = state.reviewDetails.tagsIds.any { tagId -> tagId == tag.id },
             )
         }
 

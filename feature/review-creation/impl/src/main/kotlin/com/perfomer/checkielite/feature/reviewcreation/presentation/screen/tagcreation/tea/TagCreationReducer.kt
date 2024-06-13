@@ -103,8 +103,8 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
         is TagSaving.Started -> state { copy(isSaving = true) }
         is TagSaving.Succeed -> {
             val result = when (state.mode) {
-                is TagCreationMode.Creation -> TagCreationResult.Created(event.tag)
-                is TagCreationMode.Modification -> TagCreationResult.Modified(event.tag)
+                is TagCreationMode.Creation -> TagCreationResult.Created(event.tag.id)
+                is TagCreationMode.Modification -> TagCreationResult.Modified(event.tag.id)
             }
 
             commands(ExitWithResult(result))

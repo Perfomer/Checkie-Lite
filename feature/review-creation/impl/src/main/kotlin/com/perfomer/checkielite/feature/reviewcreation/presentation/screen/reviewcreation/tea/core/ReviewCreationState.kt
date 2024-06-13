@@ -32,7 +32,7 @@ internal data class ReviewDetails(
     val productBrand: String = "",
     val pictures: PersistentList<CheckiePicture> = emptyPersistentList(),
 
-    val tags: Set<CheckieTag> = emptySet(),
+    val tagsIds: Set<String> = emptySet(),
 
     val rating: Int = 5,
     val comment: String = "",

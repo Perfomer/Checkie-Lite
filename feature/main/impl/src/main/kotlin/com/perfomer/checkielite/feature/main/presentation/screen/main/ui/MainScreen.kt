@@ -6,7 +6,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,8 +20,9 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
@@ -41,6 +45,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
@@ -49,19 +54,24 @@ import com.perfomer.checkielite.common.ui.cui.widget.button.CuiFloatingActionBut
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewHorizontalItem
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
+import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.isDebug
 import com.perfomer.checkielite.feature.main.R
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiState
+import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.Tag
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 internal fun MainScreen(
     state: MainUiState,
     onSearchClick: () -> Unit = {},
     onReviewClick: (id: String) -> Unit = {},
+    onTagClick: (id: String) -> Unit = {},
     onFabClick: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
@@ -91,6 +101,7 @@ internal fun MainScreen(
                 contentPadding = contentPadding,
                 onSearchClick = onSearchClick,
                 onReviewClick = onReviewClick,
+                onTagClick = onTagClick,
             )
 
             is MainUiState.Empty -> Empty()
@@ -107,6 +118,7 @@ private fun Content(
     contentPadding: PaddingValues,
     onSearchClick: () -> Unit = {},
     onReviewClick: (id: String) -> Unit,
+    onTagClick: (id: String) -> Unit,
 ) {
     LazyColumn(
         contentPadding = contentPadding,
@@ -117,16 +129,22 @@ private fun Content(
     ) {
         item {
             Spacer(modifier = Modifier.height(4.dp))
-
             SearchField(onSearchClick = onSearchClick)
-
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        itemsIndexed(
+        if (state.tags.isNotEmpty()) {
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+                TagsRow(tags = state.tags, onTagClick = onTagClick)
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+
+        items(
             items = state.reviews,
-            key = { _, item -> item.id },
-        ) { _, item ->
+            key = { item -> item.id },
+        ) { item ->
             CuiReviewHorizontalItem(item, onReviewClick)
         }
 
@@ -243,6 +261,51 @@ private fun SearchField(
     }
 }
 
+@Composable
+private fun TagsRow(
+    tags: ImmutableList<Tag>,
+    onTagClick: (id: String) -> Unit,
+) {
+    val shouldShowSecondRow = tags.size >= 10
+
+    val firstRow = remember(tags) {
+        if (shouldShowSecondRow) tags.filterIndexed { index, _ -> index % 2 == 0 }.toPersistentList()
+        else tags
+    }
+
+    val secondRow = remember(tags) {
+        if (shouldShowSecondRow) tags.filterIndexed { index, _ -> index % 2 != 0 }.toPersistentList()
+        else null
+    }
+
+    @Composable
+    fun SingleRow(tags: ImmutableList<Tag>) {
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            for (tag in tags) {
+                CuiChip(
+                    leadingIcon = tag.emoji?.let { { Text(it) } },
+                    onClick = { onTagClick(tag.id) },
+                    content = { Text(tag.value) },
+                )
+            }
+        }
+    }
+
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp)
+    ) {
+        SingleRow(tags = firstRow)
+
+        if (secondRow != null) {
+            SingleRow(tags = secondRow)
+        }
+    }
+}
+
 @ScreenPreview
 @Composable
 private fun MainScreenContentPreview() = CheckieLiteTheme {
@@ -297,5 +360,6 @@ internal val mockUiState = MainUiState.Content(
             rating = 3,
             isSyncing = false,
         ),
-    )
+    ),
+    tags = emptyPersistentList(),
 )

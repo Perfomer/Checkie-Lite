@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core
 
 import com.perfomer.checkielite.core.entity.CheckieReview
+import com.perfomer.checkielite.core.entity.CheckieTag
 
 internal sealed interface MainEvent {
 
@@ -9,6 +10,12 @@ internal sealed interface MainEvent {
         class Succeed(val reviews: List<CheckieReview>) : ReviewsLoading
         class Failed(val error: Throwable) : ReviewsLoading
     }
+
+    sealed interface TagsLoading : MainEvent {
+        data object Started : TagsLoading
+        class Succeed(val tags: List<CheckieTag>) : TagsLoading
+        class Failed(val error: Throwable) : TagsLoading
+    }
 }
 
 internal sealed interface MainUiEvent : MainEvent {
@@ -16,6 +23,8 @@ internal sealed interface MainUiEvent : MainEvent {
     data object OnStart : MainUiEvent
 
     class OnReviewClick(val id: String) : MainUiEvent
+
+    class OnTagClick(val id: String) : MainUiEvent
 
     data object OnSearchClick : MainUiEvent
 

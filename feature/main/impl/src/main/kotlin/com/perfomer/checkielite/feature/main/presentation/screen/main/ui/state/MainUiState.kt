@@ -10,6 +10,7 @@ internal sealed interface MainUiState {
     data object Loading : MainUiState
 
     data class Content(
+        val tags: ImmutableList<Tag>,
         val reviews: ImmutableList<ReviewItem>,
     ) : MainUiState
 
@@ -17,3 +18,10 @@ internal sealed interface MainUiState {
 
     data object Error : MainUiState
 }
+
+@Immutable
+data class Tag(
+    val id: String,
+    val value: String,
+    val emoji: String?,
+)

@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor
 
+import com.perfomer.checkielite.common.pure.util.toArrayList
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.navigation.api.Router
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand
@@ -51,7 +52,7 @@ internal class MainNavigationActor(
             }
 
             is OpenSearch -> {
-                val params = SearchParams(arrayListOf())
+                val params = SearchParams(listOfNotNull(command.tag).toArrayList())
                 navigate(searchScreenProvider(params))
             }
         }

@@ -2,7 +2,7 @@ package com.perfomer.checkielite.feature.search.presentation.screen.search.tea.c
 
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.search.SearchFilters
-import com.perfomer.checkielite.core.entity.search.SearchSorting
+import com.perfomer.checkielite.core.entity.sort.ReviewsSortingStrategy
 
 internal sealed interface SearchCommand {
 
@@ -18,7 +18,7 @@ internal sealed interface SearchCommand {
         val reviews: List<CheckieReview>,
         val query: String,
         val filters: SearchFilters,
-        val sorting: SearchSorting,
+        val sorting: ReviewsSortingStrategy,
     ) : SearchCommand
 
     class RememberRecentSearch(val reviewId: String) : SearchCommand
@@ -32,10 +32,10 @@ internal sealed interface SearchNavigationCommand : SearchCommand {
 
     class OpenAllFilters(
         val currentFilters: SearchFilters,
-        val currentSorting: SearchSorting,
+        val currentSorting: ReviewsSortingStrategy,
     ) : SearchNavigationCommand
 
-    class OpenSort(val currentSorting: SearchSorting) : SearchNavigationCommand
+    class OpenSort(val currentSorting: ReviewsSortingStrategy) : SearchNavigationCommand
 
     class OpenTags(val selectedTagsIds: List<String>) : SearchNavigationCommand
 }

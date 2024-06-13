@@ -9,9 +9,7 @@ import com.perfomer.checkielite.common.pure.search.score
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.search.RatingRange
-import com.perfomer.checkielite.core.entity.search.SearchSorting
 import com.perfomer.checkielite.core.entity.sort.ReviewsSortingStrategy
-import com.perfomer.checkielite.core.entity.sort.SortingOrder
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.FilterReviews
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent
@@ -93,23 +91,13 @@ internal class FilterReviewsActor : Actor<SearchCommand, SearchEvent> {
             return fastFilter { review -> review.rating in range }
         }
 
-        private fun List<CheckieReview>.sortedBy(sorting: SearchSorting): List<CheckieReview> {
-            @Suppress("UNCHECKED_CAST")
-            fun CheckieReview.getSortingValue(strategy: ReviewsSortingStrategy): Comparable<Any> {
-                return when (strategy) {
-                    ReviewsSortingStrategy.CREATION_DATE -> creationDate
-                    ReviewsSortingStrategy.RATING -> rating
-                    ReviewsSortingStrategy.RELEVANCE -> throw IllegalStateException()
-                } as Comparable<Any>
-            }
-
-            if (sorting.strategy == ReviewsSortingStrategy.RELEVANCE) {
-                return this
-            }
-
-            return when (sorting.order) {
-                SortingOrder.ASCENDING -> sortedBy { it.getSortingValue(sorting.strategy) }
-                SortingOrder.DESCENDING -> sortedByDescending { it.getSortingValue(sorting.strategy) }
+        private fun List<CheckieReview>.sortedBy(sorting: ReviewsSortingStrategy): List<CheckieReview> {
+            return when (sorting) {
+                ReviewsSortingStrategy.RELEVANCE -> this
+                ReviewsSortingStrategy.NEWEST -> sortedByDescending { it.creationDate }
+                ReviewsSortingStrategy.OLDEST -> sortedBy { it.creationDate }
+                ReviewsSortingStrategy.MOST_RATED -> sortedByDescending { it.rating }
+                ReviewsSortingStrategy.LEAST_RATED -> sortedBy { it.rating }
             }
         }
     }

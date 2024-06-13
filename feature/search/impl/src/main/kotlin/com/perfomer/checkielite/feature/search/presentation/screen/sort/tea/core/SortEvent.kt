@@ -10,8 +10,6 @@ internal sealed interface SortUiEvent : SortEvent {
 
     data object OnDoneClick : SortUiEvent
 
-    data object OnSortingOrderClick : SortUiEvent
-
     class OnSortingOptionClick(val type: ReviewsSortingStrategy) : SortUiEvent
 }
 

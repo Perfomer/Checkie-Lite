@@ -5,7 +5,7 @@ import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.common.pure.state.toLoading
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.core.entity.search.SearchFilters
-import com.perfomer.checkielite.core.entity.search.SearchSorting
+import com.perfomer.checkielite.core.entity.sort.ReviewsSortingStrategy
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.ClearRecentSearches
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.FilterReviews
@@ -75,13 +75,13 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
             state { copy(recentSearches = Lce.Content(emptyList())) }
             commands(ClearRecentSearches)
         }
-        is OnAllFiltersClick -> updateSearchConditions(filters = SearchFilters(), sorting = SearchSorting.default)
+        is OnAllFiltersClick -> updateSearchConditions(filters = SearchFilters(), sorting = ReviewsSortingStrategy.RELEVANCE)
     }
 
     private fun reduceOnFilterClick(event: OnFilterClick) = when (event.type) {
         FilterType.TAGS -> commands(OpenTags(state.searchFilters.tagsIds))
         FilterType.RATING -> Unit
-        FilterType.SORT -> commands(OpenSort(state.searchSorting))
+        FilterType.SORT -> commands(OpenSort(state.sortingStrategy))
     }
 
     private fun reduceNavigation(event: SearchNavigationEvent) = when (event) {
@@ -118,13 +118,13 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
     private fun updateSearchConditions(
         query: String = state.searchQuery,
         filters: SearchFilters = state.searchFilters,
-        sorting: SearchSorting = state.searchSorting,
+        sorting: ReviewsSortingStrategy = state.sortingStrategy,
     ) {
         state {
             copy(
                 searchFilters = filters,
                 searchQuery = query,
-                searchSorting = sorting,
+                sortingStrategy = sorting,
             )
         }
 
@@ -133,7 +133,7 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
                 reviews = state.allReviews.content.orEmpty(),
                 query = state.searchQuery,
                 filters = state.searchFilters,
-                sorting = state.searchSorting,
+                sorting = state.sortingStrategy,
             )
         )
     }

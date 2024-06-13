@@ -18,6 +18,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenGallery
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenReviewEdit
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenSearch
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsState
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnBackPress
@@ -30,6 +31,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnPictureSelect
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnRecommendationClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnStart
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnTagClick
 
 internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDetailsEffect, ReviewDetailsEvent, ReviewDetailsState>() {
 
@@ -47,6 +49,7 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
         is OnEmptyImageClick -> reduceOnEditClick(initialPage = ReviewCreationPage.PRODUCT_INFO)
         is OnEmptyReviewTextClick -> reduceOnEditClick(initialPage = ReviewCreationPage.REVIEW_INFO)
         is OnEditClick -> reduceOnEditClick(initialPage = ReviewCreationPage.entries.first())
+        is OnTagClick -> commands(OpenSearch(state.review.requireContent().review.tags.first { it.id == event.tagId }))
         is OnRecommendationClick -> commands(OpenReviewDetails(event.recommendedReviewId))
         is OnPictureSelect -> state { copy(currentPicturePosition = event.position) }
         is OnPictureClick -> commands(

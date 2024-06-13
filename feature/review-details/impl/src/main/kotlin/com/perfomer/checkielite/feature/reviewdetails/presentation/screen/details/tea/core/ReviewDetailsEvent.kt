@@ -37,5 +37,7 @@ internal sealed interface ReviewDetailsUiEvent : ReviewDetailsEvent {
 
     data object OnConfirmDeleteClick : ReviewDetailsUiEvent
 
+    class OnTagClick(val tagId: String) : ReviewDetailsUiEvent
+
     class OnRecommendationClick(val recommendedReviewId: String) : ReviewDetailsUiEvent
 }

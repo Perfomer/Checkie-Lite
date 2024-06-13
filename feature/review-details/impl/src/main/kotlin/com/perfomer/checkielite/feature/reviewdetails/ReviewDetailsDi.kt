@@ -14,6 +14,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.actor.ReviewDetailsNavigationActor
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.ReviewDetailsContentScreen
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiStateMapper
+import com.perfomer.checkielite.feature.search.presentation.navigation.SearchScreenProvider
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -38,13 +39,20 @@ internal fun createReviewDetailsStore(
     reviewCreationScreenProvider: ReviewCreationScreenProvider,
     reviewDetailsScreenProvider: ReviewDetailsScreenProvider,
     galleryScreenProvider: GalleryScreenProvider,
+    searchScreenProvider: SearchScreenProvider,
 ): ReviewDetailsStore {
     return ReviewDetailsStore(
         params = params,
         reducer = ReviewDetailsReducer(),
         uiStateMapper = ReviewDetailsUiStateMapper(),
         actors = setOf(
-            ReviewDetailsNavigationActor(router, reviewCreationScreenProvider, reviewDetailsScreenProvider, galleryScreenProvider),
+            ReviewDetailsNavigationActor(
+                router = router,
+                reviewCreationScreenProvider = reviewCreationScreenProvider,
+                reviewDetailsScreenProvider = reviewDetailsScreenProvider,
+                galleryScreenProvider = galleryScreenProvider,
+                searchScreenProvider = searchScreenProvider,
+            ),
             LoadReviewActor(reviewDetailsRepository),
             DeleteReviewActor(reviewDetailsRepository),
         ),

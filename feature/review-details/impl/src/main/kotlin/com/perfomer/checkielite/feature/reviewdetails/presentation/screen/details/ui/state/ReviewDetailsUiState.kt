@@ -22,6 +22,7 @@ internal sealed interface ReviewDetailsUiState {
         val comment: String?,
         val advantages: String?,
         val disadvantages: String?,
+        val tags: ImmutableList<Tag>,
         val recommendations: ImmutableList<RecommendedReview>,
         override val isMenuAvailable: Boolean,
     ) : ReviewDetailsUiState
@@ -31,6 +32,7 @@ internal sealed interface ReviewDetailsUiState {
     }
 }
 
+@Immutable
 internal data class RecommendedReview(
     val reviewId: String,
     val brandName: String?,
@@ -38,4 +40,11 @@ internal data class RecommendedReview(
     val pictureUri: String?,
     val rating: Int,
     val isSyncing: Boolean,
+)
+
+@Immutable
+internal data class Tag(
+    val tagId: String,
+    val text: String,
+    val emoji: String?,
 )

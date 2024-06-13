@@ -34,6 +34,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsImage
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsInfo
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsRecommendations
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsTags
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsTextCard
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsTextEmptyCard
 import kotlinx.collections.immutable.persistentListOf
@@ -51,6 +52,7 @@ internal fun ReviewDetailsScreen(
     onEmptyImageClick: () -> Unit = {},
     onEmptyReviewTextClick: () -> Unit = {},
     onPageChange: (pageIndex: Int) -> Unit = {},
+    onTagClick: (tagId: String) -> Unit = {},
     onRecommendationClick: (recommendedReviewId: String) -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
@@ -76,6 +78,7 @@ internal fun ReviewDetailsScreen(
                 onEmptyImageClick = onEmptyImageClick,
                 onEmptyReviewTextClick = onEmptyReviewTextClick,
                 onPageChange = onPageChange,
+                onTagClick = onTagClick,
                 onRecommendationClick = onRecommendationClick,
             )
 
@@ -111,6 +114,7 @@ private fun Content(
     onEmptyImageClick: () -> Unit,
     onEmptyReviewTextClick: () -> Unit,
     onPageChange: (pageIndex: Int) -> Unit,
+    onTagClick: (tagId: String) -> Unit,
     onRecommendationClick: (recommendedReviewId: String) -> Unit,
 ) {
     Column(
@@ -133,7 +137,7 @@ private fun Content(
         )
 
         Spacer(Modifier.height(24.dp))
-        
+
         ReviewDetailsInfo(
             date = state.date,
             rating = state.rating,
@@ -169,6 +173,11 @@ private fun Content(
                 header = { ReviewDetailsDisadvantagesHeader() },
             )
         }
+
+        ReviewDetailsTags(
+            tags = state.tags,
+            onTagClick = onTagClick,
+        )
 
         ReviewDetailsRecommendations(
             recommendations = state.recommendations,
@@ -208,6 +217,7 @@ internal val mockUiState = ReviewDetailsUiState.Content(
     advantages = "Great, but not great.",
     disadvantages = "It's okay.",
     isMenuAvailable = true,
+    tags = persistentListOf(),
     recommendations = persistentListOf(
         RecommendedReview("", "DARKSIDE", "Lemonblast", null, 10, false),
     )

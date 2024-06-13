@@ -304,9 +304,9 @@ private fun FiltersRow(
     ) {
         val filtersScrollState = rememberScrollState()
         val appliedFiltersCount = remember(filters) { filters.count { it.isApplied } }
-        val hasAppliedFilters = appliedFiltersCount > 0
+        val showAllFiltersChip = appliedFiltersCount > 1
 
-        if (hasAppliedFilters) {
+        if (showAllFiltersChip) {
             Spacer(Modifier.width(20.dp))
 
             FilterChip(
@@ -338,7 +338,7 @@ private fun FiltersRow(
                     .fillMaxWidth()
                     .horizontalScroll(filtersScrollState)
                     .padding(
-                        start = if (hasAppliedFilters) 0.dp else 20.dp,
+                        start = if (showAllFiltersChip) 0.dp else 20.dp,
                         end = 20.dp
                     )
             ) {
@@ -374,7 +374,7 @@ private fun FiltersRow(
             }
 
             androidx.compose.animation.AnimatedVisibility(
-                visible = hasAppliedFilters && filtersScrollState.canScrollBackward,
+                visible = showAllFiltersChip && filtersScrollState.canScrollBackward,
                 enter = fadeIn(),
                 exit = fadeOut(),
             ) {

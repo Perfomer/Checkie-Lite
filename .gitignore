@@ -78,3 +78,5 @@ google-services.json
 *.jks
 *.pepk
 secret.properties
+
+/app/release/

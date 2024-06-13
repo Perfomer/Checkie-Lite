@@ -1,11 +1,10 @@
 package com.perfomer.checkielite.feature.search.presentation.navigation
 
-import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.core.navigation.api.CheckieScreen
 import com.perfomer.checkielite.core.navigation.api.Params
 
 data class SearchParams(
-    val tags: ArrayList<CheckieTag>,
+    val tagId: String?,
 ) : Params
 
 fun interface SearchScreenProvider {

@@ -75,12 +75,12 @@ internal class SearchNavigationActor(
 
     private suspend fun openTags(command: OpenTags): SearchNavigationEvent {
         val result = router.navigateForResult<TagsResult>(
-            screen = tagsScreenProvider(TagsParams(command.selectedTags.toArrayList())),
+            screen = tagsScreenProvider(TagsParams(command.selectedTagsIds.toArrayList())),
             mode = DestinationMode.BOTTOM_SHEET,
         )
 
         return when (result) {
-            is TagsResult.Success -> OnTagsUpdated(result.selectedTags)
+            is TagsResult.Success -> OnTagsUpdated(result.selectedTagsIds)
         }
     }
 }

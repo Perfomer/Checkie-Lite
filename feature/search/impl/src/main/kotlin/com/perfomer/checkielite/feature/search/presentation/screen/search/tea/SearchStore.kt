@@ -21,7 +21,7 @@ internal class SearchStore(
 ) : ScreenModelStore<SearchCommand, SearchEffect, SearchEvent, SearchUiEvent, SearchState, SearchUiState>(
     initialState = SearchState(
         searchFilters = SearchFilters(
-            tags = params.tags,
+            tagsIds = listOfNotNull(params.tagId),
         )
     ),
     reducer = reducer,

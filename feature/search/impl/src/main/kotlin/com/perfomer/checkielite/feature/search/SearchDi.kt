@@ -27,12 +27,13 @@ import com.perfomer.checkielite.feature.search.presentation.screen.sort.ui.SortC
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.ui.state.SortUiStateMapper
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.TagsReducer
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.TagsStore
-import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.actor.LoadTagsActor
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.actor.TagsNavigationActor
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.ui.TagsContentScreen
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.ui.state.TagsUiStateMapper
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.LoadTagsActor as SearchLoadTagsActor
+import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.actor.LoadTagsActor as TagsLoadTagsActor
 
 val searchModules
     get() = listOf(presentationModule)
@@ -64,6 +65,7 @@ internal fun createSearchStore(
         actors = setOf(
             SearchNavigationActor(router, reviewDetailsScreenProvider, sortScreenProvider, tagsScreenProvider),
             FilterReviewsActor(),
+            SearchLoadTagsActor(localDataSource),
             LoadReviewsActor(localDataSource),
             LoadRecentSearchesActor(localDataSource),
             RememberRecentSearchActor(localDataSource),
@@ -99,7 +101,7 @@ internal fun createTagsStore(
         uiStateMapper = TagsUiStateMapper(context),
         actors = setOf(
             TagsNavigationActor(router),
-            LoadTagsActor(localDataSource),
+            TagsLoadTagsActor(localDataSource),
         ),
     )
 }

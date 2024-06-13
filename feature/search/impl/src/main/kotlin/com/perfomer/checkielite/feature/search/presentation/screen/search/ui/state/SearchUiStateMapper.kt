@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state
 
 import android.content.Context
+import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
 import com.perfomer.checkielite.core.entity.CheckieReview
@@ -32,7 +33,7 @@ internal class SearchUiStateMapper(
     }
 
     private fun createFilters(state: SearchState): ImmutableList<Filter> {
-        return listOf(
+        return listOfNotNull(
             createTagFilter(state),
             createRatingFilter(state),
             createSortFilter(state),
@@ -76,22 +77,23 @@ internal class SearchUiStateMapper(
         )
     }
 
-    private fun createTagFilter(state: SearchState): Filter {
-        val tags = state.searchFilters.tags
-        val firstTag by lazy { tags.first() }
+    private fun createTagFilter(state: SearchState): Filter? {
+        val tags = state.allTags.content ?: return null
+        val selectedTagsIds = state.searchFilters.tagsIds
+        val firstSelectedTag by lazy { tags.first { it.id == selectedTagsIds.first() } }
 
         return Filter(
             type = FilterType.TAGS,
-            leadingIcon = when (tags.size) {
+            leadingIcon = when (selectedTagsIds.size) {
                 0 -> null
-                1 -> firstTag.emoji?.let { LeadingIcon(it, LeadingIconType.EMOJI) }
-                else -> LeadingIcon(tags.size.toString(), LeadingIconType.BADGE)
+                1 -> firstSelectedTag.emoji?.let { LeadingIcon(it, LeadingIconType.EMOJI) }
+                else -> LeadingIcon(selectedTagsIds.size.toString(), LeadingIconType.BADGE)
             },
-            text = when (tags.size) {
-                1 -> firstTag.value
+            text = when (selectedTagsIds.size) {
+                1 -> firstSelectedTag.value
                 else -> context.getString(R.string.search_filters_tags)
             },
-            isApplied = tags.size > 0,
+            isApplied = selectedTagsIds.isNotEmpty(),
         )
     }
 

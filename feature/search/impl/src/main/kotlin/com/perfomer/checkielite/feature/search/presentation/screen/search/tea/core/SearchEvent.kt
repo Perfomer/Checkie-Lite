@@ -23,6 +23,12 @@ internal sealed interface SearchEvent {
         class Succeed(val reviews: List<CheckieReview>) : ReviewsLoading
         class Failed(val error: Throwable) : ReviewsLoading
     }
+
+    sealed interface TagsLoading : SearchEvent {
+        data object Started : TagsLoading
+        class Succeed(val tags: List<CheckieTag>) : TagsLoading
+        class Failed(val error: Throwable) : TagsLoading
+    }
 }
 
 internal sealed interface SearchUiEvent : SearchEvent {
@@ -45,6 +51,6 @@ internal sealed interface SearchUiEvent : SearchEvent {
 internal sealed interface SearchNavigationEvent : SearchEvent {
 
     class OnSortUpdated(val sorting: SearchSorting) : SearchNavigationEvent
-    class OnTagsUpdated(val tags: ArrayList<CheckieTag>) : SearchNavigationEvent
+    class OnTagsUpdated(val tagsIds: List<String>) : SearchNavigationEvent
     class OnFiltersUpdated(val filters: SearchFilters, val sorting: SearchSorting) : SearchNavigationEvent
 }

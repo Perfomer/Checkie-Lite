@@ -18,7 +18,7 @@ internal class TagsStore(
     uiStateMapper: TagsUiStateMapper,
     actors: Set<Actor<TagsCommand, TagsEvent>>,
 ) : ScreenModelStore<TagsCommand, TagsEffect, TagsEvent, TagsUiEvent, TagsState, TagsUiState>(
-    initialState = TagsState(selectedTags = params.selectedTags),
+    initialState = TagsState(selectedTagsIds = params.selectedTagsIds),
     reducer = reducer,
     uiStateMapper = uiStateMapper,
     actors = actors,

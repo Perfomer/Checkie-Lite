@@ -37,7 +37,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -82,6 +81,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 internal fun SearchScreen(
     state: SearchUiState,
+    searchFieldFocusRequester: FocusRequester = remember { FocusRequester() },
     onNavigationIconClick: () -> Unit = {},
     onSearchFieldInput: (text: String) -> Unit = {},
     onSearchClearClick: () -> Unit = {},
@@ -92,12 +92,7 @@ internal fun SearchScreen(
     onRecentSearchesClearClick: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
-    val searchFieldFocusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
-
-    LaunchedEffect(Unit) {
-        searchFieldFocusRequester.requestFocus()
-    }
 
     Scaffold(
         topBar = {
@@ -186,7 +181,8 @@ private fun Empty(
                 title = stringResource(R.string.search_empty_start_title),
                 message = stringResource(R.string.search_empty_start_description),
                 illustrationPainter = painterResource(CommonDrawable.ill_empty),
-                modifier = Modifier.imePadding()
+                modifier = Modifier
+                    .imePadding()
                     .padding(contentPadding)
             )
         }
@@ -195,7 +191,8 @@ private fun Empty(
                 title = stringResource(R.string.search_empty_title),
                 message = stringResource(R.string.search_empty_description),
                 illustrationPainter = painterResource(CommonDrawable.ill_empty),
-                modifier = Modifier.imePadding()
+                modifier = Modifier
+                    .imePadding()
                     .padding(contentPadding)
             )
         }

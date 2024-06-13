@@ -1,12 +1,15 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.focus.FocusRequester
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.util.BackHandlerWithLifecycle
 import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchParams
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.SearchStore
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEffect
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnAllFiltersClick
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnFilterClick
@@ -24,8 +27,17 @@ internal class SearchContentScreen(
     override fun Screen() = TeaComposable(store<SearchStore>(params)) { state ->
         BackHandlerWithLifecycle { accept(OnBackPress) }
 
+        val searchFieldFocusRequester = remember { FocusRequester() }
+
+        EffectHandler { effect ->
+            when (effect) {
+                SearchEffect.ShowKeyboard -> searchFieldFocusRequester.requestFocus()
+            }
+        }
+
         SearchScreen(
             state = state,
+            searchFieldFocusRequester = searchFieldFocusRequester,
             onNavigationIconClick = acceptable(OnBackPress),
             onSearchFieldInput = acceptable(::OnSearchFieldInput),
             onSearchClearClick = acceptable(OnSearchClearClick),

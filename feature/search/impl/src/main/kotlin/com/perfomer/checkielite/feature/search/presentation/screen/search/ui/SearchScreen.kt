@@ -433,14 +433,13 @@ private fun Badge(
         modifier = Modifier
             .size(16.dp)
             .background(backgroundColor, CircleShape)
-            .padding(end = 0.5.dp, top = 0.5.dp)
     ) {
         Text(
             text = value,
             fontSize = 12.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Medium,
-            color = Color.White,
+            color = LocalCuiPalette.current.TextInverted,
             style = MaterialTheme.typography.bodySmall.copy(
                 platformStyle = PlatformTextStyle(includeFontPadding = false)
             ),

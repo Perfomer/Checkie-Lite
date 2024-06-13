@@ -6,6 +6,7 @@ import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckiePi
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieReviewDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieTagDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.RecentSearchDao
+import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieTagReviewBoundDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.RecentSearchedReviewDb
 import com.perfomer.checkielite.core.data.datasource.database.room.mapper.toDb
@@ -36,12 +37,35 @@ internal interface DatabaseDataSource {
 
     suspend fun searchBrands(searchQuery: String): List<String>
 
-    suspend fun createReview(review: CheckieReview)
+    suspend fun createReview(
+        id: String,
+        productName: String,
+        productBrand: String?,
+        rating: Int,
+        pictures: List<CheckiePicture>,
+        tagsIds: Set<String>,
+        comment: String?,
+        advantages: String?,
+        disadvantages: String?,
+        creationDate: Date,
+        modificationDate: Date,
+        isSyncing: Boolean,
+    )
 
     suspend fun updateReview(
-        review: CheckieReview,
+        id: String,
+        productName: String,
+        productBrand: String?,
+        rating: Int,
         deletedPictures: List<CheckiePicture>,
         actualPictures: List<CheckiePicture>,
+        tagsIds: Set<String>,
+        comment: String?,
+        advantages: String?,
+        disadvantages: String?,
+        creationDate: Date,
+        modificationDate: Date,
+        isSyncing: Boolean,
     )
 
     suspend fun deleteReview(
@@ -109,11 +133,36 @@ internal class DatabaseDataSourceImpl(
         return reviewDao.searchBrands(searchQuery)
     }
 
-    override suspend fun createReview(review: CheckieReview) = database.withTransaction {
-        val reviewDb = review.toDb()
-        val tagsBoundsDb = review.tags.map { tag -> CheckieTagReviewBoundDb(tagId = tag.id, reviewId = review.id) }
-        val picturesDb = review.pictures.mapIndexed { i, picture ->
-            picture.toDb(reviewId = review.id, order = i)
+    override suspend fun createReview(
+        id: String,
+        productName: String,
+        productBrand: String?,
+        rating: Int,
+        pictures: List<CheckiePicture>,
+        tagsIds: Set<String>,
+        comment: String?,
+        advantages: String?,
+        disadvantages: String?,
+        creationDate: Date,
+        modificationDate: Date,
+        isSyncing: Boolean,
+    ) = database.withTransaction {
+        val reviewDb = CheckieReviewDb(
+            id = id,
+            productName = productName,
+            brandName = productBrand?.takeIf { it.isNotBlank() },
+            rating = rating,
+            reviewText = comment?.takeIf { it.isNotBlank() },
+            advantages = advantages?.takeIf { it.isNotBlank() },
+            disadvantages = disadvantages?.takeIf { it.isNotBlank() },
+            creationDate = creationDate,
+            modificationDate = modificationDate,
+            isSyncing = isSyncing,
+        )
+
+        val tagsBoundsDb = tagsIds.map { tagId -> CheckieTagReviewBoundDb(tagId = tagId, reviewId = id) }
+        val picturesDb = pictures.mapIndexed { i, picture ->
+            picture.toDb(reviewId = id, order = i)
         }
 
         reviewDao.insertReview(reviewDb)
@@ -122,15 +171,37 @@ internal class DatabaseDataSourceImpl(
     }
 
     override suspend fun updateReview(
-        review: CheckieReview,
+        id: String,
+        productName: String,
+        productBrand: String?,
+        rating: Int,
         deletedPictures: List<CheckiePicture>,
-        actualPictures: List<CheckiePicture>
+        actualPictures: List<CheckiePicture>,
+        tagsIds: Set<String>,
+        comment: String?,
+        advantages: String?,
+        disadvantages: String?,
+        creationDate: Date,
+        modificationDate: Date,
+        isSyncing: Boolean
     ) = database.withTransaction {
-        val reviewDb = review.toDb()
-        val tagsBoundsDb = review.tags.map { tag -> CheckieTagReviewBoundDb(tagId = tag.id, reviewId = review.id) }
+        val reviewDb = CheckieReviewDb(
+            id = id,
+            productName = productName,
+            brandName = productBrand?.takeIf { it.isNotBlank() },
+            rating = rating,
+            reviewText = comment?.takeIf { it.isNotBlank() },
+            advantages = advantages?.takeIf { it.isNotBlank() },
+            disadvantages = disadvantages?.takeIf { it.isNotBlank() },
+            creationDate = creationDate,
+            modificationDate = modificationDate,
+            isSyncing = isSyncing,
+        )
+
+        val tagsBoundsDb = tagsIds.map { tagId -> CheckieTagReviewBoundDb(tagId = tagId, reviewId = id) }
         val deletedPicturesIds = deletedPictures.map { it.id }
         val actualPicturesDb = actualPictures.mapIndexed { i, picture ->
-            picture.toDb(reviewId = review.id, order = i)
+            picture.toDb(reviewId = id, order = i)
         }
 
         reviewDao.updateReview(reviewDb)
@@ -138,7 +209,7 @@ internal class DatabaseDataSourceImpl(
         pictureDao.insertPictures(actualPicturesDb)
         pictureDao.deletePictures(deletedPicturesIds)
 
-        tagDao.deleteBoundsForReview(review.id)
+        tagDao.deleteBoundsForReview(id)
         tagDao.insertBounds(tagsBoundsDb)
     }
 

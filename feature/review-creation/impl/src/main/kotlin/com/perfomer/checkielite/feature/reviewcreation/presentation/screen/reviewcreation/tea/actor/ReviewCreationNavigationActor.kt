@@ -75,7 +75,7 @@ internal class ReviewCreationNavigationActor(
         )
 
         return when (result) {
-            is TagCreationResult.Created -> OnTagCreated(result.tag)
+            is TagCreationResult.Created -> OnTagCreated(result.tagId)
             is TagCreationResult.Modified -> null
             is TagCreationResult.Deleted -> OnTagDeleted(result.tagId)
         }

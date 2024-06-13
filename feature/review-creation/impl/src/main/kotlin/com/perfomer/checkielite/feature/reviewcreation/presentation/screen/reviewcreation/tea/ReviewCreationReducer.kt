@@ -86,7 +86,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                             disadvantages = state.reviewDetails.disadvantages,
                             rating = state.reviewDetails.rating,
                             pictures = state.reviewDetails.pictures,
-                            tags = state.reviewDetails.tags.toList(),
+                            tagsIds = state.reviewDetails.tagsIds,
                         )
                     )
 
@@ -100,7 +100,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                             disadvantages = state.reviewDetails.disadvantages,
                             rating = state.reviewDetails.rating,
                             pictures = state.reviewDetails.pictures,
-                            tags = state.reviewDetails.tags.toList(),
+                            tagsIds = state.reviewDetails.tagsIds,
                         )
                     )
                 }
@@ -179,16 +179,14 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         is Tags.OnSearchQueryClearClick -> onTagsSearchQueryInput("")
         is Tags.OnSearchQueryInput -> onTagsSearchQueryInput(event.query)
         is Tags.OnTagClick -> {
+            val isTagSelected = state.reviewDetails.tagsIds.any { it == event.tagId }
             state {
-                val tag = state.tagsSuggestions.find { it.id == event.tagId } ?: return@state state
-                val isTagSelected = state.reviewDetails.tags.contains(tag)
-
                 copy(
                     reviewDetails = reviewDetails.copy(
-                        tags = if (isTagSelected) {
-                            reviewDetails.tags - tag
+                        tagsIds = if (isTagSelected) {
+                            reviewDetails.tagsIds - event.tagId
                         } else {
-                            reviewDetails.tags + tag
+                            reviewDetails.tagsIds + event.tagId
                         }
                     )
                 )
@@ -225,7 +223,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             state {
                 copy(
                     reviewDetails = reviewDetails.copy(
-                        tags = reviewDetails.tags + event.tag,
+                        tagsIds = reviewDetails.tagsIds + event.tagId,
                     ),
                 )
             }
@@ -237,9 +235,9 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             state {
                 copy(
                     reviewDetails = reviewDetails.copy(
-                        tags = buildSet {
-                            addAll(reviewDetails.tags)
-                            removeIf { it.id != event.tagId }
+                        tagsIds = buildSet {
+                            addAll(reviewDetails.tagsIds)
+                            removeIf { it != event.tagId }
                         },
                     ),
                 )
@@ -263,7 +261,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 productName = event.review.productName,
                 productBrand = event.review.productBrand.orEmpty(),
                 pictures = event.review.pictures.toPersistentList(),
-                tags = event.review.tags.toSet(),
+                tagsIds = event.review.tags.map { it.id }.toSet(),
                 comment = event.review.comment.orEmpty(),
                 advantages = event.review.advantages.orEmpty(),
                 disadvantages = event.review.disadvantages.orEmpty(),

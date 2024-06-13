@@ -57,18 +57,19 @@ internal class CheckieLocalDataSourceImpl(
         productBrand: String?,
         rating: Int,
         pictures: List<CheckiePicture>,
-        tags: List<CheckieTag>,
+        tagsIds: Set<String>,
         comment: String?,
         advantages: String?,
         disadvantages: String?
-    ): CheckieReview {
+    ) {
         val actualPictures = pictures.map { picture -> picture.copy(id = randomUuid()) }
         val creationDate = Date()
 
         val isNeedSync = actualPictures.isNotEmpty()
+        val reviewId = randomUuid()
 
-        val review = CheckieReview(
-            id = randomUuid(),
+        databaseDataSource.createReview(
+            id = reviewId,
             productName = productName,
             productBrand = productBrand,
             rating = rating,
@@ -76,19 +77,15 @@ internal class CheckieLocalDataSourceImpl(
             advantages = advantages,
             disadvantages = disadvantages,
             pictures = actualPictures,
-            tags = tags,
+            tagsIds = tagsIds,
             creationDate = creationDate,
             modificationDate = creationDate,
             isSyncing = isNeedSync,
         )
 
-        databaseDataSource.createReview(review)
-
         if (isNeedSync) {
-            ContextCompat.startForegroundService(context, CompressorService.createIntent(context, review.id, actualPictures.toArrayList()))
+            ContextCompat.startForegroundService(context, CompressorService.createIntent(context, reviewId, actualPictures.toArrayList()))
         }
-
-        return review
     }
 
     override suspend fun updateReview(
@@ -97,11 +94,11 @@ internal class CheckieLocalDataSourceImpl(
         productBrand: String?,
         rating: Int,
         pictures: List<CheckiePicture>,
-        tags: List<CheckieTag>,
+        tagsIds: Set<String>,
         comment: String?,
         advantages: String?,
         disadvantages: String?
-    ): CheckieReview = coroutineScope {
+    ) = coroutineScope {
         val initialReview = getReview(reviewId).first()
         val initialPictures = initialReview.pictures
 
@@ -127,32 +124,25 @@ internal class CheckieLocalDataSourceImpl(
 
         val isNeedSync = addedPictures.isNotEmpty()
 
-        val review = CheckieReview(
+        databaseDataSource.updateReview(
             id = reviewId,
             productName = productName,
             productBrand = productBrand,
             rating = rating,
+            deletedPictures = deletedPictures,
+            actualPictures = actualPictures,
             comment = comment,
             advantages = advantages,
             disadvantages = disadvantages,
-            pictures = actualPictures,
-            tags = tags,
+            tagsIds = tagsIds,
             creationDate = initialReview.creationDate,
             modificationDate = Date(),
             isSyncing = isNeedSync,
         )
 
-        databaseDataSource.updateReview(
-            review = review,
-            deletedPictures = deletedPictures,
-            actualPictures = actualPictures,
-        )
-
         if (isNeedSync) {
-            ContextCompat.startForegroundService(context, CompressorService.createIntent(context, review.id, actualAddedPictures.toArrayList()))
+            ContextCompat.startForegroundService(context, CompressorService.createIntent(context, reviewId, actualAddedPictures.toArrayList()))
         }
-
-        return@coroutineScope review
     }
 
     override suspend fun deleteReview(reviewId: String) {

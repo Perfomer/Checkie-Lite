@@ -80,7 +80,7 @@ internal sealed interface ReviewCreationNavigationEvent : ReviewCreationEvent {
 
     class OnPhotosPick(val uris: List<String>) : ReviewCreationNavigationEvent
 
-    class OnTagCreated(val tag: CheckieTag) : ReviewCreationNavigationEvent
+    class OnTagCreated(val tagId: String) : ReviewCreationNavigationEvent
 
     class OnTagDeleted(val tagId: String) : ReviewCreationNavigationEvent
 }

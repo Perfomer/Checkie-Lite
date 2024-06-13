@@ -9,7 +9,7 @@ import com.perfomer.checkielite.common.ui.util.BackHandlerWithLifecycle
 import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchParams
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.SearchStore
-import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEffect
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEffect.ShowKeyboard
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnAllFiltersClick
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnFilterClick
@@ -31,7 +31,7 @@ internal class SearchContentScreen(
 
         EffectHandler { effect ->
             when (effect) {
-                SearchEffect.ShowKeyboard -> searchFieldFocusRequester.requestFocus()
+                ShowKeyboard -> searchFieldFocusRequester.requestFocus()
             }
         }
 

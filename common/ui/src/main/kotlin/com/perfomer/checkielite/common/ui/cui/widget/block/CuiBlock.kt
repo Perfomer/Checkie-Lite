@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -41,6 +42,7 @@ fun CuiBlock(
         Text(
             text = title,
             fontSize = 20.sp,
+            textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
         )
 
@@ -49,6 +51,8 @@ fun CuiBlock(
         Text(
             text = message,
             fontSize = 14.sp,
+            lineHeight = 18.sp,
+            textAlign = TextAlign.Center,
             color = LocalCuiPalette.current.TextSecondary,
         )
     }

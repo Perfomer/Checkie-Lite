@@ -1,5 +1,7 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.tea
 
+import androidx.compose.ui.util.fastAny
+import androidx.compose.ui.util.fastFilter
 import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.common.pure.state.toLoading
@@ -92,8 +94,18 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
 
     private fun reduceTagsLoading(event: TagsLoading) = when (event) {
         is TagsLoading.Started -> state { copy(allTags = allTags.toLoading()) }
-        is TagsLoading.Succeed -> state { copy(allTags = Lce.Content(event.tags)) }
         is TagsLoading.Failed -> state { copy(allTags = Lce.Error(event.error)) }
+        is TagsLoading.Succeed -> {
+            state { copy(allTags = Lce.Content(event.tags)) }
+
+            updateSearchConditions(
+                filters = state.searchFilters.copy(
+                    tagsIds = state.searchFilters.tagsIds.fastFilter { tagId ->
+                        event.tags.fastAny { it.id == tagId }
+                    },
+                ),
+            )
+        }
     }
 
     private fun reduceRecentSearchesLoading(event: RecentSearchesLoading) = when (event) {

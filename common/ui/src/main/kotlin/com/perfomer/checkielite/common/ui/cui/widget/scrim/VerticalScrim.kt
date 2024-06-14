@@ -15,12 +15,18 @@ fun VerticalScrim(
     color: Color = LocalCuiPalette.current.BackgroundPrimary,
     fromTop: Boolean = false,
 ) {
-    val brush = remember(color, fromTop) {
+    Box(modifier = modifier.background(verticalScrimBrush(color, fromTop)))
+}
+
+@Composable
+fun verticalScrimBrush(
+    color: Color = LocalCuiPalette.current.BackgroundPrimary,
+    fromTop: Boolean = false,
+): Brush {
+    return remember(color, fromTop) {
         Brush.verticalGradient(
             if (fromTop) listOf(color, color.copy(alpha = 0F))
             else listOf(color.copy(alpha = 0F), color)
         )
     }
-
-    Box(modifier = modifier.background(brush))
 }

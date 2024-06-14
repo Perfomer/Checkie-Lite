@@ -16,7 +16,7 @@
     <string name="search_filters_rating">Оценка</string>
 
     <string name="search_sort_title">Показать сначала</string>
-    <string name="search_sort_relevant">Релевантные</string>
+    <string name="search_sort_relevant">Самые подходящие</string>
     <string name="search_sort_newest">Самые новые</string>
     <string name="search_sort_oldest">Самые старые</string>
     <string name="search_sort_most_rated">С наибольшей оценкой</string>

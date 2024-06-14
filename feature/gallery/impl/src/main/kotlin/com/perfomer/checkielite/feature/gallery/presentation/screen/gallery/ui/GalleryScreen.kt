@@ -65,6 +65,7 @@ import com.mxalbert.zoomable.rememberZoomableState
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.cui.modifier.indicatorOffsetForPage
+import com.perfomer.checkielite.common.ui.cui.widget.scrim.NavBarScrimController
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -92,8 +93,10 @@ internal fun GalleryScreen(
 
     DisposableEffect(Unit) {
         systemUiController.setTransparentSystemBars(darkIcons = false)
+        NavBarScrimController.showScrim(false)
 
         onDispose {
+            NavBarScrimController.showScrim(true)
             systemUiController.setTransparentSystemBars(darkIcons = !isSystemInDarkTheme)
             systemUiController.isSystemBarsVisible = true
         }

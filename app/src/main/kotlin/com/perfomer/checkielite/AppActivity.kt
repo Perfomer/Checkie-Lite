@@ -15,6 +15,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.FadeTransition
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.perfomer.checkielite.common.android.SingleActivityHolder
+import com.perfomer.checkielite.common.ui.cui.widget.scrim.NavBarScrim
 import com.perfomer.checkielite.common.ui.cui.widget.sheet.CuiDragAnchor
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -49,6 +50,7 @@ class AppActivity : AppCompatActivity() {
                 UsualNavigator()
                 BottomSheetNavigator()
                 OverlayNavigator()
+                NavBarScrim()
             }
 
             ClearFocusOnKeyboardClose()

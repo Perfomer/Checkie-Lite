@@ -7,15 +7,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 
 @Composable
 fun VerticalScrim(
-	modifier: Modifier = Modifier,
-	color: Color = Color.White,
+    modifier: Modifier = Modifier,
+    color: Color = LocalCuiPalette.current.BackgroundPrimary,
+    fromTop: Boolean = false,
 ) {
-	val brush = remember {
-		Brush.verticalGradient(colors = listOf(color.copy(alpha = 0F), color))
-	}
+    val brush = remember(color, fromTop) {
+        Brush.verticalGradient(
+            if (fromTop) listOf(color, color.copy(alpha = 0F))
+            else listOf(color.copy(alpha = 0F), color)
+        )
+    }
 
-	Box(modifier = modifier.background(brush))
+    Box(modifier = modifier.background(brush))
 }

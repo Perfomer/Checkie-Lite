@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -31,6 +32,7 @@ import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
+import com.perfomer.checkielite.common.ui.cui.widget.scrim.verticalScrimBrush
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
@@ -88,9 +90,11 @@ internal fun ReviewCreationScreen(
         Box(
             contentAlignment = Alignment.BottomCenter,
             modifier = Modifier
-                .fillMaxSize()
-                .navigationBarsPadding()
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
                 .imePadding()
+                .background(verticalScrimBrush())
+                .navigationBarsPadding()
                 .padding(bottom = 20.dp)
                 .padding(horizontal = 20.dp)
         ) {

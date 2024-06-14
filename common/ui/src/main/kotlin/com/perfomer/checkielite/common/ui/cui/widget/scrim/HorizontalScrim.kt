@@ -15,12 +15,18 @@ fun HorizontalScrim(
     color: Color = LocalCuiPalette.current.BackgroundPrimary,
     fromLeft: Boolean = false,
 ) {
-    val brush = remember(color, fromLeft) {
+    Box(modifier = modifier.background(horizontalScrimBrush(color, fromLeft)))
+}
+
+@Composable
+fun horizontalScrimBrush(
+    color: Color = LocalCuiPalette.current.BackgroundPrimary,
+    fromLeft: Boolean = false,
+): Brush {
+    return remember(color, fromLeft) {
         Brush.horizontalGradient(
             if (fromLeft) listOf(color, color.copy(alpha = 0F))
             else listOf(color.copy(alpha = 0F), color)
         )
     }
-
-    Box(modifier = modifier.background(brush))
 }

@@ -78,12 +78,14 @@ internal fun MainScreen(
 
     Scaffold(
         floatingActionButton = {
-            CuiFloatingActionButton(
-                painter = painterResource(id = CommonDrawable.ic_plus),
-                contentDescription = stringResource(R.string.main_add_checkie),
-                onClick = onFabClick,
-                modifier = Modifier.imePadding()
-            )
+            if (state !is MainUiState.Error) {
+                CuiFloatingActionButton(
+                    painter = painterResource(id = CommonDrawable.ic_plus),
+                    contentDescription = stringResource(R.string.main_add_checkie),
+                    onClick = onFabClick,
+                    modifier = Modifier.imePadding()
+                )
+            }
         },
         topBar = {
             TopAppBar(
@@ -169,7 +171,8 @@ private fun Empty() {
     CuiBlock(
         title = stringResource(R.string.main_empty_title),
         message = stringResource(R.string.main_empty_description),
-        illustrationPainter = painterResource(CommonDrawable.ill_empty)
+        illustrationPainter = painterResource(CommonDrawable.ill_empty),
+        modifier = Modifier.padding(32.dp)
     )
 }
 
@@ -177,8 +180,9 @@ private fun Empty() {
 private fun Error() {
     CuiBlock(
         title = stringResource(CommonString.common_error_title),
-        message = stringResource(CommonString.common_error_message),
+        message = stringResource(R.string.main_error_description),
         illustrationPainter = painterResource(CommonDrawable.ill_error),
+        modifier = Modifier.padding(32.dp)
     )
 }
 

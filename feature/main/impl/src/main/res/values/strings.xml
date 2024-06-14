@@ -9,5 +9,7 @@
     <string name="main_empty_title">There are no Checkies yet</string>
     <string name="main_empty_description">Would you like to add one?</string>
 
+    <string name="main_error_description">If you see this message, do not take steps to fix the error and do not reinstall the application, otherwise you will lose all data.\n\nWait for the app update to fix the problem.</string>
+
     <string name="main_copyright" translatable="false">© 2024 Perfomer Development</string>
 </resources>

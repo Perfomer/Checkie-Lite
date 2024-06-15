@@ -33,7 +33,6 @@ internal class SearchUiStateMapper(
     private fun createFilters(state: SearchState): ImmutableList<Filter> {
         return listOfNotNull(
             createTagFilter(state),
-            createRatingFilter(state),
             createSortFilter(state),
         ).toPersistentList()
     }

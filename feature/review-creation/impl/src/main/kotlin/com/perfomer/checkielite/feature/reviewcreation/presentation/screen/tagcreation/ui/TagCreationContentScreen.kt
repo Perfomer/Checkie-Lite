@@ -1,7 +1,10 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.focus.FocusRequester
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
@@ -13,6 +16,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcr
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowErrorToast
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowTagDeleteConfirmationDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnBackPress
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnDeleteConfirmClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnDeleteTagClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnDoneClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnTagValueInput
@@ -28,17 +32,24 @@ internal class TagCreationContentScreen(
 
         BackHandlerWithLifecycle { accept(OnBackPress) }
 
+        var isConfirmDeleteDialogShown by remember { mutableStateOf(false) }
+
         EffectHandler { effect ->
             when (effect) {
                 is ShowErrorToast.DeletionFailed -> Unit // todo
                 is ShowErrorToast.SavingFailed -> Unit // todo
-                is ShowTagDeleteConfirmationDialog -> Unit // todo
+                is ShowTagDeleteConfirmationDialog -> isConfirmDeleteDialogShown = true
                 is FocusTagValueField -> focusRequester.requestFocus()
             }
         }
 
         TagCreationScreen(
             state = state,
+
+            isConfirmDeleteDialogShown = isConfirmDeleteDialogShown,
+            onDeleteDialogDismiss = { isConfirmDeleteDialogShown = false },
+            onDeleteDialogConfirm = acceptable(OnDeleteConfirmClick),
+
             focusRequester = focusRequester,
             onTagValueInput = acceptable(::OnTagValueInput),
             onDoneClick = acceptable(OnDoneClick),

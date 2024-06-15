@@ -32,11 +32,18 @@ import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui.state.TagCreationUiState
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui.widget.ConfirmDeleteDialog
 
 @Composable
 internal fun TagCreationScreen(
     state: TagCreationUiState,
-    focusRequester: FocusRequester,
+
+    isConfirmDeleteDialogShown: Boolean = false,
+    onDeleteDialogDismiss: () -> Unit = {},
+    onDeleteDialogConfirm: () -> Unit = {},
+
+    focusRequester: FocusRequester = FocusRequester(),
+
     onTagValueInput: (value: String) -> Unit = {},
     onDoneClick: () -> Unit = {},
     onDeleteTagClick: () -> Unit = {},
@@ -88,6 +95,13 @@ internal fun TagCreationScreen(
             onClick = onDoneClick,
         )
     }
+
+    if (isConfirmDeleteDialogShown) {
+        ConfirmDeleteDialog(
+            onDismiss = onDeleteDialogDismiss,
+            onConfirm = onDeleteDialogConfirm
+        )
+    }
 }
 
 @Composable
@@ -113,7 +127,7 @@ private fun Header(title: String) {
 @ScreenPreview
 @Composable
 private fun SearchScreenPreview() = CheckieLiteTheme {
-    TagCreationScreen(state = mockUiState, focusRequester = FocusRequester())
+    TagCreationScreen(state = mockUiState)
 }
 
 internal val mockUiState = TagCreationUiState(

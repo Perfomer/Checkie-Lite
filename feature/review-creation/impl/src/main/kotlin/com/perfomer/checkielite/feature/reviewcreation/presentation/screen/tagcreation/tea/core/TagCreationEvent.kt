@@ -51,6 +51,8 @@ internal sealed interface TagCreationUiEvent : TagCreationEvent {
     data object OnDoneClick : TagCreationUiEvent
 
     data object OnDeleteTagClick : TagCreationUiEvent
+
+    data object OnDeleteConfirmClick : TagCreationUiEvent
 }
 
 internal sealed interface TagCreationNavigationEvent : TagCreationEvent

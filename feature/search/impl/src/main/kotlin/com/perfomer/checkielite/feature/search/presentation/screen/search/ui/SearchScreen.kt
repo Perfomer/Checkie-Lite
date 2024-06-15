@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.ui
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -304,7 +305,7 @@ private fun FiltersRow(
     ) {
         val filtersScrollState = rememberScrollState()
         val appliedFiltersCount = remember(filters) { filters.count { it.isApplied } }
-        val showAllFiltersChip = appliedFiltersCount > 1
+        val showAllFiltersChip = appliedFiltersCount > 1 && false // todo remove false after adding one more filter
 
         if (showAllFiltersChip) {
             Spacer(Modifier.width(20.dp))
@@ -472,6 +473,7 @@ private fun FilterChip(
                 onClick = onClick,
                 onLongClick = onLongClick,
             )
+            .animateContentSize()
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

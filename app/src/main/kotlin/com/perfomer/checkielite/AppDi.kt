@@ -10,10 +10,13 @@ import com.perfomer.checkielite.feature.reviewdetails.reviewDetailsModules
 import com.perfomer.checkielite.feature.search.searchModules
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.voyager.navigationModule
+import com.perfomer.checkielite.update.AppUpdateManager
+import com.perfomer.checkielite.update.RuStoreUpdateManager
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import ru.rustore.sdk.appupdate.manager.factory.RuStoreAppUpdateManagerFactory
 
 val checkieLiteModules: List<Module>
     get() = appModule + coreModules + commonModules + featureModules
@@ -21,6 +24,9 @@ val checkieLiteModules: List<Module>
 private val appModule = module {
     singleOf(::SingleActivityHolder)
     singleOf(::AndroidExternalRouter) bind ExternalRouter::class
+
+    single { RuStoreAppUpdateManagerFactory.create(get()) }
+    singleOf(::RuStoreUpdateManager) bind AppUpdateManager::class
 }
 
 private val coreModules

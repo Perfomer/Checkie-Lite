@@ -5,6 +5,7 @@ activity = "1.9.0"
 agp = "8.3.1" # todo: 8.4.0 version fails R8 minification
 androidx-core = "1.13.1"
 appcompat = "1.7.0"
+rustore-appupdate = "3.0.0"
 coil = "2.6.0"
 compose-bom = "2024.06.00"
 compressor = "3.0.1"
@@ -31,6 +32,7 @@ activity = { module = "androidx.activity:activity", version.ref = "activity" }
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx-core = { module = "androidx.core:core", version.ref = "androidx-core" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+rustore-appupdate = { module = "ru.rustore.sdk:appupdate", version.ref = "rustore-appupdate" }
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 compose-material3 = { module = "androidx.compose.material3:material3" }

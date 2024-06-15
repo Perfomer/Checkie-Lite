@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
@@ -25,10 +26,15 @@ import com.perfomer.checkielite.feature.main.navigation.MainScreenProvider
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.HiddenScreen
 import com.perfomer.checkielite.navigation.voyager.impl.NavigatorHolder
+import com.perfomer.checkielite.update.AppUpdateManager
+import com.perfomer.checkielite.update.updateIfAvailable
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator as VoyagerBottomSheetNavigator
 
 class AppActivity : AppCompatActivity() {
+
+    private val updateManager: AppUpdateManager by inject()
 
     private val singleActivityHolder: SingleActivityHolder by inject()
     private val externalRouter: AndroidExternalRouter by inject()
@@ -55,6 +61,8 @@ class AppActivity : AppCompatActivity() {
 
             ClearFocusOnKeyboardClose()
         }
+
+        checkForUpdates()
     }
 
     @Composable
@@ -104,5 +112,9 @@ class AppActivity : AppCompatActivity() {
      */
     private fun initExternalRouter() {
         externalRouter.register()
+    }
+
+    private fun checkForUpdates() = lifecycleScope.launch {
+        updateManager.updateIfAvailable()
     }
 }

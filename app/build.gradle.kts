@@ -50,6 +50,7 @@ dependencies {
 
     implementation(project(":common:android"))
     implementation(project(":common:navigation:voyager"))
+    implementation(project(":common:pure"))
     implementation(project(":common:ui"))
 
     implementation(libs.activity)
@@ -58,6 +59,7 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.core)
     implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.rustore.appupdate)
     implementation(libs.voyager.bottomsheet)
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.transitions)

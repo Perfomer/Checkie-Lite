@@ -185,6 +185,7 @@ private fun Empty(
                 modifier = Modifier
                     .imePadding()
                     .padding(contentPadding)
+                    .padding(horizontal = 32.dp)
             )
         }
         SearchContentType.CURRENT_SEARCH -> {
@@ -195,6 +196,7 @@ private fun Empty(
                 modifier = Modifier
                     .imePadding()
                     .padding(contentPadding)
+                    .padding(horizontal = 32.dp)
             )
         }
     }

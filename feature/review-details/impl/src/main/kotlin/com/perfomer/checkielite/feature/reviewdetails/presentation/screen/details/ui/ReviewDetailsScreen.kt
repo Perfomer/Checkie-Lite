@@ -4,9 +4,7 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -26,17 +24,13 @@ import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.RecommendedReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiState
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ConfirmDeleteDialog
-import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsAdvantagesHeader
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsAppBar
-import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsCommentHeader
-import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsDisadvantagesHeader
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsHeader
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsImage
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsInfo
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsRecommendations
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsTags
-import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsTextCard
-import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsTextEmptyCard
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsText
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
@@ -136,43 +130,17 @@ private fun Content(
             onPageChange = onPageChange
         )
 
-        Spacer(Modifier.height(24.dp))
-
         ReviewDetailsInfo(
             date = state.date,
             rating = state.rating,
         )
 
-        Spacer(Modifier.height(24.dp))
-
-        if (state.comment != null) {
-            ReviewDetailsTextCard(
-                text = state.comment,
-                header = { ReviewDetailsCommentHeader() },
-            )
-        } else {
-            ReviewDetailsTextEmptyCard(
-                onClick = onEmptyReviewTextClick,
-            )
-        }
-
-        if (state.advantages != null) {
-            Spacer(Modifier.height(16.dp))
-
-            ReviewDetailsTextCard(
-                text = state.advantages,
-                header = { ReviewDetailsAdvantagesHeader() },
-            )
-        }
-
-        if (state.disadvantages != null) {
-            Spacer(Modifier.height(16.dp))
-
-            ReviewDetailsTextCard(
-                text = state.disadvantages,
-                header = { ReviewDetailsDisadvantagesHeader() },
-            )
-        }
+        ReviewDetailsText(
+            comment = state.comment,
+            advantages = state.advantages,
+            disadvantages = state.disadvantages,
+            onEmptyCommentClick = onEmptyReviewTextClick,
+        )
 
         ReviewDetailsTags(
             tags = state.tags,

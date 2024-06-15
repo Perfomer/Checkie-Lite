@@ -48,8 +48,8 @@ internal class CheckieLocalDataSourceImpl(
         return databaseDataSource.clearRecentSearches()
     }
 
-    override suspend fun searchBrands(searchQuery: String): List<String> {
-        return databaseDataSource.searchBrands(searchQuery)
+    override suspend fun getAllBrands(): List<String> {
+        return databaseDataSource.getAllBrands()
     }
 
     override suspend fun createReview(

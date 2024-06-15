@@ -35,7 +35,7 @@ internal interface DatabaseDataSource {
 
     suspend fun clearRecentSearches()
 
-    suspend fun searchBrands(searchQuery: String): List<String>
+    suspend fun getAllBrands(): List<String>
 
     suspend fun createReview(
         id: String,
@@ -131,8 +131,8 @@ internal class DatabaseDataSourceImpl(
         recentSearchDao.trimRecentSearches(leaveLatest = 0)
     }
 
-    override suspend fun searchBrands(searchQuery: String): List<String> {
-        return reviewDao.searchBrands(searchQuery)
+    override suspend fun getAllBrands(): List<String> {
+        return reviewDao.getAllBrands()
     }
 
     override suspend fun createReview(

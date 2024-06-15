@@ -19,7 +19,7 @@ interface CheckieLocalDataSource {
 
     suspend fun clearRecentSearches()
 
-    suspend fun searchBrands(searchQuery: String): List<String>
+    suspend fun getAllBrands(): List<String>
 
     suspend fun createReview(
         productName: String,

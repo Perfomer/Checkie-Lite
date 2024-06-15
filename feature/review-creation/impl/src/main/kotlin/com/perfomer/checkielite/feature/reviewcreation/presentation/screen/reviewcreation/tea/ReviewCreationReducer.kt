@@ -81,11 +81,11 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 when (val mode = state.mode) {
                     is ReviewCreationMode.Creation -> commands(
                         CreateReview(
-                            productName = state.reviewDetails.productName,
-                            productBrand = state.reviewDetails.productBrand,
-                            comment = state.reviewDetails.comment,
-                            advantages = state.reviewDetails.advantages,
-                            disadvantages = state.reviewDetails.disadvantages,
+                            productName = state.reviewDetails.productName.trim(),
+                            productBrand = state.reviewDetails.productBrand.trim(),
+                            comment = state.reviewDetails.comment.trim(),
+                            advantages = state.reviewDetails.advantages.trim(),
+                            disadvantages = state.reviewDetails.disadvantages.trim(),
                             rating = state.reviewDetails.rating,
                             pictures = state.reviewDetails.pictures,
                             tagsIds = state.reviewDetails.tagsIds,
@@ -95,11 +95,11 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                     is ReviewCreationMode.Modification -> commands(
                         UpdateReview(
                             reviewId = mode.reviewId,
-                            productName = state.reviewDetails.productName,
-                            productBrand = state.reviewDetails.productBrand,
-                            comment = state.reviewDetails.comment,
-                            advantages = state.reviewDetails.advantages,
-                            disadvantages = state.reviewDetails.disadvantages,
+                            productName = state.reviewDetails.productName.trim(),
+                            productBrand = state.reviewDetails.productBrand.trim(),
+                            comment = state.reviewDetails.comment.trim(),
+                            advantages = state.reviewDetails.advantages.trim(),
+                            disadvantages = state.reviewDetails.disadvantages.trim(),
                             rating = state.reviewDetails.rating,
                             pictures = state.reviewDetails.pictures,
                             tagsIds = state.reviewDetails.tagsIds,

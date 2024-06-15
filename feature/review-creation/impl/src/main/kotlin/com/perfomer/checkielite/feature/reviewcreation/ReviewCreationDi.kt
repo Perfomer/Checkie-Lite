@@ -29,6 +29,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcr
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.actor.LoadTagActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.actor.TagCreationNavigationActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.actor.UpdateTagActor
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.actor.ValidateTagNameActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui.TagCreationContentScreen
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui.state.TagCreationUiStateMapper
 import org.koin.core.module.dsl.factoryOf
@@ -89,6 +90,7 @@ internal fun createTagCreationStore(
         actors = setOf(
             TagCreationNavigationActor(router),
             LoadTagActor(localDataSource),
+            ValidateTagNameActor(localDataSource),
             CreateTagActor(localDataSource),
             DeleteTagActor(localDataSource),
             UpdateTagActor(localDataSource),

@@ -31,6 +31,11 @@ internal sealed interface TagCreationEvent {
         data object Succeed : TagDeletion
         class Failed(val throwable: Throwable) : TagDeletion
     }
+
+    sealed interface TagNameValidated : TagCreationEvent {
+        data object Valid : TagNameValidated
+        class Invalid(val reason: TagInvalidReason) : TagNameValidated
+    }
 }
 
 internal sealed interface TagCreationUiEvent : TagCreationEvent {

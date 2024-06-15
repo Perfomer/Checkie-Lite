@@ -27,6 +27,7 @@
     <string name="tagcreation_description">Type the tag name</string>
     <string name="tagcreation_tag_name">Tag name</string>
     <string name="tagcreation_tag_name_error_empty">Tag name should not be empty</string>
+    <string name="tagcreation_tag_name_error_too_long">Tag name is too long</string>
     <string name="tagcreation_tag_name_error_exists">Tag with this name already exists</string>
     <string name="tagcreation_delete">Delete</string>
     <string name="tagcreation_dialog_confirmdelete_title">Do you really want to delete the tag?</string>

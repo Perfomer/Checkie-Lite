@@ -8,6 +8,8 @@ internal sealed interface TagCreationCommand {
 
     class LoadTag(val id: String) : TagCreationCommand
 
+    class ValidateTagName(val id: String?, val name: String) :TagCreationCommand
+
     class CreateTag(
         val value: String,
         val emoji: String?,

@@ -29,6 +29,7 @@
 
     <string name="tagcreation_tag_name_error_empty">Название тега нужно заполнить</string>
     <string name="tagcreation_tag_name_error_exists">Такой тег уже существует</string>
+    <string name="tagcreation_tag_name_error_too_long">Название тега слишком длинное</string>
 
     <string name="tagcreation_delete">Удалить</string>
     <string name="tagcreation_dialog_confirmdelete_title">Вы действительно хотите удалить тег?</string>

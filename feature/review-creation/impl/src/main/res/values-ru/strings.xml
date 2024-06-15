@@ -35,4 +35,6 @@
     <string name="tagcreation_dialog_confirmdelete_title">Вы действительно хотите удалить тег?</string>
     <string name="tagcreation_dialog_confirmdelete_message">Этот тег будет навсегда удалён из всех продуктов, где он указан.</string>
     <string name="tagcreation_dialog_confirmdelete_confirm">Удалить</string>
+    <string name="tagcreation_error_save">Не удалось сохранить тег</string>
+    <string name="tagcreation_error_delete">Не удалось удалить тег</string>
 </resources>

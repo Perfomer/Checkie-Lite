@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +20,9 @@ import cafe.adriel.voyager.transitions.SlideTransition
 import com.perfomer.checkielite.common.android.SingleActivityHolder
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.NavBarScrim
 import com.perfomer.checkielite.common.ui.cui.widget.sheet.CuiDragAnchor
+import com.perfomer.checkielite.common.ui.cui.widget.toast.CuiToastHost
+import com.perfomer.checkielite.common.ui.cui.widget.toast.CuiToastHostState
+import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalCuiToastHostState
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
@@ -50,13 +55,19 @@ class AppActivity : AppCompatActivity() {
         enableEdgeToEdge()
 
         setContent {
+            val toastHostState = remember { CuiToastHostState() }
+
             TransparentSystemBars()
 
             CheckieLiteTheme {
-                UsualNavigator()
-                BottomSheetNavigator()
-                OverlayNavigator()
-                NavBarScrim()
+                CompositionLocalProvider(LocalCuiToastHostState provides toastHostState) {
+                    UsualNavigator()
+                    BottomSheetNavigator()
+                    OverlayNavigator()
+
+                    NavBarScrim()
+                    CuiToastHost()
+                }
             }
 
             ClearFocusOnKeyboardClose()

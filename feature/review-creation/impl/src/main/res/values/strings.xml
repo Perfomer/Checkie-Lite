@@ -33,4 +33,6 @@
     <string name="tagcreation_dialog_confirmdelete_title">Do you really want to delete the tag?</string>
     <string name="tagcreation_dialog_confirmdelete_message">This tag will be permanently removed from all products where it is listed.</string>
     <string name="tagcreation_dialog_confirmdelete_confirm">Delete</string>
+    <string name="tagcreation_error_save">Failed to save tag</string>
+    <string name="tagcreation_error_delete">Failed to delete tag</string>
 </resources>

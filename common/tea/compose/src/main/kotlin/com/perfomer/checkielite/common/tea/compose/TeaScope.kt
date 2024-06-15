@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.common.tea.compose
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
@@ -37,7 +36,6 @@ private class TeaScopeImpl<in UiEvent : Any, out Effect : Any>(
 	}
 
 	@Composable
-	@SuppressLint("ComposableNaming")
 	override fun EffectHandler(renderer: suspend CoroutineScope.(Effect) -> Unit) {
 		store.effects.collectOnLifecycle(lifecycleState, renderer)
 	}

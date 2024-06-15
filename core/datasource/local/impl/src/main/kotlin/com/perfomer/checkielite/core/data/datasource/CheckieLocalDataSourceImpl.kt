@@ -165,6 +165,10 @@ internal class CheckieLocalDataSourceImpl(
         return databaseDataSource.getTag(id)
     }
 
+    override suspend fun getTagByName(name: String): CheckieTag? {
+        return databaseDataSource.getTagByName(name)
+    }
+
     override suspend fun createTag(value: String, emoji: String?): CheckieTag {
         val tag = CheckieTag(id = randomUuid(), value = value, emoji = emoji)
         databaseDataSource.createTag(tag)

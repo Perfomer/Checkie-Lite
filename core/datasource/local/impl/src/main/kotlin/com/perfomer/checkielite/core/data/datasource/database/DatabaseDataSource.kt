@@ -83,6 +83,8 @@ internal interface DatabaseDataSource {
 
     suspend fun getTag(id: String): CheckieTag
 
+    suspend fun getTagByName(name: String): CheckieTag?
+
     suspend fun createTag(tag: CheckieTag)
 
     suspend fun updateTag(tag: CheckieTag)
@@ -246,6 +248,10 @@ internal class DatabaseDataSourceImpl(
 
     override suspend fun getTag(id: String): CheckieTag {
         return tagDao.getTag(id).toDomain()
+    }
+
+    override suspend fun getTagByName(name: String): CheckieTag? {
+        return tagDao.getTagByName(name)?.toDomain()
     }
 
     override suspend fun createTag(tag: CheckieTag) {

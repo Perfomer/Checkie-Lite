@@ -55,6 +55,8 @@ interface CheckieLocalDataSource {
 
     suspend fun getTag(id: String): CheckieTag
 
+    suspend fun getTagByName(name: String) : CheckieTag?
+
     suspend fun createTag(value: String, emoji: String?): CheckieTag
 
     suspend fun updateTag(id: String, value: String, emoji: String?): CheckieTag

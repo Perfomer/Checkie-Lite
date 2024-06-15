@@ -14,6 +14,9 @@ internal interface CheckieTagDao {
     @Query("SELECT * FROM CheckieTagDb WHERE id = :id")
     suspend fun getTag(id: String) : CheckieTagDb
 
+    @Query("SELECT * FROM CheckieTagDb WHERE value = :name")
+    suspend fun getTagByName(name: String) : CheckieTagDb?
+
     @Query(
         """
             SELECT * FROM CheckieTagDb tag

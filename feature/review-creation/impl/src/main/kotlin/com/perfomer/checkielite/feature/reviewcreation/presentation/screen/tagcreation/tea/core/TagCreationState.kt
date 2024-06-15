@@ -11,7 +11,7 @@ internal data class TagCreationState(
     val emojis: PersistentList<Pair<CheckieEmojiCategory, PersistentList<CheckieEmoji>>> = emptyPersistentList(),
 
     val tagValue: String = "",
-    val tagValueError: TagValueFieldError? = null,
+    val tagInvalidReason: TagInvalidReason? = null,
     val selectedEmoji: String? = null,
     val hasEmoji: Boolean = false,
 
@@ -21,7 +21,8 @@ internal data class TagCreationState(
     val isBusy: Boolean = isDeleting || isSaving
 }
 
-internal enum class TagValueFieldError {
-    FIELD_IS_EMPTY,
+internal enum class TagInvalidReason {
+    NAME_IS_EMPTY,
+    NAME_IS_TOO_LONG,
     NAME_CONFLICT,
 }

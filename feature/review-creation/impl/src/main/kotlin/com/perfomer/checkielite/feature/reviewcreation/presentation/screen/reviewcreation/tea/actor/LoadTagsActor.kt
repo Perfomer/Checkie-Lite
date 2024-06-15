@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor
 
+import com.perfomer.checkielite.common.pure.search.smartFilterByQuery
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
@@ -25,7 +26,10 @@ internal class LoadTagsActor(
     }
 
     private fun handleCommand(command: LoadTags): Flow<TagsLoading> {
-        return localDataSource.getTags(command.searchQuery)
+        return localDataSource.getTags()
+            .map { tags ->
+                tags.smartFilterByQuery(command.searchQuery) { listOf(value to 1F) }
+            }
             .map(TagsLoading::Succeed)
             .onCatchReturn(TagsLoading::Failed)
             .startWith(TagsLoading.Started)

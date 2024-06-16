@@ -42,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -57,6 +58,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.input.DecimalInputFilter
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ProductInfoPageUiState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -68,12 +70,15 @@ internal fun ProductInfoScreen(
     scrollState: ScrollState = rememberScrollState(),
     onProductNameTextInput: (String) -> Unit = {},
     onBrandTextInput: (String) -> Unit = {},
+    onPriceTextInput: (String) -> Unit = {},
+    onPriceCurrencyClick: () -> Unit = {},
     onAddPictureClick: () -> Unit = {},
     onPictureClick: (position: Int) -> Unit = {},
     onPictureDeleteClick: (position: Int) -> Unit = {},
     onPictureReorder: (from: Int, to: Int) -> Unit = { _, _ -> },
 ) {
     val brandNameInteractionSource = remember { MutableInteractionSource() }
+    val decimalInputFilter = remember { DecimalInputFilter() }
 
     Column(
         modifier = Modifier
@@ -125,6 +130,25 @@ internal fun ProductInfoScreen(
             )
         }
 
+        Spacer(Modifier.height(4.dp))
+
+        CuiOutlinedField(
+            text = state.price,
+            title = stringResource(R.string.reviewcreation_productinfo_field_price),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next,
+                capitalization = KeyboardCapitalization.Sentences,
+                keyboardType = KeyboardType.Decimal,
+            ),
+            onValueChange = { value -> onPriceTextInput(decimalInputFilter.cleanUp(value)) },
+            trailingIcon = {
+                Currency(
+                    currencySymbol = state.priceCurrency,
+                    onClick = onPriceCurrencyClick,
+                )
+            },
+        )
+
         Spacer(Modifier.height(12.dp))
 
         PicturesFlowRow(
@@ -133,6 +157,28 @@ internal fun ProductInfoScreen(
             onPictureClick = onPictureClick,
             onPictureDeleteClick = onPictureDeleteClick,
             onPictureReorder = onPictureReorder,
+        )
+    }
+}
+
+@Composable
+private fun Currency(
+    currencySymbol: String,
+    onClick: () -> Unit,
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .size(32.dp)
+            .offset(x = (-6).dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(LocalCuiPalette.current.BackgroundSecondary)
+            .clickable(onClick = onClick)
+    ) {
+        Text(
+            text = currencySymbol,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Medium,
         )
     }
 }
@@ -275,6 +321,8 @@ private fun ProductInfoScreenPreview() {
             productNameErrorText = null,
             brand = "Abobov",
             brandSuggestions = emptyPersistentList(),
+            price = "0",
+            priceCurrency = "RUB",
             picturesUri = persistentListOf(
                 "https://habrastorage.org/r/w780/getpro/habr/upload_files/746/2ab/27c/7462ab27cca552ce31ee9cba01387692.jpeg",
                 "https://images.unsplash.com/photo-1483129804960-cb1964499894?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",

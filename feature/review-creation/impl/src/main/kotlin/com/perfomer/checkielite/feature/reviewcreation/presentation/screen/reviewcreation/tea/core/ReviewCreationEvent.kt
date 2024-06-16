@@ -48,6 +48,10 @@ internal sealed interface ReviewCreationUiEvent : ReviewCreationEvent {
 
         class OnPictureDeleteClick(val position: Int) : ProductInfo
 
+        class OnPriceTextInput(val text: String) : ProductInfo
+
+        data object OnPriceCurrencyClick : ProductInfo
+
         class OnPictureReorder(val fromPosition: Int, val toPosition: Int) : ProductInfo
     }
 

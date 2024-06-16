@@ -2,6 +2,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.entity.price.CheckiePrice
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagCreationMode
 
@@ -14,6 +15,7 @@ internal sealed interface ReviewCreationCommand {
     class CreateReview(
         val productName: String,
         val productBrand: String?,
+        val price: CheckiePrice?,
         val rating: Int,
         val pictures: List<CheckiePicture>,
         val tagsIds: Set<String>,
@@ -26,6 +28,7 @@ internal sealed interface ReviewCreationCommand {
         val reviewId: String,
         val productName: String,
         val productBrand: String?,
+        val price: CheckiePrice?,
         val rating: Int,
         val pictures: List<CheckiePicture>,
         val tagsIds: Set<String>,

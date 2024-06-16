@@ -6,6 +6,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.perfomer.checkielite.core.data.datasource.database.room.converter.BigDecimalConverter
 import com.perfomer.checkielite.core.data.datasource.database.room.converter.DateConverter
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckiePictureDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieReviewDao
@@ -18,7 +19,7 @@ import com.perfomer.checkielite.core.data.datasource.database.room.entity.Checki
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.RecentSearchedReviewDb
 
 @Database(
-    version = 4,
+    version = 5,
     entities = [
         CheckieReviewDb::class,
         CheckieReviewPictureDb::class,
@@ -30,9 +31,10 @@ import com.perfomer.checkielite.core.data.datasource.database.room.entity.Recent
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
         AutoMigration(from = 3, to = 4),
+        AutoMigration(from = 4, to = 5),
     ],
 )
-@TypeConverters(DateConverter::class)
+@TypeConverters(DateConverter::class, BigDecimalConverter::class)
 internal abstract class CheckieDatabase : RoomDatabase() {
 
     abstract fun reviewDao(): CheckieReviewDao

@@ -3,6 +3,8 @@ package com.perfomer.checkielite.core.data.datasource
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
+import com.perfomer.checkielite.core.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.entity.price.CheckiePrice
 import kotlinx.coroutines.flow.Flow
 
 interface CheckieLocalDataSource {
@@ -24,6 +26,7 @@ interface CheckieLocalDataSource {
     suspend fun createReview(
         productName: String,
         productBrand: String?,
+        price: CheckiePrice?,
         rating: Int,
         pictures: List<CheckiePicture>,
         tagsIds: Set<String>,
@@ -36,6 +39,7 @@ interface CheckieLocalDataSource {
         reviewId: String,
         productName: String,
         productBrand: String?,
+        price: CheckiePrice?,
         rating: Int,
         pictures: List<CheckiePicture>,
         tagsIds: Set<String>,
@@ -55,11 +59,13 @@ interface CheckieLocalDataSource {
 
     suspend fun getTag(id: String): CheckieTag
 
-    suspend fun getTagByName(name: String) : CheckieTag?
+    suspend fun getTagByName(name: String): CheckieTag?
 
     suspend fun createTag(value: String, emoji: String?): CheckieTag
 
     suspend fun updateTag(id: String, value: String, emoji: String?): CheckieTag
 
     suspend fun deleteTag(id: String)
+
+    suspend fun getCurrencies(): List<CheckieCurrency>
 }

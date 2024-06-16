@@ -9,6 +9,7 @@ internal fun CheckieReviewDetailedDb.toDomain(): CheckieReview {
         id = review.id,
         productName = review.productName,
         productBrand = review.brandName,
+        price = review.price?.toDomain(),
         rating = review.rating,
         pictures = picturesUri
             .sortedWith(compareBy({ it.order }, { it.id }))
@@ -28,6 +29,7 @@ internal fun CheckieReview.toDb(): CheckieReviewDb {
         id = id,
         productName = productName,
         brandName = productBrand?.takeIf { it.isNotBlank() },
+        price = price?.toDb(),
         rating = rating,
         reviewText = comment?.takeIf { it.isNotBlank() },
         advantages = advantages?.takeIf { it.isNotBlank() },

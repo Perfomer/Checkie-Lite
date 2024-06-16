@@ -14,6 +14,8 @@ import com.perfomer.checkielite.core.data.datasource.database.room.mapper.toDoma
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
+import com.perfomer.checkielite.core.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.entity.price.CheckiePrice
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.Date
@@ -41,6 +43,7 @@ internal interface DatabaseDataSource {
         id: String,
         productName: String,
         productBrand: String?,
+        price: CheckiePrice?,
         rating: Int,
         pictures: List<CheckiePicture>,
         tagsIds: Set<String>,
@@ -56,6 +59,7 @@ internal interface DatabaseDataSource {
         id: String,
         productName: String,
         productBrand: String?,
+        price: CheckiePrice?,
         rating: Int,
         deletedPictures: List<CheckiePicture>,
         actualPictures: List<CheckiePicture>,
@@ -90,6 +94,8 @@ internal interface DatabaseDataSource {
     suspend fun updateTag(tag: CheckieTag)
 
     suspend fun deleteTag(tagId: String)
+
+    suspend fun getUsedCurrencies(): List<CheckieCurrency>
 }
 
 internal class DatabaseDataSourceImpl(
@@ -139,6 +145,7 @@ internal class DatabaseDataSourceImpl(
         id: String,
         productName: String,
         productBrand: String?,
+        price: CheckiePrice?,
         rating: Int,
         pictures: List<CheckiePicture>,
         tagsIds: Set<String>,
@@ -153,6 +160,7 @@ internal class DatabaseDataSourceImpl(
             id = id,
             productName = productName,
             brandName = productBrand?.takeIf { it.isNotBlank() },
+            price = price?.toDb(),
             rating = rating,
             reviewText = comment?.takeIf { it.isNotBlank() },
             advantages = advantages?.takeIf { it.isNotBlank() },
@@ -176,6 +184,7 @@ internal class DatabaseDataSourceImpl(
         id: String,
         productName: String,
         productBrand: String?,
+        price: CheckiePrice?,
         rating: Int,
         deletedPictures: List<CheckiePicture>,
         actualPictures: List<CheckiePicture>,
@@ -191,6 +200,7 @@ internal class DatabaseDataSourceImpl(
             id = id,
             productName = productName,
             brandName = productBrand?.takeIf { it.isNotBlank() },
+            price = price?.toDb(),
             rating = rating,
             reviewText = comment?.takeIf { it.isNotBlank() },
             advantages = advantages?.takeIf { it.isNotBlank() },
@@ -264,6 +274,12 @@ internal class DatabaseDataSourceImpl(
 
     override suspend fun deleteTag(tagId: String) {
         tagDao.deleteTag(tagId)
+    }
+
+    override suspend fun getUsedCurrencies(): List<CheckieCurrency> {
+        return reviewDao.getUsedCurrencies()
+            .filterNotNull()
+            .map(::CheckieCurrency)
     }
 
     private companion object {

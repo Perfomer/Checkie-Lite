@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.core.data.datasource
 
 import android.content.Context
+import android.icu.util.Currency
 import androidx.core.content.ContextCompat
 import com.perfomer.checkielite.common.pure.util.forEachAsync
 import com.perfomer.checkielite.common.pure.util.randomUuid
@@ -10,10 +11,13 @@ import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
+import com.perfomer.checkielite.core.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.entity.price.CheckiePrice
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import java.util.Date
+import java.util.Locale
 
 internal class CheckieLocalDataSourceImpl(
     private val context: Context,
@@ -55,6 +59,7 @@ internal class CheckieLocalDataSourceImpl(
     override suspend fun createReview(
         productName: String,
         productBrand: String?,
+        price: CheckiePrice?,
         rating: Int,
         pictures: List<CheckiePicture>,
         tagsIds: Set<String>,
@@ -72,6 +77,7 @@ internal class CheckieLocalDataSourceImpl(
             id = reviewId,
             productName = productName,
             productBrand = productBrand,
+            price = price,
             rating = rating,
             comment = comment,
             advantages = advantages,
@@ -92,6 +98,7 @@ internal class CheckieLocalDataSourceImpl(
         reviewId: String,
         productName: String,
         productBrand: String?,
+        price: CheckiePrice?,
         rating: Int,
         pictures: List<CheckiePicture>,
         tagsIds: Set<String>,
@@ -128,6 +135,7 @@ internal class CheckieLocalDataSourceImpl(
             id = reviewId,
             productName = productName,
             productBrand = productBrand,
+            price = price,
             rating = rating,
             deletedPictures = deletedPictures,
             actualPictures = actualPictures,
@@ -185,5 +193,14 @@ internal class CheckieLocalDataSourceImpl(
 
     override suspend fun deleteTag(id: String) {
         databaseDataSource.deleteTag(id)
+    }
+
+    override suspend fun getCurrencies(): List<CheckieCurrency> {
+        val usedCurrencies = databaseDataSource.getUsedCurrencies()
+        val localCurrencies = Currency.getAvailableCurrencyCodes(Locale.getDefault(), Date()).map(::CheckieCurrency)
+        val allCurrencies = Currency.getAvailableCurrencies().map { currency -> CheckieCurrency(currency.currencyCode) }
+
+        return (usedCurrencies + localCurrencies + allCurrencies)
+            .distinctBy { it.code }
     }
 }

@@ -1,11 +1,13 @@
 package com.perfomer.checkielite.core.entity
 
+import com.perfomer.checkielite.core.entity.price.CheckiePrice
 import java.util.Date
 
 data class CheckieReview(
     val id: String,
     val productName: String,
     val productBrand: String?,
+    val price: CheckiePrice?,
     val rating: Int,
     val pictures: List<CheckiePicture>,
     val tags: List<CheckieTag>,

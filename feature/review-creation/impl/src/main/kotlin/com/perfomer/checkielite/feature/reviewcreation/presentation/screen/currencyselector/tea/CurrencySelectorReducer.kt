@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.curr
 import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.common.pure.state.toLoading
+import com.perfomer.checkielite.common.pure.util.remove
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorCommand
@@ -48,7 +49,17 @@ internal class CurrencySelectorReducer : DslReducer<CurrencySelectorCommand, Cur
 
     private fun reduceTagLoading(event: CurrenciesLoading) = when (event) {
         is CurrenciesLoading.Started -> state { copy(allCurrencies = allCurrencies.toLoading()) }
-        is CurrenciesLoading.Succeed -> state { copy(allCurrencies = Lce.Content(event.currencies)) }
+        is CurrenciesLoading.Succeed -> {
+            state {
+                copy(
+                    allCurrencies = Lce.Content(
+                        buildList {
+                            add(selectedCurrency)
+                            addAll(event.currencies.remove(selectedCurrency))
+                        })
+                )
+            }
+        }
         is CurrenciesLoading.Failed -> commands(Exit)
     }
 

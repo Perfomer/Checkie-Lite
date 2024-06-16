@@ -22,6 +22,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.curre
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationReducer
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationStore
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.CreateReviewActor
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.LoadLatestCurrencyActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.LoadReviewActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.LoadTagsActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.ReviewCreationNavigationActor
@@ -86,6 +87,7 @@ internal fun createReviewCreationStore(
             LoadTagsActor(localDataSource),
             SearchBrandsActor(localDataSource),
             WarmUpCurrenciesActor(localDataSource),
+            LoadLatestCurrencyActor(localDataSource),
         )
     )
 }

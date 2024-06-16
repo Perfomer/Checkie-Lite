@@ -8,6 +8,7 @@ import com.perfomer.checkielite.common.pure.util.randomUuid
 import com.perfomer.checkielite.common.pure.util.toArrayList
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
 import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
+import com.perfomer.checkielite.core.data.datasource.preferences.PreferencesDataSource
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
@@ -27,6 +28,7 @@ internal class CheckieLocalDataSourceImpl(
     private val context: Context,
     private val databaseDataSource: DatabaseDataSource,
     private val fileDataSource: FileDataSource,
+    private val preferencesDataSource: PreferencesDataSource,
 ) : CheckieLocalDataSource {
 
     @Volatile
@@ -97,6 +99,10 @@ internal class CheckieLocalDataSourceImpl(
             isSyncing = isNeedSync,
         )
 
+        if (price != null) {
+            preferencesDataSource.setLatestCurrency(price.currency)
+        }
+
         if (isNeedSync) {
             ContextCompat.startForegroundService(context, CompressorService.createIntent(context, reviewId, actualPictures.toArrayList()))
         }
@@ -155,6 +161,10 @@ internal class CheckieLocalDataSourceImpl(
             modificationDate = Date(),
             isSyncing = isNeedSync,
         )
+
+        if (price != null && initialReview.price?.currency != price.currency) {
+            preferencesDataSource.setLatestCurrency(price.currency)
+        }
 
         if (isNeedSync) {
             ContextCompat.startForegroundService(context, CompressorService.createIntent(context, reviewId, actualAddedPictures.toArrayList()))
@@ -222,5 +232,9 @@ internal class CheckieLocalDataSourceImpl(
 
         return (usedCurrencies + localCurrencies + allCurrencies.orEmpty())
             .distinctBy { it.code }
+    }
+
+    override suspend fun getLatestCurrency(): CheckieCurrency? {
+        return preferencesDataSource.getLatestCurrency()
     }
 }

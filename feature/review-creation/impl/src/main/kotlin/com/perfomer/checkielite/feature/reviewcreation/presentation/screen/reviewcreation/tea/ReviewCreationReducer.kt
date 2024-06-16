@@ -11,6 +11,7 @@ import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreation
 import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.CreateReview
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadLatestCurrency
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadTags
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.SearchBrands
@@ -23,6 +24,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.BrandsSearchComplete
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.Initialize
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.LatestCurrencyLoading
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.ReviewLoading
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.ReviewSaving
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.TagsLoading
@@ -46,6 +48,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.ReviewInfo
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.Tags
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewDetails
+import com.perfomer.checkielite.feature.reviewcreation.presentation.util.LocalCheckieCurrency
 import kotlinx.collections.immutable.toPersistentList
 import java.math.BigDecimal
 
@@ -60,6 +63,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         is ReviewLoading -> reduceReviewLoading(event)
         is ReviewSaving -> reduceReviewsCreation(event)
         is TagsLoading -> reduceTagsLoading(event)
+        is LatestCurrencyLoading -> reduceLatestCurrencyLoading(event)
 
         is BrandsSearchComplete -> state { copy(suggestedBrands = event.brands) }
     }
@@ -67,6 +71,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     private fun reduceInitialize() {
         val modificationMode = state.mode as? ReviewCreationMode.Modification
         if (modificationMode != null) commands(LoadReview(modificationMode.reviewId))
+        else commands(LoadLatestCurrency)
 
         commands(LoadTags(), WarmUpCurrencies)
     }
@@ -315,5 +320,14 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         is TagsLoading.Started -> Unit
         is TagsLoading.Succeed -> state { copy(tagsSuggestions = event.tags) }
         is TagsLoading.Failed -> Unit
+    }
+
+    private fun reduceLatestCurrencyLoading(event: LatestCurrencyLoading) = when (event) {
+        is LatestCurrencyLoading.Started -> Unit
+        is LatestCurrencyLoading.Succeed -> {
+            val currency = event.currency ?: LocalCheckieCurrency.getLocalCurrency()
+            state { copy(reviewDetails = reviewDetails.copy(priceCurrency = currency)) }
+        }
+        is LatestCurrencyLoading.Failed -> Unit
     }
 }

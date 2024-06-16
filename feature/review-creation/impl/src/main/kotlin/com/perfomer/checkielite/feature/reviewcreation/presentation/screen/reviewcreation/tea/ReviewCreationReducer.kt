@@ -75,7 +75,10 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
 
             if (next != null) {
                 val isProductNameValid = state.reviewDetails.productName.isNotBlank()
-                if (isProductNameValid) state { copy(currentPage = next) }
+                if (isProductNameValid) {
+                    state { copy(currentPage = next) }
+                    effects(CloseKeyboard)
+                }
                 state { copy(isProductNameValid = isProductNameValid) }
             } else {
                 when (val mode = state.mode) {
@@ -106,7 +109,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                         )
                     )
                 }
-
+                effects(CloseKeyboard)
             }
         }
 

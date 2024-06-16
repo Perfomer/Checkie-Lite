@@ -13,9 +13,13 @@ import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.core.entity.price.CheckieCurrency
 import com.perfomer.checkielite.core.entity.price.CheckiePrice
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import java.util.Date
 import java.util.Locale
 
@@ -24,6 +28,10 @@ internal class CheckieLocalDataSourceImpl(
     private val databaseDataSource: DatabaseDataSource,
     private val fileDataSource: FileDataSource,
 ) : CheckieLocalDataSource {
+
+    @Volatile
+    private var allCurrencies: List<CheckieCurrency>? = null
+    private val mutex = Mutex()
 
     override fun getReviews(): Flow<List<CheckieReview>> {
         return databaseDataSource.getReviews()
@@ -195,12 +203,24 @@ internal class CheckieLocalDataSourceImpl(
         databaseDataSource.deleteTag(id)
     }
 
-    override suspend fun getCurrencies(): List<CheckieCurrency> {
+    override suspend fun getCurrencies(): List<CheckieCurrency> = mutex.withLock {
         val usedCurrencies = databaseDataSource.getUsedCurrencies()
         val localCurrencies = Currency.getAvailableCurrencyCodes(Locale.getDefault(), Date()).map(::CheckieCurrency)
-        val allCurrencies = Currency.getAvailableCurrencies().map { currency -> CheckieCurrency(currency.currencyCode) }
 
-        return (usedCurrencies + localCurrencies + allCurrencies)
+        if (allCurrencies == null) {
+            allCurrencies = withContext(Dispatchers.IO) {
+                Locale.getAvailableLocales()
+                    .asSequence()
+                    .flatMap { locale -> Currency.getAvailableCurrencyCodes(locale, Date()).orEmpty().toList() }
+                    .distinct()
+                    .map(Currency::getInstance)
+                    .sortedWith(compareBy({ it.symbol.length > 1 }, { it.displayName }))
+                    .map { currency -> CheckieCurrency(currency.currencyCode) }
+                    .toList()
+            }
+        }
+
+        return (usedCurrencies + localCurrencies + allCurrencies.orEmpty())
             .distinctBy { it.code }
     }
 }

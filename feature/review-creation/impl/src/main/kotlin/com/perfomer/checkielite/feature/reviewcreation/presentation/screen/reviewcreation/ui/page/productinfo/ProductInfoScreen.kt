@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -58,6 +59,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.ui.widget.CurrencySymbol
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.input.DecimalInputFilter
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ProductInfoPageUiState
 import kotlinx.collections.immutable.ImmutableList
@@ -142,9 +144,12 @@ internal fun ProductInfoScreen(
             ),
             onValueChange = { value -> onPriceTextInput(decimalInputFilter.cleanUp(value)) },
             trailingIcon = {
-                Currency(
+                CurrencySymbol(
                     currencySymbol = state.priceCurrency,
                     onClick = onPriceCurrencyClick,
+                    modifier = Modifier
+                        .requiredWidthIn(min = 156.dp)
+                        .offset(x = (-14).dp)
                 )
             },
         )
@@ -157,28 +162,6 @@ internal fun ProductInfoScreen(
             onPictureClick = onPictureClick,
             onPictureDeleteClick = onPictureDeleteClick,
             onPictureReorder = onPictureReorder,
-        )
-    }
-}
-
-@Composable
-private fun Currency(
-    currencySymbol: String,
-    onClick: () -> Unit,
-) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .size(32.dp)
-            .offset(x = (-6).dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(LocalCuiPalette.current.BackgroundSecondary)
-            .clickable(onClick = onClick)
-    ) {
-        Text(
-            text = currencySymbol,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium,
         )
     }
 }

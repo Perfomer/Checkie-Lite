@@ -2,6 +2,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
+import com.perfomer.checkielite.core.entity.price.CheckieCurrency
 
 internal sealed interface ReviewCreationEvent {
 
@@ -87,4 +88,6 @@ internal sealed interface ReviewCreationNavigationEvent : ReviewCreationEvent {
     class OnTagCreated(val tagId: String) : ReviewCreationNavigationEvent
 
     class OnTagDeleted(val tagId: String) : ReviewCreationNavigationEvent
+
+    class OnCurrencySelected(val currency: CheckieCurrency) : ReviewCreationNavigationEvent
 }

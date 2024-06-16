@@ -9,6 +9,9 @@ import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.core.navigation.api.Router
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryParams
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryScreenProvider
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorParams
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorResult
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorScreenProvider
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationScreenProvider
@@ -22,6 +25,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenPhotoPicker
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenTagCreation
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnCurrencySelected
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnTagCreated
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnTagDeleted
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -37,6 +41,7 @@ internal class ReviewCreationNavigationActor(
 
     private val galleryScreenProvider: GalleryScreenProvider,
     private val tagCreationScreenProvider: TagCreationScreenProvider,
+    private val currencySelectorScreenProvider: CurrencySelectorScreenProvider,
 ) : Actor<ReviewCreationCommand, ReviewCreationEvent> {
 
     override fun act(commands: Flow<ReviewCreationCommand>): Flow<ReviewCreationEvent> {
@@ -84,6 +89,14 @@ internal class ReviewCreationNavigationActor(
     }
 
     private suspend fun openCurrencySelector(command: OpenCurrencySelector): ReviewCreationNavigationEvent? {
-        return null
+        val params = CurrencySelectorParams(command.currency)
+        val result = router.navigateForResult<CurrencySelectorResult>(
+            screen = currencySelectorScreenProvider(params),
+            mode = DestinationMode.BOTTOM_SHEET,
+        )
+
+        return when (result) {
+            is CurrencySelectorResult.Selected -> OnCurrencySelected(result.currency)
+        }
     }
 }

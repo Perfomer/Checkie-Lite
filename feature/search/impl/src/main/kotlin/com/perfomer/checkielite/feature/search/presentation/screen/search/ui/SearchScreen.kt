@@ -65,6 +65,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiOutlineButton
 import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewHorizontalItem
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
+import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField2
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.HorizontalScrim
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
@@ -76,7 +77,6 @@ import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.sta
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.FilterType
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.SearchContentType
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.SearchUiState
-import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.widget.OutlinedSearchField
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -209,7 +209,7 @@ private fun SearchField(
     onSearchQueryClearClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    OutlinedSearchField(
+    CuiOutlinedField2(
         value = searchQuery,
         onValueChange = onSearchQueryInput,
         placeholder = stringResource(CommonString.common_search),

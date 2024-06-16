@@ -48,6 +48,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
+import com.perfomer.checkielite.common.ui.cui.widget.scrim.verticalScrimBrush
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -126,9 +127,9 @@ internal fun TagsScreen(
 
         Box(
             modifier = Modifier
+                .align(Alignment.TopCenter)
                 .padding(horizontal = 24.dp)
                 .padding(top = 56.dp)
-                .align(Alignment.TopCenter)
         ) {
             SearchField(
                 searchQuery = state.searchQuery,
@@ -142,11 +143,12 @@ internal fun TagsScreen(
 
         Box(
             modifier = Modifier
+                .align(Alignment.BottomCenter)
                 .imePadding()
+                .background(verticalScrimBrush())
                 .navigationBarsPadding()
                 .padding(horizontal = 24.dp)
                 .padding(bottom = 24.dp)
-                .align(Alignment.BottomCenter)
         ) {
             CuiPrimaryButton(
                 text = stringResource(CommonString.common_done),

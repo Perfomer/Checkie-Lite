@@ -59,4 +59,17 @@ internal interface CheckieReviewDao {
         """
     )
     suspend fun dropSyncing()
+
+    @Query(
+        """
+            SELECT DISTINCT currencyCode FROM CheckieReviewDb
+            WHERE currencyCode IS NOT NULL
+            ORDER BY 
+                (
+                    SELECT COUNT(currencyCode) FROM CheckieReviewDb
+                    WHERE currencyCode IS NOT NULL
+                ) DESC
+        """
+    )
+    suspend fun getUsedCurrencies(): List<String>
 }

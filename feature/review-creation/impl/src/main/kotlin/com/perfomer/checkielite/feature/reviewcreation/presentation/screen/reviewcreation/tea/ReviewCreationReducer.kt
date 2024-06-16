@@ -5,6 +5,7 @@ import com.perfomer.checkielite.common.pure.util.previous
 import com.perfomer.checkielite.common.pure.util.swap
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.core.entity.CheckiePicture
+import com.perfomer.checkielite.core.entity.price.CheckiePrice
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagCreationMode
@@ -89,6 +90,9 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                         CreateReview(
                             productName = state.reviewDetails.productName.trim(),
                             productBrand = state.reviewDetails.productBrand.trim(),
+                            price = state.reviewDetails.price?.let { value ->
+                                CheckiePrice(value = value, currency = state.reviewDetails.priceCurrency)
+                            },
                             comment = state.reviewDetails.comment.trim(),
                             advantages = state.reviewDetails.advantages.trim(),
                             disadvantages = state.reviewDetails.disadvantages.trim(),
@@ -103,6 +107,9 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                             reviewId = mode.reviewId,
                             productName = state.reviewDetails.productName.trim(),
                             productBrand = state.reviewDetails.productBrand.trim(),
+                            price = state.reviewDetails.price?.let { value ->
+                                CheckiePrice(value = value, currency = state.reviewDetails.priceCurrency)
+                            },
                             comment = state.reviewDetails.comment.trim(),
                             advantages = state.reviewDetails.advantages.trim(),
                             disadvantages = state.reviewDetails.disadvantages.trim(),

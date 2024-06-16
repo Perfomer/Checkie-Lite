@@ -28,6 +28,7 @@ internal class CreateReviewActor(
             localDataSource.createReview(
                 productName = command.productName,
                 productBrand = command.productBrand,
+                price = command.price,
                 rating = command.rating,
                 pictures = command.pictures,
                 tagsIds = command.tagsIds,

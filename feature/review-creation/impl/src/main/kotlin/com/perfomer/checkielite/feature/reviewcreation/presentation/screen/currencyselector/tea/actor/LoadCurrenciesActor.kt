@@ -5,7 +5,6 @@ import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
-import com.perfomer.checkielite.core.entity.price.CheckieCurrency
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorCommand.LoadCurrencies
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorEvent
@@ -27,7 +26,7 @@ internal class LoadCurrenciesActor(
     }
 
     private fun handleCommand(command: LoadCurrencies): Flow<CurrencySelectorEvent> {
-        return flowBy { emptyList<CheckieCurrency>() }
+        return flowBy { localDataSource.getCurrencies() }
             .map(CurrenciesLoading::Succeed)
             .onCatchReturn(CurrenciesLoading::Failed)
             .startWith(CurrenciesLoading.Started)

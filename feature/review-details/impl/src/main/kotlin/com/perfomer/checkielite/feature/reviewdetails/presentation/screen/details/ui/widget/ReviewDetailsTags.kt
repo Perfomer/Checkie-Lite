@@ -1,7 +1,6 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
@@ -24,7 +23,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-internal fun ColumnScope.ReviewDetailsTags(
+internal fun ReviewDetailsTags(
     tags: ImmutableList<Tag>,
     onTagClick: (tagId: String) -> Unit,
 ) {

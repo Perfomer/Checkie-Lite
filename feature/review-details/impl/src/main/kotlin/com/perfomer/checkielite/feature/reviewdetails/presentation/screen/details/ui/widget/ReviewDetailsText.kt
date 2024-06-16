@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget
 
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -8,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun ColumnScope.ReviewDetailsText(
+internal fun ReviewDetailsText(
     comment: String?,
     advantages: String?,
     disadvantages: String?,

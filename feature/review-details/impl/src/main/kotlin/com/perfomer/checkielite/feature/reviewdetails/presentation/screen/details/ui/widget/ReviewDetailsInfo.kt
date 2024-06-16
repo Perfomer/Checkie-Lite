@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget
 
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,7 +18,7 @@ import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.feature.reviewdetails.R
 
 @Composable
-internal fun ColumnScope.ReviewDetailsInfo(
+internal fun ReviewDetailsInfo(
     date: String,
     rating: Int,
 ) {

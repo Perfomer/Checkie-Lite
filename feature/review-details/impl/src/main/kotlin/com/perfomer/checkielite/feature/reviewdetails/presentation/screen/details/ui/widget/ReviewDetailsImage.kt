@@ -1,11 +1,10 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget
 
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-internal fun ColumnScope.ReviewDetailsImage(
+internal fun ReviewDetailsImage(
     picturesUri: ImmutableList<String>,
     currentPicturePosition: Int,
     onEmptyImageClick: () -> Unit,

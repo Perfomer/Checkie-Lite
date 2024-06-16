@@ -10,6 +10,7 @@
     <string name="common_search">Search</string>
     <string name="common_view_all">View all</string>
     <string name="common_done">Done</string>
+    <string name="common_nothing_found">Nothing found.</string>
 
     <string name="common_error_title">Oops!..</string>
     <string name="common_error_message">Something went wrong</string>

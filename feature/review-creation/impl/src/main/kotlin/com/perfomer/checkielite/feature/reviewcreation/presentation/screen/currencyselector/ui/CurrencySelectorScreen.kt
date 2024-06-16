@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.feature.search.presentation.screen.tags.ui
+package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -6,22 +6,25 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -29,42 +32,42 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.modifier.conditional
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
-import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
-import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField2
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.verticalScrimBrush
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.pxToDp
-import com.perfomer.checkielite.feature.search.R
-import com.perfomer.checkielite.feature.search.presentation.screen.tags.ui.state.TagsUiState
+import com.perfomer.checkielite.feature.reviewcreation.R
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.ui.state.CurrencyItem
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.ui.state.CurrencySelectorUiState
 import kotlinx.coroutines.delay
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
-internal fun TagsScreen(
-    state: TagsUiState,
-    onTagClick: (tagId: String) -> Unit = {},
-    onSearchQueryInput: (query: String) -> Unit = {},
+internal fun CurrencySelectorScreen(
+    state: CurrencySelectorUiState,
+
+    onSearchQueryInput: (value: String) -> Unit = {},
     onSearchQueryClearClick: () -> Unit = {},
+    onCurrencyClick: (code: String) -> Unit = {},
     onDoneClick: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
@@ -89,37 +92,41 @@ internal fun TagsScreen(
                 .conditional(shouldAnimateContentSize) { animateContentSize() }
         ) {
             Column {
-                val scrollState = rememberScrollState()
+                val scrollState = rememberLazyListState()
                 val shouldShowDivider by remember { derivedStateOf { scrollState.canScrollBackward } }
 
                 Header(showDivider = shouldShowDivider)
 
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                LazyColumn(
+                    state = scrollState,
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .verticalScroll(scrollState)
                         .navigationBarsPadding()
                         .padding(horizontal = 24.dp)
                         .padding(bottom = 120.dp, top = 88.dp)
                 ) {
-                    if (state.tags.isEmpty()) {
-                        Text(
-                            text = stringResource(CommonString.common_nothing_found),
-                            color = LocalCuiPalette.current.TextSecondary,
-                        )
-                    }
-
-                    for (tag in state.tags) {
-                        key(tag.tagId) {
-                            CuiChip(
-                                onClick = { onTagClick(tag.tagId) },
-                                leadingIcon = tag.emoji?.let { { Text(it) } },
-                                style = if (tag.isSelected) CuiChipStyle.selected() else CuiChipStyle.default(),
-                                content = { Text(tag.text) },
+                    if (state.currencies.isEmpty()) {
+                        item(
+                            contentType = "empty",
+                            key = "empty",
+                        ) {
+                            Text(
+                                text = stringResource(CommonString.common_nothing_found),
+                                color = LocalCuiPalette.current.TextSecondary,
                             )
                         }
+                    }
+
+                    items(
+                        items = state.currencies,
+                        contentType = { "currency" },
+                        key = { it.code }
+                    ) { currency ->
+                        Currency(
+                            currency = currency,
+                            onClick = { onCurrencyClick(currency.code) },
+                        )
                     }
                 }
             }
@@ -159,6 +166,59 @@ internal fun TagsScreen(
 }
 
 @Composable
+private fun Currency(
+    currency: CurrencyItem,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 24.dp, vertical = 14.dp)
+    ) {
+        CurrencyCode(currencySymbol = currency.symbol)
+
+        Spacer(Modifier.width(16.dp))
+
+        Text(
+            text = currency.displayName,
+            fontSize = 16.sp,
+            fontWeight = if (currency.isSelected) FontWeight.Bold else FontWeight.Normal,
+            modifier = Modifier.weight(1F)
+        )
+
+        AnimatedVisibility(visible = currency.isSelected) {
+            Icon(
+                painter = painterResource(CommonDrawable.ic_tick),
+                contentDescription = null,
+                tint = LocalCuiPalette.current.IconPositive,
+                modifier = Modifier.size(16.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun CurrencyCode(currencySymbol: String) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(LocalCuiPalette.current.BackgroundSecondary)
+            .padding(horizontal = 11.5.dp, vertical = 10.5.dp)
+    ) {
+        Text(
+            text = currencySymbol,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Medium,
+        )
+    }
+}
+
+@Composable
 private fun Header(
     showDivider: Boolean,
 ) {
@@ -170,10 +230,10 @@ private fun Header(
             .padding(bottom = 16.dp)
     ) {
         Text(
-            text = stringResource(R.string.search_tags_title),
+            text = stringResource(R.string.reviewcreation_currencyselector_title),
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.weight(1F)
+            modifier = Modifier.fillMaxWidth()
         )
     }
 
@@ -222,11 +282,11 @@ private fun SearchField(
 
 @ScreenPreview
 @Composable
-private fun TagsScreenPreview() = CheckieLiteTheme {
-    TagsScreen(state = mockUiState)
+private fun CurrencySelectorScreenPreview() = CheckieLiteTheme {
+    CurrencySelectorScreen(state = mockUiState)
 }
 
-internal val mockUiState = TagsUiState(
-    tags = emptyList(),
+internal val mockUiState = CurrencySelectorUiState(
     searchQuery = "",
+    currencies = emptyPersistentList(),
 )

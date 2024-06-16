@@ -5,7 +5,6 @@ import com.perfomer.checkielite.common.pure.util.previous
 import com.perfomer.checkielite.common.pure.util.swap
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.core.entity.CheckiePicture
-import com.perfomer.checkielite.core.entity.price.CheckiePrice
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagCreationMode
@@ -32,6 +31,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenPhotoPicker
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenTagCreation
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnCurrencySelected
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnPhotosPick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnTagCreated
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnTagDeleted
@@ -146,7 +146,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             else commands(SearchBrands(event.text.trim()))
         }
         is ProductInfo.OnPriceTextInput -> reduceOnPriceTextInput(event)
-        is ProductInfo.OnPriceCurrencyClick -> commands(OpenCurrencySelector(state.currentCurrency))
+        is ProductInfo.OnPriceCurrencyClick -> commands(OpenCurrencySelector(state.reviewDetails.priceCurrency))
         is ProductInfo.OnAddPictureClick -> commands(OpenPhotoPicker)
         is ProductInfo.OnPictureClick -> {
             effects(CloseKeyboard)
@@ -176,13 +176,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
 
     private fun reduceOnPriceTextInput(event: ProductInfo.OnPriceTextInput) {
         val input = event.text
-        val value by lazy { BigDecimal(input.dropLastWhile { it == '.' }) }
-
-        val price = if (input.isNotEmpty()) {
-            state.reviewDetails.price?.copy(value = value) ?: CheckiePrice(currency = state.defaultCurrency, value = value)
-        } else {
-            null
-        }
+        val price = if (input.isNotEmpty()) BigDecimal(input.dropLastWhile { it == '.' }) else null
 
         state {
             copy(
@@ -261,6 +255,9 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 )
             }
         }
+        is OnCurrencySelected -> {
+            state { copy(reviewDetails = reviewDetails.copy(priceCurrency = event.currency)) }
+        }
     }
 
     private fun reduceReviewsCreation(event: ReviewSaving) = when (event) {
@@ -290,7 +287,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 isReviewLoading = false,
                 initialReviewDetails = initialReviewDetails,
                 reviewDetails = initialReviewDetails,
-                currentPriceFieldValue = initialReviewDetails.price?.value?.toString().orEmpty(),
+                currentPriceFieldValue = initialReviewDetails.price?.toString().orEmpty(),
             )
         }
 

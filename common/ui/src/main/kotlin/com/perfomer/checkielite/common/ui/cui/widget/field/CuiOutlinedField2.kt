@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.feature.search.presentation.screen.search.ui.widget
+package com.perfomer.checkielite.common.ui.cui.widget.field
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
@@ -36,12 +36,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedFieldDefaults
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-internal fun OutlinedSearchField(
+fun CuiOutlinedField2(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,

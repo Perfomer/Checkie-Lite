@@ -23,5 +23,4 @@
     <string name="search_sort_least_rated">Least rated first</string>
 
     <string name="search_tags_title">Tags</string>
-    <string name="search_tags_empty">Nothing found.</string>
 </resources>

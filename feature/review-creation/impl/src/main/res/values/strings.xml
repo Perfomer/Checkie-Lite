@@ -23,6 +23,8 @@
     <string name="reviewcreation_tags_create_tag_generic">Create tag</string>
     <string name="reviewcreation_tags_create_tag_specific">Create \"%s\"</string>
 
+    <string name="reviewcreation_currencyselector_title">Currencies</string>
+
     <string name="tagcreation_creation_title">New tag</string>
     <string name="tagcreation_modification_title">Edit tag</string>
     <string name="tagcreation_description">Type the tag name</string>

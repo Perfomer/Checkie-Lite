@@ -9,8 +9,16 @@ import com.perfomer.checkielite.feature.reviewcreation.data.repository.CheckieEm
 import com.perfomer.checkielite.feature.reviewcreation.domain.repository.CheckieEmojiRepository
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationScreenProvider
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorParams
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorScreenProvider
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationScreenProvider
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.CurrencySelectorReducer
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.CurrencySelectorStore
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.actor.CurrencySelectorNavigationActor
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.actor.LoadCurrenciesActor
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.ui.CurrencySelectorContentScreen
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.ui.state.CurrencySelectorUiStateMapper
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationReducer
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationStore
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.CreateReviewActor
@@ -50,6 +58,9 @@ private val presentationModule = module {
 
     factoryOf(::createTagCreationStore)
     factory { TagCreationScreenProvider(::TagCreationContentScreen) }
+
+    factoryOf(::createCurrencySelectorStore)
+    factory { CurrencySelectorScreenProvider(::CurrencySelectorContentScreen) }
 }
 
 internal fun createReviewCreationStore(
@@ -60,13 +71,14 @@ internal fun createReviewCreationStore(
     externalRouter: ExternalRouter,
     galleryScreenProvider: GalleryScreenProvider,
     tagCreationScreenProvider: TagCreationScreenProvider,
+    currencySelectorScreenProvider: CurrencySelectorScreenProvider,
 ): ReviewCreationStore {
     return ReviewCreationStore(
         params = params,
         reducer = ReviewCreationReducer(),
         uiStateMapper = ReviewCreationUiStateMapper(context),
         actors = setOf(
-            ReviewCreationNavigationActor(router, externalRouter, galleryScreenProvider, tagCreationScreenProvider),
+            ReviewCreationNavigationActor(router, externalRouter, galleryScreenProvider, tagCreationScreenProvider, currencySelectorScreenProvider),
             CreateReviewActor(localDataSource),
             UpdateReviewActor(localDataSource),
             LoadReviewActor(localDataSource),
@@ -95,6 +107,23 @@ internal fun createTagCreationStore(
             DeleteTagActor(localDataSource),
             UpdateTagActor(localDataSource),
             LoadEmojisActor(emojiRepository),
+        )
+    )
+}
+
+internal fun createCurrencySelectorStore(
+    context: Context,
+    params: CurrencySelectorParams,
+    localDataSource: CheckieLocalDataSource,
+    router: Router,
+): CurrencySelectorStore {
+    return CurrencySelectorStore(
+        params = params,
+        reducer = CurrencySelectorReducer(),
+        uiStateMapper = CurrencySelectorUiStateMapper(context),
+        actors = setOf(
+            CurrencySelectorNavigationActor(router),
+            LoadCurrenciesActor(localDataSource),
         )
     )
 }

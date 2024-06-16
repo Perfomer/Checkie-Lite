@@ -18,6 +18,8 @@
     <string name="reviewcreation_dialog_confirmexit_message">Если вы выйдете, то изменения не будут сохранены.</string>
     <string name="reviewcreation_dialog_confirmexit_confirm">Выйти</string>
 
+    <string name="reviewcreation_currencyselector_title">Валюты</string>
+
     <string name="reviewcreation_tags_title">Теги</string>
     <string name="reviewcreation_tags_field_search">Введите тег…</string>
     <string name="reviewcreation_tags_create_tag_generic">Создать тег</string>

@@ -3,7 +3,6 @@ package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detai
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,7 +28,7 @@ import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 import com.perfomer.checkielite.feature.reviewdetails.R
 
 @Composable
-internal fun ColumnScope.ReviewDetailsTextCard(
+internal fun ReviewDetailsTextCard(
     text: String,
     header: @Composable () -> Unit,
 ) {
@@ -53,7 +52,7 @@ internal fun ColumnScope.ReviewDetailsTextCard(
 }
 
 @Composable
-internal fun ColumnScope.ReviewDetailsTextEmptyCard(
+internal fun ReviewDetailsTextEmptyCard(
     onClick: () -> Unit
 ) {
     OutlinedCard(

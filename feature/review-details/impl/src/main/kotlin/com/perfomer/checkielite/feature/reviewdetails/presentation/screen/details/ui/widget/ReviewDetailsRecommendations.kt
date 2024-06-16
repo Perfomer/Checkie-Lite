@@ -1,7 +1,6 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +20,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-internal fun ColumnScope.ReviewDetailsRecommendations(
+internal fun ReviewDetailsRecommendations(
     recommendations: ImmutableList<RecommendedReview>,
     onRecommendationClick: (recommendedReviewId: String) -> Unit,
 ) {

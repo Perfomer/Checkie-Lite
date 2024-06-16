@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget
 
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,7 +12,7 @@ import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 
 @Composable
-internal fun ColumnScope.ReviewDetailsHeader(
+internal fun ReviewDetailsHeader(
     productName: String,
     brandName: String?,
 ) {

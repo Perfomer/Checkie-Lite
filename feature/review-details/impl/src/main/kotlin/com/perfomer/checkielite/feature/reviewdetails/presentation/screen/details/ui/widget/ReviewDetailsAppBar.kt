@@ -1,11 +1,13 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -14,6 +16,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.gigamole.composefadingedges.FadingEdgesGravity
+import com.gigamole.composefadingedges.horizontalFadingEdges
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
 import com.perfomer.checkielite.common.ui.cui.modifier.debounced
@@ -26,7 +33,8 @@ import com.perfomer.checkielite.feature.reviewdetails.R
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 internal fun ReviewDetailsAppBar(
-    scrollState: ScrollableState,
+    scrollState: LazyListState,
+    title: String?,
     isMenuAvailable: Boolean,
     onNavigationIconClick: () -> Unit,
     onEditClick: () -> Unit,
@@ -35,7 +43,21 @@ internal fun ReviewDetailsAppBar(
     val shouldShowDivider by remember { derivedStateOf { scrollState.canScrollBackward } }
 
     TopAppBar(
-        title = {},
+        title = {
+            val shouldShowTitle by remember { derivedStateOf { scrollState.firstVisibleItemIndex > 0 } }
+            AnimatedVisibility(visible = shouldShowTitle && title != null, enter = fadeIn(tween(250)), exit = fadeOut(tween(250))) {
+                Text(
+                    text = title!!,
+                    fontSize = 18.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Visible,
+                    softWrap = false,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalFadingEdges(gravity = FadingEdgesGravity.End, length = 40.dp)
+                )
+            }
+        },
         navigationIcon = {
             CuiToolbarNavigationIcon(
                 painter = painterResource(CommonDrawable.ic_arrow_back),

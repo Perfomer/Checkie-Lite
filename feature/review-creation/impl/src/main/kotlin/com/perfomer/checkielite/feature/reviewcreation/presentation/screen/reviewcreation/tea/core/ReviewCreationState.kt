@@ -3,8 +3,11 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieTag
+import com.perfomer.checkielite.core.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.entity.price.CheckiePrice
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
+import com.perfomer.checkielite.feature.reviewcreation.presentation.util.LocalCheckieCurrency
 import kotlinx.collections.immutable.PersistentList
 
 internal data class ReviewCreationState(
@@ -14,6 +17,9 @@ internal data class ReviewCreationState(
     val initialReviewDetails: ReviewDetails = ReviewDetails(),
     val reviewDetails: ReviewDetails = initialReviewDetails,
     val isProductNameValid: Boolean = true,
+
+    val currentPriceFieldValue: String = reviewDetails.price?.value?.toString().orEmpty(),
+    val defaultCurrency: CheckieCurrency = LocalCheckieCurrency.getLocalCurrency(),
 
     val tagsSearchQuery: String = "",
     val tagsSuggestions: List<CheckieTag> = emptyList(),
@@ -25,11 +31,15 @@ internal data class ReviewCreationState(
 
     val isSavingInProgress: Boolean = false,
     val isSavingFailed: Boolean = false,
-)
+) {
+    val currentCurrency: CheckieCurrency
+        get() = reviewDetails.price?.currency ?: defaultCurrency
+}
 
 internal data class ReviewDetails(
     val productName: String = "",
     val productBrand: String = "",
+    val price: CheckiePrice? = null,
     val pictures: PersistentList<CheckiePicture> = emptyPersistentList(),
 
     val tagsIds: Set<String> = emptySet(),

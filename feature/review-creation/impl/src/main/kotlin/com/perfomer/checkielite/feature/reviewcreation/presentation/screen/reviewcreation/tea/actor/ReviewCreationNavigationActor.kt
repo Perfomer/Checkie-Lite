@@ -17,6 +17,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.Exit
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.ExitWithResult
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenCurrencySelector
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenGallery
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenPhotoPicker
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenTagCreation
@@ -55,6 +56,7 @@ internal class ReviewCreationNavigationActor(
             )
 
             is OpenTagCreation -> return openTagCreation(command)
+            is OpenCurrencySelector -> return openCurrencySelector(command)
         }
 
         return null
@@ -79,5 +81,9 @@ internal class ReviewCreationNavigationActor(
             is TagCreationResult.Modified -> null
             is TagCreationResult.Deleted -> OnTagDeleted(result.tagId)
         }
+    }
+
+    private suspend fun openCurrencySelector(command: OpenCurrencySelector): ReviewCreationNavigationEvent? {
+        return null
     }
 }

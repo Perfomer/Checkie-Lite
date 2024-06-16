@@ -152,6 +152,8 @@ internal val mockUiState = ReviewCreationUiState(
         productNameErrorText = null,
         brand = "",
         brandSuggestions = emptyPersistentList(),
+        price = "0",
+        priceCurrency = "RUB",
         picturesUri = emptyPersistentList(),
     ),
     tagsState = TagsPageUiState(

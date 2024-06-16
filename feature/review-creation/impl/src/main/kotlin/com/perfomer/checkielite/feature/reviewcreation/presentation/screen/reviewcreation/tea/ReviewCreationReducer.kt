@@ -5,6 +5,7 @@ import com.perfomer.checkielite.common.pure.util.previous
 import com.perfomer.checkielite.common.pure.util.swap
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.core.entity.CheckiePicture
+import com.perfomer.checkielite.core.entity.price.CheckiePrice
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagCreationMode
@@ -26,6 +27,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.TagsLoading
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.Exit
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.ExitWithResult
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenCurrencySelector
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenGallery
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenPhotoPicker
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenTagCreation
@@ -43,6 +45,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.Tags
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewDetails
 import kotlinx.collections.immutable.toPersistentList
+import java.math.BigDecimal
 
 internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewCreationEffect, ReviewCreationEvent, ReviewCreationState>() {
 
@@ -112,7 +115,6 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 effects(CloseKeyboard)
             }
         }
-
         is OnBackPress -> {
             when {
                 state.isReviewLoadingFailed || state.isSavingFailed -> commands(Exit)
@@ -130,10 +132,8 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                     }
                 }
             }
-
             Unit
         }
-
         is OnConfirmExitClick -> commands(Exit)
     }
 
@@ -145,9 +145,9 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             if (event.text.isBlank()) state { copy(suggestedBrands = emptyList()) }
             else commands(SearchBrands(event.text.trim()))
         }
-
+        is ProductInfo.OnPriceTextInput -> reduceOnPriceTextInput(event)
+        is ProductInfo.OnPriceCurrencyClick -> commands(OpenCurrencySelector(state.currentCurrency))
         is ProductInfo.OnAddPictureClick -> commands(OpenPhotoPicker)
-
         is ProductInfo.OnPictureClick -> {
             effects(CloseKeyboard)
 
@@ -158,7 +158,6 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 )
             )
         }
-
         is ProductInfo.OnPictureDeleteClick -> state {
             copy(
                 reviewDetails = reviewDetails.copy(
@@ -166,12 +165,29 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 ),
             )
         }
-
         is ProductInfo.OnPictureReorder -> state {
             copy(
                 reviewDetails = reviewDetails.copy(
                     pictures = reviewDetails.pictures.swap(event.fromPosition, event.toPosition).toPersistentList(),
                 ),
+            )
+        }
+    }
+
+    private fun reduceOnPriceTextInput(event: ProductInfo.OnPriceTextInput) {
+        val input = event.text
+        val value by lazy { BigDecimal(input.dropLastWhile { it == '.' }) }
+
+        val price = if (input.isNotEmpty()) {
+            state.reviewDetails.price?.copy(value = value) ?: CheckiePrice(currency = state.defaultCurrency, value = value)
+        } else {
+            null
+        }
+
+        state {
+            copy(
+                currentPriceFieldValue = input,
+                reviewDetails = reviewDetails.copy(price = price),
             )
         }
     }
@@ -274,6 +290,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 isReviewLoading = false,
                 initialReviewDetails = initialReviewDetails,
                 reviewDetails = initialReviewDetails,
+                currentPriceFieldValue = initialReviewDetails.price?.value?.toString().orEmpty(),
             )
         }
 

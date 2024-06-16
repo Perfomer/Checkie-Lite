@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core
 
 import com.perfomer.checkielite.core.entity.CheckiePicture
+import com.perfomer.checkielite.core.entity.price.CheckieCurrency
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagCreationMode
 
@@ -43,6 +44,8 @@ internal sealed interface ReviewCreationNavigationCommand : ReviewCreationComman
     class ExitWithResult(val result: ReviewCreationResult) : ReviewCreationNavigationCommand
 
     data object OpenPhotoPicker : ReviewCreationNavigationCommand
+
+    class OpenCurrencySelector(val currency: CheckieCurrency) : ReviewCreationNavigationCommand
 
     class OpenGallery(
         val picturesUri: List<String>,

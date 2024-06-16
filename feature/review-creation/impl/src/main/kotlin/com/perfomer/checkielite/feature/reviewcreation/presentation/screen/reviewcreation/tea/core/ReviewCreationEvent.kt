@@ -16,6 +16,12 @@ internal sealed interface ReviewCreationEvent {
         class Failed(val error: Throwable) : ReviewLoading
     }
 
+    sealed interface LatestCurrencyLoading : ReviewCreationEvent {
+        data object Started : LatestCurrencyLoading
+        class Succeed(val currency: CheckieCurrency?) : LatestCurrencyLoading
+        class Failed(val error: Throwable) : LatestCurrencyLoading
+    }
+
     sealed interface TagsLoading : ReviewCreationEvent {
         data object Started : TagsLoading
         class Succeed(val tags: List<CheckieTag>) : TagsLoading

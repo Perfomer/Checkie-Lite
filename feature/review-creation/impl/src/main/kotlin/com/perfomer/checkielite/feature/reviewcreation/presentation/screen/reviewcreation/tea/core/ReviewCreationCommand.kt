@@ -38,6 +38,8 @@ internal sealed interface ReviewCreationCommand {
     ) : ReviewCreationCommand
 
     class LoadTags(val searchQuery: String = "") : ReviewCreationCommand
+
+    data object WarmUpCurrencies : ReviewCreationCommand
 }
 
 internal sealed interface ReviewCreationNavigationCommand : ReviewCreationCommand {

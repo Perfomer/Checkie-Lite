@@ -11,16 +11,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -37,14 +39,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.modifier.conditional
@@ -55,10 +55,13 @@ import com.perfomer.checkielite.common.ui.cui.widget.scrim.verticalScrimBrush
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.util.plus
 import com.perfomer.checkielite.common.ui.util.pxToDp
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.ui.state.CurrencyItem
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.ui.state.CurrencySelectorUiState
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.ui.widget.CurrencySymbol
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 
 @Composable
@@ -99,12 +102,8 @@ internal fun CurrencySelectorScreen(
 
                 LazyColumn(
                     state = scrollState,
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .navigationBarsPadding()
-                        .padding(horizontal = 24.dp)
-                        .padding(bottom = 120.dp, top = 88.dp)
+                    contentPadding = PaddingValues(top = 72.dp, bottom = 100.dp) + WindowInsets.navigationBars.asPaddingValues(),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     if (state.currencies.isEmpty()) {
                         item(
@@ -179,9 +178,10 @@ private fun Currency(
             .clickable(onClick = onClick)
             .padding(horizontal = 24.dp, vertical = 14.dp)
     ) {
-        CurrencyCode(currencySymbol = currency.symbol)
-
-        Spacer(Modifier.width(16.dp))
+        CurrencySymbol(
+            currencySymbol = currency.symbol,
+            isSelected = currency.isSelected,
+        )
 
         Text(
             text = currency.displayName,
@@ -198,23 +198,6 @@ private fun Currency(
                 modifier = Modifier.size(16.dp)
             )
         }
-    }
-}
-
-@Composable
-private fun CurrencyCode(currencySymbol: String) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
-            .background(LocalCuiPalette.current.BackgroundSecondary)
-            .padding(horizontal = 11.5.dp, vertical = 10.5.dp)
-    ) {
-        Text(
-            text = currencySymbol,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium,
-        )
     }
 }
 
@@ -288,5 +271,11 @@ private fun CurrencySelectorScreenPreview() = CheckieLiteTheme {
 
 internal val mockUiState = CurrencySelectorUiState(
     searchQuery = "",
-    currencies = emptyPersistentList(),
+    currencies = persistentListOf(
+        CurrencyItem("1", "US Dollar", "$", false),
+        CurrencyItem("2", "US Dollar", "KMF", true),
+        CurrencyItem("3", "US Dollar", "$", false),
+        CurrencyItem("4", "US Dollar", "$", false),
+        CurrencyItem("5", "US Dollar", "KMF", false),
+    ),
 )

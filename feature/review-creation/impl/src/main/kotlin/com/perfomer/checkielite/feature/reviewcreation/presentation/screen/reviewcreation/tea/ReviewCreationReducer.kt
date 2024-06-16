@@ -15,6 +15,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadTags
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.SearchBrands
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.UpdateReview
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.WarmUpCurrencies
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.CloseKeyboard
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowConfirmExitDialog
@@ -67,7 +68,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         val modificationMode = state.mode as? ReviewCreationMode.Modification
         if (modificationMode != null) commands(LoadReview(modificationMode.reviewId))
 
-        commands(LoadTags())
+        commands(LoadTags(), WarmUpCurrencies)
     }
 
     private fun reduceUi(event: ReviewCreationUiEvent) = when (event) {
@@ -153,8 +154,14 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             else commands(SearchBrands(event.text.trim()))
         }
         is ProductInfo.OnPriceTextInput -> reduceOnPriceTextInput(event)
-        is ProductInfo.OnPriceCurrencyClick -> commands(OpenCurrencySelector(state.reviewDetails.priceCurrency))
-        is ProductInfo.OnAddPictureClick -> commands(OpenPhotoPicker)
+        is ProductInfo.OnPriceCurrencyClick -> {
+            effects(CloseKeyboard)
+            commands(OpenCurrencySelector(state.reviewDetails.priceCurrency))
+        }
+        is ProductInfo.OnAddPictureClick -> {
+            effects(CloseKeyboard)
+            commands(OpenPhotoPicker)
+        }
         is ProductInfo.OnPictureClick -> {
             effects(CloseKeyboard)
 

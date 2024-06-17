@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.cui.widget.progress.CuiProgressBar
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
+import com.perfomer.checkielite.common.ui.util.StableInsets
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
@@ -66,6 +67,7 @@ internal fun ProgressAppBar(
                 onBackPress = onBackPress,
             )
         },
+        windowInsets = StableInsets.statusBars(),
         modifier = modifier
     )
 }

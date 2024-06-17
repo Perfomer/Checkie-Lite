@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerScope
@@ -35,6 +34,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.verticalScrimBrush
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.util.stableNavigationBarsPadding
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ProductInfoPageUiState
@@ -94,7 +94,7 @@ internal fun ReviewCreationScreen(
                 .fillMaxWidth()
                 .imePadding()
                 .background(verticalScrimBrush())
-                .navigationBarsPadding()
+                .stableNavigationBarsPadding()
                 .padding(bottom = 20.dp)
                 .padding(horizontal = 20.dp)
         ) {

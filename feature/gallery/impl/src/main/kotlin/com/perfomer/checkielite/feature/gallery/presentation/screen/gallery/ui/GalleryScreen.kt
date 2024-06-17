@@ -84,12 +84,10 @@ internal fun GalleryScreen(
     onPageChange: (pageIndex: Int) -> Unit = {},
     onPagerClick: () -> Unit = {},
 ) {
-    var backgroundAlpha by remember { mutableFloatStateOf(1F) }
     val systemUiController = rememberSystemUiController()
     val isSystemInDarkTheme = isSystemInDarkTheme()
 
     UpdateEffect(state.isUiShown) { systemUiController.isSystemBarsVisible = state.isUiShown }
-    UpdateEffect(backgroundAlpha < 1F) { systemUiController.isSystemBarsVisible = true }
 
     DisposableEffect(Unit) {
         systemUiController.setTransparentSystemBars(darkIcons = false)
@@ -114,6 +112,7 @@ internal fun GalleryScreen(
         },
     ) {
         Box {
+            var backgroundAlpha by remember { mutableFloatStateOf(1F) }
             val coroutineScope = rememberCoroutineScope()
             val mainPagerState = rememberPagerState(
                 pageCount = { state.picturesUri.size },

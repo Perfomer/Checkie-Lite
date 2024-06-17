@@ -28,6 +28,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiDropdownIcon
 import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiDropdownMenuItem
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
+import com.perfomer.checkielite.common.ui.util.StableInsets
 import com.perfomer.checkielite.feature.reviewdetails.R
 
 @Composable
@@ -82,6 +83,7 @@ internal fun ReviewDetailsAppBar(
                 }
             }
         },
+        windowInsets = StableInsets.statusBars(),
         modifier = Modifier
             .fillMaxWidth()
             .bottomStrokeOnScroll(

@@ -1,10 +1,16 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core
 
+import android.icu.util.Currency
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorResult
 
 internal sealed interface CurrencySelectorCommand {
 
-    class LoadCurrencies(val query: String) : CurrencySelectorCommand
+    data object LoadCurrencies : CurrencySelectorCommand
+
+    class FilterCurrencies(
+        val query: String,
+        val currencies: List<Currency>,
+    ) : CurrencySelectorCommand
 }
 
 internal sealed interface CurrencySelectorNavigationCommand : CurrencySelectorCommand {

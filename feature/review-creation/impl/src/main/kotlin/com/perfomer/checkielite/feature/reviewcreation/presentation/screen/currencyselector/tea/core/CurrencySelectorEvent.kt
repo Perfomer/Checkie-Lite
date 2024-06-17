@@ -1,6 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core
 
-import com.perfomer.checkielite.core.entity.price.CheckieCurrency
+import android.icu.util.Currency
 
 internal sealed interface CurrencySelectorEvent {
 
@@ -8,9 +8,11 @@ internal sealed interface CurrencySelectorEvent {
 
     sealed interface CurrenciesLoading : CurrencySelectorEvent {
         data object Started : CurrenciesLoading
-        class Succeed(val currencies: List<CheckieCurrency>) : CurrenciesLoading
+        class Succeed(val currencies: List<Currency>) : CurrenciesLoading
         class Failed(val throwable: Throwable) : CurrenciesLoading
     }
+
+    class OnCurrenciesFiltered(val currencies: List<Currency>) : CurrencySelectorEvent
 }
 
 internal sealed interface CurrencySelectorUiEvent : CurrencySelectorEvent {

@@ -214,14 +214,15 @@ internal class CheckieLocalDataSourceImpl(
     }
 
     override suspend fun getCurrencies(): List<CheckieCurrency> = mutex.withLock {
+        val now = Date()
         val usedCurrencies = databaseDataSource.getUsedCurrencies()
-        val localCurrencies = Currency.getAvailableCurrencyCodes(Locale.getDefault(), Date()).map(::CheckieCurrency)
+        val localCurrencies = Currency.getAvailableCurrencyCodes(Locale.getDefault(), now).map(::CheckieCurrency)
 
         if (allCurrencies == null) {
             allCurrencies = withContext(Dispatchers.IO) {
                 Locale.getAvailableLocales()
                     .asSequence()
-                    .flatMap { locale -> Currency.getAvailableCurrencyCodes(locale, Date()).orEmpty().toList() }
+                    .flatMap { locale -> Currency.getAvailableCurrencyCodes(locale, now).orEmpty().toList() }
                     .distinct()
                     .map(Currency::getInstance)
                     .sortedWith(compareBy({ it.symbol.length > 1 }, { it.displayName }))

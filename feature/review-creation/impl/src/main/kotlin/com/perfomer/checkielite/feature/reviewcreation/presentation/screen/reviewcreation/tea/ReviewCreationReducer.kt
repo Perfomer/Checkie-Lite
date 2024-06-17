@@ -95,9 +95,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                         CreateReview(
                             productName = state.reviewDetails.productName.trim(),
                             productBrand = state.reviewDetails.productBrand.trim(),
-                            price = state.reviewDetails.price?.let { value ->
-                                CheckiePrice(value = value, currency = state.reviewDetails.priceCurrency)
-                            },
+                            price = state.reviewDetails.price,
                             comment = state.reviewDetails.comment.trim(),
                             advantages = state.reviewDetails.advantages.trim(),
                             disadvantages = state.reviewDetails.disadvantages.trim(),
@@ -112,9 +110,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                             reviewId = mode.reviewId,
                             productName = state.reviewDetails.productName.trim(),
                             productBrand = state.reviewDetails.productBrand.trim(),
-                            price = state.reviewDetails.price?.let { value ->
-                                CheckiePrice(value = value, currency = state.reviewDetails.priceCurrency)
-                            },
+                            price = state.reviewDetails.price,
                             comment = state.reviewDetails.comment.trim(),
                             advantages = state.reviewDetails.advantages.trim(),
                             disadvantages = state.reviewDetails.disadvantages.trim(),
@@ -160,7 +156,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         is ProductInfo.OnPriceTextInput -> reduceOnPriceTextInput(event)
         is ProductInfo.OnPriceCurrencyClick -> {
             effects(CloseKeyboard)
-            commands(OpenCurrencySelector(state.reviewDetails.priceCurrency))
+            commands(OpenCurrencySelector(state.currentPriceCurrency))
         }
         is ProductInfo.OnAddPictureClick -> {
             effects(CloseKeyboard)
@@ -192,9 +188,21 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         }
     }
 
+    @Suppress("IfThenToElvis")
     private fun reduceOnPriceTextInput(event: ProductInfo.OnPriceTextInput) {
         val input = event.text
-        val price = if (input.isNotEmpty()) BigDecimal(input.dropLastWhile { it == '.' }) else null
+        val priceInputValue = if (input.isNotEmpty()) BigDecimal(input.dropLastWhile { it == '.' }) else null
+        val currentPrice = state.reviewDetails.price
+
+        val price = if (priceInputValue == null) {
+            null
+        } else {
+            if (currentPrice == null) {
+                CheckiePrice(value = priceInputValue, currency = state.currentPriceCurrency)
+            } else {
+                currentPrice.copy(value = priceInputValue)
+            }
+        }
 
         state {
             copy(
@@ -274,7 +282,14 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             }
         }
         is OnCurrencySelected -> {
-            state { copy(reviewDetails = reviewDetails.copy(priceCurrency = event.currency)) }
+            val selectedCurrency = event.currency
+            val currentPrice = state.reviewDetails.price
+
+            if (currentPrice != null) {
+                state { copy(reviewDetails = reviewDetails.copy(price = currentPrice.copy(currency = selectedCurrency))) }
+            }
+
+            state { copy(currentPriceCurrency = selectedCurrency) }
         }
     }
 
@@ -293,8 +308,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             val initialReviewDetails = ReviewDetails(
                 productName = event.review.productName,
                 productBrand = event.review.productBrand.orEmpty(),
-                price = event.review.price?.value,
-                priceCurrency = event.review.price?.currency ?: initialReviewDetails.priceCurrency,
+                price = event.review.price,
                 pictures = event.review.pictures.toPersistentList(),
                 tagsIds = event.review.tags.map { it.id }.toSet(),
                 comment = event.review.comment.orEmpty(),
@@ -307,7 +321,8 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 isReviewLoading = false,
                 initialReviewDetails = initialReviewDetails,
                 reviewDetails = initialReviewDetails,
-                currentPriceFieldValue = initialReviewDetails.price?.toString().orEmpty(),
+                currentPriceFieldValue = initialReviewDetails.price?.value?.toString().orEmpty(),
+                currentPriceCurrency = initialReviewDetails.price?.currency ?: currentPriceCurrency,
             )
         }
 
@@ -327,28 +342,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         is LatestCurrencyLoading.Started -> Unit
         is LatestCurrencyLoading.Succeed -> {
             val defaultCurrency = event.currency ?: LocalCheckieCurrency.getLocalCurrency()
-
-            when (state.mode) {
-                is ReviewCreationMode.Creation -> {
-                    state {
-                        copy(
-                            reviewDetails = reviewDetails.copy(priceCurrency = defaultCurrency),
-                            initialReviewDetails = initialReviewDetails.copy(priceCurrency = defaultCurrency)
-                        )
-                    }
-                }
-                is ReviewCreationMode.Modification -> {
-                    if (state.isReviewLoading || state.initialReviewDetails.price == null) {
-                        state {
-                            copy(
-                                initialReviewDetails = initialReviewDetails.copy(priceCurrency = defaultCurrency)
-                            )
-                        }
-                    }
-                }
-            }
-
-            Unit
+            state { copy(currentPriceCurrency = initialReviewDetails.price?.currency ?: defaultCurrency) }
         }
         is LatestCurrencyLoading.Failed -> Unit
     }

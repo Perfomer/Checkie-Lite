@@ -35,7 +35,7 @@ internal class ReviewCreationUiStateMapper(
             brandSuggestions = state.suggestedBrands.toPersistentList(),
             picturesUri = state.reviewDetails.pictures.map { it.uri }.toPersistentList(),
             price = state.currentPriceFieldValue,
-            priceCurrency = state.reviewDetails.priceCurrency.symbol,
+            priceCurrency = state.currentPriceCurrency.symbol,
             productNameErrorText = context.getString(R.string.reviewcreation_productinfo_field_product_error_empty)
                 .takeUnless { state.isProductNameValid },
         )

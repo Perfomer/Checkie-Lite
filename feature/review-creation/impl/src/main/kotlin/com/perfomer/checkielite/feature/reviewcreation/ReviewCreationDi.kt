@@ -16,6 +16,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.T
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.CurrencySelectorReducer
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.CurrencySelectorStore
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.actor.CurrencySelectorNavigationActor
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.actor.FilterCurrenciesActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.actor.LoadCurrenciesActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.ui.CurrencySelectorContentScreen
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.ui.state.CurrencySelectorUiStateMapper
@@ -128,6 +129,7 @@ internal fun createCurrencySelectorStore(
         actors = setOf(
             CurrencySelectorNavigationActor(router),
             LoadCurrenciesActor(localDataSource),
+            FilterCurrenciesActor(),
         )
     )
 }

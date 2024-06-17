@@ -32,7 +32,7 @@ internal class CheckieLocalDataSourceImpl(
 ) : CheckieLocalDataSource {
 
     @Volatile
-    private var allCurrencies: List<CheckieCurrency>? = null
+    private var allCurrenciesCodes: List<String>? = null
     private val mutex = Mutex()
 
     override fun getReviews(): Flow<List<CheckieReview>> {
@@ -213,26 +213,26 @@ internal class CheckieLocalDataSourceImpl(
         databaseDataSource.deleteTag(id)
     }
 
-    override suspend fun getCurrencies(): List<CheckieCurrency> = mutex.withLock {
+    override suspend fun getAllCurrenciesCodes(): List<String> = mutex.withLock {
         val now = Date()
-        val usedCurrencies = databaseDataSource.getUsedCurrencies()
-        val localCurrencies = Currency.getAvailableCurrencyCodes(Locale.getDefault(), now).map(::CheckieCurrency)
+        val usedCurrencies = databaseDataSource.getUsedCurrencies().map { it.code }
+        val localCurrencies = Currency.getAvailableCurrencyCodes(Locale.getDefault(), now)
 
-        if (allCurrencies == null) {
-            allCurrencies = withContext(Dispatchers.IO) {
+        if (allCurrenciesCodes == null) {
+            allCurrenciesCodes = withContext(Dispatchers.IO) {
                 Locale.getAvailableLocales()
                     .asSequence()
                     .flatMap { locale -> Currency.getAvailableCurrencyCodes(locale, now).orEmpty().toList() }
                     .distinct()
                     .map(Currency::getInstance)
                     .sortedWith(compareBy({ it.symbol.length > 1 }, { it.displayName }))
-                    .map { currency -> CheckieCurrency(currency.currencyCode) }
+                    .map(Currency::getCurrencyCode)
                     .toList()
             }
         }
 
-        return (usedCurrencies + localCurrencies + allCurrencies.orEmpty())
-            .distinctBy { it.code }
+        return (usedCurrencies + localCurrencies + allCurrenciesCodes.orEmpty())
+            .distinct()
     }
 
     override suspend fun getLatestCurrency(): CheckieCurrency? {

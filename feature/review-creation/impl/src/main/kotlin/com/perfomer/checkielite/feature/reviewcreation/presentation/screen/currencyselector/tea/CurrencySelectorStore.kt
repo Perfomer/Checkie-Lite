@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea
 
+import android.icu.util.Currency
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.impl.ScreenModelStore
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorParams
@@ -18,7 +19,7 @@ internal class CurrencySelectorStore(
     uiStateMapper: CurrencySelectorUiStateMapper,
     actors: Set<Actor<CurrencySelectorCommand, CurrencySelectorEvent>>,
 ) : ScreenModelStore<CurrencySelectorCommand, CurrencySelectorEffect, CurrencySelectorEvent, CurrencySelectorUiEvent, CurrencySelectorState, CurrencySelectorUiState>(
-    initialState = CurrencySelectorState(selectedCurrency = params.currentCurrency),
+    initialState = CurrencySelectorState(selectedCurrency = Currency.getInstance(params.currentCurrency.code)),
     reducer = reducer,
     uiStateMapper = uiStateMapper,
     actors = actors,

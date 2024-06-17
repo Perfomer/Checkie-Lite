@@ -1,10 +1,11 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core
 
+import android.icu.util.Currency
 import com.perfomer.checkielite.common.pure.state.Lce
-import com.perfomer.checkielite.core.entity.price.CheckieCurrency
 
 internal data class CurrencySelectorState(
-    val selectedCurrency: CheckieCurrency,
-    val allCurrencies: Lce<List<CheckieCurrency>> = Lce.initial(),
+    val selectedCurrency: Currency,
+    val allCurrencies: Lce<List<Currency>> = Lce.initial(),
+    val filteredCurrencies: List<Currency> = emptyList(),
     val searchQuery: String = "",
 )

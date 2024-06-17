@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.actor
 
+import android.icu.util.Currency
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
@@ -26,7 +27,8 @@ internal class LoadCurrenciesActor(
     }
 
     private fun handleCommand(command: LoadCurrencies): Flow<CurrencySelectorEvent> {
-        return flowBy { localDataSource.getCurrencies() }
+        return flowBy { localDataSource.getAllCurrenciesCodes() }
+            .map { currencies -> currencies.map(Currency::getInstance) }
             .map(CurrenciesLoading::Succeed)
             .onCatchReturn(CurrenciesLoading::Failed)
             .startWith(CurrenciesLoading.Started)

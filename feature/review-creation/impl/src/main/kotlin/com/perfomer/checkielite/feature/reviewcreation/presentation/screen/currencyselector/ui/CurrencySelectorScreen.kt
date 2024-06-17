@@ -37,6 +37,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -55,6 +56,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.scrim.verticalScrimBrush
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.util.keyboardOpenedAsState
 import com.perfomer.checkielite.common.ui.util.plus
 import com.perfomer.checkielite.common.ui.util.pxToDp
 import com.perfomer.checkielite.feature.reviewcreation.R
@@ -77,12 +79,12 @@ internal fun CurrencySelectorScreen(
 
     BoxWithConstraints {
         val maxHeight = remember(constraints.maxHeight) {
-            constraints.maxHeight.pxToDp().dp * 0.7F
+            constraints.maxHeight.pxToDp().dp * 0.8F
         }
 
         var shouldAnimateContentSize by remember { mutableStateOf(false) }
 
-        LaunchedEffect(Unit) {
+        LaunchedEffect(shouldAnimateContentSize) {
             delay(1_000L)
             shouldAnimateContentSize = true
         }
@@ -98,11 +100,21 @@ internal fun CurrencySelectorScreen(
                 val scrollState = rememberLazyListState()
                 val shouldShowDivider by remember { derivedStateOf { scrollState.canScrollBackward } }
 
+                val isKeyboardOpened by keyboardOpenedAsState()
+                val emptyInsets = remember { PaddingValues() }
+                val navigationBarsPadding = WindowInsets.navigationBars.asPaddingValues()
+                val actualNavigationBarsPadding = if (isKeyboardOpened) emptyInsets else navigationBarsPadding
+
                 Header(showDivider = shouldShowDivider)
+
+                LaunchedEffect(state.searchQuery) {
+                    snapshotFlow { scrollState.firstVisibleItemIndex }
+                        .collect { scrollState.scrollToItem(0) }
+                }
 
                 LazyColumn(
                     state = scrollState,
-                    contentPadding = PaddingValues(top = 72.dp, bottom = 100.dp) + WindowInsets.navigationBars.asPaddingValues(),
+                    contentPadding = PaddingValues(top = 72.dp, bottom = 100.dp) + actualNavigationBarsPadding,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     if (state.currencies.isEmpty()) {
@@ -113,6 +125,7 @@ internal fun CurrencySelectorScreen(
                             Text(
                                 text = stringResource(CommonString.common_nothing_found),
                                 color = LocalCuiPalette.current.TextSecondary,
+                                modifier = Modifier.padding(horizontal = 24.dp, vertical = 14.dp)
                             )
                         }
                     }
@@ -141,6 +154,7 @@ internal fun CurrencySelectorScreen(
                 searchQuery = state.searchQuery,
                 onSearchQueryInput = onSearchQueryInput,
                 onSearchQueryClearClick = {
+                    shouldAnimateContentSize = false
                     focusManager.clearFocus()
                     onSearchQueryClearClick()
                 },

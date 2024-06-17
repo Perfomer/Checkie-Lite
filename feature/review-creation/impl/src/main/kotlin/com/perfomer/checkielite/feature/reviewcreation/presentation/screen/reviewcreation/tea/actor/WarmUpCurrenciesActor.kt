@@ -21,7 +21,7 @@ internal class WarmUpCurrenciesActor(
     }
 
     private fun handleCommand(command: WarmUpCurrencies): Flow<ReviewCreationEvent> {
-        return flowBy { localDataSource.getCurrencies() }
+        return flowBy { localDataSource.getAllCurrenciesCodes() }
             .ignoreResult()
     }
 }

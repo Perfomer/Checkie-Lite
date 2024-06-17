@@ -67,7 +67,7 @@ interface CheckieLocalDataSource {
 
     suspend fun deleteTag(id: String)
 
-    suspend fun getCurrencies(): List<CheckieCurrency>
+    suspend fun getAllCurrenciesCodes(): List<String>
 
     suspend fun getLatestCurrency(): CheckieCurrency?
 }

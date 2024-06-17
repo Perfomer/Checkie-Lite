@@ -2,9 +2,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.curr
 
 import android.content.Context
 import android.icu.util.Currency
-import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
-import com.perfomer.checkielite.core.entity.price.CheckieCurrency
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorState
 import kotlinx.collections.immutable.toPersistentList
 
@@ -15,20 +13,20 @@ internal class CurrencySelectorUiStateMapper(
     override fun map(state: CurrencySelectorState): CurrencySelectorUiState {
         return CurrencySelectorUiState(
             searchQuery = state.searchQuery,
-            currencies = state.allCurrencies.content.orEmpty()
-                .map { it.toUiItem(state.selectedCurrency.code) }
+            currencies = state.filteredCurrencies
+                .map { it.toUiItem(state.selectedCurrency.currencyCode) }
                 .toPersistentList(),
         )
     }
 
     private companion object {
 
-        private fun CheckieCurrency.toUiItem(selectedCode: String): CurrencyItem {
+        private fun Currency.toUiItem(selectedCode: String): CurrencyItem {
             return CurrencyItem(
-                code = code,
-                displayName = Currency.getInstance(code).displayName,
+                code = currencyCode,
+                displayName = displayName,
                 symbol = symbol,
-                isSelected = code == selectedCode,
+                isSelected = currencyCode == selectedCode,
             )
         }
     }

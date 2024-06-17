@@ -4,11 +4,11 @@ import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.core.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.entity.price.CheckiePrice
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.presentation.util.LocalCheckieCurrency
 import kotlinx.collections.immutable.PersistentList
-import java.math.BigDecimal
 
 internal data class ReviewCreationState(
     val mode: ReviewCreationMode,
@@ -18,6 +18,7 @@ internal data class ReviewCreationState(
     val reviewDetails: ReviewDetails = initialReviewDetails,
     val isProductNameValid: Boolean = true,
 
+    val currentPriceCurrency: CheckieCurrency = LocalCheckieCurrency.getLocalCurrency(),
     val currentPriceFieldValue: String = reviewDetails.price?.toString().orEmpty(),
 
     val tagsSearchQuery: String = "",
@@ -35,8 +36,7 @@ internal data class ReviewCreationState(
 internal data class ReviewDetails(
     val productName: String = "",
     val productBrand: String = "",
-    val price: BigDecimal? = null,
-    val priceCurrency: CheckieCurrency = LocalCheckieCurrency.getLocalCurrency(),
+    val price: CheckiePrice? = null,
     val pictures: PersistentList<CheckiePicture> = emptyPersistentList(),
 
     val tagsIds: Set<String> = emptySet(),

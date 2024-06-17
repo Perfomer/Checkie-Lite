@@ -71,9 +71,8 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     private fun reduceInitialize() {
         val modificationMode = state.mode as? ReviewCreationMode.Modification
         if (modificationMode != null) commands(LoadReview(modificationMode.reviewId))
-        else commands(LoadLatestCurrency)
 
-        commands(LoadTags(), WarmUpCurrencies)
+        commands(LoadTags(), WarmUpCurrencies, LoadLatestCurrency)
     }
 
     private fun reduceUi(event: ReviewCreationUiEvent) = when (event) {
@@ -294,6 +293,8 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             val initialReviewDetails = ReviewDetails(
                 productName = event.review.productName,
                 productBrand = event.review.productBrand.orEmpty(),
+                price = event.review.price?.value,
+                priceCurrency = event.review.price?.currency ?: initialReviewDetails.priceCurrency,
                 pictures = event.review.pictures.toPersistentList(),
                 tagsIds = event.review.tags.map { it.id }.toSet(),
                 comment = event.review.comment.orEmpty(),
@@ -325,8 +326,29 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     private fun reduceLatestCurrencyLoading(event: LatestCurrencyLoading) = when (event) {
         is LatestCurrencyLoading.Started -> Unit
         is LatestCurrencyLoading.Succeed -> {
-            val currency = event.currency ?: LocalCheckieCurrency.getLocalCurrency()
-            state { copy(reviewDetails = reviewDetails.copy(priceCurrency = currency)) }
+            val defaultCurrency = event.currency ?: LocalCheckieCurrency.getLocalCurrency()
+
+            when (state.mode) {
+                is ReviewCreationMode.Creation -> {
+                    state {
+                        copy(
+                            reviewDetails = reviewDetails.copy(priceCurrency = defaultCurrency),
+                            initialReviewDetails = initialReviewDetails.copy(priceCurrency = defaultCurrency)
+                        )
+                    }
+                }
+                is ReviewCreationMode.Modification -> {
+                    if (state.isReviewLoading || state.initialReviewDetails.price == null) {
+                        state {
+                            copy(
+                                initialReviewDetails = initialReviewDetails.copy(priceCurrency = defaultCurrency)
+                            )
+                        }
+                    }
+                }
+            }
+
+            Unit
         }
         is LatestCurrencyLoading.Failed -> Unit
     }

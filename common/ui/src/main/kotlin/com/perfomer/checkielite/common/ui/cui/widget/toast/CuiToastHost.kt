@@ -10,11 +10,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import com.perfomer.checkielite.common.ui.cui.widget.toast.CuiToastHostState.Companion.DEFAULT_DURATION_MS
 import kotlinx.coroutines.delay
 
-val LocalCuiToastHostState = compositionLocalOf<CuiToastHostState> { error("Not provided") }
+val LocalCuiToastHostState = staticCompositionLocalOf<CuiToastHostState> { error("Not provided") }
 
 @Stable
 class CuiToastHostState {

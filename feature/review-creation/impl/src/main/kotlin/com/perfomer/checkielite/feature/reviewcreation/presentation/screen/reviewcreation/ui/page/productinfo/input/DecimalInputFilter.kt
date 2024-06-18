@@ -1,35 +1,39 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.input
 
+import com.perfomer.checkielite.common.pure.util.toRegex
+
 internal class DecimalInputFilter {
 
     fun cleanUp(input: String): String {
-        if (input.matches(emptyRegex)) return ""
-        if (input.matches(onlyZerosRegex)) return "0"
+        if (input.isEmpty()) return ""
 
-        val sb = StringBuilder()
+        val parts = input
+            .filter { char -> char.isDigit() || char in decimalSeparators }
+            .split(decimalSeparatorsRegex)
+            .take(2)
 
-        var hasDecimalSeparator = false
+        val fractionalPart = parts.getOrNull(1)
+            ?.take(MAX_FRACTIONAL_PART_LENGTH)
+            .orEmpty()
 
-        for (char in input) {
-            if (char.isDigit()) {
-                sb.append(char)
-                continue
-            }
+        val separator = ".".takeIf { parts.size > 1 }.orEmpty()
 
-            if (char in decimalSeparator && !hasDecimalSeparator && sb.isNotEmpty()) {
-                hasDecimalSeparator = true
-                sb.append('.')
-            }
-        }
+        val integerPart = parts.first()
+            .dropWhile { it == '0' }
+            .ifEmpty { "0" }
+            .take(MAX_INTEGER_PART_LENGTH)
 
-        return sb.toString()
+        return "$integerPart$separator$fractionalPart"
     }
 
     private companion object {
 
-        private val decimalSeparator: Set<Char> = setOf(',', '.')
+        private const val MAX_INTEGER_PART_LENGTH = 9
+        private const val MAX_FRACTIONAL_PART_LENGTH = 2
 
-        private val emptyRegex: Regex = "\\D".toRegex()
+        private val decimalSeparators: Set<Char> = setOf(',', '.')
+
         private val onlyZerosRegex: Regex = "0+".toRegex()
+        private val decimalSeparatorsRegex: Regex = decimalSeparators.toRegex()
     }
 }

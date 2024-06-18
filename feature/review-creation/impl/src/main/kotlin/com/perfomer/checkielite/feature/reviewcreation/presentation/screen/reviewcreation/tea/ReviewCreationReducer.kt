@@ -49,8 +49,8 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.Tags
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewDetails
 import com.perfomer.checkielite.feature.reviewcreation.presentation.util.LocalCheckieCurrency
+import com.perfomer.checkielite.feature.reviewcreation.presentation.util.toBigDecimalSafe
 import kotlinx.collections.immutable.toPersistentList
-import java.math.BigDecimal
 
 internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewCreationEffect, ReviewCreationEvent, ReviewCreationState>() {
 
@@ -191,7 +191,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     @Suppress("IfThenToElvis")
     private fun reduceOnPriceTextInput(event: ProductInfo.OnPriceTextInput) {
         val input = event.text
-        val priceInputValue = if (input.isNotEmpty()) BigDecimal(input.dropLastWhile { it == '.' }) else null
+        val priceInputValue = input.toBigDecimalSafe()
         val currentPrice = state.reviewDetails.price
 
         val price = if (priceInputValue == null) {

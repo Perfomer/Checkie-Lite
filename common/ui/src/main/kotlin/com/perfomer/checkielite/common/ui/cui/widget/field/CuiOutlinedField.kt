@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
@@ -58,6 +59,7 @@ fun CuiOutlinedField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     colors: TextFieldColors = CuiOutlinedFieldDefaults.colors(),
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     OutlinedTextField(
@@ -83,6 +85,7 @@ fun CuiOutlinedField(
                 )
             }
         },
+        visualTransformation = visualTransformation,
         modifier = modifier.fillMaxWidth()
     )
 }

@@ -61,6 +61,7 @@ import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.ui.widget.CurrencySymbol
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.input.DecimalInputFilter
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.input.DecimalInputVisualTransformation
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ProductInfoPageUiState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -143,6 +144,7 @@ internal fun ProductInfoScreen(
                 keyboardType = KeyboardType.Decimal,
             ),
             onValueChange = { value -> onPriceTextInput(decimalInputFilter.cleanUp(value)) },
+            visualTransformation = remember { DecimalInputVisualTransformation() },
             trailingIcon = {
                 CurrencySymbol(
                     currencySymbol = state.priceCurrency,

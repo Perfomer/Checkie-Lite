@@ -1,17 +1,12 @@
 package com.perfomer.checkielite.common.pure.search
 
+import com.perfomer.checkielite.common.pure.util.toRegex
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-private val symbols = listOf(',', '.', ':', '-', ';', '"', '\'', '/', '!', '?', '(', ')', ' ')
+private val symbols = setOf(',', '.', ':', '-', ';', '"', '\'', '/', '!', '?', '(', ')', ' ')
 
-private val PunctuationRegex = Regex(
-    symbols.joinToString(
-        separator = "",
-        prefix = "[",
-        postfix = "]"
-    ) { c -> """\$c""" }
-)
+private val PunctuationRegex = symbols.toRegex()
 
 fun score(target: String, source: String, weights: DamerauLevenshteinWeights): Int {
     val step = min(target.length, source.length)

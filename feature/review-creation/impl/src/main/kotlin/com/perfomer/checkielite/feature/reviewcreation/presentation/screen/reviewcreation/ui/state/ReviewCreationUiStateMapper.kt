@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state
 
 import android.content.Context
+import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastMap
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
 import com.perfomer.checkielite.feature.reviewcreation.R
@@ -53,6 +54,7 @@ internal class ReviewCreationUiStateMapper(
 
         return TagsPageUiState(
             searchQuery = state.tagsSearchQuery,
+            shouldShowAddTag = uiTags.fastAll { it.value != state.tagsSearchQuery },
             tags = uiTags.toPersistentList(),
         )
     }

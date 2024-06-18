@@ -106,13 +106,15 @@ internal fun TagsScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            AddTagChip(
-                searchQuery = state.searchQuery.takeIf { it.isNotBlank() },
-                onCreateTagClick = {
-                    focusManager.clearFocus()
-                    onCreateTagClick()
-                },
-            )
+            if (state.shouldShowAddTag) {
+                AddTagChip(
+                    searchQuery = state.searchQuery.takeIf { it.isNotBlank() },
+                    onCreateTagClick = {
+                        focusManager.clearFocus()
+                        onCreateTagClick()
+                    },
+                )
+            }
 
             for (tag in state.tags) {
                 key(tag.id) { TagChip(tag) }

@@ -158,6 +158,7 @@ internal val mockUiState = ReviewCreationUiState(
     ),
     tagsState = TagsPageUiState(
         searchQuery = "",
+        shouldShowAddTag = true,
         tags = emptyPersistentList(),
     ),
     reviewInfoState = ReviewInfoPageUiState(

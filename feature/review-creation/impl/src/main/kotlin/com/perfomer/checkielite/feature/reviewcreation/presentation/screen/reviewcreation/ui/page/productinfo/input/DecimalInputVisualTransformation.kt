@@ -4,9 +4,13 @@ import android.icu.text.DecimalFormat
 import android.icu.text.DecimalFormatSymbols
 import android.icu.text.NumberFormat
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.sp
 
 internal class DecimalInputVisualTransformation : VisualTransformation {
 
@@ -36,11 +40,16 @@ internal class DecimalInputVisualTransformation : VisualTransformation {
             formattedNumber = formattedNumber.dropLast(1)
         }
 
-        val newText = AnnotatedString(
-            text = formattedNumber,
-            spanStyles = text.spanStyles,
-            paragraphStyles = text.paragraphStyles,
-        )
+        val formattedText = buildAnnotatedString {
+            val separatorIndex = formattedNumber.indexOf(separators.decimalSeparator)
+            if (separatorIndex == -1) return@buildAnnotatedString append(formattedNumber)
+
+            append(formattedNumber.subSequence(0, separatorIndex + 1))
+
+            withStyle(SpanStyle(fontSize = 14.sp)) {
+                append(formattedNumber.substring(separatorIndex + 1, formattedNumber.length))
+            }
+        }
 
         val offsetMapping = object : OffsetMapping {
             override fun originalToTransformed(offset: Int): Int {
@@ -70,7 +79,7 @@ internal class DecimalInputVisualTransformation : VisualTransformation {
             }
         }
 
-        return newText.toTransformedText(offsetMapping)
+        return formattedText.toTransformedText(offsetMapping)
     }
 
     private companion object {

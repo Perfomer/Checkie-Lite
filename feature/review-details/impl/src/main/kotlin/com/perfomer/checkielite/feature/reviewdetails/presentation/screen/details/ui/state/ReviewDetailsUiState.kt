@@ -17,6 +17,7 @@ internal sealed interface ReviewDetailsUiState {
         val productName: String,
         val date: String,
         val rating: Int,
+        val price: String?,
         val picturesUri: ImmutableList<String>,
         val currentPicturePosition: Int,
         val comment: String?,

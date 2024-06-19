@@ -25,6 +25,7 @@ internal class ReviewDetailsUiStateMapper : UiStateMapper<ReviewDetailsState, Re
                     productName = review.productName,
                     date = dateFormat.format(review.creationDate),
                     rating = review.rating,
+                    price = review.price?.value?.toString(),
                     picturesUri = review.pictures.fastMap { it.uri }.toPersistentList(),
                     currentPicturePosition = state.currentPicturePosition,
                     comment = review.comment,

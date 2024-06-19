@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.perfomer.checkielite.common.ui.R
 
-internal enum class ReviewReaction(
+enum class ReviewReaction(
     @DrawableRes val drawable: Int,
     @StringRes val contentDescription: Int,
 ) {

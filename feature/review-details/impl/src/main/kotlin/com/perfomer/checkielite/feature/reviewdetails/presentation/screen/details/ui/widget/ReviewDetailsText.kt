@@ -13,8 +13,6 @@ internal fun ReviewDetailsText(
     disadvantages: String?,
     onEmptyCommentClick: () -> Unit,
 ) {
-    Spacer(Modifier.height(8.dp))
-
     if (comment != null) {
         Spacer(Modifier.height(16.dp))
 

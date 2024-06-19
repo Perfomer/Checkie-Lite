@@ -45,7 +45,6 @@ internal class TagsReducer : DslReducer<TagsCommand, TagsEffect, TagsEvent, Tags
                 state { copy(selectedTagsIds = selectedTagsIds - event.tagId) }
             }
         }
-
         is OnSearchQueryInput -> updateSearchQuery(event.query)
         is OnSearchQueryClearClick -> updateSearchQuery("")
     }

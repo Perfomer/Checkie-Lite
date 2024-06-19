@@ -46,6 +46,6 @@ internal class ValidateTagNameActor(
     }
 
     private companion object {
-        private const val MAX_TAG_LENGTH = 15
+        private const val MAX_TAG_LENGTH = 20
     }
 }

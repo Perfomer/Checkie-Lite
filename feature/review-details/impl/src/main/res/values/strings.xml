@@ -12,6 +12,9 @@
     <string name="reviewdetails_recommendations">Recommendations</string>
     <string name="reviewdetails_tags">Tags</string>
     <string name="reviewdetails_review">Review</string>
+    <string name="reviewdetails_rating">Rating</string>
+    <string name="reviewdetails_price">Price</string>
+    <string name="reviewdetails_price_specify">Specify</string>
     <string name="reviewdetails_comment">Comment</string>
     <string name="reviewdetails_advantages">Advantages</string>
     <string name="reviewdetails_disadvantages">Disadvantages</string>

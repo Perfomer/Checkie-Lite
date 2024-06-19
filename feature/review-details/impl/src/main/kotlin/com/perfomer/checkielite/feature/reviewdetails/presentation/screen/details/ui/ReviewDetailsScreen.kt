@@ -43,6 +43,7 @@ internal fun ReviewDetailsScreen(
     onDeleteClick: () -> Unit = {},
     onPictureClick: () -> Unit = {},
     onEmptyImageClick: () -> Unit = {},
+    onEmptyPriceClick: () -> Unit = {},
     onEmptyReviewTextClick: () -> Unit = {},
     onPageChange: (pageIndex: Int) -> Unit = {},
     onTagClick: (tagId: String) -> Unit = {},
@@ -70,6 +71,7 @@ internal fun ReviewDetailsScreen(
                 scrollableState = scrollState,
                 onPictureClick = onPictureClick,
                 onEmptyImageClick = onEmptyImageClick,
+                onEmptyPriceClick = onEmptyPriceClick,
                 onEmptyReviewTextClick = onEmptyReviewTextClick,
                 onPageChange = onPageChange,
                 onTagClick = onTagClick,
@@ -106,6 +108,7 @@ private fun Content(
     scrollableState: LazyListState,
     onPictureClick: () -> Unit,
     onEmptyImageClick: () -> Unit,
+    onEmptyPriceClick: () -> Unit,
     onEmptyReviewTextClick: () -> Unit,
     onPageChange: (pageIndex: Int) -> Unit,
     onTagClick: (tagId: String) -> Unit,
@@ -136,6 +139,8 @@ private fun Content(
             ReviewDetailsInfo(
                 date = state.date,
                 rating = state.rating,
+                price = state.price,
+                onEmptyPriceClick = onEmptyPriceClick,
             )
         }
 
@@ -190,6 +195,7 @@ internal val mockUiState = ReviewDetailsUiState.Content(
     ),
     rating = 8,
     date = "31 May 2023",
+    price = null,
     currentPicturePosition = 0,
     comment = "Extraordinary. Meets an elite standard by which you judge all other restaurants. The staff is always ready to help, the premises are extremely clean, the atmosphere is lovely, and the food is both delicious and beautifully presented.",
     advantages = "Great, but not great.",

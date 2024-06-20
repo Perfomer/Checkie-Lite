@@ -6,4 +6,6 @@ enum class ReviewsSortingStrategy {
     LEAST_RATED,
     NEWEST,
     OLDEST,
+    MOST_EXPENSIVE,
+    CHEAPEST,
 }

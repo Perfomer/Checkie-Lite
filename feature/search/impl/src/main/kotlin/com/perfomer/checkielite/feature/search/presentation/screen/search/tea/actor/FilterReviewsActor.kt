@@ -79,6 +79,8 @@ internal class FilterReviewsActor : Actor<SearchCommand, SearchEvent> {
                 ReviewsSortingStrategy.OLDEST -> sortedBy { it.creationDate }
                 ReviewsSortingStrategy.MOST_RATED -> sortedByDescending { it.rating }
                 ReviewsSortingStrategy.LEAST_RATED -> sortedBy { it.rating }
+                ReviewsSortingStrategy.MOST_EXPENSIVE -> filter { it.price != null }.sortedByDescending { it.price!!.value }
+                ReviewsSortingStrategy.CHEAPEST -> filter { it.price != null }.sortedBy { it.price!!.value }
             }
         }
     }

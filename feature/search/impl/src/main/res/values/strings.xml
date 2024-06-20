@@ -19,8 +19,10 @@
     <string name="search_sort_relevant">Relevant</string>
     <string name="search_sort_newest">Newest</string>
     <string name="search_sort_oldest">Oldest</string>
-    <string name="search_sort_most_rated">Most rated first</string>
-    <string name="search_sort_least_rated">Least rated first</string>
+    <string name="search_sort_most_rated">Most rated</string>
+    <string name="search_sort_least_rated">Least rated</string>
+    <string name="search_sort_most_expensive">Most expensive</string>
+    <string name="search_sort_cheapest">Cheapest</string>
 
     <string name="search_tags_title">Tags</string>
 </resources>

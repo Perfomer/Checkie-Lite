@@ -1,11 +1,10 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.sort.ui.state
 
 import android.content.Context
-import androidx.annotation.StringRes
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
 import com.perfomer.checkielite.core.entity.sort.ReviewsSortingStrategy
-import com.perfomer.checkielite.feature.search.R
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortState
+import com.perfomer.checkielite.feature.search.presentation.util.label
 
 internal class SortUiStateMapper(
     private val context: Context,
@@ -25,18 +24,5 @@ internal class SortUiStateMapper(
             text = context.getString(label),
             isSelected = isSelected,
         )
-    }
-
-    private companion object {
-
-        @get:StringRes
-        private val ReviewsSortingStrategy.label: Int
-            get() = when (this) {
-                ReviewsSortingStrategy.RELEVANCE -> R.string.search_sort_relevant
-                ReviewsSortingStrategy.NEWEST -> R.string.search_sort_newest
-                ReviewsSortingStrategy.OLDEST -> R.string.search_sort_oldest
-                ReviewsSortingStrategy.MOST_RATED -> R.string.search_sort_most_rated
-                ReviewsSortingStrategy.LEAST_RATED -> R.string.search_sort_least_rated
-            }
     }
 }

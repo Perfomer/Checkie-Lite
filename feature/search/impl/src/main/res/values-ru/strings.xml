@@ -21,6 +21,8 @@
     <string name="search_sort_oldest">Самые старые</string>
     <string name="search_sort_most_rated">С наибольшей оценкой</string>
     <string name="search_sort_least_rated">С наименьшей оценкой</string>
+    <string name="search_sort_most_expensive">Самые дорогие</string>
+    <string name="search_sort_cheapest">Самые дешёвые</string>
 
     <string name="search_tags_title">Теги</string>
 </resources>

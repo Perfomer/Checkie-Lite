@@ -14,6 +14,7 @@ import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.core.entity.price.CheckieCurrency
 import com.perfomer.checkielite.core.entity.price.CheckiePrice
+import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -237,5 +238,13 @@ internal class CheckieLocalDataSourceImpl(
 
     override suspend fun getLatestCurrency(): CheckieCurrency? {
         return preferencesDataSource.getLatestCurrency()
+    }
+
+    override suspend fun getLatestTagSortingStrategy(): TagSortingStrategy? {
+        return preferencesDataSource.getLatestTagSortingStrategy()
+    }
+
+    override suspend fun setLatestTagSortingStrategy(strategy: TagSortingStrategy) {
+        preferencesDataSource.setLatestTagSortingStrategy(strategy)
     }
 }

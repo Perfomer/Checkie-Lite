@@ -5,6 +5,7 @@ import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.core.entity.price.CheckieCurrency
 import com.perfomer.checkielite.core.entity.price.CheckiePrice
+import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
 import kotlinx.coroutines.flow.Flow
 
 interface CheckieLocalDataSource {
@@ -70,4 +71,8 @@ interface CheckieLocalDataSource {
     suspend fun getAllCurrenciesCodes(): List<String>
 
     suspend fun getLatestCurrency(): CheckieCurrency?
+
+    suspend fun getLatestTagSortingStrategy(): TagSortingStrategy?
+
+    suspend fun setLatestTagSortingStrategy(strategy: TagSortingStrategy)
 }

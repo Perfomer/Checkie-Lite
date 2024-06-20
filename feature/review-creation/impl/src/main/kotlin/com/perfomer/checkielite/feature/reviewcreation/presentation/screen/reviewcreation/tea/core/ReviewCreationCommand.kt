@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.price.CheckieCurrency
 import com.perfomer.checkielite.core.entity.price.CheckiePrice
+import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagCreationMode
 
@@ -42,6 +43,10 @@ internal sealed interface ReviewCreationCommand {
     data object WarmUpCurrencies : ReviewCreationCommand
 
     data object LoadLatestCurrency : ReviewCreationCommand
+
+    data object LoadLatestTagSortStrategy : ReviewCreationCommand
+
+    class RememberTagSortStrategy(val strategy: TagSortingStrategy) : ReviewCreationCommand
 }
 
 internal sealed interface ReviewCreationNavigationCommand : ReviewCreationCommand {
@@ -53,6 +58,8 @@ internal sealed interface ReviewCreationNavigationCommand : ReviewCreationComman
     data object OpenPhotoPicker : ReviewCreationNavigationCommand
 
     class OpenCurrencySelector(val currency: CheckieCurrency) : ReviewCreationNavigationCommand
+
+    class OpenTagSort(val currentOption: TagSortingStrategy) : ReviewCreationNavigationCommand
 
     class OpenGallery(
         val picturesUri: List<String>,

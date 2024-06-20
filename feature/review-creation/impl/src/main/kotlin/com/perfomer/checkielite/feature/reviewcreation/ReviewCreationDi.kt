@@ -26,8 +26,10 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationStore
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.CreateReviewActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.LoadLatestCurrencyActor
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.LoadLatestTagSortStrategyActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.LoadReviewActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.LoadTagsActor
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.RememberTagSortStrategyActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.ReviewCreationNavigationActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.SearchBrandsActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.UpdateReviewActor
@@ -85,13 +87,21 @@ internal fun createReviewCreationStore(
     galleryScreenProvider: GalleryScreenProvider,
     tagCreationScreenProvider: TagCreationScreenProvider,
     currencySelectorScreenProvider: CurrencySelectorScreenProvider,
+    tagSortScreenProvider: TagSortScreenProvider,
 ): ReviewCreationStore {
     return ReviewCreationStore(
         params = params,
         reducer = ReviewCreationReducer(),
         uiStateMapper = ReviewCreationUiStateMapper(context),
         actors = setOf(
-            ReviewCreationNavigationActor(router, externalRouter, galleryScreenProvider, tagCreationScreenProvider, currencySelectorScreenProvider),
+            ReviewCreationNavigationActor(
+                router = router,
+                externalRouter = externalRouter,
+                galleryScreenProvider = galleryScreenProvider,
+                tagCreationScreenProvider = tagCreationScreenProvider,
+                tagSortScreenProvider = tagSortScreenProvider,
+                currencySelectorScreenProvider = currencySelectorScreenProvider,
+            ),
             CreateReviewActor(localDataSource),
             UpdateReviewActor(localDataSource),
             LoadReviewActor(localDataSource),
@@ -99,6 +109,8 @@ internal fun createReviewCreationStore(
             SearchBrandsActor(localDataSource),
             WarmUpCurrenciesActor(localDataSource),
             LoadLatestCurrencyActor(localDataSource),
+            LoadLatestTagSortStrategyActor(localDataSource),
+            RememberTagSortStrategyActor(localDataSource),
         )
     )
 }

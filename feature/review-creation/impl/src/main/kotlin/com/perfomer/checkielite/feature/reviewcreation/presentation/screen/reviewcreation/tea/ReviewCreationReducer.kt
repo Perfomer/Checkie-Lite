@@ -6,14 +6,17 @@ import com.perfomer.checkielite.common.pure.util.swap
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.price.CheckiePrice
+import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.CreateReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadLatestCurrency
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadLatestTagSortStrategy
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadTags
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.RememberTagSortStrategy
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.SearchBrands
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.UpdateReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.WarmUpCurrencies
@@ -25,9 +28,11 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.BrandsSearchComplete
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.Initialize
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.LatestCurrencyLoading
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.LatestTagSortStrategyLoading
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.ReviewLoading
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.ReviewSaving
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.TagsLoading
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.Exit
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.ExitWithResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenCurrencySelector
@@ -39,6 +44,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnPhotosPick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnTagCreated
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnTagDeleted
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnTagSortSelected
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnBackPress
@@ -64,6 +70,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         is ReviewSaving -> reduceReviewsCreation(event)
         is TagsLoading -> reduceTagsLoading(event)
         is LatestCurrencyLoading -> reduceLatestCurrencyLoading(event)
+        is LatestTagSortStrategyLoading -> reduceLatestTagSortStrategyLoading(event)
 
         is BrandsSearchComplete -> state { copy(suggestedBrands = event.brands) }
     }
@@ -72,7 +79,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         val modificationMode = state.mode as? ReviewCreationMode.Modification
         if (modificationMode != null) commands(LoadReview(modificationMode.reviewId))
 
-        commands(LoadTags(), WarmUpCurrencies, LoadLatestCurrency)
+        commands(LoadTags(), WarmUpCurrencies, LoadLatestCurrency, LoadLatestTagSortStrategy)
     }
 
     private fun reduceUi(event: ReviewCreationUiEvent) = when (event) {
@@ -219,6 +226,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         }
         is Tags.OnSearchQueryClearClick -> onTagsSearchQueryInput("")
         is Tags.OnSearchQueryInput -> onTagsSearchQueryInput(event.query)
+        is Tags.OnTagSortClick -> commands(ReviewCreationNavigationCommand.OpenTagSort(state.tagSorting))
         is Tags.OnTagClick -> {
             val isTagSelected = state.reviewDetails.tagsIds.any { it == event.tagId }
             state {
@@ -263,7 +271,6 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 ),
             )
         }
-
         is OnTagCreated -> {
             state {
                 copy(
@@ -275,7 +282,6 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
 
             onTagsSearchQueryInput("")
         }
-
         is OnTagDeleted -> {
             state {
                 copy(
@@ -294,6 +300,10 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             }
 
             state { copy(currentPriceCurrency = selectedCurrency) }
+        }
+        is OnTagSortSelected -> {
+            state { copy(tagSorting = event.strategy) }
+            commands(RememberTagSortStrategy(event.strategy))
         }
     }
 
@@ -349,5 +359,15 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             state { copy(currentPriceCurrency = initialReviewDetails.price?.currency ?: defaultCurrency) }
         }
         is LatestCurrencyLoading.Failed -> Unit
+    }
+
+
+    private fun reduceLatestTagSortStrategyLoading(event: LatestTagSortStrategyLoading) = when (event) {
+        is LatestTagSortStrategyLoading.Started -> Unit
+        is LatestTagSortStrategyLoading.Succeed -> {
+            val strategy = event.strategy ?: TagSortingStrategy.USAGE_COUNT
+            state { copy(tagSorting = strategy) }
+        }
+        is LatestTagSortStrategyLoading.Failed -> Unit
     }
 }

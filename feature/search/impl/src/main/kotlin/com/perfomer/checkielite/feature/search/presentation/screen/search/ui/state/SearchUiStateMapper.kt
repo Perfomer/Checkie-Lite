@@ -12,6 +12,7 @@ import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.co
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.FilterType
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.LeadingIcon
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.LeadingIconType
+import com.perfomer.checkielite.feature.search.presentation.util.label
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
@@ -41,14 +42,7 @@ internal class SearchUiStateMapper(
         val sorting = state.sortingStrategy
         val isApplied = sorting != ReviewsSortingStrategy.RELEVANCE
 
-        val strategyResource = when (sorting) {
-            ReviewsSortingStrategy.RELEVANCE -> R.string.search_sort_relevant
-            ReviewsSortingStrategy.NEWEST -> R.string.search_sort_newest
-            ReviewsSortingStrategy.OLDEST -> R.string.search_sort_oldest
-            ReviewsSortingStrategy.MOST_RATED -> R.string.search_sort_most_rated
-            ReviewsSortingStrategy.LEAST_RATED -> R.string.search_sort_least_rated
-        }
-
+        val strategyResource = sorting.label
         val postfix = ": " + context.getString(strategyResource)
 
         return Filter(

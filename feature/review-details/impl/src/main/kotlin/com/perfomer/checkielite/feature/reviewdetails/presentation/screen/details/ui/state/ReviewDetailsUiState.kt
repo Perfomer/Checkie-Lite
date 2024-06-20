@@ -17,7 +17,7 @@ internal sealed interface ReviewDetailsUiState {
         val productName: String,
         val date: String,
         val rating: Int,
-        val price: String?,
+        val price: Price?,
         val picturesUri: ImmutableList<String>,
         val currentPicturePosition: Int,
         val comment: String?,
@@ -48,4 +48,10 @@ internal data class Tag(
     val tagId: String,
     val text: String,
     val emoji: String?,
+)
+
+@Immutable
+internal data class Price(
+    val value: String,
+    val fractionalPartIndices: IntRange?,
 )

@@ -28,7 +28,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -37,12 +40,13 @@ import com.perfomer.checkielite.common.ui.cui.modifier.conditional
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewReaction
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.feature.reviewdetails.R
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.Price
 
 @Composable
 internal fun ReviewDetailsInfo(
     date: String,
     rating: Int,
-    price: String?,
+    price: Price?,
     onEmptyPriceClick: () -> Unit,
 ) {
     Spacer(Modifier.height(20.dp))
@@ -79,7 +83,7 @@ internal fun ReviewDetailsInfo(
         val ratingValue = remember(rating) { "$rating/10" }
 
         InfoCell(
-            value = ratingValue,
+            value = AnnotatedString(ratingValue),
             description = stringResource(R.string.reviewdetails_rating),
             icon = {
                 Image(
@@ -94,7 +98,13 @@ internal fun ReviewDetailsInfo(
 
         if (price != null) {
             InfoCell(
-                value = price,
+                value = buildAnnotatedString {
+                    append(price.value)
+
+                    if (price.fractionalPartIndices != null) {
+                        addStyle(SpanStyle(fontSize = 14.sp), price.fractionalPartIndices.first, price.fractionalPartIndices.last)
+                    }
+                },
                 description = stringResource(R.string.reviewdetails_price),
                 icon = {
                     Icon(
@@ -108,7 +118,7 @@ internal fun ReviewDetailsInfo(
             )
         } else {
             InfoCell(
-                value = stringResource(R.string.reviewdetails_price_specify_value),
+                value = AnnotatedString(stringResource(R.string.reviewdetails_price_specify_value)),
                 valueColor = LocalCuiPalette.current.TextAccent,
                 description = stringResource(R.string.reviewdetails_price_specify_description),
                 descriptionColor = LocalCuiPalette.current.TextAccent,
@@ -131,7 +141,7 @@ internal fun ReviewDetailsInfo(
 
 @Composable
 private fun InfoCell(
-    value: String,
+    value: AnnotatedString,
     description: String,
     icon: @Composable BoxScope.() -> Unit,
     fromLeft: Boolean,

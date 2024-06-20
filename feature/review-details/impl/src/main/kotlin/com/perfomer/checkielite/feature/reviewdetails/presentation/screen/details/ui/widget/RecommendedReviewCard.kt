@@ -146,6 +146,7 @@ private fun RecommendedReviewPicture(
         AnimatedVisibility(visible = isSyncing, enter = fadeIn(), exit = fadeOut()) {
             Box(
                 modifier = Modifier
+                    .clip(RoundedCornerShape(16.dp))
                     .background(LocalCuiPalette.current.BackgroundPrimary.copy(alpha = 0.5F))
                     .padding(12.dp)
             ) {

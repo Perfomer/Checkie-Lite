@@ -25,6 +25,10 @@
     <string name="reviewcreation_tags_create_tag_generic">Создать тег</string>
     <string name="reviewcreation_tags_create_tag_specific">Создать \"%s\"</string>
 
+    <string name="reviewcreation_tagsort_title">Сортировка</string>
+    <string name="reviewcreation_tagsort_sort_usage_count">По частоте использования</string>
+    <string name="reviewcreation_tagsort_sort_alphabetically">По алфавиту</string>
+
     <string name="tagcreation_creation_title">Новый тег</string>
     <string name="tagcreation_modification_title">Редактирование тега</string>
     <string name="tagcreation_description">Напишите название тега</string>

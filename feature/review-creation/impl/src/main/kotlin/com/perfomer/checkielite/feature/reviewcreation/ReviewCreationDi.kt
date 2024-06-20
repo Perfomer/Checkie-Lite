@@ -13,6 +13,8 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.C
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorScreenProvider
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationScreenProvider
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagSortParams
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagSortScreenProvider
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.CurrencySelectorReducer
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.CurrencySelectorStore
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.actor.CurrencySelectorNavigationActor
@@ -43,6 +45,11 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcr
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.actor.ValidateTagNameActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui.TagCreationContentScreen
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui.state.TagCreationUiStateMapper
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagsort.tea.TagSortReducer
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagsort.tea.TagSortStore
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagsort.tea.actor.TagSortNavigationActor
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagsort.ui.TagSortContentScreen
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagsort.ui.state.TagSortUiStateMapper
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -61,6 +68,9 @@ private val presentationModule = module {
 
     factoryOf(::createTagCreationStore)
     factory { TagCreationScreenProvider(::TagCreationContentScreen) }
+
+    factoryOf(::createTagSortStore)
+    factory { TagSortScreenProvider(::TagSortContentScreen) }
 
     factoryOf(::createCurrencySelectorStore)
     factory { CurrencySelectorScreenProvider(::CurrencySelectorContentScreen) }
@@ -112,6 +122,21 @@ internal fun createTagCreationStore(
             DeleteTagActor(localDataSource),
             UpdateTagActor(localDataSource),
             LoadEmojisActor(emojiRepository),
+        )
+    )
+}
+
+internal fun createTagSortStore(
+    context: Context,
+    params: TagSortParams,
+    router: Router,
+): TagSortStore {
+    return TagSortStore(
+        params = params,
+        reducer = TagSortReducer(),
+        uiStateMapper = TagSortUiStateMapper(context),
+        actors = setOf(
+            TagSortNavigationActor(router),
         )
     )
 }

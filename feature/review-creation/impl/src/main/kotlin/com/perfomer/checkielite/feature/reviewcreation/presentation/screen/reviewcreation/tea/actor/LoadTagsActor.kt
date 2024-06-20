@@ -5,6 +5,7 @@ import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadTags
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
@@ -29,6 +30,16 @@ internal class LoadTagsActor(
         return localDataSource.getTags()
             .map { tags ->
                 tags.smartFilterByQuery(command.searchQuery) { listOf(value to 1F) }
+            }
+            .map { tags ->
+                if (command.searchQuery.isEmpty()) {
+                    when (command.sort) {
+                        TagSortingStrategy.USAGE_COUNT -> tags
+                        TagSortingStrategy.ALPHABETICALLY -> tags.sortedBy { it.value }
+                    }
+                } else {
+                    tags
+                }
             }
             .map(TagsLoading::Succeed)
             .onCatchReturn(TagsLoading::Failed)

@@ -14,7 +14,8 @@
     <string name="reviewdetails_review">Отзыв</string>
     <string name="reviewdetails_rating">Оценка</string>
     <string name="reviewdetails_price">Цена</string>
-    <string name="reviewdetails_price_specify">Указать</string>
+    <string name="reviewdetails_price_specify_value">Указать</string>
+    <string name="reviewdetails_price_specify_description">цену</string>
     <string name="reviewdetails_comment">Комментарий</string>
     <string name="reviewdetails_advantages">Достоинства</string>
     <string name="reviewdetails_disadvantages">Недостатки</string>

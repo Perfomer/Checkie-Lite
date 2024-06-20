@@ -14,14 +14,14 @@ internal fun ReviewDetailsText(
     onEmptyCommentClick: () -> Unit,
 ) {
     if (comment != null) {
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(12.dp))
 
         ReviewDetailsTextCard(
             text = comment,
             header = { ReviewDetailsCommentHeader() },
         )
     } else if (advantages == null && disadvantages == null) {
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(12.dp))
 
         ReviewDetailsTextEmptyCard(
             onClick = onEmptyCommentClick,
@@ -29,7 +29,7 @@ internal fun ReviewDetailsText(
     }
 
     if (advantages != null) {
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(12.dp))
 
         ReviewDetailsTextCard(
             text = advantages,
@@ -38,7 +38,7 @@ internal fun ReviewDetailsText(
     }
 
     if (disadvantages != null) {
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(12.dp))
 
         ReviewDetailsTextCard(
             text = disadvantages,

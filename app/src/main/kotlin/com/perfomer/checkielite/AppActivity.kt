@@ -26,8 +26,6 @@ import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalCuiToastHostStat
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
-import com.perfomer.checkielite.common.ui.util.LocalStableInsetsHolder
-import com.perfomer.checkielite.common.ui.util.StableInsetsHolder
 import com.perfomer.checkielite.common.ui.util.TransparentSystemBars
 import com.perfomer.checkielite.feature.main.navigation.MainScreenProvider
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
@@ -122,7 +120,7 @@ class AppActivity : AppCompatActivity() {
     private fun EnrichCompositionLocal(content: @Composable () -> Unit) {
         CompositionLocalProvider(
             LocalCuiToastHostState provides remember { CuiToastHostState() },
-            LocalStableInsetsHolder provides remember { StableInsetsHolder() },
+//            LocalStableInsetsHolder provides remember { StableInsetsHolder() },
             content = content
         )
     }

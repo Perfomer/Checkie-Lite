@@ -38,7 +38,10 @@ internal sealed interface ReviewCreationCommand {
         val disadvantages: String?,
     ) : ReviewCreationCommand
 
-    class LoadTags(val searchQuery: String = "") : ReviewCreationCommand
+    class LoadTags(
+        val searchQuery: String = "",
+        val sort: TagSortingStrategy,
+    ) : ReviewCreationCommand
 
     data object WarmUpCurrencies : ReviewCreationCommand
 

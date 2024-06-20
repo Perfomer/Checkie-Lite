@@ -79,7 +79,12 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         val modificationMode = state.mode as? ReviewCreationMode.Modification
         if (modificationMode != null) commands(LoadReview(modificationMode.reviewId))
 
-        commands(LoadTags(), WarmUpCurrencies, LoadLatestCurrency, LoadLatestTagSortStrategy)
+        commands(
+            LoadTags(sort = state.tagSorting),
+            WarmUpCurrencies,
+            LoadLatestCurrency,
+            LoadLatestTagSortStrategy,
+        )
     }
 
     private fun reduceUi(event: ReviewCreationUiEvent) = when (event) {
@@ -222,10 +227,10 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     private fun reduceTagsUi(event: Tags) = when (event) {
         is Tags.OnCreateTagClick -> {
             commands(OpenTagCreation(TagCreationMode.Creation(state.tagsSearchQuery.trim())))
-            onTagsSearchQueryInput("")
+            onTagsSearchQueryUpdate("")
         }
-        is Tags.OnSearchQueryClearClick -> onTagsSearchQueryInput("")
-        is Tags.OnSearchQueryInput -> onTagsSearchQueryInput(event.query)
+        is Tags.OnSearchQueryClearClick -> onTagsSearchQueryUpdate("")
+        is Tags.OnSearchQueryInput -> onTagsSearchQueryUpdate(event.query)
         is Tags.OnTagSortClick -> commands(ReviewCreationNavigationCommand.OpenTagSort(state.tagSorting))
         is Tags.OnTagClick -> {
             val isTagSelected = state.reviewDetails.tagsIds.any { it == event.tagId }
@@ -240,18 +245,21 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                     )
                 )
             }
-            onTagsSearchQueryInput("")
+            onTagsSearchQueryUpdate("")
         }
         is Tags.OnTagLongClick -> {
             effects(CloseKeyboard)
             commands(OpenTagCreation(TagCreationMode.Modification(event.tagId)))
-            onTagsSearchQueryInput("")
+            onTagsSearchQueryUpdate("")
         }
     }
 
-    private fun onTagsSearchQueryInput(query: String) {
-        state { copy(tagsSearchQuery = query) }
-        commands(LoadTags(query.trim()))
+    private fun onTagsSearchQueryUpdate(
+        query: String = state.tagsSearchQuery,
+        sort: TagSortingStrategy = state.tagSorting,
+    ) {
+        state { copy(tagsSearchQuery = query, tagSorting = sort) }
+        commands(LoadTags(query.trim(), sort))
     }
 
     private fun reduceReviewInfoUi(event: ReviewInfo) = when (event) {
@@ -280,7 +288,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 )
             }
 
-            onTagsSearchQueryInput("")
+            onTagsSearchQueryUpdate("")
         }
         is OnTagDeleted -> {
             state {
@@ -291,6 +299,10 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 )
             }
         }
+        is OnTagSortSelected -> {
+            onTagsSearchQueryUpdate(sort = event.strategy)
+            commands(RememberTagSortStrategy(event.strategy))
+        }
         is OnCurrencySelected -> {
             val selectedCurrency = event.currency
             val currentPrice = state.reviewDetails.price
@@ -300,10 +312,6 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             }
 
             state { copy(currentPriceCurrency = selectedCurrency) }
-        }
-        is OnTagSortSelected -> {
-            state { copy(tagSorting = event.strategy) }
-            commands(RememberTagSortStrategy(event.strategy))
         }
     }
 
@@ -348,7 +356,10 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
 
     private fun reduceTagsLoading(event: TagsLoading) = when (event) {
         is TagsLoading.Started -> Unit
-        is TagsLoading.Succeed -> state { copy(tagsSuggestions = event.tags) }
+        is TagsLoading.Succeed -> {
+            state { copy(tagsSuggestions = event.tags) }
+            onTagsSearchQueryUpdate()
+        }
         is TagsLoading.Failed -> Unit
     }
 
@@ -366,7 +377,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         is LatestTagSortStrategyLoading.Started -> Unit
         is LatestTagSortStrategyLoading.Succeed -> {
             val strategy = event.strategy ?: TagSortingStrategy.USAGE_COUNT
-            state { copy(tagSorting = strategy) }
+            onTagsSearchQueryUpdate(sort = strategy)
         }
         is LatestTagSortStrategyLoading.Failed -> Unit
     }

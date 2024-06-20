@@ -324,7 +324,7 @@ private fun FiltersRow(
                 modifier = Modifier.fillMaxHeight()
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_sort),
+                    painter = painterResource(R.drawable.ic_filter),
                     contentDescription = null,
                     modifier = Modifier.size(12.dp)
                 )

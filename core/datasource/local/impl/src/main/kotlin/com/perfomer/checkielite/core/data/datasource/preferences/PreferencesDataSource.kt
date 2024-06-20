@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import com.perfomer.checkielite.core.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -12,6 +13,10 @@ internal interface PreferencesDataSource {
     suspend fun getLatestCurrency(): CheckieCurrency?
 
     suspend fun setLatestCurrency(currency: CheckieCurrency)
+
+    suspend fun getLatestTagSortingStrategy(): TagSortingStrategy?
+
+    suspend fun setLatestTagSortingStrategy(strategy: TagSortingStrategy)
 }
 
 @SuppressLint("ApplySharedPref")
@@ -36,10 +41,24 @@ internal class PreferencesDataSourceImpl(
         Unit
     }
 
+    override suspend fun getLatestTagSortingStrategy(): TagSortingStrategy?  = withContext(Dispatchers.IO) {
+        val value = preferences.getString(KEY_LATEST_TAG_SORT, null) ?: return@withContext null
+        return@withContext TagSortingStrategy.valueOf(value)
+    }
+
+    override suspend fun setLatestTagSortingStrategy(strategy: TagSortingStrategy)  = withContext(Dispatchers.IO) {
+        preferences.edit()
+            .putString(KEY_LATEST_TAG_SORT, strategy.name)
+            .commit()
+
+        Unit
+    }
+
     private companion object {
 
         private const val PREF_NAME = "checkielite"
 
         private const val KEY_LATEST_CURRENCY = "latest_currency"
+        private const val KEY_LATEST_TAG_SORT = "latest_tag_sort"
     }
 }

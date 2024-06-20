@@ -29,8 +29,8 @@ import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
 import com.perfomer.checkielite.feature.reviewcreation.R
-import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagSortingStrategy
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagsort.ui.state.SortingOption
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagsort.ui.state.TagSortUiState
 

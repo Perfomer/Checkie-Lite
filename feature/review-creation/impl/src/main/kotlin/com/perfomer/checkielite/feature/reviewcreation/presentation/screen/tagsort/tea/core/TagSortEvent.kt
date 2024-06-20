@@ -1,6 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagsort.tea.core
 
-import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagSortingStrategy
+import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
 
 internal sealed interface TagSortEvent
 

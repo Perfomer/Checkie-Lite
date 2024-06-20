@@ -15,6 +15,9 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.C
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationScreenProvider
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagSortParams
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagSortResult
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagSortScreenProvider
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand
@@ -24,6 +27,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenGallery
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenPhotoPicker
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenTagCreation
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenTagSort
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnCurrencySelected
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnTagCreated
@@ -41,6 +45,7 @@ internal class ReviewCreationNavigationActor(
 
     private val galleryScreenProvider: GalleryScreenProvider,
     private val tagCreationScreenProvider: TagCreationScreenProvider,
+    private val tagSortScreenProvider: TagSortScreenProvider,
     private val currencySelectorScreenProvider: CurrencySelectorScreenProvider,
 ) : Actor<ReviewCreationCommand, ReviewCreationEvent> {
 
@@ -59,9 +64,9 @@ internal class ReviewCreationNavigationActor(
                 screen = galleryScreenProvider(GalleryParams(command.picturesUri.toArrayList(), command.currentPicturePosition)),
                 mode = DestinationMode.OVERLAY,
             )
-
             is OpenTagCreation -> return openTagCreation(command)
             is OpenCurrencySelector -> return openCurrencySelector(command)
+            is OpenTagSort -> return openTagSort(command)
         }
 
         return null
@@ -85,6 +90,18 @@ internal class ReviewCreationNavigationActor(
             is TagCreationResult.Created -> OnTagCreated(result.tagId)
             is TagCreationResult.Modified -> null
             is TagCreationResult.Deleted -> OnTagDeleted(result.tagId)
+        }
+    }
+
+    private suspend fun openTagSort(command: OpenTagSort): ReviewCreationNavigationEvent? {
+        val params = TagSortParams(command.currentOption)
+        val result = router.navigateForResult<TagSortResult>(
+            screen = tagSortScreenProvider(params),
+            mode = DestinationMode.BOTTOM_SHEET,
+        )
+
+        return when (result) {
+            is TagSortResult.Success -> ReviewCreationNavigationEvent.OnTagSortSelected(result.option)
         }
     }
 

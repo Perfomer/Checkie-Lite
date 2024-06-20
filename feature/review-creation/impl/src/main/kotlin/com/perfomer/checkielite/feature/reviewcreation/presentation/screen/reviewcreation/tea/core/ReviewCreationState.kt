@@ -5,6 +5,7 @@ import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.core.entity.price.CheckieCurrency
 import com.perfomer.checkielite.core.entity.price.CheckiePrice
+import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.presentation.util.LocalCheckieCurrency
@@ -23,6 +24,7 @@ internal data class ReviewCreationState(
 
     val tagsSearchQuery: String = "",
     val tagsSuggestions: List<CheckieTag> = emptyList(),
+    val tagSorting: TagSortingStrategy = TagSortingStrategy.entries.first(),
 
     val suggestedBrands: List<String> = emptyList(),
 

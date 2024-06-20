@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.core.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
 
 internal sealed interface ReviewCreationEvent {
 
@@ -20,6 +21,12 @@ internal sealed interface ReviewCreationEvent {
         data object Started : LatestCurrencyLoading
         class Succeed(val currency: CheckieCurrency?) : LatestCurrencyLoading
         class Failed(val error: Throwable) : LatestCurrencyLoading
+    }
+
+    sealed interface LatestTagSortStrategyLoading : ReviewCreationEvent {
+        data object Started : LatestTagSortStrategyLoading
+        class Succeed(val strategy: TagSortingStrategy?) : LatestTagSortStrategyLoading
+        class Failed(val error: Throwable) : LatestTagSortStrategyLoading
     }
 
     sealed interface TagsLoading : ReviewCreationEvent {
@@ -73,6 +80,8 @@ internal sealed interface ReviewCreationUiEvent : ReviewCreationEvent {
         class OnTagClick(val tagId: String) : Tags
 
         class OnTagLongClick(val tagId: String) : Tags
+
+        data object OnTagSortClick : Tags
     }
 
     sealed interface ReviewInfo : ReviewCreationUiEvent {
@@ -96,4 +105,6 @@ internal sealed interface ReviewCreationNavigationEvent : ReviewCreationEvent {
     class OnTagDeleted(val tagId: String) : ReviewCreationNavigationEvent
 
     class OnCurrencySelected(val currency: CheckieCurrency) : ReviewCreationNavigationEvent
+
+    class OnTagSortSelected(val strategy: TagSortingStrategy) : ReviewCreationNavigationEvent
 }

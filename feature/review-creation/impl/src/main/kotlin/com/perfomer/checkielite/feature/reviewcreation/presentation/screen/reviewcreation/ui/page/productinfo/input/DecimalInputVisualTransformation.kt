@@ -14,6 +14,12 @@ import androidx.compose.ui.unit.sp
 
 internal class DecimalInputVisualTransformation : VisualTransformation {
 
+    private val separators: DecimalFormatSymbols = DecimalFormatSymbols.getInstance()
+    private val formatter: NumberFormat = DecimalFormat.getInstance()
+
+    private val Char.isNumberFormatSeparator: Boolean
+        get() = !isDigit() && this != separators.decimalSeparator
+
     override fun filter(text: AnnotatedString): TransformedText {
         if (text.isEmpty()) return text.toTransformedText(OffsetMapping.Identity)
 
@@ -83,12 +89,6 @@ internal class DecimalInputVisualTransformation : VisualTransformation {
     }
 
     private companion object {
-
-        private val separators: DecimalFormatSymbols = DecimalFormatSymbols.getInstance()
-        private val formatter: NumberFormat = DecimalFormat.getInstance()
-
-        private val Char.isNumberFormatSeparator: Boolean
-            get() = !isDigit() && this != separators.decimalSeparator
 
         private fun AnnotatedString.toTransformedText(offsetMapping: OffsetMapping): TransformedText {
             return TransformedText(

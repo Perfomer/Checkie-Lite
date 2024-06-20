@@ -23,6 +23,10 @@
     <string name="reviewcreation_tags_create_tag_generic">Create tag</string>
     <string name="reviewcreation_tags_create_tag_specific">Create \"%s\"</string>
 
+    <string name="reviewcreation_tagsort_title">Sorting</string>
+    <string name="reviewcreation_tagsort_sort_usage_count">By usage count</string>
+    <string name="reviewcreation_tagsort_sort_alphabetically">Alphabetically</string>
+
     <string name="reviewcreation_currencyselector_title">Currencies</string>
 
     <string name="tagcreation_creation_title">New tag</string>

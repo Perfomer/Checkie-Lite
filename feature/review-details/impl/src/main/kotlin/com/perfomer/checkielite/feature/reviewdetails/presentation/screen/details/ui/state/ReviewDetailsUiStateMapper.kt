@@ -6,6 +6,7 @@ import com.perfomer.checkielite.common.tea.component.UiStateMapper
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.core.entity.price.CheckiePrice
+import com.perfomer.checkielite.core.entity.price.CurrencySymbol
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsState
 import kotlinx.collections.immutable.toPersistentList
 import java.text.DecimalFormat
@@ -73,7 +74,13 @@ internal class ReviewDetailsUiStateMapper : UiStateMapper<ReviewDetailsState, Re
             this.minimumFractionDigits = 0
         }
 
-        val formattedPrice = priceFormat.format(value)
+        var formattedPrice = priceFormat.format(value)
+
+        val alternateSymbol = CurrencySymbol.getSymbol(currency.currencyCode)
+        if (alternateSymbol != null) {
+            formattedPrice = formattedPrice.replace(currency.symbol, alternateSymbol)
+        }
+
         val fractionalPartStartIndex = formattedPrice.indexOf(decimalSeparator) + 1
         val fractionalPart = formattedPrice.substringAfter(
             delimiter = decimalSeparator,

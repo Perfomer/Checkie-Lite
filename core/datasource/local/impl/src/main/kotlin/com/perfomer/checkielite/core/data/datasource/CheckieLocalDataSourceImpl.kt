@@ -14,6 +14,7 @@ import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.core.entity.price.CheckieCurrency
 import com.perfomer.checkielite.core.entity.price.CheckiePrice
+import com.perfomer.checkielite.core.entity.price.CurrencySymbol
 import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -226,7 +227,13 @@ internal class CheckieLocalDataSourceImpl(
                     .flatMap { locale -> Currency.getAvailableCurrencyCodes(locale, now).orEmpty().toList() }
                     .distinct()
                     .map(Currency::getInstance)
-                    .sortedWith(compareBy({ it.symbol.length > 1 }, { it.displayName }))
+                    .sortedWith(
+                        compareBy(
+                            { it.currencyCode in MOST_COMMON_CURRENCY_CODES },
+                            { (CurrencySymbol.getSymbol(it.currencyCode) ?: it.symbol).length > 1 },
+                            { it.displayName },
+                        )
+                    )
                     .map(Currency::getCurrencyCode)
                     .toList()
             }
@@ -246,5 +253,9 @@ internal class CheckieLocalDataSourceImpl(
 
     override suspend fun setLatestTagSortingStrategy(strategy: TagSortingStrategy) {
         preferencesDataSource.setLatestTagSortingStrategy(strategy)
+    }
+
+    private companion object {
+        private val MOST_COMMON_CURRENCY_CODES = listOf("USD", "EUR")
     }
 }

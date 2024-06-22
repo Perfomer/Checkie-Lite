@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastMap
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
+import com.perfomer.checkielite.core.entity.price.CurrencySymbol
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationState
@@ -30,13 +31,15 @@ internal class ReviewCreationUiStateMapper(
     }
 
     private fun createProductInfoPageState(state: ReviewCreationState): ProductInfoPageUiState {
+        val priceCurrency = state.currentPriceCurrency
+
         return ProductInfoPageUiState(
             productName = state.reviewDetails.productName,
             brand = state.reviewDetails.productBrand,
             brandSuggestions = state.suggestedBrands.toPersistentList(),
             picturesUri = state.reviewDetails.pictures.map { it.uri }.toPersistentList(),
             price = state.currentPriceFieldValue,
-            priceCurrency = state.currentPriceCurrency.symbol,
+            priceCurrency = CurrencySymbol.getSymbol(priceCurrency.code) ?: priceCurrency.symbol,
             productNameErrorText = context.getString(R.string.reviewcreation_productinfo_field_product_error_empty)
                 .takeUnless { state.isProductNameValid },
         )

@@ -6,6 +6,7 @@ internal class DecimalInputFilter {
 
     fun cleanUp(input: String): String {
         if (input.isEmpty()) return ""
+        if (input.matches(decimalSeparatorsRegex)) return ""
 
         val parts = input
             .filter { char -> char.isDigit() || char in decimalSeparators }
@@ -32,8 +33,6 @@ internal class DecimalInputFilter {
         private const val MAX_FRACTIONAL_PART_LENGTH = 2
 
         private val decimalSeparators: Set<Char> = setOf(',', '.')
-
-        private val onlyZerosRegex: Regex = "0+".toRegex()
         private val decimalSeparatorsRegex: Regex = decimalSeparators.toRegex()
     }
 }

@@ -23,4 +23,7 @@ internal interface CheckiePictureDao {
 
     @Query("DELETE FROM CheckieReviewPictureDb WHERE id IN (:picturesIds)")
     suspend fun deletePictures(picturesIds: List<String>)
+
+    @Query("SELECT * FROM CheckieReviewPictureDb")
+    fun getAllPicturesUri(): List<CheckieReviewPictureDb>
 }

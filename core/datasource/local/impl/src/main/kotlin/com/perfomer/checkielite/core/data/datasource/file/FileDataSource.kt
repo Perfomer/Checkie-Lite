@@ -3,6 +3,7 @@ package com.perfomer.checkielite.core.data.datasource.file
 import android.content.Context
 import android.graphics.Bitmap
 import com.perfomer.checkielite.common.pure.util.randomUuid
+import com.perfomer.checkielite.core.data.util.archive
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.destination
 import id.zelory.compressor.constraint.format
@@ -19,6 +20,12 @@ internal interface FileDataSource {
     ): String
 
     suspend fun deleteFile(uri: String)
+
+    suspend fun createBackup(
+        databaseUri: String,
+        picturesUri: List<String>,
+        destinationUri: String,
+    )
 
     private companion object {
         const val COMPRESS_TARGET_SIZE = 1 * 1024 * 1024L // 1 MB in bytes
@@ -37,7 +44,7 @@ internal class FileDataSourceImpl(
         val sourceFile = File(uri)
         val destinationFile = File(applicationContext.filesDir, randomUuid() + ".webp")
 
-        Compressor.compress(applicationContext, sourceFile) {
+        Compressor.compress(applicationContext, sourceFile, Dispatchers.IO) {
             format(Bitmap.CompressFormat.WEBP)
             destination(destinationFile)
             size(compressTargetSizeBytes)
@@ -50,4 +57,10 @@ internal class FileDataSourceImpl(
         File(uri).delete()
     }
 
+    override suspend fun createBackup(databaseUri: String, picturesUri: List<String>, destinationUri: String) = withContext(Dispatchers.IO) {
+        archive(
+            files = picturesUri.map(::File) + File(databaseUri),
+            destination = File(destinationUri),
+        )
+    }
 }

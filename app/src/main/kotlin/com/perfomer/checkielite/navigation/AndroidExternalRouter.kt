@@ -18,8 +18,6 @@ import com.perfomer.checkielite.core.navigation.api.ExternalDestination
 import com.perfomer.checkielite.core.navigation.api.ExternalResult
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 
-private const val IMAGE_TYPE = "image/*"
-
 internal class AndroidExternalRouter(
     private val singleActivityHolder: SingleActivityHolder
 ) : ExternalRouter {
@@ -57,6 +55,7 @@ internal class AndroidExternalRouter(
         return when (destination) {
             ExternalDestination.CAMERA -> takePhoto()
             ExternalDestination.GALLERY -> pickPhoto()
+            ExternalDestination.FILE -> pickFile()
         } as ExternalResult<T>
     }
 
@@ -111,5 +110,25 @@ internal class AndroidExternalRouter(
         val uri = activityResult.data?.data.takeIf { activityResult.resultCode == Activity.RESULT_OK }
 
         return listOfNotNull(uri)
+    }
+
+    private suspend fun pickFile(): ExternalResult<*> {
+        val isPermissionGranted = permissionResultHandler.awaitResultFor(Manifest.permission.READ_EXTERNAL_STORAGE)
+        if (!isPermissionGranted) return ExternalResult.Cancel
+
+        val intent = Intent().apply {
+            action = Intent.ACTION_PICK
+            setType("*/*")
+        }
+
+        val activityResult = commonActivityResultHandler.awaitResultFor(intent)
+
+        val uri = activityResult.data?.data.takeIf { activityResult.resultCode == Activity.RESULT_OK }
+
+        return if (uri != null) ExternalResult.Success(uri) else ExternalResult.Cancel
+    }
+
+    private companion object {
+        private const val IMAGE_TYPE: String = "image/*"
     }
 }

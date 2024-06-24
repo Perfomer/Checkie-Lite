@@ -255,6 +255,18 @@ internal class CheckieLocalDataSourceImpl(
         preferencesDataSource.setLatestTagSortingStrategy(strategy)
     }
 
+    override suspend fun exportBackup(path: String) {
+        fileDataSource.createBackup(
+            databaseUri = databaseDataSource.getDatabaseSourcePath(),
+            picturesUri =   databaseDataSource.getAllPicturesUri(),
+            destinationUri = path,
+        )
+    }
+
+    override suspend fun importBackup(path: String) {
+        TODO("Not yet implemented")
+    }
+
     private companion object {
         private val MOST_COMMON_CURRENCY_CODES = listOf("USD", "EUR")
     }

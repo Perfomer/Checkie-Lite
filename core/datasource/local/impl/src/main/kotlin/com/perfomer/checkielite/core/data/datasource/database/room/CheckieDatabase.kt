@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.perfomer.checkielite.core.data.datasource.database.room.converter.BigDecimalConverter
 import com.perfomer.checkielite.core.data.datasource.database.room.converter.DateConverter
+import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckiePictureDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieReviewDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieTagDao
@@ -37,6 +38,7 @@ import com.perfomer.checkielite.core.data.datasource.database.room.entity.Recent
 @TypeConverters(DateConverter::class, BigDecimalConverter::class)
 internal abstract class CheckieDatabase : RoomDatabase() {
 
+    abstract fun checkieDao(): CheckieDao
     abstract fun reviewDao(): CheckieReviewDao
     abstract fun pictureDao(): CheckiePictureDao
     abstract fun tagDao(): CheckieTagDao
@@ -44,20 +46,13 @@ internal abstract class CheckieDatabase : RoomDatabase() {
 
     companion object {
 
-        @Synchronized
-        internal fun getInstance(
-            appContext: Context,
-            databaseName: String,
-            inMemory: Boolean = false,
-        ): CheckieDatabase {
-            return if (inMemory) {
-                Room.inMemoryDatabaseBuilder(appContext, CheckieDatabase::class.java).build()
-            } else {
-                Room.databaseBuilder(appContext, CheckieDatabase::class.java, databaseName)
-                    .fallbackToDestructiveMigration()
-                    .build()
-            }
-        }
+        private const val DATABASE_NAME = "CheckieDatabase"
 
+        @Synchronized
+        internal fun getInstance(appContext: Context): CheckieDatabase {
+            return Room.databaseBuilder(appContext, CheckieDatabase::class.java, DATABASE_NAME)
+                .setJournalMode(JournalMode.TRUNCATE)
+                .build()
+        }
     }
 }

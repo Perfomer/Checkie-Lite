@@ -7,7 +7,6 @@ import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
 import com.perfomer.checkielite.core.data.datasource.file.FileDataSourceImpl
 import com.perfomer.checkielite.core.data.datasource.preferences.PreferencesDataSource
 import com.perfomer.checkielite.core.data.datasource.preferences.PreferencesDataSourceImpl
-import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -19,11 +18,5 @@ val localDataSourceModule = module {
     singleOf(::DatabaseDataSourceImpl) bind DatabaseDataSource::class
     singleOf(::PreferencesDataSourceImpl) bind PreferencesDataSource::class
 
-    single {
-        CheckieDatabase.getInstance(
-            appContext = androidContext(),
-            databaseName = "CheckieDatabase",
-            inMemory = false,
-        )
-    }
+    singleOf(CheckieDatabase::getInstance)
 }

@@ -15,6 +15,7 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.M
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationScreenProvider
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsScreenProvider
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchScreenProvider
+import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsScreenProvider
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -39,12 +40,19 @@ internal fun createMainStore(
     reviewCreationScreenProvider: ReviewCreationScreenProvider,
     reviewDetailsScreenProvider: ReviewDetailsScreenProvider,
     searchScreenProvider: SearchScreenProvider,
+    settingsScreenProvider: SettingsScreenProvider,
 ): MainStore {
     return MainStore(
         reducer = MainReducer(),
         uiStateMapper = MainUiStateMapper(),
         actors = setOf(
-            MainNavigationActor(router, reviewCreationScreenProvider, reviewDetailsScreenProvider, searchScreenProvider),
+            MainNavigationActor(
+                router = router,
+                reviewCreationScreenProvider = reviewCreationScreenProvider,
+                reviewDetailsScreenProvider = reviewDetailsScreenProvider,
+                searchScreenProvider = searchScreenProvider,
+                settingsScreenProvider = settingsScreenProvider,
+            ),
             LoadReviewsActor(reviewsRepository),
             LoadTagsActor(localDataSource),
         ),

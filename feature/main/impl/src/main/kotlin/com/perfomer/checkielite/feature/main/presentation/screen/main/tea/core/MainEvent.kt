@@ -28,6 +28,8 @@ internal sealed interface MainUiEvent : MainEvent {
 
     data object OnSearchClick : MainUiEvent
 
+    data object OnSettingsClick : MainUiEvent
+
     data object OnFabClick : MainUiEvent
 }
 

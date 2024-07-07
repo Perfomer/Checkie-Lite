@@ -45,6 +45,7 @@ dependencies {
     implementation(project(":feature:review-creation:impl"))
     implementation(project(":feature:review-details:impl"))
     implementation(project(":feature:search:impl"))
+    implementation(project(":feature:settings:impl"))
 
     implementation(project(":core:datasource:local:impl"))
 
@@ -58,7 +59,7 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.koin.android)
     implementation(libs.koin.core)
-    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.ktx)
     implementation(libs.rustore.appupdate)
     implementation(libs.voyager.bottomsheet)
     implementation(libs.voyager.navigator)

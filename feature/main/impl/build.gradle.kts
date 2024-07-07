@@ -20,6 +20,7 @@ dependencies {
 	implementation(project(":feature:review-creation:api"))
 	implementation(project(":feature:review-details:api"))
 	implementation(project(":feature:search:api"))
+	implementation(project(":feature:settings:api"))
 
 	implementation(project(":core:datasource:local:api"))
 	implementation(project(":core:entity"))

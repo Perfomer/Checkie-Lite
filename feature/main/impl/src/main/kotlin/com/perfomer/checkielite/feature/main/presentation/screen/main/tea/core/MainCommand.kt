@@ -14,4 +14,6 @@ internal sealed interface MainNavigationCommand : MainCommand {
     class OpenSearch(val tagId: String? = null) : MainNavigationCommand
 
     data object OpenReviewCreation : MainNavigationCommand
+
+    data object OpenSettings : MainNavigationCommand
 }

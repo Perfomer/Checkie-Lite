@@ -13,6 +13,7 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenReviewCreation
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenSearch
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenSettings
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationEvent
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationEvent.ReviewCreated
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainState
@@ -20,6 +21,7 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnFabClick
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnReviewClick
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnSearchClick
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnSettingsClick
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnStart
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnTagClick
 
@@ -38,6 +40,7 @@ internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, Main
         is OnReviewClick -> commands(OpenReviewDetails(event.id))
         is OnTagClick -> commands(OpenSearch(tagId = event.id))
         is OnSearchClick -> commands(OpenSearch())
+        is OnSettingsClick -> commands(OpenSettings)
     }
 
     private fun reduceNavigation(event: MainNavigationEvent) = when (event) {

@@ -69,6 +69,7 @@ import kotlinx.collections.immutable.toPersistentList
 @Composable
 internal fun MainScreen(
     state: MainUiState,
+    onSettingsClick: () -> Unit  =  {},
     onSearchClick: () -> Unit = {},
     onReviewClick: (id: String) -> Unit = {},
     onTagClick: (id: String) -> Unit = {},
@@ -90,6 +91,7 @@ internal fun MainScreen(
         topBar = {
             TopAppBar(
                 scrollableState = scrollState,
+                onSettingsClick = onSettingsClick,
                 onSearchClick = onSearchClick,
             )
         },
@@ -190,6 +192,7 @@ private fun Error() {
 @OptIn(ExperimentalMaterial3Api::class)
 private fun TopAppBar(
     scrollableState: LazyListState,
+    onSettingsClick: () -> Unit,
     onSearchClick: () -> Unit,
 ) {
     val shouldShowDivider by remember { derivedStateOf { scrollableState.canScrollBackward } }
@@ -222,10 +225,14 @@ private fun TopAppBar(
             AnimatedVisibility(visible = shouldShowSearchIcon, enter = fadeIn(tween(250)), exit = fadeOut(tween(250))) {
                 CuiIconButton(
                     painter = painterResource(CommonDrawable.ic_search),
-                    tint = LocalCuiPalette.current.IconPrimary,
                     onClick = onSearchClick,
                 )
             }
+
+            CuiIconButton(
+                painter = painterResource(R.drawable.ic_settings),
+                onClick = onSettingsClick,
+            )
         },
         modifier = Modifier
             .fillMaxWidth()

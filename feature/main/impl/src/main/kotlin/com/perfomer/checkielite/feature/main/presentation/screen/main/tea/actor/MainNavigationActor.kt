@@ -8,6 +8,7 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenReviewCreation
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenSearch
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenSettings
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationEvent.ReviewCreated
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
@@ -17,6 +18,7 @@ import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsPa
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsScreenProvider
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchParams
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchScreenProvider
+import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsScreenProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -29,6 +31,7 @@ internal class MainNavigationActor(
     private val reviewCreationScreenProvider: ReviewCreationScreenProvider,
     private val reviewDetailsScreenProvider: ReviewDetailsScreenProvider,
     private val searchScreenProvider: SearchScreenProvider,
+    private val settingsScreenProvider: SettingsScreenProvider,
 ) : Actor<MainCommand, MainEvent> {
 
     override fun act(commands: Flow<MainCommand>): Flow<MainEvent> {
@@ -53,6 +56,10 @@ internal class MainNavigationActor(
             is OpenSearch -> {
                 val params = SearchParams(tagId = command.tagId)
                 navigate(searchScreenProvider(params))
+            }
+
+            is OpenSettings -> {
+                navigate(settingsScreenProvider())
             }
         }
 

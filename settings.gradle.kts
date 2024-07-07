@@ -40,6 +40,8 @@ include(
     ":feature:review-details:impl",
     ":feature:search:api",
     ":feature:search:impl",
+    ":feature:settings:api",
+    ":feature:settings:impl",
 )
 
 include(

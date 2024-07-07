@@ -8,6 +8,7 @@ import com.perfomer.checkielite.feature.main.mainModules
 import com.perfomer.checkielite.feature.reviewcreation.reviewCreationModules
 import com.perfomer.checkielite.feature.reviewdetails.reviewDetailsModules
 import com.perfomer.checkielite.feature.search.searchModules
+import com.perfomer.checkielite.feature.settings.settingsModules
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.voyager.navigationModule
 import com.perfomer.checkielite.update.AppUpdateManager
@@ -46,4 +47,5 @@ private val featureModules
         reviewCreationModules,
         reviewDetailsModules,
         searchModules,
+        settingsModules,
     ).flatten()

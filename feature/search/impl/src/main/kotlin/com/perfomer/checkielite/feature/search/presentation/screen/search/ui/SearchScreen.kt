@@ -38,7 +38,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -61,6 +60,7 @@ import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
+import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
@@ -144,7 +144,7 @@ private fun Content(
     onReviewClick: (id: String) -> Unit,
     onRecentSearchesClearClick: () -> Unit,
 ) {
-    LaunchedEffect(state.filters) {
+    UpdateEffect(state.filters) {
         snapshotFlow { scrollState.firstVisibleItemIndex }
             .collect { scrollState.scrollToItem(0) }
     }

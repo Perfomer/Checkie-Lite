@@ -3,4 +3,6 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.st
 import androidx.compose.runtime.Immutable
 
 @Immutable
-internal data object SettingsUiState
+internal data class SettingsUiState(
+    val isLoading: Boolean,
+)

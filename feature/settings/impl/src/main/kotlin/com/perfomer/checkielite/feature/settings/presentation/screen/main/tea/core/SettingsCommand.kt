@@ -3,9 +3,17 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.c
 internal sealed interface SettingsCommand {
 
     data object LoadSettings : SettingsCommand
+
+    data object ExportBackup : SettingsCommand
+
+    class ImportBackup(val path: String) : SettingsCommand
 }
 
 internal sealed interface SettingsNavigationCommand : SettingsCommand {
 
     data object Exit : SettingsNavigationCommand
+
+    data object RequestFileStorageAccess : SettingsNavigationCommand
+
+    data object SelectBackupFile : SettingsNavigationCommand
 }

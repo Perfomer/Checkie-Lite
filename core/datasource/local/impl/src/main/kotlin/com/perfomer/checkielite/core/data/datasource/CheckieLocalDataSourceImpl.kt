@@ -258,7 +258,7 @@ internal class CheckieLocalDataSourceImpl(
     override suspend fun exportBackup(path: String) {
         fileDataSource.createBackup(
             databaseUri = databaseDataSource.getDatabaseSourcePath(),
-            picturesUri =   databaseDataSource.getAllPicturesUri(),
+            picturesUri = databaseDataSource.getAllPicturesUri(),
             destinationUri = path,
         )
     }

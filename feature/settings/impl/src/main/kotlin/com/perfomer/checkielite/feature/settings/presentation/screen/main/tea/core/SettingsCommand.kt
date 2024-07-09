@@ -13,7 +13,7 @@ internal sealed interface SettingsNavigationCommand : SettingsCommand {
 
     data object Exit : SettingsNavigationCommand
 
-    data object RequestFileStorageAccess : SettingsNavigationCommand
+    data object RequestWriteFileStorageAccess : SettingsNavigationCommand
 
     data object SelectBackupFile : SettingsNavigationCommand
 }

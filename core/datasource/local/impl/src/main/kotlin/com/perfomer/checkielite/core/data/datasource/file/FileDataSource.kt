@@ -11,6 +11,9 @@ import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 internal interface FileDataSource {
 
@@ -24,7 +27,7 @@ internal interface FileDataSource {
     suspend fun createBackup(
         databaseUri: String,
         picturesUri: List<String>,
-        destinationUri: String,
+        destinationFolderUri: String,
     )
 
     private companion object {
@@ -57,10 +60,15 @@ internal class FileDataSourceImpl(
         File(uri).delete()
     }
 
-    override suspend fun createBackup(databaseUri: String, picturesUri: List<String>, destinationUri: String) = withContext(Dispatchers.IO) {
+    override suspend fun createBackup(databaseUri: String, picturesUri: List<String>, destinationFolderUri: String) = withContext(Dispatchers.IO) {
+        val formatter = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault())
+        val timestamp = formatter.format(Date())
+
+        val fileName = "$timestamp.zip"
+
         archive(
             files = picturesUri.map(::File) + File(databaseUri),
-            destination = File(destinationUri),
+            destination = File("$destinationFolderUri/$fileName"),
         )
     }
 }

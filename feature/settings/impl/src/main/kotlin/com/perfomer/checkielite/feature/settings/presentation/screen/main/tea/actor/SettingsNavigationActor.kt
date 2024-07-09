@@ -11,11 +11,11 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.Exit
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.RequestFileStorageAccess
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.RequestWriteFileStorageAccess
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.SelectBackupFile
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent.BackupFileSelection
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent.StorageAccessRequest
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent.WriteStorageAccessRequest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNotNull
@@ -37,7 +37,7 @@ internal class SettingsNavigationActor(
         when (command) {
             is Exit -> router.exit()
             is SelectBackupFile -> return selectBackupFile()
-            is RequestFileStorageAccess -> return requestFileStorageAccess()
+            is RequestWriteFileStorageAccess -> return requestWriteFileStorageAccess()
         }
 
         return null
@@ -52,11 +52,11 @@ internal class SettingsNavigationActor(
         return BackupFileSelection.Succeed(filePath)
     }
 
-    private suspend fun requestFileStorageAccess(): StorageAccessRequest {
-        return if (permissionHelper.requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            StorageAccessRequest.Granted
+    private suspend fun requestWriteFileStorageAccess(): WriteStorageAccessRequest {
+        return if (permissionHelper.requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            WriteStorageAccessRequest.Granted
         } else {
-            StorageAccessRequest.Denied
+            WriteStorageAccessRequest.Denied
         }
     }
 }

@@ -2,6 +2,7 @@ package com.perfomer.checkielite.core.data.datasource
 
 import android.content.Context
 import android.icu.util.Currency
+import android.os.Environment
 import androidx.core.content.ContextCompat
 import com.perfomer.checkielite.common.pure.util.forEachAsync
 import com.perfomer.checkielite.common.pure.util.randomUuid
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.util.Date
 import java.util.Locale
 
@@ -255,11 +257,16 @@ internal class CheckieLocalDataSourceImpl(
         preferencesDataSource.setLatestTagSortingStrategy(strategy)
     }
 
-    override suspend fun exportBackup(path: String) {
+    override suspend fun exportBackup() {
+        val documentsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).absolutePath
+        val targetFolderPath = "$documentsFolder/Checkie"
+
+        File(targetFolderPath).mkdirs()
+
         fileDataSource.createBackup(
             databaseUri = databaseDataSource.getDatabaseSourcePath(),
             picturesUri = databaseDataSource.getAllPicturesUri(),
-            destinationUri = path,
+            destinationFolderUri = targetFolderPath,
         )
     }
 

@@ -28,9 +28,9 @@ internal sealed interface SettingsUiEvent : SettingsEvent {
 
 internal sealed interface SettingsNavigationEvent : SettingsEvent {
 
-    sealed interface StorageAccessRequest : SettingsNavigationEvent {
-        data object Granted : StorageAccessRequest
-        data object Denied : StorageAccessRequest
+    sealed interface WriteStorageAccessRequest : SettingsNavigationEvent {
+        data object Granted : WriteStorageAccessRequest
+        data object Denied : WriteStorageAccessRequest
     }
 
     sealed interface BackupFileSelection : SettingsNavigationEvent {

@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor
 
-import android.os.Environment
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
@@ -27,12 +26,7 @@ internal class ExportBackupActor(
     }
 
     private suspend fun handleCommand(command: ExportBackup): Flow<SettingsEvent> {
-        return flowBy {
-            val downloadsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            val downloadsPath = downloadsFolder.absolutePath
-
-            return@flowBy localDataSource.exportBackup(downloadsPath)
-        }
+        return flowBy { localDataSource.exportBackup() }
             .map { BackupExporting.Succeed }
             .startWith(BackupExporting.Started)
             .onCatchReturn(BackupExporting::Failed)

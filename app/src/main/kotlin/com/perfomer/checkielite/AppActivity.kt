@@ -18,6 +18,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.FadeTransition
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.perfomer.checkielite.common.android.SingleActivityHolder
+import com.perfomer.checkielite.common.android.permissions.PermissionHelper
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.NavBarScrim
 import com.perfomer.checkielite.common.ui.cui.widget.sheet.CuiDragAnchor
 import com.perfomer.checkielite.common.ui.cui.widget.toast.CuiToastHost
@@ -43,14 +44,14 @@ class AppActivity : AppCompatActivity() {
 
     private val singleActivityHolder: SingleActivityHolder by inject()
     private val externalRouter: AndroidExternalRouter by inject()
+    private val permissionHelper: PermissionHelper by inject()
     private val navigatorHolder: NavigatorHolder by inject()
     private val mainScreenProvider: MainScreenProvider by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        singleActivityHolder.activity = this
-        initExternalRouter()
+        initializeApplication()
 
         enableEdgeToEdge()
 
@@ -72,6 +73,12 @@ class AppActivity : AppCompatActivity() {
         }
 
         checkForUpdates()
+    }
+
+    private fun initializeApplication() {
+        singleActivityHolder.activity = this
+        externalRouter.register()
+        permissionHelper.register()
     }
 
     @Composable
@@ -120,16 +127,8 @@ class AppActivity : AppCompatActivity() {
     private fun EnrichCompositionLocal(content: @Composable () -> Unit) {
         CompositionLocalProvider(
             LocalCuiToastHostState provides remember { CuiToastHostState() },
-//            LocalStableInsetsHolder provides remember { StableInsetsHolder() },
             content = content
         )
-    }
-
-    /**
-     * Init external router to register ActivityResultLauncher, it should be done on onCreate
-     */
-    private fun initExternalRouter() {
-        externalRouter.register()
     }
 
     private fun checkForUpdates() = lifecycleScope.launch {

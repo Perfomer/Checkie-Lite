@@ -1,6 +1,6 @@
 package com.perfomer.checkielite
 
-import com.perfomer.checkielite.common.android.SingleActivityHolder
+import com.perfomer.checkielite.common.android.commonAndroidModule
 import com.perfomer.checkielite.core.data.datasource.localDataSourceModule
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.feature.gallery.galleryModules
@@ -23,7 +23,6 @@ val checkieLiteModules: List<Module>
     get() = appModule + coreModules + commonModules + featureModules
 
 private val appModule = module {
-    singleOf(::SingleActivityHolder)
     singleOf(::AndroidExternalRouter) bind ExternalRouter::class
 
     single { RuStoreAppUpdateManagerFactory.create(get()) }
@@ -37,6 +36,7 @@ private val coreModules
 
 private val commonModules
     get() = listOf(
+        commonAndroidModule,
         navigationModule,
     )
 

@@ -1,5 +1,7 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor
 
+import android.Manifest
+import com.perfomer.checkielite.common.android.permissions.PermissionHelper
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.navigation.api.ExternalDestination
 import com.perfomer.checkielite.core.navigation.api.ExternalResult
@@ -22,6 +24,7 @@ import kotlinx.coroutines.flow.mapLatest
 internal class SettingsNavigationActor(
     private val router: Router,
     private val externalRouter: ExternalRouter,
+    private val permissionHelper: PermissionHelper,
 ) : Actor<SettingsCommand, SettingsEvent> {
 
     override fun act(commands: Flow<SettingsCommand>): Flow<SettingsEvent> {
@@ -50,6 +53,10 @@ internal class SettingsNavigationActor(
     }
 
     private suspend fun requestFileStorageAccess(): StorageAccessRequest {
-        return StorageAccessRequest.Granted // todo
+        return if (permissionHelper.requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            StorageAccessRequest.Granted
+        } else {
+            StorageAccessRequest.Denied
+        }
     }
 }

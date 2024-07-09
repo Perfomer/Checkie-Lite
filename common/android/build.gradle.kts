@@ -12,4 +12,5 @@ android {
 dependencies {
 	api(libs.lifecycle.ktx)
 	implementation(libs.appcompat)
+	implementation(libs.koin.core)
 }

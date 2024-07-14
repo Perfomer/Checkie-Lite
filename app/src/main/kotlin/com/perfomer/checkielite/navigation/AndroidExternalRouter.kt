@@ -7,6 +7,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.Companion.isPhotoPickerAvailable
 import androidx.appcompat.app.AppCompatActivity
@@ -32,22 +33,10 @@ internal class AndroidExternalRouter(
     private lateinit var commonActivityResultHandler: SuspendableActivityResultHandler<Intent, ActivityResult>
 
     fun register() {
-        cameraResultHandler = SuspendableActivityResultHandler(
-            singleActivityHolder = singleActivityHolder,
-            contract = ActivityResultContracts.TakePicture(),
-        )
-        photoPickerResultHandler = SuspendableActivityResultHandler(
-            singleActivityHolder = singleActivityHolder,
-            contract = ActivityResultContracts.PickMultipleVisualMedia(),
-        )
-        filePickerResultHandler = SuspendableActivityResultHandler(
-            singleActivityHolder = singleActivityHolder,
-            contract = ActivityResultContracts.OpenDocument(),
-        )
-        commonActivityResultHandler = SuspendableActivityResultHandler(
-            singleActivityHolder = singleActivityHolder,
-            contract = ActivityResultContracts.StartActivityForResult(),
-        )
+        cameraResultHandler = ActivityResultContracts.TakePicture().suspendableResultHandler()
+        photoPickerResultHandler = ActivityResultContracts.PickMultipleVisualMedia().suspendableResultHandler()
+        filePickerResultHandler = ActivityResultContracts.OpenDocument().suspendableResultHandler()
+        commonActivityResultHandler = ActivityResultContracts.StartActivityForResult().suspendableResultHandler()
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -99,6 +88,13 @@ internal class AndroidExternalRouter(
     private suspend fun pickFile(): ExternalResult<*> {
         val uri = filePickerResultHandler.awaitResultFor(arrayOf("application/octet-stream"))?.toString()
         return if (uri != null) ExternalResult.Success(uri) else ExternalResult.Cancel
+    }
+
+    private fun <I, O> ActivityResultContract<I, O>.suspendableResultHandler(): SuspendableActivityResultHandler<I, O> {
+        return SuspendableActivityResultHandler(
+            singleActivityHolder = singleActivityHolder,
+            contract = this,
+        )
     }
 
     private companion object {

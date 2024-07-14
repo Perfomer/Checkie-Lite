@@ -3,8 +3,11 @@ package com.perfomer.checkielite.core.data.datasource.file
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import com.perfomer.checkielite.common.pure.appInfo.AppInfoProvider
 import com.perfomer.checkielite.common.pure.util.randomUuid
 import com.perfomer.checkielite.core.data.datasource.database.room.CheckieDatabase
+import com.perfomer.checkielite.core.data.datasource.file.metadata.BackupMetadata
+import com.perfomer.checkielite.core.data.datasource.file.metadata.BackupMetadataParser
 import com.perfomer.checkielite.core.data.util.archive
 import com.perfomer.checkielite.core.data.util.deleteRecursivelyIf
 import com.perfomer.checkielite.core.data.util.unarchive
@@ -46,6 +49,8 @@ internal interface FileDataSource {
 
 internal class FileDataSourceImpl(
     private val context: Context,
+    private val appInfoProvider: AppInfoProvider,
+    private val backupMetadataParser: BackupMetadataParser,
 ) : FileDataSource {
 
     @Suppress("DEPRECATION")
@@ -75,9 +80,16 @@ internal class FileDataSourceImpl(
 
         val fileName = "$timestamp.backup"
 
+        val metadata = BackupMetadata(
+            backupVersion = CURRENT_BACKUP_VERSION,
+            backupTimestamp = timestamp,
+            appVersionCode = appInfoProvider.getAppInfo().versionCode,
+        )
+
         archive(
             files = picturesUri.map(::File) + File(databaseUri),
             destination = File("$destinationFolderUri/$fileName"),
+            metadata = backupMetadataParser.serialize(metadata),
         )
     }
 
@@ -94,11 +106,16 @@ internal class FileDataSourceImpl(
             context = context,
             zipFile = Uri.parse(backupPath),
             destinationResolver = { fileName ->
-                when {
-                    fileName == CheckieDatabase.DATABASE_NAME -> File(databaseTargetUri)
+                when (fileName) {
+                    CheckieDatabase.DATABASE_NAME -> File(databaseTargetUri)
+                    BackupMetadataParser.METADATA_FILENAME -> null
                     else -> File(picturesDestinationFolder, fileName)
                 }
             }
         )
+    }
+
+    private companion object {
+        private const val CURRENT_BACKUP_VERSION = 1
     }
 }

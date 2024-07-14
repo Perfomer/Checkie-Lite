@@ -2,6 +2,7 @@ package com.perfomer.checkielite.core.data.util
 
 import android.content.Context
 import android.net.Uri
+import com.perfomer.checkielite.core.data.datasource.file.metadata.BackupMetadataParser.Companion.METADATA_FILENAME
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.File
@@ -22,7 +23,11 @@ fun File.deleteRecursivelyIf(condition: (File) -> Boolean): Boolean {
         }
 }
 
-internal fun archive(files: List<File>, destination: File) {
+internal fun archive(
+    files: List<File>,
+    destination: File,
+    metadata: String?,
+) {
     destination.zipOutputStream().use { zipOutputStream ->
         files.forEach { file ->
             zipOutputStream.putNextEntry(ZipEntry(file.name))
@@ -30,20 +35,26 @@ internal fun archive(files: List<File>, destination: File) {
                 bufferedInputStream.copyTo(zipOutputStream)
             }
         }
+
+        if (metadata != null) {
+            zipOutputStream.putNextEntry(ZipEntry(METADATA_FILENAME))
+            zipOutputStream.write(metadata.encodeToByteArray())
+            zipOutputStream.closeEntry()
+        }
     }
 }
 
 internal fun unarchive(
     context: Context,
     zipFile: Uri,
-    destinationResolver: (name: String) -> File,
+    destinationResolver: (name: String) -> File?,
 ) {
     zipFile.fileDescriptor(context, MODE_READ).use { descriptor ->
         descriptor?.fileDescriptor?.zipInputStream()?.use { zipInputStream ->
             var currentEntry = zipInputStream.nextEntry
 
             while (currentEntry != null) {
-                val destinationFile = destinationResolver(currentEntry.name)
+                val destinationFile = destinationResolver(currentEntry.name) ?: continue
 
                 if (currentEntry.isDirectory) {
                     destinationFile.mkdirs()

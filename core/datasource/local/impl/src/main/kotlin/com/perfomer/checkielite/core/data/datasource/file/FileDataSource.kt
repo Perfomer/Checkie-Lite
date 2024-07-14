@@ -6,6 +6,7 @@ import android.net.Uri
 import com.perfomer.checkielite.common.pure.util.randomUuid
 import com.perfomer.checkielite.core.data.datasource.database.room.CheckieDatabase
 import com.perfomer.checkielite.core.data.util.archive
+import com.perfomer.checkielite.core.data.util.deleteRecursivelyIf
 import com.perfomer.checkielite.core.data.util.unarchive
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.destination
@@ -44,7 +45,7 @@ internal interface FileDataSource {
 }
 
 internal class FileDataSourceImpl(
-    private val applicationContext: Context,
+    private val context: Context,
 ) : FileDataSource {
 
     @Suppress("DEPRECATION")
@@ -53,9 +54,9 @@ internal class FileDataSourceImpl(
         compressTargetSizeBytes: Long,
     ): String {
         val sourceFile = File(uri)
-        val destinationFile = File(applicationContext.filesDir, randomUuid() + ".webp")
+        val destinationFile = File(context.filesDir, randomUuid() + ".webp")
 
-        Compressor.compress(applicationContext, sourceFile, Dispatchers.IO) {
+        Compressor.compress(context, sourceFile, Dispatchers.IO) {
             format(Bitmap.CompressFormat.WEBP)
             destination(destinationFile)
             size(compressTargetSizeBytes)
@@ -84,18 +85,18 @@ internal class FileDataSourceImpl(
         backupPath: String,
         databaseTargetUri: String,
     ) = withContext(Dispatchers.IO) {
-        val picturesDestinationUri = applicationContext.filesDir
+        val picturesDestinationFolder = context.filesDir
 
-        picturesDestinationUri.deleteRecursively()
-        picturesDestinationUri.mkdirs()
+        picturesDestinationFolder.deleteRecursivelyIf { file -> file.extension == "webp" }
+        picturesDestinationFolder.mkdirs()
 
         unarchive(
-            context = applicationContext,
+            context = context,
             zipFile = Uri.parse(backupPath),
             destinationResolver = { fileName ->
                 when {
                     fileName == CheckieDatabase.DATABASE_NAME -> File(databaseTargetUri)
-                    else -> File(picturesDestinationUri, fileName)
+                    else -> File(picturesDestinationFolder, fileName)
                 }
             }
         )

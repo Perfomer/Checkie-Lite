@@ -9,4 +9,5 @@ import org.koin.dsl.module
 val commonAndroidModule = module {
     singleOf(::SingleActivityHolder)
     singleOf(::PermissionHelperImpl) bind PermissionHelper::class
+    singleOf(::AppRestarterImpl) bind AppRestarter::class
 }

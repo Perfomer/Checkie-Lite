@@ -8,7 +8,6 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.perfomer.checkielite.core.data.datasource.database.room.converter.BigDecimalConverter
 import com.perfomer.checkielite.core.data.datasource.database.room.converter.DateConverter
-import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckiePictureDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieReviewDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieTagDao
@@ -38,7 +37,6 @@ import com.perfomer.checkielite.core.data.datasource.database.room.entity.Recent
 @TypeConverters(DateConverter::class, BigDecimalConverter::class)
 internal abstract class CheckieDatabase : RoomDatabase() {
 
-    abstract fun checkieDao(): CheckieDao
     abstract fun reviewDao(): CheckieReviewDao
     abstract fun pictureDao(): CheckiePictureDao
     abstract fun tagDao(): CheckieTagDao

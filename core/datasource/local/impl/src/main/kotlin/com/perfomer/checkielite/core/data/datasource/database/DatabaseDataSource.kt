@@ -2,7 +2,6 @@ package com.perfomer.checkielite.core.data.datasource.database
 
 import androidx.room.withTransaction
 import com.perfomer.checkielite.core.data.datasource.database.room.CheckieDatabase
-import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckiePictureDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieReviewDao
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckieTagDao
@@ -100,8 +99,6 @@ internal interface DatabaseDataSource {
 
     suspend fun getDatabaseSourcePath(): String
 
-    suspend fun closeDatabase()
-
     suspend fun getAllPicturesUri(): List<String>
 }
 
@@ -109,7 +106,6 @@ internal class DatabaseDataSourceImpl(
     private val database: CheckieDatabase,
 ) : DatabaseDataSource {
 
-    private val checkieDao: CheckieDao by lazy { database.checkieDao() }
     private val reviewDao: CheckieReviewDao by lazy { database.reviewDao() }
     private val pictureDao: CheckiePictureDao by lazy { database.pictureDao() }
     private val tagDao: CheckieTagDao by lazy { database.tagDao() }
@@ -290,15 +286,7 @@ internal class DatabaseDataSourceImpl(
     }
 
     override suspend fun getDatabaseSourcePath(): String {
-        // todo check if needed
-//        require(!database.inTransaction()) { "Database is in transaction" }
-//        checkieDao.checkpoint()
-
         return requireNotNull(database.openHelper.writableDatabase.path) { "Database path is null" }
-    }
-
-    override suspend fun closeDatabase() {
-        database.close()
     }
 
     override suspend fun getAllPicturesUri(): List<String> {

@@ -3,6 +3,7 @@ package com.perfomer.checkielite.core.entity.price
 object CurrencySymbol {
 
     private val symbols: Map<String, String> = mapOf(
+        "AMD" to "֏",
         "ARS" to "$",
         "AUD" to "$",
         "AZN" to "₼",

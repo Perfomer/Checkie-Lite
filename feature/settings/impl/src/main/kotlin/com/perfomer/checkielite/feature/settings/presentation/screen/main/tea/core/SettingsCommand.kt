@@ -13,6 +13,8 @@ internal sealed interface SettingsNavigationCommand : SettingsCommand {
 
     data object Exit : SettingsNavigationCommand
 
+    data object RestartApp : SettingsNavigationCommand
+
     data object RequestWriteFileStorageAccess : SettingsNavigationCommand
 
     data object SelectBackupFile : SettingsNavigationCommand

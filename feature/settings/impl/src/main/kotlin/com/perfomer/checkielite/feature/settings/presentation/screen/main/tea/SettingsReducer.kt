@@ -15,6 +15,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.Initialize
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.Exit
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.RequestWriteFileStorageAccess
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.RestartApp
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.SelectBackupFile
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent.BackupFileSelection
@@ -86,6 +87,7 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
         is BackupImporting.Succeed -> {
             state { copy(isImportingInProgress = false) }
             effects(ShowToast.Success(SuccessReason.RESTORE_COMPLETED))
+            commands(RestartApp)
         }
         is BackupImporting.Failed -> {
             Log.e(TAG, "Failed to import backup", event.error)

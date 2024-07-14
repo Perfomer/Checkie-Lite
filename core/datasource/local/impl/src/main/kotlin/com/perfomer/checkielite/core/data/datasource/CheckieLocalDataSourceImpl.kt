@@ -271,15 +271,10 @@ internal class CheckieLocalDataSourceImpl(
     }
 
     override suspend fun importBackup(path: String) {
-        // check if needed
-        // databaseDataSource.closeDatabase()
-
         fileDataSource.importBackup(
             backupPath = path,
             databaseTargetUri = databaseDataSource.getDatabaseSourcePath(),
         )
-
-        // databaseDataSource.reinit()
     }
 
     private companion object {

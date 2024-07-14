@@ -14,6 +14,14 @@ import java.util.zip.ZipOutputStream
 private const val MODE_WRITE = "w"
 private const val MODE_READ = "r"
 
+fun File.deleteRecursivelyIf(condition: (File) -> Boolean): Boolean {
+    return walkBottomUp()
+        .fold(true) { res, it ->
+            val isDeleted = if (condition(it)) it.delete() else true
+            (isDeleted || !it.exists()) && res
+        }
+}
+
 internal fun archive(files: List<File>, destination: File) {
     destination.zipOutputStream().use { zipOutputStream ->
         files.forEach { file ->

@@ -28,14 +28,8 @@ internal sealed interface SettingsUiEvent : SettingsEvent {
 
 internal sealed interface SettingsNavigationEvent : SettingsEvent {
 
-    sealed interface WriteStorageAccessRequest : SettingsNavigationEvent {
-        data object Granted : WriteStorageAccessRequest
-        data object Denied : WriteStorageAccessRequest
-    }
-
     sealed interface BackupFileSelection : SettingsNavigationEvent {
         class Succeed(val path: String) : BackupFileSelection
         data object Canceled : BackupFileSelection
-        data object NoPermission : BackupFileSelection
     }
 }

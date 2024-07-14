@@ -2,7 +2,6 @@ package com.perfomer.checkielite.feature.settings
 
 import android.content.Context
 import com.perfomer.checkielite.common.android.AppRestarter
-import com.perfomer.checkielite.common.android.permissions.PermissionHelper
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.core.navigation.api.Router
@@ -29,7 +28,6 @@ internal fun createSettingsStore(
     context: Context,
     router: Router,
     externalRouter: ExternalRouter,
-    permissionHelper: PermissionHelper,
     appRestarter: AppRestarter,
     localDataSource: CheckieLocalDataSource,
 ): SettingsStore {
@@ -37,7 +35,7 @@ internal fun createSettingsStore(
         reducer = SettingsReducer(),
         uiStateMapper = SettingsUiStateMapper(context),
         actors = setOf(
-            SettingsNavigationActor(router, externalRouter, permissionHelper, appRestarter),
+            SettingsNavigationActor(router, externalRouter, appRestarter),
             ExportBackupActor(localDataSource),
             ImportBackupActor(localDataSource),
         ),

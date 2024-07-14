@@ -73,7 +73,7 @@ internal class FileDataSourceImpl(
         val formatter = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault())
         val timestamp = formatter.format(Date())
 
-        val fileName = "$timestamp.zip"
+        val fileName = "$timestamp.backup"
 
         archive(
             files = picturesUri.map(::File) + File(databaseUri),

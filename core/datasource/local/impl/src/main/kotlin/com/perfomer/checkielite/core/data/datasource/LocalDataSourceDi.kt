@@ -5,6 +5,8 @@ import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
 import com.perfomer.checkielite.core.data.datasource.database.room.CheckieDatabase
 import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
 import com.perfomer.checkielite.core.data.datasource.file.FileDataSourceImpl
+import com.perfomer.checkielite.core.data.datasource.file.metadata.BackupMetadataParser
+import com.perfomer.checkielite.core.data.datasource.file.metadata.BackupMetadataParserImpl
 import com.perfomer.checkielite.core.data.datasource.preferences.PreferencesDataSource
 import com.perfomer.checkielite.core.data.datasource.preferences.PreferencesDataSourceImpl
 import org.koin.core.module.dsl.singleOf
@@ -17,6 +19,8 @@ val localDataSourceModule = module {
     singleOf(::FileDataSourceImpl) bind FileDataSource::class
     singleOf(::DatabaseDataSourceImpl) bind DatabaseDataSource::class
     singleOf(::PreferencesDataSourceImpl) bind PreferencesDataSource::class
+
+    singleOf(::BackupMetadataParserImpl) bind BackupMetadataParser::class
 
     singleOf(CheckieDatabase::getInstance)
 }

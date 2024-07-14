@@ -9,7 +9,10 @@ applyCommonAndroid()
 android {
     namespace = "com.perfomer.checkielite"
 
-    buildFeatures.compose = true
+    buildFeatures {
+        buildConfig = true
+        compose = true
+    }
 
     buildTypes {
         debug {

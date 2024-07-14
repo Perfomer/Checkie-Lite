@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
-import android.webkit.MimeTypeMap
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,6 +28,7 @@ internal class AndroidExternalRouter(
 
     private lateinit var cameraResultHandler: SuspendableActivityResultHandler<Uri, Boolean>
     private lateinit var photoPickerResultHandler: SuspendableActivityResultHandler<PickVisualMediaRequest, List<Uri>>
+    private lateinit var filePickerResultHandler: SuspendableActivityResultHandler<Array<String>, Uri?>
     private lateinit var commonActivityResultHandler: SuspendableActivityResultHandler<Intent, ActivityResult>
 
     fun register() {
@@ -39,6 +39,10 @@ internal class AndroidExternalRouter(
         photoPickerResultHandler = SuspendableActivityResultHandler(
             singleActivityHolder = singleActivityHolder,
             contract = ActivityResultContracts.PickMultipleVisualMedia(),
+        )
+        filePickerResultHandler = SuspendableActivityResultHandler(
+            singleActivityHolder = singleActivityHolder,
+            contract = ActivityResultContracts.OpenDocument(),
         )
         commonActivityResultHandler = SuspendableActivityResultHandler(
             singleActivityHolder = singleActivityHolder,
@@ -93,22 +97,7 @@ internal class AndroidExternalRouter(
     }
 
     private suspend fun pickFile(): ExternalResult<*> {
-        val intent = Intent().apply {
-            action = Intent.ACTION_GET_CONTENT
-            setType(MimeTypeMap.getSingleton().getMimeTypeFromExtension("zip")) // todo change format from zip to local type
-            addCategory(Intent.CATEGORY_OPENABLE)
-            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/zip")) // todo change format from zip to local type
-        }
-
-        // todo: localization
-        val chooser = Intent.createChooser(intent, "Select a zip file")
-
-        val activityResult = commonActivityResultHandler.awaitResultFor(chooser)
-
-
-        val uri = activityResult.data?.dataString
-            .takeIf { activityResult.resultCode == Activity.RESULT_OK }
-
+        val uri = filePickerResultHandler.awaitResultFor(arrayOf("application/octet-stream"))?.toString()
         return if (uri != null) ExternalResult.Success(uri) else ExternalResult.Cancel
     }
 

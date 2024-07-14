@@ -93,9 +93,6 @@ internal class AndroidExternalRouter(
     }
 
     private suspend fun pickFile(): ExternalResult<*> {
-        val isPermissionGranted = permissionHelper.requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-        if (!isPermissionGranted) return ExternalResult.Cancel
-
         val intent = Intent().apply {
             action = Intent.ACTION_GET_CONTENT
             setType(MimeTypeMap.getSingleton().getMimeTypeFromExtension("zip")) // todo change format from zip to local type

@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
+import android.webkit.MimeTypeMap
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -96,13 +97,20 @@ internal class AndroidExternalRouter(
         if (!isPermissionGranted) return ExternalResult.Cancel
 
         val intent = Intent().apply {
-            action = Intent.ACTION_PICK
-            setType("*/*")
+            action = Intent.ACTION_GET_CONTENT
+            setType(MimeTypeMap.getSingleton().getMimeTypeFromExtension("zip")) // todo change format from zip to local type
+            addCategory(Intent.CATEGORY_OPENABLE)
+            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/zip")) // todo change format from zip to local type
         }
 
-        val activityResult = commonActivityResultHandler.awaitResultFor(intent)
+        // todo: localization
+        val chooser = Intent.createChooser(intent, "Select a zip file")
 
-        val uri = activityResult.data?.data.takeIf { activityResult.resultCode == Activity.RESULT_OK }
+        val activityResult = commonActivityResultHandler.awaitResultFor(chooser)
+
+
+        val uri = activityResult.data?.dataString
+            .takeIf { activityResult.resultCode == Activity.RESULT_OK }
 
         return if (uri != null) ExternalResult.Success(uri) else ExternalResult.Cancel
     }

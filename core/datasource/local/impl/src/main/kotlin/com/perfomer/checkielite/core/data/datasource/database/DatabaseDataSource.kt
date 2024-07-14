@@ -100,6 +100,8 @@ internal interface DatabaseDataSource {
 
     suspend fun getDatabaseSourcePath(): String
 
+    suspend fun closeDatabase()
+
     suspend fun getAllPicturesUri(): List<String>
 }
 
@@ -288,10 +290,15 @@ internal class DatabaseDataSourceImpl(
     }
 
     override suspend fun getDatabaseSourcePath(): String {
-        require(!database.inTransaction()) { "Database is in transaction" }
-        checkieDao.checkpoint()
+        // todo check if needed
+//        require(!database.inTransaction()) { "Database is in transaction" }
+//        checkieDao.checkpoint()
 
         return requireNotNull(database.openHelper.writableDatabase.path) { "Database path is null" }
+    }
+
+    override suspend fun closeDatabase() {
+        database.close()
     }
 
     override suspend fun getAllPicturesUri(): List<String> {

@@ -14,12 +14,10 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.BackupImporting
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.Initialize
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.Exit
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.RequestWriteFileStorageAccess
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.RestartApp
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.SelectBackupFile
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent.BackupFileSelection
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent.WriteStorageAccessRequest
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsState
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackPress
@@ -48,7 +46,7 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
             if (state.isExportingInProgress || state.isImportingInProgress) {
                 effects(ShowToast.Warning(WarningReason.BACKUP_IN_PROGRESS))
             } else {
-                commands(RequestWriteFileStorageAccess)
+                commands(ExportBackup)
             }
         }
         is OnBackupImportClick -> {
@@ -62,7 +60,6 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
 
     private fun reduceNavigation(event: SettingsNavigationEvent) = when (event) {
         is BackupFileSelection -> reduceBackupFileSelection(event)
-        is WriteStorageAccessRequest -> reduceWriteStorageAccessRequest(event)
     }
 
     private fun reduceBackupExporting(event: BackupExporting) = when (event) {
@@ -99,12 +96,6 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
     private fun reduceBackupFileSelection(event: BackupFileSelection) = when (event) {
         is BackupFileSelection.Succeed -> commands(ImportBackup(event.path))
         is BackupFileSelection.Canceled -> effects(ShowToast.Error(ErrorReason.NO_FILE_SELECTED))
-        is BackupFileSelection.NoPermission -> effects(ShowToast.Error(ErrorReason.NO_PERMISSION_GRANTED))
-    }
-
-    private fun reduceWriteStorageAccessRequest(event: WriteStorageAccessRequest) = when (event) {
-        is WriteStorageAccessRequest.Granted -> commands(ExportBackup)
-        is WriteStorageAccessRequest.Denied -> effects(ShowToast.Error(ErrorReason.NO_PERMISSION_GRANTED))
     }
 
     private companion object {

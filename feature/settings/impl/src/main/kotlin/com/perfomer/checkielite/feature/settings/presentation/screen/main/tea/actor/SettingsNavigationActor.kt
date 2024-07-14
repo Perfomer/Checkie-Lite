@@ -1,8 +1,6 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor
 
-import android.Manifest
 import com.perfomer.checkielite.common.android.AppRestarter
-import com.perfomer.checkielite.common.android.permissions.PermissionHelper
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.navigation.api.ExternalDestination
 import com.perfomer.checkielite.core.navigation.api.ExternalResult
@@ -12,12 +10,10 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.Exit
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.RequestWriteFileStorageAccess
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.RestartApp
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.SelectBackupFile
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent.BackupFileSelection
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent.WriteStorageAccessRequest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNotNull
@@ -26,7 +22,6 @@ import kotlinx.coroutines.flow.mapLatest
 internal class SettingsNavigationActor(
     private val router: Router,
     private val externalRouter: ExternalRouter,
-    private val permissionHelper: PermissionHelper,
     private val appRestarter: AppRestarter,
 ) : Actor<SettingsCommand, SettingsEvent> {
 
@@ -41,7 +36,6 @@ internal class SettingsNavigationActor(
             is Exit -> router.exit()
             is RestartApp -> appRestarter.restart()
             is SelectBackupFile -> return selectBackupFile()
-            is RequestWriteFileStorageAccess -> return requestWriteFileStorageAccess()
         }
 
         return null
@@ -54,13 +48,5 @@ internal class SettingsNavigationActor(
         val filePath = result.result ?: return BackupFileSelection.Canceled
 
         return BackupFileSelection.Succeed(filePath)
-    }
-
-    private suspend fun requestWriteFileStorageAccess(): WriteStorageAccessRequest {
-        return if (permissionHelper.requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            WriteStorageAccessRequest.Granted
-        } else {
-            WriteStorageAccessRequest.Denied
-        }
     }
 }

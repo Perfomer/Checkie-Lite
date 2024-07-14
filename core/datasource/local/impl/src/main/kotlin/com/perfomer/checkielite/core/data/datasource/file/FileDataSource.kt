@@ -2,8 +2,11 @@ package com.perfomer.checkielite.core.data.datasource.file
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.net.Uri
 import com.perfomer.checkielite.common.pure.util.randomUuid
+import com.perfomer.checkielite.core.data.datasource.database.room.CheckieDatabase
 import com.perfomer.checkielite.core.data.util.archive
+import com.perfomer.checkielite.core.data.util.unarchive
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.destination
 import id.zelory.compressor.constraint.format
@@ -28,6 +31,11 @@ internal interface FileDataSource {
         databaseUri: String,
         picturesUri: List<String>,
         destinationFolderUri: String,
+    )
+
+    suspend fun importBackup(
+        backupPath: String,
+        databaseTargetUri: String,
     )
 
     private companion object {
@@ -69,6 +77,27 @@ internal class FileDataSourceImpl(
         archive(
             files = picturesUri.map(::File) + File(databaseUri),
             destination = File("$destinationFolderUri/$fileName"),
+        )
+    }
+
+    override suspend fun importBackup(
+        backupPath: String,
+        databaseTargetUri: String,
+    ) = withContext(Dispatchers.IO) {
+        val picturesDestinationUri = applicationContext.filesDir
+
+        picturesDestinationUri.deleteRecursively()
+        picturesDestinationUri.mkdirs()
+
+        unarchive(
+            context = applicationContext,
+            zipFile = Uri.parse(backupPath),
+            destinationResolver = { fileName ->
+                when {
+                    fileName == CheckieDatabase.DATABASE_NAME -> File(databaseTargetUri)
+                    else -> File(picturesDestinationUri, fileName)
+                }
+            }
         )
     }
 }

@@ -73,7 +73,7 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
             effects(ShowToast.Success(SuccessReason.BACKUP_COMPLETED))
         }
         is BackupExporting.Failed -> {
-            Log.e(TAG, "Failed to export backup", event.error)
+            Log.e(TAG, "Failed to export backup", event.error) // todo move to Actor
             state { copy(isExportingInProgress = false) }
             effects(ShowToast.Error(ErrorReason.UNKNOWN))
         }
@@ -88,6 +88,7 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
             effects(ShowToast.Success(SuccessReason.RESTORE_COMPLETED))
         }
         is BackupImporting.Failed -> {
+            Log.e(TAG, "Failed to import backup", event.error)
             state { copy(isImportingInProgress = false) }
             effects(ShowToast.Error(ErrorReason.UNKNOWN))
         }

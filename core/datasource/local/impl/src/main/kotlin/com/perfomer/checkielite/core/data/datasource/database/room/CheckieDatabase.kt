@@ -46,7 +46,7 @@ internal abstract class CheckieDatabase : RoomDatabase() {
 
     companion object {
 
-        private const val DATABASE_NAME = "CheckieDatabase"
+        internal const val DATABASE_NAME = "CheckieDatabase"
 
         @Synchronized
         internal fun getInstance(appContext: Context): CheckieDatabase {

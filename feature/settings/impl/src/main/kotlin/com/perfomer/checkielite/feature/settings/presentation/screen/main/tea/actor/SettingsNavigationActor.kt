@@ -44,10 +44,10 @@ internal class SettingsNavigationActor(
     }
 
     private suspend fun selectBackupFile(): BackupFileSelection {
-        val result = externalRouter.navigateForResult<List<String>>(ExternalDestination.FILE)
+        val result = externalRouter.navigateForResult<String?>(ExternalDestination.FILE)
 
         if (result !is ExternalResult.Success) return BackupFileSelection.Canceled
-        val filePath = result.result.firstOrNull() ?: return BackupFileSelection.Canceled
+        val filePath = result.result ?: return BackupFileSelection.Canceled
 
         return BackupFileSelection.Succeed(filePath)
     }

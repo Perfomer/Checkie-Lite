@@ -10,6 +10,10 @@ import com.perfomer.checkielite.common.pure.util.toArrayList
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
 import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
 import com.perfomer.checkielite.core.data.datasource.preferences.PreferencesDataSource
+import com.perfomer.checkielite.core.data.service.BackupMode
+import com.perfomer.checkielite.core.data.service.BackupService
+import com.perfomer.checkielite.core.data.service.CompressorService
+import com.perfomer.checkielite.core.data.util.startForegroundServiceCompat
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
@@ -24,7 +28,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import java.io.File
 import java.util.Date
 import java.util.Locale
 
@@ -171,7 +174,7 @@ internal class CheckieLocalDataSourceImpl(
         }
 
         if (isNeedSync) {
-            ContextCompat.startForegroundService(context, CompressorService.createIntent(context, reviewId, actualAddedPictures.toArrayList()))
+            context.startForegroundServiceCompat(CompressorService.createIntent(context, reviewId, actualAddedPictures.toArrayList()))
         }
     }
 
@@ -257,24 +260,15 @@ internal class CheckieLocalDataSourceImpl(
         preferencesDataSource.setLatestTagSortingStrategy(strategy)
     }
 
-    override suspend fun exportBackup() {
+    override fun exportBackup() {
         val documentsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).absolutePath
         val targetFolderPath = "$documentsFolder/Checkie"
 
-        File(targetFolderPath).mkdirs()
-
-        fileDataSource.createBackup(
-            databaseUri = databaseDataSource.getDatabaseSourcePath(),
-            picturesUri = databaseDataSource.getAllPicturesUri(),
-            destinationFolderUri = targetFolderPath,
-        )
+        context.startForegroundServiceCompat(BackupService.createIntent(context, BackupMode.EXPORT, targetFolderPath))
     }
 
-    override suspend fun importBackup(path: String) {
-        fileDataSource.importBackup(
-            backupPath = path,
-            databaseTargetUri = databaseDataSource.getDatabaseSourcePath(),
-        )
+    override fun importBackup(path: String) {
+        context.startForegroundServiceCompat(BackupService.createIntent(context, BackupMode.IMPORT, path))
     }
 
     private companion object {

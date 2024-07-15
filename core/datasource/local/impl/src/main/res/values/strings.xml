@@ -2,4 +2,6 @@
 <resources>
     <string name="notification_channel_common">Common</string>
     <string name="notification_compression_title">Pictures compression…</string>
+    <string name="notification_backup_import_title">Importing backup…</string>
+    <string name="notification_backup_export_title">Creating backup…</string>
 </resources>

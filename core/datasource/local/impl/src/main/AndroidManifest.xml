@@ -6,7 +6,12 @@
 
     <application>
         <service
-            android:name=".CompressorService"
+            android:name="com.perfomer.checkielite.core.data.service.CompressorService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <service
+            android:name="com.perfomer.checkielite.core.data.service.BackupService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
     </application>

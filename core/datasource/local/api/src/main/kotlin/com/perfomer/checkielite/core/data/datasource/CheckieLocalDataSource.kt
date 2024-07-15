@@ -76,7 +76,7 @@ interface CheckieLocalDataSource {
 
     suspend fun setLatestTagSortingStrategy(strategy: TagSortingStrategy)
 
-    suspend fun exportBackup()
+    fun exportBackup()
 
-    suspend fun importBackup(path: String)
+    fun importBackup(path: String)
 }

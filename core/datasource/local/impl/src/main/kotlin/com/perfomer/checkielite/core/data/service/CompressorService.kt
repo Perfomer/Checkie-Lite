@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.core.data.datasource
+package com.perfomer.checkielite.core.data.service
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -12,6 +12,7 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import com.perfomer.checkielite.common.pure.util.mapAsync
+import com.perfomer.checkielite.core.data.datasource.R
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
 import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
 import com.perfomer.checkielite.core.entity.CheckiePicture
@@ -45,15 +46,17 @@ internal class CompressorService : Service() {
         val foregroundServiceType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC else 0
         ServiceCompat.startForeground(this, NOTIFICATION_ID, notification, foregroundServiceType)
 
-        doWork(reviewId, picturesUri)
+        scope.launch {
+            doWork(reviewId, picturesUri)
+        }
 
         return START_NOT_STICKY
     }
 
-    private fun doWork(
+    private suspend fun doWork(
         reviewId: String,
         picturesUri: List<CheckiePicture>,
-    ) = scope.launch {
+    ) {
         val compressedPicturesUri = picturesUri.mapAsync { picture ->
             picture.copy(uri = fileDataSource.cacheCompressedPicture(picture.uri))
         }

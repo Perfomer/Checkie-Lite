@@ -31,7 +31,7 @@ internal interface FileDataSource {
 
     suspend fun deleteFile(uri: String)
 
-    suspend fun createBackup(
+    suspend fun exportBackup(
         databaseUri: String,
         picturesUri: List<String>,
         destinationFolderUri: String,
@@ -74,7 +74,11 @@ internal class FileDataSourceImpl(
         File(uri).delete()
     }
 
-    override suspend fun createBackup(databaseUri: String, picturesUri: List<String>, destinationFolderUri: String) = withContext(Dispatchers.IO) {
+    override suspend fun exportBackup(
+        databaseUri: String,
+        picturesUri: List<String>,
+        destinationFolderUri: String
+    ) = withContext(Dispatchers.IO) {
         val formatter = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault())
         val timestamp = formatter.format(Date())
 

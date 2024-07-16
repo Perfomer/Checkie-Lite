@@ -110,8 +110,9 @@ internal class BackupService : Service() {
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(getString(titleRes))
             .setOngoing(true)
-            .setProgress(progressPercent, 100, false)
             .setOnlyAlertOnce(true)
+            .setProgress(progressPercent, 100, false)
+            .setSmallIcon(R.drawable.ic_logo_brand)
             .build()
     }
 
@@ -123,6 +124,7 @@ internal class BackupService : Service() {
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(getString(titleRes))
+            .setSmallIcon(R.drawable.ic_logo_brand)
             .build()
     }
 

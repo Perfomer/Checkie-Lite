@@ -6,6 +6,7 @@ import com.perfomer.checkielite.core.data.datasource.file.metadata.BackupMetadat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import java.io.BufferedInputStream
@@ -58,6 +59,7 @@ internal fun archive(
         }
     }
 }
+    .map { progress -> progress.coerceIn(0F, 1F) }
     .onStart { emit(0F) }
     .onCompletion { emit(1F) }
     .distinctUntilChanged()
@@ -77,7 +79,12 @@ internal fun unarchive(
             var currentEntry = zipInputStream.nextEntry
 
             while (currentEntry != null) {
-                val destinationFile = destinationResolver(currentEntry.name) ?: continue
+                val destinationFile = destinationResolver(currentEntry.name)
+
+                if (destinationFile == null) {
+                    currentEntry = zipInputStream.nextEntry
+                    continue
+                }
 
                 if (currentEntry.isDirectory) {
                     destinationFile.mkdirs()
@@ -95,6 +102,7 @@ internal fun unarchive(
         }
     }
 }
+    .map { progress -> progress.coerceIn(0F, 1F) }
     .onStart { emit(0F) }
     .onCompletion { emit(1F) }
     .distinctUntilChanged()

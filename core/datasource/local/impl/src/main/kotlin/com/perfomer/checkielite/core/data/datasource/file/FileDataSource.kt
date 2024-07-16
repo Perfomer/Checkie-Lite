@@ -51,6 +51,7 @@ internal class FileDataSourceImpl(
     private val context: Context,
     private val appInfoProvider: AppInfoProvider,
     private val backupMetadataParser: BackupMetadataParser,
+    private val backupProgressNotifier: BackupProgressNotifier,
 ) : FileDataSource {
 
     @Suppress("DEPRECATION")
@@ -95,6 +96,7 @@ internal class FileDataSourceImpl(
             destination = File("$destinationFolderUri/$fileName"),
             metadata = backupMetadataParser.serialize(metadata),
         )
+            .collect { progress -> backupProgressNotifier.notify(progress) }
     }
 
     override suspend fun importBackup(
@@ -117,6 +119,7 @@ internal class FileDataSourceImpl(
                 }
             }
         )
+            .collect { progress -> backupProgressNotifier.notify(progress) }
     }
 
     private companion object {

@@ -48,6 +48,7 @@ internal class CompressorService : Service() {
 
         scope.launch {
             doWork(reviewId, picturesUri)
+            stopSelf()
         }
 
         return START_NOT_STICKY
@@ -63,8 +64,6 @@ internal class CompressorService : Service() {
 
         databaseDataSource.updatePictures(compressedPicturesUri)
         databaseDataSource.updateSyncing(reviewId, false)
-
-        stopSelf()
     }
 
     override fun onDestroy() {

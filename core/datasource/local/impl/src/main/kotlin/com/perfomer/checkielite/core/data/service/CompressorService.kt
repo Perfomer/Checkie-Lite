@@ -77,6 +77,7 @@ internal class CompressorService : Service() {
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(getString(R.string.notification_compression_title))
             .setOngoing(true)
+            .setSmallIcon(R.drawable.ic_logo_brand)
             .build()
     }
 

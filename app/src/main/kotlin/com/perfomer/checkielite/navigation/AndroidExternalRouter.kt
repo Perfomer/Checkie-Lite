@@ -86,8 +86,18 @@ internal class AndroidExternalRouter(
     }
 
     private suspend fun pickFile(): ExternalResult<*> {
-        val uri = filePickerResultHandler.awaitResultFor(arrayOf("application/octet-stream"))?.toString()
-        return if (uri != null) ExternalResult.Success(uri) else ExternalResult.Cancel
+        val uri = filePickerResultHandler.awaitResultFor(arrayOf("application/octet-stream"))
+
+        if (uri != null) {
+            activity.contentResolver.takePersistableUriPermission(
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            )
+
+            return ExternalResult.Success(uri.toString())
+        }
+
+        return ExternalResult.Cancel
     }
 
     private fun <I, O> ActivityResultContract<I, O>.suspendableResultHandler(): SuspendableActivityResultHandler<I, O> {

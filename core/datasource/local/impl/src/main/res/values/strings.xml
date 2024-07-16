@@ -2,6 +2,8 @@
 <resources>
     <string name="notification_channel_common">Common</string>
     <string name="notification_compression_title">Pictures compression…</string>
-    <string name="notification_backup_import_title">Importing backup…</string>
-    <string name="notification_backup_export_title">Creating backup…</string>
+    <string name="notification_backup_import_progress_title">Importing backup…</string>
+    <string name="notification_backup_export_progress_title">Creating backup…</string>
+    <string name="notification_backup_import_success_title">Backup successfully imported!</string>
+    <string name="notification_backup_export_success_title">Backup successfully exported!</string>
 </resources>

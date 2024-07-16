@@ -2,6 +2,8 @@
 <resources>
     <string name="notification_channel_common">Общее</string>
     <string name="notification_compression_title">Сжатие изображений…</string>
-    <string name="notification_backup_import_title">Восстановление данных…</string>
-    <string name="notification_backup_export_title">Резервное копирование данных…</string>
+    <string name="notification_backup_import_progress_title">Восстановление данных…</string>
+    <string name="notification_backup_import_success_title">Восстановление данных завершено!</string>
+    <string name="notification_backup_export_progress_title">Резервное копирование данных…</string>
+    <string name="notification_backup_export_success_title">Резервное копирование данных завершено!</string>
 </resources>

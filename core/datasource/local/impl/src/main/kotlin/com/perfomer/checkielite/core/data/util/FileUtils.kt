@@ -3,11 +3,17 @@ package com.perfomer.checkielite.core.data.util
 import android.content.Context
 import android.net.Uri
 import com.perfomer.checkielite.core.data.datasource.file.metadata.BackupMetadataParser.Companion.METADATA_FILENAME
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileDescriptor
 import java.io.FileInputStream
+import java.io.IOException
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
@@ -27,13 +33,22 @@ internal fun archive(
     files: List<File>,
     destination: File,
     metadata: String?,
-) {
+): Flow<Float> = flow {
+    var totalBytes = 0L
+    var completedBytes = 0L
+
+    files.forEach { file ->
+        totalBytes += file.length()
+    }
+
     destination.zipOutputStream().use { zipOutputStream ->
         files.forEach { file ->
             zipOutputStream.putNextEntry(ZipEntry(file.name))
             file.bufferedInputStream().use { bufferedInputStream ->
-                bufferedInputStream.copyTo(zipOutputStream)
+                completedBytes += bufferedInputStream.copyTo(zipOutputStream)
             }
+
+            emit(completedBytes.toFloat() / totalBytes)
         }
 
         if (metadata != null) {
@@ -43,14 +58,22 @@ internal fun archive(
         }
     }
 }
+    .onStart { emit(0F) }
+    .onCompletion { emit(1F) }
+    .distinctUntilChanged()
 
 internal fun unarchive(
     context: Context,
     zipFile: Uri,
     destinationResolver: (name: String) -> File?,
-) {
+): Flow<Float> = flow {
+    var totalBytes = 0L
+    var completedBytes = 0L
+
     zipFile.fileDescriptor(context, MODE_READ).use { descriptor ->
-        descriptor?.fileDescriptor?.zipInputStream()?.use { zipInputStream ->
+        totalBytes = descriptor?.statSize ?: throw IOException("Unable to get file descriptor")
+
+        descriptor.fileDescriptor.zipInputStream().use { zipInputStream ->
             var currentEntry = zipInputStream.nextEntry
 
             while (currentEntry != null) {
@@ -61,8 +84,10 @@ internal fun unarchive(
                 } else {
                     destinationFile.parentFile?.mkdirs()
                     destinationFile.bufferedOutputStream().use { outStream ->
-                        zipInputStream.copyTo(outStream)
+                        completedBytes += zipInputStream.copyTo(outStream)
                     }
+
+                    emit(completedBytes.toFloat() / totalBytes)
                 }
 
                 currentEntry = zipInputStream.nextEntry
@@ -70,6 +95,9 @@ internal fun unarchive(
         }
     }
 }
+    .onStart { emit(0F) }
+    .onCompletion { emit(1F) }
+    .distinctUntilChanged()
 
 private fun File.bufferedOutputStream(size: Int = DEFAULT_BUFFER_SIZE) = BufferedOutputStream(outputStream(), size)
 private fun File.zipOutputStream(size: Int = DEFAULT_BUFFER_SIZE) = ZipOutputStream(bufferedOutputStream(size))

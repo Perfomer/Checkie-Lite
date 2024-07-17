@@ -2,8 +2,8 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea
 
 import android.util.Log
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.ErrorReason
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.CheckSyncing
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.ExportBackup
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.ImportBackup
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.LoadSettings
@@ -13,6 +13,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.BackupExporting
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.BackupImporting
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.Initialize
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.SyncingStatusUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.Exit
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.RestartApp
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.SelectBackupFile
@@ -23,7 +24,6 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackupExportClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackupImportClick
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SuccessReason
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.WarningReason
 
 internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, SettingsEvent, SettingsState>() {
@@ -34,26 +34,27 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
         is SettingsNavigationEvent -> reduceNavigation(event)
         is BackupExporting -> reduceBackupExporting(event)
         is BackupImporting -> reduceBackupImporting(event)
+        is SyncingStatusUpdated -> state { copy(isSyncingInProgress = event.isSyncing) }
     }
 
     private fun reduceInitialize() {
-        commands(LoadSettings)
+        commands(LoadSettings, CheckSyncing)
     }
 
     private fun reduceUi(event: SettingsUiEvent) = when (event) {
         is OnBackPress -> commands(Exit)
         is OnBackupExportClick -> {
-            if (state.isExportingInProgress || state.isImportingInProgress) {
-                effects(ShowToast.Warning(WarningReason.BACKUP_IN_PROGRESS))
-            } else {
-                commands(ExportBackup)
+            when {
+                state.isBackupInProgress -> effects(ShowToast.Warning(WarningReason.BACKUP_IN_PROGRESS))
+                state.isSyncingInProgress -> effects(ShowToast.Warning(WarningReason.SYNCING_IN_PROGRESS))
+                else -> commands(ExportBackup)
             }
         }
         is OnBackupImportClick -> {
-            if (state.isExportingInProgress || state.isImportingInProgress) {
-                effects(ShowToast.Warning(WarningReason.BACKUP_IN_PROGRESS))
-            } else {
-                commands(SelectBackupFile)
+            when {
+                state.isBackupInProgress -> effects(ShowToast.Warning(WarningReason.BACKUP_IN_PROGRESS))
+                state.isSyncingInProgress -> effects(ShowToast.Warning(WarningReason.SYNCING_IN_PROGRESS))
+                else -> commands(SelectBackupFile)
             }
         }
     }
@@ -68,12 +69,11 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
         }
         is BackupExporting.Succeed -> {
             state { copy(isExportingInProgress = false) }
-            effects(ShowToast.Success(SuccessReason.BACKUP_COMPLETED))
         }
         is BackupExporting.Failed -> {
             Log.e(TAG, "Failed to export backup", event.error) // todo move to Actor
             state { copy(isExportingInProgress = false) }
-            effects(ShowToast.Error(ErrorReason.UNKNOWN))
+            effects(ShowToast.Error)
         }
     }
 
@@ -83,19 +83,18 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
         }
         is BackupImporting.Succeed -> {
             state { copy(isImportingInProgress = false) }
-            effects(ShowToast.Success(SuccessReason.RESTORE_COMPLETED))
             commands(RestartApp)
         }
         is BackupImporting.Failed -> {
             Log.e(TAG, "Failed to import backup", event.error)
             state { copy(isImportingInProgress = false) }
-            effects(ShowToast.Error(ErrorReason.UNKNOWN))
+            effects(ShowToast.Error)
         }
     }
 
     private fun reduceBackupFileSelection(event: BackupFileSelection) = when (event) {
         is BackupFileSelection.Succeed -> commands(ImportBackup(event.path))
-        is BackupFileSelection.Canceled -> effects(ShowToast.Error(ErrorReason.NO_FILE_SELECTED))
+        is BackupFileSelection.Canceled -> Unit
     }
 
     private companion object {

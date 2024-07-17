@@ -8,6 +8,7 @@ import com.perfomer.checkielite.core.navigation.api.Router
 import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsScreenProvider
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.SettingsReducer
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.SettingsStore
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.CheckSyncingActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.ExportBackupActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.ImportBackupActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.SettingsNavigationActor
@@ -38,6 +39,7 @@ internal fun createSettingsStore(
             SettingsNavigationActor(router, externalRouter, appRestarter),
             ExportBackupActor(localDataSource),
             ImportBackupActor(localDataSource),
+            CheckSyncingActor(localDataSource),
         ),
     )
 }

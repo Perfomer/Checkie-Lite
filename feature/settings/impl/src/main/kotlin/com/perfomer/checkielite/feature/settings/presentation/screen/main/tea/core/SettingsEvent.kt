@@ -4,6 +4,8 @@ internal sealed interface SettingsEvent {
 
     data object Initialize : SettingsEvent
 
+    class SyncingStatusUpdated(val isSyncing: Boolean) : SettingsEvent
+
     sealed interface BackupExporting : SettingsEvent {
         data object Started : BackupExporting
         data object Succeed : BackupExporting

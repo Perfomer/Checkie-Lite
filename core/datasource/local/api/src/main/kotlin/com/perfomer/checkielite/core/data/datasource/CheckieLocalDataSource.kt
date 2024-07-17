@@ -53,6 +53,8 @@ interface CheckieLocalDataSource {
 
     suspend fun dropSyncing()
 
+    fun isSyncing(): Flow<Boolean>
+
     fun getTags(
         searchQuery: String = "",
         maxCount: Int = Int.MAX_VALUE

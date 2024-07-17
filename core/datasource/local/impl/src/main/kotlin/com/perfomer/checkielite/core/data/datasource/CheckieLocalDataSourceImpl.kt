@@ -190,6 +190,10 @@ internal class CheckieLocalDataSourceImpl(
         databaseDataSource.dropSyncing()
     }
 
+    override fun isSyncing(): Flow<Boolean> {
+        return databaseDataSource.isSyncing()
+    }
+
     override fun getTags(searchQuery: String, maxCount: Int): Flow<List<CheckieTag>> {
         return databaseDataSource.getTags(searchQuery, maxCount)
     }

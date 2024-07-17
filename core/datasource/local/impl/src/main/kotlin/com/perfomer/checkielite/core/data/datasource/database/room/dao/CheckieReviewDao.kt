@@ -60,6 +60,9 @@ internal interface CheckieReviewDao {
     )
     suspend fun dropSyncing()
 
+    @Query("SELECT COUNT(*) FROM CheckieReviewDb WHERE isSyncing = 1")
+    fun getSyncingCount(): Flow<Int>
+
     @Query(
         """
             SELECT DISTINCT currencyCode FROM CheckieReviewDb

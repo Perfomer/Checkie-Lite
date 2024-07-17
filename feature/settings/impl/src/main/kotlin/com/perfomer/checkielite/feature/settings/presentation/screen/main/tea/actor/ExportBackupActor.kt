@@ -25,7 +25,7 @@ internal class ExportBackupActor(
             .flatMapLatest(::handleCommand)
     }
 
-    private suspend fun handleCommand(command: ExportBackup): Flow<SettingsEvent> {
+    private fun handleCommand(command: ExportBackup): Flow<SettingsEvent> {
         return flowBy { localDataSource.exportBackup() }
             .map { BackupExporting.Succeed }
             .startWith(BackupExporting.Started)

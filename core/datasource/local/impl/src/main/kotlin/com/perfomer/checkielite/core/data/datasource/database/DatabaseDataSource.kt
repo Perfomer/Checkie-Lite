@@ -83,6 +83,8 @@ internal interface DatabaseDataSource {
 
     suspend fun dropSyncing()
 
+    fun isSyncing(): Flow<Boolean>
+
     fun getTags(searchQuery: String, maxCount: Int): Flow<List<CheckieTag>>
 
     suspend fun getTag(id: String): CheckieTag
@@ -248,6 +250,10 @@ internal class DatabaseDataSourceImpl(
 
     override suspend fun dropSyncing() {
         reviewDao.dropSyncing()
+    }
+
+    override fun isSyncing(): Flow<Boolean> {
+        return reviewDao.getSyncingCount().map { it > 0 }
     }
 
     override fun getTags(searchQuery: String, maxCount: Int): Flow<List<CheckieTag>> {

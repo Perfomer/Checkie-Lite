@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.core.data.datasource.file.metadata
+package com.perfomer.checkielite.core.data.datasource.file.backup.metadata
 
 internal interface BackupMetadataParser {
 

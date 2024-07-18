@@ -6,8 +6,10 @@ import android.net.Uri
 import com.perfomer.checkielite.common.pure.appInfo.AppInfoProvider
 import com.perfomer.checkielite.common.pure.util.randomUuid
 import com.perfomer.checkielite.core.data.datasource.database.room.CheckieDatabase
-import com.perfomer.checkielite.core.data.datasource.file.metadata.BackupMetadata
-import com.perfomer.checkielite.core.data.datasource.file.metadata.BackupMetadataParser
+import com.perfomer.checkielite.core.data.datasource.file.backup.BackupProgress
+import com.perfomer.checkielite.core.data.datasource.file.backup.BackupProgressNotifier
+import com.perfomer.checkielite.core.data.datasource.file.backup.metadata.BackupMetadata
+import com.perfomer.checkielite.core.data.datasource.file.backup.metadata.BackupMetadataParser
 import com.perfomer.checkielite.core.data.util.archive
 import com.perfomer.checkielite.core.data.util.deleteRecursivelyIf
 import com.perfomer.checkielite.core.data.util.unarchive
@@ -16,6 +18,9 @@ import id.zelory.compressor.constraint.destination
 import id.zelory.compressor.constraint.format
 import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.text.SimpleDateFormat
@@ -96,7 +101,9 @@ internal class FileDataSourceImpl(
             destination = File("$destinationFolderUri/$fileName"),
             metadata = backupMetadataParser.serialize(metadata),
         )
-            .collect { progress -> backupProgressNotifier.notify(progress) }
+            .onStart { backupProgressNotifier.notify(BackupProgress.None) }
+            .catch { error -> backupProgressNotifier.notify(BackupProgress.Failure(error)) }
+            .collect { progress -> backupProgressNotifier.notify(BackupProgress.Progress(progress)) }
     }
 
     override suspend fun importBackup(
@@ -119,7 +126,10 @@ internal class FileDataSourceImpl(
                 }
             }
         )
-            .collect { progress -> backupProgressNotifier.notify(progress) }
+            .onStart { backupProgressNotifier.notify(BackupProgress.None) }
+            .catch { error -> backupProgressNotifier.notify(BackupProgress.Failure(error)) }
+            .onCompletion { backupProgressNotifier.notify(BackupProgress.Success) }
+            .collect { progress -> backupProgressNotifier.notify(BackupProgress.Progress(progress)) }
     }
 
     private companion object {

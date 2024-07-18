@@ -13,11 +13,13 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import com.perfomer.checkielite.core.data.datasource.R
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
-import com.perfomer.checkielite.core.data.datasource.file.BackupProgressObserver
 import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
+import com.perfomer.checkielite.core.data.datasource.file.backup.BackupProgress
+import com.perfomer.checkielite.core.data.datasource.file.backup.BackupProgressObserver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import java.io.File
@@ -51,8 +53,9 @@ internal class BackupService : Service() {
 
         scope.launch {
             backupProgressObserver.observe()
+                .filterIsInstance<BackupProgress.Progress>()
                 .collect { progress ->
-                    val updatedNotification = createForegroundNotification(mode, progress)
+                    val updatedNotification = createForegroundNotification(mode, progress.progress)
                     notificationManager.notify(NOTIFICATION_ID_FOREGROUND, updatedNotification)
                 }
         }

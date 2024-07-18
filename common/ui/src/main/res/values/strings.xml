@@ -3,6 +3,10 @@
     <string name="app_name" translatable="false">Checkie Lite</string>
     <string name="app_name_debug" translatable="false">Checkie Debug</string>
 
+    <string name="app_name_checkie" translatable="false">checkie</string>
+    <string name="app_name_lite" translatable="false">lite</string>
+    <string name="app_name_lite_debug" translatable="false">debug</string>
+
     <string name="common_cancel">Cancel</string>
     <string name="common_ok">OK</string>
 

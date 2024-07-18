@@ -29,44 +29,44 @@ fun CuiProgressBar(
     progressColor: Color = LocalCuiPalette.current.BackgroundAccentPrimary,
     progressFullColor: Color = LocalCuiPalette.current.BackgroundPositivePrimary,
 ) {
-	val targetProgressColor =
-		if (progress >= 1F) progressFullColor
-		else progressColor
+    val targetProgressColor =
+        if (progress >= 1F) progressFullColor
+        else progressColor
 
-	val animatedProgress = animateFloatAsState(
-		targetValue = progress,
-		animationSpec = tween(durationMillis = ANIMATION_DURATION_MS),
-		label = "animatedProgress",
-	)
+    val animatedProgress = animateFloatAsState(
+        targetValue = progress,
+        animationSpec = tween(durationMillis = ANIMATION_DURATION_MS),
+        label = "animatedProgress",
+    )
 
-	val animatedProgressColor = animateColorAsState(
-		targetValue = targetProgressColor,
-		animationSpec = tween(durationMillis = ANIMATION_DURATION_MS),
-		label = "animatedProgressColor",
-	)
+    val animatedProgressColor = animateColorAsState(
+        targetValue = targetProgressColor,
+        animationSpec = tween(durationMillis = ANIMATION_DURATION_MS),
+        label = "animatedProgressColor",
+    )
 
-	LinearProgressIndicator(
-		progress = { animatedProgress.value },
-		trackColor = backgroundColor,
-		color = animatedProgressColor.value,
-		strokeCap = StrokeCap.Round,
-		modifier = modifier
-			.height(8.dp)
-			.clip(CircleShape),
-	)
+    LinearProgressIndicator(
+        progress = { animatedProgress.value },
+        trackColor = backgroundColor,
+        color = animatedProgressColor.value,
+        strokeCap = StrokeCap.Round,
+        modifier = modifier
+            .height(8.dp)
+            .clip(CircleShape),
+    )
 }
 
 @WidgetPreview
 @Composable
 private fun CuiProgressBarPreview() = CheckieLiteTheme {
-	Column(
-		verticalArrangement = Arrangement.spacedBy(16.dp),
-		modifier = Modifier.padding(24.dp)
-	) {
-		CuiProgressBar(progress = 0.00F)
-		CuiProgressBar(progress = 0.25F)
-		CuiProgressBar(progress = 0.50F)
-		CuiProgressBar(progress = 0.75F)
-		CuiProgressBar(progress = 1.00F)
-	}
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.padding(24.dp)
+    ) {
+        CuiProgressBar(progress = 0.00F)
+        CuiProgressBar(progress = 0.25F)
+        CuiProgressBar(progress = 0.50F)
+        CuiProgressBar(progress = 0.75F)
+        CuiProgressBar(progress = 1.00F)
+    }
 }

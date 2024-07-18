@@ -14,8 +14,8 @@ import androidx.core.app.ServiceCompat
 import com.perfomer.checkielite.core.data.datasource.R
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
 import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
-import com.perfomer.checkielite.core.data.datasource.file.backup.BackupProgress
 import com.perfomer.checkielite.core.data.datasource.file.backup.BackupProgressObserver
+import com.perfomer.checkielite.core.data.entity.BackupProgress
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

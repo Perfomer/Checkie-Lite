@@ -2,13 +2,7 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea
 
 internal sealed interface BackupCommand {
 
-    data object LoadSettings : BackupCommand
-
-    data object CheckSyncing : BackupCommand
-
-    data object ExportBackup : BackupCommand
-
-    class ImportBackup(val path: String) : BackupCommand
+    data object ObserveBackupProgress : BackupCommand
 }
 
 internal sealed interface BackupNavigationCommand : BackupCommand {

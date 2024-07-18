@@ -9,6 +9,6 @@ internal class SettingsUiStateMapper(
 ) : UiStateMapper<SettingsState, SettingsUiState> {
 
     override fun map(state: SettingsState): SettingsUiState {
-        return SettingsUiState(isLoading = state.isExportingInProgress || state.isImportingInProgress)
+        return SettingsUiState(isLoading = false)
     }
 }

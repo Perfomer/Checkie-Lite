@@ -5,5 +5,6 @@ import androidx.compose.runtime.Immutable
 @Immutable
 internal data class BackupUiState(
     val title: String,
-    val progressPercentDone: Int,
+    val progressLabel: String?,
+    val backupProgress: Float?,
 )

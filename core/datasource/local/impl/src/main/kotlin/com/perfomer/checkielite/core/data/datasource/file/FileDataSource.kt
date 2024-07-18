@@ -6,10 +6,10 @@ import android.net.Uri
 import com.perfomer.checkielite.common.pure.appInfo.AppInfoProvider
 import com.perfomer.checkielite.common.pure.util.randomUuid
 import com.perfomer.checkielite.core.data.datasource.database.room.CheckieDatabase
-import com.perfomer.checkielite.core.data.datasource.file.backup.BackupProgress
 import com.perfomer.checkielite.core.data.datasource.file.backup.BackupProgressNotifier
 import com.perfomer.checkielite.core.data.datasource.file.backup.metadata.BackupMetadata
 import com.perfomer.checkielite.core.data.datasource.file.backup.metadata.BackupMetadataParser
+import com.perfomer.checkielite.core.data.entity.BackupProgress
 import com.perfomer.checkielite.core.data.util.archive
 import com.perfomer.checkielite.core.data.util.deleteRecursivelyIf
 import com.perfomer.checkielite.core.data.util.unarchive

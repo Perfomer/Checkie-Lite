@@ -1,9 +1,9 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core
 
+import com.perfomer.checkielite.core.data.entity.BackupProgress
+import com.perfomer.checkielite.feature.settings.presentation.entity.BackupMode
+
 internal data class BackupState(
-    val isExportingInProgress: Boolean = false,
-    val isImportingInProgress: Boolean = false,
-    val isSyncingInProgress: Boolean = false,
-) {
-    val isBackupInProgress: Boolean = isExportingInProgress || isImportingInProgress
-}
+    val mode: BackupMode,
+    val progress: BackupProgress = BackupProgress.None,
+)

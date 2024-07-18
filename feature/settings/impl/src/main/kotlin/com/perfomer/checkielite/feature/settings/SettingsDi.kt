@@ -5,11 +5,13 @@ import com.perfomer.checkielite.common.android.AppRestarter
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.core.navigation.api.Router
+import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupParams
 import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupScreenProvider
 import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsScreenProvider
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.BackupReducer
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.BackupStore
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor.BackupNavigationActor
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor.ObserveBackupProgressActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.BackupContentScreen
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.state.BackupUiStateMapper
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.SettingsReducer
@@ -54,16 +56,19 @@ internal fun createSettingsStore(
 }
 
 internal fun createBackupStore(
+    params: BackupParams,
     context: Context,
     router: Router,
     appRestarter: AppRestarter,
     localDataSource: CheckieLocalDataSource,
 ): BackupStore {
     return BackupStore(
+        params = params,
         reducer = BackupReducer(),
         uiStateMapper = BackupUiStateMapper(context),
         actors = setOf(
             BackupNavigationActor(router, appRestarter),
+            ObserveBackupProgressActor(localDataSource),
         ),
     )
 }

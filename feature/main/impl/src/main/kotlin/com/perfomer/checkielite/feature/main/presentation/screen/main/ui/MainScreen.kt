@@ -39,10 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
@@ -58,7 +54,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
-import com.perfomer.checkielite.common.ui.util.isDebug
+import com.perfomer.checkielite.common.ui.util.span.appNameSpannable
 import com.perfomer.checkielite.feature.main.R
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiState
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.Tag
@@ -198,28 +194,7 @@ private fun TopAppBar(
     val shouldShowDivider by remember { derivedStateOf { scrollableState.canScrollBackward } }
 
     CenterAlignedTopAppBar(
-        title = {
-            val textResource = if (isDebug()) R.string.app_name_lite_debug else R.string.app_name_lite
-
-            Text(
-                text = buildAnnotatedString {
-                    append(
-                        AnnotatedString(
-                            text = stringResource(R.string.app_name_checkie),
-                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
-                        )
-                    )
-                    append(" ")
-                    append(
-                        AnnotatedString(
-                            text = stringResource(textResource),
-                            spanStyle = SpanStyle(fontWeight = FontWeight.Normal)
-                        )
-                    )
-                },
-                fontSize = 20.sp,
-            )
-        },
+        title = { Text(text = appNameSpannable(), fontSize = 20.sp) },
         actions = {
             val shouldShowSearchIcon by remember { derivedStateOf { scrollableState.firstVisibleItemIndex > 0 } }
             AnimatedVisibility(visible = shouldShowSearchIcon, enter = fadeIn(tween(250)), exit = fadeOut(tween(250))) {

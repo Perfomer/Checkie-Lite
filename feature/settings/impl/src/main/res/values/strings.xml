@@ -1,3 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="settings_backup_title_import">Importing backup…</string>
+    <string name="settings_backup_title_export">Exporting backup…</string>
+    <string name="settings_backup_minimize_hint">It may take a while.\nYou can <b>minimize</b> the application.</string>
 </resources>

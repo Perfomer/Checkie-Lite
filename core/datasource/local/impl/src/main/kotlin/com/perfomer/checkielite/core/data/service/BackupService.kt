@@ -112,6 +112,7 @@ internal class BackupService : Service() {
             .setOngoing(true)
             .setOnlyAlertOnce(true)
             .setProgress(progressPercent, 100, false)
+            .setSilent(true)
             .setSmallIcon(R.drawable.ic_logo_brand)
             .build()
     }

@@ -5,7 +5,13 @@ import com.perfomer.checkielite.common.android.AppRestarter
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.core.navigation.api.Router
+import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupScreenProvider
 import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsScreenProvider
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.BackupReducer
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.BackupStore
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor.BackupNavigationActor
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.BackupContentScreen
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.state.BackupUiStateMapper
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.SettingsReducer
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.SettingsStore
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.CheckSyncingActor
@@ -23,6 +29,9 @@ val settingsModules
 private val presentationModule = module {
     factoryOf(::createSettingsStore)
     factory { SettingsScreenProvider(::SettingsContentScreen) }
+
+    factoryOf(::createBackupStore)
+    factory { BackupScreenProvider(::BackupContentScreen) }
 }
 
 internal fun createSettingsStore(
@@ -40,6 +49,21 @@ internal fun createSettingsStore(
             ExportBackupActor(localDataSource),
             ImportBackupActor(localDataSource),
             CheckSyncingActor(localDataSource),
+        ),
+    )
+}
+
+internal fun createBackupStore(
+    context: Context,
+    router: Router,
+    appRestarter: AppRestarter,
+    localDataSource: CheckieLocalDataSource,
+): BackupStore {
+    return BackupStore(
+        reducer = BackupReducer(),
+        uiStateMapper = BackupUiStateMapper(context),
+        actors = setOf(
+            BackupNavigationActor(router, appRestarter),
         ),
     )
 }

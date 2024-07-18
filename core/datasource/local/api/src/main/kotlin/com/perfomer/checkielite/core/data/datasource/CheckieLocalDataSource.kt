@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.core.data.datasource
 
+import com.perfomer.checkielite.core.data.entity.BackupProgress
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
@@ -81,4 +82,6 @@ interface CheckieLocalDataSource {
     fun exportBackup()
 
     fun importBackup(path: String)
+
+    fun observeBackupProgress(): Flow<BackupProgress>
 }

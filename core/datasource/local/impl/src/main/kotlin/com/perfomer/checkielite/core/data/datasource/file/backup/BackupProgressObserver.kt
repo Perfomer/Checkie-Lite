@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.core.data.datasource.file.backup
 
+import com.perfomer.checkielite.core.data.entity.BackupProgress
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 

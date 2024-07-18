@@ -1,3 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="settings_backup_title_import">Восстановление данных…</string>
+    <string name="settings_backup_title_export">Создание резервной копии…</string>
+    <string name="settings_backup_minimize_hint">Это может занять время.\nВы можете <b>свернуть</b> приложение.</string>
 </resources>

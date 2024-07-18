@@ -1,20 +1,12 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core
 
+import com.perfomer.checkielite.core.data.entity.BackupProgress
+
 internal sealed interface BackupEvent {
 
     data object Initialize : BackupEvent
 
-    sealed interface BackupExporting : BackupEvent {
-        data object Started : BackupExporting
-        data object Succeed : BackupExporting
-        class Failed(val error: Throwable) : BackupExporting
-    }
-
-    sealed interface BackupImporting : BackupEvent {
-        data object Started : BackupImporting
-        data object Succeed : BackupImporting
-        class Failed(val error: Throwable) : BackupImporting
-    }
+    class BackupProgressUpdated(val progress: BackupProgress) : BackupEvent
 }
 
 internal sealed interface BackupUiEvent : BackupEvent {

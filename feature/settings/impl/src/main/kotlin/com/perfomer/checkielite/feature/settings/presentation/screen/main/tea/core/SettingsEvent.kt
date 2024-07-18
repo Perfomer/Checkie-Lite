@@ -5,18 +5,6 @@ internal sealed interface SettingsEvent {
     data object Initialize : SettingsEvent
 
     class SyncingStatusUpdated(val isSyncing: Boolean) : SettingsEvent
-
-    sealed interface BackupExporting : SettingsEvent {
-        data object Started : BackupExporting
-        data object Succeed : BackupExporting
-        class Failed(val error: Throwable) : BackupExporting
-    }
-
-    sealed interface BackupImporting : SettingsEvent {
-        data object Started : BackupImporting
-        data object Succeed : BackupImporting
-        class Failed(val error: Throwable) : BackupImporting
-    }
 }
 
 internal sealed interface SettingsUiEvent : SettingsEvent {

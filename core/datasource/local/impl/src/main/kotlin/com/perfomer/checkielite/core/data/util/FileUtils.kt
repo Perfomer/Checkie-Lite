@@ -2,7 +2,7 @@ package com.perfomer.checkielite.core.data.util
 
 import android.content.Context
 import android.net.Uri
-import com.perfomer.checkielite.core.data.datasource.file.metadata.BackupMetadataParser.Companion.METADATA_FILENAME
+import com.perfomer.checkielite.core.data.datasource.file.backup.metadata.BackupMetadataParser.Companion.METADATA_FILENAME
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow

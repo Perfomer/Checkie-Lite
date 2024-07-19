@@ -12,7 +12,7 @@ internal class BackupUiStateMapper(
 ) : UiStateMapper<BackupState, BackupUiState> {
 
     override fun map(state: BackupState): BackupUiState {
-        val progress = state.progress as? BackupProgress.Progress
+        val progress = state.progress as? BackupProgress.InProgress
 
         return BackupUiState(
             title = when (state.mode) {

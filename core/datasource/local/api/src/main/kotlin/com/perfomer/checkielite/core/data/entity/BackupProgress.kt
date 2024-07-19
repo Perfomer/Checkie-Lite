@@ -4,9 +4,9 @@ sealed interface BackupProgress {
 
     data object None : BackupProgress
 
-    class Progress(val progress: Float) : BackupProgress
+    class InProgress(val progress: Float) : BackupProgress
 
-    data object Success : BackupProgress
+    data object Completed : BackupProgress
 
     class Failure(val error: Throwable) : BackupProgress
 }

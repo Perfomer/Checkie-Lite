@@ -103,7 +103,8 @@ internal class FileDataSourceImpl(
         )
             .onStart { backupProgressNotifier.notify(BackupProgress.None) }
             .catch { error -> backupProgressNotifier.notify(BackupProgress.Failure(error)) }
-            .collect { progress -> backupProgressNotifier.notify(BackupProgress.Progress(progress)) }
+            .onCompletion { backupProgressNotifier.notify(BackupProgress.Completed) }
+            .collect { progress -> backupProgressNotifier.notify(BackupProgress.InProgress(progress)) }
     }
 
     override suspend fun importBackup(
@@ -128,8 +129,8 @@ internal class FileDataSourceImpl(
         )
             .onStart { backupProgressNotifier.notify(BackupProgress.None) }
             .catch { error -> backupProgressNotifier.notify(BackupProgress.Failure(error)) }
-            .onCompletion { backupProgressNotifier.notify(BackupProgress.Success) }
-            .collect { progress -> backupProgressNotifier.notify(BackupProgress.Progress(progress)) }
+            .onCompletion { backupProgressNotifier.notify(BackupProgress.Completed) }
+            .collect { progress -> backupProgressNotifier.notify(BackupProgress.InProgress(progress)) }
     }
 
     private companion object {

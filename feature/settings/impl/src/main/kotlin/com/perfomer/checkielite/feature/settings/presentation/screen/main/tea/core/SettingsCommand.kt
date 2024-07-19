@@ -1,5 +1,7 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core
 
+import com.perfomer.checkielite.feature.settings.presentation.entity.BackupMode
+
 internal sealed interface SettingsCommand {
 
     data object LoadSettings : SettingsCommand
@@ -18,4 +20,6 @@ internal sealed interface SettingsNavigationCommand : SettingsCommand {
     data object RestartApp : SettingsNavigationCommand
 
     data object SelectBackupFile : SettingsNavigationCommand
+
+    class OpenBackup(val mode: BackupMode) : SettingsNavigationCommand
 }

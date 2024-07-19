@@ -6,10 +6,13 @@ import com.perfomer.checkielite.core.navigation.api.ExternalDestination
 import com.perfomer.checkielite.core.navigation.api.ExternalResult
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.core.navigation.api.Router
+import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupParams
+import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupScreenProvider
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.Exit
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.OpenBackup
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.RestartApp
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.SelectBackupFile
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent
@@ -23,6 +26,7 @@ internal class SettingsNavigationActor(
     private val router: Router,
     private val externalRouter: ExternalRouter,
     private val appRestarter: AppRestarter,
+    private val backupScreenProvider: BackupScreenProvider,
 ) : Actor<SettingsCommand, SettingsEvent> {
 
     override fun act(commands: Flow<SettingsCommand>): Flow<SettingsEvent> {
@@ -36,6 +40,7 @@ internal class SettingsNavigationActor(
             is Exit -> router.exit()
             is RestartApp -> appRestarter.restart()
             is SelectBackupFile -> return selectBackupFile()
+            is OpenBackup -> router.navigate(backupScreenProvider(BackupParams(command.mode)))
         }
 
         return null

@@ -53,7 +53,7 @@ internal class BackupService : Service() {
 
         scope.launch {
             backupProgressObserver.observe()
-                .filterIsInstance<BackupProgress.Progress>()
+                .filterIsInstance<BackupProgress.InProgress>()
                 .collect { progress ->
                     val updatedNotification = createForegroundNotification(mode, progress.progress)
                     notificationManager.notify(NOTIFICATION_ID_FOREGROUND, updatedNotification)

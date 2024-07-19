@@ -42,12 +42,13 @@ internal fun createSettingsStore(
     externalRouter: ExternalRouter,
     appRestarter: AppRestarter,
     localDataSource: CheckieLocalDataSource,
+    backupScreenProvider: BackupScreenProvider,
 ): SettingsStore {
     return SettingsStore(
         reducer = SettingsReducer(),
         uiStateMapper = SettingsUiStateMapper(context),
         actors = setOf(
-            SettingsNavigationActor(router, externalRouter, appRestarter),
+            SettingsNavigationActor(router, externalRouter, appRestarter, backupScreenProvider),
             ExportBackupActor(localDataSource),
             ImportBackupActor(localDataSource),
             CheckSyncingActor(localDataSource),

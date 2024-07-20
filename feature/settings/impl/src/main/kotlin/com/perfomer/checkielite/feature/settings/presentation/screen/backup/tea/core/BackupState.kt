@@ -5,5 +5,6 @@ import com.perfomer.checkielite.feature.settings.presentation.entity.BackupMode
 
 internal data class BackupState(
     val mode: BackupMode,
-    val progress: BackupProgress = BackupProgress.None,
+    val backupState: BackupProgress = BackupProgress.None,
+    val progressValue: Float = 0F,
 )

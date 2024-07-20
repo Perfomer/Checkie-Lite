@@ -6,10 +6,8 @@ import android.net.Uri
 import com.perfomer.checkielite.common.pure.appInfo.AppInfoProvider
 import com.perfomer.checkielite.common.pure.util.randomUuid
 import com.perfomer.checkielite.core.data.datasource.database.room.CheckieDatabase
-import com.perfomer.checkielite.core.data.datasource.file.backup.BackupProgressNotifier
 import com.perfomer.checkielite.core.data.datasource.file.backup.metadata.BackupMetadata
 import com.perfomer.checkielite.core.data.datasource.file.backup.metadata.BackupMetadataParser
-import com.perfomer.checkielite.core.data.entity.BackupProgress
 import com.perfomer.checkielite.core.data.util.archive
 import com.perfomer.checkielite.core.data.util.deleteRecursivelyIf
 import com.perfomer.checkielite.core.data.util.unarchive
@@ -18,9 +16,7 @@ import id.zelory.compressor.constraint.destination
 import id.zelory.compressor.constraint.format
 import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.text.SimpleDateFormat
@@ -36,16 +32,16 @@ internal interface FileDataSource {
 
     suspend fun deleteFile(uri: String)
 
-    suspend fun exportBackup(
+    fun exportBackup(
         databaseUri: String,
         picturesUri: List<String>,
         destinationFolderUri: String,
-    )
+    ): Flow<Float>
 
-    suspend fun importBackup(
+    fun importBackup(
         backupPath: String,
         databaseTargetUri: String,
-    )
+    ): Flow<Float>
 
     private companion object {
         const val COMPRESS_TARGET_SIZE = 1 * 1024 * 1024L // 1 MB in bytes
@@ -56,7 +52,6 @@ internal class FileDataSourceImpl(
     private val context: Context,
     private val appInfoProvider: AppInfoProvider,
     private val backupMetadataParser: BackupMetadataParser,
-    private val backupProgressNotifier: BackupProgressNotifier,
 ) : FileDataSource {
 
     @Suppress("DEPRECATION")
@@ -80,11 +75,11 @@ internal class FileDataSourceImpl(
         File(uri).delete()
     }
 
-    override suspend fun exportBackup(
+    override fun exportBackup(
         databaseUri: String,
         picturesUri: List<String>,
         destinationFolderUri: String
-    ) = withContext(Dispatchers.IO) {
+    ): Flow<Float> {
         val formatter = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault())
         val timestamp = formatter.format(Date())
 
@@ -96,27 +91,23 @@ internal class FileDataSourceImpl(
             appVersionCode = appInfoProvider.getAppInfo().versionCode,
         )
 
-        archive(
+        return archive(
             files = picturesUri.map(::File) + File(databaseUri),
             destination = File("$destinationFolderUri/$fileName"),
             metadata = backupMetadataParser.serialize(metadata),
         )
-            .onStart { backupProgressNotifier.notify(BackupProgress.None) }
-            .catch { error -> backupProgressNotifier.notify(BackupProgress.Failure(error)) }
-            .onCompletion { backupProgressNotifier.notify(BackupProgress.Completed) }
-            .collect { progress -> backupProgressNotifier.notify(BackupProgress.InProgress(progress)) }
     }
 
-    override suspend fun importBackup(
+    override fun importBackup(
         backupPath: String,
         databaseTargetUri: String,
-    ) = withContext(Dispatchers.IO) {
+    ): Flow<Float> {
         val picturesDestinationFolder = context.filesDir
 
         picturesDestinationFolder.deleteRecursivelyIf { file -> file.extension == "webp" }
         picturesDestinationFolder.mkdirs()
 
-        unarchive(
+        return unarchive(
             context = context,
             zipFile = Uri.parse(backupPath),
             destinationResolver = { fileName ->
@@ -127,10 +118,6 @@ internal class FileDataSourceImpl(
                 }
             }
         )
-            .onStart { backupProgressNotifier.notify(BackupProgress.None) }
-            .catch { error -> backupProgressNotifier.notify(BackupProgress.Failure(error)) }
-            .onCompletion { backupProgressNotifier.notify(BackupProgress.Completed) }
-            .collect { progress -> backupProgressNotifier.notify(BackupProgress.InProgress(progress)) }
     }
 
     private companion object {

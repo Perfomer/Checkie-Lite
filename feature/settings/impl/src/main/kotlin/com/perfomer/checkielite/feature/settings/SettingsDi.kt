@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.settings
 import android.content.Context
 import com.perfomer.checkielite.common.android.AppRestarter
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.data.repository.BackupRepository
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.core.navigation.api.Router
 import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupParams
@@ -42,6 +43,7 @@ internal fun createSettingsStore(
     externalRouter: ExternalRouter,
     appRestarter: AppRestarter,
     localDataSource: CheckieLocalDataSource,
+    backupRepository: BackupRepository,
     backupScreenProvider: BackupScreenProvider,
 ): SettingsStore {
     return SettingsStore(
@@ -49,8 +51,8 @@ internal fun createSettingsStore(
         uiStateMapper = SettingsUiStateMapper(context),
         actors = setOf(
             SettingsNavigationActor(router, externalRouter, appRestarter, backupScreenProvider),
-            ExportBackupActor(localDataSource),
-            ImportBackupActor(localDataSource),
+            ExportBackupActor(backupRepository),
+            ImportBackupActor(backupRepository),
             CheckSyncingActor(localDataSource),
         ),
     )
@@ -61,7 +63,7 @@ internal fun createBackupStore(
     context: Context,
     router: Router,
     appRestarter: AppRestarter,
-    localDataSource: CheckieLocalDataSource,
+    backupRepository: BackupRepository,
 ): BackupStore {
     return BackupStore(
         params = params,
@@ -69,7 +71,7 @@ internal fun createBackupStore(
         uiStateMapper = BackupUiStateMapper(context),
         actors = setOf(
             BackupNavigationActor(router, appRestarter),
-            ObserveBackupProgressActor(localDataSource),
+            ObserveBackupProgressActor(backupRepository),
         ),
     )
 }

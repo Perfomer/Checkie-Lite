@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor
 
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.data.repository.BackupRepository
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.ObserveBackupProgress
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.map
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class ObserveBackupProgressActor(
-    private val localDataSource: CheckieLocalDataSource,
+    private val backupRepository: BackupRepository,
 ) : Actor<BackupCommand, BackupEvent> {
 
     override fun act(commands: Flow<BackupCommand>): Flow<BackupEvent> {
@@ -23,7 +23,7 @@ internal class ObserveBackupProgressActor(
     }
 
     private fun handleCommand(command: ObserveBackupProgress): Flow<BackupEvent> {
-        return localDataSource.observeBackupProgress()
+        return backupRepository.observeBackupState()
             .map(::BackupProgressUpdated)
     }
 }

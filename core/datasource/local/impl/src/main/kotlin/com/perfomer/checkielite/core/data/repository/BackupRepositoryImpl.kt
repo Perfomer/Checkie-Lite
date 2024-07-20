@@ -12,6 +12,7 @@ import com.perfomer.checkielite.core.entity.backup.BackupMode
 import com.perfomer.checkielite.core.entity.backup.BackupProgress
 import com.perfomer.checkielite.core.entity.backup.BackupState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
@@ -48,6 +49,7 @@ internal class BackupRepositoryImpl(
             .onFailure { error -> updateState(BackupProgress.Failure(error)) }
             .onSuccess { updateState(BackupProgress.Completed) }
 
+        delay(500L)
         updateState(BackupProgress.None)
     }
 
@@ -73,6 +75,7 @@ internal class BackupRepositoryImpl(
             .onFailure { error -> updateState(BackupProgress.Failure(error)) }
             .onSuccess { updateState(BackupProgress.Completed) }
 
+        delay(500L)
         updateState(BackupProgress.None)
     }
 

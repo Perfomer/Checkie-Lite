@@ -6,11 +6,13 @@ import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.data.repository.BackupRepository
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.core.navigation.api.Router
+import com.perfomer.checkielite.feature.main.navigation.MainScreenProvider
 import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupParams
 import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupScreenProvider
 import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsScreenProvider
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.BackupReducer
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.BackupStore
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor.AwaitActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor.BackupNavigationActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor.ObserveBackupProgressActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.BackupContentScreen
@@ -44,13 +46,12 @@ internal fun createSettingsStore(
     appRestarter: AppRestarter,
     localDataSource: CheckieLocalDataSource,
     backupRepository: BackupRepository,
-    backupScreenProvider: BackupScreenProvider,
 ): SettingsStore {
     return SettingsStore(
         reducer = SettingsReducer(),
         uiStateMapper = SettingsUiStateMapper(context),
         actors = setOf(
-            SettingsNavigationActor(router, externalRouter, appRestarter, backupScreenProvider),
+            SettingsNavigationActor(router, externalRouter, appRestarter),
             ExportBackupActor(backupRepository),
             ImportBackupActor(backupRepository),
             CheckSyncingActor(localDataSource),
@@ -64,14 +65,16 @@ internal fun createBackupStore(
     router: Router,
     appRestarter: AppRestarter,
     backupRepository: BackupRepository,
+    mainScreenProvider: MainScreenProvider,
 ): BackupStore {
     return BackupStore(
         params = params,
         reducer = BackupReducer(),
         uiStateMapper = BackupUiStateMapper(context),
         actors = setOf(
-            BackupNavigationActor(router, appRestarter),
+            BackupNavigationActor(router, appRestarter, mainScreenProvider),
             ObserveBackupProgressActor(backupRepository),
+            AwaitActor(),
         ),
     )
 }

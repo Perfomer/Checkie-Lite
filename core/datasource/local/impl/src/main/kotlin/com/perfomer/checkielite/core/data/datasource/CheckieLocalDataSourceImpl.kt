@@ -2,7 +2,6 @@ package com.perfomer.checkielite.core.data.datasource
 
 import android.content.Context
 import android.icu.util.Currency
-import androidx.core.content.ContextCompat
 import com.perfomer.checkielite.common.pure.util.forEachAsync
 import com.perfomer.checkielite.common.pure.util.randomUuid
 import com.perfomer.checkielite.common.pure.util.toArrayList
@@ -108,7 +107,7 @@ internal class CheckieLocalDataSourceImpl(
         }
 
         if (isNeedSync) {
-            ContextCompat.startForegroundService(context, CompressorService.createIntent(context, reviewId, actualPictures.toArrayList()))
+            context.startForegroundServiceCompat(CompressorService.createIntent(context, reviewId, actualPictures.toArrayList()))
         }
     }
 

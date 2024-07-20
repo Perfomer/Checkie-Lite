@@ -3,11 +3,13 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea
 internal sealed interface BackupCommand {
 
     data object ObserveBackupProgress : BackupCommand
+
+    class Await(val durationMs: Long) : BackupCommand
 }
 
 internal sealed interface BackupNavigationCommand : BackupCommand {
 
-    data object Exit : BackupNavigationCommand
-
     data object RestartApp : BackupNavigationCommand
+
+    data object OpenMain : BackupNavigationCommand
 }

@@ -12,6 +12,8 @@ interface Router {
 		mode: DestinationMode = DestinationMode.USUAL,
 	)
 
+	fun replaceStack(screen: CheckieScreen)
+
 	suspend fun <T> navigateForResult(
         screen: CheckieScreen,
 		mode: DestinationMode = DestinationMode.USUAL,

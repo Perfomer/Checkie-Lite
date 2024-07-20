@@ -1,7 +1,6 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea
 
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
-import com.perfomer.checkielite.feature.settings.presentation.entity.BackupMode
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.CheckSyncing
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.ExportBackup
@@ -13,7 +12,6 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.Initialize
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.SyncingStatusUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.Exit
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.OpenBackup
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.SelectBackupFile
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent.BackupFileSelection
@@ -42,7 +40,7 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
         is OnBackupExportClick -> {
             when {
                 state.isSyncingInProgress -> effects(ShowToast.Warning(WarningReason.SYNCING_IN_PROGRESS))
-                else -> commands(ExportBackup, OpenBackup(BackupMode.EXPORT))
+                else -> commands(ExportBackup)
             }
         }
         is OnBackupImportClick -> {
@@ -58,7 +56,7 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
     }
 
     private fun reduceBackupFileSelection(event: BackupFileSelection) = when (event) {
-        is BackupFileSelection.Succeed -> commands(ImportBackup(event.path), OpenBackup(BackupMode.IMPORT))
+        is BackupFileSelection.Succeed -> commands(ImportBackup(event.path))
         is BackupFileSelection.Canceled -> Unit
     }
 }

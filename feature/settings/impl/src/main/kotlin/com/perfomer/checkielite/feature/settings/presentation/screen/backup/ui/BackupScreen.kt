@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -14,11 +13,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -27,8 +24,8 @@ import com.perfomer.checkielite.common.ui.cui.widget.progress.CuiProgressBar
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.util.span.annotatedStringResource
 import com.perfomer.checkielite.common.ui.util.span.appNameSpannable
-import com.perfomer.checkielite.common.ui.util.span.parseHtml
 import com.perfomer.checkielite.feature.settings.R
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.state.BackupUiState
 
@@ -42,8 +39,7 @@ internal fun BackupScreen(state: BackupUiState) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
-                .padding(vertical = 32.dp, horizontal = 24.dp)
-                .navigationBarsPadding()
+                .padding(vertical= 32.dp, horizontal = 24.dp)
         ) {
             Image(
                 painter = painterResource(R.drawable.ill_backup),
@@ -79,10 +75,8 @@ internal fun BackupScreen(state: BackupUiState) {
 
             Spacer(Modifier.weight(1F))
 
-            val hintText = stringResource(R.string.settings_backup_minimize_hint)
-
             Text(
-                text = remember { hintText.parseHtml() },
+                text = annotatedStringResource(R.string.settings_backup_minimize_hint),
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center,
                 lineHeight = 20.sp,

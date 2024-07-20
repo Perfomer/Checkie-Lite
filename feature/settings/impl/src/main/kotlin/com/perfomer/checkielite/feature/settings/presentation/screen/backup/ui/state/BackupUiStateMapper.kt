@@ -12,15 +12,20 @@ internal class BackupUiStateMapper(
 ) : UiStateMapper<BackupState, BackupUiState> {
 
     override fun map(state: BackupState): BackupUiState {
-        val progress = state.progress as? BackupProgress.InProgress
+        val progress = when (state.progress) {
+            is BackupProgress.None -> 0F
+            is BackupProgress.InProgress -> state.progress.progress
+            is BackupProgress.Completed -> 1F
+            is BackupProgress.Failure -> null
+        }
 
         return BackupUiState(
             title = when (state.mode) {
                 BackupMode.IMPORT -> context.getString(R.string.settings_backup_title_import)
                 BackupMode.EXPORT -> context.getString(R.string.settings_backup_title_export)
             },
-            backupProgress = progress?.progress,
-            progressLabel = progress?.progress?.times(100)?.toInt()?.let { "$it%" },
+            backupProgress = progress,
+            progressLabel = progress?.times(100)?.toInt()?.let { "$it%" },
         )
     }
 }

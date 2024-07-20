@@ -4,6 +4,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import com.perfomer.checkielite.core.data.repository.BackupRepository
 import com.perfomer.checkielite.core.entity.backup.BackupMode
 import com.perfomer.checkielite.core.entity.backup.BackupProgress
+import com.perfomer.checkielite.core.entity.backup.BackupState
 import com.perfomer.checkielite.core.navigation.api.Router
 import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupParams
 import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupScreenProvider
@@ -22,10 +23,16 @@ internal class BackupNavigationManager(
             backupRepository.observeBackupState()
                 .map { state -> state.mode to (state.progress is BackupProgress.InProgress) }
                 .distinctUntilChanged()
-                .collect { (mode, isInProgress) ->
-                    if (isInProgress && mode != null) onBackupStarted(mode)
+                .collect { (mode, isBackupInProgress) ->
+                    if (isBackupInProgress && mode != null) {
+                        onBackupStarted(mode)
+                    }
                 }
         }
+    }
+
+    fun getCurrentBackupState(): BackupState {
+        return backupRepository.backupState
     }
 
     private fun onBackupStarted(mode: BackupMode) {

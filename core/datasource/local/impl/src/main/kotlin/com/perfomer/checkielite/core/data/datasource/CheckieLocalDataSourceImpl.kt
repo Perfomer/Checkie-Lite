@@ -2,18 +2,13 @@ package com.perfomer.checkielite.core.data.datasource
 
 import android.content.Context
 import android.icu.util.Currency
-import android.os.Environment
 import androidx.core.content.ContextCompat
 import com.perfomer.checkielite.common.pure.util.forEachAsync
 import com.perfomer.checkielite.common.pure.util.randomUuid
 import com.perfomer.checkielite.common.pure.util.toArrayList
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
 import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
-import com.perfomer.checkielite.core.data.datasource.file.backup.BackupProgressObserver
 import com.perfomer.checkielite.core.data.datasource.preferences.PreferencesDataSource
-import com.perfomer.checkielite.core.data.entity.BackupProgress
-import com.perfomer.checkielite.core.data.service.BackupMode
-import com.perfomer.checkielite.core.data.service.BackupService
 import com.perfomer.checkielite.core.data.service.CompressorService
 import com.perfomer.checkielite.core.data.util.startForegroundServiceCompat
 import com.perfomer.checkielite.core.entity.CheckiePicture
@@ -38,7 +33,6 @@ internal class CheckieLocalDataSourceImpl(
     private val databaseDataSource: DatabaseDataSource,
     private val fileDataSource: FileDataSource,
     private val preferencesDataSource: PreferencesDataSource,
-    private val backupProgressObserver: BackupProgressObserver,
 ) : CheckieLocalDataSource {
 
     @Volatile
@@ -265,21 +259,6 @@ internal class CheckieLocalDataSourceImpl(
 
     override suspend fun setLatestTagSortingStrategy(strategy: TagSortingStrategy) {
         preferencesDataSource.setLatestTagSortingStrategy(strategy)
-    }
-
-    override fun exportBackup() {
-        val documentsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).absolutePath
-        val targetFolderPath = "$documentsFolder/Checkie"
-
-        context.startForegroundServiceCompat(BackupService.createIntent(context, BackupMode.EXPORT, targetFolderPath))
-    }
-
-    override fun importBackup(path: String) {
-        context.startForegroundServiceCompat(BackupService.createIntent(context, BackupMode.IMPORT, path))
-    }
-
-    override fun observeBackupProgress(): Flow<BackupProgress> {
-        return backupProgressObserver.observe()
     }
 
     private companion object {

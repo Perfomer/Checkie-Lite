@@ -3,7 +3,7 @@ package com.perfomer.checkielite
 import com.perfomer.checkielite.appinfo.AppInfoProviderImpl
 import com.perfomer.checkielite.common.android.commonAndroidModule
 import com.perfomer.checkielite.common.pure.appInfo.AppInfoProvider
-import com.perfomer.checkielite.core.data.datasource.localDataSourceModule
+import com.perfomer.checkielite.core.data.localDataSourceModule
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.feature.gallery.galleryModules
 import com.perfomer.checkielite.feature.main.mainModules

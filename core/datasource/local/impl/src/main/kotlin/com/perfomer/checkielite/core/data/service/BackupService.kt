@@ -12,23 +12,19 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import com.perfomer.checkielite.core.data.datasource.R
-import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
-import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
-import com.perfomer.checkielite.core.data.datasource.file.backup.BackupProgressObserver
 import com.perfomer.checkielite.core.data.entity.BackupProgress
+import com.perfomer.checkielite.core.data.repository.BackupRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import java.io.File
+import java.io.Serializable
 
 internal class BackupService : Service() {
 
-    private val fileDataSource: FileDataSource by inject()
-    private val databaseDataSource: DatabaseDataSource by inject()
-    private val backupProgressObserver: BackupProgressObserver by inject()
+    private val backupRepository: BackupRepository by inject()
 
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
@@ -36,9 +32,8 @@ internal class BackupService : Service() {
     @Suppress("DEPRECATION")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val mode = intent?.getSerializableExtra(EXTRA_MODE) as? BackupMode
-        val path = intent?.getStringExtra(EXTRA_PATH)
 
-        if (mode == null || path.isNullOrBlank()) {
+        if (mode == null) {
             stopSelf()
             return START_NOT_STICKY
         }
@@ -52,7 +47,7 @@ internal class BackupService : Service() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         scope.launch {
-            backupProgressObserver.observe()
+            backupRepository.observeBackupState()
                 .filterIsInstance<BackupProgress.InProgress>()
                 .collect { progress ->
                     val updatedNotification = createForegroundNotification(mode, progress.progress)
@@ -61,7 +56,7 @@ internal class BackupService : Service() {
         }
 
         scope.launch {
-            doWork(mode, path)
+            doWork(mode)
 
             val successNotification = createSuccessNotification(mode)
             notificationManager.notify(NOTIFICATION_ID_SUCCESS, successNotification)
@@ -72,10 +67,10 @@ internal class BackupService : Service() {
         return START_NOT_STICKY
     }
 
-    private suspend fun doWork(mode: BackupMode, path: String) {
+    private suspend fun doWork(mode: BackupMode) {
         when (mode) {
-            BackupMode.EXPORT -> exportBackup(path)
-            BackupMode.IMPORT -> importBackup(path)
+            is BackupMode.Export -> backupRepository.exportBackup()
+            is BackupMode.Import -> backupRepository.importBackup(mode.path)
         }
     }
 
@@ -86,28 +81,11 @@ internal class BackupService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
-    private suspend fun exportBackup(path: String) {
-        File(path).mkdirs()
-
-        fileDataSource.exportBackup(
-            databaseUri = databaseDataSource.getDatabaseSourcePath(),
-            picturesUri = databaseDataSource.getAllPicturesUri(),
-            destinationFolderUri = path,
-        )
-    }
-
-    private suspend fun importBackup(path: String) {
-        fileDataSource.importBackup(
-            backupPath = path,
-            databaseTargetUri = databaseDataSource.getDatabaseSourcePath(),
-        )
-    }
-
     private fun createForegroundNotification(mode: BackupMode, progress: Float = 0F): Notification {
         val progressPercent = (progress * 100).toInt()
         val titleRes = when (mode) {
-            BackupMode.EXPORT -> R.string.notification_backup_export_progress_title
-            BackupMode.IMPORT -> R.string.notification_backup_import_progress_title
+            is BackupMode.Export -> R.string.notification_backup_export_progress_title
+            is BackupMode.Import -> R.string.notification_backup_import_progress_title
         }
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
@@ -122,8 +100,8 @@ internal class BackupService : Service() {
 
     private fun createSuccessNotification(mode: BackupMode): Notification {
         val titleRes = when (mode) {
-            BackupMode.EXPORT -> R.string.notification_backup_export_success_title
-            BackupMode.IMPORT -> R.string.notification_backup_import_success_title
+            is BackupMode.Export -> R.string.notification_backup_export_success_title
+            is BackupMode.Import -> R.string.notification_backup_import_success_title
         }
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
@@ -150,16 +128,19 @@ internal class BackupService : Service() {
         private const val NOTIFICATION_ID_SUCCESS = 113
         private const val CHANNEL_ID = "common"
         private const val EXTRA_MODE = "mode"
-        private const val EXTRA_PATH = "path"
 
-        fun createIntent(context: Context, mode: BackupMode, path: String): Intent {
+        fun createIntent(context: Context, mode: BackupMode): Intent {
             return Intent(context, BackupService::class.java)
                 .putExtra(EXTRA_MODE, mode)
-                .putExtra(EXTRA_PATH, path)
         }
     }
 }
 
-internal enum class BackupMode {
-    EXPORT, IMPORT
+internal sealed interface BackupMode : Serializable {
+
+    data object Export : BackupMode {
+        private fun readResolve(): Any = Export
+    }
+
+    data class Import(val path: String) : BackupMode
 }

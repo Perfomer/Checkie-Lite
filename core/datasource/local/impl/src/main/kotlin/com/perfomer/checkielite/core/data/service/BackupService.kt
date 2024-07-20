@@ -12,8 +12,8 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import com.perfomer.checkielite.core.data.datasource.R
-import com.perfomer.checkielite.core.data.entity.BackupProgress
 import com.perfomer.checkielite.core.data.repository.BackupRepository
+import com.perfomer.checkielite.core.entity.backup.BackupProgress
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

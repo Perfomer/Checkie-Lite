@@ -5,12 +5,12 @@ import android.os.Environment
 import com.perfomer.checkielite.common.pure.util.runSuspendCatching
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
 import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
-import com.perfomer.checkielite.core.data.entity.BackupMode
-import com.perfomer.checkielite.core.data.entity.BackupProgress
-import com.perfomer.checkielite.core.data.entity.BackupState
 import com.perfomer.checkielite.core.data.service.BackupParams
 import com.perfomer.checkielite.core.data.service.BackupService
 import com.perfomer.checkielite.core.data.util.startForegroundServiceCompat
+import com.perfomer.checkielite.core.entity.backup.BackupMode
+import com.perfomer.checkielite.core.entity.backup.BackupProgress
+import com.perfomer.checkielite.core.entity.backup.BackupState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

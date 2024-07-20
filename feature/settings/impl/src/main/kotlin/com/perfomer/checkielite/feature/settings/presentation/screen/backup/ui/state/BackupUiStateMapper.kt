@@ -2,8 +2,8 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.
 
 import android.content.Context
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
+import com.perfomer.checkielite.core.entity.backup.BackupMode
 import com.perfomer.checkielite.feature.settings.R
-import com.perfomer.checkielite.feature.settings.presentation.entity.BackupMode
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupState
 
 internal class BackupUiStateMapper(

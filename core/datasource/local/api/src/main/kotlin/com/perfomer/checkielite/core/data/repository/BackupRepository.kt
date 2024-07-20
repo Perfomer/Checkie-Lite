@@ -1,6 +1,6 @@
 package com.perfomer.checkielite.core.data.repository
 
-import com.perfomer.checkielite.core.data.entity.BackupState
+import com.perfomer.checkielite.core.entity.backup.BackupState
 import kotlinx.coroutines.flow.Flow
 
 interface BackupRepository {

@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.core.data.entity
+package com.perfomer.checkielite.core.entity.backup
 
 sealed interface BackupProgress {
 

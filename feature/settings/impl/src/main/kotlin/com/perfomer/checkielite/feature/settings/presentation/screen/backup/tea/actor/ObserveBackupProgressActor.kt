@@ -1,8 +1,8 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor
 
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.data.entity.BackupProgress
 import com.perfomer.checkielite.core.data.repository.BackupRepository
+import com.perfomer.checkielite.core.entity.backup.BackupProgress
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.ObserveBackupProgress
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent

@@ -30,6 +30,7 @@ import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
 import com.perfomer.checkielite.common.ui.util.TransparentSystemBars
 import com.perfomer.checkielite.feature.main.navigation.MainScreenProvider
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
+import com.perfomer.checkielite.navigation.BackupNavigationManager
 import com.perfomer.checkielite.navigation.HiddenScreen
 import com.perfomer.checkielite.navigation.voyager.impl.NavigatorHolder
 import com.perfomer.checkielite.update.AppUpdateManager
@@ -47,6 +48,7 @@ class AppActivity : AppCompatActivity() {
     private val permissionHelper: PermissionHelper by inject()
     private val navigatorHolder: NavigatorHolder by inject()
     private val mainScreenProvider: MainScreenProvider by inject()
+    private val backupNavigationManager: BackupNavigationManager by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +75,8 @@ class AppActivity : AppCompatActivity() {
         }
 
         checkForUpdates()
+
+        backupNavigationManager.register(lifecycleScope)
     }
 
     private fun initializeApplication() {

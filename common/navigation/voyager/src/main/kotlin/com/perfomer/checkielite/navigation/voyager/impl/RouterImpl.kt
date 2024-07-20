@@ -54,6 +54,11 @@ internal class RouterImpl(
         }
     }
 
+    override fun replaceStack(screen: CheckieScreen) {
+        navigator.popUntilRoot()
+        navigator.replace(screen as Screen)
+    }
+
     override suspend fun <T> navigateForResult(screen: CheckieScreen, mode: DestinationMode): T {
         navigate(screen, mode)
         return resultEventBus.awaitResult((screen as Screen).key)

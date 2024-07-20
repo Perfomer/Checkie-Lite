@@ -12,6 +12,7 @@ import com.perfomer.checkielite.feature.reviewdetails.reviewDetailsModules
 import com.perfomer.checkielite.feature.search.searchModules
 import com.perfomer.checkielite.feature.settings.settingsModules
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
+import com.perfomer.checkielite.navigation.BackupNavigationManager
 import com.perfomer.checkielite.navigation.voyager.navigationModule
 import com.perfomer.checkielite.update.AppUpdateManager
 import com.perfomer.checkielite.update.RuStoreUpdateManager
@@ -27,6 +28,7 @@ val checkieLiteModules: List<Module>
 private val appModule = module {
     singleOf(::AndroidExternalRouter) bind ExternalRouter::class
     singleOf(::AppInfoProviderImpl) bind AppInfoProvider::class
+    singleOf(::BackupNavigationManager)
 
     single { RuStoreAppUpdateManagerFactory.create(get()) }
     singleOf(::RuStoreUpdateManager) bind AppUpdateManager::class

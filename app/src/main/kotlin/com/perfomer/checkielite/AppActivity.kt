@@ -28,10 +28,10 @@ import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
 import com.perfomer.checkielite.common.ui.util.TransparentSystemBars
-import com.perfomer.checkielite.feature.main.navigation.MainScreenProvider
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.BackupNavigationManager
 import com.perfomer.checkielite.navigation.HiddenScreen
+import com.perfomer.checkielite.navigation.StartScreenProvider
 import com.perfomer.checkielite.navigation.voyager.impl.NavigatorHolder
 import com.perfomer.checkielite.update.AppUpdateManager
 import com.perfomer.checkielite.update.updateIfAvailable
@@ -47,8 +47,8 @@ class AppActivity : AppCompatActivity() {
     private val externalRouter: AndroidExternalRouter by inject()
     private val permissionHelper: PermissionHelper by inject()
     private val navigatorHolder: NavigatorHolder by inject()
-    private val mainScreenProvider: MainScreenProvider by inject()
     private val backupNavigationManager: BackupNavigationManager by inject()
+    private val startScreenProvider: StartScreenProvider by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,20 +75,19 @@ class AppActivity : AppCompatActivity() {
         }
 
         checkForUpdates()
-
-        backupNavigationManager.register(lifecycleScope)
     }
 
     private fun initializeApplication() {
         singleActivityHolder.activity = this
         externalRouter.register()
         permissionHelper.register()
+        backupNavigationManager.register(lifecycleScope)
     }
 
     @Composable
     private fun UsualNavigator() {
         Navigator(
-            screen = mainScreenProvider() as Screen,
+            screen = startScreenProvider() as Screen,
             onBackPressed = { false },
         ) { navigator ->
             navigatorHolder.usualNavigator = navigator

@@ -31,16 +31,16 @@ internal class BackupService : Service() {
 
     @Suppress("DEPRECATION")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val mode = intent?.getSerializableExtra(EXTRA_MODE) as? BackupMode
+        val params = intent?.getSerializableExtra(EXTRA_PARAMS) as? BackupParams
 
-        if (mode == null) {
+        if (params == null) {
             stopSelf()
             return START_NOT_STICKY
         }
 
         createNotificationChannel()
 
-        val notification = createForegroundNotification(mode)
+        val notification = createForegroundNotification(params)
         val foregroundServiceType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC else 0
         ServiceCompat.startForeground(this, NOTIFICATION_ID_FOREGROUND, notification, foregroundServiceType)
 
@@ -50,15 +50,15 @@ internal class BackupService : Service() {
             backupRepository.observeBackupState()
                 .filterIsInstance<BackupProgress.InProgress>()
                 .collect { progress ->
-                    val updatedNotification = createForegroundNotification(mode, progress.progress)
+                    val updatedNotification = createForegroundNotification(params, progress.progress)
                     notificationManager.notify(NOTIFICATION_ID_FOREGROUND, updatedNotification)
                 }
         }
 
         scope.launch {
-            doWork(mode)
+            doWork(params)
 
-            val successNotification = createSuccessNotification(mode)
+            val successNotification = createSuccessNotification(params)
             notificationManager.notify(NOTIFICATION_ID_SUCCESS, successNotification)
 
             stopSelf()
@@ -67,10 +67,10 @@ internal class BackupService : Service() {
         return START_NOT_STICKY
     }
 
-    private suspend fun doWork(mode: BackupMode) {
+    private suspend fun doWork(mode: BackupParams) {
         when (mode) {
-            is BackupMode.Export -> backupRepository.exportBackup()
-            is BackupMode.Import -> backupRepository.importBackup(mode.path)
+            is BackupParams.Export -> backupRepository.exportBackup()
+            is BackupParams.Import -> backupRepository.importBackup(mode.path)
         }
     }
 
@@ -81,11 +81,11 @@ internal class BackupService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
-    private fun createForegroundNotification(mode: BackupMode, progress: Float = 0F): Notification {
+    private fun createForegroundNotification(mode: BackupParams, progress: Float = 0F): Notification {
         val progressPercent = (progress * 100).toInt()
         val titleRes = when (mode) {
-            is BackupMode.Export -> R.string.notification_backup_export_progress_title
-            is BackupMode.Import -> R.string.notification_backup_import_progress_title
+            is BackupParams.Export -> R.string.notification_backup_export_progress_title
+            is BackupParams.Import -> R.string.notification_backup_import_progress_title
         }
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
@@ -98,10 +98,10 @@ internal class BackupService : Service() {
             .build()
     }
 
-    private fun createSuccessNotification(mode: BackupMode): Notification {
+    private fun createSuccessNotification(mode: BackupParams): Notification {
         val titleRes = when (mode) {
-            is BackupMode.Export -> R.string.notification_backup_export_success_title
-            is BackupMode.Import -> R.string.notification_backup_import_success_title
+            is BackupParams.Export -> R.string.notification_backup_export_success_title
+            is BackupParams.Import -> R.string.notification_backup_import_success_title
         }
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
@@ -127,20 +127,20 @@ internal class BackupService : Service() {
         private const val NOTIFICATION_ID_FOREGROUND = 112
         private const val NOTIFICATION_ID_SUCCESS = 113
         private const val CHANNEL_ID = "common"
-        private const val EXTRA_MODE = "mode"
+        private const val EXTRA_PARAMS = "params"
 
-        fun createIntent(context: Context, mode: BackupMode): Intent {
+        fun createIntent(context: Context, params: BackupParams): Intent {
             return Intent(context, BackupService::class.java)
-                .putExtra(EXTRA_MODE, mode)
+                .putExtra(EXTRA_PARAMS, params)
         }
     }
 }
 
-internal sealed interface BackupMode : Serializable {
+internal sealed interface BackupParams : Serializable {
 
-    data object Export : BackupMode {
+    data object Export : BackupParams {
         private fun readResolve(): Any = Export
     }
 
-    data class Import(val path: String) : BackupMode
+    data class Import(val path: String) : BackupParams
 }

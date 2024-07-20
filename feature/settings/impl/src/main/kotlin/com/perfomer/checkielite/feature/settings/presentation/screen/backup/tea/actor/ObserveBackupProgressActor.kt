@@ -26,6 +26,7 @@ internal class ObserveBackupProgressActor(
 
     private fun handleCommand(command: ObserveBackupProgress): Flow<BackupEvent> {
         return backupRepository.observeBackupState()
+            .map { state -> state.progress }
             .filter { progress -> progress !is BackupProgress.None }
             .map(::BackupProgressUpdated)
     }

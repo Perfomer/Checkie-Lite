@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor
 
-import com.perfomer.checkielite.common.android.AppRestarter
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.navigation.api.ExternalDestination
 import com.perfomer.checkielite.core.navigation.api.ExternalResult
@@ -10,7 +9,6 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.Exit
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.RestartApp
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.SelectBackupFile
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent.BackupFileSelection
@@ -22,7 +20,6 @@ import kotlinx.coroutines.flow.mapLatest
 internal class SettingsNavigationActor(
     private val router: Router,
     private val externalRouter: ExternalRouter,
-    private val appRestarter: AppRestarter,
 ) : Actor<SettingsCommand, SettingsEvent> {
 
     override fun act(commands: Flow<SettingsCommand>): Flow<SettingsEvent> {
@@ -34,7 +31,6 @@ internal class SettingsNavigationActor(
     private suspend fun handleCommand(command: SettingsNavigationCommand): SettingsNavigationEvent? {
         when (command) {
             is Exit -> router.exit()
-            is RestartApp -> appRestarter.restart()
             is SelectBackupFile -> return selectBackupFile()
         }
 

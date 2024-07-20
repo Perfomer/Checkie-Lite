@@ -43,7 +43,6 @@ internal fun createSettingsStore(
     context: Context,
     router: Router,
     externalRouter: ExternalRouter,
-    appRestarter: AppRestarter,
     localDataSource: CheckieLocalDataSource,
     backupRepository: BackupRepository,
 ): SettingsStore {
@@ -51,7 +50,7 @@ internal fun createSettingsStore(
         reducer = SettingsReducer(),
         uiStateMapper = SettingsUiStateMapper(context),
         actors = setOf(
-            SettingsNavigationActor(router, externalRouter, appRestarter),
+            SettingsNavigationActor(router, externalRouter),
             ExportBackupActor(backupRepository),
             ImportBackupActor(backupRepository),
             CheckSyncingActor(localDataSource),

@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea
 
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
+import com.perfomer.checkielite.core.data.entity.BackupProgress
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.ObserveBackupProgress
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect
@@ -29,6 +30,13 @@ internal class BackupReducer : DslReducer<BackupCommand, BackupEffect, BackupEve
     }
 
     private fun reduceBackupProgressUpdated(event: BackupProgressUpdated) {
-        state { copy(progress = event.progress) }
+        val progressValue = when (event.progress) {
+            is BackupProgress.None -> state.progressValue
+            is BackupProgress.InProgress -> event.progress.progress
+            is BackupProgress.Completed -> 1F
+            is BackupProgress.Failure -> state.progressValue
+        }
+
+        state { copy(backupState = event.progress, progressValue = progressValue) }
     }
 }

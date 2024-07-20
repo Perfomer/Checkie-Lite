@@ -1,13 +1,13 @@
 package com.perfomer.checkielite.core.data.repository
 
-import com.perfomer.checkielite.core.data.entity.BackupProgress
+import com.perfomer.checkielite.core.data.entity.BackupState
 import kotlinx.coroutines.flow.Flow
 
 interface BackupRepository {
 
-    val backupState: BackupProgress
+    val backupState: BackupState
 
-    fun observeBackupState(): Flow<BackupProgress>
+    fun observeBackupState(): Flow<BackupState>
 
     suspend fun importBackup(fromPath: String)
 

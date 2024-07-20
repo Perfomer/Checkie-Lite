@@ -26,7 +26,7 @@ internal class BackupReducer : DslReducer<BackupCommand, BackupEffect, BackupEve
     }
 
     private fun reduceUi(event: BackupUiEvent) = when (event) {
-        is OnBackPress -> commands(Exit)
+        is OnBackPress -> commands(Exit) // todo remove exit on back press
     }
 
     private fun reduceBackupProgressUpdated(event: BackupProgressUpdated) {

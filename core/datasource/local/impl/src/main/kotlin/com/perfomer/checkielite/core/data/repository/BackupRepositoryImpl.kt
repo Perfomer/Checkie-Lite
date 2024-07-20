@@ -5,8 +5,10 @@ import android.os.Environment
 import com.perfomer.checkielite.common.pure.util.runSuspendCatching
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
 import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
+import com.perfomer.checkielite.core.data.entity.BackupMode
 import com.perfomer.checkielite.core.data.entity.BackupProgress
-import com.perfomer.checkielite.core.data.service.BackupMode
+import com.perfomer.checkielite.core.data.entity.BackupState
+import com.perfomer.checkielite.core.data.service.BackupParams
 import com.perfomer.checkielite.core.data.service.BackupService
 import com.perfomer.checkielite.core.data.util.startForegroundServiceCompat
 import kotlinx.coroutines.Dispatchers
@@ -21,31 +23,39 @@ internal class BackupRepositoryImpl(
     private val databaseDataSource: DatabaseDataSource,
 ) : BackupRepository {
 
-    private val backupFlow: MutableStateFlow<BackupProgress> = MutableStateFlow(BackupProgress.None)
+    private val backupFlow: MutableStateFlow<BackupState> = MutableStateFlow(BackupState.default)
 
-    override val backupState: BackupProgress
+    override val backupState: BackupState
         get() = backupFlow.value
 
-    override fun observeBackupState(): Flow<BackupProgress> {
+    override fun observeBackupState(): Flow<BackupState> {
         return backupFlow
     }
 
     override suspend fun importBackup(fromPath: String) = withContext(Dispatchers.IO) {
+        suspend fun updateState(progress: BackupProgress) {
+            backupFlow.emit(BackupState(BackupMode.IMPORT, progress))
+        }
+
         runSuspendCatching {
             fileDataSource.importBackup(
                 backupPath = fromPath,
                 databaseTargetUri = databaseDataSource.getDatabaseSourcePath(),
             ).collect { progress ->
-                backupFlow.emit(BackupProgress.InProgress(progress))
+                updateState(BackupProgress.InProgress(progress))
             }
         }
-            .onFailure { error -> backupFlow.emit(BackupProgress.Failure(error)) }
-            .onSuccess { backupFlow.emit(BackupProgress.Completed) }
+            .onFailure { error -> updateState(BackupProgress.Failure(error)) }
+            .onSuccess { updateState(BackupProgress.Completed) }
 
-        backupFlow.emit(BackupProgress.None)
+        updateState(BackupProgress.None)
     }
 
     override suspend fun exportBackup() = withContext(Dispatchers.IO) {
+        suspend fun updateState(progress: BackupProgress) {
+            backupFlow.emit(BackupState(BackupMode.EXPORT, progress))
+        }
+
         val documentsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).absolutePath
         val targetFolderPath = "$documentsFolder/$TARGET_FOLDER_NAME"
 
@@ -57,21 +67,21 @@ internal class BackupRepositoryImpl(
                 picturesUri = databaseDataSource.getAllPicturesUri(),
                 destinationFolderUri = targetFolderPath,
             ).collect { progress ->
-                backupFlow.emit(BackupProgress.InProgress(progress))
+                updateState(BackupProgress.InProgress(progress))
             }
         }
-            .onFailure { error -> backupFlow.emit(BackupProgress.Failure(error)) }
-            .onSuccess { backupFlow.emit(BackupProgress.Completed) }
+            .onFailure { error -> updateState(BackupProgress.Failure(error)) }
+            .onSuccess { updateState(BackupProgress.Completed) }
 
-        backupFlow.emit(BackupProgress.None)
+        updateState(BackupProgress.None)
     }
 
     override fun launchImportBackupService(fromPath: String) {
-        context.startForegroundServiceCompat(BackupService.createIntent(context, BackupMode.Import(fromPath)))
+        context.startForegroundServiceCompat(BackupService.createIntent(context, BackupParams.Import(fromPath)))
     }
 
     override fun launchExportBackupService() {
-        context.startForegroundServiceCompat(BackupService.createIntent(context, BackupMode.Export))
+        context.startForegroundServiceCompat(BackupService.createIntent(context, BackupParams.Export))
     }
 
     private companion object {

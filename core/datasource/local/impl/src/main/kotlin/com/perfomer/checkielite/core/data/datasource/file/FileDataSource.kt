@@ -17,6 +17,7 @@ import id.zelory.compressor.constraint.format
 import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.text.SimpleDateFormat
@@ -91,8 +92,11 @@ internal class FileDataSourceImpl(
             appVersionCode = appInfoProvider.getAppInfo().versionCode,
         )
 
+        val databaseFile = File(databaseUri)
+        if (!databaseFile.exists()) return flow { throw IllegalStateException("Database doesn't exist") }
+
         return archive(
-            files = picturesUri.map(::File) + File(databaseUri),
+            files = picturesUri.map(::File) + databaseFile,
             destination = File("$destinationFolderUri/$fileName"),
             metadata = backupMetadataParser.serialize(metadata),
         )

@@ -1,7 +1,6 @@
 package com.perfomer.checkielite.feature.settings
 
 import android.content.Context
-import com.perfomer.checkielite.common.android.AppRestarter
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.data.repository.BackupRepository
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
@@ -62,7 +61,6 @@ internal fun createBackupStore(
     params: BackupParams,
     context: Context,
     router: Router,
-    appRestarter: AppRestarter,
     backupRepository: BackupRepository,
     mainScreenProvider: MainScreenProvider,
 ): BackupStore {
@@ -71,7 +69,7 @@ internal fun createBackupStore(
         reducer = BackupReducer(),
         uiStateMapper = BackupUiStateMapper(context),
         actors = setOf(
-            BackupNavigationActor(router, appRestarter, mainScreenProvider),
+            BackupNavigationActor(router, mainScreenProvider),
             ObserveBackupProgressActor(backupRepository),
             AwaitActor(),
         ),

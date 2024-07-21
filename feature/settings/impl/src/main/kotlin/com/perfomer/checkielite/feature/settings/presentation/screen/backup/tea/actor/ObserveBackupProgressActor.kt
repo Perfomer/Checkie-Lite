@@ -32,7 +32,7 @@ internal class ObserveBackupProgressActor(
                     is BackupProgress.None -> null
                     is BackupProgress.InProgress -> Backup.ProgressUpdated(progress.progress)
                     is BackupProgress.Completed -> Backup.Completed
-                    is BackupProgress.Failure -> null // todo
+                    is BackupProgress.Failure -> Backup.Failed(progress.error)
                 }
             }
     }

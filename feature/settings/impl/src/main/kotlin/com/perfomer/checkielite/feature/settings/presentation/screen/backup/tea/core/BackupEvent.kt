@@ -7,6 +7,7 @@ internal sealed interface BackupEvent {
     sealed interface Backup : BackupEvent {
         class ProgressUpdated(val progress: Float) : Backup
         data object Completed : Backup
+        class Failed(val error: Throwable) : Backup
     }
 
     data object AwaitCompleted : BackupEvent

@@ -26,6 +26,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -124,12 +125,12 @@ internal fun ProductInfoScreen(
                 text = state.brand,
                 title = stringResource(R.string.reviewcreation_productinfo_field_brand),
                 keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done,
+                    imeAction = ImeAction.Next,
                     capitalization = KeyboardCapitalization.Sentences,
                 ),
                 onValueChange = onBrandTextInput,
                 interactionSource = brandNameInteractionSource,
-                modifier = Modifier.menuAnchor()
+                modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable)
             )
         }
 
@@ -139,7 +140,7 @@ internal fun ProductInfoScreen(
             text = state.price,
             title = stringResource(R.string.reviewcreation_productinfo_field_price),
             keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next,
+                imeAction = ImeAction.Done,
                 capitalization = KeyboardCapitalization.Sentences,
                 keyboardType = KeyboardType.Decimal,
             ),

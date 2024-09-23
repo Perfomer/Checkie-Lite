@@ -50,6 +50,7 @@ fun CuiProgressBar(
         trackColor = backgroundColor,
         color = animatedProgressColor.value,
         strokeCap = StrokeCap.Round,
+        drawStopIndicator = {},
         modifier = modifier
             .height(8.dp)
             .clip(CircleShape),

@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -18,7 +17,6 @@ import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.util.StableInsets
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 internal fun ProgressAppBar(
     pagerState: PagerState,
     navigationIconPainter: Painter,

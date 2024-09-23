@@ -13,9 +13,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text2.BasicTextField2
-import androidx.compose.foundation.text2.input.TextFieldLineLimits
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
@@ -64,7 +63,7 @@ fun CuiOutlinedField2(
         )
     }
 
-    BasicTextField2(
+    BasicTextField(
         value = value,
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.Sentences,
@@ -78,8 +77,8 @@ fun CuiOutlinedField2(
             fontSize = 14.sp,
             color = colors.focusedTextColor,
         ),
-        lineLimits = TextFieldLineLimits.SingleLine,
-        decorator = { innerTextField ->
+        singleLine = singleLine,
+        decorationBox = { innerTextField ->
             TextFieldDefaults.DecorationBox(
                 value = value,
                 visualTransformation = VisualTransformation.None,

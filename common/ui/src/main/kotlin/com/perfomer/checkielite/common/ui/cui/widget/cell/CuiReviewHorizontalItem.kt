@@ -50,10 +50,11 @@ data class ReviewItem(
 fun CuiReviewHorizontalItem(
     item: ReviewItem,
     onClick: (id: String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { onClick(item.id) }
             .padding(horizontal = 20.dp, vertical = 12.dp)

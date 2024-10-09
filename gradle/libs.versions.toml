@@ -1,25 +1,25 @@
 [versions]
 accompanist-systemuicontroller = "0.34.0"
-activity = "1.9.1"
+activity = "1.9.2"
 #noinspection AndroidGradlePluginVersion
 agp = "8.3.1" # todo: 8.4.0 version fails R8 minification
 androidx-core = "1.13.1"
 appcompat = "1.7.0"
-rustore-appupdate = "3.0.0"
 coil = "2.6.0"
-compose-bom = "2024.09.02"
+compose-bom = "2024.09.03"
 compressor = "3.0.1"
 core-ktx = "1.13.1"
 drag-and-drop = "0.2.0"
 fading-edges = "1.0.4"
-google-fonts = "1.7.2"
+google-fonts = "1.7.3"
 koin = "3.5.0"
-kotlin = "2.0.0"
+kotlin = "2.0.10"
 kotlinx-collections-immutable = "0.3.7"
 kotlinx-coroutines = "1.8.1"
 ksp = "2.0.0-1.0.21"
 lifecycle-ktx = "2.8.6"
 room = "2.6.1"
+rustore-appupdate = "3.0.0"
 testJunitJupiter = "5.9.2"
 testKotestAssertions = "5.6.2"
 testMock = "1.13.5"
@@ -32,7 +32,6 @@ activity = { module = "androidx.activity:activity", version.ref = "activity" }
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx-core = { module = "androidx.core:core", version.ref = "androidx-core" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
-rustore-appupdate = { module = "ru.rustore.sdk:appupdate", version.ref = "rustore-appupdate" }
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
@@ -51,6 +50,7 @@ lifecycle-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.r
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+rustore-appupdate = { module = "ru.rustore.sdk:appupdate", version.ref = "rustore-appupdate" }
 testCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 testJunitJupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "testJunitJupiter" }
 testKotestAssertions = { module = "io.kotest:kotest-assertions-core", version.ref = "testKotestAssertions" }

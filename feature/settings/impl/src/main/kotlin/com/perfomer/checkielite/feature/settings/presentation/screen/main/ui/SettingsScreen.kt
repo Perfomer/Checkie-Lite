@@ -4,9 +4,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -116,13 +118,15 @@ private fun BackupGroup(
         Spacer(Modifier.height(8.dp))
 
         SettingsItem(
-            text = stringResource(R.string.settings_group_data_item_export),
+            title = stringResource(R.string.settings_group_data_item_export),
+            subtitle = stringResource(R.string.settings_group_data_item_export_desc),
             icon = painterResource(R.drawable.ic_backup_export),
             onClick = onBackupExportClick,
         )
 
         SettingsItem(
-            text = stringResource(R.string.settings_group_data_item_import),
+            title = stringResource(R.string.settings_group_data_item_import),
+            subtitle = stringResource(R.string.settings_group_data_item_import_desc),
             icon = painterResource(R.drawable.ic_backup_import),
             onClick = onBackupImportClick,
         )
@@ -168,16 +172,19 @@ private fun GroupTitle(
 
 @Composable
 private fun SettingsItem(
-    text: String,
+    title: String,
+    subtitle: String? = null,
     icon: Painter,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
+            .defaultMinSize(minHeight = 56.dp)
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .padding(horizontal = 20.dp, vertical = 18.dp)
+            .padding(horizontal = 20.dp, vertical = 9.dp)
     ) {
         Icon(
             painter = icon,
@@ -188,12 +195,27 @@ private fun SettingsItem(
 
         Spacer(Modifier.width(16.dp))
 
-        Text(
-            text = text,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium,
+        Column(
             modifier = Modifier.weight(1f)
-        )
+        ) {
+            Text(
+                text = title,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            if (subtitle != null) {
+                Text(
+                    text = subtitle,
+                    fontSize = 12.sp,
+                    color = LocalCuiPalette.current.TextSecondary,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .offset(y = (-2).dp)
+                )
+            }
+        }
     }
 }
 

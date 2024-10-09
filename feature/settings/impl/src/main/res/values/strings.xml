@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="settings_title">Settings</string>
+    <string name="settings_group_backup_title">Backup</string>
+    <string name="settings_group_backup_description">Save all the application data in one file so as not to lose them. They can be transferred to another device or saved to the cloud.</string>
+    <string name="settings_group_backup_item_import">Import backup</string>
+    <string name="settings_group_backup_item_export">Create backup</string>
     <string name="settings_backup_title_import">Importing backup…</string>
     <string name="settings_backup_title_export">Exporting backup…</string>
     <string name="settings_backup_minimize_hint">It may take a while.\nYou can <b>minimize</b> the application.</string>

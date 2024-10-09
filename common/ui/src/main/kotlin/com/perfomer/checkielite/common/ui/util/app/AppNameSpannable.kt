@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.common.ui.util.span
+package com.perfomer.checkielite.common.ui.util.app
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable

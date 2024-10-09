@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="settings_title">Настройки</string>
+    <string name="settings_group_backup_title">Резервная копия</string>
+    <string name="settings_group_backup_description">Сохраните все данные приложения в одном файле, чтобы не потерять их. Их можно передать на другое устройство или сохранить на облако.</string>
+    <string name="settings_group_backup_item_import">Восстановить данные</string>
+    <string name="settings_group_backup_item_export">Создать резервную копию</string>
     <string name="settings_backup_title_import">Восстановление данных…</string>
     <string name="settings_backup_title_export">Создание резервной копии…</string>
     <string name="settings_backup_minimize_hint">Это может занять время.\nВы можете <b>свернуть</b> приложение.</string>

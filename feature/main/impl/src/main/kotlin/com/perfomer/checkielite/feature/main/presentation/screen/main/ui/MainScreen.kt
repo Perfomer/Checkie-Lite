@@ -54,6 +54,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.util.pxToDp
 import com.perfomer.checkielite.common.ui.util.span.appNameSpannable
 import com.perfomer.checkielite.feature.main.R
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiState
@@ -65,7 +66,7 @@ import kotlinx.collections.immutable.toPersistentList
 @Composable
 internal fun MainScreen(
     state: MainUiState,
-    onSettingsClick: () -> Unit  =  {},
+    onSettingsClick: () -> Unit = {},
     onSearchClick: () -> Unit = {},
     onReviewClick: (id: String) -> Unit = {},
     onTagClick: (id: String) -> Unit = {},
@@ -191,7 +192,11 @@ private fun TopAppBar(
     onSettingsClick: () -> Unit,
     onSearchClick: () -> Unit,
 ) {
-    val shouldShowDivider by remember { derivedStateOf { scrollableState.canScrollBackward } }
+    val shouldShowDivider by remember {
+        derivedStateOf {
+            scrollableState.canScrollBackward && (scrollableState.firstVisibleItemIndex > 0 || scrollableState.firstVisibleItemScrollOffset.pxToDp() > 4 )
+        }
+    }
 
     CenterAlignedTopAppBar(
         title = { Text(text = appNameSpannable(), fontSize = 20.sp) },

@@ -5,6 +5,8 @@
     <string name="settings_group_data_description">Сохраните все данные приложения в одном файле, чтобы не потерять их. Его можно передать на другое устройство или сохранить на облако.</string>
     <string name="settings_group_data_item_import">Восстановить данные</string>
     <string name="settings_group_data_item_export">Создать резервную копию</string>
+    <string name="settings_group_data_item_import_desc">Выбрать файл…</string>
+    <string name="settings_group_data_item_export_desc">Сохранить в \"/Документы/Checkie\"</string>
     <string name="settings_backup_title_import">Восстановление данных…</string>
     <string name="settings_backup_title_export">Создание резервной копии…</string>
     <string name="settings_backup_minimize_hint">Это может занять время.\nВы можете <b>свернуть</b> приложение.</string>

@@ -5,6 +5,8 @@
     <string name="settings_group_data_description">Save all app data in one file to avoid losing it. You can transfer it to another device or save it to the cloud.</string>
     <string name="settings_group_data_item_import">Import backup</string>
     <string name="settings_group_data_item_export">Create backup</string>
+    <string name="settings_group_data_item_import_desc">Pick a file…</string>
+    <string name="settings_group_data_item_export_desc">Save to \"/Documents/Checkie\"</string>
     <string name="settings_backup_title_import">Importing backup…</string>
     <string name="settings_backup_title_export">Exporting backup…</string>
     <string name="settings_backup_minimize_hint">It may take a while.\nYou can <b>minimize</b> the application.</string>

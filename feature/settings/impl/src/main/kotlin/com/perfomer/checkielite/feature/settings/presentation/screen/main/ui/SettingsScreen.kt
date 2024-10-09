@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.cui.widget.info.CuiInfoIcon
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -107,20 +108,21 @@ private fun BackupGroup(
 ) {
     Column(modifier = modifier) {
         GroupTitle(
-            title = stringResource(R.string.settings_group_backup_title),
+            title = stringResource(R.string.settings_group_data_title),
+            infoText = stringResource(R.string.settings_group_data_description),
             modifier = Modifier.padding(horizontal = 20.dp)
         )
 
         Spacer(Modifier.height(8.dp))
 
         SettingsItem(
-            text = stringResource(R.string.settings_group_backup_item_export),
+            text = stringResource(R.string.settings_group_data_item_export),
             icon = painterResource(R.drawable.ic_backup_export),
             onClick = onBackupExportClick,
         )
 
         SettingsItem(
-            text = stringResource(R.string.settings_group_backup_item_import),
+            text = stringResource(R.string.settings_group_data_item_import),
             icon = painterResource(R.drawable.ic_backup_import),
             onClick = onBackupImportClick,
         )
@@ -131,16 +133,24 @@ private fun BackupGroup(
 private fun GroupTitle(
     title: String,
     modifier: Modifier = Modifier,
+    infoText: String? = null,
     description: String? = null,
 ) {
     Column(
         modifier = modifier
     ) {
-        Text(
-            text = title,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = title,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+            )
+
+            if (infoText != null) {
+                Spacer(Modifier.width(12.dp))
+                CuiInfoIcon(text = infoText)
+            }
+        }
 
         if (description != null) {
             Spacer(Modifier.height(4.dp))

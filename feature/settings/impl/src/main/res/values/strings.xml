@@ -2,7 +2,7 @@
 <resources>
     <string name="settings_title">Settings</string>
     <string name="settings_group_data_title">Data</string>
-    <string name="settings_group_data_description">Save all the application data in one file so as not to lose them. They can be transferred to another device or saved to the cloud.</string>
+    <string name="settings_group_data_description">Save all app data in one file to avoid losing it. You can transfer it to another device or save it to the cloud.</string>
     <string name="settings_group_data_item_import">Import backup</string>
     <string name="settings_group_data_item_export">Create backup</string>
     <string name="settings_backup_title_import">Importing backup…</string>

@@ -48,7 +48,7 @@ fun CuiInfoIcon(
 }
 
 @Composable
-internal fun InfoIcon(
+private fun InfoIcon(
     isActive: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier

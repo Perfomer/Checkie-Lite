@@ -1,3 +1,8 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core
 
-internal sealed interface BackupEffect
+import com.perfomer.checkielite.core.entity.backup.BackupMode
+
+internal sealed interface BackupEffect {
+
+    class ShowErrorToast(val mode: BackupMode) : BackupEffect
+}

@@ -10,4 +10,6 @@
     <string name="settings_backup_title_import">Восстановление данных…</string>
     <string name="settings_backup_title_export">Создание резервной копии…</string>
     <string name="settings_backup_minimize_hint">Это может занять время.\nВы можете <b>свернуть</b> приложение.</string>
+    <string name="settings_backup_failure_export">Не удалось создать резервную копию</string>
+    <string name="settings_backup_failure_import">Не удалось восстановить данные</string>
 </resources>

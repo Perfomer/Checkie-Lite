@@ -69,7 +69,7 @@ internal class FileDataSourceImpl(
             size(compressTargetSizeBytes)
         }
 
-        return destinationFile.absolutePath
+        return destinationFile.name
     }
 
     override suspend fun deleteFile(uri: String): Unit = withContext(Dispatchers.IO) {
@@ -95,8 +95,12 @@ internal class FileDataSourceImpl(
         val databaseFile = File(databaseUri)
         if (!databaseFile.exists()) return flow { throw IllegalStateException("Database doesn't exist") }
 
+        val picturesFiles = picturesUri
+            .map { "${context.filesDir.absolutePath}/$it" }
+            .map(::File)
+
         return archive(
-            files = picturesUri.map(::File) + databaseFile,
+            files = picturesFiles + databaseFile,
             destination = File("$destinationFolderUri/$fileName"),
             metadata = backupMetadataParser.serialize(metadata),
         )

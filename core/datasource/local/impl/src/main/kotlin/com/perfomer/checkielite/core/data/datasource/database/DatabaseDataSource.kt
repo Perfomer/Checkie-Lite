@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.core.data.datasource.database
 
+import android.content.Context
 import androidx.room.withTransaction
 import com.perfomer.checkielite.core.data.datasource.database.room.CheckieDatabase
 import com.perfomer.checkielite.core.data.datasource.database.room.dao.CheckiePictureDao
@@ -105,6 +106,7 @@ internal interface DatabaseDataSource {
 }
 
 internal class DatabaseDataSourceImpl(
+    private val context: Context,
     private val database: CheckieDatabase,
 ) : DatabaseDataSource {
 
@@ -115,22 +117,22 @@ internal class DatabaseDataSourceImpl(
 
     override fun getReviews(): Flow<List<CheckieReview>> {
         return reviewDao.getReviews()
-            .map { reviewsDb -> reviewsDb.map { it.toDomain() } }
+            .map { reviewsDb -> reviewsDb.map { it.toDomain(context) } }
     }
 
     override fun getReviewsByBrand(brand: String): Flow<List<CheckieReview>> {
         return reviewDao.getReviewsByBrand(brand)
-            .map { reviewsDb -> reviewsDb.map { it.toDomain() } }
+            .map { reviewsDb -> reviewsDb.map { it.toDomain(context) } }
     }
 
     override fun getReview(reviewId: String): Flow<CheckieReview> {
         return reviewDao.getReview(reviewId)
-            .map { it.toDomain() }
+            .map { it.toDomain(context) }
     }
 
     override fun getRecentSearches(): Flow<List<CheckieReview>> {
         return recentSearchDao.getRecentSearches()
-            .map { recentSearches -> recentSearches.map { it.toDomain() } }
+            .map { recentSearches -> recentSearches.map { it.toDomain(context) } }
     }
 
     override suspend fun rememberRecentSearch(reviewId: String, searchDate: Date) = database.withTransaction {
@@ -178,7 +180,7 @@ internal class DatabaseDataSourceImpl(
 
         val tagsBoundsDb = tagsIds.map { tagId -> CheckieTagReviewBoundDb(tagId = tagId, reviewId = id) }
         val picturesDb = pictures.mapIndexed { i, picture ->
-            picture.toDb(reviewId = id, order = i)
+            picture.toDb(reviewId = id, order = i, context = context)
         }
 
         reviewDao.insertReview(reviewDb)
@@ -219,7 +221,7 @@ internal class DatabaseDataSourceImpl(
         val tagsBoundsDb = tagsIds.map { tagId -> CheckieTagReviewBoundDb(tagId = tagId, reviewId = id) }
         val deletedPicturesIds = deletedPictures.map { it.id }
         val actualPicturesDb = actualPictures.mapIndexed { i, picture ->
-            picture.toDb(reviewId = id, order = i)
+            picture.toDb(reviewId = id, order = i, context = context)
         }
 
         reviewDao.updateReview(reviewDb)

@@ -7,7 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipBox
@@ -41,30 +40,30 @@ fun CuiInfoIcon(
         state = tooltipState,
         modifier = modifier,
     ) {
-        InfoIcon(onClick = { scope.launch { tooltipState.show() } })
+        InfoIcon(
+            isActive = tooltipState.isVisible,
+            onClick = { scope.launch { tooltipState.show() } },
+        )
     }
 }
 
 @Composable
 internal fun InfoIcon(
+    isActive: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val palette = LocalCuiPalette.current
+
+    val backgroundColor = if (isActive) palette.BackgroundAccentSecondary else palette.BackgroundSecondary
+    val outlineColor = if (isActive) palette.OutlineAccentSecondary else palette.OutlineSecondary
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .border(
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = LocalCuiPalette.current.OutlineSecondary,
-                ),
-                shape = RoundedCornerShape(14.dp)
-            )
-            .background(
-                color = LocalCuiPalette.current.BackgroundSecondary,
-                shape = CircleShape
-            )
-            .clip(RoundedCornerShape(14.dp))
+            .border(border = BorderStroke(width = 1.dp, color = outlineColor), shape = CircleShape)
+            .background(color = backgroundColor, shape = CircleShape)
+            .clip(CircleShape)
             .size(24.dp)
             .clickable(onClick = onClick)
     ) {
@@ -72,7 +71,7 @@ internal fun InfoIcon(
             text = "?",
             fontSize = 12.sp,
             fontWeight = FontWeight.Medium,
-            color = LocalCuiPalette.current.TextPrimary,
+            color = palette.TextPrimary,
         )
     }
 }

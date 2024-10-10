@@ -3,6 +3,7 @@ package com.perfomer.checkielite.common.ui.cui.widget.info
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -46,11 +47,13 @@ fun TooltipScope.CuiTooltip(
                 tint = LocalCuiPalette.current.IconAccent,
                 contentDescription = null,
                 modifier = Modifier.size(20.dp)
+                    .offset(y = 4.dp)
             )
 
             Text(
                 text = text,
                 fontSize = 14.sp,
+                color = LocalCuiPalette.current.TextPrimary,
             )
         }
     }

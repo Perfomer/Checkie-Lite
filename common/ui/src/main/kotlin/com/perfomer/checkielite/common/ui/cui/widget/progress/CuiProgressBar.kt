@@ -19,7 +19,7 @@ import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
-private const val ANIMATION_DURATION_MS = 500
+private const val ANIMATION_DURATION_MS = 350
 
 @Composable
 fun CuiProgressBar(

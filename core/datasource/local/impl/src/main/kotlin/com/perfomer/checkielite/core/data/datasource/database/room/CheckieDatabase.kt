@@ -17,9 +17,10 @@ import com.perfomer.checkielite.core.data.datasource.database.room.entity.Checki
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieTagDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieTagReviewBoundDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.RecentSearchedReviewDb
+import com.perfomer.checkielite.core.data.datasource.database.room.migration.MIGRATION_5_6
 
 @Database(
-    version = 5,
+    version = 6,
     entities = [
         CheckieReviewDb::class,
         CheckieReviewPictureDb::class,
@@ -32,6 +33,7 @@ import com.perfomer.checkielite.core.data.datasource.database.room.entity.Recent
         AutoMigration(from = 2, to = 3),
         AutoMigration(from = 3, to = 4),
         AutoMigration(from = 4, to = 5),
+        // Migration from 5 to 6 is manual: see `MIGRATION_5_6`.
     ],
 )
 @TypeConverters(DateConverter::class, BigDecimalConverter::class)
@@ -50,6 +52,7 @@ internal abstract class CheckieDatabase : RoomDatabase() {
         internal fun getInstance(appContext: Context): CheckieDatabase {
             return Room.databaseBuilder(appContext, CheckieDatabase::class.java, DATABASE_NAME)
                 .setJournalMode(JournalMode.TRUNCATE)
+                .addMigrations(MIGRATION_5_6)
                 .build()
         }
     }

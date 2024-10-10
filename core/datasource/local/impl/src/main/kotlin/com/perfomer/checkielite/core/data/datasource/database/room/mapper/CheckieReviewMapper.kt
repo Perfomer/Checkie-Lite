@@ -1,10 +1,11 @@
 package com.perfomer.checkielite.core.data.datasource.database.room.mapper
 
+import android.content.Context
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.relation.CheckieReviewDetailedDb
 import com.perfomer.checkielite.core.entity.CheckieReview
 
-internal fun CheckieReviewDetailedDb.toDomain(): CheckieReview {
+internal fun CheckieReviewDetailedDb.toDomain(context: Context): CheckieReview {
     return CheckieReview(
         id = review.id,
         productName = review.productName,
@@ -13,7 +14,7 @@ internal fun CheckieReviewDetailedDb.toDomain(): CheckieReview {
         rating = review.rating,
         pictures = picturesUri
             .sortedWith(compareBy({ it.order }, { it.id }))
-            .map { it.toDomain() },
+            .map { it.toDomain(context) },
         tags = tags.map { it.toDomain() },
         comment = review.reviewText,
         advantages = review.advantages,

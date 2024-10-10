@@ -3,8 +3,10 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea
 import android.util.Log
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.Await
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.ObserveBackupProgress
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect.ShowErrorToast
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent.AwaitCompleted
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent.Backup
@@ -37,15 +39,16 @@ internal class BackupReducer : DslReducer<BackupCommand, BackupEffect, BackupEve
         }
         is Backup.Completed -> {
             state { copy(progressValue = 1F) }
-            commands(BackupCommand.Await(DELAY_AFTER_SUCCESS_MS))
+            commands(Await(DELAY_AFTER_FINISH_MS))
         }
         is Backup.Failed -> {
             Log.e("BackupReducer", "Failed to backup", event.error)
-            Unit // todo handle
+            effects(ShowErrorToast(state.mode))
+            commands(Await(DELAY_AFTER_FINISH_MS))
         }
     }
 
     private companion object {
-        private const val DELAY_AFTER_SUCCESS_MS = 3_000L
+        private const val DELAY_AFTER_FINISH_MS = 2_000L
     }
 }

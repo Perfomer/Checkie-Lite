@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -16,16 +15,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gigamole.composefadingedges.FadingEdgesGravity
-import com.gigamole.composefadingedges.horizontalFadingEdges
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
 import com.perfomer.checkielite.common.ui.cui.modifier.debounced
 import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiDropdownIcon
 import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiDropdownMenuItem
+import com.perfomer.checkielite.common.ui.cui.widget.text.CuiFadedText
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.util.StableInsets
@@ -47,15 +43,11 @@ internal fun ReviewDetailsAppBar(
         title = {
             val shouldShowTitle by remember { derivedStateOf { scrollState.firstVisibleItemIndex > 0 } }
             AnimatedVisibility(visible = shouldShowTitle && title != null, enter = fadeIn(tween(250)), exit = fadeOut(tween(250))) {
-                Text(
+                CuiFadedText(
                     text = title!!,
                     fontSize = 18.sp,
                     maxLines = 1,
-                    overflow = TextOverflow.Visible,
-                    softWrap = false,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .horizontalFadingEdges(gravity = FadingEdgesGravity.End, length = 40.dp)
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         },

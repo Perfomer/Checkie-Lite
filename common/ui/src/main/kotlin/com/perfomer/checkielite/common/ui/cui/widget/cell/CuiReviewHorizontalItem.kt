@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
@@ -26,14 +25,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.gigamole.composefadingedges.FadingEdgesGravity
-import com.gigamole.composefadingedges.horizontalFadingEdges
 import com.perfomer.checkielite.common.ui.R
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRating
+import com.perfomer.checkielite.common.ui.cui.widget.text.CuiFadedText
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 
 @Immutable
@@ -88,28 +85,21 @@ fun CuiReviewHorizontalItem(
         Spacer(modifier = Modifier.width(16.dp))
 
         Column(modifier = Modifier.weight(1F)) {
-            Text(
+            CuiFadedText(
                 text = item.title,
                 fontSize = 16.sp,
                 maxLines = 1,
-                overflow = TextOverflow.Visible,
-                softWrap = false,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalFadingEdges(gravity = FadingEdgesGravity.End, length = 40.dp)
+                modifier = Modifier.fillMaxWidth()
             )
 
             if (item.brand != null) {
-                Text(
+                CuiFadedText(
                     text = item.brand.uppercase(),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
                     color = LocalCuiPalette.current.TextAccent,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .horizontalFadingEdges(gravity = FadingEdgesGravity.End, length = 40.dp)
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }

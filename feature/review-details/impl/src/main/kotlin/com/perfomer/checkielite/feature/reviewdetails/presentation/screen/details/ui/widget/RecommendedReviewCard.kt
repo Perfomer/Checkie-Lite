@@ -17,7 +17,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,14 +25,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.gigamole.composefadingedges.FadingEdgesGravity
-import com.gigamole.composefadingedges.horizontalFadingEdges
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRatingVertical
+import com.perfomer.checkielite.common.ui.cui.widget.text.CuiFadedText
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
@@ -78,7 +75,7 @@ internal fun RecommendedReviewCard(
                 val hasBrand = review.brandName != null
 
                 if (hasBrand) {
-                    Text(
+                    CuiFadedText(
                         text = review.brandName!!,
                         maxLines = 1,
                         fontSize = 12.sp,
@@ -87,15 +84,11 @@ internal fun RecommendedReviewCard(
                         style = MaterialTheme.typography.bodySmall.copy(
                             platformStyle = PlatformTextStyle(includeFontPadding = false)
                         ),
-                        overflow = TextOverflow.Visible,
-                        softWrap = false,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .horizontalFadingEdges(gravity = FadingEdgesGravity.End, length = 40.dp)
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
 
-                Text(
+                CuiFadedText(
                     text = review.productName,
                     maxLines = if (hasBrand) 1 else 2,
                     fontSize = 14.sp,
@@ -104,11 +97,7 @@ internal fun RecommendedReviewCard(
                         platformStyle = PlatformTextStyle(includeFontPadding = false)
                     ),
                     fontWeight = FontWeight.Medium,
-                    overflow = TextOverflow.Visible,
-                    softWrap = false,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .horizontalFadingEdges(gravity = FadingEdgesGravity.End, length = 40.dp)
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }

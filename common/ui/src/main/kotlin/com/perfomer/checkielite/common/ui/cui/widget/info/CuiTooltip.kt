@@ -28,7 +28,7 @@ fun TooltipScope.CuiTooltip(
     icon: Painter = painterResource(R.drawable.ic_info),
 ) {
     RichTooltip(
-        shadowElevation = 8.dp,
+        shadowElevation = LocalCuiPalette.current.MediumElevation,
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .padding(horizontal = 16.dp)

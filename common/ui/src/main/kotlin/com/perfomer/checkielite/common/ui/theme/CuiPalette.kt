@@ -3,12 +3,19 @@ package com.perfomer.checkielite.common.ui.theme
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 
 val LocalCuiPalette = compositionLocalOf<CuiPalette> { error("Not provided") }
 
 @Suppress("PropertyName")
 @Immutable
 interface CuiPalette {
+
+    val SmallElevation: Dp
+    val MediumElevation: Dp
+    val BigElevation: Dp
+    val LargeElevation: Dp
 
     val TextPrimary: Color
     val TextInverted: Color
@@ -18,6 +25,7 @@ interface CuiPalette {
     val TextNegative: Color
 
     val BackgroundPrimary: Color
+    val BackgroundElevation: Color
     val BackgroundSecondary: Color
     val BackgroundTertiary: Color
     val BackgroundAccentPrimary: Color
@@ -42,6 +50,11 @@ interface CuiPalette {
 
     object Light : CuiPalette {
 
+        override val SmallElevation: Dp = 4.dp
+        override val MediumElevation: Dp = 12.dp
+        override val BigElevation: Dp = 16.dp
+        override val LargeElevation: Dp = 24.dp
+
         override val TextPrimary: Color = CuiColorToken.Black1
         override val TextInverted: Color = CuiColorToken.White1
         override val TextSecondary: Color = CuiColorToken.Grey5
@@ -50,6 +63,7 @@ interface CuiPalette {
         override val TextNegative: Color = CuiColorToken.Red1
 
         override val BackgroundPrimary: Color = CuiColorToken.White1
+        override val BackgroundElevation: Color = CuiColorToken.White1
         override val BackgroundSecondary: Color = CuiColorToken.Grey1
         override val BackgroundTertiary: Color = CuiColorToken.Grey4
         override val BackgroundAccentPrimary: Color = CuiColorToken.Orange1
@@ -72,6 +86,11 @@ interface CuiPalette {
 
     object Dark : CuiPalette {
 
+        override val SmallElevation: Dp = 0.dp
+        override val MediumElevation: Dp = 0.dp
+        override val BigElevation: Dp = 0.dp
+        override val LargeElevation: Dp = 0.dp
+
         override val TextPrimary: Color = CuiColorToken.White2
         override val TextInverted: Color = CuiColorToken.Black1
         override val TextSecondary: Color = CuiColorToken.Brown1
@@ -80,6 +99,7 @@ interface CuiPalette {
         override val TextNegative: Color = CuiColorToken.Red1
 
         override val BackgroundPrimary: Color = CuiColorToken.Black2
+        override val BackgroundElevation: Color = CuiColorToken.Brown7
         override val BackgroundSecondary: Color = CuiColorToken.Brown2
         override val BackgroundTertiary: Color = CuiColorToken.Brown5
         override val BackgroundAccentPrimary: Color = CuiColorToken.Orange1
@@ -126,6 +146,7 @@ object CuiColorToken {
     val Brown4 = Color(0xFF383838)
     val Brown5 = Color(0xFF6D5852)
     val Brown6 = Color(0xFF2B201D)
+    val Brown7 = Color(0xFF262120)
 
     val Green1 = Color(0xFF59B130)
     val Green2 = Color(0xFFE2F9D7)

@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 
 @Composable
 fun CuiFloatingActionButton(
@@ -20,7 +21,7 @@ fun CuiFloatingActionButton(
     contentDescription: String? = null,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     elevation: FloatingActionButtonElevation = FloatingActionButtonDefaults.elevation(
-        defaultElevation = 6.dp,
+        defaultElevation = LocalCuiPalette.current.SmallElevation,
         pressedElevation = 0.dp,
     ),
 ) {

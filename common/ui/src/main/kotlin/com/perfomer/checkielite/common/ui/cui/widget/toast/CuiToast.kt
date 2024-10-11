@@ -33,7 +33,7 @@ fun CuiToast(
         modifier = Modifier
             .padding(top = 40.dp)
             .shadow(
-                elevation = 20.dp,
+                elevation = LocalCuiPalette.current.LargeElevation,
                 spotColor = Color.Black.copy(alpha = 0.7F),
                 shape = CircleShape,
             )

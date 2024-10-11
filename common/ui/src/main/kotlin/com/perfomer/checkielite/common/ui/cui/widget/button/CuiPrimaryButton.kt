@@ -19,7 +19,7 @@ fun CuiPrimaryButton(
     modifier: Modifier = Modifier,
     activeButtonColor: Color = LocalCuiPalette.current.BackgroundAccentPrimary,
     elevation: ButtonElevation = ButtonDefaults.buttonElevation(
-        defaultElevation = 12.dp,
+        defaultElevation = LocalCuiPalette.current.MediumElevation,
         pressedElevation = 0.dp,
     ),
     isEnabled: Boolean = true,

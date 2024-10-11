@@ -46,7 +46,7 @@ internal fun RecommendedReviewCard(
         onClick = { onClick(review.reviewId) },
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 16.dp,
+            defaultElevation = LocalCuiPalette.current.BigElevation,
             pressedElevation = 0.dp,
         ),
         modifier = modifier.size(width = 148.dp, height = 200.dp)
@@ -69,7 +69,7 @@ internal fun RecommendedReviewCard(
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(4.dp))
-                    .background(LocalCuiPalette.current.BackgroundPrimary)
+                    .background(LocalCuiPalette.current.BackgroundElevation)
                     .padding(12.dp)
             ) {
                 val hasBrand = review.brandName != null

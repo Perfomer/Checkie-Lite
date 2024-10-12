@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
@@ -9,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
@@ -19,6 +19,8 @@ import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationStore
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.CloseKeyboard
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.FocusCommentField
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.FocusPriceField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowConfirmExitDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowErrorDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnBackPress
@@ -32,7 +34,6 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.TagsScreen
 import com.perfomer.checkielite.navigation.voyager.BaseScreen
 
-@OptIn(ExperimentalFoundationApi::class)
 internal class ReviewCreationContentScreen(
     private val params: ReviewCreationParams,
 ) : BaseScreen() {
@@ -40,6 +41,8 @@ internal class ReviewCreationContentScreen(
     @Composable
     override fun Screen() = TeaComposable(store<ReviewCreationStore>(params)) { state ->
         val focusManager = LocalFocusManager.current
+        val priceFocusRequester = remember { FocusRequester() }
+        val commentFocusRequester = remember { FocusRequester() }
 
         var isConfirmExitDialogShown by remember { mutableStateOf(false) }
         var isErrorDialogShown by remember { mutableStateOf(false) }
@@ -51,6 +54,8 @@ internal class ReviewCreationContentScreen(
                 is ShowConfirmExitDialog -> isConfirmExitDialogShown = true
                 is ShowErrorDialog -> isErrorDialogShown = true
                 is CloseKeyboard -> focusManager.clearFocus()
+                is FocusCommentField -> commentFocusRequester.requestFocus()
+                is FocusPriceField -> priceFocusRequester.requestFocus()
             }
         }
 
@@ -97,6 +102,7 @@ internal class ReviewCreationContentScreen(
                 ReviewCreationPage.PRODUCT_INFO -> ProductInfoScreen(
                     state = state.productInfoState,
                     scrollState = productInfoScrollState,
+                    priceFocusRequester = priceFocusRequester,
                     onProductNameTextInput = acceptable(ProductInfo::OnProductNameTextInput),
                     onBrandTextInput = acceptable(ProductInfo::OnBrandTextInput),
                     onPriceTextInput = acceptable(ProductInfo::OnPriceTextInput),
@@ -121,6 +127,7 @@ internal class ReviewCreationContentScreen(
                 ReviewCreationPage.REVIEW_INFO -> ReviewInfoScreen(
                     state = state.reviewInfoState,
                     scrollState = reviewInfoScrollState,
+                    commentFocusRequester = commentFocusRequester,
                     onRatingSelect = acceptable(ReviewInfo::OnRatingSelect),
                     onCommentInput = acceptable(ReviewInfo::OnCommentInput),
                     onAdvantagesInput = acceptable(ReviewInfo::OnAdvantagesInput),

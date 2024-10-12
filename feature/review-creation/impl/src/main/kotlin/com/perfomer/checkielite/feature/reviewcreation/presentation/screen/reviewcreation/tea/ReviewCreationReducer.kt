@@ -9,6 +9,7 @@ import com.perfomer.checkielite.core.entity.PictureSource
 import com.perfomer.checkielite.core.entity.price.CheckiePrice
 import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
+import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationStartAction
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
@@ -23,6 +24,8 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.WarmUpCurrencies
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.CloseKeyboard
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.FocusCommentField
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.FocusPriceField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowConfirmExitDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowErrorDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
@@ -86,6 +89,13 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             LoadLatestCurrency,
             LoadLatestTagSortStrategy,
         )
+
+        when (state.mode.startAction) {
+            ReviewCreationStartAction.NONE -> Unit
+            ReviewCreationStartAction.SET_PRICE -> effects(FocusPriceField)
+            ReviewCreationStartAction.ADD_PICTURES -> commands(OpenPhotoPicker)
+            ReviewCreationStartAction.ADD_REVIEW_COMMENT -> effects(FocusCommentField)
+        }
     }
 
     private fun reduceUi(event: ReviewCreationUiEvent) = when (event) {

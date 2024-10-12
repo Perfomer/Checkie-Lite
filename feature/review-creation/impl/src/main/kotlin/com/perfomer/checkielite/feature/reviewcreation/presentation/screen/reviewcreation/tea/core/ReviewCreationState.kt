@@ -13,7 +13,7 @@ import kotlinx.collections.immutable.PersistentList
 
 internal data class ReviewCreationState(
     val mode: ReviewCreationMode,
-    val currentPage: ReviewCreationPage = mode.initialPage,
+    val currentPage: ReviewCreationPage = mode.startAction.targetPage,
 
     val initialReviewDetails: ReviewDetails = ReviewDetails(),
     val reviewDetails: ReviewDetails = initialReviewDetails,

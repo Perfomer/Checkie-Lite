@@ -49,7 +49,7 @@ internal class ReviewDetailsNavigationActor(
             }
 
             is OpenReviewEdit -> {
-                val params = ReviewCreationParams(mode = ReviewCreationMode.Modification(reviewId = command.reviewId, initialPage = command.initialPage))
+                val params = ReviewCreationParams(mode = ReviewCreationMode.Modification(reviewId = command.reviewId, startAction = command.startAction))
                 navigate(reviewCreationScreenProvider(params))
             }
 

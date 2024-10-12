@@ -16,6 +16,7 @@ import com.perfomer.checkielite.core.data.datasource.R
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
 import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
 import com.perfomer.checkielite.core.entity.CheckiePicture
+import com.perfomer.checkielite.core.entity.PictureSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -56,13 +57,16 @@ internal class CompressorService : Service() {
 
     private suspend fun doWork(
         reviewId: String,
-        picturesUri: List<CheckiePicture>,
+        pictures: List<CheckiePicture>,
     ) {
-        val compressedPicturesUri = picturesUri.mapAsync { picture ->
-            picture.copy(uri = fileDataSource.cacheCompressedPicture(picture.uri))
+        val compressedPictures = pictures.mapAsync { picture ->
+            picture.copy(
+                uri = fileDataSource.cacheCompressedPicture(picture.uri),
+                source = PictureSource.APP,
+            )
         }
 
-        databaseDataSource.updatePictures(compressedPicturesUri)
+        databaseDataSource.updatePictures(compressedPictures)
         databaseDataSource.updateSyncing(reviewId, false)
     }
 

@@ -15,11 +15,11 @@ internal interface CheckiePictureDao {
     @Query(
         """
             UPDATE CheckieReviewPictureDb
-            SET uri = :pictureUri
+            SET uri = :pictureUri, source = :pictureSource
             WHERE id = :pictureId
         """
     )
-    suspend fun updatePictureUri(pictureId: String, pictureUri: String)
+    suspend fun updatePictureUri(pictureId: String, pictureUri: String, pictureSource: String)
 
     @Query("DELETE FROM CheckieReviewPictureDb WHERE id IN (:picturesIds)")
     suspend fun deletePictures(picturesIds: List<String>)

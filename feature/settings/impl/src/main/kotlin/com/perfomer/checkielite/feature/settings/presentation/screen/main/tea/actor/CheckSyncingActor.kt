@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand
@@ -26,5 +27,10 @@ internal class CheckSyncingActor(
     private fun handleCommand(command: CheckSyncing): Flow<SettingsEvent> {
         return localDataSource.isSyncing()
             .map(::SyncingStatusUpdated)
+            .onCatchLog(TAG, "Failed to check syncing status", rethrow = false)
+    }
+
+    private companion object {
+        private const val TAG = "CheckSyncingActor"
     }
 }

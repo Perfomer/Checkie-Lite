@@ -36,6 +36,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -72,6 +74,7 @@ import kotlinx.collections.immutable.persistentListOf
 internal fun ProductInfoScreen(
     state: ProductInfoPageUiState,
     scrollState: ScrollState = rememberScrollState(),
+    priceFocusRequester: FocusRequester = remember { FocusRequester() },
     onProductNameTextInput: (String) -> Unit = {},
     onBrandTextInput: (String) -> Unit = {},
     onPriceTextInput: (String) -> Unit = {},
@@ -155,6 +158,7 @@ internal fun ProductInfoScreen(
                         .offset(x = (-14).dp)
                 )
             },
+            modifier = Modifier.focusRequester(priceFocusRequester)
         )
 
         Spacer(Modifier.height(12.dp))

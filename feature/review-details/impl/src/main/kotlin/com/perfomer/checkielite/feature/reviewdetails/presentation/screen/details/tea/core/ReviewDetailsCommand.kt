@@ -1,6 +1,6 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core
 
-import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
+import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationStartAction
 
 internal sealed interface ReviewDetailsCommand {
 
@@ -15,7 +15,7 @@ internal sealed interface ReviewDetailsNavigationCommand : ReviewDetailsCommand 
 
     class OpenReviewEdit(
         val reviewId: String,
-        val initialPage: ReviewCreationPage,
+        val startAction: ReviewCreationStartAction,
     ) : ReviewDetailsNavigationCommand
 
     class OpenReviewDetails(val reviewId: String) : ReviewDetailsNavigationCommand

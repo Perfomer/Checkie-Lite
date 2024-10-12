@@ -4,7 +4,7 @@ import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.pure.state.requireContent
 import com.perfomer.checkielite.common.pure.state.toLoadingContentAware
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
-import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
+import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationStartAction
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand.DeleteReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand.LoadReview
@@ -47,10 +47,10 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
         is OnBackPress -> commands(Exit)
         is OnDeleteClick -> effects(ShowConfirmDeleteDialog)
         is OnConfirmDeleteClick -> commands(DeleteReview(state.reviewId))
-        is OnEmptyImageClick -> reduceOnEditClick(initialPage = ReviewCreationPage.PRODUCT_INFO)
-        is OnEmptyPriceClick -> reduceOnEditClick(initialPage = ReviewCreationPage.PRODUCT_INFO)
-        is OnEmptyReviewTextClick -> reduceOnEditClick(initialPage = ReviewCreationPage.REVIEW_INFO)
-        is OnEditClick -> reduceOnEditClick(initialPage = ReviewCreationPage.entries.first())
+        is OnEmptyImageClick -> reduceOnEditClick(startAction = ReviewCreationStartAction.ADD_PICTURES)
+        is OnEmptyPriceClick -> reduceOnEditClick(startAction = ReviewCreationStartAction.SET_PRICE)
+        is OnEmptyReviewTextClick -> reduceOnEditClick(startAction = ReviewCreationStartAction.ADD_REVIEW_COMMENT)
+        is OnEditClick -> reduceOnEditClick(startAction = ReviewCreationStartAction.NONE)
         is OnTagClick -> commands(OpenSearch(tagId = event.tagId))
         is OnRecommendationClick -> commands(OpenReviewDetails(event.recommendedReviewId))
         is OnPictureSelect -> state { copy(currentPicturePosition = event.position) }
@@ -74,11 +74,11 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
         is ReviewDeletion.Failed -> state { copy(review = Lce.Error()) }
     }
 
-    private fun reduceOnEditClick(initialPage: ReviewCreationPage) {
+    private fun reduceOnEditClick(startAction: ReviewCreationStartAction) {
         if (state.review.requireContent().review.isSyncing) {
             effects(ShowSyncingToast)
         } else {
-            commands(OpenReviewEdit(reviewId = state.reviewId, initialPage = initialPage))
+            commands(OpenReviewEdit(reviewId = state.reviewId, startAction = startAction))
         }
     }
 }

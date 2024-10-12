@@ -203,7 +203,7 @@ private fun PicturesFlowRow(
             }
 
             picturesUri.forEachIndexed { i, pictureUri ->
-                key(pictureUri) {
+                key(i, pictureUri) {
                     DeletableItem(
                         onDeletePictureClick = { onPictureDeleteClick(i) },
                     ) {

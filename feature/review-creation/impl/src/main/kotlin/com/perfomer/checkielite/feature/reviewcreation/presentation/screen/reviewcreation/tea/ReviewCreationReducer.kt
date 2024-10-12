@@ -5,6 +5,7 @@ import com.perfomer.checkielite.common.pure.util.previous
 import com.perfomer.checkielite.common.pure.util.swap
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.core.entity.CheckiePicture
+import com.perfomer.checkielite.core.entity.PictureSource
 import com.perfomer.checkielite.core.entity.price.CheckiePrice
 import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
@@ -271,7 +272,9 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
 
     private fun reduceNavigation(event: ReviewCreationNavigationEvent) = when (event) {
         is OnPhotosPick -> state {
-            val addedPictures = event.uris.map { uri -> CheckiePicture(uri = uri) }
+            val addedPictures = event.uris.map { uri ->
+                CheckiePicture(uri = uri, source = PictureSource.GALLERY)
+            }
 
             copy(
                 reviewDetails = reviewDetails.copy(

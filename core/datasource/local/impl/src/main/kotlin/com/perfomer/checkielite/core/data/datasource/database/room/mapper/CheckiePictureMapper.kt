@@ -3,6 +3,7 @@ package com.perfomer.checkielite.core.data.datasource.database.room.mapper
 import android.content.Context
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewPictureDb
 import com.perfomer.checkielite.core.entity.CheckiePicture
+import com.perfomer.checkielite.core.entity.PictureSource
 
 internal fun CheckiePicture.toDb(
     context: Context,
@@ -15,13 +16,23 @@ internal fun CheckiePicture.toDb(
         id = id,
         order = order,
         reviewId = reviewId,
-        uri = uri.substring(pathLength),
+        source = source.name,
+        uri = when (source) {
+            PictureSource.GALLERY -> uri
+            PictureSource.APP -> uri.substring(pathLength)
+        },
     )
 }
 
 internal fun CheckieReviewPictureDb.toDomain(context: Context): CheckiePicture {
+    val pictureSource = PictureSource.valueOf(source)
+
     return CheckiePicture(
         id = id,
-        uri = "${context.filesDir.absolutePath}/$uri",
+        source = pictureSource,
+        uri = when (pictureSource) {
+            PictureSource.GALLERY -> uri
+            PictureSource.APP -> "${context.filesDir.absolutePath}/$uri"
+        },
     )
 }

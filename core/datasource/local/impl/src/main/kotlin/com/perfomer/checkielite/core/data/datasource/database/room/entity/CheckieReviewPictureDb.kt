@@ -21,4 +21,5 @@ internal data class CheckieReviewPictureDb(
     @ColumnInfo(defaultValue = "0") val order: Int = 0,
     val reviewId: String,
     val uri: String,
+    @ColumnInfo(defaultValue = "APP") val source: String = "APP", // PictureSource
 )

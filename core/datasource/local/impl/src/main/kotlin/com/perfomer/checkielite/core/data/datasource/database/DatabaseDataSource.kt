@@ -242,7 +242,11 @@ internal class DatabaseDataSourceImpl(
 
     override suspend fun updatePictures(pictures: List<CheckiePicture>) = database.withTransaction {
         pictures.forEach { picture ->
-            pictureDao.updatePictureUri(picture.id, picture.uri)
+            pictureDao.updatePictureUri(
+                pictureId = picture.id,
+                pictureUri = picture.uri,
+                pictureSource = picture.source.name,
+            )
         }
     }
 

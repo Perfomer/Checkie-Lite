@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -16,9 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
@@ -62,11 +65,17 @@ fun CuiOutlinedField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
+    val defaultErrorTrailingIcon: @Composable (() -> Unit)? = if (trailingIcon == null && !errorText.isNullOrBlank()) {
+        { DefaultErrorTrailingIcon() }
+    } else {
+        null
+    }
+
     OutlinedTextField(
         value = text,
         onValueChange = onValueChange,
         singleLine = singleLine,
-        trailingIcon = trailingIcon,
+        trailingIcon = trailingIcon ?: defaultErrorTrailingIcon,
         shape = RoundedCornerShape(16.dp),
         colors = colors,
         keyboardOptions = keyboardOptions,
@@ -87,6 +96,15 @@ fun CuiOutlinedField(
         },
         visualTransformation = visualTransformation,
         modifier = modifier.fillMaxWidth()
+    )
+}
+
+@Composable
+private fun DefaultErrorTrailingIcon() {
+    Icon(
+        painterResource(id = CommonDrawable.ic_error),
+        contentDescription = null,
+        tint = LocalCuiPalette.current.IconNegative,
     )
 }
 

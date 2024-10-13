@@ -24,10 +24,12 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.WarmUpCurrencies
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.CloseKeyboard
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.CollapseProductNameField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.FocusCommentField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.FocusPriceField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowConfirmExitDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowErrorDialog
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.VibrateError
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.BrandsSearchComplete
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.Initialize
@@ -110,6 +112,8 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 if (isProductNameValid) {
                     state { copy(currentPage = next) }
                     effects(CloseKeyboard)
+                } else {
+                    effects(CollapseProductNameField, VibrateError)
                 }
                 state { copy(isProductNameValid = isProductNameValid) }
             } else {
@@ -169,7 +173,10 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     }
 
     private fun reduceProductInfoUi(event: ProductInfo) = when (event) {
-        is ProductInfo.OnProductNameTextInput -> state { copy(reviewDetails = reviewDetails.copy(productName = event.text)) }
+        is ProductInfo.OnProductNameTextInput -> {
+            if (!state.isProductNameValid) state { copy(isProductNameValid = true) }
+            state { copy(reviewDetails = reviewDetails.copy(productName = event.text)) }
+        }
         is ProductInfo.OnBrandTextInput -> {
             state { copy(reviewDetails = reviewDetails.copy(productBrand = event.text)) }
 

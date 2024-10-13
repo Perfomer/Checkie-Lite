@@ -11,4 +11,8 @@ internal sealed interface ReviewCreationEffect {
     data object FocusPriceField : ReviewCreationEffect
 
     data object FocusCommentField : ReviewCreationEffect
+
+    data object CollapseProductNameField : ReviewCreationEffect
+
+    data object VibrateError : ReviewCreationEffect
 }

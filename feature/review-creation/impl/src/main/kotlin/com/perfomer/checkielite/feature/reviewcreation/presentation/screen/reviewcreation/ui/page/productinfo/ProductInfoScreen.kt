@@ -64,6 +64,7 @@ import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.pure.util.move
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
+import com.perfomer.checkielite.common.ui.cui.modifier.shake
 import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiSuggestionsBox
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -81,8 +82,13 @@ import kotlinx.collections.immutable.toPersistentList
 @Composable
 internal fun ProductInfoScreen(
     state: ProductInfoPageUiState,
+
     scrollState: ScrollState = rememberScrollState(),
+
     priceFocusRequester: FocusRequester = remember { FocusRequester() },
+    shouldCollapseProductNameField: Boolean = false,
+
+    onProductNameFieldCollapsed: () -> Unit = {},
     onProductNameTextInput: (String) -> Unit = {},
     onBrandTextInput: (String) -> Unit = {},
     onPriceTextInput: (String) -> Unit = {},
@@ -122,9 +128,12 @@ internal fun ProductInfoScreen(
                 capitalization = KeyboardCapitalization.Sentences,
             ),
             onValueChange = onProductNameTextInput,
+            modifier = Modifier.shake(shouldCollapseProductNameField, onProductNameFieldCollapsed)
         )
 
-        Spacer(Modifier.height(4.dp))
+        if (state.productNameErrorText.isNullOrBlank()) {
+            Spacer(Modifier.height(4.dp))
+        }
 
         CuiSuggestionsBox(
             currentValue = state.brand,

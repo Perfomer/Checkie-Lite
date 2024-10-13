@@ -14,15 +14,20 @@ import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.util.BackHandlerWithLifecycle
+import com.perfomer.checkielite.common.ui.util.VibratorPattern
+import com.perfomer.checkielite.common.ui.util.rememberVibrator
 import com.perfomer.checkielite.common.ui.util.store
+import com.perfomer.checkielite.common.ui.util.vibrateCompat
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationStore
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.CloseKeyboard
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.CollapseProductNameField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.FocusCommentField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.FocusPriceField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowConfirmExitDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowErrorDialog
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.VibrateError
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnConfirmExitClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationUiEvent.OnPrimaryButtonClick
@@ -43,9 +48,12 @@ internal class ReviewCreationContentScreen(
         val focusManager = LocalFocusManager.current
         val priceFocusRequester = remember { FocusRequester() }
         val commentFocusRequester = remember { FocusRequester() }
+        val vibrator = rememberVibrator()
 
         var isConfirmExitDialogShown by remember { mutableStateOf(false) }
         var isErrorDialogShown by remember { mutableStateOf(false) }
+
+        var shouldCollapseProductNameField by remember { mutableStateOf(false) }
 
         BackHandlerWithLifecycle { accept(OnBackPress) }
 
@@ -56,6 +64,8 @@ internal class ReviewCreationContentScreen(
                 is CloseKeyboard -> focusManager.clearFocus()
                 is FocusCommentField -> commentFocusRequester.requestFocus()
                 is FocusPriceField -> priceFocusRequester.requestFocus()
+                is CollapseProductNameField -> shouldCollapseProductNameField = true
+                is VibrateError -> vibrator.vibrateCompat(VibratorPattern.ERROR)
             }
         }
 
@@ -103,6 +113,8 @@ internal class ReviewCreationContentScreen(
                     state = state.productInfoState,
                     scrollState = productInfoScrollState,
                     priceFocusRequester = priceFocusRequester,
+                    shouldCollapseProductNameField = shouldCollapseProductNameField,
+                    onProductNameFieldCollapsed = { shouldCollapseProductNameField = false },
                     onProductNameTextInput = acceptable(ProductInfo::OnProductNameTextInput),
                     onBrandTextInput = acceptable(ProductInfo::OnBrandTextInput),
                     onPriceTextInput = acceptable(ProductInfo::OnPriceTextInput),

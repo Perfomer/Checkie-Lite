@@ -8,9 +8,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.focus.FocusRequester
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
-import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalCuiToastHostState
-import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberToast
+import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberErrorToast
 import com.perfomer.checkielite.common.ui.util.BackHandlerWithLifecycle
 import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.feature.reviewcreation.R
@@ -37,8 +36,8 @@ internal class TagCreationContentScreen(
         BackHandlerWithLifecycle { accept(OnBackPress) }
 
         val toastHostState = LocalCuiToastHostState.current
-        val deleteErrorToast = rememberToast(message = R.string.tagcreation_error_delete, icon = CommonDrawable.ic_error)
-        val saveErrorToast = rememberToast(message = R.string.tagcreation_error_save, icon = CommonDrawable.ic_error)
+        val deleteErrorToast = rememberErrorToast(R.string.tagcreation_error_delete)
+        val saveErrorToast = rememberErrorToast(R.string.tagcreation_error_save)
 
         var isConfirmDeleteDialogShown by remember { mutableStateOf(false) }
 

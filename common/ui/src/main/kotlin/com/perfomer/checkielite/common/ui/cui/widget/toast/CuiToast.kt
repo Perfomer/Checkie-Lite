@@ -27,6 +27,12 @@ fun CuiToast(
     data: CuiToastData,
     onClick: () -> Unit,
 ) {
+    val actualBackgroundColor = if (data.backgroundColor == Color.Unspecified) {
+        LocalCuiPalette.current.BackgroundElevation
+    } else {
+        data.backgroundColor
+    }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
@@ -37,18 +43,20 @@ fun CuiToast(
                 spotColor = Color.Black.copy(alpha = 0.7F),
                 shape = CircleShape,
             )
-            .background(color = LocalCuiPalette.current.BackgroundNegativeSecondary)
+            .background(color = actualBackgroundColor)
             .clip(CircleShape)
             .clickable(onClick = onClick)
             .padding(vertical = 13.dp)
             .padding(end = 24.dp, start = 16.dp)
     ) {
-        Icon(
-            painter = data.icon,
-            tint = LocalCuiPalette.current.IconNegative,
-            contentDescription = null,
-            modifier = Modifier.size(20.dp)
-        )
+        if (data.icon != null) {
+            Icon(
+                painter = data.icon,
+                tint = data.iconTint,
+                contentDescription = null,
+                modifier = Modifier.size(20.dp)
+            )
+        }
 
         Spacer(modifier = Modifier.width(16.dp))
 

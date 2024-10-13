@@ -2,9 +2,8 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui
 
 import androidx.compose.runtime.Composable
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
-import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalCuiToastHostState
-import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberToast
+import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberErrorToast
 import com.perfomer.checkielite.common.ui.util.BackHandlerWithLifecycle
 import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.core.entity.backup.BackupMode
@@ -24,8 +23,8 @@ internal class BackupContentScreen(
         BackHandlerWithLifecycle { accept(OnBackPress) }
 
         val toastHostState = LocalCuiToastHostState.current
-        val exportFailedToast = rememberToast(message = R.string.settings_backup_failure_export, icon = CommonDrawable.ic_error)
-        val importFailedToast = rememberToast(message = R.string.settings_backup_failure_import, icon = CommonDrawable.ic_error)
+        val exportFailedToast = rememberErrorToast(R.string.settings_backup_failure_export)
+        val importFailedToast = rememberErrorToast(message = R.string.settings_backup_failure_import)
 
         EffectHandler { effect ->
             when (effect) {

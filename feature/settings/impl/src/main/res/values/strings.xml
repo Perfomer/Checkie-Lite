@@ -12,4 +12,5 @@
     <string name="settings_backup_minimize_hint">It may take a while.\nYou can <b>minimize</b> the application.</string>
     <string name="settings_backup_failure_export">Failed to export backup</string>
     <string name="settings_backup_failure_import">Failed to import backup</string>
+    <string name="settings_backup_success_export">Backup successfully exported</string>
 </resources>

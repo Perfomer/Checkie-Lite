@@ -18,7 +18,7 @@ fun Modifier.bottomStroke(
     strokeWidth: Dp = 1.dp,
     strokeAlpha: Float = 1F,
 ): Modifier {
-    return this then drawWithContent {
+    return this.drawWithContent {
         drawContent()
         drawLine(
             color = strokeColor,
@@ -36,7 +36,7 @@ fun Modifier.bottomStrokeOnScroll(
     strokeWidth: Dp = 1.dp,
     animationSpec: AnimationSpec<Float> = tween(250),
 ): Modifier {
-    return this then composed {
+    return this.composed {
         val strokeAlpha = remember { Animatable(1F) }
 
         LaunchedEffect(show) {
@@ -44,7 +44,7 @@ fun Modifier.bottomStrokeOnScroll(
             strokeAlpha.animateTo(targetValue = targetAlpha, animationSpec = animationSpec)
         }
 
-        this then bottomStroke(
+        this.bottomStroke(
             strokeColor = strokeColor,
             strokeWidth = strokeWidth,
             strokeAlpha = strokeAlpha.value,

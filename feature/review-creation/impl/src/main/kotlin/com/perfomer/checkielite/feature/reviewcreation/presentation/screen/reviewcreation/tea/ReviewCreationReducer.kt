@@ -1,8 +1,8 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea
 
+import com.perfomer.checkielite.common.pure.util.move
 import com.perfomer.checkielite.common.pure.util.next
 import com.perfomer.checkielite.common.pure.util.previous
-import com.perfomer.checkielite.common.pure.util.swap
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.PictureSource
@@ -203,9 +203,13 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             )
         }
         is ProductInfo.OnPictureReorder -> state {
+            val movingItem = reviewDetails.pictures.first { it.uri == event.pictureUri }
+
             copy(
                 reviewDetails = reviewDetails.copy(
-                    pictures = reviewDetails.pictures.swap(event.fromPosition, event.toPosition).toPersistentList(),
+                    pictures = reviewDetails.pictures
+                        .move(item = movingItem, toPosition = event.toPosition)
+                        .toPersistentList(),
                 ),
             )
         }

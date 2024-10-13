@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,18 +8,21 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,13 +35,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -55,6 +62,7 @@ import com.mohamedrejeb.compose.dnd.reorder.ReorderContainer
 import com.mohamedrejeb.compose.dnd.reorder.ReorderableItem
 import com.mohamedrejeb.compose.dnd.reorder.rememberReorderState
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
+import com.perfomer.checkielite.common.pure.util.move
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiSuggestionsBox
@@ -68,6 +76,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ProductInfoPageUiState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,7 +91,7 @@ internal fun ProductInfoScreen(
     onAddPictureClick: () -> Unit = {},
     onPictureClick: (position: Int) -> Unit = {},
     onPictureDeleteClick: (position: Int) -> Unit = {},
-    onPictureReorder: (from: Int, to: Int) -> Unit = { _, _ -> },
+    onPictureReorder: (pictureUri: String, toPosition: Int) -> Unit = { _, _ -> },
 ) {
     val brandNameInteractionSource = remember { MutableInteractionSource() }
     val decimalInputFilter = remember { DecimalInputFilter() }
@@ -161,8 +170,6 @@ internal fun ProductInfoScreen(
             modifier = Modifier.focusRequester(priceFocusRequester)
         )
 
-        Spacer(Modifier.height(12.dp))
-
         PicturesFlowRow(
             picturesUri = state.picturesUri,
             onAddPictureClick = onAddPictureClick,
@@ -173,19 +180,27 @@ internal fun ProductInfoScreen(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun PicturesFlowRow(
     picturesUri: ImmutableList<String>,
     onAddPictureClick: () -> Unit,
     onPictureClick: (position: Int) -> Unit,
     onPictureDeleteClick: (position: Int) -> Unit,
-    onPictureReorder: (from: Int, to: Int) -> Unit,
+    onPictureReorder: (pictureUri: String, toPosition: Int) -> Unit,
 ) {
     val reorderState = rememberReorderState<String>(dragAfterLongPress = true)
     val hapticFeedback = LocalHapticFeedback.current
 
+    var reorderableItems by remember(picturesUri) { mutableStateOf(picturesUri) }
+
+    val currentDraggedPosition by remember { derivedStateOf { reorderState.draggedItem?.key as? Int } }
+    val targetDraggedPosition by remember { derivedStateOf { reorderState.hoveredDropTargetKey as? Int } }
+    val hiddenItemPosition by remember { derivedStateOf { targetDraggedPosition ?: currentDraggedPosition } }
+
     val isDragging by remember { derivedStateOf { reorderState.draggedItem != null } }
+
+    val targetDraggedItemElevation = if (isDragging) LocalCuiPalette.current.MediumElevation else 0.dp
+    val actualDraggedItemElevation by animateDpAsState(targetValue = targetDraggedItemElevation, label = "dragged_elevation")
 
     UpdateEffect(isDragging) {
         if (isDragging) {
@@ -193,35 +208,60 @@ private fun PicturesFlowRow(
         }
     }
 
-    ReorderContainer(state = reorderState) {
-        FlowRow(
+    ReorderContainer(
+        state = reorderState,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(minSize = 62.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.fillMaxWidth()
+            userScrollEnabled = false,
+            contentPadding = PaddingValues(top = 12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                // Need to constraint the height of the grid when it is in scrollable container
+                // https://stackoverflow.com/questions/67919707/jetpack-compose-how-to-put-a-lazyverticalgrid-inside-a-scrollable-column
+                .heightIn(max = 2000.dp)
         ) {
-            Box {
-                AddPicture(
-                    onClick = onAddPictureClick,
-                    modifier = Modifier
-                )
+            item(
+                key = "AddPicture",
+                contentType = "AddPicture",
+            ) {
+                Box {
+                    AddPicture(
+                        onClick = onAddPictureClick,
+                    )
+                }
             }
 
-            picturesUri.forEachIndexed { i, pictureUri ->
-                key(i, pictureUri) {
+            itemsIndexed(
+                items = reorderableItems,
+                key = { _, uri -> uri },
+                contentType = { _, _ -> "Picture" },
+            ) { i, pictureUri ->
+                ReorderableItem(
+                    state = reorderState,
+                    key = i,
+                    data = pictureUri,
+                    onDragEnter = { state -> reorderableItems = reorderableItems.move(item = state.data, toPosition = i).toPersistentList() },
+                    onDrop = { draggedItem -> onPictureReorder(draggedItem.data, i) },
+                    draggableContent = {
+                        Picture(
+                            pictureUrl = pictureUri,
+                            modifier = Modifier.shadow(elevation = actualDraggedItemElevation)
+                        )
+                    },
+                    modifier = Modifier.animateItem()
+                ) {
                     DeletableItem(
                         onDeletePictureClick = { onPictureDeleteClick(i) },
+                        modifier = Modifier.graphicsLayer { alpha = if (key == hiddenItemPosition) 0F else 1F }
                     ) {
-                        ReorderableItem(
-                            state = reorderState,
-                            key = i,
-                            data = pictureUri,
-                            onDrop = { draggedItem -> onPictureReorder(i, draggedItem.key as Int) },
-                        ) {
-                            Picture(
-                                pictureUrl = pictureUri,
-                                onClick = { onPictureClick(i) },
-                            )
-                        }
+                        Picture(
+                            pictureUrl = pictureUri,
+                            onClick = { onPictureClick(i) },
+                        )
                     }
                 }
             }
@@ -287,7 +327,7 @@ private fun DeleteIconButton(
 @Composable
 internal fun Picture(
     pictureUrl: String,
-    onClick: () -> Unit,
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     AsyncImage(

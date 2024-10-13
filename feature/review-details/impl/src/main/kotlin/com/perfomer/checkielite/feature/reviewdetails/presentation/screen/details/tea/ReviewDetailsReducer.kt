@@ -21,6 +21,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenSearch
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsState
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnAddTagsClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnConfirmDeleteClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnDeleteClick
@@ -51,6 +52,7 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
         is OnEmptyPriceClick -> reduceOnEditClick(startAction = ReviewCreationStartAction.SET_PRICE)
         is OnEmptyReviewTextClick -> reduceOnEditClick(startAction = ReviewCreationStartAction.ADD_REVIEW_COMMENT)
         is OnEditClick -> reduceOnEditClick(startAction = ReviewCreationStartAction.NONE)
+        is OnAddTagsClick -> reduceOnEditClick(startAction = ReviewCreationStartAction.ADD_TAGS)
         is OnTagClick -> commands(OpenSearch(tagId = event.tagId))
         is OnRecommendationClick -> commands(OpenReviewDetails(event.recommendedReviewId))
         is OnPictureSelect -> state { copy(currentPicturePosition = event.position) }

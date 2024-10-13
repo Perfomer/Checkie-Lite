@@ -43,11 +43,11 @@ fun CuiToast(
                 spotColor = Color.Black.copy(alpha = 0.7F),
                 shape = CircleShape,
             )
-            .background(color = actualBackgroundColor)
             .clip(CircleShape)
+            .background(color = actualBackgroundColor)
             .clickable(onClick = onClick)
             .padding(vertical = 13.dp)
-            .padding(end = 24.dp, start = 16.dp)
+            .padding(start = 16.dp, end = 24.dp)
     ) {
         if (data.icon != null) {
             Icon(
@@ -56,9 +56,11 @@ fun CuiToast(
                 contentDescription = null,
                 modifier = Modifier.size(20.dp)
             )
-        }
 
-        Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(16.dp))
+        } else {
+            Spacer(modifier = Modifier.width(8.dp))
+        }
 
         Text(
             text = data.message,

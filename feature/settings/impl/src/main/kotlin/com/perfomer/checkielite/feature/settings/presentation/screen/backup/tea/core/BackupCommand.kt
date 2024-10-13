@@ -9,5 +9,7 @@ internal sealed interface BackupCommand {
 
 internal sealed interface BackupNavigationCommand : BackupCommand {
 
+    data object RestartApp : BackupNavigationCommand
+
     data object OpenMain : BackupNavigationCommand
 }

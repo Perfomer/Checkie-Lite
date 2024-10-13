@@ -2,6 +2,7 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea
 
 import android.util.Log
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
+import com.perfomer.checkielite.core.entity.backup.BackupMode
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.Await
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.ObserveBackupProgress
@@ -12,6 +13,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent.Backup
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent.Initialize
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupNavigationCommand.OpenMain
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupNavigationCommand.RestartApp
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupState
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupUiEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupUiEvent.OnBackPress
@@ -22,7 +24,10 @@ internal class BackupReducer : DslReducer<BackupCommand, BackupEffect, BackupEve
         is Initialize -> reduceInitialize()
         is BackupUiEvent -> reduceUi(event)
         is Backup -> reduceBackup(event)
-        is AwaitCompleted -> commands(OpenMain)
+        is AwaitCompleted -> when (state.mode) {
+            BackupMode.EXPORT -> commands(OpenMain)
+            BackupMode.IMPORT -> commands(RestartApp)
+        }
     }
 
     private fun reduceInitialize() {

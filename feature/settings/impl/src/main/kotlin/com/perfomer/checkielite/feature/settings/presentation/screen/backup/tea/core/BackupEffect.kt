@@ -4,5 +4,8 @@ import com.perfomer.checkielite.core.entity.backup.BackupMode
 
 internal sealed interface BackupEffect {
 
-    class ShowErrorToast(val mode: BackupMode) : BackupEffect
+    sealed interface ShowToast : BackupEffect {
+        data object Success : ShowToast
+        class Error(val mode: BackupMode) : ShowToast
+    }
 }

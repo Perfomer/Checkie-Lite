@@ -7,7 +7,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.Await
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.ObserveBackupProgress
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect
-import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect.ShowErrorToast
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect.ShowToast
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent.AwaitCompleted
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent.Backup
@@ -24,10 +24,7 @@ internal class BackupReducer : DslReducer<BackupCommand, BackupEffect, BackupEve
         is Initialize -> reduceInitialize()
         is BackupUiEvent -> reduceUi(event)
         is Backup -> reduceBackup(event)
-        is AwaitCompleted -> when (state.mode) {
-            BackupMode.EXPORT -> commands(OpenMain)
-            BackupMode.IMPORT -> commands(RestartApp)
-        }
+        is AwaitCompleted -> reduceOnAwaitCompleted()
     }
 
     private fun reduceInitialize() {
@@ -48,8 +45,20 @@ internal class BackupReducer : DslReducer<BackupCommand, BackupEffect, BackupEve
         }
         is Backup.Failed -> {
             Log.e("BackupReducer", "Failed to backup", event.error)
-            effects(ShowErrorToast(state.mode))
+            effects(ShowToast.Error(state.mode))
             commands(Await(DELAY_AFTER_FINISH_MS))
+        }
+    }
+
+    private fun reduceOnAwaitCompleted() {
+        when (state.mode) {
+            BackupMode.EXPORT -> {
+                effects(ShowToast.Success)
+                commands(OpenMain)
+            }
+            BackupMode.IMPORT -> {
+                commands(RestartApp)
+            }
         }
     }
 

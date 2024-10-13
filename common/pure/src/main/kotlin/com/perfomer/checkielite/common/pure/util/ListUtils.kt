@@ -31,3 +31,12 @@ fun <T> List<T>.swap(from: Int, to: Int): List<T> {
     Collections.swap(resultList, from, to)
     return resultList
 }
+
+fun <T> List<T>.move(item: T, toPosition: Int): List<T> {
+    if (!contains(item)) return this
+
+    return toMutableList().apply {
+        remove(item)
+        add(toPosition, item)
+    }
+}

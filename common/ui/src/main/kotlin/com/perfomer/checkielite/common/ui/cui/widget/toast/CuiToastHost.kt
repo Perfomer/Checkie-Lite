@@ -62,7 +62,7 @@ fun rememberToast(
     val actualMessage = stringResource(message)
     val actualIcon = icon?.let { painterResource(it) }
 
-    return remember(message, icon, iconTint, backgroundColor) {
+    return remember(message, icon, iconTint, backgroundColor, durationMs) {
         CuiToastData(actualMessage, actualIcon, iconTint, backgroundColor, durationMs)
     }
 }

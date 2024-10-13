@@ -96,6 +96,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             ReviewCreationStartAction.NONE -> Unit
             ReviewCreationStartAction.SET_PRICE -> effects(FocusPriceField)
             ReviewCreationStartAction.ADD_PICTURES -> commands(OpenPhotoPicker)
+            ReviewCreationStartAction.ADD_TAGS -> Unit // Don't need to do anything: Tags page will be opened automatically
             ReviewCreationStartAction.ADD_REVIEW_COMMENT -> effects(FocusCommentField)
         }
     }

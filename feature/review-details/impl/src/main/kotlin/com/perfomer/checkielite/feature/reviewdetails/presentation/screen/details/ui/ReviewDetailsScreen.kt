@@ -46,6 +46,7 @@ internal fun ReviewDetailsScreen(
     onEmptyPriceClick: () -> Unit = {},
     onEmptyReviewTextClick: () -> Unit = {},
     onPageChange: (pageIndex: Int) -> Unit = {},
+    onAddTagsClick: () -> Unit = {},
     onTagClick: (tagId: String) -> Unit = {},
     onRecommendationClick: (recommendedReviewId: String) -> Unit = {},
 ) {
@@ -74,6 +75,7 @@ internal fun ReviewDetailsScreen(
                 onEmptyPriceClick = onEmptyPriceClick,
                 onEmptyReviewTextClick = onEmptyReviewTextClick,
                 onPageChange = onPageChange,
+                onAddTagsClick = onAddTagsClick,
                 onTagClick = onTagClick,
                 onRecommendationClick = onRecommendationClick,
             )
@@ -111,6 +113,7 @@ private fun Content(
     onEmptyPriceClick: () -> Unit,
     onEmptyReviewTextClick: () -> Unit,
     onPageChange: (pageIndex: Int) -> Unit,
+    onAddTagsClick: () -> Unit,
     onTagClick: (tagId: String) -> Unit,
     onRecommendationClick: (recommendedReviewId: String) -> Unit,
 ) {
@@ -156,6 +159,7 @@ private fun Content(
         item {
             ReviewDetailsTags(
                 tags = state.tags,
+                onAddTagsClick = onAddTagsClick,
                 onTagClick = onTagClick,
             )
         }

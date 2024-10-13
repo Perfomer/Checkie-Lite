@@ -17,6 +17,7 @@ import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsPa
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsStore
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect.ShowConfirmDeleteDialog
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect.ShowSyncingToast
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnAddTagsClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnConfirmDeleteClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnDeleteClick
@@ -66,6 +67,7 @@ internal class ReviewDetailsContentScreen(
             onEmptyImageClick = acceptable(OnEmptyImageClick),
             onEmptyPriceClick = acceptable(OnEmptyPriceClick),
             onEmptyReviewTextClick = acceptable(OnEmptyReviewTextClick),
+            onAddTagsClick = acceptable(OnAddTagsClick),
             onTagClick = acceptable(::OnTagClick),
             onRecommendationClick = acceptable(::OnRecommendationClick),
         )

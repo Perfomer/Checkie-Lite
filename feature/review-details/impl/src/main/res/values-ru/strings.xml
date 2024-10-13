@@ -11,6 +11,7 @@
     <string name="reviewdetails_toast_syncing">Попробуйте позже. Сейчас идёт синхронизация.</string>
     <string name="reviewdetails_recommendations">Рекомендации</string>
     <string name="reviewdetails_tags">Теги</string>
+    <string name="reviewdetails_tags_add">Добавить теги</string>
     <string name="reviewdetails_review">Отзыв</string>
     <string name="reviewdetails_rating">Оценка</string>
     <string name="reviewdetails_price">Цена</string>

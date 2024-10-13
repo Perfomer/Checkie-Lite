@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo
 
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -199,9 +198,6 @@ private fun PicturesFlowRow(
 
     val isDragging by remember { derivedStateOf { reorderState.draggedItem != null } }
 
-    val targetDraggedItemElevation = if (isDragging) LocalCuiPalette.current.MediumElevation else 0.dp
-    val actualDraggedItemElevation by animateDpAsState(targetValue = targetDraggedItemElevation, label = "dragged_elevation")
-
     UpdateEffect(isDragging) {
         if (isDragging) {
             hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -249,7 +245,10 @@ private fun PicturesFlowRow(
                     draggableContent = {
                         Picture(
                             pictureUrl = pictureUri,
-                            modifier = Modifier.shadow(elevation = actualDraggedItemElevation)
+                            modifier = Modifier.shadow(
+                                elevation = LocalCuiPalette.current.MediumElevation,
+                                shape = RoundedCornerShape(16.dp),
+                            )
                         )
                     },
                     modifier = Modifier.animateItem()

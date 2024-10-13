@@ -119,7 +119,7 @@ private fun Content(
 ) {
     LazyColumn(
         state = scrollableState,
-        contentPadding = contentPadding.copy(bottom = contentPadding.calculateBottomPadding() + 16.dp),
+        contentPadding = contentPadding.copy(bottom = contentPadding.calculateBottomPadding() + 24.dp),
     ) {
         item {
             ReviewDetailsHeader(

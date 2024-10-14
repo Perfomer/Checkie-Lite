@@ -102,7 +102,7 @@ class AppActivity : AppCompatActivity() {
     private fun BottomSheetNavigator() {
         VoyagerBottomSheetNavigator(
             sheetElevation = LocalCuiPalette.current.LargeElevation,
-            sheetBackgroundColor = LocalCuiPalette.current.BackgroundElevation,
+            sheetBackgroundColor = LocalCuiPalette.current.BackgroundElevationBase,
             sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
             content = { navigator ->
                 navigatorHolder.bottomSheetNavigator = navigator

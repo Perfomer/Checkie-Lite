@@ -28,7 +28,7 @@ fun CuiToast(
     onClick: () -> Unit,
 ) {
     val actualBackgroundColor = if (data.backgroundColor == Color.Unspecified) {
-        LocalCuiPalette.current.BackgroundElevation
+        LocalCuiPalette.current.BackgroundElevationBase
     } else {
         data.backgroundColor
     }

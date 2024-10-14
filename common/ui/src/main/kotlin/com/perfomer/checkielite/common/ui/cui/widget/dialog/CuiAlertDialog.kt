@@ -52,7 +52,7 @@ fun CuiAlertDialog(
                 }
             }
         },
-        containerColor = LocalCuiPalette.current.BackgroundElevation,
+        containerColor = LocalCuiPalette.current.BackgroundElevationBase,
         tonalElevation = 0.dp,
     )
 }

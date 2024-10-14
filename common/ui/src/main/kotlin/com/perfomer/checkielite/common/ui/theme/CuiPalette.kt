@@ -25,7 +25,8 @@ interface CuiPalette {
     val TextNegative: Color
 
     val BackgroundPrimary: Color
-    val BackgroundElevation: Color
+    val BackgroundElevationBase: Color
+    val BackgroundElevationContent: Color
     val BackgroundSecondary: Color
     val BackgroundTertiary: Color
     val BackgroundAccentPrimary: Color
@@ -63,7 +64,8 @@ interface CuiPalette {
         override val TextNegative: Color = CuiColorToken.Red1
 
         override val BackgroundPrimary: Color = CuiColorToken.White1
-        override val BackgroundElevation: Color = CuiColorToken.White1
+        override val BackgroundElevationBase: Color = BackgroundPrimary
+        override val BackgroundElevationContent: Color = BackgroundPrimary
         override val BackgroundSecondary: Color = CuiColorToken.Grey1
         override val BackgroundTertiary: Color = CuiColorToken.Grey4
         override val BackgroundAccentPrimary: Color = CuiColorToken.Orange1
@@ -99,7 +101,8 @@ interface CuiPalette {
         override val TextNegative: Color = CuiColorToken.Red1
 
         override val BackgroundPrimary: Color = CuiColorToken.Black2
-        override val BackgroundElevation: Color = CuiColorToken.Brown7
+        override val BackgroundElevationBase: Color = CuiColorToken.Brown7
+        override val BackgroundElevationContent: Color = CuiColorToken.Brown2
         override val BackgroundSecondary: Color = CuiColorToken.Brown2
         override val BackgroundTertiary: Color = CuiColorToken.Brown5
         override val BackgroundAccentPrimary: Color = CuiColorToken.Orange1

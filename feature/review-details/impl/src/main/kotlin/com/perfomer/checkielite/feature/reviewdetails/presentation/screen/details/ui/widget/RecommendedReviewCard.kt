@@ -69,7 +69,7 @@ internal fun RecommendedReviewCard(
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(4.dp))
-                    .background(LocalCuiPalette.current.BackgroundElevation)
+                    .background(LocalCuiPalette.current.BackgroundElevationContent)
                     .padding(12.dp)
             ) {
                 val hasBrand = review.brandName != null

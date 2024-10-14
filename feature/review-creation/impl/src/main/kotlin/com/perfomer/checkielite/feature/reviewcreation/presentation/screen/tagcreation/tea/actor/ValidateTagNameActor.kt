@@ -25,7 +25,6 @@ internal class ValidateTagNameActor(
 
     private suspend fun handleCommand(command: ValidateTagName): TagCreationEvent {
         return when {
-            checkIfEmpty(command.name) -> Invalid(TagInvalidReason.NAME_IS_EMPTY)
             checkIfTooLong(command.name) -> Invalid(TagInvalidReason.NAME_IS_TOO_LONG)
             checkIfAlreadyExists(command.id, command.name) -> Invalid(TagInvalidReason.NAME_CONFLICT)
             else -> Valid
@@ -35,10 +34,6 @@ internal class ValidateTagNameActor(
     private suspend fun checkIfAlreadyExists(id: String?, name: String): Boolean {
         val existingTag = localDataSource.getTagByName(name)
         return existingTag != null && existingTag.id != id
-    }
-
-    private fun checkIfEmpty(name: String): Boolean {
-        return name.isBlank()
     }
 
     private fun checkIfTooLong(name: String): Boolean {

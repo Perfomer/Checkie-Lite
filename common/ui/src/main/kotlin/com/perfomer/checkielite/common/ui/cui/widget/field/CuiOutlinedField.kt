@@ -55,6 +55,7 @@ fun CuiOutlinedField(
     title: String? = null,
     placeholder: String? = null,
     errorText: String? = null,
+    reservePlaceForError: Boolean = false,
     isEnabled: Boolean = true,
     onValueChange: (String) -> Unit = {},
     singleLine: Boolean = true,
@@ -86,9 +87,9 @@ fun CuiOutlinedField(
         enabled = isEnabled,
         interactionSource = interactionSource,
         supportingText = {
-            if (!errorText.isNullOrBlank()) {
+            if (!errorText.isNullOrBlank() || reservePlaceForError) {
                 Text(
-                    text = errorText,
+                    text = errorText ?: "",
                     fontSize = 12.sp,
                     color = LocalCuiPalette.current.TextNegative,
                 )

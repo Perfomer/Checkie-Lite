@@ -11,13 +11,18 @@ import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalCuiToastHostState
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberErrorToast
 import com.perfomer.checkielite.common.ui.util.BackHandlerWithLifecycle
+import com.perfomer.checkielite.common.ui.util.VibratorPattern
+import com.perfomer.checkielite.common.ui.util.rememberVibrator
 import com.perfomer.checkielite.common.ui.util.store
+import com.perfomer.checkielite.common.ui.util.vibrateCompat
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.TagCreationStore
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.CollapseTagValueField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.FocusTagValueField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowErrorToast
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowTagDeleteConfirmationDialog
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.VibrateError
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnDeleteConfirmClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnDeleteTagClick
@@ -32,6 +37,7 @@ internal class TagCreationContentScreen(
     @Composable
     override fun Screen() = TeaComposable(store<TagCreationStore>(params)) { state ->
         val focusRequester = remember { FocusRequester() }
+        val vibrator = rememberVibrator()
 
         BackHandlerWithLifecycle { accept(OnBackPress) }
 
@@ -39,6 +45,7 @@ internal class TagCreationContentScreen(
         val deleteErrorToast = rememberErrorToast(R.string.tagcreation_error_delete)
         val saveErrorToast = rememberErrorToast(R.string.tagcreation_error_save)
 
+        var shouldCollapseTagValueField by remember { mutableStateOf(false) }
         var isConfirmDeleteDialogShown by remember { mutableStateOf(false) }
 
         EffectHandler { effect ->
@@ -47,11 +54,16 @@ internal class TagCreationContentScreen(
                 is ShowErrorToast.SavingFailed -> toastHostState.showToast(saveErrorToast)
                 is ShowTagDeleteConfirmationDialog -> isConfirmDeleteDialogShown = true
                 is FocusTagValueField -> focusRequester.requestFocus()
+                is CollapseTagValueField -> shouldCollapseTagValueField = true
+                is VibrateError -> vibrator.vibrateCompat(VibratorPattern.ERROR)
             }
         }
 
         TagCreationScreen(
             state = state,
+
+            shouldCollapseTagValueField = shouldCollapseTagValueField,
+            onTagValueFieldCollapsed = { shouldCollapseTagValueField = false },
 
             isConfirmDeleteDialogShown = isConfirmDeleteDialogShown,
             onDeleteDialogDismiss = { isConfirmDeleteDialogShown = false },

@@ -9,5 +9,9 @@ internal sealed interface TagCreationEffect {
         data object SavingFailed : ShowErrorToast
     }
 
+    data object CollapseTagValueField : TagCreationEffect
+
+    data object VibrateError : TagCreationEffect
+
     data object ShowTagDeleteConfirmationDialog : TagCreationEffect
 }

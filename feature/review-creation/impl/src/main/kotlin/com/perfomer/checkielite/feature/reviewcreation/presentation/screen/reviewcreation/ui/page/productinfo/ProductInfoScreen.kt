@@ -129,7 +129,10 @@ internal fun ProductInfoScreen(
                 capitalization = KeyboardCapitalization.Sentences,
             ),
             onValueChange = onProductNameTextInput,
-            modifier = Modifier.shake(shouldCollapseProductNameField, onProductNameFieldCollapsed)
+            modifier = Modifier.shake(
+                enabled = shouldCollapseProductNameField,
+                onAnimationFinish = onProductNameFieldCollapsed,
+            )
         )
 
         CuiSuggestionsBox(

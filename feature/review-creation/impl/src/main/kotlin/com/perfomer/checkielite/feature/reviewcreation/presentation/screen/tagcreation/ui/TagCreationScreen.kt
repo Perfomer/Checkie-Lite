@@ -77,7 +77,10 @@ internal fun TagCreationScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(focusRequester)
-                .shake(shouldCollapseTagValueField, onTagValueFieldCollapsed)
+                .shake(
+                    enabled = shouldCollapseTagValueField,
+                    onAnimationFinish = onTagValueFieldCollapsed,
+                )
         )
 
         if (state.isDeleteAvailable) {

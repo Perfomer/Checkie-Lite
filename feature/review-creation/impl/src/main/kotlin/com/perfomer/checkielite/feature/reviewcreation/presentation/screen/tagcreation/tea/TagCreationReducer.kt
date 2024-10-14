@@ -11,9 +11,11 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcr
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationCommand.UpdateTag
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationCommand.ValidateTagName
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.CollapseTagValueField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.FocusTagValueField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowErrorToast
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowTagDeleteConfirmationDialog
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.VibrateError
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEvent.EmojisLoading
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEvent.Initialize
@@ -32,6 +34,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcr
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnEmojiSelect
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnSelectedEmojiClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnTagValueInput
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagInvalidReason
 import kotlinx.collections.immutable.toPersistentList
 
 internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEffect, TagCreationEvent, TagCreationState>() {
@@ -67,7 +70,12 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
         }
         is OnEmojiSelect -> state { copy(selectedEmoji = event.emoji, hasEmoji = true) }
         is OnSelectedEmojiClick -> state { copy(hasEmoji = !hasEmoji) }
-        is OnTagValueInput -> state { copy(tagValue = event.text) }
+        is OnTagValueInput -> {
+            state { copy(tagValue = event.text) }
+
+            val tagId = (state.mode as? TagCreationMode.Modification)?.tagId
+            commands(ValidateTagName(id = tagId, name = state.tagValue.trim()))
+        }
         is OnDeleteTagClick -> effects(ShowTagDeleteConfirmationDialog)
         is OnDeleteConfirmClick -> {
             val modificationMode = state.mode as TagCreationMode.Modification
@@ -129,9 +137,33 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
     }
 
     private fun reduceOnDoneClick() {
-        val tagId = (state.mode as? TagCreationMode.Modification)?.tagId
+        if (state.tagValue.isBlank()) {
+            state { copy(tagInvalidReason = TagInvalidReason.NAME_IS_EMPTY) }
+        }
 
-        commands(ValidateTagName(id = tagId, name = state.tagValue.trim()))
+        if (state.tagInvalidReason != null) {
+            effects(CollapseTagValueField, VibrateError)
+            return
+        }
+
+        when (val mode = state.mode) {
+            is TagCreationMode.Creation -> {
+                commands(
+                    CreateTag(
+                        value = state.tagValue.trim(),
+                        emoji = state.selectedEmoji.takeIf { state.hasEmoji }),
+                )
+            }
+
+            is TagCreationMode.Modification -> {
+                commands(
+                    UpdateTag(
+                        id = mode.tagId,
+                        value = state.tagValue.trim(),
+                        emoji = state.selectedEmoji.takeIf { state.hasEmoji }),
+                )
+            }
+        }
     }
 
     private fun reduceTagNameValidated(event: TagNameValidated) {
@@ -141,25 +173,6 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
             }
             is TagNameValidated.Valid -> {
                 state { copy(tagInvalidReason = null) }
-
-                when (val mode = state.mode) {
-                    is TagCreationMode.Creation -> {
-                        commands(
-                            CreateTag(
-                                value = state.tagValue.trim(),
-                                emoji = state.selectedEmoji.takeIf { state.hasEmoji }),
-                        )
-                    }
-
-                    is TagCreationMode.Modification -> {
-                        commands(
-                            UpdateTag(
-                                id = mode.tagId,
-                                value = state.tagValue.trim(),
-                                emoji = state.selectedEmoji.takeIf { state.hasEmoji }),
-                        )
-                    }
-                }
             }
         }
     }

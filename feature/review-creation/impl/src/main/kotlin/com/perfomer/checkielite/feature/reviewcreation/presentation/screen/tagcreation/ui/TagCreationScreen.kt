@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.ui.CommonString
+import com.perfomer.checkielite.common.ui.cui.modifier.shake
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiSecondaryButton
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
@@ -37,6 +38,9 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcr
 @Composable
 internal fun TagCreationScreen(
     state: TagCreationUiState,
+
+    shouldCollapseTagValueField: Boolean = false,
+    onTagValueFieldCollapsed: () -> Unit = {},
 
     isConfirmDeleteDialogShown: Boolean = false,
     onDeleteDialogDismiss: () -> Unit = {},
@@ -64,6 +68,7 @@ internal fun TagCreationScreen(
             text = state.tagValue,
             title = stringResource(R.string.tagcreation_tag_name),
             errorText = state.tagValueError,
+            reservePlaceForError = true,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
                 capitalization = KeyboardCapitalization.Sentences,
@@ -72,6 +77,7 @@ internal fun TagCreationScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(focusRequester)
+                .shake(shouldCollapseTagValueField, onTagValueFieldCollapsed)
         )
 
         if (state.isDeleteAvailable) {

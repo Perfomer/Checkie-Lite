@@ -122,6 +122,7 @@ internal fun ProductInfoScreen(
         CuiOutlinedField(
             text = state.productName,
             errorText = state.productNameErrorText,
+            reservePlaceForError = true,
             title = stringResource(R.string.reviewcreation_productinfo_field_product),
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next,
@@ -130,10 +131,6 @@ internal fun ProductInfoScreen(
             onValueChange = onProductNameTextInput,
             modifier = Modifier.shake(shouldCollapseProductNameField, onProductNameFieldCollapsed)
         )
-
-        if (state.productNameErrorText.isNullOrBlank()) {
-            Spacer(Modifier.height(4.dp))
-        }
 
         CuiSuggestionsBox(
             currentValue = state.brand,

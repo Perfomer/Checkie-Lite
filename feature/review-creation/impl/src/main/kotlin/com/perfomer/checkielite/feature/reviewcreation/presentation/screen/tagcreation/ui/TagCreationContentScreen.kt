@@ -8,6 +8,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.focus.FocusRequester
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
+import com.perfomer.checkielite.common.ui.cui.modifier.ShakeConfig
+import com.perfomer.checkielite.common.ui.cui.modifier.rememberShakeController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalCuiToastHostState
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberErrorToast
 import com.perfomer.checkielite.common.ui.util.BackHandlerWithLifecycle
@@ -38,6 +40,7 @@ internal class TagCreationContentScreen(
     override fun Screen() = TeaComposable(store<TagCreationStore>(params)) { state ->
         val focusRequester = remember { FocusRequester() }
         val vibrator = rememberVibrator()
+        val tagValueShakeController = rememberShakeController()
 
         BackHandlerWithLifecycle { accept(OnBackPress) }
 
@@ -45,7 +48,6 @@ internal class TagCreationContentScreen(
         val deleteErrorToast = rememberErrorToast(R.string.tagcreation_error_delete)
         val saveErrorToast = rememberErrorToast(R.string.tagcreation_error_save)
 
-        var shouldCollapseTagValueField by remember { mutableStateOf(false) }
         var isConfirmDeleteDialogShown by remember { mutableStateOf(false) }
 
         EffectHandler { effect ->
@@ -54,7 +56,7 @@ internal class TagCreationContentScreen(
                 is ShowErrorToast.SavingFailed -> toastHostState.showToast(saveErrorToast)
                 is ShowTagDeleteConfirmationDialog -> isConfirmDeleteDialogShown = true
                 is FocusTagValueField -> focusRequester.requestFocus()
-                is CollapseTagValueField -> shouldCollapseTagValueField = true
+                is CollapseTagValueField -> tagValueShakeController.shake(ShakeConfig.inputError)
                 is VibrateError -> vibrator.vibrateCompat(VibratorPattern.ERROR)
             }
         }
@@ -62,14 +64,13 @@ internal class TagCreationContentScreen(
         TagCreationScreen(
             state = state,
 
-            shouldCollapseTagValueField = shouldCollapseTagValueField,
-            onTagValueFieldCollapsed = { shouldCollapseTagValueField = false },
+            focusRequester = focusRequester,
+            tagValueShakeController = tagValueShakeController,
 
             isConfirmDeleteDialogShown = isConfirmDeleteDialogShown,
             onDeleteDialogDismiss = { isConfirmDeleteDialogShown = false },
             onDeleteDialogConfirm = acceptable(OnDeleteConfirmClick),
 
-            focusRequester = focusRequester,
             onTagValueInput = acceptable(::OnTagValueInput),
             onDoneClick = acceptable(OnDoneClick),
             onDeleteTagClick = acceptable(OnDeleteTagClick),

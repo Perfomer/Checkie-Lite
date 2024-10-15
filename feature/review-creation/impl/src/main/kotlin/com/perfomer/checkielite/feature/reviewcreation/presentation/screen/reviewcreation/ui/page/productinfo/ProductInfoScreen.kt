@@ -64,6 +64,8 @@ import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.pure.util.move
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
+import com.perfomer.checkielite.common.ui.cui.modifier.ShakeController
+import com.perfomer.checkielite.common.ui.cui.modifier.rememberShakeController
 import com.perfomer.checkielite.common.ui.cui.modifier.shake
 import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiSuggestionsBox
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
@@ -86,9 +88,8 @@ internal fun ProductInfoScreen(
     scrollState: ScrollState = rememberScrollState(),
 
     priceFocusRequester: FocusRequester = remember { FocusRequester() },
-    shouldCollapseProductNameField: Boolean = false,
+    productNameShakeController: ShakeController = rememberShakeController(),
 
-    onProductNameFieldCollapsed: () -> Unit = {},
     onProductNameTextInput: (String) -> Unit = {},
     onBrandTextInput: (String) -> Unit = {},
     onPriceTextInput: (String) -> Unit = {},
@@ -129,10 +130,7 @@ internal fun ProductInfoScreen(
                 capitalization = KeyboardCapitalization.Sentences,
             ),
             onValueChange = onProductNameTextInput,
-            modifier = Modifier.shake(
-                enabled = shouldCollapseProductNameField,
-                onAnimationFinish = onProductNameFieldCollapsed,
-            )
+            modifier = Modifier.shake(productNameShakeController)
         )
 
         CuiSuggestionsBox(

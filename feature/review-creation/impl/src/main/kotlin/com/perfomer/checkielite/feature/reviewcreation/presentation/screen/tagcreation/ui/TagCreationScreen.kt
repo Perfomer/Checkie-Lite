@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.ui.CommonString
+import com.perfomer.checkielite.common.ui.cui.modifier.ShakeController
+import com.perfomer.checkielite.common.ui.cui.modifier.rememberShakeController
 import com.perfomer.checkielite.common.ui.cui.modifier.shake
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiSecondaryButton
@@ -39,14 +41,12 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcr
 internal fun TagCreationScreen(
     state: TagCreationUiState,
 
-    shouldCollapseTagValueField: Boolean = false,
-    onTagValueFieldCollapsed: () -> Unit = {},
+    focusRequester: FocusRequester = FocusRequester(),
+    tagValueShakeController: ShakeController = rememberShakeController(),
 
     isConfirmDeleteDialogShown: Boolean = false,
     onDeleteDialogDismiss: () -> Unit = {},
     onDeleteDialogConfirm: () -> Unit = {},
-
-    focusRequester: FocusRequester = FocusRequester(),
 
     onTagValueInput: (value: String) -> Unit = {},
     onDoneClick: () -> Unit = {},
@@ -77,10 +77,7 @@ internal fun TagCreationScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(focusRequester)
-                .shake(
-                    enabled = shouldCollapseTagValueField,
-                    onAnimationFinish = onTagValueFieldCollapsed,
-                )
+                .shake(tagValueShakeController)
         )
 
         if (state.isDeleteAvailable) {

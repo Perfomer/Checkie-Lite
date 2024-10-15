@@ -13,6 +13,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
+import com.perfomer.checkielite.common.ui.cui.modifier.ShakeConfig
+import com.perfomer.checkielite.common.ui.cui.modifier.rememberShakeController
 import com.perfomer.checkielite.common.ui.util.BackHandlerWithLifecycle
 import com.perfomer.checkielite.common.ui.util.VibratorPattern
 import com.perfomer.checkielite.common.ui.util.rememberVibrator
@@ -48,12 +50,11 @@ internal class ReviewCreationContentScreen(
         val focusManager = LocalFocusManager.current
         val priceFocusRequester = remember { FocusRequester() }
         val commentFocusRequester = remember { FocusRequester() }
+        val productNameShakeController = rememberShakeController()
         val vibrator = rememberVibrator()
 
         var isConfirmExitDialogShown by remember { mutableStateOf(false) }
         var isErrorDialogShown by remember { mutableStateOf(false) }
-
-        var shouldCollapseProductNameField by remember { mutableStateOf(false) }
 
         BackHandlerWithLifecycle { accept(OnBackPress) }
 
@@ -64,7 +65,7 @@ internal class ReviewCreationContentScreen(
                 is CloseKeyboard -> focusManager.clearFocus()
                 is FocusCommentField -> commentFocusRequester.requestFocus()
                 is FocusPriceField -> priceFocusRequester.requestFocus()
-                is CollapseProductNameField -> shouldCollapseProductNameField = true
+                is CollapseProductNameField -> productNameShakeController.shake(ShakeConfig.inputError)
                 is VibrateError -> vibrator.vibrateCompat(VibratorPattern.ERROR)
             }
         }
@@ -113,8 +114,7 @@ internal class ReviewCreationContentScreen(
                     state = state.productInfoState,
                     scrollState = productInfoScrollState,
                     priceFocusRequester = priceFocusRequester,
-                    shouldCollapseProductNameField = shouldCollapseProductNameField,
-                    onProductNameFieldCollapsed = { shouldCollapseProductNameField = false },
+                    productNameShakeController = productNameShakeController,
                     onProductNameTextInput = acceptable(ProductInfo::OnProductNameTextInput),
                     onBrandTextInput = acceptable(ProductInfo::OnBrandTextInput),
                     onPriceTextInput = acceptable(ProductInfo::OnPriceTextInput),

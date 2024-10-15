@@ -35,6 +35,8 @@ import com.perfomer.checkielite.navigation.StartScreenProvider
 import com.perfomer.checkielite.navigation.voyager.impl.NavigatorHolder
 import com.perfomer.checkielite.update.AppUpdateManager
 import com.perfomer.checkielite.update.updateIfAvailable
+import com.perfomer.checkielite.utils.holdSplashFor
+import com.perfomer.checkielite.utils.installSplashScreen
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator as VoyagerBottomSheetNavigator
@@ -51,6 +53,7 @@ class AppActivity : AppCompatActivity() {
     private val startScreenProvider: StartScreenProvider by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
 
         initializeApplication()
@@ -74,6 +77,7 @@ class AppActivity : AppCompatActivity() {
             ClearFocusOnKeyboardClose()
         }
 
+        holdSplashFor(350L)
         checkForUpdates()
     }
 

@@ -11,6 +11,8 @@
     <string name="settings_backup_title_export">Exporting backup…</string>
     <string name="settings_backup_minimize_hint">It may take a while.\nYou can <b>minimize</b> the application.</string>
     <string name="settings_backup_failure_export">Failed to export backup</string>
+    <string name="settings_backup_failure_export_no_space">No space left on device</string>
     <string name="settings_backup_failure_import">Failed to import backup</string>
     <string name="settings_backup_success_export">Backup successfully exported</string>
+    <string name="settings_backup_cancel_export">Backup export cancelled</string>
 </resources>

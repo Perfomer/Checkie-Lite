@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Checkie Lite</string>
     <string name="common_cancel">Отмена</string>
+    <string name="common_cancel_v2">Отменить</string>
     <string name="common_ok">ОК</string>
     <string name="common_clear">Очистить</string>
     <string name="common_search">Поиск</string>

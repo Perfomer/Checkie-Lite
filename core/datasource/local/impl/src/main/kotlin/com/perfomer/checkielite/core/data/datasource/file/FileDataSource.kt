@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import com.perfomer.checkielite.common.pure.appInfo.AppInfoProvider
+import com.perfomer.checkielite.common.pure.util.getFormattedDate
 import com.perfomer.checkielite.common.pure.util.randomUuid
 import com.perfomer.checkielite.core.data.datasource.database.room.CheckieDatabase
 import com.perfomer.checkielite.core.data.datasource.file.backup.metadata.BackupMetadata
@@ -20,9 +21,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 internal interface FileDataSource {
 
@@ -37,6 +35,7 @@ internal interface FileDataSource {
         databaseUri: String,
         picturesUri: List<String>,
         destinationFolderUri: String,
+        fileName: String,
     ): Flow<Float>
 
     fun importBackup(
@@ -79,16 +78,12 @@ internal class FileDataSourceImpl(
     override fun exportBackup(
         databaseUri: String,
         picturesUri: List<String>,
-        destinationFolderUri: String
+        destinationFolderUri: String,
+        fileName: String,
     ): Flow<Float> {
-        val formatter = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault())
-        val timestamp = formatter.format(Date())
-
-        val fileName = "$timestamp.backup"
-
         val metadata = BackupMetadata(
             backupVersion = CURRENT_BACKUP_VERSION,
-            backupTimestamp = timestamp,
+            backupTimestamp = getFormattedDate(),
             appVersionCode = appInfoProvider.getAppInfo().versionCode,
         )
 

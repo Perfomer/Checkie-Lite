@@ -8,6 +8,7 @@
     <string name="app_name_lite_debug" translatable="false">debug</string>
 
     <string name="common_cancel">Cancel</string>
+    <string name="common_cancel_v2">Cancel</string>
     <string name="common_ok">OK</string>
 
     <string name="common_clear">Clear</string>

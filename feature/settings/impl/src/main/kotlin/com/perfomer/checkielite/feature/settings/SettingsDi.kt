@@ -14,6 +14,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.BackupStore
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor.AwaitActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor.BackupNavigationActor
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor.CancelBackupActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor.ObserveBackupProgressActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.BackupContentScreen
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.state.BackupUiStateMapper
@@ -74,6 +75,7 @@ internal fun createBackupStore(
             BackupNavigationActor(router, appRestarter, mainScreenProvider),
             ObserveBackupProgressActor(backupRepository),
             AwaitActor(),
+            CancelBackupActor(backupRepository),
         ),
     )
 }

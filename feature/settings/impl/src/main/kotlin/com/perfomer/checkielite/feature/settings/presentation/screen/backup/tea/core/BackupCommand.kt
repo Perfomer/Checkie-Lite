@@ -5,6 +5,8 @@ internal sealed interface BackupCommand {
     data object ObserveBackupProgress : BackupCommand
 
     class Await(val durationMs: Long) : BackupCommand
+
+    data object CancelBackup : BackupCommand
 }
 
 internal sealed interface BackupNavigationCommand : BackupCommand {

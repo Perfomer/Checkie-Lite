@@ -13,13 +13,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.perfomer.checkielite.common.ui.CommonString
+import com.perfomer.checkielite.common.ui.cui.widget.button.CuiSecondaryButton
 import com.perfomer.checkielite.common.ui.cui.widget.progress.CuiProgressBar
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -27,10 +31,24 @@ import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.app.appNameSpannable
 import com.perfomer.checkielite.common.ui.util.span.annotatedStringResource
 import com.perfomer.checkielite.feature.settings.R
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.state.BackupProgressBarStyle
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.state.BackupUiState
 
 @Composable
-internal fun BackupScreen(state: BackupUiState) {
+internal fun BackupScreen(
+    state: BackupUiState,
+    onCancelClick: () -> Unit = {},
+) {
+    val palette = LocalCuiPalette.current
+    val progressBarColor = remember(state.progressBarStyle) {
+        when (state.progressBarStyle) {
+            BackupProgressBarStyle.IN_PROGRESS -> palette.BackgroundAccentPrimary
+            BackupProgressBarStyle.COMPLETED -> palette.BackgroundPositivePrimary
+            BackupProgressBarStyle.CANCELLED -> palette.BackgroundAccentSecondary
+            BackupProgressBarStyle.FAILED -> palette.BackgroundNegativePrimary
+        }
+    }
+
     Scaffold(
         topBar = { BackupTopAppBar() },
     ) { contentPadding ->
@@ -39,7 +57,7 @@ internal fun BackupScreen(state: BackupUiState) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
-                .padding(vertical= 32.dp, horizontal = 24.dp)
+                .padding(vertical = 32.dp, horizontal = 24.dp)
         ) {
             Image(
                 painter = painterResource(R.drawable.ill_backup),
@@ -58,22 +76,32 @@ internal fun BackupScreen(state: BackupUiState) {
 
             Spacer(Modifier.height(24.dp))
 
-            if (state.backupProgress != null && state.progressLabel != null) {
-                CuiProgressBar(
-                    progress = state.backupProgress,
-                    modifier = Modifier.width(160.dp)
-                )
+            CuiProgressBar(
+                progress = state.backupProgress,
+                progressColor = progressBarColor,
+                progressFullColor = progressBarColor,
+                modifier = Modifier.width(160.dp)
+            )
 
-                Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(8.dp))
 
-                Text(
-                    text = state.progressLabel,
-                    fontSize = 14.sp,
-                    color = LocalCuiPalette.current.TextSecondary
-                )
-            }
+            Text(
+                text = state.progressLabel,
+                fontSize = 14.sp,
+                color = LocalCuiPalette.current.TextSecondary
+            )
 
             Spacer(Modifier.weight(1F))
+
+            if (state.isCancelVisible) {
+                CuiSecondaryButton(
+                    text = stringResource(CommonString.common_cancel_v2),
+                    onClick = onCancelClick,
+                    enabled = state.isCancelAvailable,
+                )
+
+                Spacer(Modifier.height(24.dp))
+            }
 
             Text(
                 text = annotatedStringResource(R.string.settings_backup_minimize_hint),
@@ -106,4 +134,7 @@ internal val mockUiState = BackupUiState(
     title = "Creating backup...",
     backupProgress = 0.65F,
     progressLabel = "65%",
+    isCancelVisible = true,
+    isCancelAvailable = true,
+    progressBarStyle = BackupProgressBarStyle.IN_PROGRESS,
 )

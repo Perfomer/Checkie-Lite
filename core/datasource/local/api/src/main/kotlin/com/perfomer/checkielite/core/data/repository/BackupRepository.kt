@@ -13,6 +13,8 @@ interface BackupRepository {
 
     suspend fun exportBackup()
 
+    suspend fun cancelBackupExport()
+
     fun launchImportBackupService(fromPath: String)
 
     fun launchExportBackupService()

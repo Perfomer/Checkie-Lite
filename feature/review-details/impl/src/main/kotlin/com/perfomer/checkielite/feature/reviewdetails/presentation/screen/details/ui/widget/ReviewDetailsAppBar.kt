@@ -70,6 +70,7 @@ internal fun ReviewDetailsAppBar(
                     CuiDropdownMenuItem(
                         text = stringResource(R.string.reviewdetails_action_delete),
                         iconPainter = painterResource(CommonDrawable.ic_delete),
+                        iconTint = LocalCuiPalette.current.IconNegative,
                         onClick = debounced(onDeleteClick),
                     )
                 }

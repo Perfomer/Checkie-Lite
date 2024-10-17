@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.res.painterResource
@@ -46,8 +46,9 @@ fun CuiDropdownIcon(
         onDismissRequest = { isExpanded = false },
         content = content,
         offset = DpOffset(x = (-12).dp, y = 0.dp),
+        shadowElevation = LocalCuiPalette.current.MediumElevation,
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface)
+            .background(LocalCuiPalette.current.BackgroundElevationBase)
             .motionEventSpy { event ->
                 if (event.action != MotionEvent.ACTION_UP) return@motionEventSpy
                 isExpanded = false
@@ -60,6 +61,7 @@ fun CuiDropdownMenuItem(
     text: String,
     modifier: Modifier = Modifier,
     iconPainter: Painter? = null,
+    iconTint: Color = LocalCuiPalette.current.IconPrimary,
     iconContentDescription: String? = null,
     onClick: () -> Unit,
 ) {
@@ -69,12 +71,13 @@ fun CuiDropdownMenuItem(
             {
                 Icon(
                     painter = iconPainter,
+                    tint = iconTint,
                     contentDescription = iconContentDescription,
                 )
             }
         },
         onClick = onClick,
-        contentPadding = PaddingValues(horizontal = 12.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = modifier,
     )
 }

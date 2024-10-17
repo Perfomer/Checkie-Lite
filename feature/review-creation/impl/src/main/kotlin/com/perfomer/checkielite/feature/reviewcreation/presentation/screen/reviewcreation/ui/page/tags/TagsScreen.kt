@@ -40,6 +40,7 @@ import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
+import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiTagChip
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedFieldDefaults
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -104,15 +105,15 @@ internal fun TagsScreen(
 
         @Composable
         fun TagChip(tag: TagsPageUiState.Tag) {
-            CuiChip(
+            CuiTagChip(
+                text = tag.value,
+                emoji = tag.emoji,
+                isSelected = tag.isSelected,
                 onClick = { onTagClick(tag.id) },
                 onLongClick = {
                     hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
                     onTagLongClick(tag.id)
                 },
-                leadingIcon = tag.emoji?.let { { Text(it) } },
-                style = if (tag.isSelected) CuiChipStyle.selected() else CuiChipStyle.default(),
-                content = { Text(tag.value) },
             )
         }
 

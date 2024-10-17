@@ -111,6 +111,7 @@ fun CuiChip(
         }
 
         Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .padding(start = 8.dp, end = 12.dp)
                 .padding(vertical = 2.dp)

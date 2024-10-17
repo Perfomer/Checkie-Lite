@@ -3,6 +3,7 @@ package com.perfomer.checkielite.common.ui.cui.widget.toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -18,10 +19,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
+import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
 @Composable
 fun CuiToast(
@@ -39,6 +45,7 @@ fun CuiToast(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .statusBarsPadding()
+            .padding(horizontal = 20.dp)
             .padding(top = 4.dp)
             .shadow(
                 elevation = LocalCuiPalette.current.LargeElevation,
@@ -68,7 +75,50 @@ fun CuiToast(
             text = data.message,
             color = LocalCuiPalette.current.TextPrimary,
             fontSize = 14.sp,
+            textAlign = TextAlign.Center,
             fontWeight = FontWeight.Medium
+        )
+    }
+}
+
+@WidgetPreview
+@Composable
+private fun CuiToastPreview() = CheckieLiteTheme {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.padding(32.dp)
+    ) {
+        CuiToast(
+            data = CuiToastData(
+                message = "Short text",
+                icon = null,
+                iconTint = Color.Unspecified,
+                backgroundColor = LocalCuiPalette.current.BackgroundElevationBase,
+                durationMs = 1000L,
+            ),
+            onClick = {},
+        )
+
+        CuiToast(
+            data = CuiToastData(
+                message = "Short text",
+                icon = painterResource(CommonDrawable.ic_error),
+                iconTint = LocalCuiPalette.current.IconNegative,
+                backgroundColor = LocalCuiPalette.current.BackgroundNegativeSecondary,
+                durationMs = 1000L,
+            ),
+            onClick = {},
+        )
+
+        CuiToast(
+            data = CuiToastData(
+                message = "Failed to export backup: Not enough space",
+                icon = painterResource(CommonDrawable.ic_error),
+                iconTint = LocalCuiPalette.current.IconNegative,
+                backgroundColor = LocalCuiPalette.current.BackgroundNegativeSecondary,
+                durationMs = 1000L,
+            ),
+            onClick = {},
         )
     }
 }

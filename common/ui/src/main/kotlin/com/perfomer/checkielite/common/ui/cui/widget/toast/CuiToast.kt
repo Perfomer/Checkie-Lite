@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
@@ -37,7 +38,8 @@ fun CuiToast(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
-            .padding(top = 40.dp)
+            .statusBarsPadding()
+            .padding(top = 4.dp)
             .shadow(
                 elevation = LocalCuiPalette.current.LargeElevation,
                 spotColor = Color.Black.copy(alpha = 0.7F),

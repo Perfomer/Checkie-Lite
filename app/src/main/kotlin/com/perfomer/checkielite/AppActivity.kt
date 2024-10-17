@@ -11,6 +11,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.CurrentScreen
@@ -35,8 +36,6 @@ import com.perfomer.checkielite.navigation.StartScreenProvider
 import com.perfomer.checkielite.navigation.voyager.impl.NavigatorHolder
 import com.perfomer.checkielite.update.AppUpdateManager
 import com.perfomer.checkielite.update.updateIfAvailable
-import com.perfomer.checkielite.utils.holdSplashFor
-import com.perfomer.checkielite.utils.installSplashScreen
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator as VoyagerBottomSheetNavigator
@@ -44,7 +43,6 @@ import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator as Voyager
 class AppActivity : AppCompatActivity() {
 
     private val updateManager: AppUpdateManager by inject()
-
     private val singleActivityHolder: SingleActivityHolder by inject()
     private val externalRouter: AndroidExternalRouter by inject()
     private val permissionHelper: PermissionHelper by inject()
@@ -77,7 +75,6 @@ class AppActivity : AppCompatActivity() {
             ClearFocusOnKeyboardClose()
         }
 
-        holdSplashFor(350L)
         checkForUpdates()
     }
 

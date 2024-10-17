@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
+import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiTagChip
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.feature.reviewdetails.R
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.Tag
@@ -55,10 +56,10 @@ internal fun ReviewDetailsTags(
     ) {
         for (tag in tags) {
             key(tag.tagId) {
-                CuiChip(
+                CuiTagChip(
+                    text = tag.text,
+                    emoji = tag.emoji,
                     onClick = { onTagClick(tag.tagId) },
-                    leadingIcon = tag.emoji?.let { { Text(it) } },
-                    content = { Text(tag.text) },
                 )
             }
         }

@@ -46,8 +46,7 @@ import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.modifier.conditional
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
-import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
-import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
+import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiTagChip
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField2
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.verticalScrimBrush
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
@@ -113,11 +112,11 @@ internal fun TagsScreen(
 
                     for (tag in state.tags) {
                         key(tag.tagId) {
-                            CuiChip(
+                            CuiTagChip(
+                                text = tag.text,
+                                emoji = tag.emoji,
+                                isSelected = tag.isSelected,
                                 onClick = { onTagClick(tag.tagId) },
-                                leadingIcon = tag.emoji?.let { { Text(it) } },
-                                style = if (tag.isSelected) CuiChipStyle.selected() else CuiChipStyle.default(),
-                                content = { Text(tag.text) },
                             )
                         }
                     }

@@ -50,7 +50,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.button.CuiFloatingActionBut
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewHorizontalItem
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
-import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
+import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiTagChip
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -194,7 +194,7 @@ private fun TopAppBar(
 ) {
     val shouldShowDivider by remember {
         derivedStateOf {
-            scrollableState.canScrollBackward && (scrollableState.firstVisibleItemIndex > 0 || scrollableState.firstVisibleItemScrollOffset.pxToDp() > 4 )
+            scrollableState.canScrollBackward && (scrollableState.firstVisibleItemIndex > 0 || scrollableState.firstVisibleItemScrollOffset.pxToDp() > 4)
         }
     }
 
@@ -273,10 +273,10 @@ private fun TagsRow(
     fun SingleRow(tags: ImmutableList<Tag>) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             for (tag in tags) {
-                CuiChip(
-                    leadingIcon = tag.emoji?.let { { Text(it) } },
+                CuiTagChip(
+                    text = tag.value,
+                    emoji = tag.emoji,
                     onClick = { onTagClick(tag.id) },
-                    content = { Text(tag.value) },
                 )
             }
         }

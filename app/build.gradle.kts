@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.activity.compose)
     implementation(libs.core.ktx)
+    implementation(libs.core.ktx.splashscreen)
     implementation(libs.koin.android)
     implementation(libs.koin.core)
     implementation(libs.lifecycle.ktx)

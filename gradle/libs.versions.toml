@@ -9,6 +9,7 @@ coil = "2.6.0"
 compose-bom = "2024.09.03"
 compressor = "3.0.1"
 core-ktx = "1.13.1"
+core-ktx-splashscreen = "1.0.1"
 drag-and-drop = "0.2.0" # 0.3.0 brokes second time dnd
 fading-edges = "1.0.4"
 google-fonts = "1.7.3"
@@ -39,6 +40,7 @@ compose-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
+core-ktx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "core-ktx-splashscreen" }
 drag-and-drop = { module = "com.mohamedrejeb.dnd:compose-dnd", version.ref = "drag-and-drop" }
 fading-edges = { module = "com.github.GIGAMOLE:ComposeFadingEdges", version.ref = "fading-edges" }
 google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "google-fonts" }

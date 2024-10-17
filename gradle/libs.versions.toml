@@ -1,18 +1,17 @@
 [versions]
 accompanist-systemuicontroller = "0.34.0"
-activity = "1.9.2"
-#noinspection AndroidGradlePluginVersion
+activity = "1.9.3"
 agp = "8.3.1" # todo: 8.4.0 version fails R8 minification
 androidx-core = "1.13.1"
 appcompat = "1.7.0"
 coil = "2.6.0"
-compose-bom = "2024.09.03"
+compose-bom = "2024.10.00"
 compressor = "3.0.1"
 core-ktx = "1.13.1"
 core-ktx-splashscreen = "1.0.1"
 drag-and-drop = "0.2.0" # 0.3.0 brokes second time dnd
 fading-edges = "1.0.4"
-google-fonts = "1.7.3"
+google-fonts = "1.7.4"
 koin = "3.5.0"
 kotlin = "2.0.20"
 kotlinx-collections-immutable = "0.3.7"

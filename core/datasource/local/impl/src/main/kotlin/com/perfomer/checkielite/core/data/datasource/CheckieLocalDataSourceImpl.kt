@@ -234,7 +234,7 @@ internal class CheckieLocalDataSourceImpl(
                     .map(Currency::getInstance)
                     .sortedWith(
                         compareBy(
-                            { it.currencyCode in MOST_COMMON_CURRENCY_CODES },
+                            { it.currencyCode !in MOST_COMMON_CURRENCY_CODES },
                             { (CurrencySymbol.getSymbol(it.currencyCode) ?: it.symbol).length > 1 },
                             { it.displayName },
                         )

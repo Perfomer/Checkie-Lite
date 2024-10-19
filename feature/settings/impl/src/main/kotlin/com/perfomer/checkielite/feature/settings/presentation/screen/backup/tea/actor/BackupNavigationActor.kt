@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor
 
-import com.perfomer.checkielite.common.android.AppRestarter
+import com.perfomer.checkielite.common.android.apprestart.AppRestarter
+import com.perfomer.checkielite.common.android.apprestart.RestartAction
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.navigation.api.Router
 import com.perfomer.checkielite.feature.main.navigation.MainScreenProvider
@@ -29,7 +30,7 @@ internal class BackupNavigationActor(
 
     private fun handleCommand(command: BackupNavigationCommand): BackupNavigationEvent? {
         when (command) {
-            is RestartApp -> appRestarter.restart()
+            is RestartApp -> appRestarter.restart(RestartAction.ShowSuccessBackupImportToast)
             is OpenMain -> router.replaceStack(mainScreenProvider())
         }
 

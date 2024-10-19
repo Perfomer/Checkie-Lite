@@ -28,7 +28,7 @@ internal class RuStoreUpdateManager(
                     continuation.safeResume(isUpdateAvailable)
                 }
                 .addOnFailureListener { throwable ->
-                    Log.e(TAG, "Failed to check if update is available", throwable)
+                    Log.w(TAG, "Failed to check if update is available", throwable)
                     continuation.safeResume(false)
                 }
         }
@@ -46,7 +46,7 @@ internal class RuStoreUpdateManager(
                 updateManager.unregisterListener(this)
             }
             InstallStatus.FAILED -> {
-                Log.e(TAG, "Failed to install update")
+                Log.w(TAG, "Failed to install update")
                 updateManager.unregisterListener(this)
             }
         }
@@ -58,7 +58,7 @@ internal class RuStoreUpdateManager(
             appUpdateOptions = options,
         )
             .addOnFailureListener { throwable ->
-                Log.e(TAG, "Failed to launch app update", throwable)
+                Log.w(TAG, "Failed to launch app update", throwable)
                 updateManager.unregisterListener(this)
             }
     }

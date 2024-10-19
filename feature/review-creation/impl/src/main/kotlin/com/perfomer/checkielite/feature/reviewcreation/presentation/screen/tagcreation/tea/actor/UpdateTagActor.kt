@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
@@ -34,7 +35,12 @@ internal class UpdateTagActor(
             )
         }
             .map(TagSaving::Succeed)
+            .onCatchLog(TAG, "Failed to update tag")
             .onCatchReturn(TagSaving::Failed)
             .startWith(TagSaving.Started)
+    }
+
+    private companion object {
+        private const val TAG = "UpdateTagActor"
     }
 }

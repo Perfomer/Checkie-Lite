@@ -20,6 +20,7 @@ dependencies {
 	implementation(project(":core:datasource:local:api"))
 	implementation(project(":core:entity"))
 
+	implementation(project(":common:android"))
 	implementation(project(":common:navigation:voyager"))
 	implementation(project(":common:pure"))
 	implementation(project(":common:tea:compose"))

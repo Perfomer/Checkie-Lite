@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
@@ -28,7 +29,12 @@ internal class CreateTagActor(
     private fun handleCommand(command: CreateTag): Flow<TagSaving> {
         return flowBy { localDataSource.createTag(value = command.value, emoji = command.emoji) }
             .map(TagSaving::Succeed)
+            .onCatchLog(TAG, "Failed to create tag")
             .onCatchReturn(TagSaving::Failed)
             .startWith(TagSaving.Started)
+    }
+
+    private companion object {
+        private const val TAG = "CreateTagActor"
     }
 }

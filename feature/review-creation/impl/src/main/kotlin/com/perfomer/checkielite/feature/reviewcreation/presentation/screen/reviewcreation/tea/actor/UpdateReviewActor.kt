@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
@@ -39,7 +40,12 @@ internal class UpdateReviewActor(
             )
         }
             .map { ReviewSaving.Succeed }
+            .onCatchLog(TAG, "Failed to update review")
             .onCatchReturn { ReviewSaving.Failed }
             .startWith(ReviewSaving.Started)
+    }
+
+    private companion object {
+        private const val TAG = "UpdateReviewActor"
     }
 }

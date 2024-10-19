@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
@@ -28,7 +29,12 @@ internal class LoadEmojisActor(
     private fun handleCommand(command: LoadEmojis): Flow<EmojisLoading> {
         return flowBy { emojiRepository.getCategorizedEmojis() }
             .map(EmojisLoading::Succeed)
+            .onCatchLog(TAG, "Failed to load emojis")
             .onCatchReturn(EmojisLoading::Failed)
             .startWith(EmojisLoading.Started)
+    }
+
+    private companion object {
+        private const val TAG = "LoadEmojisActor"
     }
 }

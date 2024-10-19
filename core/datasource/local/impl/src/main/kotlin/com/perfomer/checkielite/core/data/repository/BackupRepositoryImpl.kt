@@ -2,6 +2,7 @@ package com.perfomer.checkielite.core.data.repository
 
 import android.content.Context
 import android.os.Environment
+import android.util.Log
 import com.perfomer.checkielite.common.pure.util.getFormattedDate
 import com.perfomer.checkielite.common.pure.util.runSuspendCatching
 import com.perfomer.checkielite.common.pure.util.tryLaunch
@@ -56,7 +57,10 @@ internal class BackupRepositoryImpl(
                     updateState(BackupProgress.InProgress(progress))
                 }
             }
-                .onFailure { error -> updateState(BackupProgress.Failure(error)) }
+                .onFailure { error ->
+                    Log.e(TAG, "Failed to import backup", error)
+                    updateState(BackupProgress.Failure(error))
+                }
                 .onSuccess { updateState(BackupProgress.Completed) }
 
             delay(500L)
@@ -94,6 +98,7 @@ internal class BackupRepositoryImpl(
                         }
                     }
                         .onFailure { error ->
+                            Log.e(TAG, "Failed to export backup", error)
                             deleteBackupFile()
                             updateState(BackupProgress.Failure(error))
                         }
@@ -124,6 +129,7 @@ internal class BackupRepositoryImpl(
     }
 
     private companion object {
+        private const val TAG: String = "BackupRepositoryImpl"
         private const val TARGET_FOLDER_NAME: String = "Checkie"
     }
 }

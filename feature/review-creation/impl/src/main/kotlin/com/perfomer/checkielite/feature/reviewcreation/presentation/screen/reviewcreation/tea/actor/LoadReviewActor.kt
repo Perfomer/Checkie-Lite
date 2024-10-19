@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
@@ -28,7 +29,12 @@ internal class LoadReviewActor(
     private fun handleCommand(command: ReviewCreationCommand.LoadReview): Flow<ReviewLoading> {
         return flowBy { localDataSource.getReview(command.reviewId).first() }
             .map(ReviewLoading::Succeed)
+            .onCatchLog(TAG, "Failed to load review")
             .onCatchReturn(ReviewLoading::Failed)
             .startWith(ReviewLoading.Started)
+    }
+
+    private companion object {
+        private const val TAG = "LoadReviewActor"
     }
 }

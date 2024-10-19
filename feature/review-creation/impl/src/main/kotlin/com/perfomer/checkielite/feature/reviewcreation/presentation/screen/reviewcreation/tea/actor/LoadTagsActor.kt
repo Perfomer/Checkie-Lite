@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.search.smartFilterByQuery
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
@@ -42,7 +43,12 @@ internal class LoadTagsActor(
                 }
             }
             .map(TagsLoading::Succeed)
+            .onCatchLog(TAG, "Failed to load tags")
             .onCatchReturn(TagsLoading::Failed)
             .startWith(TagsLoading.Started)
+    }
+
+    private companion object {
+        private const val TAG = "LoadTagsActor"
     }
 }

@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
@@ -28,7 +29,12 @@ internal class DeleteTagActor(
     private fun handleCommand(command: DeleteTag): Flow<TagDeletion> {
         return flowBy { localDataSource.deleteTag(command.id) }
             .map { TagDeletion.Succeed }
+            .onCatchLog(TAG, "Failed to delete tag")
             .onCatchReturn(TagDeletion::Failed)
             .startWith(TagDeletion.Started)
+    }
+
+    private companion object {
+        private const val TAG = "DeleteTagActor"
     }
 }

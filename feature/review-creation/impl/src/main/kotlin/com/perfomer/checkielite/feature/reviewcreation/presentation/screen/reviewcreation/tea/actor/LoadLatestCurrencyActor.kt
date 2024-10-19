@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
@@ -26,7 +27,12 @@ internal class LoadLatestCurrencyActor(
     private fun handleCommand(command: LoadLatestCurrency): Flow<ReviewCreationEvent> {
         return flowBy { localDataSource.getLatestCurrency() }
             .map(LatestCurrencyLoading::Succeed)
+            .onCatchLog(TAG, "Failed to load latest currency")
             .onCatchReturn(LatestCurrencyLoading::Failed)
             .startWith(LatestCurrencyLoading.Started)
+    }
+
+    private companion object {
+        private const val TAG = "LoadLatestCurrencyActor"
     }
 }

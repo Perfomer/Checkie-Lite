@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
@@ -33,7 +34,12 @@ internal class LoadReviewActor(
             ::ReviewDetails
         )
             .map(ReviewLoading::Succeed)
+            .onCatchLog(TAG, "Failed to load review")
             .onCatchReturn(ReviewLoading::Failed)
             .startWith(ReviewLoading.Started)
+    }
+
+    private companion object {
+        private const val TAG = "LoadReviewActor"
     }
 }

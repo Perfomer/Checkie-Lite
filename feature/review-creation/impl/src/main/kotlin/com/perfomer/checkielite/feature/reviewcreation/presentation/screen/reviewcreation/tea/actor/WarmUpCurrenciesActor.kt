@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.ignoreResult
 import com.perfomer.checkielite.common.tea.component.Actor
@@ -22,6 +23,11 @@ internal class WarmUpCurrenciesActor(
 
     private fun handleCommand(command: WarmUpCurrencies): Flow<ReviewCreationEvent> {
         return flowBy { localDataSource.getAllCurrenciesCodes() }
+            .onCatchLog(TAG, "Failed to warm up currencies", rethrow = false)
             .ignoreResult()
+    }
+
+    private companion object {
+        private const val TAG = "WarmUpCurrenciesActor"
     }
 }

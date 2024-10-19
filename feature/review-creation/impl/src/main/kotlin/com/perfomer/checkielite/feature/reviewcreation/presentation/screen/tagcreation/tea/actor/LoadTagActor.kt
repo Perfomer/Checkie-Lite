@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
@@ -28,7 +29,12 @@ internal class LoadTagActor(
     private fun handleCommand(command: LoadTag): Flow<TagLoading> {
         return flowBy { localDataSource.getTag(command.id) }
             .map(TagLoading::Succeed)
+            .onCatchLog(TAG, "Failed to load tag")
             .onCatchReturn(TagLoading::Failed)
             .startWith(TagLoading.Started)
+    }
+
+    private companion object {
+        private const val TAG = "LoadTagActor"
     }
 }

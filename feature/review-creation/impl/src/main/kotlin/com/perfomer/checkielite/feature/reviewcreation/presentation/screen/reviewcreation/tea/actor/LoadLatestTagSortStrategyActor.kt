@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
@@ -26,7 +27,12 @@ internal class LoadLatestTagSortStrategyActor(
     private fun handleCommand(command: LoadLatestTagSortStrategy): Flow<ReviewCreationEvent> {
         return flowBy { localDataSource.getLatestTagSortingStrategy() }
             .map(LatestTagSortStrategyLoading::Succeed)
+            .onCatchLog(TAG, "Failed to load latest tag sort strategy")
             .onCatchReturn(LatestTagSortStrategyLoading::Failed)
             .startWith(LatestTagSortStrategyLoading.Started)
+    }
+
+    private companion object {
+        private const val TAG = "LoadLatestTagSortStrategyActor"
     }
 }

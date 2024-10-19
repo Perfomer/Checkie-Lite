@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationCommand
@@ -21,6 +22,7 @@ internal class ValidateTagNameActor(
     override fun act(commands: Flow<TagCreationCommand>): Flow<TagCreationEvent> {
         return commands.filterIsInstance<ValidateTagName>()
             .mapLatest(::handleCommand)
+            .onCatchLog(TAG, "Failed to validate tag", rethrow = false)
     }
 
     private suspend fun handleCommand(command: ValidateTagName): TagCreationEvent {
@@ -41,6 +43,7 @@ internal class ValidateTagNameActor(
     }
 
     private companion object {
+        private const val TAG = "ValidateTagNameActor"
         private const val MAX_TAG_LENGTH = 20
     }
 }

@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
@@ -27,7 +28,12 @@ internal class LoadTagsActor(
     private fun handleCommand(command: LoadTags): Flow<MainEvent> {
         return localDataSource.getTags()
             .map(TagsLoading::Succeed)
+            .onCatchLog(TAG, "Failed to load tags")
             .onCatchReturn(TagsLoading::Failed)
             .startWith(TagsLoading.Started)
+    }
+
+    private companion object {
+        private const val TAG = "LoadTagsActor"
     }
 }

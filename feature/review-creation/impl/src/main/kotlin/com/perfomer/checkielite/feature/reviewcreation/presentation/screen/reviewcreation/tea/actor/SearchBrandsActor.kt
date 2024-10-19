@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.search.smartFilterByQuery
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.tea.component.Actor
@@ -9,7 +10,6 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.BrandsSearchComplete
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -31,10 +31,11 @@ internal class SearchBrandsActor(
                 .take(MAX_RESULTS)
         }
             .map(::BrandsSearchComplete)
-            .catch { error -> error.printStackTrace() }
+            .onCatchLog(TAG, "Failed to search brands", rethrow = false)
     }
 
     private companion object {
+        private const val TAG = "SearchBrandsActor"
         private const val MAX_RESULTS = 3
     }
 }

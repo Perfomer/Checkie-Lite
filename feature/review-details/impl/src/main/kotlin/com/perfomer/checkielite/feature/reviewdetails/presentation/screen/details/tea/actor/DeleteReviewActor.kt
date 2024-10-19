@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
@@ -28,7 +29,12 @@ internal class DeleteReviewActor(
     private fun handleCommand(command: DeleteReview): Flow<ReviewDeletion> {
         return flowBy { repository.deleteReview(command.reviewId) }
             .map { ReviewDeletion.Succeed }
+            .onCatchLog(TAG, "Failed to delete review")
             .onCatchReturn { ReviewDeletion.Failed }
             .startWith(ReviewDeletion.Started)
+    }
+
+    private companion object {
+        private const val TAG = "DeleteReviewActor"
     }
 }

@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.actor
 
 import android.icu.util.Currency
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
@@ -30,7 +31,12 @@ internal class LoadCurrenciesActor(
         return flowBy { localDataSource.getAllCurrenciesCodes() }
             .map { currencies -> currencies.map(Currency::getInstance) }
             .map(CurrenciesLoading::Succeed)
+            .onCatchLog(TAG, "Failed to load currencies")
             .onCatchReturn(CurrenciesLoading::Failed)
             .startWith(CurrenciesLoading.Started)
+    }
+
+    private companion object {
+        private const val TAG = "LoadCurrenciesActor"
     }
 }

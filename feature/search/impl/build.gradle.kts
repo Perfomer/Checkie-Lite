@@ -15,6 +15,7 @@ dependencies {
 	api(project(":feature:search:api"))
 	implementation(project(":feature:review-details:api"))
 
+	implementation(project(":common:android"))
 	implementation(project(":common:navigation:voyager"))
 	implementation(project(":common:pure"))
 	implementation(project(":common:tea:compose"))

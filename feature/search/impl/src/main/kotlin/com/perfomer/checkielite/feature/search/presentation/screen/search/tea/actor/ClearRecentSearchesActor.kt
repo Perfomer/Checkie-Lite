@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor
 
+import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.ignoreResult
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
@@ -19,10 +20,15 @@ internal class ClearRecentSearchesActor(
     override fun act(commands: Flow<SearchCommand>): Flow<SearchEvent> {
         return commands.filterIsInstance<ClearRecentSearches>()
             .mapLatest(::handleCommand)
+            .onCatchLog(TAG, "Failed to clear recent searches")
             .ignoreResult()
     }
 
     private suspend fun handleCommand(command: ClearRecentSearches) {
         localDataSource.clearRecentSearches()
+    }
+
+    private companion object {
+        private const val TAG = "ClearRecentSearchesActor"
     }
 }

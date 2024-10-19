@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea
 
-import android.util.Log
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.core.entity.backup.BackupMode
 import com.perfomer.checkielite.core.entity.backup.BackupProgress
@@ -80,7 +79,6 @@ internal class BackupReducer : DslReducer<BackupCommand, BackupEffect, BackupEve
                     }
                 }
 
-                Log.e("BackupReducer", "Failed to backup", progress.error)
                 commands(Await(DELAY_AFTER_FINISH_MS))
                 effects(ShowToast.Error(reason))
             }

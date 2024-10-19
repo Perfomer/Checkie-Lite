@@ -55,8 +55,11 @@ internal class BackupReducer : DslReducer<BackupCommand, BackupEffect, BackupEve
             }
             is BackupProgress.Completed -> {
                 state { copy(progressValue = 1F) }
-                effects(ShowToast.Success)
                 commands(Await(DELAY_AFTER_FINISH_MS))
+
+                if (state.mode == BackupMode.EXPORT) {
+                    effects(ShowToast.SuccessExport)
+                }
             }
             is BackupProgress.Cancelled -> {
                 state { copy(isCancelled = true) }
@@ -78,7 +81,6 @@ internal class BackupReducer : DslReducer<BackupCommand, BackupEffect, BackupEve
                 }
 
                 Log.e("BackupReducer", "Failed to backup", progress.error)
-                state { copy(progressValue = 0F) }
                 commands(Await(DELAY_AFTER_FINISH_MS))
                 effects(ShowToast.Error(reason))
             }

@@ -9,6 +9,7 @@
     <string name="reviewdetails_dialog_confirmdelete_message">Вы действительно хотите удалить отзыв?</string>
     <string name="reviewdetails_dialog_confirmdelete_confirm">Удалить</string>
     <string name="reviewdetails_toast_syncing">Попробуйте позже. Сейчас идёт синхронизация.</string>
+    <string name="reviewdetails_toast_deleted">Отзыв удалён</string>
     <string name="reviewdetails_recommendations">Рекомендации</string>
     <string name="reviewdetails_tags">Теги</string>
     <string name="reviewdetails_tags_add">Добавить теги</string>

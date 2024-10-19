@@ -10,7 +10,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand.LoadReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect.ShowConfirmDeleteDialog
-import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect.ShowSyncingToast
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect.ShowToast
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent.ReviewDeletion
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent.ReviewLoading
@@ -71,14 +71,21 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
     }
 
     private fun reduceReviewDeletion(event: ReviewDeletion) = when (event) {
-        is ReviewDeletion.Started -> Unit
-        is ReviewDeletion.Succeed -> commands(Exit)
-        is ReviewDeletion.Failed -> state { copy(review = Lce.Error()) }
+        is ReviewDeletion.Started -> {
+            Unit
+        }
+        is ReviewDeletion.Succeed -> {
+            effects(ShowToast.Deleted)
+            commands(Exit)
+        }
+        is ReviewDeletion.Failed -> {
+            state { copy(review = Lce.Error()) }
+        }
     }
 
     private fun reduceOnEditClick(startAction: ReviewCreationStartAction) {
         if (state.review.requireContent().review.isSyncing) {
-            effects(ShowSyncingToast)
+            effects(ShowToast.Syncing)
         } else {
             commands(OpenReviewEdit(reviewId = state.reviewId, startAction = startAction))
         }

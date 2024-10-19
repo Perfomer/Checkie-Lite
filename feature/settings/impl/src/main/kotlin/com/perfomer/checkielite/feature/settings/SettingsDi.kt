@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.settings
 
 import android.content.Context
-import com.perfomer.checkielite.common.android.AppRestarter
+import com.perfomer.checkielite.common.android.apprestart.AppRestarter
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.data.repository.BackupRepository
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter

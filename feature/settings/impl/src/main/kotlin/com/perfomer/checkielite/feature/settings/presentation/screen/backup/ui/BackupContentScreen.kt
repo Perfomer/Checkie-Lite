@@ -35,7 +35,7 @@ internal class BackupContentScreen(
 
         EffectHandler { effect ->
             when (effect) {
-                is ShowToast.Success -> {
+                is ShowToast.SuccessExport -> {
                     toastHostState.showToast(exportSucceedToast)
                 }
                 is ShowToast.Cancelled -> {

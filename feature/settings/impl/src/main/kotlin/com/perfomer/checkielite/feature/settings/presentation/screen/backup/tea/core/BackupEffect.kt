@@ -6,7 +6,7 @@ internal sealed interface BackupEffect {
 
         data object Cancelled : ShowToast
 
-        data object Success : ShowToast
+        data object SuccessExport : ShowToast
 
         class Error(val reason: Reason) : ShowToast {
             enum class Reason {

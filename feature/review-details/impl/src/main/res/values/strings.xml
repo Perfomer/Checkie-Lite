@@ -9,6 +9,7 @@
     <string name="reviewdetails_dialog_confirmdelete_message">Are you sure you want to delete the review?</string>
     <string name="reviewdetails_dialog_confirmdelete_confirm">Delete</string>
     <string name="reviewdetails_toast_syncing">Try again later. Synchronization is in progress now.</string>
+    <string name="reviewdetails_toast_deleted">Review deleted</string>
     <string name="reviewdetails_recommendations">Recommendations</string>
     <string name="reviewdetails_tags">Tags</string>
     <string name="reviewdetails_tags_add">Add tags</string>

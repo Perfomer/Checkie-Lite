@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,10 +20,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.cui.widget.text.WrapTextContent
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
@@ -71,12 +70,12 @@ fun CuiToast(
             Spacer(modifier = Modifier.width(8.dp))
         }
 
-        Text(
+        WrapTextContent(
             text = data.message,
             color = LocalCuiPalette.current.TextPrimary,
             fontSize = 14.sp,
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Medium
+            lineHeight = 18.sp,
+            fontWeight = FontWeight.Medium,
         )
     }
 }
@@ -86,7 +85,7 @@ fun CuiToast(
 private fun CuiToastPreview() = CheckieLiteTheme {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.padding(32.dp)
+        modifier = Modifier.padding(vertical = 32.dp)
     ) {
         CuiToast(
             data = CuiToastData(
@@ -113,9 +112,9 @@ private fun CuiToastPreview() = CheckieLiteTheme {
         CuiToast(
             data = CuiToastData(
                 message = "Failed to export backup: Not enough space",
-                icon = painterResource(CommonDrawable.ic_error),
-                iconTint = LocalCuiPalette.current.IconNegative,
-                backgroundColor = LocalCuiPalette.current.BackgroundNegativeSecondary,
+                icon = painterResource(CommonDrawable.ic_warning),
+                iconTint = LocalCuiPalette.current.IconWarning,
+                backgroundColor = LocalCuiPalette.current.BackgroundWarningSecondary,
                 durationMs = 1000L,
             ),
             onClick = {},

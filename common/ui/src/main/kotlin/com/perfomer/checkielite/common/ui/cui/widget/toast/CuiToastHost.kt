@@ -82,6 +82,21 @@ fun rememberSuccessToast(
 }
 
 @Composable
+fun rememberWarningToast(
+    @StringRes message: Int,
+    durationMs: Long = DEFAULT_DURATION_MS,
+): CuiToastData {
+    return rememberToast(
+        message = message,
+        icon = CommonDrawable.ic_warning,
+        iconTint = LocalCuiPalette.current.IconWarning,
+        backgroundColor = LocalCuiPalette.current.BackgroundWarningSecondary,
+        durationMs = durationMs,
+    )
+}
+
+
+@Composable
 fun rememberErrorToast(
     @StringRes message: Int,
     durationMs: Long = DEFAULT_DURATION_MS,

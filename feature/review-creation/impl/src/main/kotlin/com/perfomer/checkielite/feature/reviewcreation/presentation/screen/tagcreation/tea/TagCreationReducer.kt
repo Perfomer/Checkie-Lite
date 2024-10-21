@@ -88,9 +88,7 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
         is EmojisLoading.Started -> Unit
         is EmojisLoading.Succeed -> state {
             copy(
-                emojis = event.emojis.map { (category, emojis) ->
-                    category to emojis.toPersistentList()
-                }.toPersistentList()
+                emojis = event.emojis.toPersistentList()
             )
         }
         is EmojisLoading.Failed -> commands(Exit)

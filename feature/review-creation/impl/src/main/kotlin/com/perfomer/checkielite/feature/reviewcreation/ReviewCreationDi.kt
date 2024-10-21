@@ -34,6 +34,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.SearchBrandsActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.UpdateReviewActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.WarmUpCurrenciesActor
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.WarmUpEmojisActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.ReviewCreationContentScreen
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewCreationUiStateMapper
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.TagCreationReducer
@@ -82,6 +83,7 @@ internal fun createReviewCreationStore(
     context: Context,
     params: ReviewCreationParams,
     localDataSource: CheckieLocalDataSource,
+    emojiRepository: CheckieEmojiRepository,
     router: Router,
     externalRouter: ExternalRouter,
     galleryScreenProvider: GalleryScreenProvider,
@@ -108,6 +110,7 @@ internal fun createReviewCreationStore(
             LoadTagsActor(localDataSource),
             SearchBrandsActor(localDataSource),
             WarmUpCurrenciesActor(localDataSource),
+            WarmUpEmojisActor(emojiRepository),
             LoadLatestCurrencyActor(localDataSource),
             LoadLatestTagSortStrategyActor(localDataSource),
             RememberTagSortStrategyActor(localDataSource),

@@ -1,6 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.domain.entity
 
-internal data class CheckieEmojiCategory(
+internal data class CheckieEmojiGroup(
     val name: String,
-    val groups: List<CheckieEmojiGroup>,
+    val emojis: List<CheckieEmoji>,
 )

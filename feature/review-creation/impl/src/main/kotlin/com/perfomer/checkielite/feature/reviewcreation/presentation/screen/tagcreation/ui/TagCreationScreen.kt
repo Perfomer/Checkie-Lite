@@ -59,8 +59,7 @@ import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.keyboardOpenedAsState
 import com.perfomer.checkielite.common.ui.util.plus
 import com.perfomer.checkielite.feature.reviewcreation.R
-import com.perfomer.checkielite.feature.reviewcreation.domain.entity.CheckieEmoji
-import com.perfomer.checkielite.feature.reviewcreation.domain.entity.CheckieEmojiCategory
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEmojiCategory
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui.state.TagCreationUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui.widget.ConfirmDeleteDialog
 import kotlinx.collections.immutable.ImmutableList
@@ -78,7 +77,7 @@ internal fun TagCreationScreen(
 
     onTagValueInput: (value: String) -> Unit = {},
     onSelectedEmojiClick: () -> Unit = {},
-    onEmojiSelect: (item: CheckieEmoji) -> Unit = {},
+    onEmojiSelect: (item: String) -> Unit = {},
     onDoneClick: () -> Unit = {},
     onDeleteTagClick: () -> Unit = {},
 ) {
@@ -200,7 +199,7 @@ private fun Header(
             )
         }
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(16.dp))
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -248,8 +247,8 @@ private fun Header(
 @Composable
 private fun EmojiPicker(
     lazyGridState: LazyGridState,
-    emojis: ImmutableList<CheckieEmojiCategory>,
-    onEmojiSelect: (item: CheckieEmoji) -> Unit,
+    emojis: ImmutableList<TagCreationEmojiCategory>,
+    onEmojiSelect: (item: String) -> Unit,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     modifier: Modifier = Modifier
 ) {
@@ -260,8 +259,8 @@ private fun EmojiPicker(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
     ) {
-        emojis.forEachIndexed { index, emojis ->
-            item(key = emojis.name, contentType = "category", span = { GridItemSpan(maxLineSpan) }) {
+        emojis.forEachIndexed { index, category ->
+            item(key = category.name, contentType = "category", span = { GridItemSpan(maxLineSpan) }) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -272,31 +271,32 @@ private fun EmojiPicker(
                     }
 
                     Text(
-                        text = emojis.name,
+                        text = category.name,
                         fontSize = 14.sp,
                         color = LocalCuiPalette.current.TextSecondary,
                     )
                 }
             }
 
-            emojis.groups.forEach {
-                items(items = it.emojis) { item ->
-                    EmojiItem(onEmojiSelect, item)
-                }
+            items(items = category.emojis, contentType = { "emoji" }) { item ->
+                EmojiItem(item, onEmojiSelect)
             }
-
         }
+
     }
 }
 
 @Composable
-private fun EmojiItem(onEmojiSelect: (item: CheckieEmoji) -> Unit, item: CheckieEmoji) {
+private fun EmojiItem(
+    item: String,
+    onEmojiSelect: (item: String) -> Unit,
+) {
     IconButton(
         onClick = { onEmojiSelect(item) },
         modifier = Modifier.size(56.dp),
     ) {
         Text(
-            text = item.char,
+            text = item,
             fontSize = 24.sp,
         )
     }

@@ -16,6 +16,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcr
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowErrorToast
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowTagDeleteConfirmationDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.VibrateError
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEmojiCategory
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEvent.EmojisLoading
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEvent.Initialize
@@ -68,7 +69,7 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
             if (state.isBusy) Unit // do nothing
             else commands(Exit)
         }
-        is OnEmojiSelect -> state { copy(selectedEmoji = event.emoji.char, hasEmoji = true) }
+        is OnEmojiSelect -> state { copy(selectedEmoji = event.emoji, hasEmoji = true) }
         is OnSelectedEmojiClick -> state { copy(hasEmoji = !hasEmoji) }
         is OnTagValueInput -> {
             state { copy(tagValue = event.text) }
@@ -88,7 +89,16 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
         is EmojisLoading.Started -> Unit
         is EmojisLoading.Succeed -> state {
             copy(
-                emojis = event.emojis.toPersistentList()
+                emojis = event.emojis
+                    .map { category ->
+                        TagCreationEmojiCategory(
+                            name = category.name,
+                            emojis = category.groups
+                                .flatMap { it.emojis }
+                                .map { it.char },
+                        )
+                    }
+                    .toPersistentList()
             )
         }
         is EmojisLoading.Failed -> commands(Exit)

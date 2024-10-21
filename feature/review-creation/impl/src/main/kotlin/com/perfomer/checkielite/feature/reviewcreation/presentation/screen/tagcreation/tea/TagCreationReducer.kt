@@ -68,7 +68,7 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
             if (state.isBusy) Unit // do nothing
             else commands(Exit)
         }
-        is OnEmojiSelect -> state { copy(selectedEmoji = event.emoji, hasEmoji = true) }
+        is OnEmojiSelect -> state { copy(selectedEmoji = event.emoji.char, hasEmoji = true) }
         is OnSelectedEmojiClick -> state { copy(hasEmoji = !hasEmoji) }
         is OnTagValueInput -> {
             state { copy(tagValue = event.text) }

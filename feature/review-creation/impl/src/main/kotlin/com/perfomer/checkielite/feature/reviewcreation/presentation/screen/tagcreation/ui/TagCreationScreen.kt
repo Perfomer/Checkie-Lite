@@ -128,7 +128,7 @@ internal fun TagCreationScreen(
                 onEmojiSelect = onEmojiSelect,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
+                    .padding(horizontal = 16.dp)
             )
 
             FloatingButtonsContainer(
@@ -368,27 +368,36 @@ private fun EmojiPicker(
     ) {
         emojis.forEachIndexed { index, category ->
             item(key = category.name, contentType = "category", span = { GridItemSpan(maxLineSpan) }) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp)
-                ) {
-                    if (index != 0) {
-                        Spacer(Modifier.height(20.dp))
-                    }
-
-                    Text(
-                        text = category.name,
-                        fontSize = 14.sp,
-                        color = LocalCuiPalette.current.TextSecondary,
-                    )
-                }
+                CategoryHeader(isFirst = index == 0, name = category.name)
             }
 
             items(items = category.emojis, contentType = { "emoji" }) { item ->
                 EmojiItem(item, onEmojiSelect)
             }
         }
+    }
+}
+
+@Composable
+private fun CategoryHeader(
+    isFirst: Boolean,
+    name: String,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 8.dp)
+            .padding(horizontal = 8.dp)
+    ) {
+        if (!isFirst) {
+            Spacer(Modifier.height(20.dp))
+        }
+
+        Text(
+            text = name,
+            fontSize = 14.sp,
+            color = LocalCuiPalette.current.TextSecondary,
+        )
     }
 }
 

@@ -18,6 +18,7 @@ fun CuiSecondaryButton(
     text: String,
     modifier: Modifier = Modifier,
     textColor: Color = LocalCuiPalette.current.TextPrimary,
+    backgroundColor: Color = Color.Transparent,
     enabled: Boolean = true,
     loading: Boolean = false,
     onClick: () -> Unit,
@@ -29,8 +30,8 @@ fun CuiSecondaryButton(
         textColor = textColor,
         textColorDisabled = LocalCuiPalette.current.TextSecondary,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color.Transparent,
-            disabledContainerColor = Color.Transparent,
+            containerColor = backgroundColor,
+            disabledContainerColor = backgroundColor,
             contentColor = textColor,
             disabledContentColor = LocalCuiPalette.current.TextSecondary,
         ),

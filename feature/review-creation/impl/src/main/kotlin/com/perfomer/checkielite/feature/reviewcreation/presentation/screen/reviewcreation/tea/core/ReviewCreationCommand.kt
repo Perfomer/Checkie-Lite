@@ -45,6 +45,8 @@ internal sealed interface ReviewCreationCommand {
 
     data object WarmUpCurrencies : ReviewCreationCommand
 
+    data object WarmUpEmojis : ReviewCreationCommand
+
     data object LoadLatestCurrency : ReviewCreationCommand
 
     data object LoadLatestTagSortStrategy : ReviewCreationCommand

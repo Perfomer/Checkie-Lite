@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.domain.entity
 
 internal data class CheckieEmoji(
-    val emoji: String,
+    val id: String,
+    val char: String,
     val name: String,
-    val aliases: List<String>,
 )

@@ -38,7 +38,7 @@ internal class TagCreationContentScreen(
 
     @Composable
     override fun Screen() = TeaComposable(store<TagCreationStore>(params)) { state ->
-        val focusRequester = remember { FocusRequester() }
+        val tagValueFocusRequester = remember { FocusRequester() }
         val vibrator = rememberVibrator()
         val tagValueShakeController = rememberShakeController()
 
@@ -55,7 +55,7 @@ internal class TagCreationContentScreen(
                 is ShowErrorToast.DeletionFailed -> toastHostState.showToast(deleteErrorToast)
                 is ShowErrorToast.SavingFailed -> toastHostState.showToast(saveErrorToast)
                 is ShowTagDeleteConfirmationDialog -> isConfirmDeleteDialogShown = true
-                is FocusTagValueField -> focusRequester.requestFocus()
+                is FocusTagValueField -> tagValueFocusRequester.requestFocus()
                 is CollapseTagValueField -> tagValueShakeController.shake(ShakeConfig.inputError)
                 is VibrateError -> vibrator.vibrateCompat(VibratorPattern.ERROR)
             }
@@ -64,7 +64,7 @@ internal class TagCreationContentScreen(
         TagCreationScreen(
             state = state,
 
-            focusRequester = focusRequester,
+            tagValueFocusRequester = tagValueFocusRequester,
             tagValueShakeController = tagValueShakeController,
 
             isConfirmDeleteDialogShown = isConfirmDeleteDialogShown,

@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core
 
 import com.perfomer.checkielite.core.entity.CheckieTag
+import com.perfomer.checkielite.feature.reviewcreation.domain.entity.CheckieEmoji
 import com.perfomer.checkielite.feature.reviewcreation.domain.entity.CheckieEmojiCategory
 
 internal sealed interface TagCreationEvent {
@@ -45,7 +46,7 @@ internal sealed interface TagCreationUiEvent : TagCreationEvent {
 
     class OnTagValueInput(val text: String) : TagCreationUiEvent
 
-    class OnEmojiSelect(val emoji: String) : TagCreationUiEvent
+    class OnEmojiSelect(val emoji: CheckieEmoji) : TagCreationUiEvent
 
     data object OnDoneClick : TagCreationUiEvent
 

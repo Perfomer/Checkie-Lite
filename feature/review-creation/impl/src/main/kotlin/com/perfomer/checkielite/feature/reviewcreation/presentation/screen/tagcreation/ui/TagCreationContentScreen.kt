@@ -29,6 +29,8 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcr
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnDeleteConfirmClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnDeleteTagClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnDoneClick
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnEmojiSelect
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnSelectedEmojiClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnTagValueInput
 import com.perfomer.checkielite.navigation.voyager.BaseScreen
 
@@ -72,8 +74,10 @@ internal class TagCreationContentScreen(
             onDeleteDialogConfirm = acceptable(OnDeleteConfirmClick),
 
             onTagValueInput = acceptable(::OnTagValueInput),
+            onSelectedEmojiClick = acceptable(OnSelectedEmojiClick),
+            onEmojiSelect = acceptable(::OnEmojiSelect),
             onDoneClick = acceptable(OnDoneClick),
-            onDeleteTagClick = acceptable(OnDeleteTagClick),
+            onDeleteTagClick = acceptable(OnDeleteTagClick)
         )
     }
 }

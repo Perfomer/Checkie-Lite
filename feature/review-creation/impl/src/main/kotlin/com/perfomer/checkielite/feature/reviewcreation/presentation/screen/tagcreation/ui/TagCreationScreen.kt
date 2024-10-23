@@ -37,6 +37,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -48,6 +49,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -97,12 +99,19 @@ internal fun TagCreationScreen(
     onDoneClick: () -> Unit = {},
     onDeleteTagClick: () -> Unit = {},
 ) {
+    val focusManager = LocalFocusManager.current
     val scrollState = rememberLazyGridState()
 
     val isKeyboardOpened by keyboardOpenedAsState()
     val emptyInsets = remember { PaddingValues() }
     val navigationBarsPadding = WindowInsets.navigationBars.asPaddingValues()
     val actualNavigationBarsPadding = if (isKeyboardOpened) emptyInsets else navigationBarsPadding
+
+    LaunchedEffect(scrollState.isScrollInProgress) {
+        if (scrollState.isScrollInProgress) {
+            focusManager.clearFocus()
+        }
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

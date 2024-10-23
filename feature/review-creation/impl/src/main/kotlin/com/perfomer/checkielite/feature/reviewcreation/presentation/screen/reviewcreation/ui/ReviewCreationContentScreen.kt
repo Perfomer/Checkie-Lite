@@ -27,6 +27,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.CollapseProductNameField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.FocusCommentField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.FocusPriceField
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.FocusProductNameField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowConfirmExitDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowErrorDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.VibrateError
@@ -50,6 +51,7 @@ internal class ReviewCreationContentScreen(
         val focusManager = LocalFocusManager.current
         val priceFocusRequester = remember { FocusRequester() }
         val commentFocusRequester = remember { FocusRequester() }
+        val productNameFocusRequester = remember { FocusRequester() }
         val productNameShakeController = rememberShakeController()
         val vibrator = rememberVibrator()
 
@@ -65,6 +67,7 @@ internal class ReviewCreationContentScreen(
                 is CloseKeyboard -> focusManager.clearFocus()
                 is FocusCommentField -> commentFocusRequester.requestFocus()
                 is FocusPriceField -> priceFocusRequester.requestFocus()
+                is FocusProductNameField -> productNameFocusRequester.requestFocus()
                 is CollapseProductNameField -> productNameShakeController.shake(ShakeConfig.inputError)
                 is VibrateError -> vibrator.vibrateCompat(VibratorPattern.ERROR)
             }
@@ -114,6 +117,7 @@ internal class ReviewCreationContentScreen(
                     state = state.productInfoState,
                     scrollState = productInfoScrollState,
                     priceFocusRequester = priceFocusRequester,
+                    productNameFocusRequester = productNameFocusRequester,
                     productNameShakeController = productNameShakeController,
                     onProductNameTextInput = acceptable(ProductInfo::OnProductNameTextInput),
                     onBrandTextInput = acceptable(ProductInfo::OnBrandTextInput),

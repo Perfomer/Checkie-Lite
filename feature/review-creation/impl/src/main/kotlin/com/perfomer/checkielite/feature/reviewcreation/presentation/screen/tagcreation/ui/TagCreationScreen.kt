@@ -271,7 +271,7 @@ private fun TagContent(
         IconButton(
             onClick = onSelectedEmojiClick,
             modifier = Modifier
-                .padding(top = 10.dp)
+                .padding(top = 8.dp)
                 .size(56.dp)
                 .clip(CircleShape)
                 .border(1.dp, LocalCuiPalette.current.OutlinePrimary, CircleShape)

@@ -150,7 +150,7 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
         }
 
         if (state.tagInvalidReason != null) {
-            effects(CollapseTagValueField, VibrateError)
+            effects(CollapseTagValueField, VibrateError, FocusTagValueField)
             return
         }
 

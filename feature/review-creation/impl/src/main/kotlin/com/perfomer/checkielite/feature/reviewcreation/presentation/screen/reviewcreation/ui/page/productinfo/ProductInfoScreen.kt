@@ -88,6 +88,7 @@ internal fun ProductInfoScreen(
     scrollState: ScrollState = rememberScrollState(),
 
     priceFocusRequester: FocusRequester = remember { FocusRequester() },
+    productNameFocusRequester: FocusRequester = remember { FocusRequester() },
     productNameShakeController: ShakeController = rememberShakeController(),
 
     onProductNameTextInput: (String) -> Unit = {},
@@ -130,7 +131,9 @@ internal fun ProductInfoScreen(
                 capitalization = KeyboardCapitalization.Sentences,
             ),
             onValueChange = onProductNameTextInput,
-            modifier = Modifier.shake(productNameShakeController)
+            modifier = Modifier
+                .focusRequester(productNameFocusRequester)
+                .shake(productNameShakeController)
         )
 
         CuiSuggestionsBox(

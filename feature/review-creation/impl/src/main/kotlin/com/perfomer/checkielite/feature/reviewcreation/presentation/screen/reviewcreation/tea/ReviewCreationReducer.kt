@@ -28,6 +28,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.CollapseProductNameField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.FocusCommentField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.FocusPriceField
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.FocusProductNameField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowConfirmExitDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.ShowErrorDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.VibrateError
@@ -116,7 +117,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                     state { copy(currentPage = next) }
                     effects(CloseKeyboard)
                 } else {
-                    effects(CollapseProductNameField, VibrateError)
+                    effects(CollapseProductNameField, VibrateError, FocusProductNameField)
                 }
                 state { copy(isProductNameValid = isProductNameValid) }
             } else {

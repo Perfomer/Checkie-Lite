@@ -304,13 +304,15 @@ private fun EmojiCategoriesCarousel(
             result += counter
         }
 
-        result.toPersistentList()
+        result.dropLast(1).toPersistentList()
     }
 
     val currentIndex by remember {
         derivedStateOf {
-            categoriesIndexes.indexOfLast {
-                lazyGridState.firstVisibleItemIndex >= it
+            when {
+                !lazyGridState.canScrollBackward -> 0
+                !lazyGridState.canScrollForward -> categoriesIndexes.lastIndex
+                else -> categoriesIndexes.indexOfLast { lazyGridState.firstVisibleItemIndex >= it }
             }
         }
     }

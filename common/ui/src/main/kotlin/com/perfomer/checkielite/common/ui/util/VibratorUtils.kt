@@ -13,7 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 
 object VibratorPattern {
-    val ERROR = longArrayOf(50, 100, 50, 100, 50, 100)
+    val ERROR = longArrayOf(50, 150, 50, 75)
 }
 
 @Composable

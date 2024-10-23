@@ -1,5 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -40,10 +42,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -342,12 +344,20 @@ private fun CategoryIcon(
     isSelected: Boolean,
     onClick: () -> Unit,
 ) {
+    val targetAlpha = if (isSelected) 1F else 0.3F
+
+    val animatedAlpha by animateFloatAsState(
+        targetValue = targetAlpha,
+        animationSpec = spring(),
+        label = "animatedCategoryIconAlpha",
+    )
+
     CuiIconButton(
         painter = icon,
         onClick = onClick,
         modifier = Modifier
             .size(32.dp)
-            .alpha(if (isSelected) 1F else 0.3F)
+            .graphicsLayer { alpha = animatedAlpha }
     )
 }
 

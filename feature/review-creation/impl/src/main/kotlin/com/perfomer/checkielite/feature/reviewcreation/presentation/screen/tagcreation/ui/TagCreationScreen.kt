@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
@@ -233,17 +234,20 @@ private fun TagContent(
     selectedEmoji: String?,
     onSelectedEmojiClick: () -> Unit,
 ) {
+    val bottomPadding = if (tagValueError == null) 6.dp else 12.dp
+
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
             .fillMaxWidth()
+            .animateContentSize()
             .padding(horizontal = 24.dp)
+            .padding(bottom = bottomPadding)
     ) {
         CuiOutlinedField(
             text = tagValue,
             title = stringResource(R.string.tagcreation_tag_name),
             errorText = tagValueError,
-            reservePlaceForError = true,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
                 capitalization = KeyboardCapitalization.Sentences,

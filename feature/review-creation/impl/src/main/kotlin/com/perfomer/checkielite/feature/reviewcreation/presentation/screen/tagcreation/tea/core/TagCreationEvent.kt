@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core
 
 import com.perfomer.checkielite.core.entity.CheckieTag
-import com.perfomer.checkielite.feature.reviewcreation.domain.entity.CheckieEmojiCategory
+import com.perfomer.checkielite.feature.reviewcreation.domain.entity.EmojiCategory
 
 internal sealed interface TagCreationEvent {
 
@@ -9,7 +9,7 @@ internal sealed interface TagCreationEvent {
 
     sealed interface EmojisLoading : TagCreationEvent {
         data object Started : EmojisLoading
-        class Succeed(val emojis: List<CheckieEmojiCategory>) : EmojisLoading
+        class Succeed(val emojis: List<EmojiCategory>) : EmojisLoading
         class Failed(val throwable: Throwable) : EmojisLoading
     }
 

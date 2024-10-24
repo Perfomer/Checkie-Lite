@@ -38,6 +38,8 @@ fun Modifier.shake(shakeController: ShakeController) = composed {
             }
 
             shake.animateTo(0F)
+
+            shakeController.clear()
         }
 
         this
@@ -65,6 +67,10 @@ class ShakeController {
 
     fun shake(shakeConfig: ShakeConfig) {
         this.shakeConfig = shakeConfig
+    }
+
+    fun clear() {
+        this.shakeConfig = null
     }
 }
 

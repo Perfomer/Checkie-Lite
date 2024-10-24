@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.res.AssetManager
 import com.perfomer.checkielite.feature.reviewcreation.data.entity.EmojiCategoryApi
 import com.perfomer.checkielite.feature.reviewcreation.data.mapper.toDomain
-import com.perfomer.checkielite.feature.reviewcreation.domain.entity.CheckieEmojiCategory
+import com.perfomer.checkielite.feature.reviewcreation.domain.entity.EmojiCategory
 import com.perfomer.checkielite.feature.reviewcreation.domain.repository.CheckieEmojiRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
@@ -16,7 +16,7 @@ internal class CheckieEmojiRepositoryImpl(
     private val context: Context,
 ) : CheckieEmojiRepository {
 
-    private var emojis: List<CheckieEmojiCategory>? = null
+    private var emojis: List<EmojiCategory>? = null
     private val mutex: Mutex = Mutex()
 
     override suspend fun warmUp() = mutex.withLock {
@@ -29,7 +29,7 @@ internal class CheckieEmojiRepositoryImpl(
         }
     }
 
-    override suspend fun getCategorizedEmojis(): List<CheckieEmojiCategory> {
+    override suspend fun getCategorizedEmojis(): List<EmojiCategory> {
         if (emojis == null) warmUp()
         return emojis!!
     }

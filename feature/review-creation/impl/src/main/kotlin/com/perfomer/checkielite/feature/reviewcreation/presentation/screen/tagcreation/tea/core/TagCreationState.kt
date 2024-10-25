@@ -2,6 +2,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagc
 
 import androidx.compose.runtime.Immutable
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
+import com.perfomer.checkielite.feature.reviewcreation.domain.entity.EmojiCategoryType
 import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagCreationMode
 import kotlinx.collections.immutable.PersistentList
 
@@ -28,6 +29,6 @@ internal enum class TagInvalidReason {
 
 @Immutable
 internal data class TagCreationEmojiCategory(
-    val name: String,
+    val type: EmojiCategoryType,
     val emojis: List<String>,
 )

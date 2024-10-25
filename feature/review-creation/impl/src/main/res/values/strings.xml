@@ -42,4 +42,14 @@
     <string name="tagcreation_dialog_confirmdelete_confirm">Delete</string>
     <string name="tagcreation_error_save">Failed to save tag</string>
     <string name="tagcreation_error_delete">Failed to delete tag</string>
+
+    <string name="tagcreation_emoji_category_activities">Activities</string>
+    <string name="tagcreation_emoji_category_animals">Animals &amp; Nature</string>
+    <string name="tagcreation_emoji_category_body">People &amp; Body</string>
+    <string name="tagcreation_emoji_category_flags">Flags</string>
+    <string name="tagcreation_emoji_category_food">Food &amp; Drink</string>
+    <string name="tagcreation_emoji_category_objects">Objects</string>
+    <string name="tagcreation_emoji_category_smiles">Smileys &amp; Emotion</string>
+    <string name="tagcreation_emoji_category_symbols">Symbols</string>
+    <string name="tagcreation_emoji_category_travel">Travel &amp; Places</string>
 </resources>

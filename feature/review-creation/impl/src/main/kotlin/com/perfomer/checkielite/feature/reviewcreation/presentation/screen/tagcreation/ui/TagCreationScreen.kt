@@ -78,6 +78,8 @@ import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEmojiCategory
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui.state.TagCreationUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui.widget.ConfirmDeleteDialog
+import com.perfomer.checkielite.feature.reviewcreation.presentation.util.iconResource
+import com.perfomer.checkielite.feature.reviewcreation.presentation.util.nameResource
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
@@ -329,19 +331,7 @@ private fun EmojiCategoriesCarousel(
     ) {
         itemsIndexed(items = emojis) { i, category ->
             CategoryIcon(
-                icon = painterResource(
-                    when (i) {
-                        0 -> R.drawable.ic_emoji_category_smiles
-                        1 -> R.drawable.ic_emoji_category_body
-                        2 -> R.drawable.ic_emoji_category_animals
-                        3 -> R.drawable.ic_emoji_category_food
-                        4 -> R.drawable.ic_emoji_category_travel
-                        5 -> R.drawable.ic_emoji_category_activities
-                        6 -> R.drawable.ic_emoji_category_objects
-                        7 -> R.drawable.ic_emoji_category_flags
-                        else -> R.drawable.ic_emoji_category_flags
-                    }
-                ),
+                icon = painterResource(category.type.iconResource),
                 isSelected = currentIndex == i,
                 onClick = {
                     coroutineScope.launch {
@@ -392,8 +382,8 @@ private fun EmojiPicker(
         modifier = modifier
     ) {
         emojis.forEachIndexed { index, category ->
-            item(key = category.name, contentType = "category", span = { GridItemSpan(maxLineSpan) }) {
-                CategoryHeader(isFirst = index == 0, name = category.name)
+            item(key = category.type, contentType = "category", span = { GridItemSpan(maxLineSpan) }) {
+                CategoryHeader(isFirst = index == 0, name = stringResource(category.type.nameResource))
             }
 
             items(items = category.emojis, contentType = { "emoji" }) { item ->

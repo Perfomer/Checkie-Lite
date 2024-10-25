@@ -5,11 +5,12 @@ import com.perfomer.checkielite.feature.reviewcreation.data.entity.EmojiCategory
 import com.perfomer.checkielite.feature.reviewcreation.data.entity.EmojiGroupApi
 import com.perfomer.checkielite.feature.reviewcreation.domain.entity.Emoji
 import com.perfomer.checkielite.feature.reviewcreation.domain.entity.EmojiCategory
+import com.perfomer.checkielite.feature.reviewcreation.domain.entity.EmojiCategoryType
 import com.perfomer.checkielite.feature.reviewcreation.domain.entity.EmojiGroup
 
 internal fun EmojiCategoryApi.toDomain(): EmojiCategory {
     return EmojiCategory(
-        name = name,
+        type = EmojiCategoryType.entries.first { it.originalName == name },
         groups = groups.map { it.toDomain() },
     )
 }

@@ -92,7 +92,7 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
                 emojis = event.emojis
                     .map { category ->
                         TagCreationEmojiCategory(
-                            name = category.name,
+                            type = category.type,
                             emojis = category.groups
                                 .flatMap { it.emojis }
                                 .map { it.char },

@@ -1,8 +1,14 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -278,11 +284,28 @@ private fun TagContent(
                 .clip(CircleShape)
                 .border(1.dp, LocalCuiPalette.current.OutlinePrimary, CircleShape)
         ) {
-            if (selectedEmoji != null) {
-                Text(
-                    text = selectedEmoji,
-                    fontSize = 32.sp,
-                )
+            AnimatedContent(
+                targetState = selectedEmoji,
+                contentAlignment = Alignment.Center,
+                label = "CurrentEmojiAnimatedContent",
+                transitionSpec = {
+                    (scaleIn(spring()) + fadeIn(spring()))
+                        .togetherWith(scaleOut(spring()) + fadeOut(spring()))
+                },
+            ) { currentSelectedEmoji ->
+                if (currentSelectedEmoji != null) {
+                    Text(
+                        text = currentSelectedEmoji,
+                        fontSize = 32.sp,
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_no_emoji),
+                        tint = LocalCuiPalette.current.IconQuaternary,
+                        contentDescription = null,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
             }
         }
     }

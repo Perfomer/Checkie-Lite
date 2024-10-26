@@ -47,6 +47,7 @@ interface CuiPalette {
     val IconPrimary: Color
     val IconSecondary: Color
     val IconTertiary: Color
+    val IconQuaternary: Color
     val IconAccent: Color
     val IconPositive: Color get() = BackgroundPositivePrimary
     val IconWarning: Color get() = BackgroundWarningPrimary
@@ -88,6 +89,7 @@ interface CuiPalette {
         override val IconPrimary: Color = CuiColorToken.Black1
         override val IconSecondary: Color = CuiColorToken.Grey5
         override val IconTertiary: Color = CuiColorToken.Grey3
+        override val IconQuaternary: Color = IconSecondary.copy(alpha = 0.5F)
         override val IconAccent: Color = CuiColorToken.Orange1
     }
 
@@ -126,6 +128,7 @@ interface CuiPalette {
         override val IconPrimary: Color = CuiColorToken.White2
         override val IconSecondary: Color = CuiColorToken.Brown1
         override val IconTertiary: Color = CuiColorToken.Brown1
+        override val IconQuaternary: Color = IconTertiary.copy(alpha = 0.5F)
         override val IconAccent: Color = CuiColorToken.Orange1
     }
 }

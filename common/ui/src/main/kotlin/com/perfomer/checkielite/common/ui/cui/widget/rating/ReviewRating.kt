@@ -5,10 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,6 +22,7 @@ import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
@@ -52,7 +51,7 @@ fun ReviewRating(
             color = LocalCuiPalette.current.TextSecondary,
         )
 
-        Spacer(modifier = Modifier.width(8.dp))
+        CuiSpacer(8.dp)
 
         Image(
             painter = painterResource(reviewReaction.drawable),
@@ -82,7 +81,7 @@ fun ReviewRatingVertical(
             modifier = Modifier.size(24.dp)
         )
 
-        Spacer(modifier = Modifier.width(2.dp))
+        CuiSpacer(2.dp)
 
         Text(
             text = rating.toString(),

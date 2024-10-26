@@ -3,9 +3,7 @@ package com.perfomer.checkielite.common.ui.cui.widget.block
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 
 @Composable
@@ -37,7 +36,7 @@ fun CuiBlock(
             modifier = Modifier.width(184.dp),
         )
 
-        Spacer(Modifier.height(32.dp))
+        CuiSpacer(32.dp)
 
         Text(
             text = title,
@@ -46,7 +45,7 @@ fun CuiBlock(
             fontWeight = FontWeight.Bold,
         )
 
-        Spacer(Modifier.height(8.dp))
+        CuiSpacer(8.dp)
 
         Text(
             text = message,

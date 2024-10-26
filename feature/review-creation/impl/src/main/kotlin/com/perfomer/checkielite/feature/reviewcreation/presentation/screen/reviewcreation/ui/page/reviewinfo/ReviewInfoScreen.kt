@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
 import com.perfomer.checkielite.common.ui.cui.widget.rating.RatingSlider
+import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
@@ -55,7 +56,7 @@ internal fun ReviewInfoScreen(
             fontWeight = FontWeight.Bold,
         )
 
-        Spacer(Modifier.height(8.dp))
+        CuiSpacer(8.dp)
 
         RatingSlider(
             rating = state.rating,
@@ -63,7 +64,7 @@ internal fun ReviewInfoScreen(
             isEnabled = !state.isSaving,
         )
 
-        Spacer(Modifier.height(24.dp))
+        CuiSpacer(24.dp)
 
         CuiOutlinedField(
             text = state.comment,
@@ -75,7 +76,7 @@ internal fun ReviewInfoScreen(
             modifier = Modifier.focusRequester(commentFocusRequester)
         )
 
-        Spacer(Modifier.height(4.dp))
+        CuiSpacer(4.dp)
 
         CuiOutlinedField(
             text = state.advantages,

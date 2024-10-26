@@ -6,10 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
@@ -43,6 +41,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiTagChip
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedFieldDefaults
+import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
@@ -90,7 +89,7 @@ internal fun TagsScreen(
             )
         }
 
-        Spacer(Modifier.height(16.dp))
+        CuiSpacer(16.dp)
 
         SearchField(
             searchQuery = state.searchQuery,
@@ -101,7 +100,7 @@ internal fun TagsScreen(
             },
         )
 
-        Spacer(Modifier.height(16.dp))
+        CuiSpacer(16.dp)
 
         @Composable
         fun TagChip(tag: TagsPageUiState.Tag) {

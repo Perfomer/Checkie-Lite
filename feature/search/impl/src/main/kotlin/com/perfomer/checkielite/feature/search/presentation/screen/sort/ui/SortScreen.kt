@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
+import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -45,7 +44,7 @@ internal fun SortScreen(
     ) {
         Header()
 
-        Spacer(Modifier.height(16.dp))
+        CuiSpacer(16.dp)
 
         state.items.forEach { item ->
             key(item.type) {
@@ -56,7 +55,7 @@ internal fun SortScreen(
             }
         }
 
-        Spacer(Modifier.height(24.dp))
+        CuiSpacer(24.dp)
 
         CuiPrimaryButton(
             text = stringResource(CommonString.common_done),
@@ -66,7 +65,7 @@ internal fun SortScreen(
                 .padding(horizontal = 24.dp)
         )
 
-        Spacer(Modifier.height(16.dp))
+        CuiSpacer(16.dp)
     }
 }
 

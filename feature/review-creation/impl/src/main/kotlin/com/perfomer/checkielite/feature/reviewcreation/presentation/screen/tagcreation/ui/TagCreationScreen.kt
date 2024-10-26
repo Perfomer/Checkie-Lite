@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -75,7 +76,6 @@ import com.perfomer.checkielite.common.ui.cui.modifier.rememberShakeController
 import com.perfomer.checkielite.common.ui.cui.modifier.shake
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
-import com.perfomer.checkielite.common.ui.cui.widget.button.CuiSecondaryButton
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.verticalScrimBrush
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
@@ -517,8 +517,7 @@ private fun BoxScope.FloatingButtonsContainer(
     onDoneClick: () -> Unit,
     onDeleteTagClick: () -> Unit,
 ) {
-    Column(
-        verticalArrangement = Arrangement.Bottom,
+    Row(
         modifier = Modifier
             .imePadding()
             .background(verticalScrimBrush())
@@ -527,31 +526,28 @@ private fun BoxScope.FloatingButtonsContainer(
             .padding(bottom = 24.dp)
             .align(Alignment.BottomCenter)
     ) {
-        if (isDeleteAvailable) {
-            CuiSecondaryButton(
-                text = stringResource(R.string.tagcreation_delete),
-                onClick = onDeleteTagClick,
-                textColor = LocalCuiPalette.current.TextNegative,
-                backgroundColor = LocalCuiPalette.current.BackgroundElevationBase,
-                trailingIcon = {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_trash),
-                        tint = LocalCuiPalette.current.IconNegative,
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp)
-                    )
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(Modifier.height(12.dp))
-        }
-
         CuiPrimaryButton(
             text = stringResource(CommonString.common_done),
             onClick = onDoneClick,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.weight(1F)
         )
+
+        if (isDeleteAvailable) {
+            Spacer(Modifier.width(12.dp))
+
+            CuiPrimaryButton(
+                onClick = onDeleteTagClick,
+                activeButtonColor = LocalCuiPalette.current.BackgroundNegativeSecondary,
+                modifier = Modifier.width(96.dp)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_trash),
+                    tint = LocalCuiPalette.current.IconNegative,
+                    contentDescription = stringResource(R.string.tagcreation_delete),
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+        }
     }
 }
 

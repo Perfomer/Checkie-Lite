@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.common.ui.cui.widget.button
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +27,7 @@ fun CuiPrimaryButton(
     ),
     isEnabled: Boolean = true,
     loading: Boolean = false,
+    borderStroke: BorderStroke? = null,
     onClick: () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
@@ -34,6 +36,7 @@ fun CuiPrimaryButton(
         activeButtonColor = activeButtonColor,
         elevation = elevation,
         isEnabled = isEnabled,
+        borderStroke = borderStroke,
         loading = loading,
         onClick = onClick,
         leadingIcon = leadingIcon,
@@ -54,6 +57,7 @@ fun CuiPrimaryButton(
     ),
     isEnabled: Boolean = true,
     loading: Boolean = false,
+    borderStroke: BorderStroke? = null,
     onClick: () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
@@ -66,6 +70,7 @@ fun CuiPrimaryButton(
             containerColor = activeButtonColor,
             disabledContainerColor = LocalCuiPalette.current.BackgroundSecondary,
         ),
+        border = borderStroke,
         elevation = elevation,
         enabled = isEnabled,
         loading = loading,

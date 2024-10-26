@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.navigation.voyager.impl
 
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
+import com.perfomer.checkielite.navigation.voyager.navigator.BottomSheetNavigator
 
 class NavigatorHolder {
 

@@ -5,6 +5,7 @@ agp = "8.3.1" # todo: 8.4.0 version fails R8 minification
 androidx-core = "1.13.1"
 appcompat = "1.7.0"
 coil = "2.6.0"
+composables-core = "1.18.1"
 compose-bom = "2024.10.00"
 compressor = "3.0.1"
 core-ktx = "1.13.1"
@@ -37,6 +38,7 @@ coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-ui = { module = "androidx.compose.ui:ui" }
+composables-core = { module = "com.composables:core", version.ref = "composables-core" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }

@@ -3,12 +3,12 @@ package com.perfomer.checkielite.navigation.voyager.impl
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import com.perfomer.checkielite.core.navigation.api.CheckieScreen
 import com.perfomer.checkielite.core.navigation.api.DestinationMode
 import com.perfomer.checkielite.core.navigation.api.NoScreen
 import com.perfomer.checkielite.core.navigation.api.Router
 import com.perfomer.checkielite.navigation.voyager.impl.result.NavigationResultEventBus
+import com.perfomer.checkielite.navigation.voyager.navigator.BottomSheetNavigator
 
 internal class RouterImpl(
     private val navigatorHolder: NavigatorHolder,

@@ -58,6 +58,7 @@ fun CuiOutlineButton(
 
         if (trailingIcon != null) {
             CuiSpacer(8.dp)
+            trailingIcon()
         }
     }
 }

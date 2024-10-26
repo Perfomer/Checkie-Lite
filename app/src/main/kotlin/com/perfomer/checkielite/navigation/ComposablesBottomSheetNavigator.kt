@@ -38,6 +38,7 @@ import cafe.adriel.voyager.navigator.compositionUniqueId
 import com.composables.core.LocalModalWindow
 import com.composables.core.ModalBottomSheet
 import com.composables.core.ModalBottomSheetState
+import com.composables.core.ModalSheetProperties
 import com.composables.core.Scrim
 import com.composables.core.Sheet
 import com.composables.core.SheetDetent
@@ -74,7 +75,7 @@ internal fun ComposablesBottomSheetNavigator(
         velocityThreshold = { 24_576.dp },
     )
 
-    Navigator(HiddenBottomSheetScreen2, onBackPressed = null, key = key) { navigator ->
+    Navigator(HiddenBottomSheetScreen, onBackPressed = null, key = key) { navigator ->
         val bottomSheetNavigator = remember(navigator, sheetState, coroutineScope) {
             ComposablesBottomSheetNavigator(navigator, sheetState, coroutineScope)
         }
@@ -82,8 +83,11 @@ internal fun ComposablesBottomSheetNavigator(
         CompositionLocalProvider(LocalBottomSheetNavigator provides bottomSheetNavigator) {
             content(bottomSheetNavigator)
 
-            if (navigator.lastItemOrNull != HiddenBottomSheetScreen2) {
-                ModalBottomSheet(state = sheetState) {
+            if (navigator.lastItemOrNull != HiddenBottomSheetScreen) {
+                ModalBottomSheet(
+                    state = sheetState,
+                    properties = ModalSheetProperties(dismissOnBackPress = false)
+                ) {
                     val window = LocalModalWindow.current
                     LaunchedEffect(Unit) {
                         window.navigationBarColor = AndroidColor.TRANSPARENT
@@ -141,10 +145,11 @@ private class ComposablesBottomSheetNavigator(
         coroutineScope.launch {
             if (isVisible) {
                 sheetState.animateTo(SheetDetent.Hidden)
-                replaceAll(HiddenBottomSheetScreen2)
+                sheetState.currentDetent = SheetDetent.Hidden
+                replaceAll(HiddenBottomSheetScreen)
             } else if (sheetState.targetDetent == SheetDetent.Hidden) {
                 // Swipe down - sheetState is already hidden here so `isVisible` is false
-                replaceAll(HiddenBottomSheetScreen2)
+                replaceAll(HiddenBottomSheetScreen)
             }
         }
     }
@@ -171,12 +176,12 @@ private fun BottomSheetNavigatorBackHandler(
     }
 }
 
-private object HiddenBottomSheetScreen2 : Screen {
+private object HiddenBottomSheetScreen : Screen {
 
     @Composable
     override fun Content() {
         Spacer(modifier = Modifier.height(1.dp))
     }
 
-    private fun readResolve(): Any = HiddenBottomSheetScreen2
+    private fun readResolve(): Any = HiddenBottomSheetScreen
 }

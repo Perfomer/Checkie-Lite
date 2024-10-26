@@ -2,8 +2,8 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagc
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -56,7 +56,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -424,20 +423,24 @@ private fun CategoryIcon(
     isSelected: Boolean,
     onClick: () -> Unit,
 ) {
-    val targetAlpha = if (isSelected) 1F else 0.3F
+    val targetColor = if (isSelected) {
+        LocalCuiPalette.current.IconPrimary
+    } else {
+        LocalCuiPalette.current.IconQuaternary
+    }
 
-    val animatedAlpha by animateFloatAsState(
-        targetValue = targetAlpha,
+    val animatedColor by animateColorAsState(
+        targetValue = targetColor,
         animationSpec = spring(),
-        label = "animatedCategoryIconAlpha",
+        label = "animatedCategoryIcon",
     )
 
     CuiIconButton(
         painter = icon,
         onClick = onClick,
+        tint = animatedColor,
         modifier = Modifier
             .size(32.dp)
-            .graphicsLayer { alpha = animatedAlpha }
     )
 }
 

@@ -2,6 +2,7 @@ package com.perfomer.checkielite.common.ui.cui.widget.button
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
@@ -48,26 +49,29 @@ fun CuiPrimaryButton(
 
 @WidgetPreview
 @Composable
-private fun BuiPrimaryButtonPreview() = CheckieLiteTheme {
+private fun CuiPrimaryButtonPreview() = CheckieLiteTheme {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.padding(24.dp)
     ) {
         CuiPrimaryButton(
             text = "Next",
-            onClick = {}
+            onClick = {},
+            modifier = Modifier.fillMaxWidth()
         )
 
         CuiPrimaryButton(
             text = "Next",
             isEnabled = false,
             onClick = {},
+            modifier = Modifier.fillMaxWidth()
         )
 
         CuiPrimaryButton(
             text = "Next",
             loading = true,
             onClick = {},
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

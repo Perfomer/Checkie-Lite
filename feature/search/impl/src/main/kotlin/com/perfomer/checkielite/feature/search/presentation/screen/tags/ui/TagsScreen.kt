@@ -152,6 +152,7 @@ internal fun TagsScreen(
             CuiPrimaryButton(
                 text = stringResource(CommonString.common_done),
                 onClick = onDoneClick,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }

@@ -2,7 +2,6 @@ package com.perfomer.checkielite.common.ui.cui.widget.button
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -49,7 +48,6 @@ internal fun CuiInternalButton(
         onClick = onClick,
         border = border,
         modifier = modifier
-            .fillMaxWidth()
             .height(56.dp)
     ) {
         if (loading) {

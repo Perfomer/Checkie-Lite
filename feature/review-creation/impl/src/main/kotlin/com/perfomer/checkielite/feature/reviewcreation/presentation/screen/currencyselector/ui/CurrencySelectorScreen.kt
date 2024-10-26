@@ -173,6 +173,7 @@ internal fun CurrencySelectorScreen(
             CuiPrimaryButton(
                 text = stringResource(CommonString.common_done),
                 onClick = onDoneClick,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }

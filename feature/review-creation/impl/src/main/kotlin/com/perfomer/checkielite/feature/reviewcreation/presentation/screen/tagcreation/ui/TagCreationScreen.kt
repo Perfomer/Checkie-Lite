@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -11,6 +12,7 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -26,6 +28,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -64,6 +67,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
+import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.cui.modifier.ShakeController
@@ -276,6 +280,22 @@ private fun TagContent(
                 .shake(tagValueShakeController)
         )
 
+        SelectedEmoji(
+            selectedEmoji = selectedEmoji,
+            onSelectedEmojiClick = onSelectedEmojiClick,
+        )
+    }
+}
+
+@Composable
+private fun SelectedEmoji(
+    selectedEmoji: String?,
+    onSelectedEmojiClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+    ) {
         IconButton(
             onClick = onSelectedEmojiClick,
             modifier = Modifier
@@ -308,7 +328,39 @@ private fun TagContent(
                 }
             }
         }
+
+        AnimatedVisibility(
+            visible = selectedEmoji != null,
+            enter = fadeIn(spring()),
+            exit = fadeOut(spring()),
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .offset(y = 4.dp)
+        ) {
+            DeleteSelectedEmojiIcon(
+                onClick = onSelectedEmojiClick,
+            )
+        }
     }
+}
+
+
+@Composable
+private fun DeleteSelectedEmojiIcon(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Icon(
+        painter = painterResource(CommonDrawable.ic_cross),
+        tint = LocalCuiPalette.current.IconPrimary,
+        contentDescription = null,
+        modifier = modifier
+            .size(20.dp)
+            .clip(CircleShape)
+            .background(LocalCuiPalette.current.BackgroundSecondary)
+            .clickable(onClick = onClick)
+            .padding(3.dp)
+    )
 }
 
 @Composable

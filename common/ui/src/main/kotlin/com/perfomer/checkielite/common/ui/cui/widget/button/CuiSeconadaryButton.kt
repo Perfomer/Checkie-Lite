@@ -3,6 +3,7 @@ package com.perfomer.checkielite.common.ui.cui.widget.button
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
@@ -64,18 +65,21 @@ private fun CuiSecondaryButtonPreview() = CheckieLiteTheme {
         CuiSecondaryButton(
             text = "Next",
             onClick = {},
+            modifier = Modifier.fillMaxWidth()
         )
 
         CuiSecondaryButton(
             text = "Next",
             enabled = false,
             onClick = {},
+            modifier = Modifier.fillMaxWidth()
         )
 
         CuiSecondaryButton(
             text = "Next",
             loading = true,
             onClick = {},
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

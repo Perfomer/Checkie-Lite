@@ -113,6 +113,7 @@ internal fun ReviewCreationScreen(
                 onClick = onPrimaryButtonClick,
                 activeButtonColor = animatedColor,
                 loading = state.isPrimaryButtonLoading,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }

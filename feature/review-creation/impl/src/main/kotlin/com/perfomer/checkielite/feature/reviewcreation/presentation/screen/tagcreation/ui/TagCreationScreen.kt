@@ -541,6 +541,7 @@ private fun BoxScope.FloatingButtonsContainer(
                         modifier = Modifier.size(20.dp)
                     )
                 },
+                modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(Modifier.height(12.dp))
@@ -549,6 +550,7 @@ private fun BoxScope.FloatingButtonsContainer(
         CuiPrimaryButton(
             text = stringResource(CommonString.common_done),
             onClick = onDoneClick,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

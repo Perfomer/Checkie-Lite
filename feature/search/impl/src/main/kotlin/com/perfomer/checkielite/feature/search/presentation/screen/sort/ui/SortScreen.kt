@@ -61,7 +61,9 @@ internal fun SortScreen(
         CuiPrimaryButton(
             text = stringResource(CommonString.common_done),
             onClick = onDoneClick,
-            modifier = Modifier.padding(horizontal = 24.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
         )
 
         Spacer(Modifier.height(16.dp))

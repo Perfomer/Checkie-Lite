@@ -98,6 +98,7 @@ internal fun BackupScreen(
                     text = stringResource(CommonString.common_cancel_v2),
                     onClick = onCancelClick,
                     enabled = state.isCancelAvailable,
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 Spacer(Modifier.height(24.dp))

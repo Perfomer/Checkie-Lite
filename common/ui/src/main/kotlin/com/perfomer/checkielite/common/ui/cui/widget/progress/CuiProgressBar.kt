@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,8 +19,6 @@ import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
-
-private const val ANIMATION_DURATION_MS = 350
 
 @Composable
 fun CuiProgressBar(
@@ -35,13 +34,13 @@ fun CuiProgressBar(
 
     val animatedProgress = animateFloatAsState(
         targetValue = progress,
-        animationSpec = tween(durationMillis = ANIMATION_DURATION_MS),
+        animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
         label = "animatedProgress",
     )
 
     val animatedProgressColor = animateColorAsState(
         targetValue = targetProgressColor,
-        animationSpec = tween(durationMillis = ANIMATION_DURATION_MS),
+        animationSpec = tween(durationMillis = 350),
         label = "animatedProgressColor",
     )
 

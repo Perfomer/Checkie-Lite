@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,8 +30,36 @@ fun CuiPrimaryButton(
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
 ) {
+    CuiPrimaryButton(
+        activeButtonColor = activeButtonColor,
+        elevation = elevation,
+        isEnabled = isEnabled,
+        loading = loading,
+        onClick = onClick,
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
+        modifier = modifier
+    ) {
+        Text(text)
+    }
+}
+
+@Composable
+fun CuiPrimaryButton(
+    modifier: Modifier = Modifier,
+    activeButtonColor: Color = LocalCuiPalette.current.BackgroundAccentPrimary,
+    elevation: ButtonElevation = ButtonDefaults.buttonElevation(
+        defaultElevation = LocalCuiPalette.current.MediumElevation,
+        pressedElevation = 0.dp,
+    ),
+    isEnabled: Boolean = true,
+    loading: Boolean = false,
+    onClick: () -> Unit,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    content: @Composable () -> Unit,
+) {
     CuiInternalButton(
-        text = text,
         textColor = LocalCuiPalette.current.TextInverted,
         textColorDisabled = LocalCuiPalette.current.TextSecondary,
         colors = ButtonDefaults.buttonColors(
@@ -44,6 +73,7 @@ fun CuiPrimaryButton(
         modifier = modifier,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
+        content = content,
     )
 }
 

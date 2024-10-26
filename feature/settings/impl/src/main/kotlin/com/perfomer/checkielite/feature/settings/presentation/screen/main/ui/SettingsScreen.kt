@@ -3,15 +3,12 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.main.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -28,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.widget.info.CuiInfoIcon
+import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -86,7 +84,7 @@ private fun SettingsHeader(version: String) {
             modifier = Modifier.size(width = 66.dp, height = 72.dp)
         )
 
-        Spacer(Modifier.height(16.dp))
+        CuiSpacer(16.dp)
 
         Text(
             text = appNameSpannable(),
@@ -115,7 +113,7 @@ private fun BackupGroup(
             modifier = Modifier.padding(horizontal = 20.dp)
         )
 
-        Spacer(Modifier.height(8.dp))
+        CuiSpacer(8.dp)
 
         SettingsItem(
             title = stringResource(R.string.settings_group_data_item_export),
@@ -151,13 +149,13 @@ private fun GroupTitle(
             )
 
             if (infoText != null) {
-                Spacer(Modifier.width(12.dp))
+                CuiSpacer(12.dp)
                 CuiInfoIcon(text = infoText)
             }
         }
 
         if (description != null) {
-            Spacer(Modifier.height(4.dp))
+            CuiSpacer(4.dp)
 
             Text(
                 text = description,
@@ -193,7 +191,7 @@ private fun SettingsItem(
             modifier = Modifier.size(20.dp)
         )
 
-        Spacer(Modifier.width(16.dp))
+        CuiSpacer(16.dp)
 
         Column(
             modifier = Modifier.weight(1f)

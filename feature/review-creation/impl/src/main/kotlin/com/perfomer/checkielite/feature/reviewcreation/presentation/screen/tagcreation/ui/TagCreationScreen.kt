@@ -78,6 +78,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.verticalScrimBrush
+import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -200,7 +201,7 @@ private fun Header(
     ) {
         SheetTitle(title = title)
 
-        Spacer(Modifier.height(16.dp))
+        CuiSpacer(16.dp)
 
         TagContent(
             tagValue = tagValue,
@@ -217,7 +218,7 @@ private fun Header(
             emojis = emojis,
         )
 
-        Spacer(Modifier.height(12.dp))
+        CuiSpacer(12.dp)
     }
 }
 
@@ -533,7 +534,7 @@ private fun BoxScope.FloatingButtonsContainer(
         )
 
         if (isDeleteAvailable) {
-            Spacer(Modifier.width(12.dp))
+            CuiSpacer(12.dp)
 
             CuiPrimaryButton(
                 onClick = onDeleteTagClick,

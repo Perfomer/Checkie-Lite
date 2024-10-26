@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -25,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiSecondaryButton
 import com.perfomer.checkielite.common.ui.cui.widget.progress.CuiProgressBar
+import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -65,7 +65,7 @@ internal fun BackupScreen(
                 modifier = Modifier.width(170.dp)
             )
 
-            Spacer(Modifier.height(24.dp))
+            CuiSpacer(24.dp)
 
             Text(
                 text = state.title,
@@ -74,7 +74,7 @@ internal fun BackupScreen(
                 letterSpacing = 0.sp,
             )
 
-            Spacer(Modifier.height(24.dp))
+            CuiSpacer(24.dp)
 
             CuiProgressBar(
                 progress = state.backupProgress,
@@ -83,7 +83,7 @@ internal fun BackupScreen(
                 modifier = Modifier.width(160.dp)
             )
 
-            Spacer(Modifier.height(8.dp))
+            CuiSpacer(8.dp)
 
             Text(
                 text = state.progressLabel,
@@ -101,7 +101,7 @@ internal fun BackupScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(Modifier.height(24.dp))
+                CuiSpacer(24.dp)
             }
 
             Text(

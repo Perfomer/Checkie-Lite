@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -70,6 +69,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewHorizontalIte
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField2
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.HorizontalScrim
+import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -295,7 +295,7 @@ private fun SearchTopAppBar(
             )
         }
 
-        Spacer(Modifier.height(14.dp))
+        CuiSpacer(14.dp)
 
         FiltersRow(
             filters = filters,
@@ -303,7 +303,7 @@ private fun SearchTopAppBar(
             onAllFiltersClick = onAllFiltersClick,
         )
 
-        Spacer(Modifier.height(8.dp))
+        CuiSpacer(8.dp)
     }
 }
 
@@ -324,7 +324,7 @@ private fun FiltersRow(
         val showAllFiltersChip = appliedFiltersCount > 1 && false // todo remove false after adding one more filter
 
         if (showAllFiltersChip) {
-            Spacer(Modifier.width(20.dp))
+            CuiSpacer(20.dp)
 
             FilterChip(
                 onClick = onAllFiltersClick,
@@ -336,12 +336,12 @@ private fun FiltersRow(
                     modifier = Modifier.size(12.dp)
                 )
 
-                Spacer(Modifier.width(4.dp))
+                CuiSpacer(4.dp)
 
                 Badge(value = appliedFiltersCount.toString(), LocalCuiPalette.current.IconPrimary)
             }
 
-            Spacer(Modifier.width(8.dp))
+            CuiSpacer(8.dp)
         }
 
         Box(
@@ -374,11 +374,11 @@ private fun FiltersRow(
                                 }
                             }
 
-                            Spacer(Modifier.width(4.dp))
+                            CuiSpacer(4.dp)
 
                             Text(filter.text)
 
-                            Spacer(Modifier.width(4.dp))
+                            CuiSpacer(4.dp)
 
                             Icon(
                                 painter = painterResource(CommonDrawable.ic_chevron_down),

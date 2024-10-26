@@ -2,7 +2,6 @@ package com.perfomer.checkielite.common.ui.cui.widget.pager
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,7 +20,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.cui.modifier.indicatorOffsetForPage
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CuiHorizontalPagerIndicator(
     state: PagerState,

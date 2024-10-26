@@ -8,12 +8,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -30,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.perfomer.checkielite.common.ui.R
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRating
+import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.cui.widget.text.CuiFadedText
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 
@@ -82,7 +81,7 @@ fun CuiReviewHorizontalItem(
             SyncingBlock(item.isSyncing)
         }
 
-        Spacer(modifier = Modifier.width(16.dp))
+        CuiSpacer(16.dp)
 
         Column(modifier = Modifier.weight(1F)) {
             CuiFadedText(
@@ -104,7 +103,7 @@ fun CuiReviewHorizontalItem(
             }
         }
 
-        Spacer(modifier = Modifier.width(16.dp))
+        CuiSpacer(16.dp)
 
         ReviewRating(rating = item.rating)
     }

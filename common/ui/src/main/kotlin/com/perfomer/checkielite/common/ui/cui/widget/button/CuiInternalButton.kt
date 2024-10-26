@@ -1,10 +1,8 @@
 package com.perfomer.checkielite.common.ui.cui.widget.button
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -19,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
@@ -55,7 +54,7 @@ internal fun CuiInternalButton(
         } else {
             if (leadingIcon != null) {
                 leadingIcon()
-                Spacer(Modifier.width(8.dp))
+                CuiSpacer(8.dp)
             }
 
             CompositionLocalProvider(
@@ -69,7 +68,7 @@ internal fun CuiInternalButton(
             )
 
             if (trailingIcon != null) {
-                Spacer(Modifier.width(8.dp))
+                CuiSpacer(8.dp)
                 trailingIcon()
             }
         }

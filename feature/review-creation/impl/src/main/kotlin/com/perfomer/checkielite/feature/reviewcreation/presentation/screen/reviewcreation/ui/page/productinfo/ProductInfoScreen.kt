@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -69,6 +67,7 @@ import com.perfomer.checkielite.common.ui.cui.modifier.rememberShakeController
 import com.perfomer.checkielite.common.ui.cui.modifier.shake
 import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiSuggestionsBox
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
+import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
@@ -119,7 +118,7 @@ internal fun ProductInfoScreen(
             fontWeight = FontWeight.Bold,
         )
 
-        Spacer(Modifier.height(16.dp))
+        CuiSpacer(16.dp)
 
         CuiOutlinedField(
             text = state.productName,
@@ -155,7 +154,7 @@ internal fun ProductInfoScreen(
             )
         }
 
-        Spacer(Modifier.height(4.dp))
+        CuiSpacer(4.dp)
 
         CuiOutlinedField(
             text = state.price,

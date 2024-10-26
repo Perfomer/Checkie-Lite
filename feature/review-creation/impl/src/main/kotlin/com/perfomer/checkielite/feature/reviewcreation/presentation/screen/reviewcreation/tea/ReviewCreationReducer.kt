@@ -386,7 +386,6 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         is TagsLoading.Started -> Unit
         is TagsLoading.Succeed -> {
             state { copy(tagsSuggestions = event.tags) }
-            onTagsSearchQueryUpdate()
         }
         is TagsLoading.Failed -> Unit
     }

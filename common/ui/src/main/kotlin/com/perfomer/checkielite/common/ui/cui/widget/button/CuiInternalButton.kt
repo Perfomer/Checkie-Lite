@@ -10,13 +10,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -24,7 +24,6 @@ import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 
 @Composable
 internal fun CuiInternalButton(
-    text: String,
     textColor: Color,
     textColorDisabled: Color,
     colors: ButtonColors,
@@ -36,6 +35,7 @@ internal fun CuiInternalButton(
     border: BorderStroke? = null,
     leadingIcon: @Composable (() -> Unit)?,
     trailingIcon: @Composable (() -> Unit)?,
+    content: @Composable () -> Unit,
 ) {
     val actualEnabled = remember(enabled, loading) { enabled && !loading }
     val actualTextColor = if (actualEnabled) textColor else textColorDisabled
@@ -58,9 +58,14 @@ internal fun CuiInternalButton(
                 Spacer(Modifier.width(8.dp))
             }
 
-            CuiButtonText(
-                text = text,
-                textColor = actualTextColor,
+            CompositionLocalProvider(
+                LocalTextStyle provides LocalTextStyle.current.copy(
+                    letterSpacing = 0.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = actualTextColor,
+                ),
+                content = content,
             )
 
             if (trailingIcon != null) {
@@ -78,20 +83,5 @@ private fun CuiButtonLoader() {
         color = LocalCuiPalette.current.BackgroundPositivePrimary,
         strokeWidth = 2.dp,
         modifier = Modifier.size(24.dp),
-    )
-}
-
-@Composable
-internal fun CuiButtonText(
-    text: String,
-    textColor: Color,
-    fontSize: TextUnit = 16.sp,
-) {
-    Text(
-        text = text,
-        fontWeight = FontWeight.Bold,
-        fontSize = fontSize,
-        letterSpacing = 0.sp,
-        color = textColor,
     )
 }

@@ -31,8 +31,14 @@ internal class AppRestarterImpl(
     context(Activity)
     @Suppress("DEPRECATION")
     override fun extractStartActions(): List<RestartAction> {
-        return intent.getParcelableArrayListExtra<RestartAction>(EXTRA_START_ACTIONS)
+        val startActions = intent.getParcelableArrayListExtra<RestartAction>(EXTRA_START_ACTIONS)
             .orEmpty()
+
+        // Clear start actions to not handle it again after configuration change
+        intent.replaceExtras(null)
+
+        return startActions
+
     }
 
     private companion object {

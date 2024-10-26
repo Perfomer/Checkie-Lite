@@ -31,7 +31,7 @@
 
     <string name="tagcreation_creation_title">Новый тег</string>
     <string name="tagcreation_modification_title">Редактирование тега</string>
-    <string name="tagcreation_description">Напишите название тега</string>
+    <string name="tagcreation_description">Напишите название тега и выберите иконку</string>
     <string name="tagcreation_tag_name">Название тега</string>
 
     <string name="tagcreation_tag_name_error_empty">Название тега нужно заполнить</string>

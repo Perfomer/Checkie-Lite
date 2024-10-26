@@ -70,7 +70,7 @@ internal fun TagsScreen(
 
     BoxWithConstraints {
         val maxHeight = remember(constraints.maxHeight) {
-            constraints.maxHeight.pxToDp().dp * 0.7F
+            constraints.maxHeight.pxToDp().dp * 0.9F
         }
 
         var shouldAnimateContentSize by remember { mutableStateOf(false) }

@@ -43,6 +43,7 @@ import com.composables.core.Scrim
 import com.composables.core.Sheet
 import com.composables.core.SheetDetent
 import com.composables.core.rememberModalBottomSheetState
+import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
 import com.perfomer.checkielite.navigation.voyager.navigator.BottomSheetNavigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -95,6 +96,8 @@ internal fun ComposablesBottomSheetNavigator(
                             isAppearanceLightNavigationBars = true
                         }
                     }
+
+                    ClearFocusOnKeyboardClose()
 
                     Scrim(scrimColor = scrimColor, enter = fadeIn(), exit = fadeOut())
 

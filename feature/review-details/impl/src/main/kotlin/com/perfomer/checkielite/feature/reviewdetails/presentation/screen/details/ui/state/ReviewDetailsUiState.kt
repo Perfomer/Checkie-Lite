@@ -9,7 +9,7 @@ internal sealed interface ReviewDetailsUiState {
     val isMenuAvailable: Boolean
 
     data object Loading : ReviewDetailsUiState {
-        override val isMenuAvailable: Boolean = false
+        override val isMenuAvailable: Boolean = true
     }
 
     data class Content(

@@ -536,12 +536,12 @@ private fun BoxScope.FloatingButtonsContainer(
 
             CuiPrimaryButton(
                 onClick = onDeleteTagClick,
-                activeButtonColor = LocalCuiPalette.current.BackgroundNegativeSecondary,
+                activeButtonColor = LocalCuiPalette.current.BackgroundNegativePrimary,
                 modifier = Modifier.width(96.dp)
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_trash),
-                    tint = LocalCuiPalette.current.IconNegative,
+                    tint = LocalCuiPalette.current.IconInverted,
                     contentDescription = stringResource(R.string.tagcreation_delete),
                     modifier = Modifier.size(20.dp)
                 )

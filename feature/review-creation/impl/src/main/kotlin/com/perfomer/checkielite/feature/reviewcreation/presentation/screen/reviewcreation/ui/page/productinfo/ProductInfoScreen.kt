@@ -78,7 +78,6 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.input.DecimalInputVisualTransformation
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ProductInfoPageUiState
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,7 +99,7 @@ internal fun ProductInfoScreen(
     onTakePhotoClick: () -> Unit = {},
     onPictureClick: (position: Int) -> Unit = {},
     onPictureDeleteClick: (position: Int) -> Unit = {},
-    onPictureReorder: (pictureUri: String, toPosition: Int) -> Unit = { _, _ -> },
+    onPictureReorder: (pictureId: String, toPosition: Int) -> Unit = { _, _ -> },
 ) {
     val brandNameInteractionSource = remember { MutableInteractionSource() }
     val decimalInputFilter = remember { DecimalInputFilter() }
@@ -213,12 +212,12 @@ internal fun ProductInfoScreen(
 
 @Composable
 private fun PicturesFlowRow(
-    picturesUri: ImmutableList<String>,
+    picturesUri: ImmutableList<ProductInfoPageUiState.Picture>,
     onPictureClick: (position: Int) -> Unit,
     onPictureDeleteClick: (position: Int) -> Unit,
-    onPictureReorder: (pictureUri: String, toPosition: Int) -> Unit,
+    onPictureReorder: (pictureId: String, toPosition: Int) -> Unit,
 ) {
-    val reorderState = rememberReorderState<String>(dragAfterLongPress = true)
+    val reorderState = rememberReorderState<ProductInfoPageUiState.Picture>(dragAfterLongPress = true)
     val hapticFeedback = LocalHapticFeedback.current
 
     var reorderableItems by remember(picturesUri) { mutableStateOf(picturesUri) }
@@ -253,17 +252,21 @@ private fun PicturesFlowRow(
         ) {
             itemsIndexed(
                 items = reorderableItems,
-                key = { _, uri -> uri },
-            ) { i, pictureUri ->
+                key = { _, picture -> picture.id },
+            ) { i, picture ->
                 ReorderableItem(
                     state = reorderState,
                     key = i,
-                    data = pictureUri,
-                    onDragEnter = { state -> reorderableItems = reorderableItems.move(item = state.data, toPosition = i).toPersistentList() },
-                    onDrop = { draggedItem -> onPictureReorder(draggedItem.data, i) },
+                    data = picture,
+                    onDragEnter = { state ->
+                        reorderableItems = reorderableItems.move(item = state.data, toPosition = i).toPersistentList()
+                    },
+                    onDrop = { draggedItem ->
+                        onPictureReorder(draggedItem.data.id, i)
+                    },
                     draggableContent = {
                         Picture(
-                            pictureUrl = pictureUri,
+                            pictureUrl = picture.uri,
                             modifier = Modifier.shadow(
                                 elevation = LocalCuiPalette.current.MediumElevation,
                                 shape = RoundedCornerShape(16.dp),
@@ -277,7 +280,7 @@ private fun PicturesFlowRow(
                         modifier = Modifier.graphicsLayer { alpha = if (key == hiddenItemPosition) 0F else 1F }
                     ) {
                         Picture(
-                            pictureUrl = pictureUri,
+                            pictureUrl = picture.uri,
                             onClick = { onPictureClick(i) },
                         )
                     }
@@ -372,12 +375,7 @@ private fun ProductInfoScreenPreview() {
             brandSuggestions = emptyPersistentList(),
             price = "0",
             priceCurrency = "RUB",
-            picturesUri = persistentListOf(
-                "https://habrastorage.org/r/w780/getpro/habr/upload_files/746/2ab/27c/7462ab27cca552ce31ee9cba01387692.jpeg",
-                "https://images.unsplash.com/photo-1483129804960-cb1964499894?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-                "https://images.unsplash.com/photo-1620447875063-19be4e4604bc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=796&q=80",
-                "https://images.unsplash.com/photo-1548100535-fe8a16c187ef?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1151&q=80"
-            )
+            picturesUri = emptyPersistentList(),
         )
     )
 }

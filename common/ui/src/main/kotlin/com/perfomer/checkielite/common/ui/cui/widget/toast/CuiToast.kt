@@ -91,7 +91,7 @@ private fun CuiToastPreview() = CheckieLiteTheme {
                 message = "Short text",
                 icon = null,
                 iconTint = Color.Unspecified,
-                backgroundColor = LocalCuiPalette.current.BackgroundElevationBase,
+                backgroundColor = LocalCuiPalette.current.BackgroundElevationContent,
                 durationMs = 1000L,
             ),
             onClick = {},

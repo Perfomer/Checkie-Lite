@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.core.navigation.api
 
 enum class ExternalDestination {
+	CAMERA,
 	GALLERY,
 	FILE,
 }

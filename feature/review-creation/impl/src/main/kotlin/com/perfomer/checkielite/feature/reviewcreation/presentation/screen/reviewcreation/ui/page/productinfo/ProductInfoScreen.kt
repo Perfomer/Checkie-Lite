@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -42,6 +43,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -95,6 +97,7 @@ internal fun ProductInfoScreen(
     onPriceTextInput: (String) -> Unit = {},
     onPriceCurrencyClick: () -> Unit = {},
     onAddPictureClick: () -> Unit = {},
+    onTakePhotoClick: () -> Unit = {},
     onPictureClick: (position: Int) -> Unit = {},
     onPictureDeleteClick: (position: Int) -> Unit = {},
     onPictureReorder: (pictureUri: String, toPosition: Int) -> Unit = { _, _ -> },
@@ -178,9 +181,29 @@ internal fun ProductInfoScreen(
             modifier = Modifier.focusRequester(priceFocusRequester)
         )
 
+        CuiSpacer(12.dp)
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(20.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            AddPicture(
+                painter = painterResource(id = CommonDrawable.ic_add_picture_v2),
+                onClick = onAddPictureClick,
+                modifier = Modifier.weight(1F)
+            )
+
+            AddPicture(
+                painter = painterResource(id = R.drawable.ic_camera),
+                onClick = onTakePhotoClick,
+                modifier = Modifier.weight(1F)
+            )
+        }
+
+        CuiSpacer(16.dp)
+
         PicturesFlowRow(
             picturesUri = state.picturesUri,
-            onAddPictureClick = onAddPictureClick,
             onPictureClick = onPictureClick,
             onPictureDeleteClick = onPictureDeleteClick,
             onPictureReorder = onPictureReorder,
@@ -191,7 +214,6 @@ internal fun ProductInfoScreen(
 @Composable
 private fun PicturesFlowRow(
     picturesUri: ImmutableList<String>,
-    onAddPictureClick: () -> Unit,
     onPictureClick: (position: Int) -> Unit,
     onPictureDeleteClick: (position: Int) -> Unit,
     onPictureReorder: (pictureUri: String, toPosition: Int) -> Unit,
@@ -229,21 +251,9 @@ private fun PicturesFlowRow(
                 // https://stackoverflow.com/questions/67919707/jetpack-compose-how-to-put-a-lazyverticalgrid-inside-a-scrollable-column
                 .heightIn(max = 2000.dp)
         ) {
-            item(
-                key = "AddPicture",
-                contentType = "AddPicture",
-            ) {
-                Box {
-                    AddPicture(
-                        onClick = onAddPictureClick,
-                    )
-                }
-            }
-
             itemsIndexed(
                 items = reorderableItems,
                 key = { _, uri -> uri },
-                contentType = { _, _ -> "Picture" },
             ) { i, pictureUri ->
                 ReorderableItem(
                     state = reorderState,
@@ -279,17 +289,18 @@ private fun PicturesFlowRow(
 
 @Composable
 internal fun AddPicture(
+    painter: Painter,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Icon(
-        painter = painterResource(id = CommonDrawable.ic_add_picture),
+        painter = painter,
         contentDescription = null,
         tint = LocalCuiPalette.current.IconAccent,
         modifier = modifier
             .size(56.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(LocalCuiPalette.current.BackgroundAccentSecondary)
+            .background(LocalCuiPalette.current.BackgroundAccentTertiary)
             .clickable(onClick = onClick)
             .padding(16.dp),
     )

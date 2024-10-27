@@ -23,6 +23,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.Exit
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.ExitWithResult
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenCamera
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenCurrencySelector
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenGallery
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenPhotoPicker
@@ -60,6 +61,7 @@ internal class ReviewCreationNavigationActor(
             is Exit -> exit()
             is ExitWithResult -> exitWithResult(command.result)
             is OpenPhotoPicker -> return openPhotoPicker()
+            is OpenCamera -> return openCamera()
             is OpenGallery -> router.navigate(
                 screen = galleryScreenProvider(GalleryParams(command.picturesUri.toArrayList(), command.currentPicturePosition)),
                 mode = DestinationMode.OVERLAY,
@@ -77,6 +79,13 @@ internal class ReviewCreationNavigationActor(
         if (result !is ExternalResult.Success) return null
 
         return ReviewCreationNavigationEvent.OnPhotosPick(uris = result.result)
+    }
+
+    private suspend fun openCamera(): ReviewCreationNavigationEvent? {
+        val result = externalRouter.navigateForResult<String>(ExternalDestination.CAMERA)
+        if (result !is ExternalResult.Success) return null
+
+        return ReviewCreationNavigationEvent.OnPhotosPick(uris = listOf(result.result))
     }
 
     private suspend fun openTagCreation(command: OpenTagCreation): ReviewCreationNavigationEvent? {

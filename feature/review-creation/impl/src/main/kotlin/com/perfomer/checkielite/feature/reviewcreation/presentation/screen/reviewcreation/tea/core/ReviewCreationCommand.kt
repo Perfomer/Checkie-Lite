@@ -62,6 +62,8 @@ internal sealed interface ReviewCreationNavigationCommand : ReviewCreationComman
 
     data object OpenPhotoPicker : ReviewCreationNavigationCommand
 
+    data object OpenCamera : ReviewCreationNavigationCommand
+
     class OpenCurrencySelector(val currency: CheckieCurrency) : ReviewCreationNavigationCommand
 
     class OpenTagSort(val currentOption: TagSortingStrategy) : ReviewCreationNavigationCommand

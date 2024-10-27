@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 import com.perfomer.checkielite.common.pure.util.move
 import com.perfomer.checkielite.common.pure.util.next
 import com.perfomer.checkielite.common.pure.util.previous
+import com.perfomer.checkielite.common.pure.util.randomUuid
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.PictureSource
@@ -219,7 +220,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             )
         }
         is ProductInfo.OnPictureReorder -> state {
-            val movingItem = reviewDetails.pictures.first { it.uri == event.pictureUri }
+            val movingItem = reviewDetails.pictures.first { it.id == event.pictureId }
 
             copy(
                 reviewDetails = reviewDetails.copy(
@@ -303,7 +304,11 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     private fun reduceNavigation(event: ReviewCreationNavigationEvent) = when (event) {
         is OnPhotosPick -> state {
             val addedPictures = event.uris.map { uri ->
-                CheckiePicture(uri = uri, source = PictureSource.GALLERY)
+                CheckiePicture(
+                    id = randomUuid(),
+                    uri = uri,
+                    source = PictureSource.GALLERY,
+                )
             }
 
             copy(

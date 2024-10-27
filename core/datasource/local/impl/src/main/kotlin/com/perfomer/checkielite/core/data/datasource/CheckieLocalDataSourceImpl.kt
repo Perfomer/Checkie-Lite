@@ -13,6 +13,7 @@ import com.perfomer.checkielite.core.data.util.startForegroundServiceCompat
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
+import com.perfomer.checkielite.core.entity.PictureSource
 import com.perfomer.checkielite.core.entity.price.CheckieCurrency
 import com.perfomer.checkielite.core.entity.price.CheckiePrice
 import com.perfomer.checkielite.core.entity.price.CurrencySymbol
@@ -80,10 +81,9 @@ internal class CheckieLocalDataSourceImpl(
         advantages: String?,
         disadvantages: String?
     ) {
-        val actualPictures = pictures.map { picture -> picture.copy(id = randomUuid()) }
         val creationDate = Date()
 
-        val isNeedSync = actualPictures.isNotEmpty()
+        val isNeedSync = pictures.isNotEmpty()
         val reviewId = randomUuid()
 
         databaseDataSource.createReview(
@@ -95,7 +95,7 @@ internal class CheckieLocalDataSourceImpl(
             comment = comment,
             advantages = advantages,
             disadvantages = disadvantages,
-            pictures = actualPictures,
+            pictures = pictures,
             tagsIds = tagsIds,
             creationDate = creationDate,
             modificationDate = creationDate,
@@ -107,7 +107,8 @@ internal class CheckieLocalDataSourceImpl(
         }
 
         if (isNeedSync) {
-            context.startForegroundServiceCompat(CompressorService.createIntent(context, reviewId, actualPictures.toArrayList()))
+            val intent = CompressorService.createIntent(context, reviewId, pictures.toArrayList())
+            context.startForegroundServiceCompat(intent)
         }
     }
 
@@ -129,20 +130,18 @@ internal class CheckieLocalDataSourceImpl(
         val deletedPictures = initialPictures.filterNot(pictures::contains)
         deletedPictures.forEachAsync { picture -> fileDataSource.deleteFile(picture.uri) }
 
-        val addedPictures = pictures.filter { picture -> picture.id == CheckiePicture.NO_ID }
-        val actualAddedPictures = addedPictures.map { picture -> picture.copy(id = randomUuid()) }
-
+        val addedPictures = pictures.filter { picture -> picture.source == PictureSource.GALLERY }
         val actualPictures = mutableListOf<CheckiePicture>()
 
-        pictures.forEach { picture ->
+        for (picture in pictures) {
             val isPictureDeleted = deletedPictures.contains(picture)
-            if (isPictureDeleted) return@forEach
+            if (isPictureDeleted) continue
 
             val addedPictureIndex = addedPictures.indexOf(picture)
             val isPictureAdded = addedPictureIndex != -1
 
             actualPictures +=
-                if (isPictureAdded) actualAddedPictures[addedPictureIndex]
+                if (isPictureAdded) addedPictures[addedPictureIndex]
                 else picture
         }
 
@@ -170,7 +169,8 @@ internal class CheckieLocalDataSourceImpl(
         }
 
         if (isNeedSync) {
-            context.startForegroundServiceCompat(CompressorService.createIntent(context, reviewId, actualAddedPictures.toArrayList()))
+            val intent = CompressorService.createIntent(context, reviewId, addedPictures.toArrayList())
+            context.startForegroundServiceCompat(intent)
         }
     }
 

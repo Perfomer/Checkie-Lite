@@ -68,7 +68,7 @@ internal sealed interface ReviewCreationUiEvent : ReviewCreationEvent {
 
         data object OnPriceCurrencyClick : ProductInfo
 
-        class OnPictureReorder(val pictureUri: String, val toPosition: Int) : ProductInfo
+        class OnPictureReorder(val pictureId: String, val toPosition: Int) : ProductInfo
     }
 
     sealed interface Tags : ReviewCreationUiEvent {

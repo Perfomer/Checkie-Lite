@@ -25,8 +25,15 @@ internal data class ProductInfoPageUiState(
     val brandSuggestions: ImmutableList<String>,
     val price: String,
     val priceCurrency: String,
-    val picturesUri: ImmutableList<String>,
-)
+    val picturesUri: ImmutableList<Picture>,
+) {
+
+    @Immutable
+    data class Picture(
+        val id: String,
+        val uri: String,
+    )
+}
 
 @Immutable
 internal data class TagsPageUiState(

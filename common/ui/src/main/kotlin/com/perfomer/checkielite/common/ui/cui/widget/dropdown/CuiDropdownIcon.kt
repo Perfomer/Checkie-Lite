@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -73,6 +74,7 @@ fun CuiDropdownMenuItem(
                     painter = iconPainter,
                     tint = iconTint,
                     contentDescription = iconContentDescription,
+                    modifier = Modifier.size(20.dp)
                 )
             }
         },

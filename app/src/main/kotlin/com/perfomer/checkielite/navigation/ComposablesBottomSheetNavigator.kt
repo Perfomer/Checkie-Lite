@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -105,7 +104,6 @@ internal fun ComposablesBottomSheetNavigator(
 
                     Sheet(
                         modifier = modifier
-                            .padding(top = 12.dp)
                             .statusBarsPadding()
                             .shadow(sheetElevation, shape)
                             .clip(shape)

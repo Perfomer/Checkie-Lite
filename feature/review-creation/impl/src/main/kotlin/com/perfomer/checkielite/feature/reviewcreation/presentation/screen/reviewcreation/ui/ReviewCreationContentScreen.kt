@@ -124,6 +124,7 @@ internal class ReviewCreationContentScreen(
                     onPriceTextInput = acceptable(ProductInfo::OnPriceTextInput),
                     onPriceCurrencyClick = acceptable(ProductInfo.OnPriceCurrencyClick),
                     onAddPictureClick = acceptable(ProductInfo.OnAddPictureClick),
+                    onTakePhotoClick = acceptable(ProductInfo.OnTakePhotoClick),
                     onPictureClick = acceptable(ProductInfo::OnPictureClick),
                     onPictureDeleteClick = acceptable(ProductInfo::OnPictureDeleteClick),
                     onPictureReorder = acceptable(ProductInfo::OnPictureReorder),

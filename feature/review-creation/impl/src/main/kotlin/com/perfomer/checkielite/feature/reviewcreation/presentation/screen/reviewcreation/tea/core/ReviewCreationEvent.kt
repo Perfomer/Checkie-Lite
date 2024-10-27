@@ -58,6 +58,8 @@ internal sealed interface ReviewCreationUiEvent : ReviewCreationEvent {
 
         data object OnAddPictureClick : ProductInfo
 
+        data object OnTakePhotoClick : ProductInfo
+
         class OnPictureClick(val position: Int) : ProductInfo
 
         class OnPictureDeleteClick(val position: Int) : ProductInfo

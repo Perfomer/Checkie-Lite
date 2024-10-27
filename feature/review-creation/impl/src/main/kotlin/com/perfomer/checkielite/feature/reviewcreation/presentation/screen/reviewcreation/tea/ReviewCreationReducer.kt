@@ -43,6 +43,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.Exit
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.ExitWithResult
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenCamera
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenCurrencySelector
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenGallery
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand.OpenPhotoPicker
@@ -195,6 +196,10 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         is ProductInfo.OnAddPictureClick -> {
             effects(CloseKeyboard)
             commands(OpenPhotoPicker)
+        }
+        is ProductInfo.OnTakePhotoClick -> {
+            effects(CloseKeyboard)
+            commands(OpenCamera)
         }
         is ProductInfo.OnPictureClick -> {
             effects(CloseKeyboard)

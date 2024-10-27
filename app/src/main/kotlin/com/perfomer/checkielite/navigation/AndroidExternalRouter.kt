@@ -2,6 +2,7 @@ package com.perfomer.checkielite.navigation
 
 import android.Manifest
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
@@ -45,6 +46,7 @@ internal class AndroidExternalRouter(
         return when (destination) {
             ExternalDestination.GALLERY -> pickPhoto()
             ExternalDestination.FILE -> pickFile()
+            ExternalDestination.CAMERA -> takePhoto()
         } as ExternalResult<T>
     }
 
@@ -98,6 +100,24 @@ internal class AndroidExternalRouter(
         }
 
         return ExternalResult.Cancel
+    }
+
+    private suspend fun takePhoto(): ExternalResult<*> {
+        val isPermissionGranted = permissionHelper.requestPermission(Manifest.permission.CAMERA)
+        if (!isPermissionGranted) return ExternalResult.Cancel
+
+        val imageUri = activity.contentResolver.insert(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            ContentValues(),
+        ) ?: return ExternalResult.Cancel
+
+        val isPhotoTakenSuccessfully = cameraResultHandler.awaitResultFor(imageUri)
+
+        return if (isPhotoTakenSuccessfully) {
+            ExternalResult.Success(imageUri.getRealPath(activity))
+        } else {
+            ExternalResult.Cancel
+        }
     }
 
     private fun <I, O> ActivityResultContract<I, O>.suspendableResultHandler(): SuspendableActivityResultHandler<I, O> {

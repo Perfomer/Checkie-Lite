@@ -4,9 +4,13 @@ object CurrencySymbol {
 
     private val symbols: Map<String, String> = mapOf(
         "AMD" to "֏",
+        "AWG" to "ƒ",
         "AZN" to "₼",
+        "CNY" to "¥",
+        "CRC" to "₡",
         "GEL" to "₾",
         "GHS" to "₵",
+        "KHR" to "៛",
         "KZT" to "₸",
         "LAK" to "₭",
         "MNT" to "₮",

@@ -149,7 +149,7 @@ class AppActivity : AppCompatActivity() {
             restartActions.forEach { restartAction ->
                 when (restartAction) {
                     is ShowSuccessBackupImportToast -> {
-                        delay(1_000L)
+                        delay(1_500L)
                         toastHost.showToast(backupImportSuccessToast)
                     }
                 }

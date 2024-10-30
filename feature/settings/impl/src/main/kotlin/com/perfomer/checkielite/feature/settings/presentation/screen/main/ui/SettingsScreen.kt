@@ -34,11 +34,17 @@ import com.perfomer.checkielite.common.ui.util.app.AppLogo
 import com.perfomer.checkielite.common.ui.util.app.appNameSpannable
 import com.perfomer.checkielite.feature.settings.R
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.state.SettingsUiState
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.widget.ConfirmBackupImportDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SettingsScreen(
     state: SettingsUiState,
+
+    shouldShowBackupImportConfirmDialog: Boolean = false,
+    onBackupImportConfirmDialogDismiss: () -> Unit = {},
+    onBackupImportConfirmDialogConfirm: () -> Unit = {},
+
     onNavigationIconClick: () -> Unit = {},
     onBackupExportClick: () -> Unit = {},
     onBackupImportClick: () -> Unit = {},
@@ -67,6 +73,13 @@ internal fun SettingsScreen(
             BackupGroup(
                 onBackupExportClick = onBackupExportClick,
                 onBackupImportClick = onBackupImportClick,
+            )
+        }
+
+        if (shouldShowBackupImportConfirmDialog) {
+            ConfirmBackupImportDialog(
+                onDismiss = onBackupImportConfirmDialogDismiss,
+                onConfirm = onBackupImportConfirmDialogConfirm,
             )
         }
     }

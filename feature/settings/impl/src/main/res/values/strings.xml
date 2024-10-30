@@ -15,4 +15,6 @@
     <string name="settings_backup_failure_import">Failed to import backup</string>
     <string name="settings_backup_success_export">Backup successfully exported</string>
     <string name="settings_backup_cancel_export">Backup export cancelled</string>
+    <string name="settings_backup_dialog_confirmimport_title">Import backup</string>
+    <string name="settings_backup_dialog_confirmimport_message">All app data will be replaced with the data in the backup you select.\n\nAre you sure you want to <b>overwrite all app data</b>?</string>
 </resources>

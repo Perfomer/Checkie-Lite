@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
+import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalCuiToastHostState
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberToast
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberWarningToast
@@ -42,7 +43,7 @@ internal class ReviewDetailsContentScreen(
         val toastHost = LocalCuiToastHostState.current
         var isConfirmDeleteDialogShown by remember { mutableStateOf(false) }
 
-        val syncingToast = rememberWarningToast(R.string.reviewdetails_toast_syncing)
+        val syncingToast = rememberWarningToast(CommonString.common_toast_syncing)
         val deletedToast = rememberToast(R.string.reviewdetails_toast_deleted)
 
         BackHandlerWithLifecycle { accept(OnBackPress) }

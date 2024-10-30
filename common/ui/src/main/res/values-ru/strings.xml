@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Checkie Lite</string>
+    <string name="common_proceed">Продолжить</string>
     <string name="common_cancel">Отмена</string>
     <string name="common_cancel_v2">Отменить</string>
     <string name="common_ok">ОК</string>
@@ -16,4 +16,5 @@
     <string name="common_reaction_like_it">Нравится</string>
     <string name="common_reaction_brilliant">Блестяще</string>
     <string name="common_error_message">Что-то пошло не так</string>
+    <string name="common_toast_syncing">Попробуйте позже. Сейчас идёт синхронизация.</string>
 </resources>

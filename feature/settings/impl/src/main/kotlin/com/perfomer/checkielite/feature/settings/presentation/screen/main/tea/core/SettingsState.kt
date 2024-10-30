@@ -2,4 +2,5 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.c
 
 internal data class SettingsState(
     val isSyncingInProgress: Boolean = false,
+    val hasReviews: Boolean = false,
 )

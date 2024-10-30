@@ -2,13 +2,16 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea
 
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.CheckHasReviews
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.CheckSyncing
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.ExportBackup
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.ImportBackup
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.LoadSettings
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowConfirmImportDialog
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowToast
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.CheckingHasReviewsStatusUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.Initialize
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.SyncingStatusUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.Exit
@@ -20,6 +23,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackupExportClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackupImportClick
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackupImportConfirmClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.WarningReason
 
 internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, SettingsEvent, SettingsState>() {
@@ -29,10 +33,11 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
         is SettingsUiEvent -> reduceUi(event)
         is SettingsNavigationEvent -> reduceNavigation(event)
         is SyncingStatusUpdated -> state { copy(isSyncingInProgress = event.isSyncing) }
+        is CheckingHasReviewsStatusUpdated -> state { copy(hasReviews = event.hasReviews) }
     }
 
     private fun reduceInitialize() {
-        commands(LoadSettings, CheckSyncing)
+        commands(LoadSettings, CheckSyncing, CheckHasReviews)
     }
 
     private fun reduceUi(event: SettingsUiEvent) = when (event) {
@@ -46,9 +51,11 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
         is OnBackupImportClick -> {
             when {
                 state.isSyncingInProgress -> effects(ShowToast.Warning(WarningReason.SYNCING_IN_PROGRESS))
+                state.hasReviews -> effects(ShowConfirmImportDialog)
                 else -> commands(SelectBackupFile)
             }
         }
+        is OnBackupImportConfirmClick -> commands(SelectBackupFile)
     }
 
     private fun reduceNavigation(event: SettingsNavigationEvent) = when (event) {

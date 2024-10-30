@@ -10,8 +10,8 @@ internal sealed interface BackupEffect {
 
         class Error(val reason: Reason) : ShowToast {
             enum class Reason {
+                COMMON_FAILED_NO_SPACE,
                 EXPORT_FAILED_COMMON,
-                EXPORT_FAILED_NO_SPACE,
                 IMPORT_FAILED_COMMON,
             }
         }

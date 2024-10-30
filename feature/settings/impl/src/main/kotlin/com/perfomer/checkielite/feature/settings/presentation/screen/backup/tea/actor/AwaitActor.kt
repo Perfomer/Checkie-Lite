@@ -21,6 +21,6 @@ internal class AwaitActor : Actor<BackupCommand, BackupEvent> {
 
     private suspend fun handleCommand(command: Await): BackupEvent {
         delay(command.durationMs)
-        return AwaitCompleted
+        return AwaitCompleted(command.reason)
     }
 }

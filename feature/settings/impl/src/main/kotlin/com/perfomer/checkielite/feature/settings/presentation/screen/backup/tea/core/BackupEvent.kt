@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core
 
 import com.perfomer.checkielite.core.entity.backup.BackupProgress
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.Await
 
 internal sealed interface BackupEvent {
 
@@ -8,7 +9,7 @@ internal sealed interface BackupEvent {
 
     class BackupProgressUpdated(val progress: BackupProgress) : BackupEvent
 
-    data object AwaitCompleted : BackupEvent
+    class AwaitCompleted(val reason: Await.Reason) : BackupEvent
 }
 
 internal sealed interface BackupUiEvent : BackupEvent {

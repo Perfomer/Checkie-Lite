@@ -26,7 +26,7 @@ internal class BackupReducer : DslReducer<BackupCommand, BackupEffect, BackupEve
         is Initialize -> reduceInitialize()
         is BackupUiEvent -> reduceUi(event)
         is BackupProgressUpdated -> reduceBackupProgressUpdated(event)
-        is AwaitCompleted -> reduceOnAwaitCompleted()
+        is AwaitCompleted -> reduceOnAwaitCompleted(event)
     }
 
     private fun reduceInitialize() {
@@ -54,45 +54,47 @@ internal class BackupReducer : DslReducer<BackupCommand, BackupEffect, BackupEve
             }
             is BackupProgress.Completed -> {
                 state { copy(progressValue = 1F) }
-                commands(Await(DELAY_AFTER_FINISH_MS))
 
-                if (state.mode == BackupMode.EXPORT) {
-                    effects(ShowToast.SuccessExport)
+                when (state.mode) {
+                    BackupMode.EXPORT -> {
+                        effects(ShowToast.SuccessExport)
+                        commands(Await(durationMs = DELAY_AFTER_FINISH_MS, reason = Await.Reason.OPEN_MAIN))
+                    }
+                    BackupMode.IMPORT -> {
+                        commands(Await(durationMs = DELAY_AFTER_FINISH_MS, reason = Await.Reason.RESTART))
+                    }
                 }
             }
             is BackupProgress.Cancelled -> {
                 state { copy(isCancelled = true) }
                 effects(ShowToast.Cancelled)
-                commands(Await(DELAY_AFTER_FINISH_MS))
+                commands(Await(durationMs = DELAY_AFTER_FINISH_MS, reason = Await.Reason.OPEN_MAIN))
             }
             is BackupProgress.Failure -> {
-                val reason = when (state.mode) {
-                    BackupMode.EXPORT -> {
-                        if (progress.error.message?.contains(NO_SPACE_MESSAGE) == true) {
-                            ShowToast.Error.Reason.EXPORT_FAILED_NO_SPACE
-                        } else {
-                            ShowToast.Error.Reason.EXPORT_FAILED_COMMON
-                        }
+                val reason = when {
+                    progress.error.message?.contains(NO_SPACE_MESSAGE) == true -> {
+                        ShowToast.Error.Reason.COMMON_FAILED_NO_SPACE
                     }
-                    BackupMode.IMPORT -> {
+                    state.mode == BackupMode.EXPORT -> {
+                        ShowToast.Error.Reason.EXPORT_FAILED_COMMON
+                    }
+                    state.mode == BackupMode.IMPORT -> {
                         ShowToast.Error.Reason.IMPORT_FAILED_COMMON
                     }
+                    else -> null
+
                 }
 
-                commands(Await(DELAY_AFTER_FINISH_MS))
-                effects(ShowToast.Error(reason))
+                commands(Await(durationMs = DELAY_AFTER_FINISH_MS, reason = Await.Reason.OPEN_MAIN))
+                reason?.let { effects(ShowToast.Error(it)) }
             }
         }
     }
 
-    private fun reduceOnAwaitCompleted() {
-        when (state.mode) {
-            BackupMode.EXPORT -> {
-                commands(OpenMain)
-            }
-            BackupMode.IMPORT -> {
-                commands(RestartApp)
-            }
+    private fun reduceOnAwaitCompleted(event: AwaitCompleted) {
+        when (event.reason) {
+            Await.Reason.RESTART -> commands(RestartApp)
+            Await.Reason.OPEN_MAIN -> commands(OpenMain)
         }
     }
 

@@ -28,7 +28,7 @@ internal class BackupContentScreen(
         val toastHostState = LocalCuiToastHostState.current
 
         val exportFailedCommonToast = rememberErrorToast(R.string.settings_backup_failure_export)
-        val exportFailedNoSpaceToast = rememberErrorToast(R.string.settings_backup_failure_export_no_space)
+        val noSpaceLeftToast = rememberErrorToast(R.string.settings_backup_failure_export_no_space)
         val importFailedCommonToast = rememberErrorToast(R.string.settings_backup_failure_import)
         val exportSucceedToast = rememberSuccessToast(R.string.settings_backup_success_export)
         val exportCancelledToast = rememberToast(R.string.settings_backup_cancel_export)
@@ -43,7 +43,7 @@ internal class BackupContentScreen(
                 }
                 is ShowToast.Error -> when (effect.reason) {
                     ShowToast.Error.Reason.EXPORT_FAILED_COMMON -> toastHostState.showToast(exportFailedCommonToast)
-                    ShowToast.Error.Reason.EXPORT_FAILED_NO_SPACE -> toastHostState.showToast(exportFailedNoSpaceToast)
+                    ShowToast.Error.Reason.COMMON_FAILED_NO_SPACE -> toastHostState.showToast(noSpaceLeftToast)
                     ShowToast.Error.Reason.IMPORT_FAILED_COMMON -> toastHostState.showToast(importFailedCommonToast)
                 }
             }

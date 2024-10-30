@@ -53,6 +53,7 @@ internal class BackupRepositoryImpl(
             runSuspendCatching {
                 fileDataSource.importBackup(
                     backupPath = fromPath,
+                    databaseTempUri = "${context.cacheDir}/$TEMP_DATABASE_FILENAME",
                     databaseTargetUri = databaseDataSource.getDatabaseSourcePath(),
                 ).collect { progress ->
                     updateState(BackupProgress.InProgress(progress))
@@ -135,5 +136,6 @@ internal class BackupRepositoryImpl(
     private companion object {
         private const val TAG: String = "BackupRepositoryImpl"
         private const val TARGET_FOLDER_NAME: String = "Checkie"
+        private const val TEMP_DATABASE_FILENAME: String = "temp_database.db"
     }
 }

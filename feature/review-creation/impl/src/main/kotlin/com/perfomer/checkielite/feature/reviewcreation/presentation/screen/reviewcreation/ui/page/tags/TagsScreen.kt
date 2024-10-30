@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,9 +20,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -82,9 +85,13 @@ internal fun TagsScreen(
                 modifier = Modifier.weight(1F)
             )
 
+            val targetTagSortAlpha = if (state.searchQuery.isBlank()) 1F else 0F
+            val animatedTagSortAlpha by animateFloatAsState(targetValue = targetTagSortAlpha, label = "TagsSortAlpha")
+
             CuiIconButton(
                 painter = painterResource(CommonDrawable.ic_sort),
                 onClick = onTagSortClick,
+                modifier = Modifier.graphicsLayer { alpha = animatedTagSortAlpha }
             )
         }
 

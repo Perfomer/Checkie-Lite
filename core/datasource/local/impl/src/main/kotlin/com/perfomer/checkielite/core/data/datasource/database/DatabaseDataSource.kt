@@ -12,6 +12,7 @@ import com.perfomer.checkielite.core.data.datasource.database.room.entity.Checki
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.RecentSearchedReviewDb
 import com.perfomer.checkielite.core.data.datasource.database.room.mapper.toDb
 import com.perfomer.checkielite.core.data.datasource.database.room.mapper.toDomain
+import com.perfomer.checkielite.core.data.util.version
 import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
@@ -100,7 +101,9 @@ internal interface DatabaseDataSource {
 
     suspend fun getUsedCurrencies(): List<CheckieCurrency>
 
-    suspend fun getDatabaseSourcePath(): String
+    fun getDatabaseSourcePath(): String
+
+    fun getDatabaseVersion(): Int
 
     suspend fun getAllPictures(): List<CheckiePicture>
 }
@@ -297,8 +300,12 @@ internal class DatabaseDataSourceImpl(
             .map(::CheckieCurrency)
     }
 
-    override suspend fun getDatabaseSourcePath(): String {
+    override fun getDatabaseSourcePath(): String {
         return requireNotNull(database.openHelper.writableDatabase.path) { "Database path is null" }
+    }
+
+    override fun getDatabaseVersion(): Int {
+        return database.version
     }
 
     override suspend fun getAllPictures(): List<CheckiePicture> {

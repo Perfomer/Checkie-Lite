@@ -4,4 +4,5 @@ internal class BackupMetadata(
     val backupVersion: Int,
     val backupTimestamp: String,
     val appVersionCode: Int,
+    val databaseVersion: Int?,
 )

@@ -90,6 +90,7 @@ internal class BackupRepositoryImpl(
                     runSuspendCatching {
                         fileDataSource.exportBackup(
                             databaseUri = databaseDataSource.getDatabaseSourcePath(),
+                            databaseVersion = databaseDataSource.getDatabaseVersion(),
                             picturesUri = databaseDataSource.getAllPictures()
                                 .filter { it.source == PictureSource.APP }
                                 .map { it.uri },

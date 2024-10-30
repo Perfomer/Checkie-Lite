@@ -29,6 +29,8 @@ internal interface FileDataSource {
         compressTargetSizeBytes: Long = COMPRESS_TARGET_SIZE,
     ): String
 
+    suspend fun clearCompressorCache()
+
     suspend fun deleteFile(uri: String)
 
     fun exportBackup(
@@ -62,7 +64,7 @@ internal class FileDataSourceImpl(
         val sourceFile = File(uri)
         val destinationFile = File(context.filesDir, randomUuid() + ".webp")
 
-        Compressor.compress(context, sourceFile, Dispatchers.IO) {
+        Compressor.compress(context, sourceFile, Dispatchers.Default) {
             format(Bitmap.CompressFormat.WEBP)
             destination(destinationFile)
             size(compressTargetSizeBytes)
@@ -71,8 +73,12 @@ internal class FileDataSourceImpl(
         return destinationFile.name
     }
 
+    override suspend fun clearCompressorCache() {
+        deleteFile("${context.cacheDir}/compressor")
+    }
+
     override suspend fun deleteFile(uri: String): Unit = withContext(Dispatchers.IO) {
-        File(uri).delete()
+        File(uri).deleteRecursively()
     }
 
     override fun exportBackup(

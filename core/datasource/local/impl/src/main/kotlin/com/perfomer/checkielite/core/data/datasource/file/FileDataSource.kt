@@ -10,7 +10,6 @@ import com.perfomer.checkielite.core.data.datasource.database.room.CheckieDataba
 import com.perfomer.checkielite.core.data.datasource.file.backup.metadata.BackupMetadata
 import com.perfomer.checkielite.core.data.datasource.file.backup.metadata.BackupMetadataParser
 import com.perfomer.checkielite.core.data.util.archive
-import com.perfomer.checkielite.core.data.util.deleteRecursivelyIf
 import com.perfomer.checkielite.core.data.util.unarchive
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.destination
@@ -19,6 +18,7 @@ import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.withContext
 import java.io.File
 
@@ -43,6 +43,7 @@ internal interface FileDataSource {
 
     fun importBackup(
         backupPath: String,
+        databaseTempUri: String,
         databaseTargetUri: String,
     ): Flow<Float>
 
@@ -100,6 +101,7 @@ internal class FileDataSourceImpl(
         if (!databaseFile.exists()) return flow { throw IllegalStateException("Database doesn't exist") }
 
         val picturesFiles = picturesUri.map(::File)
+            .filter(File::exists)
 
         return archive(
             files = picturesFiles + databaseFile,
@@ -110,24 +112,86 @@ internal class FileDataSourceImpl(
 
     override fun importBackup(
         backupPath: String,
+        databaseTempUri: String,
         databaseTargetUri: String,
     ): Flow<Float> {
         val picturesDestinationFolder = context.filesDir
 
-        picturesDestinationFolder.deleteRecursivelyIf { file -> file.extension == "webp" }
-        picturesDestinationFolder.mkdirs()
+        // Pictures we have before importing the backup
+        val oldPictures = picturesDestinationFolder.listFiles()
+            .orEmpty()
+            .filter { it.extension == "webp" }
+            .toSet()
+
+        // Pictures we need to delete after backup
+        val oldPicturesToDelete = oldPictures.toMutableSet()
+
+        val databaseTemp = File(databaseTempUri)
 
         return unarchive(
             context = context,
             zipFile = Uri.parse(backupPath),
             destinationResolver = { fileName ->
                 when (fileName) {
-                    CheckieDatabase.DATABASE_NAME -> File(databaseTargetUri)
+                    CheckieDatabase.DATABASE_NAME -> databaseTemp
                     BackupMetadataParser.METADATA_FILENAME -> null
-                    else -> File(picturesDestinationFolder, fileName)
+                    else -> {
+                        if (oldPicturesToDelete.removeIf { it.name == fileName }) {
+                            // No need to rewrite the file if it already exists
+                            null
+                        } else {
+                            File(picturesDestinationFolder, fileName)
+                        }
+                    }
                 }
             }
         )
+            .onCompletion { throwable ->
+                if (throwable == null) {
+                    finishBackupImport(
+                        databaseTemp = databaseTemp,
+                        databaseTargetUri = databaseTargetUri,
+                        oldPictures = oldPicturesToDelete,
+                        picturesDestinationFolder = picturesDestinationFolder,
+                    )
+                } else {
+                    rollbackBackupImport(
+                        databaseTemp = databaseTemp,
+                        oldPictures = oldPictures,
+                        picturesDestinationFolder = picturesDestinationFolder,
+                    )
+                }
+            }
+    }
+
+    private suspend fun finishBackupImport(
+        databaseTemp: File,
+        databaseTargetUri: String,
+        oldPictures: Set<File>,
+        picturesDestinationFolder: File,
+    ) = withContext(Dispatchers.IO) {
+        // Move temp database file to the target path
+        databaseTemp.renameTo(File(databaseTargetUri))
+
+        // Delete old pictures
+        oldPictures.forEach(File::delete)
+        picturesDestinationFolder.mkdirs()
+    }
+
+    private suspend fun rollbackBackupImport(
+        databaseTemp: File,
+        oldPictures: Set<File>,
+        picturesDestinationFolder: File,
+    ) = withContext(Dispatchers.IO) {
+        // Delete temporary database file
+        databaseTemp.delete()
+
+        // Delete new pictures
+        picturesDestinationFolder.listFiles()
+            .orEmpty()
+            .filter { it.extension == "webp" }
+            .filterNot(oldPictures::contains)
+            .forEach(File::delete)
     }
 
     private companion object {

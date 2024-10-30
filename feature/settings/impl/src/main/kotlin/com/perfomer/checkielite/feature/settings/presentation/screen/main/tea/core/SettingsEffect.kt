@@ -4,11 +4,11 @@ internal sealed interface SettingsEffect {
 
     sealed interface ShowToast : SettingsEffect {
         class Warning(val reason: WarningReason) : ShowToast
-        data object Error : ShowToast
     }
+
+    data object ShowConfirmImportDialog : SettingsEffect
 }
 
 internal enum class WarningReason {
-    BACKUP_IN_PROGRESS,
     SYNCING_IN_PROGRESS,
 }

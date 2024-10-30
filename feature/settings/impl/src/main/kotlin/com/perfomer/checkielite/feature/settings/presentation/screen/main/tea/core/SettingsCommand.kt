@@ -6,6 +6,8 @@ internal sealed interface SettingsCommand {
 
     data object CheckSyncing : SettingsCommand
 
+    data object CheckHasReviews : SettingsCommand
+
     data object ExportBackup : SettingsCommand
 
     class ImportBackup(val path: String) : SettingsCommand

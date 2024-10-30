@@ -20,6 +20,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.B
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.state.BackupUiStateMapper
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.SettingsReducer
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.SettingsStore
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.CheckHasReviewsActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.CheckSyncingActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.ExportBackupActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.ImportBackupActor
@@ -55,6 +56,7 @@ internal fun createSettingsStore(
             ExportBackupActor(backupRepository),
             ImportBackupActor(backupRepository),
             CheckSyncingActor(localDataSource),
+            CheckHasReviewsActor(localDataSource),
         ),
     )
 }

@@ -7,6 +7,8 @@
     <string name="app_name_lite" translatable="false">lite</string>
     <string name="app_name_lite_debug" translatable="false">debug</string>
 
+    <string name="common_proceed">Proceed</string>
+
     <string name="common_cancel">Cancel</string>
     <string name="common_cancel_v2">Cancel</string>
     <string name="common_ok">OK</string>
@@ -25,4 +27,6 @@
     <string name="common_reaction_okay">Okay</string>
     <string name="common_reaction_like_it">Like it</string>
     <string name="common_reaction_brilliant">Brilliant</string>
+
+    <string name="common_toast_syncing">Try again later. Synchronization is in progress now.</string>
 </resources>

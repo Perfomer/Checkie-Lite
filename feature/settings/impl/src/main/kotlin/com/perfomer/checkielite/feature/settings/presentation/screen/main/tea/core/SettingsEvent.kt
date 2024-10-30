@@ -5,6 +5,8 @@ internal sealed interface SettingsEvent {
     data object Initialize : SettingsEvent
 
     class SyncingStatusUpdated(val isSyncing: Boolean) : SettingsEvent
+
+    class CheckingHasReviewsStatusUpdated(val hasReviews: Boolean) : SettingsEvent
 }
 
 internal sealed interface SettingsUiEvent : SettingsEvent {
@@ -14,6 +16,8 @@ internal sealed interface SettingsUiEvent : SettingsEvent {
     data object OnBackupExportClick : SettingsUiEvent
 
     data object OnBackupImportClick : SettingsUiEvent
+
+    data object OnBackupImportConfirmClick : SettingsUiEvent
 }
 
 internal sealed interface SettingsNavigationEvent : SettingsEvent {

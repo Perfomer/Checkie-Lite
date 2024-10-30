@@ -96,9 +96,7 @@ internal class FileDataSourceImpl(
         val databaseFile = File(databaseUri)
         if (!databaseFile.exists()) return flow { throw IllegalStateException("Database doesn't exist") }
 
-        val picturesFiles = picturesUri
-            .map { "${context.filesDir.absolutePath}/$it" }
-            .map(::File)
+        val picturesFiles = picturesUri.map(::File)
 
         return archive(
             files = picturesFiles + databaseFile,

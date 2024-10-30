@@ -25,5 +25,5 @@ internal interface CheckiePictureDao {
     suspend fun deletePictures(picturesIds: List<String>)
 
     @Query("SELECT * FROM CheckieReviewPictureDb")
-    suspend fun getAllPicturesUri(): List<CheckieReviewPictureDb>
+    suspend fun getAllPictures(): List<CheckieReviewPictureDb>
 }

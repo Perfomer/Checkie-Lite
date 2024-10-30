@@ -102,7 +102,7 @@ internal interface DatabaseDataSource {
 
     suspend fun getDatabaseSourcePath(): String
 
-    suspend fun getAllPicturesUri(): List<String>
+    suspend fun getAllPictures(): List<CheckiePicture>
 }
 
 internal class DatabaseDataSourceImpl(
@@ -301,8 +301,8 @@ internal class DatabaseDataSourceImpl(
         return requireNotNull(database.openHelper.writableDatabase.path) { "Database path is null" }
     }
 
-    override suspend fun getAllPicturesUri(): List<String> {
-        return pictureDao.getAllPicturesUri().map { it.uri }
+    override suspend fun getAllPictures(): List<CheckiePicture> {
+        return pictureDao.getAllPictures().map { it.toDomain(context) }
     }
 
     private companion object {

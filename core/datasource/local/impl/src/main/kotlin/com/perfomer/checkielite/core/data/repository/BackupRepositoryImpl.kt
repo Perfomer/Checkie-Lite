@@ -11,6 +11,7 @@ import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
 import com.perfomer.checkielite.core.data.service.BackupParams
 import com.perfomer.checkielite.core.data.service.BackupService
 import com.perfomer.checkielite.core.data.util.startForegroundServiceCompat
+import com.perfomer.checkielite.core.entity.PictureSource
 import com.perfomer.checkielite.core.entity.backup.BackupMode
 import com.perfomer.checkielite.core.entity.backup.BackupProgress
 import com.perfomer.checkielite.core.entity.backup.BackupState
@@ -89,7 +90,9 @@ internal class BackupRepositoryImpl(
                     runSuspendCatching {
                         fileDataSource.exportBackup(
                             databaseUri = databaseDataSource.getDatabaseSourcePath(),
-                            picturesUri = databaseDataSource.getAllPicturesUri(),
+                            picturesUri = databaseDataSource.getAllPictures()
+                                .filter { it.source == PictureSource.APP }
+                                .map { it.uri },
                             destinationFolderUri = targetFolderPath,
                             fileName = fileName,
                         ).collect { progress ->

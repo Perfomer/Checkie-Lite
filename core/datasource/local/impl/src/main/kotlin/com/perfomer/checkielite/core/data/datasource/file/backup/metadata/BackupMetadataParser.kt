@@ -24,6 +24,7 @@ internal class BackupMetadataParserImpl : BackupMetadataParser {
             appVersionCode = entries[APP_VERSION]!!.toInt(),
             backupTimestamp = entries[BACKUP_TIMESTAMP]!!,
             backupVersion = entries[BACKUP_VERSION]!!.toInt(),
+            databaseVersion = entries[DATABASE_VERSION]?.toInt(),
         )
     }
 
@@ -32,6 +33,7 @@ internal class BackupMetadataParserImpl : BackupMetadataParser {
             APP_VERSION to metadata.appVersionCode,
             BACKUP_TIMESTAMP to metadata.backupTimestamp,
             BACKUP_VERSION to metadata.backupVersion,
+            DATABASE_VERSION to metadata.databaseVersion,
         )
             .entries
             .joinToString(separator = ";") { (key, value) -> "$key=$value" }
@@ -41,5 +43,6 @@ internal class BackupMetadataParserImpl : BackupMetadataParser {
         private const val APP_VERSION = "appVersion"
         private const val BACKUP_VERSION = "backupVersion"
         private const val BACKUP_TIMESTAMP = "backupTimestamp"
+        private const val DATABASE_VERSION = "databaseVersion"
     }
 }

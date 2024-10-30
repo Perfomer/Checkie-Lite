@@ -35,6 +35,7 @@ internal interface FileDataSource {
 
     fun exportBackup(
         databaseUri: String,
+        databaseVersion: Int,
         picturesUri: List<String>,
         destinationFolderUri: String,
         fileName: String,
@@ -83,6 +84,7 @@ internal class FileDataSourceImpl(
 
     override fun exportBackup(
         databaseUri: String,
+        databaseVersion: Int,
         picturesUri: List<String>,
         destinationFolderUri: String,
         fileName: String,
@@ -91,6 +93,7 @@ internal class FileDataSourceImpl(
             backupVersion = CURRENT_BACKUP_VERSION,
             backupTimestamp = getFormattedDate(),
             appVersionCode = appInfoProvider.getAppInfo().versionCode,
+            databaseVersion = databaseVersion,
         )
 
         val databaseFile = File(databaseUri)
@@ -128,6 +131,6 @@ internal class FileDataSourceImpl(
     }
 
     private companion object {
-        private const val CURRENT_BACKUP_VERSION = 1
+        private const val CURRENT_BACKUP_VERSION = 2
     }
 }

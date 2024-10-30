@@ -66,6 +66,8 @@ internal class CompressorService : Service() {
             )
         }
 
+        fileDataSource.clearCompressorCache()
+
         databaseDataSource.updatePictures(compressedPictures)
         databaseDataSource.updateSyncing(reviewId, false)
     }

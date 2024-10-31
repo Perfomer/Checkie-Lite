@@ -20,7 +20,7 @@ internal class SettingsUiStateMapper(
         return try {
             context.packageManager
                 .getPackageInfo(context.packageName, 0)
-                .versionName
+                .versionName!!
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
             "Unknown"

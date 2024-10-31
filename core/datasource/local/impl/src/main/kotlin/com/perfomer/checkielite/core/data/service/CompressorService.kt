@@ -77,6 +77,11 @@ internal class CompressorService : Service() {
         job.cancel()
     }
 
+    override fun onTimeout(startId: Int, fgsType: Int) {
+        super.onTimeout(startId, fgsType)
+        stopSelf()
+    }
+
     override fun onBind(intent: Intent?): IBinder? = null
 
     private fun createForegroundNotification(): Notification {

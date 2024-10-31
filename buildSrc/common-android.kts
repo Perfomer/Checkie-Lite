@@ -31,13 +31,9 @@ android {
         }
 
         release {
-            setMinifyEnabled(true)
-            signingConfig = signingConfigs.getByName("debug")
-
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            // After AGP 8.4.0 minification should be enabled only for `:app` module.
+            // https://stackoverflow.com/a/78794247/5328992
+            setMinifyEnabled(false)
         }
     }
 }

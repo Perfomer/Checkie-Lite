@@ -41,12 +41,7 @@ internal class BackupService : Service() {
         createNotificationChannel()
 
         val notification = createForegroundNotification(params)
-        val foregroundServiceType = when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM -> ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROCESSING
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
-            else -> 0
-        }
-
+        val foregroundServiceType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC else 0
         ServiceCompat.startForeground(this, NOTIFICATION_ID_FOREGROUND, notification, foregroundServiceType)
 
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager

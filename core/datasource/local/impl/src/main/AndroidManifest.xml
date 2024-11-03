@@ -3,13 +3,12 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROCESSING" />
 
     <application>
         <service
             android:name="com.perfomer.checkielite.core.data.service.CompressorService"
             android:exported="false"
-            android:foregroundServiceType="mediaProcessing|dataSync" />
+            android:foregroundServiceType="dataSync" />
 
         <service
             android:name="com.perfomer.checkielite.core.data.service.BackupService"

@@ -1,9 +1,11 @@
 package com.perfomer.checkielite.common.ui.cui.widget.dialog
 
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -76,7 +78,12 @@ private fun CuiAlertDialogInternal(
                 color = LocalCuiPalette.current.TextPrimary,
             )
         },
-        text = text,
+        text = {
+            CompositionLocalProvider(
+                LocalTextStyle provides LocalTextStyle.current.copy(color = LocalCuiPalette.current.TextSecondary),
+                content = text,
+            )
+        },
         confirmButton = {
             TextButton(
                 onClick = {

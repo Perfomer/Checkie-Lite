@@ -55,6 +55,7 @@ internal class BackupRepositoryImpl(
                     backupPath = fromPath,
                     databaseTempUri = "${context.cacheDir}/$TEMP_DATABASE_FILENAME",
                     databaseTargetUri = databaseDataSource.getDatabaseSourcePath(),
+                    databaseVersion = databaseDataSource.getDatabaseVersion(),
                 ).collect { progress ->
                     updateState(BackupProgress.InProgress(progress))
                 }

@@ -13,6 +13,7 @@ internal sealed interface BackupEffect {
                 COMMON_FAILED_NO_SPACE,
                 EXPORT_FAILED_COMMON,
                 IMPORT_FAILED_COMMON,
+                IMPORT_FAILED_UPDATE_REQUIRED,
             }
         }
     }

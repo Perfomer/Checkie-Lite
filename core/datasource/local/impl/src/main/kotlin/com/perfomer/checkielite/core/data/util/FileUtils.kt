@@ -68,6 +68,7 @@ internal fun unarchive(
     context: Context,
     zipFile: Uri,
     destinationResolver: (name: String) -> File?,
+    metadataParser: (String) -> Unit,
 ): Flow<Float> = flow {
     var totalBytes = 0L
     var completedBytes = 0L
@@ -79,6 +80,14 @@ internal fun unarchive(
             var currentEntry = zipInputStream.nextEntry
 
             while (currentEntry != null) {
+                if (currentEntry.name == METADATA_FILENAME) {
+                    val reader = zipInputStream.bufferedReader()
+                    metadataParser(reader.readText())
+
+                    currentEntry = zipInputStream.nextEntry
+                    continue
+                }
+
                 val destinationFile = destinationResolver(currentEntry.name)
 
                 if (destinationFile == null) {

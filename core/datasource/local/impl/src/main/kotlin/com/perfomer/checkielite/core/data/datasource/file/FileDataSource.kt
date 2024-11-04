@@ -11,6 +11,7 @@ import com.perfomer.checkielite.core.data.datasource.file.backup.metadata.Backup
 import com.perfomer.checkielite.core.data.datasource.file.backup.metadata.BackupMetadataParser
 import com.perfomer.checkielite.core.data.util.archive
 import com.perfomer.checkielite.core.data.util.unarchive
+import com.perfomer.checkielite.core.entity.backup.BackupException
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.destination
 import id.zelory.compressor.constraint.format
@@ -45,6 +46,7 @@ internal interface FileDataSource {
         backupPath: String,
         databaseTempUri: String,
         databaseTargetUri: String,
+        databaseVersion: Int,
     ): Flow<Float>
 
     private companion object {
@@ -114,6 +116,7 @@ internal class FileDataSourceImpl(
         backupPath: String,
         databaseTempUri: String,
         databaseTargetUri: String,
+        databaseVersion: Int,
     ): Flow<Float> {
         val picturesDestinationFolder = context.filesDir
 
@@ -131,6 +134,12 @@ internal class FileDataSourceImpl(
         return unarchive(
             context = context,
             zipFile = Uri.parse(backupPath),
+            metadataParser = { metadataString ->
+                verifyMetadata(
+                    metadata = backupMetadataParser.parse(metadataString),
+                    currentDatabaseVersion = databaseVersion,
+                )
+            },
             destinationResolver = { fileName ->
                 when (fileName) {
                     CheckieDatabase.DATABASE_NAME -> databaseTemp
@@ -144,7 +153,7 @@ internal class FileDataSourceImpl(
                         }
                     }
                 }
-            }
+            },
         )
             .onCompletion { throwable ->
                 if (throwable == null) {
@@ -192,6 +201,18 @@ internal class FileDataSourceImpl(
             .filter { it.extension == "webp" }
             .filterNot(oldPictures::contains)
             .forEach(File::delete)
+    }
+
+    private fun verifyMetadata(
+        currentDatabaseVersion: Int,
+        metadata: BackupMetadata,
+    ) {
+        if (metadata.databaseVersion != null && metadata.databaseVersion > currentDatabaseVersion) {
+            throw BackupException.DatabaseVersionNotSupported(
+                currentDatabaseVersion = currentDatabaseVersion,
+                importingDatabaseVersion = metadata.databaseVersion,
+            )
+        }
     }
 
     private companion object {

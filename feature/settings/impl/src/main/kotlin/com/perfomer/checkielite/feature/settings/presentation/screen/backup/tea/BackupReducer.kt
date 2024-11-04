@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea
 
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
+import com.perfomer.checkielite.core.entity.backup.BackupException
 import com.perfomer.checkielite.core.entity.backup.BackupMode
 import com.perfomer.checkielite.core.entity.backup.BackupProgress
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand
@@ -74,6 +75,9 @@ internal class BackupReducer : DslReducer<BackupCommand, BackupEffect, BackupEve
                 val reason = when {
                     progress.error.message?.contains(NO_SPACE_MESSAGE) == true -> {
                         ShowToast.Error.Reason.COMMON_FAILED_NO_SPACE
+                    }
+                    progress.error is BackupException.DatabaseVersionNotSupported -> {
+                        ShowToast.Error.Reason.IMPORT_FAILED_UPDATE_REQUIRED
                     }
                     state.mode == BackupMode.EXPORT -> {
                         ShowToast.Error.Reason.EXPORT_FAILED_COMMON

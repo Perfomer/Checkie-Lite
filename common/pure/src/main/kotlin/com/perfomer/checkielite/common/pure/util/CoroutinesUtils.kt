@@ -48,29 +48,28 @@ suspend inline fun <R> runSuspendCatching(block: () -> R): Result<R> {
     }
 }
 
-fun CoroutineScope.tryLaunch(
+fun <T> CoroutineScope.tryLaunch(
     context: CoroutineContext = EmptyCoroutineContext,
     start: CoroutineStart = CoroutineStart.DEFAULT,
+    onSuccess: (suspend CoroutineScope.(T) -> Unit)? = null,
     onCancel: (suspend CoroutineScope.() -> Unit)? = null,
     onError: (suspend CoroutineScope.(Throwable) -> Unit)? = null,
     finally: (suspend CoroutineScope.() -> Unit)? = null,
-    block: suspend CoroutineScope.() -> Unit,
+    block: suspend CoroutineScope.() -> T,
 ): Job {
     return launch(context, start) {
         try {
-            block()
+            val result = block()
+            onSuccess?.invoke(this, result)
+        } catch (error: TimeoutCancellationException) {
+            onError?.invoke(this, error) ?: throw error
         } catch (error: CancellationException) {
-            withContext(NonCancellable) {
-                onCancel?.invoke(this)
-            }
+            withContext(NonCancellable) { onCancel?.invoke(this) }
             throw error
         } catch (error: Throwable) {
-            onError?.invoke(this, error)
-                ?: throw error
+            onError?.invoke(this, error) ?: throw error
         } finally {
-            withContext(NonCancellable) {
-                finally?.invoke(this)
-            }
+            withContext(NonCancellable) { finally?.invoke(this) }
         }
     }
 }

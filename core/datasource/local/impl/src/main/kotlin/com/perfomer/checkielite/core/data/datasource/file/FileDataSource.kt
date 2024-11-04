@@ -144,14 +144,7 @@ internal class FileDataSourceImpl(
                 when (fileName) {
                     CheckieDatabase.DATABASE_NAME -> databaseTemp
                     BackupMetadataParser.METADATA_FILENAME -> null
-                    else -> {
-                        if (oldPicturesToDelete.removeIf { it.name == fileName }) {
-                            // No need to rewrite the file if it already exists
-                            null
-                        } else {
-                            File(picturesDestinationFolder, fileName)
-                        }
-                    }
+                    else -> File(picturesDestinationFolder, fileName)
                 }
             },
         )

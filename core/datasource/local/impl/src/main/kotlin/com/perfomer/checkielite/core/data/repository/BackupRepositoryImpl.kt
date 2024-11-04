@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Environment
 import android.util.Log
 import com.perfomer.checkielite.common.pure.util.getFormattedDate
-import com.perfomer.checkielite.common.pure.util.runSuspendCatching
 import com.perfomer.checkielite.common.pure.util.tryLaunch
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
 import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
@@ -49,24 +48,32 @@ internal class BackupRepositoryImpl(
                 backupFlow.emit(BackupState(BackupMode.IMPORT, progress))
             }
 
-            runSuspendCatching {
+            backupJob = tryLaunch(
+                onSuccess = {
+                    updateState(BackupProgress.Completed)
+                },
+                onError = { throwable ->
+                    Log.e(TAG, "Failed to import backup", throwable)
+                    updateState(BackupProgress.Failure(throwable))
+                },
+                onCancel = {
+                    updateState(BackupProgress.Cancelled)
+                },
+                finally = {
+                    delay(500L)
+                    updateState(BackupProgress.None)
+                },
+            ) {
                 fileDataSource.importBackup(
                     backupPath = fromPath,
                     databaseTempUri = "${context.cacheDir}/$TEMP_DATABASE_FILENAME",
                     databaseTargetUri = databaseDataSource.getDatabaseSourcePath(),
                     databaseVersion = databaseDataSource.getDatabaseVersion(),
                 ).collect { progress ->
+                    ensureActive()
                     updateState(BackupProgress.InProgress(progress))
                 }
             }
-                .onFailure { error ->
-                    Log.e(TAG, "Failed to import backup", error)
-                    updateState(BackupProgress.Failure(error))
-                }
-                .onSuccess { updateState(BackupProgress.Completed) }
-
-            delay(500L)
-            updateState(BackupProgress.None)
         }
     }
 
@@ -112,7 +119,7 @@ internal class BackupRepositoryImpl(
         }
     }
 
-    override suspend fun cancelBackupExport() {
+    override suspend fun cancelBackup() {
         backupJob?.cancel()
     }
 

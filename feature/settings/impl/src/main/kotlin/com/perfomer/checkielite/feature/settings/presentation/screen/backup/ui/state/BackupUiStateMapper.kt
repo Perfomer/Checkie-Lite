@@ -21,7 +21,6 @@ internal class BackupUiStateMapper(
             },
             backupProgress = state.progressValue,
             progressLabel = "$progressPercent%",
-            isCancelVisible = state.mode == BackupMode.EXPORT,
             isCancelAvailable = state.backupProgress is BackupProgress.InProgress,
             progressBarStyle = when (state.backupProgress) {
                 is BackupProgress.None,

@@ -21,6 +21,6 @@ internal class CancelBackupActor(
     }
 
     private suspend fun handleCommand(command: CancelBackup) {
-        repository.cancelBackupExport()
+        repository.cancelBackup()
     }
 }

@@ -13,6 +13,7 @@ import com.perfomer.checkielite.feature.settings.R
 import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupParams
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.BackupStore
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect.ShowToast
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect.ShowToast.Reason
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupUiEvent.OnCancelClick
 import com.perfomer.checkielite.navigation.voyager.BaseScreen
@@ -30,24 +31,24 @@ internal class BackupContentScreen(
         val noSpaceLeftToast = rememberErrorToast(R.string.settings_backup_failure_common_no_space)
         val importFailedCommonToast = rememberErrorToast(R.string.settings_backup_failure_import)
         val importFailedUpdateRequiredToast = rememberErrorToast(R.string.settings_backup_failure_import_need_update)
+        val importCancelledToast = rememberToast(R.string.settings_backup_cancel_import)
         val exportFailedCommonToast = rememberErrorToast(R.string.settings_backup_failure_export)
         val exportSucceedToast = rememberSuccessToast(R.string.settings_backup_success_export)
         val exportCancelledToast = rememberToast(R.string.settings_backup_cancel_export)
 
         EffectHandler { effect ->
             when (effect) {
-                is ShowToast.SuccessExport -> {
-                    toastHostState.showToast(exportSucceedToast)
-                }
-                is ShowToast.Cancelled -> {
-                    toastHostState.showToast(exportCancelledToast)
-                }
-                is ShowToast.Error -> when (effect.reason) {
-                    ShowToast.Error.Reason.COMMON_FAILED_NO_SPACE -> toastHostState.showToast(noSpaceLeftToast)
-                    ShowToast.Error.Reason.EXPORT_FAILED_COMMON -> toastHostState.showToast(exportFailedCommonToast)
-                    ShowToast.Error.Reason.IMPORT_FAILED_COMMON -> toastHostState.showToast(importFailedCommonToast)
-                    ShowToast.Error.Reason.IMPORT_FAILED_UPDATE_REQUIRED -> toastHostState.showToast(importFailedUpdateRequiredToast)
-                }
+                is ShowToast -> toastHostState.showToast(
+                    when (effect.reason) {
+                        Reason.EXPORT_SUCCESS -> exportSucceedToast
+                        Reason.IMPORT_CANCELLED -> importCancelledToast
+                        Reason.EXPORT_CANCELLED -> exportCancelledToast
+                        Reason.BACKUP_FAILED_NO_SPACE -> noSpaceLeftToast
+                        Reason.EXPORT_FAILED_COMMON -> exportFailedCommonToast
+                        Reason.IMPORT_FAILED_COMMON -> importFailedCommonToast
+                        Reason.IMPORT_FAILED_UPDATE_REQUIRED -> importFailedUpdateRequiredToast
+                    }
+                )
             }
         }
 

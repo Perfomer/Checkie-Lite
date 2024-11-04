@@ -93,16 +93,14 @@ internal fun BackupScreen(
 
             Spacer(Modifier.weight(1F))
 
-            if (state.isCancelVisible) {
-                CuiSecondaryButton(
-                    text = stringResource(CommonString.common_cancel_v2),
-                    onClick = onCancelClick,
-                    enabled = state.isCancelAvailable,
-                    modifier = Modifier.fillMaxWidth()
-                )
+            CuiSecondaryButton(
+                text = stringResource(CommonString.common_cancel_v2),
+                onClick = onCancelClick,
+                enabled = state.isCancelAvailable,
+                modifier = Modifier.fillMaxWidth()
+            )
 
-                CuiSpacer(24.dp)
-            }
+            CuiSpacer(24.dp)
 
             Text(
                 text = annotatedStringResource(R.string.settings_backup_minimize_hint),
@@ -135,7 +133,6 @@ internal val mockUiState = BackupUiState(
     title = "Creating backup...",
     backupProgress = 0.65F,
     progressLabel = "65%",
-    isCancelVisible = true,
     isCancelAvailable = true,
     progressBarStyle = BackupProgressBarStyle.IN_PROGRESS,
 )

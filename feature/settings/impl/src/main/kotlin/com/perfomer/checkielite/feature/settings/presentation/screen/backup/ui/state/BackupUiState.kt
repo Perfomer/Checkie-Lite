@@ -8,7 +8,6 @@ internal data class BackupUiState(
     val progressLabel: String,
     val backupProgress: Float,
     val progressBarStyle: BackupProgressBarStyle,
-    val isCancelVisible: Boolean,
     val isCancelAvailable: Boolean,
 )
 

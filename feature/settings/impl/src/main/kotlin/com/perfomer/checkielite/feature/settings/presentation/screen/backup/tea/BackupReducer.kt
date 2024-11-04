@@ -10,6 +10,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.ObserveBackupProgress
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect.ShowToast
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect.ShowToast.Reason
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent.AwaitCompleted
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent.BackupProgressUpdated
@@ -58,7 +59,7 @@ internal class BackupReducer : DslReducer<BackupCommand, BackupEffect, BackupEve
 
                 when (state.mode) {
                     BackupMode.EXPORT -> {
-                        effects(ShowToast.SuccessExport)
+                        effects(ShowToast(Reason.EXPORT_SUCCESS))
                         commands(Await(durationMs = DELAY_AFTER_FINISH_MS, reason = Await.Reason.OPEN_MAIN))
                     }
                     BackupMode.IMPORT -> {
@@ -67,30 +68,34 @@ internal class BackupReducer : DslReducer<BackupCommand, BackupEffect, BackupEve
                 }
             }
             is BackupProgress.Cancelled -> {
+                val reason = when (state.mode) {
+                    BackupMode.EXPORT -> Reason.EXPORT_CANCELLED
+                    BackupMode.IMPORT -> Reason.IMPORT_CANCELLED
+                }
+
                 state { copy(isCancelled = true) }
-                effects(ShowToast.Cancelled)
+                effects(ShowToast(reason))
                 commands(Await(durationMs = DELAY_AFTER_FINISH_MS, reason = Await.Reason.OPEN_MAIN))
             }
             is BackupProgress.Failure -> {
                 val reason = when {
                     progress.error.message?.contains(NO_SPACE_MESSAGE) == true -> {
-                        ShowToast.Error.Reason.COMMON_FAILED_NO_SPACE
+                        Reason.BACKUP_FAILED_NO_SPACE
                     }
                     progress.error is BackupException.DatabaseVersionNotSupported -> {
-                        ShowToast.Error.Reason.IMPORT_FAILED_UPDATE_REQUIRED
+                        Reason.IMPORT_FAILED_UPDATE_REQUIRED
                     }
                     state.mode == BackupMode.EXPORT -> {
-                        ShowToast.Error.Reason.EXPORT_FAILED_COMMON
+                        Reason.EXPORT_FAILED_COMMON
                     }
                     state.mode == BackupMode.IMPORT -> {
-                        ShowToast.Error.Reason.IMPORT_FAILED_COMMON
+                        Reason.IMPORT_FAILED_COMMON
                     }
                     else -> null
-
                 }
 
                 commands(Await(durationMs = DELAY_AFTER_FINISH_MS, reason = Await.Reason.OPEN_MAIN))
-                reason?.let { effects(ShowToast.Error(it)) }
+                effects(reason?.let(::ShowToast))
             }
         }
     }

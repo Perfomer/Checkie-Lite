@@ -16,6 +16,7 @@
     <string name="settings_backup_failure_import_need_update">Эта версия приложения устарела. Требуется обновление</string>
     <string name="settings_backup_success_export">Резервная копия успешно создана</string>
     <string name="settings_backup_cancel_export">Создание резервной копии отменено</string>
+    <string name="settings_backup_cancel_import">Восстановление данных отменено</string>
     <string name="settings_backup_dialog_confirmimport_title">Восстановить данные</string>
     <string name="settings_backup_dialog_confirmimport_message">Все данные приложения будут заменены на те, что находятся в резервной копии, которую вы выберете.\n\nВы уверены, что хотите <b>перезаписать все данные приложения</b>?</string>
 </resources>

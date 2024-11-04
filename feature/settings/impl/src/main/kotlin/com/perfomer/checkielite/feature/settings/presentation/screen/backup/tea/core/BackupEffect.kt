@@ -2,19 +2,16 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea
 
 internal sealed interface BackupEffect {
 
-    sealed interface ShowToast : BackupEffect {
-
-        data object Cancelled : ShowToast
-
-        data object SuccessExport : ShowToast
-
-        class Error(val reason: Reason) : ShowToast {
-            enum class Reason {
-                COMMON_FAILED_NO_SPACE,
-                EXPORT_FAILED_COMMON,
-                IMPORT_FAILED_COMMON,
-                IMPORT_FAILED_UPDATE_REQUIRED,
-            }
+    class ShowToast(val reason: Reason) : BackupEffect {
+        enum class Reason {
+            EXPORT_SUCCESS,
+            // `IMPORT_SUCCESS` shows only after app restart: see `RestartAction.ShowSuccessBackupImportToast`.
+            IMPORT_CANCELLED,
+            EXPORT_CANCELLED,
+            BACKUP_FAILED_NO_SPACE,
+            EXPORT_FAILED_COMMON,
+            IMPORT_FAILED_COMMON,
+            IMPORT_FAILED_UPDATE_REQUIRED,
         }
     }
 }

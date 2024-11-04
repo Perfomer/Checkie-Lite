@@ -17,9 +17,11 @@ import id.zelory.compressor.constraint.destination
 import id.zelory.compressor.constraint.format
 import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 import java.io.File
 
@@ -77,7 +79,7 @@ internal class FileDataSourceImpl(
         return destinationFile.name
     }
 
-    override suspend fun clearCompressorCache() {
+    override suspend fun clearCompressorCache() = withContext(Dispatchers.IO) {
         deleteFile("${context.cacheDir}/compressor")
     }
 
@@ -110,6 +112,17 @@ internal class FileDataSourceImpl(
             destination = File("$destinationFolderUri/$fileName"),
             metadata = backupMetadataParser.serialize(metadata),
         )
+            .onStart {
+                File(destinationFolderUri).mkdirs()
+            }
+            .onCompletion { throwable ->
+                if (throwable != null) {
+                    rollbackBackupExport(
+                        destinationFolderUri = destinationFolderUri,
+                        fileName = fileName,
+                    )
+                }
+            }
     }
 
     override fun importBackup(
@@ -171,7 +184,7 @@ internal class FileDataSourceImpl(
         databaseTargetUri: String,
         oldPictures: Set<File>,
         picturesDestinationFolder: File,
-    ) = withContext(Dispatchers.IO) {
+    ) = withContext(NonCancellable + Dispatchers.IO) {
         // Move temp database file to the target path
         databaseTemp.renameTo(File(databaseTargetUri))
 
@@ -184,7 +197,7 @@ internal class FileDataSourceImpl(
         databaseTemp: File,
         oldPictures: Set<File>,
         picturesDestinationFolder: File,
-    ) = withContext(Dispatchers.IO) {
+    ) = withContext(NonCancellable + Dispatchers.IO) {
         // Delete temporary database file
         databaseTemp.delete()
 
@@ -194,6 +207,13 @@ internal class FileDataSourceImpl(
             .filter { it.extension == "webp" }
             .filterNot(oldPictures::contains)
             .forEach(File::delete)
+    }
+
+    private suspend fun rollbackBackupExport(
+        destinationFolderUri: String,
+        fileName: String,
+    ) = withContext(NonCancellable + Dispatchers.IO) {
+        deleteFile("$destinationFolderUri/$fileName")
     }
 
     private fun verifyMetadata(

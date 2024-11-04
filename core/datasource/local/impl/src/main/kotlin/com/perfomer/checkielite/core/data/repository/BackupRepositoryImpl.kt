@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import java.io.File
 
 internal class BackupRepositoryImpl(
     private val context: Context,
@@ -81,44 +80,35 @@ internal class BackupRepositoryImpl(
                 backupFlow.emit(BackupState(BackupMode.EXPORT, progress))
             }
 
-            suspend fun deleteBackupFile() {
-                fileDataSource.deleteFile("$targetFolderPath/$fileName")
-            }
-
-            File(targetFolderPath).mkdirs()
-
             backupJob = tryLaunch(
-                block = {
-                    runSuspendCatching {
-                        fileDataSource.exportBackup(
-                            databaseUri = databaseDataSource.getDatabaseSourcePath(),
-                            databaseVersion = databaseDataSource.getDatabaseVersion(),
-                            picturesUri = databaseDataSource.getAllPictures()
-                                .filter { it.source == PictureSource.APP }
-                                .map { it.uri },
-                            destinationFolderUri = targetFolderPath,
-                            fileName = fileName,
-                        ).collect { progress ->
-                            ensureActive()
-                            updateState(BackupProgress.InProgress(progress))
-                        }
-                    }
-                        .onFailure { error ->
-                            Log.e(TAG, "Failed to export backup", error)
-                            deleteBackupFile()
-                            updateState(BackupProgress.Failure(error))
-                        }
-                        .onSuccess { updateState(BackupProgress.Completed) }
+                onSuccess = {
+                    updateState(BackupProgress.Completed)
+                },
+                onError = { throwable ->
+                    Log.e(TAG, "Failed to export backup", throwable)
+                    updateState(BackupProgress.Failure(throwable))
                 },
                 onCancel = {
-                    deleteBackupFile()
                     updateState(BackupProgress.Cancelled)
                 },
                 finally = {
                     delay(500L)
                     updateState(BackupProgress.None)
                 }
-            )
+            ) {
+                fileDataSource.exportBackup(
+                    databaseUri = databaseDataSource.getDatabaseSourcePath(),
+                    databaseVersion = databaseDataSource.getDatabaseVersion(),
+                    picturesUri = databaseDataSource.getAllPictures()
+                        .filter { it.source == PictureSource.APP }
+                        .map { it.uri },
+                    destinationFolderUri = targetFolderPath,
+                    fileName = fileName,
+                ).collect { progress ->
+                    ensureActive()
+                    updateState(BackupProgress.InProgress(progress))
+                }
+            }
         }
     }
 

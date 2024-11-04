@@ -23,11 +23,11 @@ abstract class DslReducer<Command : Any, Effect : Any, Event : Any, State : Any>
 		updater.state(block)
 	}
 
-	fun commands(vararg commands: Command) {
+	fun commands(vararg commands: Command?) {
 		updater.commands(*commands)
 	}
 
-	fun effects(vararg effects: Effect) {
+	fun effects(vararg effects: Effect?) {
 		updater.effects(*effects)
 	}
 }

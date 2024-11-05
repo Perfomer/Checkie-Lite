@@ -13,16 +13,14 @@ android {
 
 dependencies {
 	api(project(":feature:settings:api"))
-
-	implementation(project(":feature:main:api"))
-
 	implementation(project(":common:android"))
 	implementation(project(":common:navigation:voyager"))
 	implementation(project(":common:pure"))
 	implementation(project(":common:tea:compose"))
 	implementation(project(":common:ui"))
-
+	implementation(project(":common:update:api"))
 	implementation(project(":core:datasource:local:api"))
+	implementation(project(":feature:main:api"))
 
 	implementation(libs.activity.compose)
 	implementation(libs.compose.material3)

@@ -2,13 +2,13 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.c
 
 internal sealed interface SettingsEffect {
 
-    sealed interface ShowToast : SettingsEffect {
-        class Warning(val reason: WarningReason) : ShowToast
+    class ShowToast(val reason: Reason) : SettingsEffect {
+        enum class Reason {
+            SYNCING_IN_PROGRESS,
+            APP_IS_UP_TO_DATE,
+            FAILED_TO_CHECK_UPDATES,
+        }
     }
 
     data object ShowConfirmImportDialog : SettingsEffect
-}
-
-internal enum class WarningReason {
-    SYNCING_IN_PROGRESS,
 }

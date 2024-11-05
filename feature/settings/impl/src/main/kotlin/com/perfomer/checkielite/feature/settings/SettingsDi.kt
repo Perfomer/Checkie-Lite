@@ -2,6 +2,7 @@ package com.perfomer.checkielite.feature.settings
 
 import android.content.Context
 import com.perfomer.checkielite.common.android.apprestart.AppRestarter
+import com.perfomer.checkielite.common.update.api.AppUpdateManager
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.data.repository.BackupRepository
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
@@ -22,8 +23,10 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.Se
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.SettingsStore
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.CheckHasReviewsActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.CheckSyncingActor
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.CheckUpdatesActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.ExportBackupActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.ImportBackupActor
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.LaunchAppUpdateActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.SettingsNavigationActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.SettingsContentScreen
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.state.SettingsUiStateMapper
@@ -47,6 +50,7 @@ internal fun createSettingsStore(
     externalRouter: ExternalRouter,
     localDataSource: CheckieLocalDataSource,
     backupRepository: BackupRepository,
+    appUpdateManager: AppUpdateManager,
 ): SettingsStore {
     return SettingsStore(
         reducer = SettingsReducer(),
@@ -57,6 +61,8 @@ internal fun createSettingsStore(
             ImportBackupActor(backupRepository),
             CheckSyncingActor(localDataSource),
             CheckHasReviewsActor(localDataSource),
+            CheckUpdatesActor(appUpdateManager),
+            LaunchAppUpdateActor(appUpdateManager),
         ),
     )
 }

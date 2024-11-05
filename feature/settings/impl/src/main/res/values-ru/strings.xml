@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings_title">Настройки</string>
+    <string name="settings_group_app_title">Приложение</string>
+    <string name="settings_group_app_item_check_updates">Проверить обновления</string>
     <string name="settings_group_data_title">Данные</string>
     <string name="settings_group_data_description">Сохраните все данные приложения в одном файле, чтобы не потерять их. Его можно передать на другое устройство или сохранить на облако.</string>
     <string name="settings_group_data_item_import">Восстановить данные</string>
@@ -19,4 +21,6 @@
     <string name="settings_backup_cancel_import">Восстановление данных отменено</string>
     <string name="settings_backup_dialog_confirmimport_title">Восстановить данные</string>
     <string name="settings_backup_dialog_confirmimport_message">Все данные приложения будут заменены на те, что находятся в резервной копии, которую вы выберете.\n\nВы уверены, что хотите <b>перезаписать все данные приложения</b>?</string>
+    <string name="settings_toast_update_check_succeed">Версия приложения актуальна</string>
+    <string name="settings_toast_update_check_failed">Не удалось проверить обновления</string>
 </resources>

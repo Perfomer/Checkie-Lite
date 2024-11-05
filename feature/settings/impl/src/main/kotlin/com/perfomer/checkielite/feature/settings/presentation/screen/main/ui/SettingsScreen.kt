@@ -48,6 +48,7 @@ internal fun SettingsScreen(
     onNavigationIconClick: () -> Unit = {},
     onBackupExportClick: () -> Unit = {},
     onBackupImportClick: () -> Unit = {},
+    onCheckUpdatesClick: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -73,6 +74,12 @@ internal fun SettingsScreen(
             BackupGroup(
                 onBackupExportClick = onBackupExportClick,
                 onBackupImportClick = onBackupImportClick,
+            )
+
+            CuiSpacer(20.dp)
+
+            AppGroup(
+                onCheckUpdatesClick = onCheckUpdatesClick,
             )
         }
 
@@ -140,6 +147,27 @@ private fun BackupGroup(
             subtitle = stringResource(R.string.settings_group_data_item_import_desc),
             icon = painterResource(R.drawable.ic_backup_import),
             onClick = onBackupImportClick,
+        )
+    }
+}
+
+@Composable
+private fun AppGroup(
+    onCheckUpdatesClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        GroupTitle(
+            title = stringResource(R.string.settings_group_app_title),
+            modifier = Modifier.padding(horizontal = 20.dp)
+        )
+
+        CuiSpacer(8.dp)
+
+        SettingsItem(
+            title = stringResource(R.string.settings_group_app_item_check_updates),
+            icon = painterResource(R.drawable.ic_update),
+            onClick = onCheckUpdatesClick,
         )
     }
 }

@@ -11,6 +11,10 @@ internal sealed interface SettingsCommand {
     data object ExportBackup : SettingsCommand
 
     class ImportBackup(val path: String) : SettingsCommand
+
+    data object CheckUpdates : SettingsCommand
+
+    data object LaunchAppUpdate : SettingsCommand
 }
 
 internal sealed interface SettingsNavigationCommand : SettingsCommand {

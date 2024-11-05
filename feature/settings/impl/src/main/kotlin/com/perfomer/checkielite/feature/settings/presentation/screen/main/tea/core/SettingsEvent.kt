@@ -1,5 +1,7 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core
 
+import com.perfomer.checkielite.common.pure.state.Lce
+
 internal sealed interface SettingsEvent {
 
     data object Initialize : SettingsEvent
@@ -7,6 +9,8 @@ internal sealed interface SettingsEvent {
     class SyncingStatusUpdated(val isSyncing: Boolean) : SettingsEvent
 
     class CheckingHasReviewsStatusUpdated(val hasReviews: Boolean) : SettingsEvent
+
+    class UpdatesCheck(val hasUpdates: Lce<Boolean>) : SettingsEvent
 }
 
 internal sealed interface SettingsUiEvent : SettingsEvent {
@@ -18,6 +22,8 @@ internal sealed interface SettingsUiEvent : SettingsEvent {
     data object OnBackupImportClick : SettingsUiEvent
 
     data object OnBackupImportConfirmClick : SettingsUiEvent
+
+    data object OnCheckUpdatesClick : SettingsUiEvent
 }
 
 internal sealed interface SettingsNavigationEvent : SettingsEvent {

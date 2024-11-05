@@ -9,6 +9,7 @@
 
     <string name="common_proceed">Proceed</string>
 
+    <string name="common_warning">Warning</string>
     <string name="common_cancel">Cancel</string>
     <string name="common_cancel_v2">Cancel</string>
     <string name="common_ok">OK</string>

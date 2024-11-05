@@ -14,7 +14,7 @@ internal fun ConfirmBackupImportDialog(
     onConfirm: () -> Unit,
 ) {
     CuiAlertDialog(
-        title = stringResource(R.string.settings_backup_dialog_confirmimport_title),
+        title = stringResource(CommonString.common_warning),
         text = annotatedStringResource(R.string.settings_backup_dialog_confirmimport_message),
         confirmText = stringResource(CommonString.common_proceed),
         confirmColor = MaterialTheme.colorScheme.error,

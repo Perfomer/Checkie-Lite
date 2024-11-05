@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="common_proceed">Продолжить</string>
+    <string name="common_warning">Внимание</string>
     <string name="common_cancel">Отмена</string>
     <string name="common_cancel_v2">Отменить</string>
     <string name="common_ok">ОК</string>

@@ -80,7 +80,7 @@ private fun CuiAlertDialogInternal(
         },
         text = {
             CompositionLocalProvider(
-                LocalTextStyle provides LocalTextStyle.current.copy(color = LocalCuiPalette.current.TextSecondary),
+                LocalTextStyle provides LocalTextStyle.current.copy(color = LocalCuiPalette.current.TextPrimary),
                 content = text,
             )
         },

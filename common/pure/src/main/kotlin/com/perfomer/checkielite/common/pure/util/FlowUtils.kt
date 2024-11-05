@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.common.pure.util
 
+import com.perfomer.checkielite.common.pure.state.Lce
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -59,4 +60,11 @@ fun <T> Flow<T>.cleanLoading(
 
         emit(value)
     }
+}
+
+fun <T> Flow<T>.lce(): Flow<Lce<T>> {
+    return this
+        .map { Lce.Content(it) }
+        .onCatchReturn { Lce.Error(it) }
+        .startWith(Lce.Loading())
 }

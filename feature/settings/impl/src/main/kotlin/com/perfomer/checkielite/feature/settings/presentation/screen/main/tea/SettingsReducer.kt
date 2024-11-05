@@ -1,19 +1,24 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea
 
+import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.CheckHasReviews
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.CheckSyncing
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.CheckUpdates
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.ExportBackup
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.ImportBackup
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.LaunchAppUpdate
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.LoadSettings
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowConfirmImportDialog
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowToast
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowToast.Reason
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.CheckingHasReviewsStatusUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.Initialize
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.SyncingStatusUpdated
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.UpdatesCheck
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.Exit
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.SelectBackupFile
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent
@@ -24,7 +29,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackupExportClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackupImportClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackupImportConfirmClick
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.WarningReason
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnCheckUpdatesClick
 
 internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, SettingsEvent, SettingsState>() {
 
@@ -34,6 +39,14 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
         is SettingsNavigationEvent -> reduceNavigation(event)
         is SyncingStatusUpdated -> state { copy(isSyncingInProgress = event.isSyncing) }
         is CheckingHasReviewsStatusUpdated -> state { copy(hasReviews = event.hasReviews) }
+        is UpdatesCheck -> when (event.hasUpdates) {
+            is Lce.Loading -> Unit
+            is Lce.Content -> {
+                if (event.hasUpdates.content) commands(LaunchAppUpdate)
+                else effects(ShowToast(Reason.APP_IS_UP_TO_DATE))
+            }
+            is Lce.Error -> effects(ShowToast(Reason.FAILED_TO_CHECK_UPDATES))
+        }
     }
 
     private fun reduceInitialize() {
@@ -44,18 +57,19 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
         is OnBackPress -> commands(Exit)
         is OnBackupExportClick -> {
             when {
-                state.isSyncingInProgress -> effects(ShowToast.Warning(WarningReason.SYNCING_IN_PROGRESS))
+                state.isSyncingInProgress -> effects(ShowToast(Reason.SYNCING_IN_PROGRESS))
                 else -> commands(ExportBackup)
             }
         }
         is OnBackupImportClick -> {
             when {
-                state.isSyncingInProgress -> effects(ShowToast.Warning(WarningReason.SYNCING_IN_PROGRESS))
+                state.isSyncingInProgress -> effects(ShowToast(Reason.SYNCING_IN_PROGRESS))
                 state.hasReviews -> effects(ShowConfirmImportDialog)
                 else -> commands(SelectBackupFile)
             }
         }
         is OnBackupImportConfirmClick -> commands(SelectBackupFile)
+        is OnCheckUpdatesClick -> commands(CheckUpdates)
     }
 
     private fun reduceNavigation(event: SettingsNavigationEvent) = when (event) {

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings_title">Settings</string>
+    <string name="settings_group_app_title">Application</string>
+    <string name="settings_group_app_item_check_updates">Check for updates</string>
     <string name="settings_group_data_title">Data</string>
     <string name="settings_group_data_description">Save all app data in one file to avoid losing it. You can transfer it to another device or save it to the cloud.</string>
     <string name="settings_group_data_item_import">Import backup</string>
@@ -19,4 +21,6 @@
     <string name="settings_backup_cancel_import">Backup import cancelled</string>
     <string name="settings_backup_dialog_confirmimport_title">Import backup</string>
     <string name="settings_backup_dialog_confirmimport_message">All app data will be replaced with the data in the backup you select.\n\nAre you sure you want to <b>overwrite all app data</b>?</string>
+    <string name="settings_toast_update_check_succeed">App is up to date</string>
+    <string name="settings_toast_update_check_failed">Failed to check if app has updates</string>
 </resources>

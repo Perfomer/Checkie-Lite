@@ -3,6 +3,7 @@ package com.perfomer.checkielite
 import com.perfomer.checkielite.appinfo.AppInfoProviderImpl
 import com.perfomer.checkielite.common.android.commonAndroidModule
 import com.perfomer.checkielite.common.pure.appInfo.AppInfoProvider
+import com.perfomer.checkielite.common.update.updateModule
 import com.perfomer.checkielite.core.data.localDataSourceModule
 import com.perfomer.checkielite.core.navigation.api.ExternalRouter
 import com.perfomer.checkielite.feature.gallery.galleryModules
@@ -15,13 +16,10 @@ import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.BackupNavigationManager
 import com.perfomer.checkielite.navigation.StartScreenProvider
 import com.perfomer.checkielite.navigation.voyager.navigationModule
-import com.perfomer.checkielite.update.AppUpdateManager
-import com.perfomer.checkielite.update.RuStoreUpdateManager
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import ru.rustore.sdk.appupdate.manager.factory.RuStoreAppUpdateManagerFactory
 
 val checkieLiteModules: List<Module>
     get() = appModule + coreModules + commonModules + featureModules
@@ -32,9 +30,6 @@ private val appModule = module {
 
     singleOf(::BackupNavigationManager)
     singleOf(::StartScreenProvider)
-
-    single { RuStoreAppUpdateManagerFactory.create(get()) }
-    singleOf(::RuStoreUpdateManager) bind AppUpdateManager::class
 }
 
 private val coreModules
@@ -46,6 +41,7 @@ private val commonModules
     get() = listOf(
         commonAndroidModule,
         navigationModule,
+        updateModule,
     )
 
 private val featureModules

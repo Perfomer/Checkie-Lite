@@ -1,7 +1,8 @@
-package com.perfomer.checkielite.update
+package com.perfomer.checkielite.common.update.rustore
 
 import android.util.Log
 import com.perfomer.checkielite.common.pure.util.safeResume
+import com.perfomer.checkielite.common.update.api.AppUpdateManager
 import kotlinx.coroutines.suspendCancellableCoroutine
 import ru.rustore.sdk.appupdate.listener.InstallStateUpdateListener
 import ru.rustore.sdk.appupdate.manager.RuStoreAppUpdateManager

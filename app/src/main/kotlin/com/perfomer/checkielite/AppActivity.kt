@@ -31,14 +31,14 @@ import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
 import com.perfomer.checkielite.common.ui.util.TransparentSystemBars
+import com.perfomer.checkielite.common.update.api.AppUpdateManager
+import com.perfomer.checkielite.common.update.api.updateIfAvailable
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.BackupNavigationManager
 import com.perfomer.checkielite.navigation.ComposablesBottomSheetNavigator
 import com.perfomer.checkielite.navigation.HiddenScreen
 import com.perfomer.checkielite.navigation.StartScreenProvider
 import com.perfomer.checkielite.navigation.voyager.impl.NavigatorHolder
-import com.perfomer.checkielite.update.AppUpdateManager
-import com.perfomer.checkielite.update.updateIfAvailable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay

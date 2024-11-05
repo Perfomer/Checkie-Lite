@@ -2,6 +2,7 @@ package com.perfomer.checkielite.common.update.rustore
 
 import android.util.Log
 import com.perfomer.checkielite.common.pure.util.safeResume
+import com.perfomer.checkielite.common.pure.util.safeResumeWithException
 import com.perfomer.checkielite.common.update.api.AppUpdateManager
 import kotlinx.coroutines.suspendCancellableCoroutine
 import ru.rustore.sdk.appupdate.listener.InstallStateUpdateListener
@@ -30,7 +31,7 @@ internal class RuStoreUpdateManager(
                 }
                 .addOnFailureListener { throwable ->
                     Log.w(TAG, "Failed to check if update is available", throwable)
-                    continuation.safeResume(false)
+                    continuation.safeResumeWithException(throwable)
                 }
         }
     }

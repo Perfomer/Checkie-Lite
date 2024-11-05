@@ -126,6 +126,7 @@ fun CuiToastHost(
         CuiToast(
             data = data,
             onClick = { hostState.dismiss() },
+            onSwipeOut = { hostState.dismiss() },
         )
     },
 ) {

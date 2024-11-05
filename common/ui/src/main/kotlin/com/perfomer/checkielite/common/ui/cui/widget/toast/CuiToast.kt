@@ -44,7 +44,7 @@ fun CuiToast(
         modifier = Modifier
             .statusBarsPadding()
             .padding(horizontal = 20.dp)
-            .padding(top = 4.dp)
+            .padding(top = 8.dp)
             .shadow(
                 elevation = LocalCuiPalette.current.LargeElevation,
                 spotColor = Color.Black.copy(alpha = 0.7F),

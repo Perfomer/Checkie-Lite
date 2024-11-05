@@ -15,6 +15,7 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 suspend fun <T, R> Iterable<T>.mapAsync(
     transformation: suspend (T) -> R
@@ -34,6 +35,10 @@ suspend fun <T> Iterable<T>.forEachAsync(
 
 fun <T> CancellableContinuation<T>.safeResume(value: T) {
     if (isActive) resume(value)
+}
+
+fun <T> CancellableContinuation<T>.safeResumeWithException(error: Throwable) {
+    if (isActive) resumeWithException(error)
 }
 
 suspend inline fun <R> runSuspendCatching(block: () -> R): Result<R> {

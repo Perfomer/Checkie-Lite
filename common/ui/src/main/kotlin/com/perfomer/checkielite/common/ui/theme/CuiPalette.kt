@@ -43,6 +43,7 @@ interface CuiPalette {
     val OutlineSecondary: Color
     val OutlineAccentPrimary: Color get() = BackgroundAccentPrimary
     val OutlineAccentSecondary: Color
+    val OutlinePicture: Color
 
     val IconPrimary: Color
     val IconSecondary: Color
@@ -86,6 +87,7 @@ interface CuiPalette {
         override val OutlinePrimary: Color = CuiColorToken.Grey5
         override val OutlineSecondary: Color = CuiColorToken.Grey2
         override val OutlineAccentSecondary: Color = CuiColorToken.Orange5
+        override val OutlinePicture: Color = Color.Transparent
 
         override val IconPrimary: Color = CuiColorToken.Black1
         override val IconSecondary: Color = CuiColorToken.Grey5
@@ -127,6 +129,7 @@ interface CuiPalette {
         override val OutlinePrimary: Color = CuiColorToken.Brown4
         override val OutlineSecondary: Color = CuiColorToken.Brown4
         override val OutlineAccentSecondary: Color = CuiColorToken.Orange6
+        override val OutlinePicture: Color = Color.White.copy(alpha = 0.2F)
 
         override val IconPrimary: Color = CuiColorToken.White2
         override val IconSecondary: Color = CuiColorToken.Brown1

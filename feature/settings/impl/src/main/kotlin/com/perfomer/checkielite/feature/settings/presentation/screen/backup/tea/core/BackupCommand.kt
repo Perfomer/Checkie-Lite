@@ -15,6 +15,8 @@ internal sealed interface BackupCommand {
     }
 
     data object CancelBackup : BackupCommand
+
+    data object LaunchAppUpdate : BackupCommand
 }
 
 internal sealed interface BackupNavigationCommand : BackupCommand {

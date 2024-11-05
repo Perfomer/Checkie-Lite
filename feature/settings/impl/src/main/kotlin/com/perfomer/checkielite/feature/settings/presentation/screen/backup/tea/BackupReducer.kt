@@ -7,6 +7,7 @@ import com.perfomer.checkielite.core.entity.backup.BackupProgress
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.Await
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.CancelBackup
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.LaunchAppUpdate
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.ObserveBackupProgress
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect.ShowToast
@@ -94,8 +95,12 @@ internal class BackupReducer : DslReducer<BackupCommand, BackupEffect, BackupEve
                     else -> null
                 }
 
-                commands(Await(durationMs = DELAY_AFTER_FINISH_MS, reason = Await.Reason.OPEN_MAIN))
                 effects(reason?.let(::ShowToast))
+
+                commands(
+                    Await(durationMs = DELAY_AFTER_FINISH_MS, reason = Await.Reason.OPEN_MAIN),
+                    LaunchAppUpdate.takeIf { progress.error is BackupException.DatabaseVersionNotSupported },
+                )
             }
         }
     }

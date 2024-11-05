@@ -73,7 +73,7 @@ internal fun PicturesCarousel(
 
                 if (pictureState is AsyncImagePainter.State.Success) {
                     val isSystemInDarkTheme = isSystemInDarkTheme()
-                    val themeCoefficient = if (isSystemInDarkTheme) 0.35F else 0.75F
+                    val themeCoefficient = if (isSystemInDarkTheme) 0.5F else 0.75F
                     val alpha = (1F - pagerState.offsetForPage(i).absoluteValue) * themeCoefficient
                     val interpolatedAlpha = FastOutLinearInEasing.transform(alpha)
                     Image(

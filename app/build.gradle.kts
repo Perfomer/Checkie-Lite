@@ -56,6 +56,7 @@ dependencies {
     implementation(project(":common:navigation:voyager"))
     implementation(project(":common:pure"))
     implementation(project(":common:ui"))
+    implementation(project(":common:update:rustore"))
 
     implementation(libs.activity)
     implementation(libs.activity.compose)
@@ -66,7 +67,6 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.core)
     implementation(libs.lifecycle.ktx)
-    implementation(libs.rustore.appupdate)
     implementation(libs.voyager.bottomsheet)
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.transitions)

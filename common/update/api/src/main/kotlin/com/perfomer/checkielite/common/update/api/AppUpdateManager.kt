@@ -1,13 +1,13 @@
-package com.perfomer.checkielite.update
+package com.perfomer.checkielite.common.update.api
 
-internal interface AppUpdateManager {
+interface AppUpdateManager {
 
     suspend fun checkUpdateAvailability(): Boolean
 
     fun launchUpdate()
 }
 
-internal suspend fun AppUpdateManager.updateIfAvailable() {
+suspend fun AppUpdateManager.updateIfAvailable() {
     if (!checkUpdateAvailability()) return
     launchUpdate()
 }

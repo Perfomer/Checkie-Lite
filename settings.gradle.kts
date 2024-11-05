@@ -27,6 +27,8 @@ include(
     ":common:tea:compose",
     ":common:tea:core",
     ":common:ui",
+    ":common:update:api",
+    ":common:update:rustore",
 )
 
 include(

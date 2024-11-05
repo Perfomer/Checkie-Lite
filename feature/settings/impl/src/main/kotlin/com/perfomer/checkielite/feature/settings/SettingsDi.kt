@@ -26,12 +26,13 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.ac
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.CheckUpdatesActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.ExportBackupActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.ImportBackupActor
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.LaunchAppUpdateActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.SettingsNavigationActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.SettingsContentScreen
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.state.SettingsUiStateMapper
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
+import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor.LaunchAppUpdateActor as BackupLaunchAppUpdateActor
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.LaunchAppUpdateActor as SettingsLaunchAppUpdateActor
 
 val settingsModules
     get() = listOf(presentationModule)
@@ -62,7 +63,7 @@ internal fun createSettingsStore(
             CheckSyncingActor(localDataSource),
             CheckHasReviewsActor(localDataSource),
             CheckUpdatesActor(appUpdateManager),
-            LaunchAppUpdateActor(appUpdateManager),
+            SettingsLaunchAppUpdateActor(appUpdateManager),
         ),
     )
 }
@@ -74,6 +75,7 @@ internal fun createBackupStore(
     appRestarter: AppRestarter,
     backupRepository: BackupRepository,
     mainScreenProvider: MainScreenProvider,
+    appUpdateManager: AppUpdateManager,
 ): BackupStore {
     return BackupStore(
         params = params,
@@ -84,6 +86,7 @@ internal fun createBackupStore(
             ObserveBackupProgressActor(backupRepository),
             AwaitActor(),
             CancelBackupActor(backupRepository),
+            BackupLaunchAppUpdateActor(appUpdateManager),
         ),
     )
 }

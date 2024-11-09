@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 applyCommonAndroid()
@@ -71,6 +72,7 @@ dependencies {
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.transitions)
     implementation(libs.decompose)
+    implementation(libs.decompose.extensions.compose)
     implementation(platform(libs.compose.bom))
 
     testImplementation(libs.testJunitJupiter)

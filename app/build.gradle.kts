@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.voyager.bottomsheet)
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.transitions)
+    implementation(libs.decompose)
     implementation(platform(libs.compose.bom))
 
     testImplementation(libs.testJunitJupiter)

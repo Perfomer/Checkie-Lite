@@ -10,6 +10,7 @@ compose-bom = "2024.10.01"
 compressor = "3.0.1"
 core-ktx = "1.15.0"
 core-ktx-splashscreen = "1.0.1"
+decompose = "3.2.2"
 drag-and-drop = "0.2.0" # 0.3.0 brokes second time dnd
 fading-edges = "1.0.4"
 google-fonts = "1.7.5"
@@ -35,14 +36,16 @@ activity-compose = { module = "androidx.activity:activity-compose", version.ref 
 androidx-core = { module = "androidx.core:core", version.ref = "androidx-core" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+composables-core = { module = "com.composables:core", version.ref = "composables-core" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-ui = { module = "androidx.compose.ui:ui" }
-composables-core = { module = "com.composables:core", version.ref = "composables-core" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 core-ktx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "core-ktx-splashscreen" }
+decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
+decompose-extensions-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
 drag-and-drop = { module = "com.mohamedrejeb.dnd:compose-dnd", version.ref = "drag-and-drop" }
 fading-edges = { module = "com.github.GIGAMOLE:ComposeFadingEdges", version.ref = "fading-edges" }
 google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "google-fonts" }

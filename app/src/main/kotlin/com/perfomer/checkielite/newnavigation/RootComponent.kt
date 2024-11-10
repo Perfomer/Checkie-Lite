@@ -9,7 +9,7 @@ import com.arkivanov.decompose.router.stack.pushNew
 import com.perfomer.checkielite.newnavigation.screena.ScreenA
 import com.perfomer.checkielite.newnavigation.screena.ScreenAComponent
 import com.perfomer.checkielite.newnavigation.screenb.ScreenB
-import com.perfomer.checkielite.newnavigation.screenb.ScreenBComponent
+import com.perfomer.checkielite.newnavigation.screenb.tea.ScreenBStore
 import kotlinx.serialization.Serializable
 
 class RootComponent(
@@ -44,12 +44,9 @@ class RootComponent(
                 )
             )
             is BDestination -> ScreenB(
-                ScreenBComponent(
-                    text = config.text,
+                ScreenBStore(
                     componentContext = context,
-                    onGoBack = {
-                        navigation.pop()
-                    }
+                    params = config,
                 )
             )
             else -> throw RuntimeException()

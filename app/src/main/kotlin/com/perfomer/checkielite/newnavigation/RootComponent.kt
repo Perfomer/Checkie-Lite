@@ -11,10 +11,14 @@ import com.perfomer.checkielite.newnavigation.screena.ScreenAComponent
 import com.perfomer.checkielite.newnavigation.screenb.ScreenB
 import com.perfomer.checkielite.newnavigation.screenb.tea.ScreenBStore
 import kotlinx.serialization.Serializable
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
+import org.koin.core.parameter.parametersOf
 
 class RootComponent(
     componentContext: ComponentContext,
-) : ComponentContext by componentContext {
+) : ComponentContext by componentContext,
+    KoinComponent {
 
     private val navigation = StackNavigation<Destination>()
 
@@ -31,10 +35,10 @@ class RootComponent(
     )
 
     private fun createChild(
-        config: Destination,
+        destination: Destination,
         context: ComponentContext
     ): BaseDecomposeScreen {
-        return when (config) {
+        return when (destination) {
             is ADestination -> ScreenA(
                 ScreenAComponent(
                     componentContext = context,
@@ -44,10 +48,7 @@ class RootComponent(
                 )
             )
             is BDestination -> ScreenB(
-                ScreenBStore(
-                    componentContext = context,
-                    params = config,
-                )
+                store = get<ScreenBStore> { parametersOf(context, destination) },
             )
             else -> throw RuntimeException()
         }

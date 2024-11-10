@@ -16,13 +16,14 @@ import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.BackupNavigationManager
 import com.perfomer.checkielite.navigation.StartScreenProvider
 import com.perfomer.checkielite.navigation.voyager.navigationModule
+import com.perfomer.checkielite.newnavigation.screenb.tea.screenBModule
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val checkieLiteModules: List<Module>
-    get() = appModule + coreModules + commonModules + featureModules
+    get() = appModule + coreModules + commonModules + featureModules + screenBModule
 
 private val appModule = module {
     singleOf(::AndroidExternalRouter) bind ExternalRouter::class

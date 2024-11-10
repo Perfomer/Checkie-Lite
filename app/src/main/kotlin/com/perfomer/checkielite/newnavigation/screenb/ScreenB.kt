@@ -1,4 +1,4 @@
-package screens
+package com.perfomer.checkielite.newnavigation.screenb
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.perfomer.checkielite.newnavigation.BaseDecomposeScreen
-import navigation.ScreenBComponent
 
 class ScreenB(val component: ScreenBComponent) : BaseDecomposeScreen {
 

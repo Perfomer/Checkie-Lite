@@ -1,4 +1,4 @@
-package navigation
+package com.perfomer.checkielite.newnavigation.screena
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue

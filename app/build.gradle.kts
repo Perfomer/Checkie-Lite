@@ -74,6 +74,8 @@ dependencies {
     implementation(libs.decompose)
     implementation(libs.decompose.extensions.compose)
     implementation(platform(libs.compose.bom))
+    implementation(project(":common:tea:core"))
+    implementation(project(":common:tea:compose"))
 
     testImplementation(libs.testJunitJupiter)
 }

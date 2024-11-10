@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.newnavigation
 
+import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
@@ -8,12 +9,14 @@ import com.arkivanov.decompose.router.stack.pushNew
 import kotlinx.serialization.Serializable
 import navigation.ScreenAComponent
 import navigation.ScreenBComponent
+import screens.ScreenA
+import screens.ScreenB
 
 class RootComponent(
     componentContext: ComponentContext,
 ) : ComponentContext by componentContext {
 
-    private val navigation = StackNavigation<Configuration>()
+    private val navigation = StackNavigation<Destination>()
 
     fun onBackClicked() {
         navigation.pop()
@@ -21,26 +24,26 @@ class RootComponent(
 
     val childStack = childStack(
         source = navigation,
-        serializer = Configuration.serializer(),
-        initialConfiguration = Configuration.ScreenA,
+        serializer = Destination.serializer(),
+        initialConfiguration = ADestination,
         handleBackButton = true,
         childFactory = ::createChild
     )
 
     private fun createChild(
-        config: Configuration,
+        config: Destination,
         context: ComponentContext
-    ): Child {
+    ): BaseDecomposeScreen {
         return when (config) {
-            Configuration.ScreenA -> Child.ScreenA(
+            is ADestination -> ScreenA(
                 ScreenAComponent(
                     componentContext = context,
                     onNavigateToScreenB = { text ->
-                        navigation.pushNew(Configuration.ScreenB(text))
+                        navigation.pushNew(BDestination(text))
                     }
                 )
             )
-            is Configuration.ScreenB -> Child.ScreenB(
+            is BDestination -> ScreenB(
                 ScreenBComponent(
                     text = config.text,
                     componentContext = context,
@@ -49,21 +52,21 @@ class RootComponent(
                     }
                 )
             )
+            else -> throw RuntimeException()
         }
     }
-
 }
 
-sealed class Child {
-    data class ScreenA(val component: ScreenAComponent) : Child()
-    data class ScreenB(val component: ScreenBComponent) : Child()
+interface BaseDecomposeScreen {
+    @Composable
+    fun Screen()
 }
 
 @Serializable
-sealed class Configuration {
-    @Serializable
-    data object ScreenA : Configuration()
+abstract class Destination
 
-    @Serializable
-    data class ScreenB(val text: String) : Configuration()
-}
+@Serializable
+data object ADestination : Destination()
+
+@Serializable
+data class BDestination(val text: String) : Destination()

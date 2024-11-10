@@ -14,30 +14,34 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import com.perfomer.checkielite.newnavigation.BaseDecomposeScreen
 import navigation.ScreenAComponent
 import navigation.ScreenAEvent
 
-@Composable
-fun ScreenA(component: ScreenAComponent) {
-    val text by component.text.subscribeAsState()
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text("Screen A")
-        OutlinedTextField(
-            value = text,
-            onValueChange = { component.onEvent(ScreenAEvent.UpdateText(it)) },
+class ScreenA(val component: ScreenAComponent) : BaseDecomposeScreen {
+
+    @Composable
+    override fun Screen() {
+        val text by component.text.subscribeAsState()
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        )
-        Button(onClick = {
-            component.onEvent(ScreenAEvent.ClickButtonA)
-        }) {
-            Text("Go to Screen B")
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text("Screen A")
+            OutlinedTextField(
+                value = text,
+                onValueChange = { component.onEvent(ScreenAEvent.UpdateText(it)) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
+            Button(onClick = {
+                component.onEvent(ScreenAEvent.ClickButtonA)
+            }) {
+                Text("Go to Screen B")
+            }
         }
     }
 }

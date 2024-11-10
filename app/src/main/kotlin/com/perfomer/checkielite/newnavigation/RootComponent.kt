@@ -9,7 +9,6 @@ import com.arkivanov.decompose.router.stack.pushNew
 import com.perfomer.checkielite.newnavigation.screena.ScreenA
 import com.perfomer.checkielite.newnavigation.screena.ScreenAComponent
 import com.perfomer.checkielite.newnavigation.screenb.ScreenB
-import com.perfomer.checkielite.newnavigation.screenb.tea.ScreenBStore
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
@@ -47,9 +46,7 @@ class RootComponent(
                     }
                 )
             )
-            is BDestination -> ScreenB(
-                store = get<ScreenBStore> { parametersOf(context, destination) },
-            )
+            is BDestination -> get<ScreenB> { parametersOf(context, destination) }
             else -> throw RuntimeException()
         }
     }

@@ -44,15 +44,12 @@ import com.perfomer.checkielite.navigation.ComposablesBottomSheetNavigator
 import com.perfomer.checkielite.navigation.HiddenScreen
 import com.perfomer.checkielite.navigation.StartScreenProvider
 import com.perfomer.checkielite.navigation.voyager.impl.NavigatorHolder
-import com.perfomer.checkielite.newnavigation.Child
 import com.perfomer.checkielite.newnavigation.RootComponent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import screens.ScreenA
-import screens.ScreenB
 
 class AppActivity : AppCompatActivity() {
 
@@ -96,12 +93,8 @@ class AppActivity : AppCompatActivity() {
                         selector = { backEvent, _, _ -> androidPredictiveBackAnimatable(backEvent) },
                         onBack = root::onBackClicked,
                     ),
-                ) { child ->
-                    when (val instance = child.instance) {
-                        is Child.ScreenA -> ScreenA(instance.component)
-                        is Child.ScreenB -> ScreenB(instance.component)
-                    }
-                }
+                    content = { child -> child.instance.Screen() }
+                )
 
 //                EnrichCompositionLocal {
 //                    UsualNavigator()

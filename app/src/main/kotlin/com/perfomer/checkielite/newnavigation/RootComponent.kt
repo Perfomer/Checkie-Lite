@@ -6,11 +6,11 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
+import com.perfomer.checkielite.newnavigation.screena.ScreenA
+import com.perfomer.checkielite.newnavigation.screena.ScreenAComponent
+import com.perfomer.checkielite.newnavigation.screenb.ScreenB
+import com.perfomer.checkielite.newnavigation.screenb.ScreenBComponent
 import kotlinx.serialization.Serializable
-import navigation.ScreenAComponent
-import navigation.ScreenBComponent
-import screens.ScreenA
-import screens.ScreenB
 
 class RootComponent(
     componentContext: ComponentContext,
@@ -27,7 +27,7 @@ class RootComponent(
         serializer = Destination.serializer(),
         initialConfiguration = ADestination,
         handleBackButton = true,
-        childFactory = ::createChild
+        childFactory = ::createChild,
     )
 
     private fun createChild(

@@ -1,4 +1,4 @@
-package navigation
+package com.perfomer.checkielite.newnavigation.screenb
 
 import com.arkivanov.decompose.ComponentContext
 

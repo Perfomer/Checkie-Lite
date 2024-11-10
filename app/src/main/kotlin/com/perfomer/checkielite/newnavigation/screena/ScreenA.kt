@@ -1,4 +1,4 @@
-package screens
+package com.perfomer.checkielite.newnavigation.screena
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,8 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.perfomer.checkielite.newnavigation.BaseDecomposeScreen
-import navigation.ScreenAComponent
-import navigation.ScreenAEvent
 
 class ScreenA(val component: ScreenAComponent) : BaseDecomposeScreen {
 

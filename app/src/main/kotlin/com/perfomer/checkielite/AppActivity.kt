@@ -30,12 +30,16 @@ import com.perfomer.checkielite.common.android.apprestart.AppRestarter
 import com.perfomer.checkielite.common.android.apprestart.RestartAction
 import com.perfomer.checkielite.common.android.apprestart.RestartAction.ShowSuccessBackupImportToast
 import com.perfomer.checkielite.common.android.permissions.PermissionHelper
+import com.perfomer.checkielite.common.ui.cui.widget.scrim.NavBarScrim
 import com.perfomer.checkielite.common.ui.cui.widget.sheet.CuiDragAnchor
+import com.perfomer.checkielite.common.ui.cui.widget.toast.CuiToastHost
 import com.perfomer.checkielite.common.ui.cui.widget.toast.CuiToastHostState
 import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalCuiToastHostState
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberSuccessToast
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
+import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
+import com.perfomer.checkielite.common.ui.util.TransparentSystemBars
 import com.perfomer.checkielite.common.update.api.AppUpdateManager
 import com.perfomer.checkielite.common.update.api.updateIfAvailable
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
@@ -78,37 +82,37 @@ class AppActivity : AppCompatActivity() {
         }
 
         setContent {
+            TransparentSystemBars()
 
-
-//            TransparentSystemBars()
-//
             CheckieLiteTheme {
-                val childStack by root.childStack.subscribeAsState()
 
-                Children(
-                    stack = childStack,
-                    animation = predictiveBackAnimation(
-                        backHandler = root.backHandler,
-                        fallbackAnimation = stackAnimation(slide()),
-                        selector = { backEvent, _, _ -> androidPredictiveBackAnimatable(backEvent) },
-                        onBack = root::onBackClicked,
-                    ),
-                    content = { child -> child.instance.Screen() }
-                )
+                EnrichCompositionLocal {
+                    val childStack by root.childStack.subscribeAsState()
 
-//                EnrichCompositionLocal {
+                    Children(
+                        stack = childStack,
+                        animation = predictiveBackAnimation(
+                            backHandler = root.backHandler,
+                            fallbackAnimation = stackAnimation(slide()),
+                            selector = { backEvent, _, _ -> androidPredictiveBackAnimatable(backEvent) },
+                            onBack = root::onBackClicked,
+                        ),
+                        content = { child -> child.instance.Screen() },
+                    )
+
+//
 //                    UsualNavigator()
 //                    BottomSheetNavigator()
 //                    OverlayNavigator()
 //
-//                    NavBarScrim()
-//                    CuiToastHost()
-//
-//                    RestartActionsHandler(restartActions)
-//                }
+                    NavBarScrim()
+                    CuiToastHost()
+
+                    RestartActionsHandler(restartActions)
+                }
             }
-//
-//            ClearFocusOnKeyboardClose()
+
+            ClearFocusOnKeyboardClose()
         }
 
         checkForUpdates()

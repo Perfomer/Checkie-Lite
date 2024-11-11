@@ -13,9 +13,9 @@ object NavigationRegistry {
     fun associate(destinationClass: KClass<out Destination>, screenClass: KClass<out BaseDecomposeScreen>) {
         registry[destinationClass] = screenClass
     }
-
-    operator fun invoke(block: NavigationRegistry.() -> Unit) = apply(block)
 }
+
+fun navigation(block: NavigationRegistry.() -> Unit) = NavigationRegistry.apply(block)
 
 inline fun <reified D : Destination, reified S : BaseDecomposeScreen> NavigationRegistry.associate() {
     associate(destinationClass = D::class, screenClass = S::class)

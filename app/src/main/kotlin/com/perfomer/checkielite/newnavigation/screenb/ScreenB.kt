@@ -26,7 +26,7 @@ class ScreenB(
 
         EffectHandler { effect ->
             when (effect) {
-                ScreenBEffect.ShowToast -> Toast.makeText(context, "Toast", Toast.LENGTH_SHORT).show()
+                ScreenBEffect.ShowToast -> Toast.makeText(context, state.text, Toast.LENGTH_SHORT).show()
             }
         }
 

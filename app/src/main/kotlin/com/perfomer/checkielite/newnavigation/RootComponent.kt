@@ -5,13 +5,10 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
-import com.perfomer.checkielite.newnavigation.screena.ScreenA
-import com.perfomer.checkielite.newnavigation.screenb.ScreenB
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
-import kotlin.reflect.KClass
 
 class RootComponent(
     componentContext: ComponentContext,
@@ -20,32 +17,23 @@ class RootComponent(
 
     private val navigation: StackNavigation<Destination> by inject()
 
-    fun onBackClicked() {
-        navigation.pop()
-    }
-
     val childStack = childStack(
         source = navigation,
         serializer = Destination.serializer(),
         initialConfiguration = ADestination,
         handleBackButton = true,
-        childFactory = ::createChild,
+        childFactory = ::createScreen,
     )
 
-    private fun createChild(
-        destination: Destination,
-        context: ComponentContext
-    ): BaseDecomposeScreen {
-        val screenClass = navigationAssociation[destination.javaClass.kotlin]!!
+    fun onBackClicked() {
+        navigation.pop()
+    }
 
+    private fun createScreen(destination: Destination, context: ComponentContext): BaseDecomposeScreen {
+        val screenClass = NavigationRegistry.obtain(destination::class)
         return getKoin().get(screenClass, null) { parametersOf(context, destination) }
     }
 }
-
-val navigationAssociation = mutableMapOf<KClass<out Destination>, KClass<out BaseDecomposeScreen>>(
-    ADestination::class to ScreenA::class,
-    BDestination::class to ScreenB::class,
-)
 
 interface BaseDecomposeScreen {
     @Composable

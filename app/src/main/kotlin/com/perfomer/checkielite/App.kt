@@ -2,6 +2,12 @@ package com.perfomer.checkielite
 
 import android.app.Application
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.newnavigation.ADestination
+import com.perfomer.checkielite.newnavigation.BDestination
+import com.perfomer.checkielite.newnavigation.NavigationRegistry
+import com.perfomer.checkielite.newnavigation.associate
+import com.perfomer.checkielite.newnavigation.screena.ScreenA
+import com.perfomer.checkielite.newnavigation.screenb.ScreenB
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -25,6 +31,11 @@ class App : Application() {
             runCatching {
                 localDataSource.dropSyncing()
             }
+        }
+
+        NavigationRegistry {
+            associate<ADestination, ScreenA>()
+            associate<BDestination, ScreenB>()
         }
     }
 

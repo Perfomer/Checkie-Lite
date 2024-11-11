@@ -1,0 +1,13 @@
+package com.perfomer.checkielite.core.navigation
+
+import androidx.activity.ComponentActivity
+import androidx.compose.runtime.Composable
+
+interface NavigationHost {
+
+    context(ComponentActivity)
+    fun initialize(startDestination: Destination)
+
+    @Composable
+    fun Root()
+}

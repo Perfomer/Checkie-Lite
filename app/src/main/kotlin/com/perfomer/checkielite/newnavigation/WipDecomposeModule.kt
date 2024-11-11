@@ -1,25 +1,20 @@
-package com.perfomer.checkielite.newnavigation.screenb.tea
+package com.perfomer.checkielite.newnavigation
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.router.stack.StackNavigation
-import com.perfomer.checkielite.newnavigation.ADestination
-import com.perfomer.checkielite.newnavigation.BDestination
-import com.perfomer.checkielite.newnavigation.Destination
-import com.perfomer.checkielite.newnavigation.associate
-import com.perfomer.checkielite.newnavigation.navigation
+import com.perfomer.checkielite.core.navigation.associate
+import com.perfomer.checkielite.core.navigation.navigation
 import com.perfomer.checkielite.newnavigation.screena.ScreenA
 import com.perfomer.checkielite.newnavigation.screena.ScreenAComponent
 import com.perfomer.checkielite.newnavigation.screenb.ScreenB
+import com.perfomer.checkielite.newnavigation.screenb.tea.ScreenBStore
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
-val decomposeModule = module {
+val decomposeWipModule = module {
     navigation {
         associate<ADestination, ScreenA>()
         associate<BDestination, ScreenB>()
     }
-
-    single { StackNavigation<Destination>() }
 
     factoryOf(::ScreenA)
     factoryOf(::ScreenB)

@@ -11,14 +11,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
-import com.perfomer.checkielite.newnavigation.BaseDecomposeScreen
+import com.perfomer.checkielite.core.navigation.Screen
 import com.perfomer.checkielite.newnavigation.screenb.tea.ScreenBEffect
 import com.perfomer.checkielite.newnavigation.screenb.tea.ScreenBStore
 import com.perfomer.checkielite.newnavigation.screenb.tea.ScreenBUiEvent
 
 class ScreenB(
     private val store: ScreenBStore,
-) : BaseDecomposeScreen {
+) : Screen {
 
     @Composable
     override fun Screen() = TeaComposable(store) { state ->

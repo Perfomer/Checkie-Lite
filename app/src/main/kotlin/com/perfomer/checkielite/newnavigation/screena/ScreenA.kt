@@ -14,9 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.perfomer.checkielite.newnavigation.BaseDecomposeScreen
+import com.perfomer.checkielite.core.navigation.Screen
 
-class ScreenA(val component: ScreenAComponent) : BaseDecomposeScreen {
+class ScreenA(val component: ScreenAComponent) : Screen {
 
     @Composable
     override fun Screen() {

@@ -54,6 +54,7 @@ dependencies {
     implementation(project(":core:datasource:local:impl"))
 
     implementation(project(":common:android"))
+    implementation(project(":common:navigation:decompose"))
     implementation(project(":common:navigation:voyager"))
     implementation(project(":common:pure"))
     implementation(project(":common:ui"))

@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.core.navigation.api.dec
+package com.perfomer.checkielite.core.navigation
 
 import kotlinx.serialization.Serializable
 

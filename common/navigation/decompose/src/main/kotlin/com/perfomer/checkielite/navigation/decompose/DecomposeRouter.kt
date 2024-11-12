@@ -1,5 +1,7 @@
 package com.perfomer.checkielite.navigation.decompose
 
+import com.arkivanov.decompose.router.slot.SlotNavigation
+import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
@@ -11,22 +13,35 @@ import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.navigation.result.NavigationResultEventBus
 
 internal class DecomposeRouter(
-    private val navigationStack: StackNavigation<Destination>,
+    private val navigation: DecomposeNavigatorHolder,
     private val resultEventBus: NavigationResultEventBus,
 ) : Router {
 
+    private val navigator: StackNavigation<Destination>
+        get() = navigation.mainNavigator
+
+    private val bottomSheetNavigator: SlotNavigation<Destination>
+        get() = navigation.bottomSheetNavigator
+
+    private val overlayNavigator: SlotNavigation<Destination>
+        get() = navigation.overlayNavigator
+
     override fun navigate(destination: Destination, mode: DestinationMode) {
-        // TODO: DestinationMode
-        navigationStack.pushNew(destination)
+        when (mode) {
+            DestinationMode.USUAL -> navigator.pushNew(destination)
+            DestinationMode.OVERLAY -> TODO()
+            DestinationMode.BOTTOM_SHEET -> bottomSheetNavigator.activate(destination)
+        }
+
     }
 
     override fun replace(destination: Destination, mode: DestinationMode) {
         // TODO: DestinationMode
-        navigationStack.replaceCurrent(destination)
+        navigator.replaceCurrent(destination)
     }
 
     override fun replaceStack(destination: Destination) {
-        navigationStack.replaceAll(destination)
+        navigator.replaceAll(destination)
     }
 
     override suspend fun <T> navigateForResult(
@@ -39,7 +54,7 @@ internal class DecomposeRouter(
     }
 
     override fun exit() {
-        navigationStack.pop()
+        navigator.pop()
     }
 
     override fun exitWithResult(result: Any?) {

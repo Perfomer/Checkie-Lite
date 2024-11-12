@@ -16,7 +16,8 @@ dependencies {
 	implementation(project(":common:android"))
 
 	api(libs.decompose)
-	implementation(libs.appcompat)
+	implementation(libs.activity.compose)
+	implementation(libs.composables.core)
 	implementation(libs.compose.material3)
 	implementation(libs.compose.ui)
 	implementation(libs.decompose.extensions.compose)

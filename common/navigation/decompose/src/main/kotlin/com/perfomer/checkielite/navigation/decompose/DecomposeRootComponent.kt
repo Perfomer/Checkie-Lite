@@ -21,8 +21,7 @@ internal class DecomposeRootComponent(
 
     val childStack = childStack(
         source = navigation,
-        // TODO: serializer doesn't work as it is not sealed, needed manual polymorphism
-        serializer = Destination.serializer(),
+        serializer = NavigationRegistry.serializer(),
         initialConfiguration = startDestination,
         handleBackButton = true,
         childFactory = ::createScreen,

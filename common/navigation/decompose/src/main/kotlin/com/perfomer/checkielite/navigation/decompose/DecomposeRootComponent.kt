@@ -1,9 +1,8 @@
 package com.perfomer.checkielite.navigation.decompose
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.router.stack.StackNavigation
+import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.stack.childStack
-import com.arkivanov.decompose.router.stack.pop
 import com.perfomer.checkielite.core.navigation.Destination
 import com.perfomer.checkielite.core.navigation.NavigationRegistry
 import com.perfomer.checkielite.core.navigation.Screen
@@ -17,19 +16,29 @@ internal class DecomposeRootComponent(
 ) : ComponentContext by componentContext,
     KoinComponent {
 
-    private val navigation: StackNavigation<Destination> by inject()
+    private val navigation: DecomposeNavigatorHolder by inject()
 
-    val childStack = childStack(
-        source = navigation,
+    val navigationStack = childStack(
+        source = navigation.mainNavigator,
         serializer = NavigationRegistry.serializer(),
         initialConfiguration = startDestination,
         handleBackButton = true,
         childFactory = ::createScreen,
     )
 
-    fun onBackClicked() {
-        navigation.pop()
-    }
+    val bottomSheetSlot = childSlot(
+        source = navigation.bottomSheetNavigator,
+        serializer = NavigationRegistry.serializer(),
+        key = "BottomSheet",
+        childFactory = ::createScreen,
+    )
+
+    val overlaySlot = childSlot(
+        source = navigation.overlayNavigator,
+        serializer = NavigationRegistry.serializer(),
+        key = "Overlay",
+        childFactory = ::createScreen,
+    )
 
     private fun createScreen(destination: Destination, context: ComponentContext): Screen {
         val screenClass = NavigationRegistry.obtain(destination::class)

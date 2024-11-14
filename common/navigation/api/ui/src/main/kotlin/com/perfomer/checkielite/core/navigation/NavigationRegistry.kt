@@ -24,7 +24,7 @@ object NavigationRegistry {
         return requireNotNull(registry[destinationClass]) { "Destination `${destinationClass.simpleName}` is not registered!" }
     }
 
-    fun <T : Destination> associate(
+    fun <T : Destination> register(
         destinationClass: KClass<T>,
         destinationSerializer: KSerializer<T>,
         screenClass: KClass<out Screen>,

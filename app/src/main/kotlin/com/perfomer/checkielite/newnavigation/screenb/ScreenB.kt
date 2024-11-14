@@ -3,13 +3,16 @@ package com.perfomer.checkielite.newnavigation.screenb
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.core.navigation.Screen
 import com.perfomer.checkielite.newnavigation.screenb.tea.ScreenBEffect
@@ -31,9 +34,12 @@ class ScreenB(
         }
 
         Column(
-            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(40.dp)
         ) {
             Text("Screen B: ${state.text}")
 

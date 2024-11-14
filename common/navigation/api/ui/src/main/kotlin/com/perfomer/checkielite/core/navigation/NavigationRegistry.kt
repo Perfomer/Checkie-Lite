@@ -21,7 +21,9 @@ object NavigationRegistry {
     }
 
     fun obtain(destinationClass: KClass<out Destination>): KClass<out Screen> {
-        return requireNotNull(registry[destinationClass]) { "Destination `${destinationClass.simpleName}` is not registered!" }
+        return requireNotNull(registry[destinationClass]) {
+            "Destination `${destinationClass.simpleName}` is not registered!"
+        }
     }
 
     fun <T : Destination> register(

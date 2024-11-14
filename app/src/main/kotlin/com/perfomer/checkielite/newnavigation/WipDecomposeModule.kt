@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.newnavigation
 
 import com.arkivanov.decompose.ComponentContext
+import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
 import com.perfomer.checkielite.core.navigation.navigation
 import com.perfomer.checkielite.newnavigation.screena.ScreenA
@@ -26,9 +27,11 @@ val decomposeWipModule = module {
 internal fun createScreenBStore(
     componentContext: ComponentContext,
     destination: BDestination,
+    router: Router,
 ): ScreenBStore {
     return ScreenBStore(
         componentContext = componentContext,
         params = destination,
+        router = router,
     )
 }

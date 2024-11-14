@@ -2,15 +2,17 @@ package com.perfomer.checkielite.newnavigation.screenb.tea
 
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.impl.ComponentStore
+import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.newnavigation.BDestination
 
 class ScreenBStore(
     componentContext: ComponentContext,
     params: BDestination,
+    router: Router,
 ) : ComponentStore<ScreenBCommand, ScreenBEffect, ScreenBEvent, ScreenBUiEvent, ScreenBState, ScreenBState>(
     componentContext = componentContext,
     initialState = ScreenBState(params.text),
-    reducer = ScreenBReducer(),
+    reducer = ScreenBReducer(router),
     actors = emptySet(),
 )
 

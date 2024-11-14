@@ -1,11 +1,14 @@
 package com.perfomer.checkielite.newnavigation.screenb.tea
 
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
+import com.perfomer.checkielite.core.navigation.Router
 
-class ScreenBReducer : DslReducer<ScreenBCommand, ScreenBEffect, ScreenBEvent, ScreenBState>() {
+class ScreenBReducer(
+    private val router: Router,
+) : DslReducer<ScreenBCommand, ScreenBEffect, ScreenBEvent, ScreenBState>() {
 
     override fun reduce(event: ScreenBEvent) = when (event) {
-        ScreenBUiEvent.OnBackClick -> commands(ScreenBCommand.Exit)
+        ScreenBUiEvent.OnBackClick -> router.exit()
         ScreenBUiEvent.OnShowToastClick -> effects(ScreenBEffect.ShowToast)
     }
 }

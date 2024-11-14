@@ -25,16 +25,12 @@ import com.composables.core.rememberModalBottomSheetState
 import com.perfomer.checkielite.core.navigation.Destination
 import com.perfomer.checkielite.core.navigation.NavigationHost
 import com.perfomer.checkielite.core.navigation.Screen
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @OptIn(ExperimentalDecomposeApi::class)
-internal class DecomposeNavigationHost : NavigationHost, KoinComponent {
+internal class DecomposeNavigationHost : NavigationHost {
 
     @Stable
-    private lateinit var root: DecomposeRootComponent
-
-    private val navigation: DecomposeNavigatorHolder by inject()
+    private var root: DecomposeRootComponent by DecomposeRootComponentHolder
 
     context(ComponentActivity)
     override fun initialize(startDestination: Destination) {
@@ -55,7 +51,7 @@ internal class DecomposeNavigationHost : NavigationHost, KoinComponent {
 
     @Composable
     private fun MainRoot() {
-        val mainNavigationStack by root.navigationStack.subscribeAsState()
+        val mainNavigationStack by root.mainNavigationStack.subscribeAsState()
 
         Children(
             stack = mainNavigationStack,
@@ -63,7 +59,7 @@ internal class DecomposeNavigationHost : NavigationHost, KoinComponent {
                 backHandler = root.backHandler,
                 fallbackAnimation = stackAnimation(slide()),
                 selector = { backEvent, _, _ -> androidPredictiveBackAnimatable(backEvent) },
-                onBack = { navigation.mainNavigator.pop() },
+                onBack = { root.mainNavigator.pop() },
             ),
             content = { child -> child.instance.Screen() },
         )
@@ -100,7 +96,7 @@ internal class DecomposeNavigationHost : NavigationHost, KoinComponent {
 
         BottomSheetHost(
             sheetState = sheetState,
-            onBackPress = { navigation.bottomSheetNavigator.dismiss() },
+            onBackPress = { root.bottomSheetNavigator.dismiss() },
             content = { localScreen?.Screen() },
         )
     }

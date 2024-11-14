@@ -17,6 +17,12 @@ internal class DecomposeRouter(
 
     private val root: DecomposeRootComponent by DecomposeRootComponentHolder
 
+    private val isBottomSheetVisible: Boolean
+        get() = root.bottomSheetSlot.value.child != null
+
+    private val isOverlayVisible: Boolean
+        get() = root.overlaySlot.value.child != null
+
     override fun navigate(destination: Destination, mode: DestinationMode) = with(root) {
         when (mode) {
             DestinationMode.USUAL -> mainNavigator.pushNew(destination)
@@ -44,21 +50,25 @@ internal class DecomposeRouter(
         mode: DestinationMode,
     ): T {
         navigate(destination, mode)
-        // TODO: result key?
-        return resultEventBus.awaitResult("")
+        return resultEventBus.awaitResult(destination.resultKey)
     }
 
     override fun exit() = with(root) {
         when {
-            bottomSheetSlot.value.child != null -> bottomSheetNavigator.dismiss()
-            overlaySlot.value.child != null -> overlayNavigator.dismiss()
+            isBottomSheetVisible -> bottomSheetNavigator.dismiss()
+            isOverlayVisible -> overlayNavigator.dismiss()
             else -> mainNavigator.pop()
         }
     }
 
-    override fun exitWithResult(result: Any?) {
-        // TODO: result key?
-        resultEventBus.sendResult("", result)
+    override fun exitWithResult(result: Any?) = with(root) {
+        val resultKey = when {
+            isBottomSheetVisible -> bottomSheetSlot.value.child!!.configuration.resultKey
+            isOverlayVisible -> overlaySlot.value.child!!.configuration.resultKey
+            else -> mainNavigationStack.value.active.configuration.resultKey
+        }
+
+        resultEventBus.sendResult(resultKey, result)
         exit()
     }
 }

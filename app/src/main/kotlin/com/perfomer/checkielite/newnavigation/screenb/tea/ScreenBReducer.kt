@@ -8,7 +8,7 @@ class ScreenBReducer(
 ) : DslReducer<ScreenBCommand, ScreenBEffect, ScreenBEvent, ScreenBState>() {
 
     override fun reduce(event: ScreenBEvent) = when (event) {
-        ScreenBUiEvent.OnBackClick -> router.exit()
+        ScreenBUiEvent.OnBackClick -> router.exitWithResult("Result")
         ScreenBUiEvent.OnShowToastClick -> effects(ScreenBEffect.ShowToast)
     }
 }

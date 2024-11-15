@@ -8,6 +8,8 @@ interface NavigationHost {
     context(ComponentActivity)
     fun initialize(startDestination: Destination)
 
+    fun hideBottomSheet()
+
     @Composable
     fun Root(
         bottomSheetController: BottomSheetController,

@@ -40,6 +40,10 @@ internal class DecomposeNavigationHost : NavigationHost {
         }
     }
 
+    override fun hideBottomSheet() {
+        root.bottomSheetNavigator.dismiss()
+    }
+
     @Composable
     override fun Root(
         bottomSheetController: BottomSheetController,

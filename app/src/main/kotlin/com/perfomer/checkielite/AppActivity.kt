@@ -140,6 +140,7 @@ class AppActivity : AppCompatActivity() {
                     containerColor = LocalCuiPalette.current.BackgroundPrimary,
                     shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
                     dragHandle = { CuiDragAnchor() },
+                    onDismiss = { navigationHost.hideBottomSheet() },
                     content = content,
                 )
             }

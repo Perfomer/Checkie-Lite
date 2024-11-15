@@ -57,8 +57,8 @@ internal class DecomposeRouter(
 
     override fun exitWithResult(result: Any?) = with(root) {
         val resultKey = when {
-            bottomSheetSlot.isVisible -> bottomSheetSlot.actual!!.resultKey
-            overlaySlot.isVisible -> overlaySlot.actual!!.resultKey
+            bottomSheetSlot.isVisible -> bottomSheetSlot.active!!.resultKey
+            overlaySlot.isVisible -> overlaySlot.active!!.resultKey
             else -> mainNavigationStack.actual.resultKey
         }
 

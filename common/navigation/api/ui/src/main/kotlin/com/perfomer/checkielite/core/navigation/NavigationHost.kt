@@ -9,5 +9,8 @@ interface NavigationHost {
     fun initialize(startDestination: Destination)
 
     @Composable
-    fun Root()
+    fun Root(
+        bottomSheetController: BottomSheetController,
+        bottomSheetContent: @Composable (@Composable () -> Unit) -> Unit,
+    )
 }

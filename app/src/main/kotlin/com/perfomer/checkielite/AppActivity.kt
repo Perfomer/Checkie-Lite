@@ -4,23 +4,30 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.unit.coerceIn
+import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
+import com.composables.core.SheetDetent
+import com.composables.core.rememberModalBottomSheetState
 import com.perfomer.checkielite.common.android.SingleActivityHolder
 import com.perfomer.checkielite.common.android.apprestart.AppRestarter
 import com.perfomer.checkielite.common.android.apprestart.RestartAction
 import com.perfomer.checkielite.common.android.apprestart.RestartAction.ShowSuccessBackupImportToast
 import com.perfomer.checkielite.common.android.permissions.PermissionHelper
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.NavBarScrim
+import com.perfomer.checkielite.common.ui.cui.widget.sheet.CuiDragAnchor
 import com.perfomer.checkielite.common.ui.cui.widget.toast.CuiToastHost
 import com.perfomer.checkielite.common.ui.cui.widget.toast.CuiToastHostState
 import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalCuiToastHostState
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberSuccessToast
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
 import com.perfomer.checkielite.common.ui.util.TransparentSystemBars
 import com.perfomer.checkielite.common.update.api.AppUpdateManager
@@ -28,6 +35,8 @@ import com.perfomer.checkielite.common.update.api.updateIfAvailable
 import com.perfomer.checkielite.core.navigation.NavigationHost
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.BackupNavigationManager
+import com.perfomer.checkielite.navigation.ComposablesBottomSheetController
+import com.perfomer.checkielite.navigation.ComposablesBottomSheetRoot
 import com.perfomer.checkielite.navigation.StartScreenProvider
 import com.perfomer.checkielite.newnavigation.ADestination
 import kotlinx.collections.immutable.ImmutableList
@@ -62,7 +71,7 @@ class AppActivity : AppCompatActivity() {
 
             CheckieLiteTheme {
                 EnrichCompositionLocal {
-                    navigationHost.Root()
+                    Content()
 
                     NavBarScrim()
                     CuiToastHost()
@@ -110,6 +119,31 @@ class AppActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    @Composable
+    private fun Content() = with(navigationHost) {
+        val sheetState = rememberModalBottomSheetState(
+            initialDetent = SheetDetent.Hidden,
+            positionalThreshold = { totalDistance -> (totalDistance / 4).coerceIn(128.dp, 384.dp) },
+            velocityThreshold = { 24_576.dp },
+        )
+
+        val bottomSheetController = remember { ComposablesBottomSheetController(sheetState) }
+
+        Root(
+            bottomSheetController = bottomSheetController,
+            bottomSheetContent = { content ->
+                ComposablesBottomSheetRoot(
+                    sheetState = sheetState,
+                    sheetElevation = LocalCuiPalette.current.LargeElevation,
+                    containerColor = LocalCuiPalette.current.BackgroundPrimary,
+                    shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+                    dragHandle = { CuiDragAnchor() },
+                    content = content,
+                )
+            }
+        )
     }
 
     private fun checkForUpdates() = lifecycleScope.launch {

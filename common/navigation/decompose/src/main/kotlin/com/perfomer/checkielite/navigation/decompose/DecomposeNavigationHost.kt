@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.navigation.decompose
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -8,8 +9,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.unit.coerceIn
-import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.androidPredictiveBackAnimatable
@@ -20,8 +19,7 @@ import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.retainedComponent
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.router.stack.pop
-import com.composables.core.SheetDetent
-import com.composables.core.rememberModalBottomSheetState
+import com.perfomer.checkielite.core.navigation.BottomSheetController
 import com.perfomer.checkielite.core.navigation.Destination
 import com.perfomer.checkielite.core.navigation.NavigationHost
 import com.perfomer.checkielite.core.navigation.Screen
@@ -43,9 +41,17 @@ internal class DecomposeNavigationHost : NavigationHost {
     }
 
     @Composable
-    override fun Root() {
+    override fun Root(
+        bottomSheetController: BottomSheetController,
+        bottomSheetContent: @Composable (@Composable () -> Unit) -> Unit,
+    ) {
         MainRoot()
-        BottomSheetRoot()
+
+        BottomSheetRoot(
+            controller = bottomSheetController,
+            content = bottomSheetContent,
+        )
+
         OverlayRoot()
     }
 
@@ -66,39 +72,35 @@ internal class DecomposeNavigationHost : NavigationHost {
     }
 
     @Composable
-    private fun BottomSheetRoot() {
+    private fun BottomSheetRoot(
+        controller: BottomSheetController,
+        content: @Composable (@Composable () -> Unit) -> Unit,
+    ) {
         val bottomSheetSlot by root.bottomSheetSlot.subscribeAsState()
-
-        // TODO: Hide `Composables` library details from here.
-        //   It should be more abstract.
-        val sheetState = rememberModalBottomSheetState(
-            initialDetent = SheetDetent.Hidden,
-            positionalThreshold = { totalDistance -> (totalDistance / 4).coerceIn(128.dp, 384.dp) },
-            velocityThreshold = { 24_576.dp },
-        )
-
         var localScreen: Screen? by remember { mutableStateOf(null) }
 
-        LaunchedEffect(bottomSheetSlot.child != null) {
+        LaunchedEffect(bottomSheetSlot.child?.configuration) {
             val child = bottomSheetSlot.child
 
             if (child != null) {
                 localScreen = child.instance
-                sheetState.animateTo(SheetDetent.FullyExpanded)
+                controller.show()
             } else {
-                if (sheetState.targetDetent != SheetDetent.Hidden) {
-                    sheetState.animateTo(SheetDetent.Hidden)
+                if (controller.isVisible) {
+                    controller.hide()
                 }
-
                 localScreen = null
             }
         }
 
-        BottomSheetHost(
-            sheetState = sheetState,
-            onBackPress = { root.bottomSheetNavigator.dismiss() },
-            content = { localScreen?.Screen() },
-        )
+        content {
+            localScreen?.Screen()
+
+            BackHandler(
+                enabled = controller.isVisible,
+                onBack = { root.bottomSheetNavigator.dismiss() },
+            )
+        }
     }
 
     @Composable

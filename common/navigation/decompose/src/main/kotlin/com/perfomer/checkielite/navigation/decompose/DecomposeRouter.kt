@@ -3,7 +3,7 @@ package com.perfomer.checkielite.navigation.decompose
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.router.stack.pop
-import com.arkivanov.decompose.router.stack.pushNew
+import com.arkivanov.decompose.router.stack.pushToFront
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.perfomer.checkielite.core.navigation.Destination
@@ -19,7 +19,7 @@ internal class DecomposeRouter(
 
     override fun navigate(destination: Destination, mode: DestinationMode) = with(root) {
         when (mode) {
-            DestinationMode.USUAL -> mainNavigator.pushNew(destination)
+            DestinationMode.USUAL -> mainNavigator.pushToFront(destination)
             DestinationMode.OVERLAY -> overlayNavigator.activate(destination)
             DestinationMode.BOTTOM_SHEET -> bottomSheetNavigator.activate(destination)
         }

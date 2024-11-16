@@ -2,6 +2,7 @@ plugins {
 	alias(libs.plugins.android.library)
 	alias(libs.plugins.kotlin.android)
 	alias(libs.plugins.compose.compiler)
+	alias(libs.plugins.kotlinx.serialization)
 }
 
 applyCommonAndroid()
@@ -16,7 +17,7 @@ dependencies {
 	implementation(project(":feature:review-details:api"))
 
 	implementation(project(":common:android"))
-	implementation(project(":common:navigation:voyager"))
+	implementation(project(":common:navigation:api:ui"))
 	implementation(project(":common:pure"))
 	implementation(project(":common:tea:compose"))
 	implementation(project(":common:ui"))

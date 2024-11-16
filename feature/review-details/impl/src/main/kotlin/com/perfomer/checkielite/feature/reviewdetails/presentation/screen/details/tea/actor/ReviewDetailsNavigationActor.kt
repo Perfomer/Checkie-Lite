@@ -15,7 +15,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenReviewEdit
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenSearch
-import com.perfomer.checkielite.feature.search.presentation.navigation.SearchParams
+import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -56,9 +56,7 @@ internal class ReviewDetailsNavigationActor(
             }
 
             is OpenSearch -> {
-                // TODO
-                val params = SearchParams(tagId = command.tagId)
-//                navigate(searchScreenProvider(params))
+                navigate(SearchDestination(tagId = command.tagId))
             }
         }
 

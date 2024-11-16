@@ -1,10 +1,13 @@
 package com.perfomer.checkielite.feature.main
 
+import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
-import com.perfomer.checkielite.core.navigation.api.Router
+import com.perfomer.checkielite.core.navigation.Router
+import com.perfomer.checkielite.core.navigation.associate
+import com.perfomer.checkielite.core.navigation.navigation
 import com.perfomer.checkielite.feature.main.data.repository.ReviewsRepositoryImpl
 import com.perfomer.checkielite.feature.main.domain.repository.ReviewsRepository
-import com.perfomer.checkielite.feature.main.navigation.MainScreenProvider
+import com.perfomer.checkielite.feature.main.navigation.MainDestination
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.MainReducer
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.MainStore
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor.LoadReviewsActor
@@ -12,10 +15,6 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor.
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor.MainNavigationActor
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.MainContentScreen
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiStateMapper
-import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationScreenProvider
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsScreenProvider
-import com.perfomer.checkielite.feature.search.presentation.navigation.SearchScreenProvider
-import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsScreenProvider
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -29,30 +28,24 @@ private val dataModule = module {
 }
 
 private val presentationModule = module {
+    navigation { associate<MainDestination, MainContentScreen>() }
+
+    factoryOf(::MainContentScreen)
     factoryOf(::createMainStore)
-    factory { MainScreenProvider { MainContentScreen() } }
 }
 
 internal fun createMainStore(
+    componentContext: ComponentContext,
     reviewsRepository: ReviewsRepository,
     localDataSource: CheckieLocalDataSource,
     router: Router,
-    reviewCreationScreenProvider: ReviewCreationScreenProvider,
-    reviewDetailsScreenProvider: ReviewDetailsScreenProvider,
-    searchScreenProvider: SearchScreenProvider,
-    settingsScreenProvider: SettingsScreenProvider,
 ): MainStore {
     return MainStore(
+        componentContext = componentContext,
         reducer = MainReducer(),
         uiStateMapper = MainUiStateMapper(),
         actors = setOf(
-            MainNavigationActor(
-                router = router,
-                reviewCreationScreenProvider = reviewCreationScreenProvider,
-                reviewDetailsScreenProvider = reviewDetailsScreenProvider,
-                searchScreenProvider = searchScreenProvider,
-                settingsScreenProvider = settingsScreenProvider,
-            ),
+            MainNavigationActor(router = router),
             LoadReviewsActor(reviewsRepository),
             LoadTagsActor(localDataSource),
         ),

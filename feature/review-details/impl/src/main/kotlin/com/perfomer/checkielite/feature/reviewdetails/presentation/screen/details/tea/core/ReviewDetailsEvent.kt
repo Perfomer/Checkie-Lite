@@ -2,6 +2,8 @@ package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detai
 
 internal sealed interface ReviewDetailsEvent {
 
+    data object Initialize : ReviewDetailsEvent
+
     sealed interface ReviewLoading : ReviewDetailsEvent {
 
         data object Started : ReviewLoading
@@ -18,8 +20,6 @@ internal sealed interface ReviewDetailsEvent {
 }
 
 internal sealed interface ReviewDetailsUiEvent : ReviewDetailsEvent {
-
-    data object OnStart : ReviewDetailsUiEvent
 
     data object OnBackPress : ReviewDetailsUiEvent
 

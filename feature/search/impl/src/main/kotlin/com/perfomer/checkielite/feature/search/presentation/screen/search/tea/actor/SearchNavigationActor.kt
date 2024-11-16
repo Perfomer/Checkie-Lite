@@ -4,8 +4,6 @@ import com.perfomer.checkielite.common.pure.util.toArrayList
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.navigation.api.DestinationMode
 import com.perfomer.checkielite.core.navigation.api.Router
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsParams
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsScreenProvider
 import com.perfomer.checkielite.feature.search.presentation.navigation.SortParams
 import com.perfomer.checkielite.feature.search.presentation.navigation.SortResult
 import com.perfomer.checkielite.feature.search.presentation.navigation.SortScreenProvider
@@ -30,7 +28,6 @@ import kotlinx.coroutines.flow.mapLatest
 
 internal class SearchNavigationActor(
     private val router: Router,
-    private val reviewDetailsScreenProvider: ReviewDetailsScreenProvider,
     private val sortScreenProvider: SortScreenProvider,
     private val tagsScreenProvider: TagsScreenProvider,
 ) : Actor<SearchCommand, SearchEvent> {
@@ -54,8 +51,9 @@ internal class SearchNavigationActor(
     }
 
     private fun openReviewDetails(command: OpenReviewDetails) {
-        val params = ReviewDetailsParams(command.reviewId)
-        router.navigate(reviewDetailsScreenProvider(params))
+        // TODO
+//        val params = ReviewDetailsParams(command.reviewId)
+//        router.navigate(reviewDetailsScreenProvider(params))
     }
 
     private suspend fun openAllFilters(command: OpenAllFilters): SearchNavigationEvent {

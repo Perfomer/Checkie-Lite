@@ -1,12 +1,12 @@
 package com.perfomer.checkielite.feature.reviewdetails
 
-import com.perfomer.checkielite.core.navigation.api.Router
-import com.perfomer.checkielite.feature.gallery.navigation.GalleryScreenProvider
-import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationScreenProvider
+import com.arkivanov.decompose.ComponentContext
+import com.perfomer.checkielite.core.navigation.Router
+import com.perfomer.checkielite.core.navigation.associate
+import com.perfomer.checkielite.core.navigation.navigation
 import com.perfomer.checkielite.feature.reviewdetails.data.repository.ReviewDetailsRepositoryImpl
 import com.perfomer.checkielite.feature.reviewdetails.domain.repository.ReviewDetailsRepository
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsParams
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsScreenProvider
+import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsReducer
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsStore
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.actor.DeleteReviewActor
@@ -14,7 +14,6 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.actor.ReviewDetailsNavigationActor
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.ReviewDetailsContentScreen
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiStateMapper
-import com.perfomer.checkielite.feature.search.presentation.navigation.SearchScreenProvider
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -28,31 +27,27 @@ private val dataModule = module {
 }
 
 private val presentationModule = module {
+    navigation {
+        associate<ReviewDetailsDestination, ReviewDetailsContentScreen>()
+    }
+
     factoryOf(::createReviewDetailsStore)
-    factory { ReviewDetailsScreenProvider(::ReviewDetailsContentScreen) }
+    factoryOf(::ReviewDetailsContentScreen)
 }
 
 internal fun createReviewDetailsStore(
-    params: ReviewDetailsParams,
+    componentContext: ComponentContext,
+    destination: ReviewDetailsDestination,
     reviewDetailsRepository: ReviewDetailsRepository,
     router: Router,
-    reviewCreationScreenProvider: ReviewCreationScreenProvider,
-    reviewDetailsScreenProvider: ReviewDetailsScreenProvider,
-    galleryScreenProvider: GalleryScreenProvider,
-    searchScreenProvider: SearchScreenProvider,
 ): ReviewDetailsStore {
     return ReviewDetailsStore(
-        params = params,
+        componentContext = componentContext,
+        destination = destination,
         reducer = ReviewDetailsReducer(),
         uiStateMapper = ReviewDetailsUiStateMapper(),
         actors = setOf(
-            ReviewDetailsNavigationActor(
-                router = router,
-                reviewCreationScreenProvider = reviewCreationScreenProvider,
-                reviewDetailsScreenProvider = reviewDetailsScreenProvider,
-                galleryScreenProvider = galleryScreenProvider,
-                searchScreenProvider = searchScreenProvider,
-            ),
+            ReviewDetailsNavigationActor(router),
             LoadReviewActor(reviewDetailsRepository),
             DeleteReviewActor(reviewDetailsRepository),
         ),

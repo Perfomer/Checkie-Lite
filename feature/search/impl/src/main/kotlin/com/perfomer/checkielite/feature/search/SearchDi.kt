@@ -3,7 +3,6 @@ package com.perfomer.checkielite.feature.search
 import android.content.Context
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.navigation.api.Router
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsScreenProvider
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchParams
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchScreenProvider
 import com.perfomer.checkielite.feature.search.presentation.navigation.SortParams
@@ -54,7 +53,6 @@ internal fun createSearchStore(
     params: SearchParams,
     localDataSource: CheckieLocalDataSource,
     router: Router,
-    reviewDetailsScreenProvider: ReviewDetailsScreenProvider,
     sortScreenProvider: SortScreenProvider,
     tagsScreenProvider: TagsScreenProvider,
 ): SearchStore {
@@ -63,7 +61,7 @@ internal fun createSearchStore(
         reducer = SearchReducer(),
         uiStateMapper = SearchUiStateMapper(context),
         actors = setOf(
-            SearchNavigationActor(router, reviewDetailsScreenProvider, sortScreenProvider, tagsScreenProvider),
+            SearchNavigationActor(router, sortScreenProvider, tagsScreenProvider),
             FilterReviewsActor(),
             SearchLoadTagsActor(localDataSource),
             LoadReviewsActor(localDataSource),

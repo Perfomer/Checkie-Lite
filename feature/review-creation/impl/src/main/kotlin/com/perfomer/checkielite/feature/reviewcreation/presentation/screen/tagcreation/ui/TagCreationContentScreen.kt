@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,13 +13,11 @@ import com.perfomer.checkielite.common.ui.cui.modifier.ShakeConfig
 import com.perfomer.checkielite.common.ui.cui.modifier.rememberShakeController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalCuiToastHostState
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberErrorToast
-import com.perfomer.checkielite.common.ui.util.BackHandlerWithLifecycle
 import com.perfomer.checkielite.common.ui.util.VibratorPattern
 import com.perfomer.checkielite.common.ui.util.rememberVibrator
-import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.common.ui.util.vibrateCompat
+import com.perfomer.checkielite.core.navigation.Screen
 import com.perfomer.checkielite.feature.reviewcreation.R
-import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.TagCreationStore
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.CollapseTagValueField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.FocusTagValueField
@@ -32,19 +31,18 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcr
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnEmojiSelect
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnSelectedEmojiClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnTagValueInput
-import com.perfomer.checkielite.navigation.voyager.BaseScreen
 
 internal class TagCreationContentScreen(
-    private val params: TagCreationParams,
-) : BaseScreen() {
+    private val store: TagCreationStore,
+) : Screen {
 
     @Composable
-    override fun Screen() = TeaComposable(store<TagCreationStore>(params)) { state ->
+    override fun Screen() = TeaComposable(store) { state ->
         val tagValueFocusRequester = remember { FocusRequester() }
         val vibrator = rememberVibrator()
         val tagValueShakeController = rememberShakeController()
 
-        BackHandlerWithLifecycle { accept(OnBackPress) }
+        BackHandler { accept(OnBackPress) }
 
         val toastHostState = LocalCuiToastHostState.current
         val deleteErrorToast = rememberErrorToast(R.string.tagcreation_error_delete)

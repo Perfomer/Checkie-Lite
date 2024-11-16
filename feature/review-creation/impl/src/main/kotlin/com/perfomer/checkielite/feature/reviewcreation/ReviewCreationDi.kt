@@ -1,20 +1,18 @@
 package com.perfomer.checkielite.feature.reviewcreation
 
 import android.content.Context
+import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
-import com.perfomer.checkielite.core.navigation.api.ExternalRouter
-import com.perfomer.checkielite.core.navigation.api.Router
-import com.perfomer.checkielite.feature.gallery.navigation.GalleryScreenProvider
+import com.perfomer.checkielite.core.navigation.ExternalRouter
+import com.perfomer.checkielite.core.navigation.Router
+import com.perfomer.checkielite.core.navigation.associate
+import com.perfomer.checkielite.core.navigation.navigation
 import com.perfomer.checkielite.feature.reviewcreation.data.repository.CheckieEmojiRepositoryImpl
 import com.perfomer.checkielite.feature.reviewcreation.domain.repository.CheckieEmojiRepository
-import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
-import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationScreenProvider
-import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorParams
-import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorScreenProvider
-import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationParams
-import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationScreenProvider
-import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagSortParams
-import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagSortScreenProvider
+import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationDestination
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorDestination
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationDestination
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagSortDestination
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.CurrencySelectorReducer
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.CurrencySelectorStore
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.actor.CurrencySelectorNavigationActor
@@ -66,44 +64,42 @@ private val dataModule = module {
 }
 
 private val presentationModule = module {
+    navigation {
+        associate<ReviewCreationDestination, ReviewCreationContentScreen>()
+        associate<CurrencySelectorDestination, CurrencySelectorContentScreen>()
+        associate<TagCreationDestination, TagCreationContentScreen>()
+        associate<TagSortDestination, TagSortContentScreen>()
+    }
+
     factoryOf(::createReviewCreationStore)
-    factory { ReviewCreationScreenProvider(::ReviewCreationContentScreen) }
+    factoryOf(::ReviewCreationContentScreen)
 
     factoryOf(::createTagCreationStore)
-    factory { TagCreationScreenProvider(::TagCreationContentScreen) }
+    factoryOf(::TagCreationContentScreen)
 
     factoryOf(::createTagSortStore)
-    factory { TagSortScreenProvider(::TagSortContentScreen) }
+    factoryOf(::TagSortContentScreen)
 
     factoryOf(::createCurrencySelectorStore)
-    factory { CurrencySelectorScreenProvider(::CurrencySelectorContentScreen) }
+    factoryOf(::CurrencySelectorContentScreen)
 }
 
 internal fun createReviewCreationStore(
+    componentContext: ComponentContext,
+    destination: ReviewCreationDestination,
     context: Context,
-    params: ReviewCreationParams,
     localDataSource: CheckieLocalDataSource,
     emojiRepository: CheckieEmojiRepository,
     router: Router,
     externalRouter: ExternalRouter,
-    galleryScreenProvider: GalleryScreenProvider,
-    tagCreationScreenProvider: TagCreationScreenProvider,
-    currencySelectorScreenProvider: CurrencySelectorScreenProvider,
-    tagSortScreenProvider: TagSortScreenProvider,
 ): ReviewCreationStore {
     return ReviewCreationStore(
-        params = params,
+        componentContext = componentContext,
+        destination = destination,
         reducer = ReviewCreationReducer(),
         uiStateMapper = ReviewCreationUiStateMapper(context),
         actors = setOf(
-            ReviewCreationNavigationActor(
-                router = router,
-                externalRouter = externalRouter,
-                galleryScreenProvider = galleryScreenProvider,
-                tagCreationScreenProvider = tagCreationScreenProvider,
-                tagSortScreenProvider = tagSortScreenProvider,
-                currencySelectorScreenProvider = currencySelectorScreenProvider,
-            ),
+            ReviewCreationNavigationActor(router, externalRouter),
             CreateReviewActor(localDataSource),
             UpdateReviewActor(localDataSource),
             LoadReviewActor(localDataSource),
@@ -119,14 +115,16 @@ internal fun createReviewCreationStore(
 }
 
 internal fun createTagCreationStore(
+    componentContext: ComponentContext,
+    destination: TagCreationDestination,
     context: Context,
-    params: TagCreationParams,
     localDataSource: CheckieLocalDataSource,
     emojiRepository: CheckieEmojiRepository,
     router: Router,
 ): TagCreationStore {
     return TagCreationStore(
-        params = params,
+        componentContext = componentContext,
+        destination = destination,
         reducer = TagCreationReducer(),
         uiStateMapper = TagCreationUiStateMapper(context),
         actors = setOf(
@@ -142,12 +140,14 @@ internal fun createTagCreationStore(
 }
 
 internal fun createTagSortStore(
+    componentContext: ComponentContext,
+    destination: TagSortDestination,
     context: Context,
-    params: TagSortParams,
     router: Router,
 ): TagSortStore {
     return TagSortStore(
-        params = params,
+        componentContext = componentContext,
+        destination = destination,
         reducer = TagSortReducer(),
         uiStateMapper = TagSortUiStateMapper(context),
         actors = setOf(
@@ -157,13 +157,15 @@ internal fun createTagSortStore(
 }
 
 internal fun createCurrencySelectorStore(
+    componentContext: ComponentContext,
+    destination: CurrencySelectorDestination,
     context: Context,
-    params: CurrencySelectorParams,
     localDataSource: CheckieLocalDataSource,
     router: Router,
 ): CurrencySelectorStore {
     return CurrencySelectorStore(
-        params = params,
+        componentContext = componentContext,
+        destination = destination,
         reducer = CurrencySelectorReducer(),
         uiStateMapper = CurrencySelectorUiStateMapper(context),
         actors = setOf(

@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
@@ -15,13 +16,11 @@ import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.cui.modifier.ShakeConfig
 import com.perfomer.checkielite.common.ui.cui.modifier.rememberShakeController
-import com.perfomer.checkielite.common.ui.util.BackHandlerWithLifecycle
 import com.perfomer.checkielite.common.ui.util.VibratorPattern
 import com.perfomer.checkielite.common.ui.util.rememberVibrator
-import com.perfomer.checkielite.common.ui.util.store
 import com.perfomer.checkielite.common.ui.util.vibrateCompat
+import com.perfomer.checkielite.core.navigation.Screen
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
-import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.ReviewCreationStore
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.CloseKeyboard
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect.CollapseProductNameField
@@ -40,14 +39,13 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.ProductInfoScreen
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.reviewinfo.ReviewInfoScreen
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.TagsScreen
-import com.perfomer.checkielite.navigation.voyager.BaseScreen
 
 internal class ReviewCreationContentScreen(
-    private val params: ReviewCreationParams,
-) : BaseScreen() {
+    private val store: ReviewCreationStore,
+) : Screen {
 
     @Composable
-    override fun Screen() = TeaComposable(store<ReviewCreationStore>(params)) { state ->
+    override fun Screen() = TeaComposable(store) { state ->
         val focusManager = LocalFocusManager.current
         val priceFocusRequester = remember { FocusRequester() }
         val commentFocusRequester = remember { FocusRequester() }
@@ -58,7 +56,7 @@ internal class ReviewCreationContentScreen(
         var isConfirmExitDialogShown by remember { mutableStateOf(false) }
         var isErrorDialogShown by remember { mutableStateOf(false) }
 
-        BackHandlerWithLifecycle { accept(OnBackPress) }
+        BackHandler { accept(OnBackPress) }
 
         EffectHandler { effect ->
             when (effect) {

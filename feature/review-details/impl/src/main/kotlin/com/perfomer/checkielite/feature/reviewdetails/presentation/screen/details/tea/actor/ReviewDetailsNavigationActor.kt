@@ -5,7 +5,7 @@ import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryParams
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
-import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
+import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationDestination
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent
@@ -40,9 +40,14 @@ internal class ReviewDetailsNavigationActor(
             }
 
             is OpenReviewEdit -> {
-                // TODO
-                val params = ReviewCreationParams(mode = ReviewCreationMode.Modification(reviewId = command.reviewId, startAction = command.startAction))
-//                navigate(reviewCreationScreenProvider(params))
+                navigate(
+                    ReviewCreationDestination(
+                        mode = ReviewCreationMode.Modification(
+                            reviewId = command.reviewId,
+                            startAction = command.startAction,
+                        ),
+                    )
+                )
             }
 
             is OpenReviewDetails -> {

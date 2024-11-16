@@ -1,0 +1,14 @@
+package com.perfomer.checkielite.feature.reviewcreation.presentation.navigation
+
+import com.perfomer.checkielite.core.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.navigation.Destination
+import kotlinx.serialization.Serializable
+
+@Serializable
+internal data class CurrencySelectorDestination(
+    val currentCurrency: CheckieCurrency,
+) : Destination()
+
+internal sealed interface CurrencySelectorResult {
+    data class Selected(val currency: CheckieCurrency) : CurrencySelectorResult
+}

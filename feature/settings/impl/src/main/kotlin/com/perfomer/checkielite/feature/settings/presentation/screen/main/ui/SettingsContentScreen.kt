@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,8 +13,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalCuiToastHostStat
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberErrorToast
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberSuccessToast
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberWarningToast
-import com.perfomer.checkielite.common.ui.util.BackHandlerWithLifecycle
-import com.perfomer.checkielite.common.ui.util.store
+import com.perfomer.checkielite.core.navigation.Screen
 import com.perfomer.checkielite.feature.settings.R
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.SettingsStore
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowConfirmImportDialog
@@ -24,13 +24,12 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackupImportClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackupImportConfirmClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnCheckUpdatesClick
-import com.perfomer.checkielite.navigation.voyager.BaseScreen
 
-internal class SettingsContentScreen : BaseScreen() {
+internal class SettingsContentScreen(private val store: SettingsStore) : Screen {
 
     @Composable
-    override fun Screen() = TeaComposable(store<SettingsStore>()) { state ->
-        BackHandlerWithLifecycle { accept(OnBackPress) }
+    override fun Screen() = TeaComposable(store) { state ->
+        BackHandler { accept(OnBackPress) }
 
         val toastController = LocalCuiToastHostState.current
         val syncingInProgressToast = rememberWarningToast(message = CommonString.common_toast_syncing)

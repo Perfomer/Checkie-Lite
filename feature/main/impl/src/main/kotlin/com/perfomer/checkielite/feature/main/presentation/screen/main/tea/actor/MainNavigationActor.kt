@@ -12,7 +12,7 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationEvent.ReviewCreated
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsParams
+import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchParams
 import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsDestination
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -41,12 +41,7 @@ internal class MainNavigationActor(
                 return ReviewCreated
             }
 
-            is OpenReviewDetails -> {
-                val params = ReviewDetailsParams(command.reviewId)
-                // TODO
-//                navigate(reviewDetailsScreenProvider(params))
-            }
-
+            is OpenReviewDetails -> navigate(ReviewDetailsDestination(command.reviewId))
             is OpenSearch -> {
                 val params = SearchParams(tagId = command.tagId)
                 // TODO

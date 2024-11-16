@@ -6,5 +6,4 @@ plugins {
 dependencies {
 	implementation(project(":common:navigation:api"))
 	implementation(project(":common:navigation:api:core"))
-	implementation(libs.kotlinx.serialization.json)
 }

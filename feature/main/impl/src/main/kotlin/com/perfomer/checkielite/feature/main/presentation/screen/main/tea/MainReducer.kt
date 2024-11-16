@@ -8,6 +8,7 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand.LoadTags
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEffect
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent.Initialize
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent.ReviewsLoading
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent.TagsLoading
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenReviewCreation
@@ -22,12 +23,12 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnReviewClick
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnSearchClick
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnSettingsClick
-import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnStart
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnTagClick
 
 internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, MainState>() {
 
     override fun reduce(event: MainEvent) = when (event) {
+        is Initialize -> commands(LoadReviews, LoadTags)
         is MainUiEvent -> reduceUi(event)
         is MainNavigationEvent -> reduceNavigation(event)
         is ReviewsLoading -> reduceReviewsLoading(event)
@@ -35,7 +36,6 @@ internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, Main
     }
 
     private fun reduceUi(event: MainUiEvent) = when (event) {
-        is OnStart -> commands(LoadReviews, LoadTags)
         is OnFabClick -> commands(OpenReviewCreation)
         is OnReviewClick -> commands(OpenReviewDetails(event.id))
         is OnTagClick -> commands(OpenSearch(tagId = event.id))

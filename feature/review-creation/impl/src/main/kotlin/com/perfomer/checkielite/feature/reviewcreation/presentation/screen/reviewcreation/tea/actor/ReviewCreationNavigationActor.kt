@@ -2,22 +2,18 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 
 import com.perfomer.checkielite.common.pure.util.toArrayList
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.navigation.api.DestinationMode
-import com.perfomer.checkielite.core.navigation.api.ExternalDestination
-import com.perfomer.checkielite.core.navigation.api.ExternalResult
-import com.perfomer.checkielite.core.navigation.api.ExternalRouter
-import com.perfomer.checkielite.core.navigation.api.Router
+import com.perfomer.checkielite.core.navigation.DestinationMode
+import com.perfomer.checkielite.core.navigation.ExternalDestination
+import com.perfomer.checkielite.core.navigation.ExternalResult
+import com.perfomer.checkielite.core.navigation.ExternalRouter
+import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryParams
-import com.perfomer.checkielite.feature.gallery.navigation.GalleryScreenProvider
-import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorParams
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorDestination
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorResult
-import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorScreenProvider
-import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationParams
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationDestination
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationResult
-import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationScreenProvider
-import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagSortParams
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagSortDestination
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagSortResult
-import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagSortScreenProvider
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationCommand
@@ -33,21 +29,14 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnCurrencySelected
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnTagCreated
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationNavigationEvent.OnTagDeleted
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.mapLatest
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class ReviewCreationNavigationActor(
     private val router: Router,
     private val externalRouter: ExternalRouter,
-
-    private val galleryScreenProvider: GalleryScreenProvider,
-    private val tagCreationScreenProvider: TagCreationScreenProvider,
-    private val tagSortScreenProvider: TagSortScreenProvider,
-    private val currencySelectorScreenProvider: CurrencySelectorScreenProvider,
 ) : Actor<ReviewCreationCommand, ReviewCreationEvent> {
 
     override fun act(commands: Flow<ReviewCreationCommand>): Flow<ReviewCreationEvent> {
@@ -62,10 +51,14 @@ internal class ReviewCreationNavigationActor(
             is ExitWithResult -> exitWithResult(command.result)
             is OpenPhotoPicker -> return openPhotoPicker()
             is OpenCamera -> return openCamera()
-            is OpenGallery -> router.navigate(
-                screen = galleryScreenProvider(GalleryParams(command.picturesUri.toArrayList(), command.currentPicturePosition)),
-                mode = DestinationMode.OVERLAY,
-            )
+            is OpenGallery -> {
+                // TODO
+                GalleryParams(command.picturesUri.toArrayList(), command.currentPicturePosition)
+//                router.navigate(
+//                    screen = galleryScreenProvider(),
+//                    mode = DestinationMode.OVERLAY,
+//                )
+            }
             is OpenTagCreation -> return openTagCreation(command)
             is OpenCurrencySelector -> return openCurrencySelector(command)
             is OpenTagSort -> return openTagSort(command)
@@ -89,9 +82,8 @@ internal class ReviewCreationNavigationActor(
     }
 
     private suspend fun openTagCreation(command: OpenTagCreation): ReviewCreationNavigationEvent? {
-        val params = TagCreationParams(mode = command.mode)
         val result = router.navigateForResult<TagCreationResult>(
-            screen = tagCreationScreenProvider(params),
+            destination = TagCreationDestination(mode = command.mode),
             mode = DestinationMode.BOTTOM_SHEET,
         )
 
@@ -103,9 +95,8 @@ internal class ReviewCreationNavigationActor(
     }
 
     private suspend fun openTagSort(command: OpenTagSort): ReviewCreationNavigationEvent? {
-        val params = TagSortParams(command.currentOption)
         val result = router.navigateForResult<TagSortResult>(
-            screen = tagSortScreenProvider(params),
+            destination = TagSortDestination(command.currentOption),
             mode = DestinationMode.BOTTOM_SHEET,
         )
 
@@ -115,9 +106,8 @@ internal class ReviewCreationNavigationActor(
     }
 
     private suspend fun openCurrencySelector(command: OpenCurrencySelector): ReviewCreationNavigationEvent? {
-        val params = CurrencySelectorParams(command.currency)
         val result = router.navigateForResult<CurrencySelectorResult>(
-            screen = currencySelectorScreenProvider(params),
+            destination = CurrencySelectorDestination(command.currency),
             mode = DestinationMode.BOTTOM_SHEET,
         )
 

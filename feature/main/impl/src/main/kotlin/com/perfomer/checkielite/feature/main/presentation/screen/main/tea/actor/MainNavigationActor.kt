@@ -14,6 +14,7 @@ import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationParams
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsParams
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchParams
+import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsDestination
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -51,11 +52,7 @@ internal class MainNavigationActor(
                 // TODO
 //                navigate(searchScreenProvider(params))
             }
-
-            is OpenSettings -> {
-                // TODO
-//                navigate(settingsScreenProvider())
-            }
+            is OpenSettings -> navigate(SettingsDestination)
         }
 
         return null

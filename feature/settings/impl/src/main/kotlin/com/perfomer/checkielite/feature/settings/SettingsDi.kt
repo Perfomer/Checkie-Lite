@@ -1,16 +1,17 @@
 package com.perfomer.checkielite.feature.settings
 
 import android.content.Context
+import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.android.apprestart.AppRestarter
 import com.perfomer.checkielite.common.update.api.AppUpdateManager
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.data.repository.BackupRepository
-import com.perfomer.checkielite.core.navigation.api.ExternalRouter
-import com.perfomer.checkielite.core.navigation.api.Router
-import com.perfomer.checkielite.feature.main.navigation.MainScreenProvider
-import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupParams
-import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupScreenProvider
-import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsScreenProvider
+import com.perfomer.checkielite.core.navigation.ExternalRouter
+import com.perfomer.checkielite.core.navigation.Router
+import com.perfomer.checkielite.core.navigation.associate
+import com.perfomer.checkielite.core.navigation.navigation
+import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupDestination
+import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsDestination
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.BackupReducer
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.BackupStore
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor.AwaitActor
@@ -38,14 +39,21 @@ val settingsModules
     get() = listOf(presentationModule)
 
 private val presentationModule = module {
+    navigation {
+        associate<SettingsDestination, SettingsContentScreen>()
+        associate<BackupDestination, BackupContentScreen>()
+    }
+
     factoryOf(::createSettingsStore)
-    factory { SettingsScreenProvider(::SettingsContentScreen) }
+    factoryOf(::SettingsContentScreen)
 
     factoryOf(::createBackupStore)
-    factory { BackupScreenProvider(::BackupContentScreen) }
+    factoryOf(::BackupContentScreen)
 }
 
 internal fun createSettingsStore(
+    componentContext: ComponentContext,
+    destination: SettingsDestination,
     context: Context,
     router: Router,
     externalRouter: ExternalRouter,
@@ -54,6 +62,8 @@ internal fun createSettingsStore(
     appUpdateManager: AppUpdateManager,
 ): SettingsStore {
     return SettingsStore(
+        componentContext = componentContext,
+        destination = destination,
         reducer = SettingsReducer(),
         uiStateMapper = SettingsUiStateMapper(context),
         actors = setOf(
@@ -69,20 +79,21 @@ internal fun createSettingsStore(
 }
 
 internal fun createBackupStore(
-    params: BackupParams,
+    componentContext: ComponentContext,
+    destination: BackupDestination,
     context: Context,
     router: Router,
     appRestarter: AppRestarter,
     backupRepository: BackupRepository,
-    mainScreenProvider: MainScreenProvider,
     appUpdateManager: AppUpdateManager,
 ): BackupStore {
     return BackupStore(
-        params = params,
+        componentContext = componentContext,
+        destination = destination,
         reducer = BackupReducer(),
         uiStateMapper = BackupUiStateMapper(context),
         actors = setOf(
-            BackupNavigationActor(router, appRestarter, mainScreenProvider),
+            BackupNavigationActor(router, appRestarter),
             ObserveBackupProgressActor(backupRepository),
             AwaitActor(),
             CancelBackupActor(backupRepository),

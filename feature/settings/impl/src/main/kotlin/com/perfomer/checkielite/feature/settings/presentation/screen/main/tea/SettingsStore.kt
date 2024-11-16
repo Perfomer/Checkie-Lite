@@ -1,7 +1,9 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea
 
+import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.common.tea.impl.ScreenModelStore
+import com.perfomer.checkielite.common.tea.impl.ComponentStore
+import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsDestination
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
@@ -12,13 +14,16 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.sta
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.state.SettingsUiStateMapper
 
 internal class SettingsStore(
+    componentContext: ComponentContext,
+    destination: SettingsDestination,
     reducer: SettingsReducer,
     uiStateMapper: SettingsUiStateMapper,
     actors: Set<Actor<SettingsCommand, SettingsEvent>>,
-) : ScreenModelStore<SettingsCommand, SettingsEffect, SettingsEvent, SettingsUiEvent, SettingsState, SettingsUiState>(
-    initialState = SettingsState(),
+) : ComponentStore<SettingsCommand, SettingsEffect, SettingsEvent, SettingsUiEvent, SettingsState, SettingsUiState>(
+    componentContext = componentContext,
     reducer = reducer,
     uiStateMapper = uiStateMapper,
     actors = actors,
+    initialState = SettingsState(),
     initialEvents = listOf(Initialize),
 )

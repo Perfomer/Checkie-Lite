@@ -3,8 +3,8 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea
 import com.perfomer.checkielite.common.android.apprestart.AppRestarter
 import com.perfomer.checkielite.common.android.apprestart.RestartAction
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.navigation.api.Router
-import com.perfomer.checkielite.feature.main.navigation.MainScreenProvider
+import com.perfomer.checkielite.core.navigation.Router
+import com.perfomer.checkielite.feature.main.navigation.MainDestination
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupNavigationCommand
@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.mapLatest
 internal class BackupNavigationActor(
     private val router: Router,
     private val appRestarter: AppRestarter,
-    private val mainScreenProvider: MainScreenProvider,
 ) : Actor<BackupCommand, BackupEvent> {
 
     override fun act(commands: Flow<BackupCommand>): Flow<BackupEvent> {
@@ -31,7 +30,7 @@ internal class BackupNavigationActor(
     private fun handleCommand(command: BackupNavigationCommand): BackupNavigationEvent? {
         when (command) {
             is RestartApp -> appRestarter.restart(RestartAction.ShowSuccessBackupImportToast)
-            is OpenMain -> router.replaceStack(mainScreenProvider())
+            is OpenMain -> router.replaceStack(MainDestination)
         }
 
         return null

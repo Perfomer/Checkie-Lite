@@ -1,10 +1,10 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor
 
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.navigation.api.ExternalDestination
-import com.perfomer.checkielite.core.navigation.api.ExternalResult
-import com.perfomer.checkielite.core.navigation.api.ExternalRouter
-import com.perfomer.checkielite.core.navigation.api.Router
+import com.perfomer.checkielite.core.navigation.ExternalDestination
+import com.perfomer.checkielite.core.navigation.ExternalResult
+import com.perfomer.checkielite.core.navigation.ExternalRouter
+import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand

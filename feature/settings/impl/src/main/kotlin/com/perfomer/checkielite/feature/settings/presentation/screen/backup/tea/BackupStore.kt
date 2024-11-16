@@ -1,8 +1,9 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea
 
+import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.common.tea.impl.ScreenModelStore
-import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupParams
+import com.perfomer.checkielite.common.tea.impl.ComponentStore
+import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupDestination
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent
@@ -13,14 +14,16 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.s
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.state.BackupUiStateMapper
 
 internal class BackupStore(
-    params: BackupParams,
+    componentContext: ComponentContext,
+    destination: BackupDestination,
     reducer: BackupReducer,
     uiStateMapper: BackupUiStateMapper,
     actors: Set<Actor<BackupCommand, BackupEvent>>,
-) : ScreenModelStore<BackupCommand, BackupEffect, BackupEvent, BackupUiEvent, BackupState, BackupUiState>(
-    initialState = BackupState(mode = params.mode),
+) : ComponentStore<BackupCommand, BackupEffect, BackupEvent, BackupUiEvent, BackupState, BackupUiState>(
+    componentContext = componentContext,
     reducer = reducer,
     uiStateMapper = uiStateMapper,
     actors = actors,
+    initialState = BackupState(mode = destination.mode),
     initialEvents = listOf(Initialize),
 )

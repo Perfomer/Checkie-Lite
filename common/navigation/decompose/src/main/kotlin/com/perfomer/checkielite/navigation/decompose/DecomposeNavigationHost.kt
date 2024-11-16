@@ -3,6 +3,7 @@ package com.perfomer.checkielite.navigation.decompose
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
@@ -115,7 +116,37 @@ internal class DecomposeNavigationHost(
     private fun OverlayRoot() {
         val overlaySlot by root.overlaySlot.subscribeAsState()
 
-        // TODO: Transition Animation
-        overlaySlot.child?.instance?.Screen()
+        var localScreen: Screen? by remember { mutableStateOf(null) }
+        val visibleState = remember { MutableTransitionState(false) }
+
+        LaunchedEffect(overlaySlot.child?.configuration) {
+            val child = overlaySlot.child
+
+            if (child != null) {
+                localScreen = child.instance
+                visibleState.targetState = true
+            } else {
+                visibleState.targetState = false
+            }
+        }
+
+        LaunchedEffect(visibleState.currentState) {
+            if (!visibleState.currentState) {
+                localScreen = null
+            }
+        }
+
+        AnimatedVisibility(
+            visibleState = visibleState,
+            enter = fadeIn(),
+            exit = fadeOut(),
+        ) {
+            localScreen?.Screen()
+
+            BackHandler(
+                enabled = overlaySlot.child != null,
+                onBack = ::back,
+            )
+        }
     }
 }

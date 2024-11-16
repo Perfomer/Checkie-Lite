@@ -16,9 +16,9 @@ import com.perfomer.checkielite.common.android.SingleActivityHolder
 import com.perfomer.checkielite.common.android.SuspendableActivityResultHandler
 import com.perfomer.checkielite.common.android.permissions.PermissionHelper
 import com.perfomer.checkielite.common.android.util.getRealPath
-import com.perfomer.checkielite.core.navigation.api.ExternalDestination
-import com.perfomer.checkielite.core.navigation.api.ExternalResult
-import com.perfomer.checkielite.core.navigation.api.ExternalRouter
+import com.perfomer.checkielite.core.navigation.ExternalDestination
+import com.perfomer.checkielite.core.navigation.ExternalResult
+import com.perfomer.checkielite.core.navigation.ExternalRouter
 
 internal class AndroidExternalRouter(
     private val singleActivityHolder: SingleActivityHolder,

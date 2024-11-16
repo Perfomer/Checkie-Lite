@@ -5,16 +5,14 @@ import com.perfomer.checkielite.core.data.repository.BackupRepository
 import com.perfomer.checkielite.core.entity.backup.BackupMode
 import com.perfomer.checkielite.core.entity.backup.BackupProgress
 import com.perfomer.checkielite.core.entity.backup.BackupState
-import com.perfomer.checkielite.core.navigation.api.Router
-import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupParams
-import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupScreenProvider
+import com.perfomer.checkielite.core.navigation.Router
+import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupDestination
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 internal class BackupNavigationManager(
     private val router: Router,
-    private val backupScreenProvider: BackupScreenProvider,
     private val backupRepository: BackupRepository,
 ) {
 
@@ -36,6 +34,6 @@ internal class BackupNavigationManager(
     }
 
     private fun onBackupStarted(mode: BackupMode) {
-        router.replaceStack(backupScreenProvider(BackupParams(mode)))
+        router.replaceStack(BackupDestination(mode))
     }
 }

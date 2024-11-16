@@ -38,7 +38,6 @@ import com.perfomer.checkielite.navigation.BackupNavigationManager
 import com.perfomer.checkielite.navigation.ComposablesBottomSheetController
 import com.perfomer.checkielite.navigation.ComposablesBottomSheetRoot
 import com.perfomer.checkielite.navigation.StartScreenProvider
-import com.perfomer.checkielite.newnavigation.ADestination
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
@@ -92,7 +91,7 @@ class AppActivity : AppCompatActivity() {
         permissionHelper.register()
         backupNavigationManager.register(lifecycleScope)
 
-        navigationHost.initialize(startDestination = ADestination)
+        navigationHost.initialize(startDestination = startScreenProvider())
     }
 
     @Composable

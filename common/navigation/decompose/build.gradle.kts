@@ -17,7 +17,6 @@ dependencies {
 
 	api(libs.decompose)
 	implementation(libs.activity.compose)
-	implementation(libs.composables.core)
 	implementation(libs.compose.material3)
 	implementation(libs.compose.ui)
 	implementation(libs.decompose.extensions.compose)

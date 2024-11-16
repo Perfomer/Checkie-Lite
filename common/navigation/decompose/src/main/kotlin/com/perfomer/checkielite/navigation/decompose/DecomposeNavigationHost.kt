@@ -2,6 +2,9 @@ package com.perfomer.checkielite.navigation.decompose
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -17,15 +20,16 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.retainedComponent
-import com.arkivanov.decompose.router.slot.dismiss
-import com.arkivanov.decompose.router.stack.pop
 import com.perfomer.checkielite.core.navigation.BottomSheetController
 import com.perfomer.checkielite.core.navigation.Destination
 import com.perfomer.checkielite.core.navigation.NavigationHost
+import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.Screen
 
 @OptIn(ExperimentalDecomposeApi::class)
-internal class DecomposeNavigationHost : NavigationHost {
+internal class DecomposeNavigationHost(
+    private val router: Router,
+) : NavigationHost {
 
     @Stable
     private var root: DecomposeRootComponent by DecomposeRootComponentHolder
@@ -40,8 +44,8 @@ internal class DecomposeNavigationHost : NavigationHost {
         }
     }
 
-    override fun hideBottomSheet() {
-        root.bottomSheetNavigator.dismiss()
+    override fun back() {
+        router.exit()
     }
 
     @Composable
@@ -69,7 +73,7 @@ internal class DecomposeNavigationHost : NavigationHost {
                 backHandler = root.backHandler,
                 fallbackAnimation = stackAnimation(slide()),
                 selector = { backEvent, _, _ -> androidPredictiveBackAnimatable(backEvent) },
-                onBack = { root.mainNavigator.pop() },
+                onBack = ::back,
             ),
             content = { child -> child.instance.Screen() },
         )
@@ -102,7 +106,7 @@ internal class DecomposeNavigationHost : NavigationHost {
 
             BackHandler(
                 enabled = controller.isVisible,
-                onBack = { root.bottomSheetNavigator.dismiss() },
+                onBack = ::back,
             )
         }
     }

@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.actor
 
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.navigation.api.Router
+import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortEvent
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortNavigationCommand

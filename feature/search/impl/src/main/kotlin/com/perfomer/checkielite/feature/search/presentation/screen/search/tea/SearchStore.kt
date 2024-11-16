@@ -1,9 +1,10 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.tea
 
+import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.common.tea.impl.ScreenModelStore
+import com.perfomer.checkielite.common.tea.impl.ComponentStore
 import com.perfomer.checkielite.core.entity.search.SearchFilters
-import com.perfomer.checkielite.feature.search.presentation.navigation.SearchParams
+import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEffect
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent
@@ -14,14 +15,16 @@ import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.sta
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.SearchUiStateMapper
 
 internal class SearchStore(
-    params: SearchParams,
+    componentContext: ComponentContext,
+    destination: SearchDestination,
     reducer: SearchReducer,
     uiStateMapper: SearchUiStateMapper,
     actors: Set<Actor<SearchCommand, SearchEvent>>,
-) : ScreenModelStore<SearchCommand, SearchEffect, SearchEvent, SearchUiEvent, SearchState, SearchUiState>(
+) : ComponentStore<SearchCommand, SearchEffect, SearchEvent, SearchUiEvent, SearchState, SearchUiState>(
+    componentContext = componentContext,
     initialState = SearchState(
         searchFilters = SearchFilters(
-            tagsIds = listOfNotNull(params.tagId),
+            tagsIds = listOfNotNull(destination.tagId),
         )
     ),
     reducer = reducer,

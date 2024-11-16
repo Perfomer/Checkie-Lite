@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.actor
 
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.navigation.api.Router
+import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core.TagsCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core.TagsEvent
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core.TagsNavigationCommand

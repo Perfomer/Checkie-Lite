@@ -1,14 +1,14 @@
 package com.perfomer.checkielite.feature.search
 
 import android.content.Context
+import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
-import com.perfomer.checkielite.core.navigation.api.Router
-import com.perfomer.checkielite.feature.search.presentation.navigation.SearchParams
-import com.perfomer.checkielite.feature.search.presentation.navigation.SearchScreenProvider
-import com.perfomer.checkielite.feature.search.presentation.navigation.SortParams
-import com.perfomer.checkielite.feature.search.presentation.navigation.SortScreenProvider
-import com.perfomer.checkielite.feature.search.presentation.navigation.TagsParams
-import com.perfomer.checkielite.feature.search.presentation.navigation.TagsScreenProvider
+import com.perfomer.checkielite.core.navigation.Router
+import com.perfomer.checkielite.core.navigation.associate
+import com.perfomer.checkielite.core.navigation.navigation
+import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination
+import com.perfomer.checkielite.feature.search.presentation.navigation.SortDestination
+import com.perfomer.checkielite.feature.search.presentation.navigation.TagsDestination
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.SearchReducer
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.SearchStore
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.ClearRecentSearchesActor
@@ -38,30 +38,36 @@ val searchModules
     get() = listOf(presentationModule)
 
 private val presentationModule = module {
+    navigation {
+        associate<SearchDestination, SearchContentScreen>()
+        associate<SortDestination, SortContentScreen>()
+        associate<TagsDestination, TagsContentScreen>()
+    }
+
     factoryOf(::createSearchStore)
-    factory { SearchScreenProvider(::SearchContentScreen) }
+    factoryOf(::SearchContentScreen)
 
     factoryOf(::createSortStore)
-    factory { SortScreenProvider(::SortContentScreen) }
+    factoryOf(::SortContentScreen)
 
     factoryOf(::createTagsStore)
-    factory { TagsScreenProvider(::TagsContentScreen) }
+    factoryOf(::TagsContentScreen)
 }
 
 internal fun createSearchStore(
+    componentContext: ComponentContext,
+    destination: SearchDestination,
     context: Context,
-    params: SearchParams,
     localDataSource: CheckieLocalDataSource,
     router: Router,
-    sortScreenProvider: SortScreenProvider,
-    tagsScreenProvider: TagsScreenProvider,
 ): SearchStore {
     return SearchStore(
-        params = params,
+        componentContext = componentContext,
+        destination = destination,
         reducer = SearchReducer(),
         uiStateMapper = SearchUiStateMapper(context),
         actors = setOf(
-            SearchNavigationActor(router, sortScreenProvider, tagsScreenProvider),
+            SearchNavigationActor(router),
             FilterReviewsActor(),
             SearchLoadTagsActor(localDataSource),
             LoadReviewsActor(localDataSource),
@@ -73,12 +79,14 @@ internal fun createSearchStore(
 }
 
 internal fun createSortStore(
+    componentContext: ComponentContext,
+    destination: SortDestination,
     context: Context,
-    params: SortParams,
     router: Router,
 ): SortStore {
     return SortStore(
-        params = params,
+        componentContext = componentContext,
+        destination = destination,
         reducer = SortReducer(),
         uiStateMapper = SortUiStateMapper(context),
         actors = setOf(
@@ -88,13 +96,15 @@ internal fun createSortStore(
 }
 
 internal fun createTagsStore(
+    componentContext: ComponentContext,
+    destination: TagsDestination,
     context: Context,
-    params: TagsParams,
     localDataSource: CheckieLocalDataSource,
     router: Router,
 ): TagsStore {
     return TagsStore(
-        params = params,
+        componentContext = componentContext,
+        destination = destination,
         reducer = TagsReducer(),
         uiStateMapper = TagsUiStateMapper(context),
         actors = setOf(

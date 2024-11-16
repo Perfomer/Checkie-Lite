@@ -1,15 +1,13 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor
 
-import com.perfomer.checkielite.common.pure.util.toArrayList
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.navigation.api.DestinationMode
-import com.perfomer.checkielite.core.navigation.api.Router
-import com.perfomer.checkielite.feature.search.presentation.navigation.SortParams
+import com.perfomer.checkielite.core.navigation.DestinationMode
+import com.perfomer.checkielite.core.navigation.Router
+import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
+import com.perfomer.checkielite.feature.search.presentation.navigation.SortDestination
 import com.perfomer.checkielite.feature.search.presentation.navigation.SortResult
-import com.perfomer.checkielite.feature.search.presentation.navigation.SortScreenProvider
-import com.perfomer.checkielite.feature.search.presentation.navigation.TagsParams
+import com.perfomer.checkielite.feature.search.presentation.navigation.TagsDestination
 import com.perfomer.checkielite.feature.search.presentation.navigation.TagsResult
-import com.perfomer.checkielite.feature.search.presentation.navigation.TagsScreenProvider
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchNavigationCommand
@@ -28,8 +26,6 @@ import kotlinx.coroutines.flow.mapLatest
 
 internal class SearchNavigationActor(
     private val router: Router,
-    private val sortScreenProvider: SortScreenProvider,
-    private val tagsScreenProvider: TagsScreenProvider,
 ) : Actor<SearchCommand, SearchEvent> {
 
     override fun act(commands: Flow<SearchCommand>): Flow<SearchEvent> {
@@ -51,9 +47,7 @@ internal class SearchNavigationActor(
     }
 
     private fun openReviewDetails(command: OpenReviewDetails) {
-        // TODO
-//        val params = ReviewDetailsParams(command.reviewId)
-//        router.navigate(reviewDetailsScreenProvider(params))
+        router.navigate(ReviewDetailsDestination(command.reviewId))
     }
 
     private suspend fun openAllFilters(command: OpenAllFilters): SearchNavigationEvent {
@@ -62,7 +56,7 @@ internal class SearchNavigationActor(
 
     private suspend fun openSort(command: OpenSort): SearchNavigationEvent {
         val result = router.navigateForResult<SortResult>(
-            screen = sortScreenProvider(SortParams(command.currentSorting)),
+            destination = SortDestination(command.currentSorting),
             mode = DestinationMode.BOTTOM_SHEET,
         )
 
@@ -73,7 +67,7 @@ internal class SearchNavigationActor(
 
     private suspend fun openTags(command: OpenTags): SearchNavigationEvent {
         val result = router.navigateForResult<TagsResult>(
-            screen = tagsScreenProvider(TagsParams(command.selectedTagsIds.toArrayList())),
+            destination = TagsDestination(command.selectedTagsIds),
             mode = DestinationMode.BOTTOM_SHEET,
         )
 

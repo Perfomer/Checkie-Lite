@@ -25,7 +25,5 @@ dependencies {
 	implementation(libs.google.fonts)
 	implementation(libs.koin.core)
 	implementation(libs.lifecycle.ktx)
-	implementation(libs.voyager.koin)
-	implementation(libs.voyager.navigator)
 	implementation(platform(libs.compose.bom))
 }

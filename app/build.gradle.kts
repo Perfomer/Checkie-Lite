@@ -55,7 +55,6 @@ dependencies {
 
     implementation(project(":common:android"))
     implementation(project(":common:navigation:decompose"))
-    implementation(project(":common:navigation:voyager"))
     implementation(project(":common:pure"))
     implementation(project(":common:ui"))
     implementation(project(":common:update:rustore"))

@@ -20,11 +20,9 @@ include(":app")
 
 include(
     ":common:android",
-    ":common:navigation:api",
     ":common:navigation:api:core",
     ":common:navigation:api:ui",
     ":common:navigation:decompose",
-    ":common:navigation:voyager",
     ":common:pure",
     ":common:tea:android",
     ":common:tea:compose",

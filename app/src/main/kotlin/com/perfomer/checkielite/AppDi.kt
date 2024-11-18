@@ -15,7 +15,7 @@ import com.perfomer.checkielite.feature.settings.settingsModules
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.BackupNavigationManager
 import com.perfomer.checkielite.navigation.StartScreenProvider
-import com.perfomer.checkielite.navigation.voyager.navigationModule
+import com.perfomer.checkielite.navigation.di.navigationModule
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -41,7 +41,6 @@ private val commonModules
     get() = listOf(
         commonAndroidModule,
         navigationModule,
-        com.perfomer.checkielite.navigation.di.navigationModule,
         updateModule,
     )
 

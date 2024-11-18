@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.focus.FocusRequester
@@ -23,8 +22,6 @@ internal class SearchContentScreen(
 
     @Composable
     override fun Screen() = TeaComposable(store) { state ->
-        BackHandler { accept(OnBackPress) }
-
         val searchFieldFocusRequester = remember { FocusRequester() }
 
         EffectHandler { effect ->

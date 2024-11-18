@@ -170,4 +170,5 @@ internal val mockUiState = ReviewCreationUiState(
         isSaving = false,
     ),
     isPrimaryButtonLoading = false,
+    isManualBackHandlerEnabled = true,
 )

@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,8 +40,6 @@ internal class ReviewDetailsContentScreen(
 
         val syncingToast = rememberWarningToast(CommonString.common_toast_syncing)
         val deletedToast = rememberToast(R.string.reviewdetails_toast_deleted)
-
-        BackHandler { accept(OnBackPress) }
 
         EffectHandler { effect ->
             when (effect) {

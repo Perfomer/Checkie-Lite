@@ -2,8 +2,9 @@ package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detai
 
 import com.perfomer.checkielite.common.pure.util.toArrayList
 import com.perfomer.checkielite.common.tea.component.Actor
+import com.perfomer.checkielite.core.navigation.DestinationMode
 import com.perfomer.checkielite.core.navigation.Router
-import com.perfomer.checkielite.feature.gallery.navigation.GalleryParams
+import com.perfomer.checkielite.feature.gallery.navigation.GalleryDestination
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationDestination
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
@@ -55,9 +56,13 @@ internal class ReviewDetailsNavigationActor(
             }
 
             is OpenGallery -> {
-                // TODO
-                val params = GalleryParams(picturesUri = command.picturesUri.toArrayList(), currentPicturePosition = command.currentPicturePosition)
-//                navigate(screen = galleryScreenProvider(params), mode = DestinationMode.OVERLAY)
+                navigate(
+                    destination = GalleryDestination(
+                        picturesUri = command.picturesUri.toArrayList(),
+                        currentPicturePosition = command.currentPicturePosition
+                    ),
+                    mode = DestinationMode.OVERLAY,
+                )
             }
 
             is OpenSearch -> {

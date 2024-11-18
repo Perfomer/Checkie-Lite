@@ -1,8 +1,9 @@
 package com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea
 
+import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.common.tea.impl.ScreenModelStore
-import com.perfomer.checkielite.feature.gallery.navigation.GalleryParams
+import com.perfomer.checkielite.common.tea.impl.ComponentStore
+import com.perfomer.checkielite.feature.gallery.navigation.GalleryDestination
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryCommand
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryEffect
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryEvent
@@ -13,16 +14,18 @@ import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui.s
 import kotlinx.collections.immutable.toPersistentList
 
 internal class GalleryStore(
-    params: GalleryParams,
+    componentContext: ComponentContext,
+    destination: GalleryDestination,
     reducer: GalleryReducer,
     uiStateMapper: GalleryUiStateMapper,
     actors: Set<Actor<GalleryCommand, GalleryEvent>>,
-) : ScreenModelStore<GalleryCommand, GalleryEffect, GalleryEvent, GalleryUiEvent, GalleryState, GalleryUiState>(
-    initialState = GalleryState(
-        picturesUri = params.picturesUri.toPersistentList(),
-        currentPicturePosition = params.currentPicturePosition,
-    ),
+) : ComponentStore<GalleryCommand, GalleryEffect, GalleryEvent, GalleryUiEvent, GalleryState, GalleryUiState>(
+    componentContext = componentContext,
     reducer = reducer,
     uiStateMapper = uiStateMapper,
     actors = actors,
+    initialState = GalleryState(
+        picturesUri = destination.picturesUri.toPersistentList(),
+        currentPicturePosition = destination.currentPicturePosition,
+    ),
 )

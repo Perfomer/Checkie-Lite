@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.actor
 
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.navigation.api.Router
+import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryCommand
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryEvent
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryNavigationCommand

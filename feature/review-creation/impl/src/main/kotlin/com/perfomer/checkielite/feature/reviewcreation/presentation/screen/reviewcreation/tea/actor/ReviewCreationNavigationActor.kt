@@ -7,7 +7,7 @@ import com.perfomer.checkielite.core.navigation.ExternalDestination
 import com.perfomer.checkielite.core.navigation.ExternalResult
 import com.perfomer.checkielite.core.navigation.ExternalRouter
 import com.perfomer.checkielite.core.navigation.Router
-import com.perfomer.checkielite.feature.gallery.navigation.GalleryParams
+import com.perfomer.checkielite.feature.gallery.navigation.GalleryDestination
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorDestination
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationDestination
@@ -52,12 +52,13 @@ internal class ReviewCreationNavigationActor(
             is OpenPhotoPicker -> return openPhotoPicker()
             is OpenCamera -> return openCamera()
             is OpenGallery -> {
-                // TODO
-                GalleryParams(command.picturesUri.toArrayList(), command.currentPicturePosition)
-//                router.navigate(
-//                    screen = galleryScreenProvider(),
-//                    mode = DestinationMode.OVERLAY,
-//                )
+                navigate(
+                    destination = GalleryDestination(
+                        picturesUri = command.picturesUri.toArrayList(),
+                        currentPicturePosition = command.currentPicturePosition
+                    ),
+                    mode = DestinationMode.OVERLAY,
+                )
             }
             is OpenTagCreation -> return openTagCreation(command)
             is OpenCurrencySelector -> return openCurrencySelector(command)

@@ -1,9 +1,11 @@
 package com.perfomer.checkielite.feature.gallery
 
 import android.content.Context
-import com.perfomer.checkielite.core.navigation.api.Router
-import com.perfomer.checkielite.feature.gallery.navigation.GalleryParams
-import com.perfomer.checkielite.feature.gallery.navigation.GalleryScreenProvider
+import com.arkivanov.decompose.ComponentContext
+import com.perfomer.checkielite.core.navigation.Router
+import com.perfomer.checkielite.core.navigation.associate
+import com.perfomer.checkielite.core.navigation.navigation
+import com.perfomer.checkielite.feature.gallery.navigation.GalleryDestination
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.GalleryReducer
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.GalleryStore
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.actor.GalleryNavigationActor
@@ -16,17 +18,23 @@ val galleryModules
     get() = listOf(presentationModule)
 
 private val presentationModule = module {
+    navigation {
+        associate<GalleryDestination, GalleryContentScreen>()
+    }
+
     factoryOf(::createGalleryStore)
-    factory { GalleryScreenProvider(::GalleryContentScreen) }
+    factoryOf(::GalleryContentScreen)
 }
 
 internal fun createGalleryStore(
+    componentContext: ComponentContext,
+    destination: GalleryDestination,
     context: Context,
-    params: GalleryParams,
     router: Router,
 ): GalleryStore {
     return GalleryStore(
-        params = params,
+        componentContext = componentContext,
+        destination = destination,
         reducer = GalleryReducer(),
         uiStateMapper = GalleryUiStateMapper(context),
         actors = setOf(

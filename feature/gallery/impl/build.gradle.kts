@@ -14,7 +14,7 @@ android {
 dependencies {
 	api(project(":feature:gallery:api"))
 
-	implementation(project(":common:navigation:voyager"))
+	implementation(project(":common:navigation:api:ui"))
 	implementation(project(":common:pure"))
 	implementation(project(":common:tea:compose"))
 	implementation(project(":common:ui"))

@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,8 +28,6 @@ internal class SettingsContentScreen(private val store: SettingsStore) : Screen 
 
     @Composable
     override fun Screen() = TeaComposable(store) { state ->
-        BackHandler { accept(OnBackPress) }
-
         val toastController = LocalCuiToastHostState.current
         val syncingInProgressToast = rememberWarningToast(message = CommonString.common_toast_syncing)
         val appUpToDateToast = rememberSuccessToast(message = R.string.settings_toast_update_check_succeed)

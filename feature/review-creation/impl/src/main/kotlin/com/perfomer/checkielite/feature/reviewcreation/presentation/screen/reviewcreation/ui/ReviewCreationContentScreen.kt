@@ -56,7 +56,9 @@ internal class ReviewCreationContentScreen(
         var isConfirmExitDialogShown by remember { mutableStateOf(false) }
         var isErrorDialogShown by remember { mutableStateOf(false) }
 
-        BackHandler { accept(OnBackPress) }
+        BackHandler(enabled = state.isManualBackHandlerEnabled) {
+            accept(OnBackPress)
+        }
 
         EffectHandler { effect ->
             when (effect) {

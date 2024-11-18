@@ -27,7 +27,19 @@ internal class ReviewCreationUiStateMapper(
             tagsState = createTagsPageState(state),
             reviewInfoState = createReviewInfoPageState(state),
             isPrimaryButtonLoading = state.isSavingInProgress,
+            isManualBackHandlerEnabled = shouldEnableManualBackHandler(state),
         )
+    }
+
+    private fun shouldEnableManualBackHandler(state: ReviewCreationState): Boolean {
+        // If there are pages behind, we should handle back manually: go to the previous page.
+        val hasPagesBehind = state.currentPage != ReviewCreationPage.entries.first()
+        // If there is something changed, we should handle back manually: show confirmation dialog.
+        val hasSomethingChanged = state.reviewDetails != state.initialReviewDetails
+        // If saving is in progress, we should handle back manually: block exiting.
+        val isSavingInProgress = state.isSavingInProgress
+
+        return hasPagesBehind ||hasSomethingChanged || isSavingInProgress
     }
 
     private fun createProductInfoPageState(state: ReviewCreationState): ProductInfoPageUiState {

@@ -139,7 +139,7 @@ class AppActivity : AppCompatActivity() {
                     containerColor = LocalCuiPalette.current.BackgroundPrimary,
                     shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
                     dragHandle = { CuiDragAnchor() },
-                    onDismiss = ::back,
+                    onDismiss = ::dismissBottomSheet,
                     content = content,
                 )
             }

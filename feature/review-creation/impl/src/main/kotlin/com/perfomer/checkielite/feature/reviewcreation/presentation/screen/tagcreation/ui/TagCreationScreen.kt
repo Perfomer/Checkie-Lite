@@ -393,7 +393,9 @@ private fun EmojiCategoriesCarousel(
     }
 
     UpdateEffect(currentIndex) {
-        categoriesScrollState.animateScrollToItem(currentIndex)
+        if (currentIndex >= 0) {
+            categoriesScrollState.animateScrollToItem(currentIndex)
+        }
     }
 
     LazyRow(

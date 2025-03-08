@@ -86,7 +86,6 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     }
 
     private fun reduceInitialize() {
-        // TODO: Review not loading when ModificationMode
         val modificationMode = state.mode as? ReviewCreationMode.Modification
         if (modificationMode != null) commands(LoadReview(modificationMode.reviewId))
 

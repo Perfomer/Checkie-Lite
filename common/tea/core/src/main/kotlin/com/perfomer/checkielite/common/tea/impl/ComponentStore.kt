@@ -10,6 +10,8 @@ import com.perfomer.checkielite.common.tea.util.combineActors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 
 /**
  * [Store] based on Decompose's [ComponentContext]
@@ -36,6 +38,14 @@ abstract class ComponentStore<Command : Any, Effect : Any, Event : Any, UiEvent 
 
     init {
         val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-        engine.launch(coroutineScope)
+
+        coroutineScope.launch {
+            // This is a weird crutch to get rid of a bug,
+            // when not all initial events are processed.
+            // Probably this is a race condition issue.
+            yield()
+
+            engine.launch(coroutineScope)
+        }
     }
 }

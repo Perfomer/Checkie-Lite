@@ -1,7 +1,6 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget
 
 import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,7 +39,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlin.math.absoluteValue
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 internal fun PicturesCarousel(
     currentPictureIndex: Int,
     picturesUri: ImmutableList<String>,

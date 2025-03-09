@@ -108,12 +108,12 @@ internal class DecomposeNavigationHost(
         }
 
         content {
-            localScreen?.Screen()
-
             BackHandler(
                 enabled = controller.isVisible,
                 onBack = ::back,
             )
+
+            localScreen?.Screen()
         }
     }
 

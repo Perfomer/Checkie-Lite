@@ -30,6 +30,7 @@ import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
 import com.perfomer.checkielite.core.navigation.BottomSheetController
 import android.graphics.Color as AndroidColor
 
+@Suppress("DEPRECATION")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ComposablesBottomSheetRoot(

@@ -77,6 +77,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
 @Composable
+@Suppress("DEPRECATION")
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 internal fun GalleryScreen(
     state: GalleryUiState,

@@ -81,8 +81,8 @@ import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.util.add
 import com.perfomer.checkielite.common.ui.util.keyboardOpenedAsState
-import com.perfomer.checkielite.common.ui.util.plus
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEmojiCategory
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui.state.TagCreationUiState
@@ -151,7 +151,7 @@ internal fun TagCreationScreen(
             EmojiPicker(
                 lazyGridState = scrollState,
                 emojis = state.emojis,
-                contentPadding = actualNavigationBarsPadding + PaddingValues(bottom = 96.dp),
+                contentPadding = actualNavigationBarsPadding.add(bottom = 96.dp),
                 onEmojiSelect = onEmojiSelect,
                 modifier = Modifier
                     .fillMaxWidth()

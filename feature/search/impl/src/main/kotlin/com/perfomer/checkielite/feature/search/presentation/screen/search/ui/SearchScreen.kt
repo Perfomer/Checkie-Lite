@@ -74,7 +74,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigatio
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
-import com.perfomer.checkielite.common.ui.util.copy
+import com.perfomer.checkielite.common.ui.util.add
 import com.perfomer.checkielite.feature.search.R
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.FilterType
@@ -157,9 +157,7 @@ private fun Content(
     }
 
     LazyColumn(
-        contentPadding = contentPadding.copy(
-            top = contentPadding.calculateTopPadding() + 12.dp,
-        ),
+        contentPadding = contentPadding.add(top = 12.dp),
         state = scrollState,
         modifier = Modifier
             .fillMaxWidth()

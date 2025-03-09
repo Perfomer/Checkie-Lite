@@ -19,7 +19,7 @@ import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
-import com.perfomer.checkielite.common.ui.util.copy
+import com.perfomer.checkielite.common.ui.util.add
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.RecommendedReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiState
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ConfirmDeleteDialog
@@ -119,7 +119,7 @@ private fun Content(
 ) {
     LazyColumn(
         state = scrollableState,
-        contentPadding = contentPadding.copy(bottom = contentPadding.calculateBottomPadding() + 24.dp),
+        contentPadding = contentPadding.add(bottom = 24.dp),
     ) {
         item {
             ReviewDetailsHeader(

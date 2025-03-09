@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun PaddingValues.copy(
@@ -23,11 +24,28 @@ fun PaddingValues.copy(
 }
 
 @Composable
-operator fun PaddingValues.plus(values: PaddingValues):PaddingValues {
+operator fun PaddingValues.plus(values: PaddingValues): PaddingValues {
     return PaddingValues(
         top = calculateTopPadding() + values.calculateTopPadding(),
         bottom = calculateBottomPadding() + values.calculateBottomPadding(),
         start = calculateStartPadding(LocalLayoutDirection.current) + values.calculateStartPadding(LocalLayoutDirection.current),
         end = calculateEndPadding(LocalLayoutDirection.current) + values.calculateEndPadding(LocalLayoutDirection.current),
+    )
+}
+
+@Composable
+fun PaddingValues.add(
+    top: Dp = 0.dp,
+    bottom: Dp = 0.dp,
+    start: Dp = 0.dp,
+    end: Dp = 0.dp,
+): PaddingValues {
+    return plus(
+        PaddingValues(
+            top = top,
+            bottom = bottom,
+            start = start,
+            end = end,
+        )
     )
 }

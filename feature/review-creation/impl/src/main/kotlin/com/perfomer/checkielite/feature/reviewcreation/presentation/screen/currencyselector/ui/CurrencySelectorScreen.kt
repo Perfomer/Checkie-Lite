@@ -56,8 +56,8 @@ import com.perfomer.checkielite.common.ui.cui.widget.scrim.verticalScrimBrush
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.util.add
 import com.perfomer.checkielite.common.ui.util.keyboardOpenedAsState
-import com.perfomer.checkielite.common.ui.util.plus
 import com.perfomer.checkielite.common.ui.util.pxToDp
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.ui.state.CurrencyItem
@@ -114,7 +114,7 @@ internal fun CurrencySelectorScreen(
 
                 LazyColumn(
                     state = scrollState,
-                    contentPadding = PaddingValues(top = 72.dp, bottom = 100.dp) + actualNavigationBarsPadding,
+                    contentPadding = actualNavigationBarsPadding.add(top = 72.dp, bottom = 100.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     if (state.currencies.isEmpty()) {

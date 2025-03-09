@@ -30,6 +30,8 @@ import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
 import com.perfomer.checkielite.common.ui.util.TransparentSystemBars
+import com.perfomer.checkielite.common.ui.util.navigation.DefaultBottomSheetDismissHandlerOwner
+import com.perfomer.checkielite.common.ui.util.navigation.LocalBottomSheetDismissHandlerOwner
 import com.perfomer.checkielite.common.update.api.AppUpdateManager
 import com.perfomer.checkielite.common.update.api.updateIfAvailable
 import com.perfomer.checkielite.core.navigation.NavigationHost
@@ -98,6 +100,7 @@ class AppActivity : AppCompatActivity() {
     private fun EnrichCompositionLocal(content: @Composable () -> Unit) {
         CompositionLocalProvider(
             LocalCuiToastHostState provides remember { CuiToastHostState() },
+            LocalBottomSheetDismissHandlerOwner provides remember { DefaultBottomSheetDismissHandlerOwner() },
             content = content
         )
     }
@@ -122,10 +125,19 @@ class AppActivity : AppCompatActivity() {
 
     @Composable
     private fun Content() = with(navigationHost) {
+        val dismissHandlerOwner = LocalBottomSheetDismissHandlerOwner.current
+
         val sheetState = rememberModalBottomSheetState(
             initialDetent = SheetDetent.Hidden,
             positionalThreshold = { totalDistance -> (totalDistance / 4).coerceIn(128.dp, 384.dp) },
             velocityThreshold = { 24_576.dp },
+            confirmDetentChange = { detent ->
+                if (detent == SheetDetent.Hidden) {
+                    dismissHandlerOwner.current.onDismissRequested()
+                } else {
+                    true
+                }
+            },
         )
 
         val bottomSheetController = remember { ComposablesBottomSheetController(sheetState) }

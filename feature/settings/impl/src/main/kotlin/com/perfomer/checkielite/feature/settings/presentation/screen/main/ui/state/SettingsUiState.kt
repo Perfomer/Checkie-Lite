@@ -5,4 +5,5 @@ import androidx.compose.runtime.Immutable
 @Immutable
 internal data class SettingsUiState(
     val appVersion: String,
+    val isCheckUpdatesInProgress: Boolean,
 )

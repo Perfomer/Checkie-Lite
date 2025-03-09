@@ -62,6 +62,26 @@ fun <T> Flow<T>.cleanLoading(
     }
 }
 
+/**
+ * Use it for "rule 300/500" with LCE state.
+ *
+ * If operations completes faster than [noLoadingDurationMs], then no loading will be shown.
+ * If operations completes slower than [noLoadingDurationMs], then loading will be shown at least [minLoadingDurationMs].
+ *
+ * @param noLoadingDurationMs Duration while we don't want to see any loader
+ * @param minLoadingDurationMs Minimum duration of loading if it shown
+ */
+fun <T> Flow<Lce<T>>.cleanLoading(
+    noLoadingDurationMs: Long = 300L,
+    minLoadingDurationMs: Long = 500L,
+): Flow<Lce<T>> {
+    return cleanLoading(
+        noLoadingDurationMs = noLoadingDurationMs,
+        minLoadingDurationMs = minLoadingDurationMs,
+        defineLoading = { it is Lce.Loading },
+    )
+}
+
 fun <T> Flow<T>.lce(): Flow<Lce<T>> {
     return this
         .map { Lce.Content(it) }

@@ -1,5 +1,8 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -79,6 +83,7 @@ internal fun SettingsScreen(
             CuiSpacer(20.dp)
 
             AppGroup(
+                isCheckUpdatesInProgress = state.isCheckUpdatesInProgress,
                 onCheckUpdatesClick = onCheckUpdatesClick,
             )
         }
@@ -153,6 +158,7 @@ private fun BackupGroup(
 
 @Composable
 private fun AppGroup(
+    isCheckUpdatesInProgress: Boolean,
     onCheckUpdatesClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -168,6 +174,18 @@ private fun AppGroup(
             title = stringResource(R.string.settings_group_app_item_check_updates),
             icon = painterResource(R.drawable.ic_update),
             onClick = onCheckUpdatesClick,
+            endIcon = {
+                AnimatedVisibility(
+                    visible = isCheckUpdatesInProgress,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    CircularProgressIndicator(
+                        strokeWidth = 2.5.dp,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+            },
         )
     }
 }
@@ -215,7 +233,8 @@ private fun SettingsItem(
     subtitle: String? = null,
     icon: Painter,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    endIcon: @Composable (() -> Unit)? = null,
+    modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -255,6 +274,8 @@ private fun SettingsItem(
                 )
             }
         }
+
+        endIcon?.invoke()
     }
 }
 
@@ -266,4 +287,5 @@ private fun SettingsScreenPreview() = CheckieLiteTheme {
 
 internal val mockUiState = SettingsUiState(
     appVersion = "1.0.0",
+    isCheckUpdatesInProgress = false,
 )

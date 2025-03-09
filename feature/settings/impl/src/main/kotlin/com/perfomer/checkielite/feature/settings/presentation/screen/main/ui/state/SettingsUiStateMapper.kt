@@ -13,6 +13,7 @@ internal class SettingsUiStateMapper(
     override fun map(state: SettingsState): SettingsUiState {
         return SettingsUiState(
             appVersion = getVersionName(),
+            isCheckUpdatesInProgress = state.isCheckUpdatesInProgress,
         )
     }
 

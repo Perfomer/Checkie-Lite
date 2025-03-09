@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor
 
 import com.perfomer.checkielite.common.android.util.onCatchLog
+import com.perfomer.checkielite.common.pure.util.cleanLoading
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.lce
 import com.perfomer.checkielite.common.tea.component.Actor
@@ -29,6 +30,7 @@ internal class CheckUpdatesActor(
         return flowBy { appUpdateManager.checkUpdateAvailability() }
             .onCatchLog(TAG, "Failed to check if has updates")
             .lce()
+            .cleanLoading()
             .map(::UpdatesCheck)
     }
 

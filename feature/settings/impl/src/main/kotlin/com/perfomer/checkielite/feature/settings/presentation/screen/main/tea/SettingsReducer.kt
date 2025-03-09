@@ -40,12 +40,19 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
         is SyncingStatusUpdated -> state { copy(isSyncingInProgress = event.isSyncing) }
         is CheckingHasReviewsStatusUpdated -> state { copy(hasReviews = event.hasReviews) }
         is UpdatesCheck -> when (event.hasUpdates) {
-            is Lce.Loading -> Unit
+            is Lce.Loading -> {
+                state { copy(isCheckUpdatesInProgress = true) }
+            }
             is Lce.Content -> {
+                state { copy(isCheckUpdatesInProgress = false) }
+
                 if (event.hasUpdates.content) commands(LaunchAppUpdate)
                 else effects(ShowToast(Reason.APP_IS_UP_TO_DATE))
             }
-            is Lce.Error -> effects(ShowToast(Reason.FAILED_TO_CHECK_UPDATES))
+            is Lce.Error -> {
+                state { copy(isCheckUpdatesInProgress = false) }
+                effects(ShowToast(Reason.FAILED_TO_CHECK_UPDATES))
+            }
         }
     }
 

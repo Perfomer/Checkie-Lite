@@ -10,8 +10,9 @@ android {
 }
 
 dependencies {
-	api(project(":common:update:api"))
-	implementation(project(":common:pure"))
+	api(projects.common.update.api)
+	implementation(projects.common.pure)
+
 	implementation(libs.koin.core)
 	implementation(libs.rustore.appupdate)
 }

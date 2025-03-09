@@ -12,7 +12,7 @@ android {
 }
 
 dependencies {
-	api(project(":common:tea:core"))
+	api(projects.common.tea.core)
 
 	implementation(libs.androidx.compose.ui)
 	implementation(libs.androidx.lifecycle.ktx)

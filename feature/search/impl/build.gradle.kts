@@ -13,16 +13,14 @@ android {
 }
 
 dependencies {
-	api(project(":feature:search:api"))
-	implementation(project(":feature:review-details:api"))
-
-	implementation(project(":common:android"))
-	implementation(project(":common:navigation:api:ui"))
-	implementation(project(":common:pure"))
-	implementation(project(":common:tea:compose"))
-	implementation(project(":common:ui"))
-
-	implementation(project(":core:datasource:local:api"))
+	api(projects.feature.search.api)
+	implementation(projects.common.android)
+	implementation(projects.common.navigation.api.ui)
+	implementation(projects.common.pure)
+	implementation(projects.common.tea.compose)
+	implementation(projects.common.ui)
+	implementation(projects.core.datasource.local.api)
+	implementation(projects.feature.reviewDetails.api)
 
 	implementation(libs.androidx.activity.compose)
 	implementation(libs.androidx.compose.material3)

@@ -10,7 +10,7 @@ android {
 }
 
 dependencies {
-	api(project(":common:tea:core"))
+	api(projects.common.tea.core)
 
 	implementation(libs.androidx.lifecycle.ktx)
 	implementation(libs.kotlinx.coroutines)

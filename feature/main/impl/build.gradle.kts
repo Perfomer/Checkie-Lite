@@ -16,20 +16,18 @@ tasks.withType<Test> {
 }
 
 dependencies {
-    api(project(":feature:main:api"))
-    implementation(project(":feature:review-creation:api"))
-    implementation(project(":feature:review-details:api"))
-    implementation(project(":feature:search:api"))
-    implementation(project(":feature:settings:api"))
-
-    implementation(project(":core:datasource:local:api"))
-    implementation(project(":core:entity"))
-
-    implementation(project(":common:android"))
-    implementation(project(":common:navigation:api:ui"))
-    implementation(project(":common:pure"))
-    implementation(project(":common:tea:compose"))
-    implementation(project(":common:ui"))
+    api(projects.feature.main.api)
+    implementation(projects.common.android)
+    implementation(projects.common.navigation.api.ui)
+    implementation(projects.common.pure)
+    implementation(projects.common.tea.compose)
+    implementation(projects.common.ui)
+    implementation(projects.core.datasource.local.api)
+    implementation(projects.core.entity)
+    implementation(projects.feature.reviewCreation.api)
+    implementation(projects.feature.reviewDetails.api)
+    implementation(projects.feature.search.api)
+    implementation(projects.feature.settings.api)
 
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)

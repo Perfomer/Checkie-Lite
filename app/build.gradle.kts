@@ -44,20 +44,18 @@ tasks.withType<Test> {
 }
 
 dependencies {
-    implementation(project(":feature:gallery:impl"))
-    implementation(project(":feature:main:impl"))
-    implementation(project(":feature:review-creation:impl"))
-    implementation(project(":feature:review-details:impl"))
-    implementation(project(":feature:search:impl"))
-    implementation(project(":feature:settings:impl"))
-
-    implementation(project(":core:datasource:local:impl"))
-
-    implementation(project(":common:android"))
-    implementation(project(":common:navigation:decompose"))
-    implementation(project(":common:pure"))
-    implementation(project(":common:ui"))
-    implementation(project(":common:update:rustore"))
+    implementation(projects.common.android)
+    implementation(projects.common.navigation.decompose)
+    implementation(projects.common.pure)
+    implementation(projects.common.ui)
+    implementation(projects.common.update.rustore)
+    implementation(projects.core.datasource.local.impl)
+    implementation(projects.feature.gallery.impl)
+    implementation(projects.feature.main.impl)
+    implementation(projects.feature.reviewCreation.impl)
+    implementation(projects.feature.reviewDetails.impl)
+    implementation(projects.feature.search.impl)
+    implementation(projects.feature.settings.impl)
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.activity.compose)

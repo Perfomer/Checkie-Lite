@@ -4,6 +4,6 @@ plugins {
 }
 
 dependencies {
-	implementation(project(":common:navigation:api:core"))
-	implementation(project(":core:entity"))
+	implementation(projects.common.navigation.api.core)
+	implementation(projects.core.entity)
 }

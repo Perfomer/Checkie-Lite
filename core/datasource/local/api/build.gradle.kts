@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-	api(project(":core:entity"))
+	api(projects.core.entity)
 
 	api(libs.kotlinx.coroutines)
 }

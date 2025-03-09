@@ -12,15 +12,15 @@ android {
 }
 
 dependencies {
-	api(project(":feature:settings:api"))
-	implementation(project(":common:android"))
-	implementation(project(":common:navigation:api:ui"))
-	implementation(project(":common:pure"))
-	implementation(project(":common:tea:compose"))
-	implementation(project(":common:ui"))
-	implementation(project(":common:update:api"))
-	implementation(project(":core:datasource:local:api"))
-	implementation(project(":feature:main:api"))
+	api(projects.feature.settings.api)
+	implementation(projects.common.android)
+	implementation(projects.common.navigation.api.ui)
+	implementation(projects.common.pure)
+	implementation(projects.common.tea.compose)
+	implementation(projects.common.ui)
+	implementation(projects.common.update.api)
+	implementation(projects.core.datasource.local.api)
+	implementation(projects.feature.main.api)
 
 	implementation(libs.androidx.activity.compose)
 	implementation(libs.androidx.compose.material3)

@@ -12,8 +12,8 @@ android {
 }
 
 dependencies {
-	implementation(project(":common:pure"))
-	implementation(project(":common:tea:compose"))
+	implementation(projects.common.pure)
+	implementation(projects.common.tea.compose)
 
 	api(libs.coil.compose)
 	api(libs.coil.network.okhttp)

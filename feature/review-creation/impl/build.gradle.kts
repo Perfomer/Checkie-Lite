@@ -13,17 +13,16 @@ android {
 }
 
 dependencies {
-    api(project(":feature:review-creation:api"))
-    implementation(project(":feature:gallery:api"))
-
-    implementation(project(":core:datasource:local:api"))
-    implementation(project(":core:entity"))
-
-    implementation(project(":common:android"))
-    implementation(project(":common:navigation:api:ui"))
-    implementation(project(":common:pure"))
-    implementation(project(":common:tea:compose"))
-    implementation(project(":common:ui"))
+    api(projects.feature.reviewCreation.api)
+    implementation(projects.feature.gallery.api)
+    implementation(projects.feature.gallery.api)
+    implementation(projects.core.datasource.local.api)
+    implementation(projects.core.entity)
+    implementation(projects.common.android)
+    implementation(projects.common.navigation.api.ui)
+    implementation(projects.common.pure)
+    implementation(projects.common.tea.compose)
+    implementation(projects.common.ui)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)

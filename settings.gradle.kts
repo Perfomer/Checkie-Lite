@@ -14,9 +14,13 @@ dependencyResolutionManagement {
         maven { url = uri("https://artifactory-external.vkpartner.ru/artifactory/maven") }
     }
 }
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "Checkie Lite"
-include(":app")
+rootProject.name = "CheckieLite"
+
+include(
+    ":app",
+)
 
 include(
     ":common:android",

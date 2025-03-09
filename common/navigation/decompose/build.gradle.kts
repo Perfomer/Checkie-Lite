@@ -12,8 +12,8 @@ android {
 }
 
 dependencies {
-	api(project(":common:navigation:api:ui"))
-	implementation(project(":common:android"))
+	api(projects.common.navigation.api.ui)
+	implementation(projects.common.android)
 
 	api(libs.decompose)
 	implementation(libs.androidx.activity.compose)

@@ -12,12 +12,11 @@ android {
 }
 
 dependencies {
-	api(project(":feature:gallery:api"))
-
-	implementation(project(":common:navigation:api:ui"))
-	implementation(project(":common:pure"))
-	implementation(project(":common:tea:compose"))
-	implementation(project(":common:ui"))
+	api(projects.feature.gallery.api)
+	implementation(projects.common.navigation.api.ui)
+	implementation(projects.common.pure)
+	implementation(projects.common.tea.compose)
+	implementation(projects.common.ui)
 
 	implementation(libs.accompanist.systemuicontroller)
 	implementation(libs.androidx.activity.compose)

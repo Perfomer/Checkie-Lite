@@ -15,8 +15,8 @@ android {
 }
 
 dependencies {
-    api(project(":core:datasource:local:api"))
-    implementation(project(":common:pure"))
+    api(projects.core.datasource.local.api)
+    implementation(projects.common.pure)
 
     implementation(libs.androidx.core)
     implementation(libs.androidx.room.ktx)

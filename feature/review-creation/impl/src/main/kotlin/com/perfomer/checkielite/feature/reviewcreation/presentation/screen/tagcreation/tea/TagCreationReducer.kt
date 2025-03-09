@@ -14,6 +14,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcr
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.CollapseTagValueField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.FocusTagValueField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowErrorToast
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowExitConfirmationDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowTagDeleteConfirmationDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.VibrateError
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEmojiCategory
@@ -33,6 +34,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcr
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnDeleteTagClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnDoneClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnEmojiSelect
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnExitConfirmClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnSelectedEmojiClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnTagValueInput
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagInvalidReason
@@ -56,7 +58,11 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
         when (val mode = state.mode) {
             is TagCreationMode.Modification -> commands(LoadTag(mode.tagId))
             is TagCreationMode.Creation -> {
-                state { copy(tagValue = mode.initialTagValue) }
+                state {
+                    val initial = initialTagDetails.copy(tagValue = mode.initialTagValue)
+                    copy(initialTagDetails = initial, tagDetails = initial)
+                }
+
                 if (mode.initialTagValue.isBlank()) effects(FocusTagValueField)
             }
         }
@@ -66,21 +72,37 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
 
     private fun reduceUi(event: TagCreationUiEvent) = when (event) {
         is OnBackPress -> {
-            if (state.isBusy) Unit // do nothing
-            else commands(Exit)
+            when {
+                state.isBusy -> Unit // do nothing
+                state.initialTagDetails != state.tagDetails -> effects(ShowExitConfirmationDialog)
+                else -> commands(Exit)
+            }
         }
-        is OnEmojiSelect -> state { copy(selectedEmoji = event.emoji, hasEmoji = true) }
-        is OnSelectedEmojiClick -> state { copy(hasEmoji = !hasEmoji) }
+        is OnEmojiSelect -> {
+            state {
+                copy(
+                    tagDetails = tagDetails.copy(
+                        selectedEmoji = event.emoji,
+                        hasEmoji = true,
+                    ),
+                )
+            }
+        }
+        is OnSelectedEmojiClick -> state { copy(tagDetails = tagDetails.copy(hasEmoji = !tagDetails.hasEmoji)) }
         is OnTagValueInput -> {
-            state { copy(tagValue = event.text) }
+            state { copy(tagDetails = tagDetails.copy(tagValue = event.text)) }
 
             val tagId = (state.mode as? TagCreationMode.Modification)?.tagId
-            commands(ValidateTagName(id = tagId, name = state.tagValue.trim()))
+            commands(ValidateTagName(id = tagId, name = event.text.trim()))
         }
         is OnDeleteTagClick -> effects(ShowTagDeleteConfirmationDialog)
         is OnDeleteConfirmClick -> {
             val modificationMode = state.mode as TagCreationMode.Modification
             commands(DeleteTag(id = modificationMode.tagId))
+        }
+        is OnExitConfirmClick -> {
+            state { copy(isExitConfirmed = true) }
+            commands(Exit)
         }
         is OnDoneClick -> reduceOnDoneClick()
     }
@@ -107,10 +129,15 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
     private fun reduceTagLoading(event: TagLoading) = when (event) {
         is TagLoading.Started -> Unit
         is TagLoading.Succeed -> state {
-            copy(
+            val initial = initialTagDetails.copy(
                 tagValue = event.tag.value,
                 selectedEmoji = event.tag.emoji,
                 hasEmoji = event.tag.emoji != null,
+            )
+
+            copy(
+                initialTagDetails = initial,
+                tagDetails = initial,
             )
         }
         is TagLoading.Failed -> commands(Exit)
@@ -145,7 +172,7 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
     }
 
     private fun reduceOnDoneClick() {
-        if (state.tagValue.isBlank()) {
+        if (state.tagDetails.tagValue.isBlank()) {
             state { copy(tagInvalidReason = TagInvalidReason.NAME_IS_EMPTY) }
         }
 
@@ -158,8 +185,9 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
             is TagCreationMode.Creation -> {
                 commands(
                     CreateTag(
-                        value = state.tagValue.trim(),
-                        emoji = state.selectedEmoji.takeIf { state.hasEmoji }),
+                        value = state.tagDetails.tagValue.trim(),
+                        emoji = state.tagDetails.actualEmoji,
+                    )
                 )
             }
 
@@ -167,8 +195,9 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
                 commands(
                     UpdateTag(
                         id = mode.tagId,
-                        value = state.tagValue.trim(),
-                        emoji = state.selectedEmoji.takeIf { state.hasEmoji }),
+                        value = state.tagDetails.tagValue.trim(),
+                        emoji = state.tagDetails.actualEmoji,
+                    )
                 )
             }
         }

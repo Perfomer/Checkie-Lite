@@ -21,13 +21,24 @@ internal class TagCreationUiStateMapper(
                 is TagCreationMode.Creation -> context.getString(R.string.tagcreation_creation_title)
                 is TagCreationMode.Modification -> context.getString(R.string.tagcreation_modification_title)
             },
-            tagValue = state.tagValue,
+            tagValue = state.tagDetails.tagValue,
             tagValueError = state.tagInvalidReason?.textResource?.let(context::getString),
             isInteractive = !state.isBusy,
             isDeleteAvailable = state.mode is TagCreationMode.Modification,
-            selectedEmoji = state.selectedEmoji.takeIf { state.hasEmoji },
+            selectedEmoji = state.tagDetails.actualEmoji,
             emojis = state.emojis,
+            isManualDismissHandlerEnabled = shouldEnableManualDismissHandler(state),
         )
+    }
+
+    private fun shouldEnableManualDismissHandler(state: TagCreationState): Boolean {
+        // If there is something changed, we should handle back manually: show confirmation dialog.
+        val hasSomethingChanged = state.initialTagDetails != state.tagDetails
+        // If exit is confirmed, we don't need to handle dismiss manually.
+        // Need to prevent exit confirmation dialog showing again.
+        val isExitConfirmed = state.isExitConfirmed
+
+        return hasSomethingChanged && !isExitConfirmed
     }
 
     private companion object {

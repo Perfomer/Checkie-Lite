@@ -87,6 +87,7 @@ import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEmojiCategory
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui.state.TagCreationUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui.widget.ConfirmDeleteDialog
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui.widget.ConfirmExitDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.util.iconResource
 import com.perfomer.checkielite.feature.reviewcreation.presentation.util.nameResource
 import kotlinx.collections.immutable.ImmutableList
@@ -103,6 +104,10 @@ internal fun TagCreationScreen(
     isConfirmDeleteDialogShown: Boolean = false,
     onDeleteDialogDismiss: () -> Unit = {},
     onDeleteDialogConfirm: () -> Unit = {},
+
+    isConfirmExitDialogShown: Boolean = false,
+    onExitDialogDismiss: () -> Unit = {},
+    onExitDialogConfirm: () -> Unit = {},
 
     onTagValueInput: (value: String) -> Unit = {},
     onSelectedEmojiClick: () -> Unit = {},
@@ -165,6 +170,13 @@ internal fun TagCreationScreen(
         ConfirmDeleteDialog(
             onDismiss = onDeleteDialogDismiss,
             onConfirm = onDeleteDialogConfirm
+        )
+    }
+
+    if (isConfirmExitDialogShown) {
+        ConfirmExitDialog(
+            onDismiss = onExitDialogDismiss,
+            onConfirm = onExitDialogConfirm,
         )
     }
 }
@@ -566,4 +578,5 @@ internal val mockUiState = TagCreationUiState(
     isDeleteAvailable = true,
     selectedEmoji = "\uD83D\uDC80", // 💀
     emojis = emptyPersistentList(),
+    isManualDismissHandlerEnabled = false,
 )

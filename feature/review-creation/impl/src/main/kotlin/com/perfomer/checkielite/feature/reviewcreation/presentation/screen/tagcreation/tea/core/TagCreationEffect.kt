@@ -14,4 +14,6 @@ internal sealed interface TagCreationEffect {
     data object VibrateError : TagCreationEffect
 
     data object ShowTagDeleteConfirmationDialog : TagCreationEffect
+
+    data object ShowExitConfirmationDialog : TagCreationEffect
 }

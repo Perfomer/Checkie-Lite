@@ -39,7 +39,7 @@ internal class ReviewCreationUiStateMapper(
         // If saving is in progress, we should handle back manually: block exiting.
         val isSavingInProgress = state.isSavingInProgress
 
-        return hasPagesBehind ||hasSomethingChanged || isSavingInProgress
+        return hasPagesBehind || hasSomethingChanged || isSavingInProgress
     }
 
     private fun createProductInfoPageState(state: ReviewCreationState): ProductInfoPageUiState {

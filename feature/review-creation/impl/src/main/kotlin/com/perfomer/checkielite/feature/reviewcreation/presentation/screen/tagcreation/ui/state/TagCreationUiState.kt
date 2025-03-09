@@ -13,4 +13,5 @@ internal data class TagCreationUiState(
     val isDeleteAvailable: Boolean,
     val selectedEmoji: String?,
     val emojis: ImmutableList<TagCreationEmojiCategory>,
+    val isManualDismissHandlerEnabled: Boolean,
 )

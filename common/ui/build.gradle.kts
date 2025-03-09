@@ -15,7 +15,8 @@ dependencies {
 	implementation(project(":common:pure"))
 	implementation(project(":common:tea:compose"))
 
-	api(libs.coil)
+	api(libs.coil.compose)
+	api(libs.coil.network.okhttp)
 	api(libs.fading.edges)
 	implementation(libs.accompanist.systemuicontroller)
 	implementation(libs.activity.compose)

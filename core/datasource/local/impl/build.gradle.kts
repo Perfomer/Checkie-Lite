@@ -19,9 +19,9 @@ dependencies {
     implementation(project(":common:pure"))
 
     implementation(libs.androidx.core)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
     implementation(libs.compressor)
     implementation(libs.koin.android)
-    implementation(libs.room.ktx)
-    implementation(libs.room.runtime)
-    ksp(libs.room.compiler)
+    ksp(libs.androidx.room.compiler)
 }

@@ -14,7 +14,7 @@ android {
 dependencies {
 	api(project(":common:tea:core"))
 
-	implementation(libs.compose.ui)
-	implementation(libs.lifecycle.ktx)
-	implementation(platform(libs.compose.bom))
+	implementation(libs.androidx.compose.ui)
+	implementation(libs.androidx.lifecycle.ktx)
+	implementation(platform(libs.androidx.compose.bom))
 }

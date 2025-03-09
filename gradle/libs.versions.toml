@@ -1,68 +1,68 @@
 [versions]
 accompanist-systemuicontroller = "0.34.0"
-activity = "1.10.1"
 agp = "8.4.2"
+androidx-activity = "1.10.1"
+androidx-appcompat = "1.7.0"
+androidx-compose-bom = "2025.02.00"
 androidx-core = "1.15.0"
-appcompat = "1.7.0"
+androidx-core-ktx = "1.15.0"
+androidx-core-ktx-splashscreen = "1.0.1"
+androidx-lifecycle-ktx = "2.8.7"
+androidx-room = "2.6.1"
 coil = "3.1.0"
 composables-core = "1.20.1"
-compose-bom = "2025.02.00"
 compressor = "3.0.1"
-core-ktx = "1.15.0"
-core-ktx-splashscreen = "1.0.1"
 decompose = "3.3.0"
-drag-and-drop = "0.2.0" # 0.3.0 brokes second time dnd
-fading-edges = "1.0.4"
-google-fonts = "1.7.8"
+dragAndDrop = "0.2.0" # 0.3.0 brokes second time dnd
+fadingEdges = "1.0.4"
+googleFonts = "1.7.8"
 koin = "4.0.2"
 kotlin = "2.0.20"
 kotlinx-collections-immutable = "0.3.7"
 kotlinx-coroutines = "1.10.1"
 kotlinx-serialization = "1.7.3"
 ksp = "2.0.20-1.0.25"
-lifecycle-ktx = "2.8.7"
-room = "2.6.1"
 rustore-appupdate = "3.0.0"
-testJunitJupiter = "5.9.2"
-testKotestAssertions = "5.6.2"
-testMock = "1.13.5"
+test-junitJupiter = "5.9.2"
+test-kotest-assertions = "5.6.2"
+test-mockk = "1.13.5"
 zoomable = "1.6.1"
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist-systemuicontroller" }
-activity = { module = "androidx.activity:activity", version.ref = "activity" }
-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
+androidx-activity = { module = "androidx.activity:activity", version.ref = "androidx-activity" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidx-compose-bom" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui" }
+androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-core = { module = "androidx.core:core", version.ref = "androidx-core" }
-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core-ktx" }
+androidx-core-ktx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-core-ktx-splashscreen" }
+androidx-lifecycle-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-ktx" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx-room" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidx-room" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 composables-core = { module = "com.composables:core", version.ref = "composables-core" }
-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
-compose-material3 = { module = "androidx.compose.material3:material3" }
-compose-ui = { module = "androidx.compose.ui:ui" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
-core-ktx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "core-ktx-splashscreen" }
 decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
 decompose-extensions-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
-drag-and-drop = { module = "com.mohamedrejeb.dnd:compose-dnd", version.ref = "drag-and-drop" }
-fading-edges = { module = "com.github.GIGAMOLE:ComposeFadingEdges", version.ref = "fading-edges" }
-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "google-fonts" }
+dragAndDrop = { module = "com.mohamedrejeb.dnd:compose-dnd", version.ref = "dragAndDrop" }
+fadingEdges = { module = "com.github.GIGAMOLE:ComposeFadingEdges", version.ref = "fadingEdges" }
+googleFonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "googleFonts" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
-lifecycle-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-ktx" }
-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 rustore-appupdate = { module = "ru.rustore.sdk:appupdate", version.ref = "rustore-appupdate" }
-testCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
-testJunitJupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "testJunitJupiter" }
-testKotestAssertions = { module = "io.kotest:kotest-assertions-core", version.ref = "testKotestAssertions" }
-testMock = { module = "io.mockk:mockk", version.ref = "testMock" }
+test-junitJupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "test-junitJupiter" }
+test-kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "test-kotest-assertions" }
+test-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+test-mockk = { module = "io.mockk:mockk", version.ref = "test-mockk" }
 zoomable = { module = "com.mxalbert.zoomable:zoomable", version.ref = "zoomable" }
 
 [plugins]

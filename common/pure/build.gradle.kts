@@ -10,5 +10,5 @@ dependencies {
 	api(libs.kotlinx.collections.immutable)
 	api(libs.kotlinx.coroutines)
 
-	testImplementation(libs.testJunitJupiter)
+	testImplementation(libs.test.junitJupiter)
 }

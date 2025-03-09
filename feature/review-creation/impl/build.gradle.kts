@@ -25,11 +25,11 @@ dependencies {
     implementation(project(":common:tea:compose"))
     implementation(project(":common:ui"))
 
-    implementation(libs.activity.compose)
-    implementation(libs.compose.material3)
-    implementation(libs.compose.ui)
-    implementation(libs.drag.and.drop)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.dragAndDrop)
     implementation(libs.koin.core)
     implementation(libs.kotlinx.serialization.json)
-    implementation(platform(libs.compose.bom))
+    implementation(platform(libs.androidx.compose.bom))
 }

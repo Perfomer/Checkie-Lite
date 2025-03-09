@@ -16,11 +16,11 @@ dependencies {
 	implementation(project(":common:android"))
 
 	api(libs.decompose)
-	implementation(libs.activity.compose)
-	implementation(libs.compose.material3)
-	implementation(libs.compose.ui)
+	implementation(libs.androidx.activity.compose)
+	implementation(libs.androidx.compose.material3)
+	implementation(libs.androidx.compose.ui)
 	implementation(libs.decompose.extensions.compose)
 	implementation(libs.koin.core)
 	implementation(libs.kotlinx.coroutines)
-	implementation(platform(libs.compose.bom))
+	implementation(platform(libs.androidx.compose.bom))
 }

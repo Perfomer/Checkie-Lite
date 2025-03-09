@@ -20,10 +20,10 @@ dependencies {
 	implementation(project(":common:ui"))
 
 	implementation(libs.accompanist.systemuicontroller)
-	implementation(libs.activity.compose)
-	implementation(libs.compose.material3)
-	implementation(libs.compose.ui)
+	implementation(libs.androidx.activity.compose)
+	implementation(libs.androidx.compose.material3)
+	implementation(libs.androidx.compose.ui)
 	implementation(libs.koin.core)
 	implementation(libs.zoomable)
-	implementation(platform(libs.compose.bom))
+	implementation(platform(libs.androidx.compose.bom))
 }

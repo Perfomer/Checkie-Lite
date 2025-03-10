@@ -9,13 +9,11 @@ import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.co
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.LoadRecentSearches
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.RecentSearchesLoading
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class LoadRecentSearchesActor(
     private val localDataSource: CheckieLocalDataSource,
 ) : Actor<SearchCommand, SearchEvent> {

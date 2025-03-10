@@ -9,13 +9,11 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand.LoadTags
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent.TagsLoading
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class LoadTagsActor(
     private val localDataSource: CheckieLocalDataSource,
 ) : Actor<MainCommand, MainEvent> {

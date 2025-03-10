@@ -7,13 +7,11 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.curre
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorEvent.OnCurrenciesFiltered
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.withContext
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class FilterCurrenciesActor : Actor<CurrencySelectorCommand, CurrencySelectorEvent> {
 
     override fun act(commands: Flow<CurrencySelectorCommand>): Flow<CurrencySelectorEvent> {

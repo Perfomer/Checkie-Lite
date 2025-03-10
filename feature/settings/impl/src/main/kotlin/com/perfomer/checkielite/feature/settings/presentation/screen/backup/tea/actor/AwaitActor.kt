@@ -5,13 +5,11 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.Await
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent.AwaitCompleted
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.mapLatest
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class AwaitActor : Actor<BackupCommand, BackupEvent> {
 
     override fun act(commands: Flow<BackupCommand>): Flow<BackupEvent> {

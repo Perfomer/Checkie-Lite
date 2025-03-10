@@ -11,13 +11,11 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.curre
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorCommand.LoadCurrencies
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorEvent.CurrenciesLoading
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class LoadCurrenciesActor(
     private val localDataSource: CheckieLocalDataSource,
 ) : Actor<CurrencySelectorCommand, CurrencySelectorEvent> {

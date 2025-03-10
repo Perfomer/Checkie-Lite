@@ -12,12 +12,10 @@ import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.co
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.FilterReviews
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.ReviewsFiltered
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.mapLatest
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class FilterReviewsActor : Actor<SearchCommand, SearchEvent> {
 
     override fun act(commands: Flow<SearchCommand>): Flow<SearchEvent> {

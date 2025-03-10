@@ -16,13 +16,11 @@ import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreation
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination
 import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsDestination
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.mapLatest
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class MainNavigationActor(
     private val router: Router,
 ) : Actor<MainCommand, MainEvent> {

@@ -10,6 +10,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+
+        resConfigs("en", "ru")
     }
 
     packagingOptions.exclude("META-INF/*.kotlin_module")

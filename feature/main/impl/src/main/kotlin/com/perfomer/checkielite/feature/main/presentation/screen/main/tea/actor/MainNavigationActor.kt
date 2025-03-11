@@ -34,11 +34,13 @@ internal class MainNavigationActor(
     private suspend fun handleCommand(command: MainNavigationCommand): MainEvent? = with(router) {
         when (command) {
             is OpenReviewCreation -> {
-                navigateForResult<ReviewCreationResult>(
+                val result = navigateForResult<ReviewCreationResult>(
                     ReviewCreationDestination(ReviewCreationMode.Creation),
                 )
 
-                return ReviewCreated
+                return when (result) {
+                    ReviewCreationResult.Success -> ReviewCreated
+                }
             }
 
             is OpenReviewDetails -> navigate(ReviewDetailsDestination(command.reviewId))

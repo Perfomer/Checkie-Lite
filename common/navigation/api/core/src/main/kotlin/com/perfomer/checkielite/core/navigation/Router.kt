@@ -14,12 +14,12 @@ interface Router {
 
     fun replaceStack(destination: Destination)
 
-    suspend fun <T> navigateForResult(
+    suspend fun <T : Result> navigateForResult(
         destination: Destination,
         mode: DestinationMode = DestinationMode.USUAL,
     ): T
 
     fun exit()
 
-    fun exitWithResult(result: Any?)
+    fun exitWithResult(result: Result)
 }

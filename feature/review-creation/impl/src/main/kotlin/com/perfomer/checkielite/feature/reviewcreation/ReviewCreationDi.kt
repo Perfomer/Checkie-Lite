@@ -4,14 +4,13 @@ import android.content.Context
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.core.data.repository.BrandRepository
 import com.perfomer.checkielite.core.data.repository.CurrencyRepository
+import com.perfomer.checkielite.core.data.repository.EmojiRepository
 import com.perfomer.checkielite.core.data.repository.ReviewRepository
 import com.perfomer.checkielite.core.data.repository.TagRepository
 import com.perfomer.checkielite.core.navigation.ExternalRouter
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
 import com.perfomer.checkielite.core.navigation.navigation
-import com.perfomer.checkielite.feature.reviewcreation.data.repository.CheckieEmojiRepositoryImpl
-import com.perfomer.checkielite.feature.reviewcreation.domain.repository.CheckieEmojiRepository
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationDestination
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorDestination
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationDestination
@@ -55,16 +54,10 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagso
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagsort.ui.TagSortContentScreen
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagsort.ui.state.TagSortUiStateMapper
 import org.koin.core.module.dsl.factoryOf
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val reviewCreationModules
-    get() = listOf(presentationModule, dataModule)
-
-private val dataModule = module {
-    singleOf(::CheckieEmojiRepositoryImpl) bind CheckieEmojiRepository::class
-}
+    get() = listOf(presentationModule)
 
 private val presentationModule = module {
     navigation {
@@ -93,7 +86,7 @@ internal fun createReviewCreationStore(
     context: Context,
     brandRepository: BrandRepository,
     currencyRepository: CurrencyRepository,
-    emojiRepository: CheckieEmojiRepository,
+    emojiRepository: EmojiRepository,
     reviewRepository: ReviewRepository,
     tagRepository: TagRepository,
     router: Router,
@@ -124,7 +117,7 @@ internal fun createTagCreationStore(
     componentContext: ComponentContext,
     destination: TagCreationDestination,
     context: Context,
-    emojiRepository: CheckieEmojiRepository,
+    emojiRepository: EmojiRepository,
     tagRepository: TagRepository,
     router: Router,
 ): TagCreationStore {

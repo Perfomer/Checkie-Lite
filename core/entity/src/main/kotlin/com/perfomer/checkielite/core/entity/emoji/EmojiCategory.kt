@@ -1,11 +1,11 @@
-package com.perfomer.checkielite.feature.reviewcreation.domain.entity
+package com.perfomer.checkielite.core.entity.emoji
 
-internal data class EmojiCategory(
+data class EmojiCategory(
     val type: EmojiCategoryType,
     val groups: List<EmojiGroup>,
 )
 
-internal enum class EmojiCategoryType(
+enum class EmojiCategoryType(
     val originalName: String,
 ) {
     SMILEYS_AND_EMOTION("Smileys & Emotion"),

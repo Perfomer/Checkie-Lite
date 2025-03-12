@@ -2,8 +2,8 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.util
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.perfomer.checkielite.core.entity.emoji.EmojiCategoryType
 import com.perfomer.checkielite.feature.reviewcreation.R
-import com.perfomer.checkielite.feature.reviewcreation.domain.entity.EmojiCategoryType
 
 @get:DrawableRes
 internal val EmojiCategoryType.iconResource: Int

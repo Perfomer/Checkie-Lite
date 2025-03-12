@@ -4,8 +4,6 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.kotlinx.serialization.json)
-
     implementation(projects.common.navigation.api.core)
     implementation(projects.core.entity)
 }

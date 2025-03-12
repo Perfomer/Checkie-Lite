@@ -17,6 +17,8 @@ import com.perfomer.checkielite.core.data.repository.BrandRepository
 import com.perfomer.checkielite.core.data.repository.BrandRepositoryImpl
 import com.perfomer.checkielite.core.data.repository.CurrencyRepository
 import com.perfomer.checkielite.core.data.repository.CurrencyRepositoryImpl
+import com.perfomer.checkielite.core.data.repository.EmojiRepository
+import com.perfomer.checkielite.core.data.repository.EmojiRepositoryImpl
 import com.perfomer.checkielite.core.data.repository.ReviewRepository
 import com.perfomer.checkielite.core.data.repository.ReviewRepositoryImpl
 import com.perfomer.checkielite.core.data.repository.SearchRepository
@@ -38,6 +40,7 @@ val localDataSourceModule = module {
     singleOf(::AppRepositoryImpl) bind AppRepository::class
     singleOf(::BrandRepositoryImpl) bind BrandRepository::class
     singleOf(::CurrencyRepositoryImpl) bind CurrencyRepository::class
+    singleOf(::EmojiRepositoryImpl) bind EmojiRepository::class
     singleOf(::ReviewRepositoryImpl) bind ReviewRepository::class
     singleOf(::SearchRepositoryImpl) bind SearchRepository::class
     singleOf(::TagRepositoryImpl) bind TagRepository::class

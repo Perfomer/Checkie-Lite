@@ -5,7 +5,7 @@ import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.feature.reviewcreation.domain.repository.CheckieEmojiRepository
+import com.perfomer.checkielite.core.data.repository.EmojiRepository
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationCommand.LoadEmojis
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEvent
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 internal class LoadEmojisActor(
-    private val emojiRepository: CheckieEmojiRepository,
+    private val emojiRepository: EmojiRepository,
 ) : Actor<TagCreationCommand, TagCreationEvent> {
 
     override fun act(commands: Flow<TagCreationCommand>): Flow<TagCreationEvent> {

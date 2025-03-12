@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.ksp)
 }
 
@@ -23,5 +24,6 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.compressor)
     implementation(libs.koin.android)
+    implementation(libs.kotlinx.serialization.json)
     ksp(libs.androidx.room.compiler)
 }

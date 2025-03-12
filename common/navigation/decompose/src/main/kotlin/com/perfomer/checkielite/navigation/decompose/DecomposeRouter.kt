@@ -27,6 +27,12 @@ internal class DecomposeRouter(
     }
 
     override fun replace(destination: Destination, mode: DestinationMode) = with(root) {
+        if (defineTopDestinationMode() != mode) {
+            exit()
+            navigate(destination, mode)
+            return@with
+        }
+
         when (mode) {
             DestinationMode.USUAL -> mainNavigator.replaceCurrent(destination)
             DestinationMode.OVERLAY -> overlayNavigator.activate(destination)

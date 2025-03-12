@@ -15,10 +15,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import java.text.Collator
 
 internal class LoadTagsActor(
     private val tagRepository: TagRepository,
 ) : Actor<ReviewCreationCommand, ReviewCreationEvent> {
+
+    private val collator: Collator by lazy { Collator.getInstance() }
 
     override fun act(commands: Flow<ReviewCreationCommand>): Flow<ReviewCreationEvent> {
         return commands.filterIsInstance<LoadTags>()
@@ -34,7 +37,7 @@ internal class LoadTagsActor(
                 if (command.searchQuery.isEmpty()) {
                     when (command.sort) {
                         TagSortingStrategy.USAGE_COUNT -> tags
-                        TagSortingStrategy.ALPHABETICALLY -> tags.sortedBy { it.value }
+                        TagSortingStrategy.ALPHABETICALLY -> tags.sortedWith { a, b -> collator.compare(a.value, b.value) }
                     }
                 } else {
                     tags

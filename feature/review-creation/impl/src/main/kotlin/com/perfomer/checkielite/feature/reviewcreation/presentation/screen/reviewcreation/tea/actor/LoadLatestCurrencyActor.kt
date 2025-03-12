@@ -5,7 +5,7 @@ import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.data.repository.CurrencyRepository
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadLatestCurrency
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 internal class LoadLatestCurrencyActor(
-    private val localDataSource: CheckieLocalDataSource,
+    private val currencyRepository: CurrencyRepository,
 ) : Actor<ReviewCreationCommand, ReviewCreationEvent> {
 
     override fun act(commands: Flow<ReviewCreationCommand>): Flow<ReviewCreationEvent> {
@@ -25,7 +25,7 @@ internal class LoadLatestCurrencyActor(
     }
 
     private fun handleCommand(command: LoadLatestCurrency): Flow<ReviewCreationEvent> {
-        return flowBy { localDataSource.getLatestCurrency() }
+        return flowBy { currencyRepository.getLatestCurrency() }
             .map(LatestCurrencyLoading::Succeed)
             .onCatchLog(TAG, "Failed to load latest currency")
             .onCatchReturn(LatestCurrencyLoading::Failed)

@@ -6,7 +6,7 @@ import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.data.repository.CurrencyRepository
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorCommand.LoadCurrencies
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorEvent
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 internal class LoadCurrenciesActor(
-    private val localDataSource: CheckieLocalDataSource,
+    private val currencyRepository: CurrencyRepository,
 ) : Actor<CurrencySelectorCommand, CurrencySelectorEvent> {
 
     override fun act(commands: Flow<CurrencySelectorCommand>): Flow<CurrencySelectorEvent> {
@@ -26,7 +26,7 @@ internal class LoadCurrenciesActor(
     }
 
     private fun handleCommand(command: LoadCurrencies): Flow<CurrencySelectorEvent> {
-        return flowBy { localDataSource.getAllCurrenciesCodes() }
+        return flowBy { currencyRepository.getAllCurrenciesCodes() }
             .map { currencies -> currencies.map(Currency::getInstance) }
             .map(CurrenciesLoading::Succeed)
             .onCatchLog(TAG, "Failed to load currencies")

@@ -15,6 +15,8 @@ import com.perfomer.checkielite.core.data.repository.BackupRepository
 import com.perfomer.checkielite.core.data.repository.BackupRepositoryImpl
 import com.perfomer.checkielite.core.data.repository.BrandRepository
 import com.perfomer.checkielite.core.data.repository.BrandRepositoryImpl
+import com.perfomer.checkielite.core.data.repository.CurrencyRepository
+import com.perfomer.checkielite.core.data.repository.CurrencyRepositoryImpl
 import com.perfomer.checkielite.core.data.repository.ReviewRepository
 import com.perfomer.checkielite.core.data.repository.ReviewRepositoryImpl
 import com.perfomer.checkielite.core.data.repository.TagRepository
@@ -34,6 +36,7 @@ val localDataSourceModule = module {
     singleOf(::BackupRepositoryImpl) bind BackupRepository::class
 
     singleOf(::BrandRepositoryImpl) bind BrandRepository::class
+    singleOf(::CurrencyRepositoryImpl) bind CurrencyRepository::class
     singleOf(::ReviewRepositoryImpl) bind ReviewRepository::class
     singleOf(::TagRepositoryImpl) bind TagRepository::class
 

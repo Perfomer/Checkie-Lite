@@ -4,7 +4,7 @@ import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.ignoreResult
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.data.repository.CurrencyRepository
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.WarmUpCurrencies
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapLatest
 
 internal class WarmUpCurrenciesActor(
-    private val localDataSource: CheckieLocalDataSource,
+    private val currencyRepository: CurrencyRepository,
 ) : Actor<ReviewCreationCommand, ReviewCreationEvent> {
 
     override fun act(commands: Flow<ReviewCreationCommand>): Flow<ReviewCreationEvent> {
@@ -22,7 +22,7 @@ internal class WarmUpCurrenciesActor(
     }
 
     private fun handleCommand(command: WarmUpCurrencies): Flow<ReviewCreationEvent> {
-        return flowBy { localDataSource.getAllCurrenciesCodes() }
+        return flowBy { currencyRepository.getAllCurrenciesCodes() }
             .onCatchLog(TAG, "Failed to warm up currencies", rethrow = false)
             .ignoreResult()
     }

@@ -2,8 +2,8 @@ package com.perfomer.checkielite.feature.reviewcreation
 
 import android.content.Context
 import com.arkivanov.decompose.ComponentContext
-import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.data.repository.BrandRepository
+import com.perfomer.checkielite.core.data.repository.CurrencyRepository
 import com.perfomer.checkielite.core.data.repository.ReviewRepository
 import com.perfomer.checkielite.core.data.repository.TagRepository
 import com.perfomer.checkielite.core.navigation.ExternalRouter
@@ -91,11 +91,11 @@ internal fun createReviewCreationStore(
     componentContext: ComponentContext,
     destination: ReviewCreationDestination,
     context: Context,
-    localDataSource: CheckieLocalDataSource,
-    reviewRepository: ReviewRepository,
     brandRepository: BrandRepository,
-    tagRepository: TagRepository,
+    currencyRepository: CurrencyRepository,
     emojiRepository: CheckieEmojiRepository,
+    reviewRepository: ReviewRepository,
+    tagRepository: TagRepository,
     router: Router,
     externalRouter: ExternalRouter,
 ): ReviewCreationStore {
@@ -111,9 +111,9 @@ internal fun createReviewCreationStore(
             LoadReviewActor(reviewRepository),
             LoadTagsActor(tagRepository),
             SearchBrandsActor(brandRepository),
-            WarmUpCurrenciesActor(localDataSource),
+            WarmUpCurrenciesActor(currencyRepository),
             WarmUpEmojisActor(emojiRepository),
-            LoadLatestCurrencyActor(localDataSource),
+            LoadLatestCurrencyActor(currencyRepository),
             LoadLatestTagSortStrategyActor(tagRepository),
             RememberTagSortStrategyActor(tagRepository),
         )
@@ -166,7 +166,7 @@ internal fun createCurrencySelectorStore(
     componentContext: ComponentContext,
     destination: CurrencySelectorDestination,
     context: Context,
-    localDataSource: CheckieLocalDataSource,
+    currencyRepository: CurrencyRepository,
     router: Router,
 ): CurrencySelectorStore {
     return CurrencySelectorStore(
@@ -176,7 +176,7 @@ internal fun createCurrencySelectorStore(
         uiStateMapper = CurrencySelectorUiStateMapper(context),
         actors = setOf(
             CurrencySelectorNavigationActor(router),
-            LoadCurrenciesActor(localDataSource),
+            LoadCurrenciesActor(currencyRepository),
             FilterCurrenciesActor(),
         )
     )

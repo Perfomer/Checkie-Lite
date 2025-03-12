@@ -40,6 +40,7 @@ internal class MainNavigationActor(
 
                 return when (result) {
                     ReviewCreationResult.Success -> ReviewCreated
+                    null -> null
                 }
             }
 

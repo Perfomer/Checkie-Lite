@@ -54,7 +54,7 @@ internal class SearchNavigationActor(
         TODO()
     }
 
-    private suspend fun openSort(command: OpenSort): SearchNavigationEvent {
+    private suspend fun openSort(command: OpenSort): SearchNavigationEvent? {
         val result = router.navigateForResult<SortResult>(
             destination = SortDestination(command.currentSorting),
             mode = DestinationMode.BOTTOM_SHEET,
@@ -62,10 +62,11 @@ internal class SearchNavigationActor(
 
         return when (result) {
             is SortResult.Success -> OnSortUpdated(sorting = result.sorting)
+            null -> null
         }
     }
 
-    private suspend fun openTags(command: OpenTags): SearchNavigationEvent {
+    private suspend fun openTags(command: OpenTags): SearchNavigationEvent? {
         val result = router.navigateForResult<TagsResult>(
             destination = TagsDestination(command.selectedTagsIds),
             mode = DestinationMode.BOTTOM_SHEET,
@@ -73,6 +74,7 @@ internal class SearchNavigationActor(
 
         return when (result) {
             is TagsResult.Success -> OnTagsUpdated(result.selectedTagsIds)
+            null -> null
         }
     }
 }

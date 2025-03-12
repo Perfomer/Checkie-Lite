@@ -85,14 +85,20 @@ internal class ComposablesBottomSheetController(
     private val sheetState: ModalBottomSheetState,
 ) : BottomSheetController {
 
+    // Needed to avoid duplicated `router.back()` call
+    var shouldIgnoreDismiss: Boolean = false
+        private set
+
     override val isVisible: Boolean
         get() = sheetState.targetDetent != SheetDetent.Hidden
 
     override suspend fun show() {
+        shouldIgnoreDismiss = false
         sheetState.animateTo(SheetDetent.FullyExpanded)
     }
 
     override suspend fun hide() {
+        shouldIgnoreDismiss = true
         sheetState.animateTo(SheetDetent.Hidden)
     }
 }

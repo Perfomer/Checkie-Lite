@@ -10,8 +10,6 @@ interface NavigationHost {
 
     fun back()
 
-    fun dismissBottomSheet()
-
     @Composable
     fun Root(
         bottomSheetController: BottomSheetController,

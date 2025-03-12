@@ -21,7 +21,6 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.retainedComponent
-import com.arkivanov.decompose.router.slot.dismiss
 import com.perfomer.checkielite.core.navigation.BottomSheetController
 import com.perfomer.checkielite.core.navigation.Destination
 import com.perfomer.checkielite.core.navigation.NavigationHost
@@ -48,10 +47,6 @@ internal class DecomposeNavigationHost(
 
     override fun back() {
         router.exit()
-    }
-
-    override fun dismissBottomSheet() {
-        root.bottomSheetNavigator.dismiss()
     }
 
     @Composable

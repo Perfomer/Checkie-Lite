@@ -90,8 +90,9 @@ internal class ReviewCreationNavigationActor(
 
         return when (result) {
             is TagCreationResult.Created -> OnTagCreated(result.tagId)
-            is TagCreationResult.Modified -> null
             is TagCreationResult.Deleted -> OnTagDeleted(result.tagId)
+            is TagCreationResult.Modified -> null
+            null -> null
         }
     }
 
@@ -103,6 +104,7 @@ internal class ReviewCreationNavigationActor(
 
         return when (result) {
             is TagSortResult.Success -> ReviewCreationNavigationEvent.OnTagSortSelected(result.option)
+            null -> null
         }
     }
 
@@ -114,6 +116,7 @@ internal class ReviewCreationNavigationActor(
 
         return when (result) {
             is CurrencySelectorResult.Selected -> OnCurrencySelected(result.currency)
+            null -> null
         }
     }
 }

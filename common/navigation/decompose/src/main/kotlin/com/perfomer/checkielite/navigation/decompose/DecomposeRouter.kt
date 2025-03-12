@@ -43,27 +43,42 @@ internal class DecomposeRouter(
     override suspend fun <T : Result> navigateForResult(
         destination: Destination,
         mode: DestinationMode,
-    ): T {
+    ): T? {
         navigate(destination, mode)
         return resultEventBus.awaitResult(destination.resultKey)
     }
 
-    override fun exit() = with(root) {
-        when {
-            bottomSheetSlot.isVisible -> bottomSheetNavigator.dismiss()
-            overlaySlot.isVisible -> overlayNavigator.dismiss()
-            else -> mainNavigator.pop()
+    override fun exit() {
+        val resultKey = defineTopDestination().resultKey
+        resultEventBus.cancelResult(resultKey)
+        exitInternal()
+    }
+
+    override fun exitWithResult(result: Result) {
+        val resultKey = defineTopDestination().resultKey
+        resultEventBus.sendResult(resultKey, result)
+        return exitInternal()
+    }
+
+    private fun exitInternal() = with(root) {
+        when (defineTopDestinationMode()) {
+            DestinationMode.USUAL -> mainNavigator.pop()
+            DestinationMode.OVERLAY -> overlayNavigator.dismiss()
+            DestinationMode.BOTTOM_SHEET -> bottomSheetNavigator.dismiss()
         }
     }
 
-    override fun exitWithResult(result: Result) = with(root) {
-        val resultKey = when {
-            bottomSheetSlot.isVisible -> bottomSheetSlot.active!!.resultKey
-            overlaySlot.isVisible -> overlaySlot.active!!.resultKey
-            else -> mainNavigationStack.actual.resultKey
-        }
+    private fun defineTopDestination(): Destination = when (defineTopDestinationMode()) {
+        DestinationMode.USUAL -> root.mainNavigationStack.actual
+        DestinationMode.OVERLAY -> requireNotNull(root.overlaySlot.active)
+        DestinationMode.BOTTOM_SHEET -> requireNotNull(root.bottomSheetSlot.active)
+    }
 
-        resultEventBus.sendResult(resultKey, result)
-        exit()
+    private fun defineTopDestinationMode(): DestinationMode = with(root) {
+        return when {
+            bottomSheetSlot.isVisible -> DestinationMode.BOTTOM_SHEET
+            overlaySlot.isVisible -> DestinationMode.OVERLAY
+            else -> DestinationMode.USUAL
+        }
     }
 }

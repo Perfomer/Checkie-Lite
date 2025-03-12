@@ -4,7 +4,7 @@ import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.search.smartFilterByQuery
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.data.repository.BrandRepository
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.BrandsSearchComplete
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 internal class SearchBrandsActor(
-    private val localDataSource: CheckieLocalDataSource,
+    private val brandRepository: BrandRepository,
 ) : Actor<ReviewCreationCommand, ReviewCreationEvent> {
 
     override fun act(commands: Flow<ReviewCreationCommand>): Flow<ReviewCreationEvent> {
@@ -24,7 +24,7 @@ internal class SearchBrandsActor(
 
     private fun handleCommand(command: ReviewCreationCommand.SearchBrands): Flow<BrandsSearchComplete> {
         return flowBy {
-            localDataSource.getAllBrands()
+            brandRepository.getAllBrands()
                 .smartFilterByQuery(command.query) { listOf(this to 1F) }
                 .take(MAX_RESULTS)
         }

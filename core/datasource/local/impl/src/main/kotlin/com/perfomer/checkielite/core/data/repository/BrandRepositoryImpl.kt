@@ -11,6 +11,10 @@ internal class BrandRepositoryImpl(
     private val databaseDataSource: DatabaseDataSource,
 ) : BrandRepository {
 
+    override suspend fun getAllBrands(): List<String> {
+        return databaseDataSource.getAllBrands()
+    }
+
     override fun getRecommendations(reviewId: String): Flow<List<CheckieReview>> {
         return databaseDataSource.getReview(reviewId)
             .flatMapLatest { review ->

@@ -14,8 +14,6 @@ interface CheckieLocalDataSource {
 
     suspend fun clearRecentSearches()
 
-    suspend fun getAllBrands(): List<String>
-
     suspend fun dropSyncing()
 
     fun isSyncing(): Flow<Boolean>

@@ -5,5 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface BrandRepository {
 
+    suspend fun getAllBrands(): List<String>
+
     fun getRecommendations(reviewId: String): Flow<List<CheckieReview>>
 }

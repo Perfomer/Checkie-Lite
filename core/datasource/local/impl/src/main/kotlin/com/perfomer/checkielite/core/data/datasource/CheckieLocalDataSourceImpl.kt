@@ -45,10 +45,6 @@ internal class CheckieLocalDataSourceImpl(
         return databaseDataSource.clearRecentSearches()
     }
 
-    override suspend fun getAllBrands(): List<String> {
-        return databaseDataSource.getAllBrands()
-    }
-
     override suspend fun dropSyncing() {
         databaseDataSource.dropSyncing()
     }

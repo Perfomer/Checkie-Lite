@@ -18,11 +18,9 @@ fun BottomSheetDismissHandler(
     val currentEnabled by rememberUpdatedState(enabled)
     val currentOnDismissRequested by rememberUpdatedState(onDismissRequested)
     val dismissCallback = remember {
-        object : BottomSheetDismissCallback {
-            override fun onDismissRequested(): Boolean {
-                return if (currentEnabled) currentOnDismissRequested()
-                else true
-            }
+        BottomSheetDismissCallback {
+            if (currentEnabled) currentOnDismissRequested()
+            else true
         }
     }
 
@@ -63,7 +61,7 @@ class DefaultBottomSheetDismissHandlerOwner : BottomSheetDismissHandlerOwner {
     }
 }
 
-interface BottomSheetDismissCallback {
+fun interface BottomSheetDismissCallback {
 
     /**
      * Returns true if the dismiss request is allowed

@@ -3,7 +3,7 @@ package com.perfomer.checkielite.feature.search.presentation.screen.search.tea.a
 import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.ignoreResult
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.data.repository.SearchRepository
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.ClearRecentSearches
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.mapLatest
 
 internal class ClearRecentSearchesActor(
-    private val localDataSource: CheckieLocalDataSource,
+    private val searchRepository: SearchRepository,
 ) : Actor<SearchCommand, SearchEvent> {
 
     override fun act(commands: Flow<SearchCommand>): Flow<SearchEvent> {
@@ -23,7 +23,7 @@ internal class ClearRecentSearchesActor(
     }
 
     private suspend fun handleCommand(command: ClearRecentSearches) {
-        localDataSource.clearRecentSearches()
+        searchRepository.clearRecentSearches()
     }
 
     private companion object {

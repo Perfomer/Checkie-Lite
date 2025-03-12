@@ -19,6 +19,8 @@ import com.perfomer.checkielite.core.data.repository.CurrencyRepository
 import com.perfomer.checkielite.core.data.repository.CurrencyRepositoryImpl
 import com.perfomer.checkielite.core.data.repository.ReviewRepository
 import com.perfomer.checkielite.core.data.repository.ReviewRepositoryImpl
+import com.perfomer.checkielite.core.data.repository.SearchRepository
+import com.perfomer.checkielite.core.data.repository.SearchRepositoryImpl
 import com.perfomer.checkielite.core.data.repository.TagRepository
 import com.perfomer.checkielite.core.data.repository.TagRepositoryImpl
 import org.koin.core.module.dsl.singleOf
@@ -38,6 +40,7 @@ val localDataSourceModule = module {
     singleOf(::BrandRepositoryImpl) bind BrandRepository::class
     singleOf(::CurrencyRepositoryImpl) bind CurrencyRepository::class
     singleOf(::ReviewRepositoryImpl) bind ReviewRepository::class
+    singleOf(::SearchRepositoryImpl) bind SearchRepository::class
     singleOf(::TagRepositoryImpl) bind TagRepository::class
 
     singleOf(CheckieDatabase::getInstance)

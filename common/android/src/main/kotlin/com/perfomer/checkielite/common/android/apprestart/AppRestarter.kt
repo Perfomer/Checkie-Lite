@@ -38,7 +38,6 @@ internal class AppRestarterImpl(
         intent.replaceExtras(null)
 
         return startActions
-
     }
 
     private companion object {

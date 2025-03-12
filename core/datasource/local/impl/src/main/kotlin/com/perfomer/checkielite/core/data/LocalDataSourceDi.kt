@@ -13,6 +13,10 @@ import com.perfomer.checkielite.core.data.datasource.preferences.PreferencesData
 import com.perfomer.checkielite.core.data.datasource.preferences.PreferencesDataSourceImpl
 import com.perfomer.checkielite.core.data.repository.BackupRepository
 import com.perfomer.checkielite.core.data.repository.BackupRepositoryImpl
+import com.perfomer.checkielite.core.data.repository.BrandRepository
+import com.perfomer.checkielite.core.data.repository.BrandRepositoryImpl
+import com.perfomer.checkielite.core.data.repository.ReviewRepository
+import com.perfomer.checkielite.core.data.repository.ReviewRepositoryImpl
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -26,6 +30,9 @@ val localDataSourceModule = module {
 
     singleOf(::BackupMetadataParserImpl) bind BackupMetadataParser::class
     singleOf(::BackupRepositoryImpl) bind BackupRepository::class
+
+    singleOf(::ReviewRepositoryImpl) bind ReviewRepository::class
+    singleOf(::BrandRepositoryImpl) bind BrandRepository::class
 
     singleOf(CheckieDatabase::getInstance)
 }

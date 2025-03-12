@@ -1,20 +1,12 @@
 package com.perfomer.checkielite.core.data.datasource
 
-import com.perfomer.checkielite.core.entity.CheckiePicture
 import com.perfomer.checkielite.core.entity.CheckieReview
 import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.core.entity.price.CheckieCurrency
-import com.perfomer.checkielite.core.entity.price.CheckiePrice
 import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
 import kotlinx.coroutines.flow.Flow
 
 interface CheckieLocalDataSource {
-
-    fun getReviews(): Flow<List<CheckieReview>>
-
-    fun getReviewsByBrand(brand: String): Flow<List<CheckieReview>>
-
-    fun getReview(reviewId: String): Flow<CheckieReview>
 
     fun getRecentSearches(): Flow<List<CheckieReview>>
 
@@ -23,33 +15,6 @@ interface CheckieLocalDataSource {
     suspend fun clearRecentSearches()
 
     suspend fun getAllBrands(): List<String>
-
-    suspend fun createReview(
-        productName: String,
-        productBrand: String?,
-        price: CheckiePrice?,
-        rating: Int,
-        pictures: List<CheckiePicture>,
-        tagsIds: Set<String>,
-        comment: String?,
-        advantages: String?,
-        disadvantages: String?,
-    )
-
-    suspend fun updateReview(
-        reviewId: String,
-        productName: String,
-        productBrand: String?,
-        price: CheckiePrice?,
-        rating: Int,
-        pictures: List<CheckiePicture>,
-        tagsIds: Set<String>,
-        comment: String?,
-        advantages: String?,
-        disadvantages: String?,
-    )
-
-    suspend fun deleteReview(reviewId: String)
 
     suspend fun dropSyncing()
 

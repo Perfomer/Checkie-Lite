@@ -5,7 +5,7 @@ import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.feature.reviewdetails.domain.repository.ReviewDetailsRepository
+import com.perfomer.checkielite.core.data.repository.ReviewRepository
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand.DeleteReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 internal class DeleteReviewActor(
-    private val repository: ReviewDetailsRepository,
+    private val reviewRepository: ReviewRepository,
 ) : Actor<ReviewDetailsCommand, ReviewDetailsEvent> {
 
     override fun act(commands: Flow<ReviewDetailsCommand>): Flow<ReviewDetailsEvent> {
@@ -25,7 +25,7 @@ internal class DeleteReviewActor(
     }
 
     private fun handleCommand(command: DeleteReview): Flow<ReviewDeletion> {
-        return flowBy { repository.deleteReview(command.reviewId) }
+        return flowBy { reviewRepository.deleteReview(command.reviewId) }
             .map { ReviewDeletion.Succeed }
             .onCatchLog(TAG, "Failed to delete review")
             .onCatchReturn { ReviewDeletion.Failed }

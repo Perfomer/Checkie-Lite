@@ -2,7 +2,7 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.a
 
 import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.data.repository.ReviewRepository
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.CheckHasReviews
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 internal class CheckHasReviewsActor(
-    private val localDataSource: CheckieLocalDataSource,
+    private val reviewRepository: ReviewRepository,
 ) : Actor<SettingsCommand, SettingsEvent> {
 
     override fun act(commands: Flow<SettingsCommand>): Flow<SettingsEvent> {
@@ -22,7 +22,7 @@ internal class CheckHasReviewsActor(
     }
 
     private fun handleCommand(command: CheckHasReviews): Flow<SettingsEvent> {
-        return localDataSource.getReviews()
+        return reviewRepository.getReviews()
             .map { it.isNotEmpty() }
             .map(::CheckingHasReviewsStatusUpdated)
             .onCatchLog(TAG, "Failed to check if has reviews", rethrow = false)

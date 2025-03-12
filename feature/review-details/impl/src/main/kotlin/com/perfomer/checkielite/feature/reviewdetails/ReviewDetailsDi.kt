@@ -1,11 +1,11 @@
 package com.perfomer.checkielite.feature.reviewdetails
 
 import com.arkivanov.decompose.ComponentContext
+import com.perfomer.checkielite.core.data.repository.BrandRepository
+import com.perfomer.checkielite.core.data.repository.ReviewRepository
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
 import com.perfomer.checkielite.core.navigation.navigation
-import com.perfomer.checkielite.feature.reviewdetails.data.repository.ReviewDetailsRepositoryImpl
-import com.perfomer.checkielite.feature.reviewdetails.domain.repository.ReviewDetailsRepository
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsReducer
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsStore
@@ -15,16 +15,10 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.ReviewDetailsContentScreen
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiStateMapper
 import org.koin.core.module.dsl.factoryOf
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val reviewDetailsModules
-    get() = listOf(presentationModule, dataModule)
-
-private val dataModule = module {
-    singleOf(::ReviewDetailsRepositoryImpl) bind ReviewDetailsRepository::class
-}
+    get() = listOf(presentationModule)
 
 private val presentationModule = module {
     navigation {
@@ -38,7 +32,8 @@ private val presentationModule = module {
 internal fun createReviewDetailsStore(
     componentContext: ComponentContext,
     destination: ReviewDetailsDestination,
-    reviewDetailsRepository: ReviewDetailsRepository,
+    reviewRepository: ReviewRepository,
+    brandRepository: BrandRepository,
     router: Router,
 ): ReviewDetailsStore {
     return ReviewDetailsStore(
@@ -48,8 +43,8 @@ internal fun createReviewDetailsStore(
         uiStateMapper = ReviewDetailsUiStateMapper(),
         actors = setOf(
             ReviewDetailsNavigationActor(router),
-            LoadReviewActor(reviewDetailsRepository),
-            DeleteReviewActor(reviewDetailsRepository),
+            LoadReviewActor(reviewRepository, brandRepository),
+            DeleteReviewActor(reviewRepository),
         ),
     )
 }

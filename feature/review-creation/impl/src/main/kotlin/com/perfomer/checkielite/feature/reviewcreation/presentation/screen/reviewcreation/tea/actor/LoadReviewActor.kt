@@ -5,7 +5,7 @@ import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.data.repository.ReviewRepository
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.ReviewLoading
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 internal class LoadReviewActor(
-    private val localDataSource: CheckieLocalDataSource,
+    private val reviewRepository: ReviewRepository,
 ) : Actor<ReviewCreationCommand, ReviewCreationEvent> {
 
     override fun act(commands: Flow<ReviewCreationCommand>): Flow<ReviewCreationEvent> {
@@ -25,7 +25,7 @@ internal class LoadReviewActor(
     }
 
     private fun handleCommand(command: ReviewCreationCommand.LoadReview): Flow<ReviewLoading> {
-        return flowBy { localDataSource.getReview(command.reviewId).first() }
+        return flowBy { reviewRepository.getReview(command.reviewId).first() }
             .map(ReviewLoading::Succeed)
             .onCatchLog(TAG, "Failed to load review")
             .onCatchReturn(ReviewLoading::Failed)

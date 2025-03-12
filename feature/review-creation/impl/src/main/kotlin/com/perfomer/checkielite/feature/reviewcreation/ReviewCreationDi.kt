@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.reviewcreation
 import android.content.Context
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.data.repository.ReviewRepository
 import com.perfomer.checkielite.core.navigation.ExternalRouter
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
@@ -89,6 +90,7 @@ internal fun createReviewCreationStore(
     destination: ReviewCreationDestination,
     context: Context,
     localDataSource: CheckieLocalDataSource,
+    reviewRepository: ReviewRepository,
     emojiRepository: CheckieEmojiRepository,
     router: Router,
     externalRouter: ExternalRouter,
@@ -100,9 +102,9 @@ internal fun createReviewCreationStore(
         uiStateMapper = ReviewCreationUiStateMapper(context),
         actors = setOf(
             ReviewCreationNavigationActor(router, externalRouter),
-            CreateReviewActor(localDataSource),
-            UpdateReviewActor(localDataSource),
-            LoadReviewActor(localDataSource),
+            CreateReviewActor(reviewRepository),
+            UpdateReviewActor(reviewRepository),
+            LoadReviewActor(reviewRepository),
             LoadTagsActor(localDataSource),
             SearchBrandsActor(localDataSource),
             WarmUpCurrenciesActor(localDataSource),

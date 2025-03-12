@@ -4,7 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
-import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalCuiToastHostState
+import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalToastController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberErrorToast
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberSuccessToast
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberToast
@@ -22,7 +22,7 @@ internal class BackupContentScreen(private val store: BackupStore) : Screen {
     override fun Screen() = TeaComposable(store) { state ->
         BackHandler { accept(OnBackPress) }
 
-        val toastHostState = LocalCuiToastHostState.current
+        val toastController = LocalToastController.current
 
         val noSpaceLeftToast = rememberErrorToast(R.string.settings_backup_failure_common_no_space)
         val importFailedCommonToast = rememberErrorToast(R.string.settings_backup_failure_import)
@@ -34,7 +34,7 @@ internal class BackupContentScreen(private val store: BackupStore) : Screen {
 
         EffectHandler { effect ->
             when (effect) {
-                is ShowToast -> toastHostState.showToast(
+                is ShowToast -> toastController.showToast(
                     when (effect.reason) {
                         Reason.EXPORT_SUCCESS -> exportSucceedToast
                         Reason.IMPORT_CANCELLED -> importCancelledToast

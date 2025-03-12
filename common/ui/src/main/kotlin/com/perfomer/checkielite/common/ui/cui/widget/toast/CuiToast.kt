@@ -41,7 +41,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun CuiToast(
-    data: CuiToastData,
+    data: ToastData,
     onClick: () -> Unit,
     onSwipeOut: () -> Unit,
 ) {
@@ -114,7 +114,7 @@ private fun CuiToastPreview() = CheckieLiteTheme {
         modifier = Modifier.padding(vertical = 32.dp)
     ) {
         CuiToast(
-            data = CuiToastData(
+            data = ToastData(
                 message = "Short text",
                 icon = null,
                 iconTint = Color.Unspecified,
@@ -126,7 +126,7 @@ private fun CuiToastPreview() = CheckieLiteTheme {
         )
 
         CuiToast(
-            data = CuiToastData(
+            data = ToastData(
                 message = "Short text",
                 icon = painterResource(CommonDrawable.ic_error),
                 iconTint = LocalCuiPalette.current.IconNegative,
@@ -138,7 +138,7 @@ private fun CuiToastPreview() = CheckieLiteTheme {
         )
 
         CuiToast(
-            data = CuiToastData(
+            data = ToastData(
                 message = "Failed to export backup: Not enough space",
                 icon = painterResource(CommonDrawable.ic_warning),
                 iconTint = LocalCuiPalette.current.IconWarning,

@@ -22,22 +22,22 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.perfomer.checkielite.common.ui.CommonDrawable
-import com.perfomer.checkielite.common.ui.cui.widget.toast.CuiToastHostState.Companion.DEFAULT_DURATION_MS
+import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastController.Companion.DEFAULT_DURATION_MS
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import kotlinx.coroutines.delay
 
-val LocalCuiToastHostState = staticCompositionLocalOf<CuiToastHostState> { error("Not provided") }
+val LocalToastController = staticCompositionLocalOf<ToastController> { error("Not provided") }
 
 @Stable
-class CuiToastHostState {
+class ToastController {
 
-    var currentToastData by mutableStateOf<CuiToastData?>(null)
+    var currentToastData by mutableStateOf<ToastData?>(null)
         private set
 
     var show by mutableStateOf(false)
         private set
 
-    fun showToast(data: CuiToastData) {
+    fun showToast(data: ToastData) {
         currentToastData = data
         show = true
     }
@@ -58,12 +58,12 @@ fun rememberToast(
     iconTint: Color = Color.Unspecified,
     backgroundColor: Color = Color.Unspecified,
     durationMs: Long = DEFAULT_DURATION_MS,
-): CuiToastData {
+): ToastData {
     val actualMessage = stringResource(message)
     val actualIcon = icon?.let { painterResource(it) }
 
     return remember(message, icon, iconTint, backgroundColor, durationMs) {
-        CuiToastData(actualMessage, actualIcon, iconTint, backgroundColor, durationMs)
+        ToastData(actualMessage, actualIcon, iconTint, backgroundColor, durationMs)
     }
 }
 
@@ -71,7 +71,7 @@ fun rememberToast(
 fun rememberSuccessToast(
     @StringRes message: Int,
     durationMs: Long = DEFAULT_DURATION_MS,
-): CuiToastData {
+): ToastData {
     return rememberToast(
         message = message,
         icon = CommonDrawable.ic_success,
@@ -85,7 +85,7 @@ fun rememberSuccessToast(
 fun rememberWarningToast(
     @StringRes message: Int,
     durationMs: Long = DEFAULT_DURATION_MS,
-): CuiToastData {
+): ToastData {
     return rememberToast(
         message = message,
         icon = CommonDrawable.ic_warning,
@@ -100,7 +100,7 @@ fun rememberWarningToast(
 fun rememberErrorToast(
     @StringRes message: Int,
     durationMs: Long = DEFAULT_DURATION_MS,
-): CuiToastData {
+): ToastData {
     return rememberToast(
         message = message,
         icon = CommonDrawable.ic_error,
@@ -111,7 +111,7 @@ fun rememberErrorToast(
 }
 
 @Stable
-data class CuiToastData(
+data class ToastData(
     val message: String,
     val icon: Painter?,
     val iconTint: Color,
@@ -120,22 +120,22 @@ data class CuiToastData(
 )
 
 @Composable
-fun CuiToastHost(
-    hostState: CuiToastHostState = LocalCuiToastHostState.current,
-    toast: @Composable (CuiToastData) -> Unit = { data ->
+fun ToastHost(
+    controller: ToastController = LocalToastController.current,
+    toast: @Composable (ToastData) -> Unit = { data ->
         CuiToast(
             data = data,
-            onClick = { hostState.dismiss() },
-            onSwipeOut = { hostState.dismiss() },
+            onClick = controller::dismiss,
+            onSwipeOut = controller::dismiss,
         )
     },
 ) {
-    val currentToastData = hostState.currentToastData
+    val currentToastData = controller.currentToastData
 
-    LaunchedEffect(hostState.show) {
-        if (currentToastData != null && hostState.show) {
+    LaunchedEffect(controller.show) {
+        if (currentToastData != null && controller.show) {
             delay(currentToastData.durationMs)
-            hostState.dismiss()
+            controller.dismiss()
         }
     }
 
@@ -144,7 +144,7 @@ fun CuiToastHost(
         modifier = Modifier.fillMaxSize()
     ) {
         AnimatedVisibility(
-            visible = hostState.show && currentToastData != null,
+            visible = controller.show && currentToastData != null,
             enter = slideInVertically(),
             exit = slideOutVertically(targetOffsetY = { -it }),
         ) {

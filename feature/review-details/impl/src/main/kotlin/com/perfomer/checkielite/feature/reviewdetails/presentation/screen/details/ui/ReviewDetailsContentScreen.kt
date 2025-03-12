@@ -8,7 +8,7 @@ import androidx.compose.runtime.setValue
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.CommonString
-import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalCuiToastHostState
+import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalToastController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberToast
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberWarningToast
 import com.perfomer.checkielite.core.navigation.Screen
@@ -35,7 +35,7 @@ internal class ReviewDetailsContentScreen(
 
     @Composable
     override fun Screen() = TeaComposable(store) { state ->
-        val toastHost = LocalCuiToastHostState.current
+        val toastController = LocalToastController.current
         var isConfirmDeleteDialogShown by remember { mutableStateOf(false) }
 
         val syncingToast = rememberWarningToast(CommonString.common_toast_syncing)
@@ -44,8 +44,8 @@ internal class ReviewDetailsContentScreen(
         EffectHandler { effect ->
             when (effect) {
                 is ShowConfirmDeleteDialog -> isConfirmDeleteDialogShown = true
-                is ShowToast.Syncing -> toastHost.showToast(syncingToast)
-                is ShowToast.Deleted -> toastHost.showToast(deletedToast)
+                is ShowToast.Syncing -> toastController.showToast(syncingToast)
+                is ShowToast.Deleted -> toastController.showToast(deletedToast)
             }
         }
 

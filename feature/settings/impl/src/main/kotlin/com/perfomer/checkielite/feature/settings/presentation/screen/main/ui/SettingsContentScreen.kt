@@ -8,7 +8,7 @@ import androidx.compose.runtime.setValue
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.CommonString
-import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalCuiToastHostState
+import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalToastController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberErrorToast
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberSuccessToast
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberWarningToast
@@ -28,7 +28,7 @@ internal class SettingsContentScreen(private val store: SettingsStore) : Screen 
 
     @Composable
     override fun Screen() = TeaComposable(store) { state ->
-        val toastController = LocalCuiToastHostState.current
+        val toastController = LocalToastController.current
         val syncingInProgressToast = rememberWarningToast(message = CommonString.common_toast_syncing)
         val appUpToDateToast = rememberSuccessToast(message = R.string.settings_toast_update_check_succeed)
         val failedCheckUpdatesToast = rememberErrorToast(message = R.string.settings_toast_update_check_failed)

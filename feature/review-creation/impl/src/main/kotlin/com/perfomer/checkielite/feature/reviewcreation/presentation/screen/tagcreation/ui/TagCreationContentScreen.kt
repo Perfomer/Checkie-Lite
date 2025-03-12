@@ -11,7 +11,7 @@ import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.cui.modifier.ShakeConfig
 import com.perfomer.checkielite.common.ui.cui.modifier.rememberShakeController
-import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalCuiToastHostState
+import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalToastController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberErrorToast
 import com.perfomer.checkielite.common.ui.util.VibratorPattern
 import com.perfomer.checkielite.common.ui.util.navigation.BottomSheetDismissHandler
@@ -54,7 +54,7 @@ internal class TagCreationContentScreen(
             false
         }
 
-        val toastHostState = LocalCuiToastHostState.current
+        val toastController = LocalToastController.current
         val deleteErrorToast = rememberErrorToast(R.string.tagcreation_error_delete)
         val saveErrorToast = rememberErrorToast(R.string.tagcreation_error_save)
 
@@ -63,8 +63,8 @@ internal class TagCreationContentScreen(
 
         EffectHandler { effect ->
             when (effect) {
-                is ShowErrorToast.DeletionFailed -> toastHostState.showToast(deleteErrorToast)
-                is ShowErrorToast.SavingFailed -> toastHostState.showToast(saveErrorToast)
+                is ShowErrorToast.DeletionFailed -> toastController.showToast(deleteErrorToast)
+                is ShowErrorToast.SavingFailed -> toastController.showToast(saveErrorToast)
                 is ShowTagDeleteConfirmationDialog -> isConfirmDeleteDialogShown = true
                 is ShowExitConfirmationDialog -> isConfirmExitDialogShown = true
                 is FocusTagValueField -> tagValueFocusRequester.requestFocus()

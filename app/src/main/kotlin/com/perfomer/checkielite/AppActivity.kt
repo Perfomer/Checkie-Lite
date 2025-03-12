@@ -22,9 +22,9 @@ import com.perfomer.checkielite.common.android.apprestart.RestartAction.ShowSucc
 import com.perfomer.checkielite.common.android.permissions.PermissionHelper
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.NavBarScrim
 import com.perfomer.checkielite.common.ui.cui.widget.sheet.CuiDragAnchor
-import com.perfomer.checkielite.common.ui.cui.widget.toast.CuiToastHost
-import com.perfomer.checkielite.common.ui.cui.widget.toast.CuiToastHostState
-import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalCuiToastHostState
+import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalToastController
+import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastController
+import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastHost
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberSuccessToast
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -75,7 +75,7 @@ class AppActivity : AppCompatActivity() {
                     Content()
 
                     NavBarScrim()
-                    CuiToastHost()
+                    ToastHost()
                     RestartActionsHandler(restartActions)
                 }
             }
@@ -99,7 +99,7 @@ class AppActivity : AppCompatActivity() {
     @Composable
     private fun EnrichCompositionLocal(content: @Composable () -> Unit) {
         CompositionLocalProvider(
-            LocalCuiToastHostState provides remember { CuiToastHostState() },
+            LocalToastController provides remember { ToastController() },
             LocalBottomSheetDismissHandlerOwner provides remember { DefaultBottomSheetDismissHandlerOwner() },
             content = content
         )
@@ -107,7 +107,7 @@ class AppActivity : AppCompatActivity() {
 
     @Composable
     private fun RestartActionsHandler(restartActions: ImmutableList<RestartAction>) {
-        val toastHost = LocalCuiToastHostState.current
+        val toastController = LocalToastController.current
 
         val backupImportSuccessToast = rememberSuccessToast(R.string.settings_backup_success_import)
 
@@ -116,7 +116,7 @@ class AppActivity : AppCompatActivity() {
                 when (restartAction) {
                     is ShowSuccessBackupImportToast -> {
                         delay(1_500L)
-                        toastHost.showToast(backupImportSuccessToast)
+                        toastController.showToast(backupImportSuccessToast)
                     }
                 }
             }

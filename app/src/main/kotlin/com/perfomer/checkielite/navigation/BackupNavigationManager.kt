@@ -2,9 +2,9 @@ package com.perfomer.checkielite.navigation
 
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.perfomer.checkielite.core.data.repository.BackupRepository
-import com.perfomer.checkielite.core.entity.backup.BackupMode
-import com.perfomer.checkielite.core.entity.backup.BackupProgress
-import com.perfomer.checkielite.core.entity.backup.BackupState
+import com.perfomer.checkielite.core.domain.entity.backup.BackupMode
+import com.perfomer.checkielite.core.domain.entity.backup.BackupProgress
+import com.perfomer.checkielite.core.domain.entity.backup.BackupState
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupDestination
 import kotlinx.coroutines.flow.distinctUntilChanged

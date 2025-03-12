@@ -3,8 +3,8 @@ package com.perfomer.checkielite.core.data.repository
 import com.perfomer.checkielite.common.pure.util.randomUuid
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
 import com.perfomer.checkielite.core.data.datasource.preferences.PreferencesDataSource
-import com.perfomer.checkielite.core.entity.CheckieTag
-import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
+import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
+import com.perfomer.checkielite.core.domain.entity.sort.TagSortingStrategy
 import kotlinx.coroutines.flow.Flow
 
 internal class TagRepositoryImpl(

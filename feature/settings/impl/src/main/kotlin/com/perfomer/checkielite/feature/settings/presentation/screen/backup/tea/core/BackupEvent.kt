@@ -1,6 +1,6 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core
 
-import com.perfomer.checkielite.core.entity.backup.BackupProgress
+import com.perfomer.checkielite.core.domain.entity.backup.BackupProgress
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.Await
 
 internal sealed interface BackupEvent {

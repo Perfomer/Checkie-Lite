@@ -4,9 +4,9 @@ import android.content.Context
 import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
-import com.perfomer.checkielite.core.entity.CheckieReview
-import com.perfomer.checkielite.core.entity.search.RatingRange
-import com.perfomer.checkielite.core.entity.sort.ReviewsSortingStrategy
+import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
+import com.perfomer.checkielite.core.domain.entity.search.RatingRange
+import com.perfomer.checkielite.core.domain.entity.sort.ReviewsSortingStrategy
 import com.perfomer.checkielite.feature.search.R
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchState
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.FilterType

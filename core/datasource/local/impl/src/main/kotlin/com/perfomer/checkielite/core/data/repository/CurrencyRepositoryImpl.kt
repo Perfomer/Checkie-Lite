@@ -3,8 +3,8 @@ package com.perfomer.checkielite.core.data.repository
 import android.icu.util.Currency
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
 import com.perfomer.checkielite.core.data.datasource.preferences.PreferencesDataSource
-import com.perfomer.checkielite.core.entity.price.CheckieCurrency
-import com.perfomer.checkielite.core.entity.price.CurrencySymbol
+import com.perfomer.checkielite.core.domain.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.domain.entity.price.CurrencySymbol
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock

@@ -3,7 +3,7 @@ package com.perfomer.checkielite.feature.search.presentation.screen.search.tea
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.impl.ComponentStore
-import com.perfomer.checkielite.core.entity.search.SearchFilters
+import com.perfomer.checkielite.core.domain.entity.search.SearchFilters
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEffect

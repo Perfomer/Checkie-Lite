@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.core.entity.emoji
+package com.perfomer.checkielite.core.domain.entity.emoji
 
 data class EmojiCategory(
     val type: EmojiCategoryType,

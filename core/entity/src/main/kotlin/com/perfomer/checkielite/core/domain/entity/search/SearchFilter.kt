@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.core.entity.search
+package com.perfomer.checkielite.core.domain.entity.search
 
 import java.io.Serializable
 

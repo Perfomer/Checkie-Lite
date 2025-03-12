@@ -6,7 +6,7 @@ import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.data.repository.TagRepository
-import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
+import com.perfomer.checkielite.core.domain.entity.sort.TagSortingStrategy
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadTags
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent

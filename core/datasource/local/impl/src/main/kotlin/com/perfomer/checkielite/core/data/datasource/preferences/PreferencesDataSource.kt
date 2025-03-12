@@ -3,8 +3,8 @@ package com.perfomer.checkielite.core.data.datasource.preferences
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import com.perfomer.checkielite.core.entity.price.CheckieCurrency
-import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
+import com.perfomer.checkielite.core.domain.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.domain.entity.sort.TagSortingStrategy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

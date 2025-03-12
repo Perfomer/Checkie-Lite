@@ -1,9 +1,9 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core
 
-import com.perfomer.checkielite.core.entity.CheckieReview
-import com.perfomer.checkielite.core.entity.CheckieTag
-import com.perfomer.checkielite.core.entity.price.CheckieCurrency
-import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
+import com.perfomer.checkielite.core.domain.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
+import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
+import com.perfomer.checkielite.core.domain.entity.sort.TagSortingStrategy
 
 internal sealed interface ReviewCreationEvent {
 

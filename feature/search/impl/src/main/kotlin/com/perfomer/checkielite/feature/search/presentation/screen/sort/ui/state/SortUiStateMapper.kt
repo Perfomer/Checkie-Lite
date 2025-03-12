@@ -2,7 +2,7 @@ package com.perfomer.checkielite.feature.search.presentation.screen.sort.ui.stat
 
 import android.content.Context
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
-import com.perfomer.checkielite.core.entity.sort.ReviewsSortingStrategy
+import com.perfomer.checkielite.core.domain.entity.sort.ReviewsSortingStrategy
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortState
 import com.perfomer.checkielite.feature.search.presentation.util.label
 

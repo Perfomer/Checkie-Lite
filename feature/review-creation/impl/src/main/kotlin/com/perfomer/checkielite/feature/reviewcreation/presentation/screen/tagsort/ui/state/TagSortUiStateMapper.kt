@@ -3,7 +3,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tags
 import android.content.Context
 import androidx.annotation.StringRes
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
-import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
+import com.perfomer.checkielite.core.domain.entity.sort.TagSortingStrategy
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagsort.tea.core.TagSortState
 

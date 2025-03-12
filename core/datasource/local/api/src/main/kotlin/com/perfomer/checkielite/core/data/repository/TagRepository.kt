@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.core.data.repository
 
-import com.perfomer.checkielite.core.entity.CheckieTag
-import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
+import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
+import com.perfomer.checkielite.core.domain.entity.sort.TagSortingStrategy
 import kotlinx.coroutines.flow.Flow
 
 interface TagRepository {

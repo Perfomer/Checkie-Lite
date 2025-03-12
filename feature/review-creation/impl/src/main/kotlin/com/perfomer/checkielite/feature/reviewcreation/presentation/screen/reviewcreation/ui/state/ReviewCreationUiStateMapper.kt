@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastMap
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
-import com.perfomer.checkielite.core.entity.price.CurrencySymbol
+import com.perfomer.checkielite.core.domain.entity.price.CurrencySymbol
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationState

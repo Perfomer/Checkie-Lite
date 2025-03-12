@@ -2,8 +2,8 @@ package com.perfomer.checkielite.core.data.datasource.database.room.mapper
 
 import android.content.Context
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewPictureDb
-import com.perfomer.checkielite.core.entity.CheckiePicture
-import com.perfomer.checkielite.core.entity.PictureSource
+import com.perfomer.checkielite.core.domain.entity.review.CheckiePicture
+import com.perfomer.checkielite.core.domain.entity.review.PictureSource
 
 internal fun CheckiePicture.toDb(
     context: Context,

@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core
 
-import com.perfomer.checkielite.core.entity.CheckieReview
-import com.perfomer.checkielite.core.entity.CheckieTag
+import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
+import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
 
 internal sealed interface MainEvent {
 

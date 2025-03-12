@@ -9,10 +9,10 @@ import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
 import com.perfomer.checkielite.core.data.datasource.preferences.PreferencesDataSource
 import com.perfomer.checkielite.core.data.service.CompressorService
 import com.perfomer.checkielite.core.data.util.startForegroundServiceCompat
-import com.perfomer.checkielite.core.entity.CheckiePicture
-import com.perfomer.checkielite.core.entity.CheckieReview
-import com.perfomer.checkielite.core.entity.PictureSource
-import com.perfomer.checkielite.core.entity.price.CheckiePrice
+import com.perfomer.checkielite.core.domain.entity.price.CheckiePrice
+import com.perfomer.checkielite.core.domain.entity.review.CheckiePicture
+import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
+import com.perfomer.checkielite.core.domain.entity.review.PictureSource
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first

@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core
 
 import com.perfomer.checkielite.common.pure.state.Lce
-import com.perfomer.checkielite.core.entity.CheckieReview
+import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
 
 internal data class ReviewDetailsState(
     val reviewId: String,

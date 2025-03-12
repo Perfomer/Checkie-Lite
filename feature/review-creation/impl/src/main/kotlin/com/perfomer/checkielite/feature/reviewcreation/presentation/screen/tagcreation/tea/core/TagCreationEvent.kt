@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core
 
-import com.perfomer.checkielite.core.entity.CheckieTag
-import com.perfomer.checkielite.core.entity.emoji.EmojiCategory
+import com.perfomer.checkielite.core.domain.entity.emoji.EmojiCategory
+import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
 
 internal sealed interface TagCreationEvent {
 

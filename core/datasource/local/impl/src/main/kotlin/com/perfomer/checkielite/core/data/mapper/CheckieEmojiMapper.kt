@@ -3,10 +3,10 @@ package com.perfomer.checkielite.core.data.mapper
 import com.perfomer.checkielite.core.data.entity.EmojiCategoryJson
 import com.perfomer.checkielite.core.data.entity.EmojiGroupJson
 import com.perfomer.checkielite.core.data.entity.EmojiJson
-import com.perfomer.checkielite.core.entity.emoji.Emoji
-import com.perfomer.checkielite.core.entity.emoji.EmojiCategory
-import com.perfomer.checkielite.core.entity.emoji.EmojiCategoryType
-import com.perfomer.checkielite.core.entity.emoji.EmojiGroup
+import com.perfomer.checkielite.core.domain.entity.emoji.Emoji
+import com.perfomer.checkielite.core.domain.entity.emoji.EmojiCategory
+import com.perfomer.checkielite.core.domain.entity.emoji.EmojiCategoryType
+import com.perfomer.checkielite.core.domain.entity.emoji.EmojiGroup
 
 internal fun EmojiCategoryJson.toDomain(): EmojiCategory {
     return EmojiCategory(

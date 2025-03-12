@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.res.AssetManager
 import com.perfomer.checkielite.core.data.entity.EmojiCategoryJson
 import com.perfomer.checkielite.core.data.mapper.toDomain
-import com.perfomer.checkielite.core.entity.emoji.EmojiCategory
+import com.perfomer.checkielite.core.domain.entity.emoji.EmojiCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock

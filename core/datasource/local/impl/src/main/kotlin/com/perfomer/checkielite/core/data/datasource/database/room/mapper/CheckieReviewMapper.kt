@@ -3,7 +3,7 @@ package com.perfomer.checkielite.core.data.datasource.database.room.mapper
 import android.content.Context
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieReviewDb
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.relation.CheckieReviewDetailedDb
-import com.perfomer.checkielite.core.entity.CheckieReview
+import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
 
 internal fun CheckieReviewDetailedDb.toDomain(context: Context): CheckieReview {
     return CheckieReview(

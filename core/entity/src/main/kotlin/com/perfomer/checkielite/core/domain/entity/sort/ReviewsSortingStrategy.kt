@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.core.entity.sort
+package com.perfomer.checkielite.core.domain.entity.sort
 
 enum class ReviewsSortingStrategy {
     RELEVANCE,

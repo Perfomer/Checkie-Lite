@@ -1,6 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.util
 
-import com.perfomer.checkielite.core.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.domain.entity.price.CheckieCurrency
 import java.util.Date
 import java.util.Locale
 import android.icu.util.Currency as AndroidCurrency

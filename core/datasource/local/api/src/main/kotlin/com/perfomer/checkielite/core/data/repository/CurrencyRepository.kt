@@ -1,6 +1,6 @@
 package com.perfomer.checkielite.core.data.repository
 
-import com.perfomer.checkielite.core.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.domain.entity.price.CheckieCurrency
 
 interface CurrencyRepository {
 

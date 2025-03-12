@@ -5,7 +5,7 @@ import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.common.pure.state.toLoading
 import com.perfomer.checkielite.common.pure.util.remove
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
-import com.perfomer.checkielite.core.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.domain.entity.price.CheckieCurrency
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorCommand.FilterCurrencies

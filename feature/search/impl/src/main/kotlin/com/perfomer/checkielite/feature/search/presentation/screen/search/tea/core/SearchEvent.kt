@@ -1,9 +1,9 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core
 
-import com.perfomer.checkielite.core.entity.CheckieReview
-import com.perfomer.checkielite.core.entity.CheckieTag
-import com.perfomer.checkielite.core.entity.search.SearchFilters
-import com.perfomer.checkielite.core.entity.sort.ReviewsSortingStrategy
+import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
+import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
+import com.perfomer.checkielite.core.domain.entity.search.SearchFilters
+import com.perfomer.checkielite.core.domain.entity.sort.ReviewsSortingStrategy
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.FilterType
 
 internal sealed interface SearchEvent {

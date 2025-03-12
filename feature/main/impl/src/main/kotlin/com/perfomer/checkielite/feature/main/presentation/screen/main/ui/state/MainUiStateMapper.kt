@@ -6,8 +6,8 @@ import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.common.pure.state.requireContent
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
-import com.perfomer.checkielite.core.entity.CheckieReview
-import com.perfomer.checkielite.core.entity.CheckieTag
+import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
+import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainState
 import kotlinx.collections.immutable.toPersistentList
 

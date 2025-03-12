@@ -3,10 +3,9 @@ package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detai
 import androidx.compose.ui.util.fastMap
 import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
-import com.perfomer.checkielite.core.entity.CheckieReview
-import com.perfomer.checkielite.core.entity.CheckieTag
-import com.perfomer.checkielite.core.entity.price.CheckiePrice
-import com.perfomer.checkielite.core.entity.price.CurrencySymbol
+import com.perfomer.checkielite.core.domain.entity.price.CheckiePrice
+import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
+import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsState
 import kotlinx.collections.immutable.toPersistentList
 import java.text.DecimalFormat
@@ -76,7 +75,7 @@ internal class ReviewDetailsUiStateMapper : UiStateMapper<ReviewDetailsState, Re
 
         var formattedPrice = priceFormat.format(value)
 
-        val alternateSymbol = CurrencySymbol.getSymbol(currency.currencyCode)
+        val alternateSymbol = com.perfomer.checkielite.core.domain.entity.price.CurrencySymbol.getSymbol(currency.currencyCode)
         if (alternateSymbol != null) {
             formattedPrice = formattedPrice.replace(currency.symbol, alternateSymbol)
         }

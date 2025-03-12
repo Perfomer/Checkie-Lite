@@ -6,8 +6,8 @@ import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.common.pure.state.toLoading
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
-import com.perfomer.checkielite.core.entity.search.SearchFilters
-import com.perfomer.checkielite.core.entity.sort.ReviewsSortingStrategy
+import com.perfomer.checkielite.core.domain.entity.search.SearchFilters
+import com.perfomer.checkielite.core.domain.entity.sort.ReviewsSortingStrategy
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.ClearRecentSearches
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.FilterReviews

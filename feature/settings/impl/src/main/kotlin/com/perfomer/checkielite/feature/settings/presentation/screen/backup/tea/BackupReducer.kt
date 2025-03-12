@@ -1,9 +1,9 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea
 
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
-import com.perfomer.checkielite.core.entity.backup.BackupException
-import com.perfomer.checkielite.core.entity.backup.BackupMode
-import com.perfomer.checkielite.core.entity.backup.BackupProgress
+import com.perfomer.checkielite.core.domain.entity.backup.BackupException
+import com.perfomer.checkielite.core.domain.entity.backup.BackupMode
+import com.perfomer.checkielite.core.domain.entity.backup.BackupProgress
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.Await
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.CancelBackup

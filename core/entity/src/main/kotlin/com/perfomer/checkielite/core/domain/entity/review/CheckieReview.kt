@@ -1,6 +1,6 @@
-package com.perfomer.checkielite.core.entity
+package com.perfomer.checkielite.core.domain.entity.review
 
-import com.perfomer.checkielite.core.entity.price.CheckiePrice
+import com.perfomer.checkielite.core.domain.entity.price.CheckiePrice
 import java.util.Date
 
 data class CheckieReview(

@@ -5,10 +5,10 @@ import com.perfomer.checkielite.common.pure.util.next
 import com.perfomer.checkielite.common.pure.util.previous
 import com.perfomer.checkielite.common.pure.util.randomUuid
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
-import com.perfomer.checkielite.core.entity.CheckiePicture
-import com.perfomer.checkielite.core.entity.PictureSource
-import com.perfomer.checkielite.core.entity.price.CheckiePrice
-import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
+import com.perfomer.checkielite.core.domain.entity.price.CheckiePrice
+import com.perfomer.checkielite.core.domain.entity.review.CheckiePicture
+import com.perfomer.checkielite.core.domain.entity.review.PictureSource
+import com.perfomer.checkielite.core.domain.entity.sort.TagSortingStrategy
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationStartAction
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult

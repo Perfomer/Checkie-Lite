@@ -1,11 +1,11 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core
 
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
-import com.perfomer.checkielite.core.entity.CheckiePicture
-import com.perfomer.checkielite.core.entity.CheckieTag
-import com.perfomer.checkielite.core.entity.price.CheckieCurrency
-import com.perfomer.checkielite.core.entity.price.CheckiePrice
-import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
+import com.perfomer.checkielite.core.domain.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.domain.entity.price.CheckiePrice
+import com.perfomer.checkielite.core.domain.entity.review.CheckiePicture
+import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
+import com.perfomer.checkielite.core.domain.entity.sort.TagSortingStrategy
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.presentation.util.LocalCheckieCurrency

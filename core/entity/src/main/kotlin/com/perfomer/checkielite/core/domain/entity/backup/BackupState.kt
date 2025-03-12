@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.core.entity.backup
+package com.perfomer.checkielite.core.domain.entity.backup
 
 class BackupState(
     val mode: BackupMode?,

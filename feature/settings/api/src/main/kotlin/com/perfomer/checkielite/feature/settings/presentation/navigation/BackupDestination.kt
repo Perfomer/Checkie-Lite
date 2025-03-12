@@ -1,6 +1,6 @@
 package com.perfomer.checkielite.feature.settings.presentation.navigation
 
-import com.perfomer.checkielite.core.entity.backup.BackupMode
+import com.perfomer.checkielite.core.domain.entity.backup.BackupMode
 import com.perfomer.checkielite.core.navigation.Destination
 import kotlinx.serialization.Serializable
 

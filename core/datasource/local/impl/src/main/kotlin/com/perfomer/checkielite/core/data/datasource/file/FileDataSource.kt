@@ -11,7 +11,7 @@ import com.perfomer.checkielite.core.data.datasource.file.backup.metadata.Backup
 import com.perfomer.checkielite.core.data.datasource.file.backup.metadata.BackupMetadataParser
 import com.perfomer.checkielite.core.data.util.archive
 import com.perfomer.checkielite.core.data.util.unarchive
-import com.perfomer.checkielite.core.entity.backup.BackupException
+import com.perfomer.checkielite.core.domain.entity.backup.BackupException
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.destination
 import id.zelory.compressor.constraint.format

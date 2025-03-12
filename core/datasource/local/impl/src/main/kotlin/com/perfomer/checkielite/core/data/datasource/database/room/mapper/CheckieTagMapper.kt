@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.core.data.datasource.database.room.mapper
 
 import com.perfomer.checkielite.core.data.datasource.database.room.entity.CheckieTagDb
-import com.perfomer.checkielite.core.entity.CheckieTag
+import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
 
 internal fun CheckieTagDb.toDomain(): CheckieTag {
     return CheckieTag(

@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.core.entity.price
+package com.perfomer.checkielite.core.domain.entity.price
 
 object CurrencySymbol {
 

@@ -3,7 +3,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.curr
 import android.content.Context
 import android.icu.util.Currency
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
-import com.perfomer.checkielite.core.entity.price.CurrencySymbol
+import com.perfomer.checkielite.core.domain.entity.price.CurrencySymbol
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorState
 import kotlinx.collections.immutable.toPersistentList
 

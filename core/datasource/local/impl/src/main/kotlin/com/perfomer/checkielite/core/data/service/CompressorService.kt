@@ -15,8 +15,8 @@ import com.perfomer.checkielite.common.pure.util.mapAsync
 import com.perfomer.checkielite.core.data.datasource.R
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
 import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
-import com.perfomer.checkielite.core.entity.CheckiePicture
-import com.perfomer.checkielite.core.entity.PictureSource
+import com.perfomer.checkielite.core.domain.entity.review.CheckiePicture
+import com.perfomer.checkielite.core.domain.entity.review.PictureSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

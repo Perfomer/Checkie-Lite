@@ -10,10 +10,10 @@ import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
 import com.perfomer.checkielite.core.data.service.BackupParams
 import com.perfomer.checkielite.core.data.service.BackupService
 import com.perfomer.checkielite.core.data.util.startForegroundServiceCompat
-import com.perfomer.checkielite.core.entity.PictureSource
-import com.perfomer.checkielite.core.entity.backup.BackupMode
-import com.perfomer.checkielite.core.entity.backup.BackupProgress
-import com.perfomer.checkielite.core.entity.backup.BackupState
+import com.perfomer.checkielite.core.domain.entity.backup.BackupMode
+import com.perfomer.checkielite.core.domain.entity.backup.BackupProgress
+import com.perfomer.checkielite.core.domain.entity.backup.BackupState
+import com.perfomer.checkielite.core.domain.entity.review.PictureSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

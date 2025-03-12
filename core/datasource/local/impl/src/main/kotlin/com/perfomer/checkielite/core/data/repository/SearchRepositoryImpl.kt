@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.core.data.repository
 
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
-import com.perfomer.checkielite.core.entity.CheckieReview
+import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 

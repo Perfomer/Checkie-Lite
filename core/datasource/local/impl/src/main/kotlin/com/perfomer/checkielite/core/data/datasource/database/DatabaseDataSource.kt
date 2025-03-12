@@ -13,11 +13,11 @@ import com.perfomer.checkielite.core.data.datasource.database.room.entity.Recent
 import com.perfomer.checkielite.core.data.datasource.database.room.mapper.toDb
 import com.perfomer.checkielite.core.data.datasource.database.room.mapper.toDomain
 import com.perfomer.checkielite.core.data.util.version
-import com.perfomer.checkielite.core.entity.CheckiePicture
-import com.perfomer.checkielite.core.entity.CheckieReview
-import com.perfomer.checkielite.core.entity.CheckieTag
-import com.perfomer.checkielite.core.entity.price.CheckieCurrency
-import com.perfomer.checkielite.core.entity.price.CheckiePrice
+import com.perfomer.checkielite.core.domain.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.domain.entity.price.CheckiePrice
+import com.perfomer.checkielite.core.domain.entity.review.CheckiePicture
+import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
+import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.Date

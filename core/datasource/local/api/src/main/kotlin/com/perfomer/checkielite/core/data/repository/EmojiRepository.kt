@@ -1,6 +1,6 @@
 package com.perfomer.checkielite.core.data.repository
 
-import com.perfomer.checkielite.core.entity.emoji.EmojiCategory
+import com.perfomer.checkielite.core.domain.entity.emoji.EmojiCategory
 
 interface EmojiRepository {
 

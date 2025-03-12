@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.search.presentation.util
 
 import androidx.annotation.StringRes
-import com.perfomer.checkielite.core.entity.sort.ReviewsSortingStrategy
+import com.perfomer.checkielite.core.domain.entity.sort.ReviewsSortingStrategy
 import com.perfomer.checkielite.feature.search.R
 
 @get:StringRes

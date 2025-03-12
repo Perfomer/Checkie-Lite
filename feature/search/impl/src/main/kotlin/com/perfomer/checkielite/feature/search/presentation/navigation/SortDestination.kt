@@ -1,6 +1,6 @@
 package com.perfomer.checkielite.feature.search.presentation.navigation
 
-import com.perfomer.checkielite.core.entity.sort.ReviewsSortingStrategy
+import com.perfomer.checkielite.core.domain.entity.sort.ReviewsSortingStrategy
 import com.perfomer.checkielite.core.navigation.Destination
 import com.perfomer.checkielite.core.navigation.Result
 import kotlinx.serialization.Serializable

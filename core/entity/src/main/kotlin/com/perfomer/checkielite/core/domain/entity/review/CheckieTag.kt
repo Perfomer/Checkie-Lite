@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.core.entity
+package com.perfomer.checkielite.core.domain.entity.review
 
 import java.io.Serializable
 

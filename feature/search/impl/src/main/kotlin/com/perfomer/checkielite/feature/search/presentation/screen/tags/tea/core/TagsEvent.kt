@@ -1,6 +1,6 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core
 
-import com.perfomer.checkielite.core.entity.CheckieTag
+import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
 
 internal sealed interface TagsEvent {
 

@@ -1,7 +1,7 @@
 package com.perfomer.checkielite
 
 import android.app.Application
-import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.data.repository.AppRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -14,7 +14,7 @@ import org.koin.core.context.startKoin
 class App : Application() {
 
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private val localDataSource: CheckieLocalDataSource by inject()
+    private val appRepository: AppRepository by inject()
 
     override fun onCreate() {
         super.onCreate()
@@ -23,7 +23,7 @@ class App : Application() {
 
         appScope.launch {
             runCatching {
-                localDataSource.dropSyncing()
+                appRepository.dropSyncing()
             }
         }
     }

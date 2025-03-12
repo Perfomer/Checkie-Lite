@@ -4,7 +4,7 @@ import android.content.Context
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.android.apprestart.AppRestarter
 import com.perfomer.checkielite.common.update.api.AppUpdateManager
-import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.data.repository.AppRepository
 import com.perfomer.checkielite.core.data.repository.BackupRepository
 import com.perfomer.checkielite.core.data.repository.ReviewRepository
 import com.perfomer.checkielite.core.navigation.ExternalRouter
@@ -58,9 +58,9 @@ internal fun createSettingsStore(
     context: Context,
     router: Router,
     externalRouter: ExternalRouter,
-    localDataSource: CheckieLocalDataSource,
-    reviewRepository: ReviewRepository,
+    appRepository: AppRepository,
     backupRepository: BackupRepository,
+    reviewRepository: ReviewRepository,
     appUpdateManager: AppUpdateManager,
 ): SettingsStore {
     return SettingsStore(
@@ -72,7 +72,7 @@ internal fun createSettingsStore(
             SettingsNavigationActor(router, externalRouter),
             ExportBackupActor(backupRepository),
             ImportBackupActor(backupRepository),
-            CheckSyncingActor(localDataSource),
+            CheckSyncingActor(appRepository),
             CheckHasReviewsActor(reviewRepository),
             CheckUpdatesActor(appUpdateManager),
             SettingsLaunchAppUpdateActor(appUpdateManager),

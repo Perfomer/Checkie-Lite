@@ -1,7 +1,5 @@
 package com.perfomer.checkielite.core.data
 
-import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
-import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSourceImpl
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSourceImpl
 import com.perfomer.checkielite.core.data.datasource.database.room.CheckieDatabase
@@ -11,6 +9,8 @@ import com.perfomer.checkielite.core.data.datasource.file.backup.metadata.Backup
 import com.perfomer.checkielite.core.data.datasource.file.backup.metadata.BackupMetadataParserImpl
 import com.perfomer.checkielite.core.data.datasource.preferences.PreferencesDataSource
 import com.perfomer.checkielite.core.data.datasource.preferences.PreferencesDataSourceImpl
+import com.perfomer.checkielite.core.data.repository.AppRepository
+import com.perfomer.checkielite.core.data.repository.AppRepositoryImpl
 import com.perfomer.checkielite.core.data.repository.BackupRepository
 import com.perfomer.checkielite.core.data.repository.BackupRepositoryImpl
 import com.perfomer.checkielite.core.data.repository.BrandRepository
@@ -28,8 +28,6 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val localDataSourceModule = module {
-    singleOf(::CheckieLocalDataSourceImpl) bind CheckieLocalDataSource::class
-
     singleOf(::DatabaseDataSourceImpl) bind DatabaseDataSource::class
     singleOf(::FileDataSourceImpl) bind FileDataSource::class
     singleOf(::PreferencesDataSourceImpl) bind PreferencesDataSource::class
@@ -37,6 +35,7 @@ val localDataSourceModule = module {
     singleOf(::BackupMetadataParserImpl) bind BackupMetadataParser::class
     singleOf(::BackupRepositoryImpl) bind BackupRepository::class
 
+    singleOf(::AppRepositoryImpl) bind AppRepository::class
     singleOf(::BrandRepositoryImpl) bind BrandRepository::class
     singleOf(::CurrencyRepositoryImpl) bind CurrencyRepository::class
     singleOf(::ReviewRepositoryImpl) bind ReviewRepository::class

@@ -2,7 +2,7 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.a
 
 import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.data.repository.AppRepository
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.CheckSyncing
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 internal class CheckSyncingActor(
-    private val localDataSource: CheckieLocalDataSource,
+    private val appRepository: AppRepository,
 ) : Actor<SettingsCommand, SettingsEvent> {
 
     override fun act(commands: Flow<SettingsCommand>): Flow<SettingsEvent> {
@@ -22,7 +22,7 @@ internal class CheckSyncingActor(
     }
 
     private fun handleCommand(command: CheckSyncing): Flow<SettingsEvent> {
-        return localDataSource.isSyncing()
+        return appRepository.isSyncing()
             .map(::SyncingStatusUpdated)
             .onCatchLog(TAG, "Failed to check syncing status", rethrow = false)
     }

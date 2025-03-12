@@ -1,11 +1,11 @@
-package com.perfomer.checkielite.core.data.datasource
+package com.perfomer.checkielite.core.data.repository
 
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
 import kotlinx.coroutines.flow.Flow
 
-internal class CheckieLocalDataSourceImpl(
+internal class AppRepositoryImpl(
     private val databaseDataSource: DatabaseDataSource,
-) : CheckieLocalDataSource {
+) : AppRepository {
 
     override suspend fun dropSyncing() {
         databaseDataSource.dropSyncing()

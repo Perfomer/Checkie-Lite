@@ -1,9 +1,8 @@
-package com.perfomer.checkielite.core.data.datasource
+package com.perfomer.checkielite.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
 
-interface CheckieLocalDataSource {
-
+interface AppRepository {
 
     suspend fun dropSyncing()
 

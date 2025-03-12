@@ -2,7 +2,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagc
 
 import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.data.repository.TagRepository
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationCommand.ValidateTagName
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEvent
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.mapLatest
 
 internal class ValidateTagNameActor(
-    private val localDataSource: CheckieLocalDataSource,
+    private val tagRepository: TagRepository,
 ) : Actor<TagCreationCommand, TagCreationEvent> {
 
     override fun act(commands: Flow<TagCreationCommand>): Flow<TagCreationEvent> {
@@ -32,7 +32,7 @@ internal class ValidateTagNameActor(
     }
 
     private suspend fun checkIfAlreadyExists(id: String?, name: String): Boolean {
-        val existingTag = localDataSource.getTagByName(name)
+        val existingTag = tagRepository.getTagByName(name)
         return existingTag != null && existingTag.id != id
     }
 

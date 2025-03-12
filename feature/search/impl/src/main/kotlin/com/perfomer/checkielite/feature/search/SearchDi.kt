@@ -4,6 +4,7 @@ import android.content.Context
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.data.repository.ReviewRepository
+import com.perfomer.checkielite.core.data.repository.TagRepository
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
 import com.perfomer.checkielite.core.navigation.navigation
@@ -61,6 +62,7 @@ internal fun createSearchStore(
     context: Context,
     localDataSource: CheckieLocalDataSource,
     reviewRepository: ReviewRepository,
+    tagRepository: TagRepository,
     router: Router,
 ): SearchStore {
     return SearchStore(
@@ -71,7 +73,7 @@ internal fun createSearchStore(
         actors = setOf(
             SearchNavigationActor(router),
             FilterReviewsActor(),
-            SearchLoadTagsActor(localDataSource),
+            SearchLoadTagsActor(tagRepository),
             LoadReviewsActor(reviewRepository),
             LoadRecentSearchesActor(localDataSource),
             RememberRecentSearchActor(localDataSource),
@@ -101,7 +103,7 @@ internal fun createTagsStore(
     componentContext: ComponentContext,
     destination: TagsDestination,
     context: Context,
-    localDataSource: CheckieLocalDataSource,
+    tagRepository: TagRepository,
     router: Router,
 ): TagsStore {
     return TagsStore(
@@ -111,7 +113,7 @@ internal fun createTagsStore(
         uiStateMapper = TagsUiStateMapper(context),
         actors = setOf(
             TagsNavigationActor(router),
-            TagsLoadTagsActor(localDataSource),
+            TagsLoadTagsActor(tagRepository),
         ),
     )
 }

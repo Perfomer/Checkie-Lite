@@ -5,6 +5,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
 import com.perfomer.checkielite.core.data.repository.BrandRepository
 import com.perfomer.checkielite.core.data.repository.ReviewRepository
+import com.perfomer.checkielite.core.data.repository.TagRepository
 import com.perfomer.checkielite.core.navigation.ExternalRouter
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
@@ -93,6 +94,7 @@ internal fun createReviewCreationStore(
     localDataSource: CheckieLocalDataSource,
     reviewRepository: ReviewRepository,
     brandRepository: BrandRepository,
+    tagRepository: TagRepository,
     emojiRepository: CheckieEmojiRepository,
     router: Router,
     externalRouter: ExternalRouter,
@@ -107,13 +109,13 @@ internal fun createReviewCreationStore(
             CreateReviewActor(reviewRepository),
             UpdateReviewActor(reviewRepository),
             LoadReviewActor(reviewRepository),
-            LoadTagsActor(localDataSource),
+            LoadTagsActor(tagRepository),
             SearchBrandsActor(brandRepository),
             WarmUpCurrenciesActor(localDataSource),
             WarmUpEmojisActor(emojiRepository),
             LoadLatestCurrencyActor(localDataSource),
-            LoadLatestTagSortStrategyActor(localDataSource),
-            RememberTagSortStrategyActor(localDataSource),
+            LoadLatestTagSortStrategyActor(tagRepository),
+            RememberTagSortStrategyActor(tagRepository),
         )
     )
 }
@@ -122,8 +124,8 @@ internal fun createTagCreationStore(
     componentContext: ComponentContext,
     destination: TagCreationDestination,
     context: Context,
-    localDataSource: CheckieLocalDataSource,
     emojiRepository: CheckieEmojiRepository,
+    tagRepository: TagRepository,
     router: Router,
 ): TagCreationStore {
     return TagCreationStore(
@@ -133,11 +135,11 @@ internal fun createTagCreationStore(
         uiStateMapper = TagCreationUiStateMapper(context),
         actors = setOf(
             TagCreationNavigationActor(router),
-            LoadTagActor(localDataSource),
-            ValidateTagNameActor(localDataSource),
-            CreateTagActor(localDataSource),
-            DeleteTagActor(localDataSource),
-            UpdateTagActor(localDataSource),
+            LoadTagActor(tagRepository),
+            ValidateTagNameActor(tagRepository),
+            CreateTagActor(tagRepository),
+            DeleteTagActor(tagRepository),
+            UpdateTagActor(tagRepository),
             LoadEmojisActor(emojiRepository),
         )
     )

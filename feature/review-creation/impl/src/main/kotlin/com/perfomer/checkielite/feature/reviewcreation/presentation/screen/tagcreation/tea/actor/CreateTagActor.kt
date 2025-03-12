@@ -5,7 +5,7 @@ import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.data.repository.TagRepository
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationCommand.CreateTag
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEvent
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 internal class CreateTagActor(
-    private val localDataSource: CheckieLocalDataSource,
+    private val tagRepository: TagRepository,
 ) : Actor<TagCreationCommand, TagCreationEvent> {
 
     override fun act(commands: Flow<TagCreationCommand>): Flow<TagCreationEvent> {
@@ -25,7 +25,7 @@ internal class CreateTagActor(
     }
 
     private fun handleCommand(command: CreateTag): Flow<TagSaving> {
-        return flowBy { localDataSource.createTag(value = command.value, emoji = command.emoji) }
+        return flowBy { tagRepository.createTag(value = command.value, emoji = command.emoji) }
             .map(TagSaving::Succeed)
             .onCatchLog(TAG, "Failed to create tag")
             .onCatchReturn(TagSaving::Failed)

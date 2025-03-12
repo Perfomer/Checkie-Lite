@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.main
 
 import com.arkivanov.decompose.ComponentContext
-import com.perfomer.checkielite.core.data.datasource.CheckieLocalDataSource
+import com.perfomer.checkielite.core.data.repository.TagRepository
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
 import com.perfomer.checkielite.core.navigation.navigation
@@ -37,7 +37,7 @@ private val presentationModule = module {
 internal fun createMainStore(
     componentContext: ComponentContext,
     reviewsRepository: ReviewsRepository,
-    localDataSource: CheckieLocalDataSource,
+    tagRepository: TagRepository,
     router: Router,
 ): MainStore {
     return MainStore(
@@ -47,7 +47,7 @@ internal fun createMainStore(
         actors = setOf(
             MainNavigationActor(router = router),
             LoadReviewsActor(reviewsRepository),
-            LoadTagsActor(localDataSource),
+            LoadTagsActor(tagRepository),
         ),
     )
 }

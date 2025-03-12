@@ -1,16 +1,11 @@
 package com.perfomer.checkielite.core.data.datasource
 
-import android.content.Context
 import android.icu.util.Currency
-import com.perfomer.checkielite.common.pure.util.randomUuid
 import com.perfomer.checkielite.core.data.datasource.database.DatabaseDataSource
-import com.perfomer.checkielite.core.data.datasource.file.FileDataSource
 import com.perfomer.checkielite.core.data.datasource.preferences.PreferencesDataSource
 import com.perfomer.checkielite.core.entity.CheckieReview
-import com.perfomer.checkielite.core.entity.CheckieTag
 import com.perfomer.checkielite.core.entity.price.CheckieCurrency
 import com.perfomer.checkielite.core.entity.price.CurrencySymbol
-import com.perfomer.checkielite.core.entity.sort.TagSortingStrategy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex
@@ -20,9 +15,7 @@ import java.util.Date
 import java.util.Locale
 
 internal class CheckieLocalDataSourceImpl(
-    private val context: Context,
     private val databaseDataSource: DatabaseDataSource,
-    private val fileDataSource: FileDataSource,
     private val preferencesDataSource: PreferencesDataSource,
 ) : CheckieLocalDataSource {
 
@@ -51,36 +44,6 @@ internal class CheckieLocalDataSourceImpl(
 
     override fun isSyncing(): Flow<Boolean> {
         return databaseDataSource.isSyncing()
-    }
-
-    override fun getTags(searchQuery: String, maxCount: Int): Flow<List<CheckieTag>> {
-        return databaseDataSource.getTags(searchQuery, maxCount)
-    }
-
-    override suspend fun getTag(id: String): CheckieTag {
-        return databaseDataSource.getTag(id)
-    }
-
-    override suspend fun getTagByName(name: String): CheckieTag? {
-        return databaseDataSource.getTagByName(name)
-    }
-
-    override suspend fun createTag(value: String, emoji: String?): CheckieTag {
-        val tag = CheckieTag(id = randomUuid(), value = value, emoji = emoji)
-        databaseDataSource.createTag(tag)
-
-        return tag
-    }
-
-    override suspend fun updateTag(id: String, value: String, emoji: String?): CheckieTag {
-        val tag = CheckieTag(id = id, value = value, emoji = emoji)
-        databaseDataSource.updateTag(tag)
-
-        return tag
-    }
-
-    override suspend fun deleteTag(id: String) {
-        databaseDataSource.deleteTag(id)
     }
 
     override suspend fun getAllCurrenciesCodes(): List<String> = mutex.withLock {
@@ -113,14 +76,6 @@ internal class CheckieLocalDataSourceImpl(
 
     override suspend fun getLatestCurrency(): CheckieCurrency? {
         return preferencesDataSource.getLatestCurrency()
-    }
-
-    override suspend fun getLatestTagSortingStrategy(): TagSortingStrategy? {
-        return preferencesDataSource.getLatestTagSortingStrategy()
-    }
-
-    override suspend fun setLatestTagSortingStrategy(strategy: TagSortingStrategy) {
-        preferencesDataSource.setLatestTagSortingStrategy(strategy)
     }
 
     private companion object {

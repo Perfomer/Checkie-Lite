@@ -26,5 +26,6 @@ dependencies {
 	implementation(libs.androidx.lifecycle.ktx)
 	implementation(libs.googleFonts)
 	implementation(libs.koin.core)
+	implementation(libs.kotlinx.coroutines)
 	implementation(platform(libs.androidx.compose.bom))
 }

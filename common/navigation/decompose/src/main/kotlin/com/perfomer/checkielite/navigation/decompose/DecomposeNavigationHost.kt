@@ -50,7 +50,7 @@ internal class DecomposeNavigationHost(
     }
 
     @Composable
-    override fun Root(
+    override fun NavigationRoot(
         bottomSheetController: BottomSheetController,
         bottomSheetContent: @Composable (@Composable () -> Unit) -> Unit,
     ) {

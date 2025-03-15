@@ -142,7 +142,7 @@ class AppActivity : AppCompatActivity() {
 
         val bottomSheetController = remember { ComposablesBottomSheetController(sheetState) }
 
-        Root(
+        NavigationRoot(
             bottomSheetController = bottomSheetController,
             bottomSheetContent = { content ->
                 ComposablesBottomSheetRoot(

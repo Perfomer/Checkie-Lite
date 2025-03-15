@@ -11,7 +11,7 @@ interface NavigationHost {
     fun back()
 
     @Composable
-    fun Root(
+    fun NavigationRoot(
         bottomSheetController: BottomSheetController,
         bottomSheetContent: @Composable (@Composable () -> Unit) -> Unit,
     )

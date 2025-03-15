@@ -141,12 +141,12 @@ internal class DecomposeNavigationHost(
             enter = fadeIn(),
             exit = fadeOut(),
         ) {
-            localScreen?.Screen()
-
             BackHandler(
                 enabled = overlaySlot.child != null,
                 onBack = ::back,
             )
+
+            localScreen?.Screen()
         }
     }
 }

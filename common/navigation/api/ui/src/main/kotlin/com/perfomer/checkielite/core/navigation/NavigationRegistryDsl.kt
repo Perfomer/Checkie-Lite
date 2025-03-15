@@ -3,7 +3,7 @@ package com.perfomer.checkielite.core.navigation
 import kotlinx.serialization.serializer
 
 @DslMarker
-annotation class NavigationDsl
+private annotation class NavigationDsl
 
 @NavigationDsl
 fun navigation(block: NavigationRegistry.() -> Unit) = NavigationRegistry.apply(block)

@@ -48,11 +48,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.times
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
@@ -70,6 +72,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.util.navigation.registerPredictiveBack
 import com.perfomer.checkielite.common.ui.util.setTransparentSystemBars
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui.state.GalleryUiState
 import kotlinx.collections.immutable.ImmutableList
@@ -88,6 +91,7 @@ internal fun GalleryScreen(
 ) {
     val systemUiController = rememberSystemUiController()
     val isSystemInDarkTheme = isSystemInDarkTheme()
+    val backProgress by registerPredictiveBack(onBack = onDismiss)
 
     UpdateEffect(state.isUiShown) { systemUiController.isSystemBarsVisible = state.isUiShown }
 
@@ -125,6 +129,9 @@ internal fun GalleryScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .alpha(backgroundAlpha)
+                    .graphicsLayer {
+                        alpha = 1 - backProgress * 0.3F
+                    }
                     .background(GalleryPalette.BackgroundColor)
             )
 
@@ -135,6 +142,16 @@ internal fun GalleryScreen(
                 onPagerClick = onPagerClick,
                 onDismissProgressChange = { progress -> backgroundAlpha = 1 - progress },
                 onDismiss = onDismiss,
+                modifier = Modifier
+                    .graphicsLayer {
+                        scaleX = 1 - backProgress * 0.2F
+                        scaleY = 1 - backProgress * 0.2F
+                    },
+                pictureModifier = Modifier
+                    .graphicsLayer {
+                        clip = true
+                        shape = RoundedCornerShape(backProgress * 40.dp)
+                    }
             )
 
             if (state.picturesUri.size > 1) {
@@ -150,6 +167,12 @@ internal fun GalleryScreen(
                         onPictureClick = { page ->
                             coroutineScope.launch { mainPagerState.animateScrollToPage(page) }
                         },
+                        modifier = Modifier.graphicsLayer {
+                            translationY = 1 - backProgress * -64.dp.toPx()
+                            alpha = 1 - backProgress * 0.5F
+                            scaleX = 1 - backProgress * 0.1F
+                            scaleY = 1 - backProgress * 0.1F
+                        }
                     )
                 }
             }
@@ -162,6 +185,7 @@ private fun PreviewRow(
     mainPagerState: PagerState,
     picturesUri: ImmutableList<String>,
     onPictureClick: (position: Int) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val lazyListState = rememberLazyListState()
 
@@ -184,7 +208,7 @@ private fun PreviewRow(
             state = lazyListState,
             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
             contentPadding = PaddingValues(vertical = 16.dp, horizontal = 24.dp),
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
         ) {
             itemsIndexed(picturesUri) { i, item ->
@@ -214,12 +238,14 @@ private fun MainHorizontalPager(
     onPagerClick: () -> Unit,
     onDismissProgressChange: (progress: Float) -> Unit,
     onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+    pictureModifier: Modifier = Modifier,
 ) {
     UpdateEffect(pagerState.currentPage) { onPageChange(pagerState.currentPage) }
 
     HorizontalPager(
         state = pagerState,
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) { page ->
         val zoomableState = rememberZoomableState(
             minScale = 0.9F,
@@ -237,7 +263,10 @@ private fun MainHorizontalPager(
             onDismiss = { onDismiss(); true },
             dismissGestureEnabled = true,
         ) {
-            MainGalleryPicture(pictureUri = picturesUri[page])
+            MainGalleryPicture(
+                pictureUri = picturesUri[page],
+                modifier = pictureModifier
+            )
         }
 
         // Reset zoom state when the page is moved out of the window.
@@ -254,7 +283,10 @@ private fun MainHorizontalPager(
 }
 
 @Composable
-private fun MainGalleryPicture(pictureUri: String) {
+private fun MainGalleryPicture(
+    pictureUri: String,
+    modifier: Modifier = Modifier
+) {
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
             .data(pictureUri)
@@ -270,7 +302,7 @@ private fun MainGalleryPicture(pictureUri: String) {
         Image(
             painter = painter,
             contentDescription = null,
-            modifier = Modifier
+            modifier = modifier
                 .aspectRatio(size.width / size.height)
                 .fillMaxSize()
         )

@@ -5,7 +5,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -13,8 +12,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.androidPredictiveBackAnimatable
@@ -23,7 +20,6 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.retainedComponent
-import com.perfomer.checkielite.common.ui.util.navigation.registerPredictiveBackHandler
 import com.perfomer.checkielite.core.navigation.BottomSheetController
 import com.perfomer.checkielite.core.navigation.Destination
 import com.perfomer.checkielite.core.navigation.NavigationHost
@@ -56,6 +52,7 @@ internal class DecomposeNavigationHost(
     override fun NavigationRoot(
         bottomSheetController: BottomSheetController,
         bottomSheetContent: @Composable (@Composable () -> Unit) -> Unit,
+        overlayContent: @Composable (@Composable () -> Unit) -> Unit,
     ) {
         MainRoot()
 
@@ -64,7 +61,9 @@ internal class DecomposeNavigationHost(
             content = bottomSheetContent,
         )
 
-        OverlayRoot()
+        OverlayRoot(
+            content = overlayContent,
+        )
     }
 
     @Composable
@@ -111,7 +110,9 @@ internal class DecomposeNavigationHost(
     }
 
     @Composable
-    private fun OverlayRoot() {
+    private fun OverlayRoot(
+        content: @Composable (@Composable () -> Unit) -> Unit,
+    ) {
         val overlaySlot by root.overlaySlot.subscribeAsState()
 
         var localScreen: Screen? by remember { mutableStateOf(null) }
@@ -139,18 +140,9 @@ internal class DecomposeNavigationHost(
             enter = fadeIn(),
             exit = fadeOut(),
         ) {
-            // TODO: Hide predictive back handling from here
-            val backProgress by registerPredictiveBackHandler(
-                enabled = overlaySlot.child != null,
-                onBack = ::back,
-            )
-
-            Box(
-                content = { localScreen?.Screen() },
-                modifier = Modifier.graphicsLayer {
-                    alpha = 1F - backProgress
-                }
-            )
+            content {
+                localScreen?.Screen()
+            }
         }
     }
 }

@@ -14,5 +14,6 @@ interface NavigationHost {
     fun NavigationRoot(
         bottomSheetController: BottomSheetController,
         bottomSheetContent: @Composable (@Composable () -> Unit) -> Unit,
+        overlayContent: @Composable (@Composable () -> Unit) -> Unit,
     )
 }

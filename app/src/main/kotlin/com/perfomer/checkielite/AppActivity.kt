@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
+import com.composables.core.ModalBottomSheetState
 import com.composables.core.SheetDetent
 import com.composables.core.rememberModalBottomSheetState
 import com.perfomer.checkielite.common.android.SingleActivityHolder
@@ -39,6 +41,7 @@ import com.perfomer.checkielite.common.ui.util.TransparentSystemBars
 import com.perfomer.checkielite.common.ui.util.navigation.DefaultBottomSheetDismissHandlerOwner
 import com.perfomer.checkielite.common.ui.util.navigation.LocalBottomSheetDismissHandlerOwner
 import com.perfomer.checkielite.common.ui.util.navigation.PredictiveBackHandler
+import com.perfomer.checkielite.common.ui.util.navigation.registerPredictiveBackHandler
 import com.perfomer.checkielite.common.update.api.AppUpdateManager
 import com.perfomer.checkielite.common.update.api.updateIfAvailable
 import com.perfomer.checkielite.core.navigation.NavigationHost
@@ -152,42 +155,73 @@ class AppActivity : AppCompatActivity() {
         NavigationRoot(
             bottomSheetController = bottomSheetController,
             bottomSheetContent = { content ->
-                var backProgress by remember { mutableFloatStateOf(0F) }
-
-                LaunchedEffect(bottomSheetController.isIdle) {
-                    if (!bottomSheetController.isVisible && bottomSheetController.isIdle) {
-                        backProgress = 0F
-                    }
-                }
-
-                ComposablesBottomSheetRoot(
+                BottomSheetRoot(
+                    controller = bottomSheetController,
                     sheetState = sheetState,
-                    sheetElevation = LocalCuiPalette.current.LargeElevation,
-                    containerColor = LocalCuiPalette.current.BackgroundPrimary,
-                    shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-                    dragHandle = { CuiDragAnchor() },
-                    onDismiss = {
-                        if (!bottomSheetController.shouldIgnoreDismiss) {
-                            back()
-                        }
-                    },
-                    content = {
-                        PredictiveBackHandler(
-                            enabled = bottomSheetController.isVisible,
-                            onBack = ::back,
-                            onProgress = { backProgress = it },
-                        )
-
-                        content()
-                    },
-                    modifier = Modifier
-                        .graphicsLayer {
-                            transformOrigin = TransformOrigin(pivotFractionX = 0.5F, pivotFractionY = 1.0F)
-                            translationY = backProgress * 72.dp.toPx()
-                            scaleX = 1 - backProgress * 0.05F
-                            scaleY = 1 - backProgress * 0.05F
-                        }
+                    content = content,
                 )
+            },
+            overlayContent = { content ->
+                OverlayRoot(
+                    content = content,
+                )
+            },
+        )
+    }
+
+    @Composable
+    private fun BottomSheetRoot(
+        controller: ComposablesBottomSheetController,
+        sheetState: ModalBottomSheetState,
+        content: @Composable () -> Unit,
+    ) = with(navigationHost) {
+        var backProgress by remember { mutableFloatStateOf(0F) }
+
+        LaunchedEffect(controller.isIdle) {
+            if (!controller.isVisible && controller.isIdle) {
+                backProgress = 0F
+            }
+        }
+
+        ComposablesBottomSheetRoot(
+            sheetState = sheetState,
+            sheetElevation = LocalCuiPalette.current.LargeElevation,
+            containerColor = LocalCuiPalette.current.BackgroundPrimary,
+            shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+            dragHandle = { CuiDragAnchor() },
+            onDismiss = {
+                if (!controller.shouldIgnoreDismiss) {
+                    back()
+                }
+            },
+            content = {
+                PredictiveBackHandler(
+                    enabled = controller.isVisible,
+                    onBack = ::back,
+                    onProgress = { backProgress = it },
+                )
+
+                content()
+            },
+            modifier = Modifier.graphicsLayer {
+                transformOrigin = TransformOrigin(pivotFractionX = 0.5F, pivotFractionY = 1.0F)
+                translationY = backProgress * 72.dp.toPx()
+                scaleX = 1 - backProgress * 0.05F
+                scaleY = 1 - backProgress * 0.05F
+            }
+        )
+    }
+
+    @Composable
+    private fun OverlayRoot(
+        content: @Composable () -> Unit,
+    ) = with(navigationHost) {
+        val backProgress by registerPredictiveBackHandler(onBack = ::back)
+
+        Box(
+            content = { content() },
+            modifier = Modifier.graphicsLayer {
+                alpha = 1F - backProgress
             }
         )
     }

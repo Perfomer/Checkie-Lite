@@ -72,7 +72,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
-import com.perfomer.checkielite.common.ui.util.navigation.registerPredictiveBack
+import com.perfomer.checkielite.common.ui.util.navigation.registerPredictiveBackHandler
 import com.perfomer.checkielite.common.ui.util.setTransparentSystemBars
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui.state.GalleryUiState
 import kotlinx.collections.immutable.ImmutableList
@@ -91,7 +91,7 @@ internal fun GalleryScreen(
 ) {
     val systemUiController = rememberSystemUiController()
     val isSystemInDarkTheme = isSystemInDarkTheme()
-    val backProgress by registerPredictiveBack(onBack = onDismiss)
+    val backProgress by registerPredictiveBackHandler(onBack = onDismiss)
 
     UpdateEffect(state.isUiShown) { systemUiController.isSystemBarsVisible = state.isUiShown }
 

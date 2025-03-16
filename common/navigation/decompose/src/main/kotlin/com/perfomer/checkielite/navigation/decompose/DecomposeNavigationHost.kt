@@ -145,7 +145,7 @@ internal class DecomposeNavigationHost(
             enter = fadeIn(),
             exit = fadeOut(),
         ) {
-            val backProgress by registerPredictiveBack(
+            val backProgress by registerPredictiveBackHandler(
                 enabled = overlaySlot.child != null,
                 onBack = ::back,
             )

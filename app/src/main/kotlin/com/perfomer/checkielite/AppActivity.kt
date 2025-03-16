@@ -8,7 +8,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -32,6 +38,7 @@ import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
 import com.perfomer.checkielite.common.ui.util.TransparentSystemBars
 import com.perfomer.checkielite.common.ui.util.navigation.DefaultBottomSheetDismissHandlerOwner
 import com.perfomer.checkielite.common.ui.util.navigation.LocalBottomSheetDismissHandlerOwner
+import com.perfomer.checkielite.common.ui.util.navigation.PredictiveBackHandler
 import com.perfomer.checkielite.common.update.api.AppUpdateManager
 import com.perfomer.checkielite.common.update.api.updateIfAvailable
 import com.perfomer.checkielite.core.navigation.NavigationHost
@@ -145,6 +152,14 @@ class AppActivity : AppCompatActivity() {
         NavigationRoot(
             bottomSheetController = bottomSheetController,
             bottomSheetContent = { content ->
+                var backProgress by remember { mutableFloatStateOf(0F) }
+
+                LaunchedEffect(bottomSheetController.isIdle) {
+                    if (!bottomSheetController.isVisible && bottomSheetController.isIdle) {
+                        backProgress = 0F
+                    }
+                }
+
                 ComposablesBottomSheetRoot(
                     sheetState = sheetState,
                     sheetElevation = LocalCuiPalette.current.LargeElevation,
@@ -156,7 +171,22 @@ class AppActivity : AppCompatActivity() {
                             back()
                         }
                     },
-                    content = content,
+                    content = {
+                        PredictiveBackHandler(
+                            enabled = bottomSheetController.isVisible,
+                            onBack = ::back,
+                            onProgress = { backProgress = it },
+                        )
+
+                        content()
+                    },
+                    modifier = Modifier
+                        .graphicsLayer {
+                            transformOrigin = TransformOrigin(pivotFractionX = 0.5F, pivotFractionY = 1.0F)
+                            translationY = backProgress * 72.dp.toPx()
+                            scaleX = 1 - backProgress * 0.05F
+                            scaleY = 1 - backProgress * 0.05F
+                        }
                 )
             }
         )

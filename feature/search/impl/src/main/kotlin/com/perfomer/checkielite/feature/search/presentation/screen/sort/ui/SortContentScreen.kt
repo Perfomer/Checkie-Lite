@@ -1,12 +1,10 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.sort.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.core.navigation.Screen
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.SortStore
-import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortUiEvent.OnDoneClick
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortUiEvent.OnSortingOptionClick
 
@@ -16,8 +14,6 @@ internal class SortContentScreen(
 
     @Composable
     override fun Screen() = TeaComposable(store) { state ->
-        BackHandler { accept(OnBackPress) }
-
         SortScreen(
             state = state,
             onOptionClick = acceptable(::OnSortingOptionClick),

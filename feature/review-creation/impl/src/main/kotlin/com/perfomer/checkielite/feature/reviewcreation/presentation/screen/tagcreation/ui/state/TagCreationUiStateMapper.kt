@@ -27,11 +27,11 @@ internal class TagCreationUiStateMapper(
             isDeleteAvailable = state.mode is TagCreationMode.Modification,
             selectedEmoji = state.tagDetails.actualEmoji,
             emojis = state.emojis,
-            isManualDismissHandlerEnabled = shouldEnableManualDismissHandler(state),
+            isManualBackHandlerEnabled = shouldEnableManualBackHandler(state),
         )
     }
 
-    private fun shouldEnableManualDismissHandler(state: TagCreationState): Boolean {
+    private fun shouldEnableManualBackHandler(state: TagCreationState): Boolean {
         // If there is something changed, we should handle back manually: show confirmation dialog.
         val hasSomethingChanged = state.initialTagDetails != state.tagDetails
         // If exit is confirmed, we don't need to handle dismiss manually.

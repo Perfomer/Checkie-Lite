@@ -1,12 +1,10 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.core.navigation.Screen
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.CurrencySelectorStore
-import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorUiEvent.OnCurrencyClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorUiEvent.OnDoneClick
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorUiEvent.OnSearchQueryClearClick
@@ -18,8 +16,6 @@ internal class CurrencySelectorContentScreen(
 
     @Composable
     override fun Screen() = TeaComposable(store) { state ->
-        BackHandler { accept(OnBackPress) }
-
         CurrencySelectorScreen(
             state = state,
 

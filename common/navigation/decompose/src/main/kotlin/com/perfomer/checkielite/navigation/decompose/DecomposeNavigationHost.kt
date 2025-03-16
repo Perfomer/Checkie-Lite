@@ -1,7 +1,6 @@
 package com.perfomer.checkielite.navigation.decompose
 
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.fadeIn
@@ -24,7 +23,7 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.retainedComponent
-import com.perfomer.checkielite.common.ui.util.navigation.registerPredictiveBack
+import com.perfomer.checkielite.common.ui.util.navigation.registerPredictiveBackHandler
 import com.perfomer.checkielite.core.navigation.BottomSheetController
 import com.perfomer.checkielite.core.navigation.Destination
 import com.perfomer.checkielite.core.navigation.NavigationHost
@@ -107,11 +106,6 @@ internal class DecomposeNavigationHost(
         }
 
         content {
-            BackHandler(
-                enabled = controller.isVisible,
-                onBack = ::back,
-            )
-
             localScreen?.Screen()
         }
     }
@@ -145,6 +139,7 @@ internal class DecomposeNavigationHost(
             enter = fadeIn(),
             exit = fadeOut(),
         ) {
+            // TODO: Hide predictive back handling from here
             val backProgress by registerPredictiveBackHandler(
                 enabled = overlaySlot.child != null,
                 onBack = ::back,

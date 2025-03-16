@@ -578,5 +578,5 @@ internal val mockUiState = TagCreationUiState(
     isDeleteAvailable = true,
     selectedEmoji = "\uD83D\uDC80", // 💀
     emojis = emptyPersistentList(),
-    isManualDismissHandlerEnabled = false,
+    isManualBackHandlerEnabled = false,
 )

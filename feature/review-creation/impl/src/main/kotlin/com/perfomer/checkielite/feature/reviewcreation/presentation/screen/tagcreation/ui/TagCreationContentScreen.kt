@@ -45,11 +45,11 @@ internal class TagCreationContentScreen(
         val vibrator = rememberVibrator()
         val tagValueShakeController = rememberShakeController()
 
-        BackHandler {
+        BackHandler(enabled = state.isManualBackHandlerEnabled) {
             accept(OnBackPress)
         }
 
-        BottomSheetDismissHandler(enabled = state.isManualDismissHandlerEnabled) {
+        BottomSheetDismissHandler(enabled = state.isManualBackHandlerEnabled) {
             accept(OnBackPress)
             false
         }

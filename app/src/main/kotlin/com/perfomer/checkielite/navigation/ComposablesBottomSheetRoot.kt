@@ -30,7 +30,6 @@ import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
 import com.perfomer.checkielite.core.navigation.BottomSheetController
 import android.graphics.Color as AndroidColor
 
-@Suppress("DEPRECATION")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ComposablesBottomSheetRoot(
@@ -47,18 +46,10 @@ internal fun ComposablesBottomSheetRoot(
     ModalBottomSheet(
         state = sheetState,
         onDismiss = onDismiss,
-        properties = ModalSheetProperties(dismissOnBackPress = false)
+        properties = ModalSheetProperties(dismissOnBackPress = false),
     ) {
-        val window = LocalModalWindow.current
-        LaunchedEffect(Unit) {
-            window.navigationBarColor = AndroidColor.TRANSPARENT
-            with(WindowInsetsControllerCompat(window, window.decorView)) {
-                isAppearanceLightNavigationBars = true
-            }
-        }
-
+        TransparentNavBar()
         ClearFocusOnKeyboardClose()
-
         Scrim(scrimColor = scrimColor, enter = fadeIn(), exit = fadeOut())
 
         Sheet(
@@ -81,16 +72,31 @@ internal fun ComposablesBottomSheetRoot(
     }
 }
 
+@Suppress("DEPRECATION")
+@Composable
+private fun TransparentNavBar() {
+    val window = LocalModalWindow.current
+    LaunchedEffect(Unit) {
+        window.navigationBarColor = AndroidColor.TRANSPARENT
+        with(WindowInsetsControllerCompat(window, window.decorView)) {
+            isAppearanceLightNavigationBars = true
+        }
+    }
+}
+
 internal class ComposablesBottomSheetController(
     private val sheetState: ModalBottomSheetState,
 ) : BottomSheetController {
 
-    // Needed to avoid duplicated `router.back()` call
-    var shouldIgnoreDismiss: Boolean = false
-        private set
-
     override val isVisible: Boolean
         get() = sheetState.targetDetent != SheetDetent.Hidden
+
+    internal val isIdle: Boolean
+        get() = sheetState.isIdle
+
+    // Needed to avoid duplicated `router.back()` call
+    internal var shouldIgnoreDismiss: Boolean = false
+        private set
 
     override suspend fun show() {
         shouldIgnoreDismiss = false

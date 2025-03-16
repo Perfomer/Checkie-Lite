@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="main_add_checkie">Добавить Checkie</string>
+    <string name="main_toast_reviewcreated">Отзыв сохранён!</string>
     <string name="main_empty_title">Здесь пока нет Checkies</string>
     <string name="main_empty_description">Не хотите добавить один?</string>
     <string name="main_error_description">Если вы видите это сообщение, не предпринимайте шаги по исправлению ошибки и не переустанавливайте приложение, иначе вы потеряете все данные.\n\nДождитесь обновления приложения с исправлением проблемы.</string>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="main_add_checkie">Add Checkie</string>
+    <string name="main_toast_reviewcreated">Review created!</string>
 
     <string name="main_empty_title">There are no Checkies yet</string>
     <string name="main_empty_description">Would you like to add one?</string>

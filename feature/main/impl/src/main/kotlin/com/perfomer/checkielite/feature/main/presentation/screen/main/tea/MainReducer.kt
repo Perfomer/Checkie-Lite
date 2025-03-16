@@ -7,6 +7,8 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand.LoadReviews
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand.LoadTags
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEffect
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEffect.ShowToast
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEffect.ShowToast.Reason
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent.Initialize
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent.ReviewsLoading
@@ -44,7 +46,7 @@ internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, Main
     }
 
     private fun reduceNavigation(event: MainNavigationEvent) = when (event) {
-        is ReviewCreated -> Unit
+        is ReviewCreated -> effects(ShowToast(Reason.REVIEW_CREATED))
     }
 
     private fun reduceReviewsLoading(event: ReviewsLoading) = when (event) {

@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.common.ui.cui.widget.dialog
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -116,6 +117,7 @@ private fun CuiAlertDialogInternal(
     content: @Composable () -> Unit,
 ) {
     var backProgress by remember { mutableFloatStateOf(0F) }
+    val animatedBackProgress by animateFloatAsState(backProgress, label = "DialogBackProgressSmooth")
 
     val dialogState = rememberDialogState(initiallyVisible = isVisible)
 
@@ -141,13 +143,12 @@ private fun CuiAlertDialogInternal(
 
         DialogPanel(
             enter = scaleIn(tween(durationMillis = ANIMATION_DURATION_MS), 0.8F) + fadeIn(tween(durationMillis = ANIMATION_DURATION_MS)),
-            exit = scaleOut(tween(durationMillis = ANIMATION_DURATION_MS), 0.8F) + fadeOut(tween(durationMillis = ANIMATION_DURATION_MS)),
+            exit = scaleOut(tween(durationMillis = ANIMATION_DURATION_MS), 0.6F) + fadeOut(tween(durationMillis = ANIMATION_DURATION_MS)),
             content = content,
             modifier = Modifier
                 .graphicsLayer {
-                    alpha = 1 - backProgress * 0.3F
-                    scaleX = 1 - backProgress * 0.15F
-                    scaleY = 1 - backProgress * 0.15F
+                    scaleX = 1 - animatedBackProgress * 0.2F
+                    scaleY = 1 - animatedBackProgress * 0.2F
                 }
                 .systemBarsPadding()
                 .widthIn(min = 280.dp, max = 560.dp)

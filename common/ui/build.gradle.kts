@@ -24,6 +24,7 @@ dependencies {
 	implementation(libs.androidx.compose.material3)
 	implementation(libs.androidx.compose.ui.tooling)
 	implementation(libs.androidx.lifecycle.ktx)
+	implementation(libs.composables.core)
 	implementation(libs.googleFonts)
 	implementation(libs.koin.core)
 	implementation(libs.kotlinx.coroutines)

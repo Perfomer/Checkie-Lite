@@ -5,16 +5,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
@@ -28,19 +24,17 @@ import com.perfomer.checkielite.common.android.apprestart.AppRestarter
 import com.perfomer.checkielite.common.android.apprestart.RestartAction
 import com.perfomer.checkielite.common.android.apprestart.RestartAction.ShowSuccessBackupImportToast
 import com.perfomer.checkielite.common.android.permissions.PermissionHelper
+import com.perfomer.checkielite.common.ui.cui.widget.bottomsheet.CuiBottomSheet
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.NavBarScrim
-import com.perfomer.checkielite.common.ui.cui.widget.sheet.CuiDragAnchor
 import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalToastController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastHost
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberSuccessToast
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
-import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
 import com.perfomer.checkielite.common.ui.util.TransparentSystemBars
 import com.perfomer.checkielite.common.ui.util.navigation.DefaultBottomSheetDismissHandlerOwner
 import com.perfomer.checkielite.common.ui.util.navigation.LocalBottomSheetDismissHandlerOwner
-import com.perfomer.checkielite.common.ui.util.navigation.PredictiveBackHandler
 import com.perfomer.checkielite.common.ui.util.navigation.registerPredictiveBackHandler
 import com.perfomer.checkielite.common.update.api.AppUpdateManager
 import com.perfomer.checkielite.common.update.api.updateIfAvailable
@@ -48,7 +42,6 @@ import com.perfomer.checkielite.core.navigation.NavigationHost
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.BackupNavigationManager
 import com.perfomer.checkielite.navigation.ComposablesBottomSheetController
-import com.perfomer.checkielite.navigation.ComposablesBottomSheetRoot
 import com.perfomer.checkielite.navigation.StartScreenProvider
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -175,40 +168,14 @@ class AppActivity : AppCompatActivity() {
         sheetState: ModalBottomSheetState,
         content: @Composable () -> Unit,
     ) = with(navigationHost) {
-        var backProgress by remember { mutableFloatStateOf(0F) }
-
-        LaunchedEffect(controller.isIdle) {
-            if (!controller.isVisible && controller.isIdle) {
-                backProgress = 0F
-            }
-        }
-
-        ComposablesBottomSheetRoot(
+        CuiBottomSheet(
             sheetState = sheetState,
-            sheetElevation = LocalCuiPalette.current.LargeElevation,
-            containerColor = LocalCuiPalette.current.BackgroundPrimary,
-            shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-            dragHandle = { CuiDragAnchor() },
             onDismiss = {
                 if (!controller.shouldIgnoreDismiss) {
                     back()
                 }
             },
-            content = {
-                PredictiveBackHandler(
-                    enabled = controller.isVisible,
-                    onBack = ::back,
-                    onProgress = { backProgress = it },
-                )
-
-                content()
-            },
-            modifier = Modifier.graphicsLayer {
-                transformOrigin = TransformOrigin(pivotFractionX = 0.5F, pivotFractionY = 1.0F)
-                translationY = backProgress * 72.dp.toPx()
-                scaleX = 1 - backProgress * 0.05F
-                scaleY = 1 - backProgress * 0.05F
-            }
+            content = content,
         )
     }
 

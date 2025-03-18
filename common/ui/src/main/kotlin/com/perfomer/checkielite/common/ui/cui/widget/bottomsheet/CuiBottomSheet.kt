@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.common.ui.cui.widget.bottomsheet
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -69,6 +70,7 @@ internal fun BaseBottomSheet(
     content: @Composable () -> Unit,
 ) {
     var backProgress by remember { mutableFloatStateOf(0F) }
+    val animatedBackProgress by animateFloatAsState(backProgress, label = "BottomSheetBackProgressSmooth")
 
     LaunchedEffect(sheetState.isIdle) {
         if (sheetState.targetDetent == SheetDetent.Hidden && sheetState.isIdle) {
@@ -96,9 +98,9 @@ internal fun BaseBottomSheet(
             modifier = modifier
                 .graphicsLayer {
                     transformOrigin = TransformOrigin(pivotFractionX = 0.5F, pivotFractionY = 1.0F)
-                    translationY = backProgress * 72.dp.toPx()
-                    scaleX = 1 - backProgress * 0.05F
-                    scaleY = 1 - backProgress * 0.05F
+                    translationY = animatedBackProgress * 72.dp.toPx()
+                    scaleX = 1 - animatedBackProgress * 0.05F
+                    scaleY = 1 - animatedBackProgress * 0.05F
                 }
                 .statusBarsPadding()
                 .shadow(sheetElevation, shape)

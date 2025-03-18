@@ -47,7 +47,6 @@ import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 import com.perfomer.checkielite.common.ui.util.DialogTransparentNavBar
 import com.perfomer.checkielite.common.ui.util.navigation.PredictiveBackHandler
-import kotlinx.coroutines.delay
 
 private const val ANIMATION_DURATION_MS = 150
 
@@ -123,8 +122,7 @@ private fun CuiAlertDialogInternal(
 
     UpdateEffect(isVisible) {
         dialogState.visible = isVisible
-        delay(ANIMATION_DURATION_MS.toLong())
-        backProgress = 0F
+        if (!isVisible) backProgress = 0F
     }
 
     Dialog(

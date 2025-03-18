@@ -188,6 +188,7 @@ private fun CuiAlertDialogContent(
                 LocalTextStyle provides LocalTextStyle.current.copy(
                     color = LocalCuiPalette.current.TextPrimary,
                     fontSize = 14.sp,
+                    lineHeight = 20.sp,
                 ),
                 content = text,
             )

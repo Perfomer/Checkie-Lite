@@ -1,3 +1,5 @@
+@file:Suppress("UnusedReceiverParameter")
+
 package com.perfomer.checkielite.common.ui.cui.widget.spacer
 
 import androidx.compose.foundation.layout.ColumnScope

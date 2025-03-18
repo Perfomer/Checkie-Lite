@@ -1,20 +1,49 @@
 package com.perfomer.checkielite.common.ui.cui.widget.dialog
 
-import androidx.compose.material3.AlertDialog
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.composables.core.Dialog
+import com.composables.core.DialogPanel
+import com.composables.core.Scrim
+import com.composables.core.rememberDialogState
 import com.perfomer.checkielite.common.ui.CommonString
+import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
+import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
+import com.perfomer.checkielite.common.ui.theme.WidgetPreview
+import com.perfomer.checkielite.common.ui.util.DialogTransparentNavBar
 
 @Composable
 fun CuiAlertDialog(
+    isVisible: Boolean,
     title: String,
     text: String,
     confirmText: String = stringResource(CommonString.common_ok),
@@ -25,19 +54,25 @@ fun CuiAlertDialog(
     onDismiss: () -> Unit,
 ) {
     CuiAlertDialogInternal(
-        title = title,
-        text = { Text(text) },
-        confirmText = confirmText,
-        confirmColor = confirmColor,
-        onConfirm = onConfirm,
-        dismissText = dismissText,
-        dismissColor = dismissColor,
+        isVisible = isVisible,
         onDismiss = onDismiss,
-    )
+    ) {
+        CuiAlertDialogContent(
+            title = title,
+            text = { Text(text) },
+            confirmText = confirmText,
+            confirmColor = confirmColor,
+            onConfirm = onConfirm,
+            dismissText = dismissText,
+            dismissColor = dismissColor,
+            onDismiss = onDismiss,
+        )
+    }
 }
 
 @Composable
 fun CuiAlertDialog(
+    isVisible: Boolean,
     title: String,
     text: AnnotatedString,
     confirmText: String = stringResource(CommonString.common_ok),
@@ -48,19 +83,57 @@ fun CuiAlertDialog(
     onDismiss: () -> Unit,
 ) {
     CuiAlertDialogInternal(
-        title = title,
-        text = { Text(text) },
-        confirmText = confirmText,
-        confirmColor = confirmColor,
-        onConfirm = onConfirm,
-        dismissText = dismissText,
-        dismissColor = dismissColor,
+        isVisible = isVisible,
         onDismiss = onDismiss,
-    )
+    ) {
+        CuiAlertDialogContent(
+            title = title,
+            text = { Text(text) },
+            confirmText = confirmText,
+            confirmColor = confirmColor,
+            onConfirm = onConfirm,
+            dismissText = dismissText,
+            dismissColor = dismissColor,
+            onDismiss = onDismiss,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CuiAlertDialogInternal(
+    isVisible: Boolean,
+    onDismiss: () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    val dialogState = rememberDialogState(initiallyVisible = isVisible)
+
+    UpdateEffect(isVisible) { dialogState.visible = isVisible }
+
+    Dialog(
+        state = dialogState,
+        onDismiss = onDismiss,
+    ) {
+        DialogTransparentNavBar()
+
+        Scrim(scrimColor = BottomSheetDefaults.ScrimColor, enter = fadeIn(), exit = fadeOut())
+
+        DialogPanel(
+            enter = scaleIn(tween(durationMillis = 150), 0.8F) + fadeIn(tween(durationMillis = 150)),
+            exit = scaleOut(tween(durationMillis = 150), 0.8F) + fadeOut(tween(durationMillis = 150)),
+            content = content,
+            modifier = Modifier
+                .systemBarsPadding()
+                .widthIn(min = 280.dp, max = 560.dp)
+                .padding(48.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(LocalCuiPalette.current.BackgroundElevationBase)
+        )
+    }
 }
 
 @Composable
-private fun CuiAlertDialogInternal(
+private fun CuiAlertDialogContent(
     title: String,
     text: @Composable () -> Unit,
     confirmText: String,
@@ -70,38 +143,70 @@ private fun CuiAlertDialogInternal(
     dismissColor: Color,
     onDismiss: () -> Unit,
 ) {
-    AlertDialog(
-        onDismissRequest = { onDismiss() },
-        title = {
+    Column(
+        modifier = Modifier.padding(top = 24.dp, bottom = 20.dp)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(20.dp),
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+        ) {
+
             Text(
                 text = title,
-                color = LocalCuiPalette.current.TextPrimary,
+                style = MaterialTheme.typography.headlineSmall,
             )
-        },
-        text = {
+
             CompositionLocalProvider(
-                LocalTextStyle provides LocalTextStyle.current.copy(color = LocalCuiPalette.current.TextPrimary),
+                LocalTextStyle provides LocalTextStyle.current.copy(
+                    color = LocalCuiPalette.current.TextPrimary,
+                    fontSize = 14.sp,
+                ),
                 content = text,
             )
-        },
-        confirmButton = {
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(space = 12.dp, alignment = Alignment.End),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp, end = 20.dp)
+        ) {
+            dismissText?.let {
+                TextButton(onClick = onDismiss) {
+                    Text(
+                        text = dismissText,
+                        color = dismissColor,
+                    )
+                }
+            }
+
             TextButton(
                 onClick = {
                     onConfirm()
                     onDismiss()
-                }
+                },
             ) {
-                Text(text = confirmText, color = confirmColor)
+                Text(
+                    text = confirmText,
+                    color = confirmColor,
+                )
             }
-        },
-        dismissButton = dismissText?.let {
-            {
-                TextButton(onClick = onDismiss) {
-                    Text(text = dismissText, color = dismissColor)
-                }
-            }
-        },
-        containerColor = LocalCuiPalette.current.BackgroundElevationBase,
-        tonalElevation = 0.dp,
+        }
+    }
+}
+
+@WidgetPreview
+@Composable
+private fun CuiAlertDialogPreview() = CheckieLiteTheme {
+    CuiAlertDialog(
+        isVisible = true,
+        title = "Oops!..",
+        text = "Something went wrong",
+        confirmText = "Exit",
+        dismissText = "Cancel",
+        confirmColor = LocalCuiPalette.current.TextNegative,
+        onConfirm = { },
+        onDismiss = {},
     )
 }

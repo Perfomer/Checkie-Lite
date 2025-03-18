@@ -84,12 +84,11 @@ internal fun ReviewDetailsScreen(
 
         }
 
-        if (showDeleteDialog) {
-            ConfirmDeleteDialog(
-                onDismiss = onDeleteDialogDismiss,
-                onConfirm = onDeleteDialogConfirm,
-            )
-        }
+        ConfirmDeleteDialog(
+            isVisible = showDeleteDialog,
+            onDismiss = onDeleteDialogDismiss,
+            onConfirm = onDeleteDialogConfirm,
+        )
     }
 }
 

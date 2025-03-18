@@ -8,10 +8,12 @@ import com.perfomer.checkielite.feature.reviewcreation.R
 
 @Composable
 internal fun ConfirmExitDialog(
+    isVisible: Boolean,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
 ) {
     CuiAlertDialog(
+        isVisible = isVisible,
         title = stringResource(R.string.reviewcreation_dialog_confirmexit_title),
         text = stringResource(R.string.reviewcreation_dialog_confirmexit_message),
         confirmText = stringResource(R.string.reviewcreation_dialog_confirmexit_confirm),

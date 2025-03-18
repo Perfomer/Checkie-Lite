@@ -88,12 +88,11 @@ internal fun SettingsScreen(
             )
         }
 
-        if (shouldShowBackupImportConfirmDialog) {
-            ConfirmBackupImportDialog(
-                onDismiss = onBackupImportConfirmDialogDismiss,
-                onConfirm = onBackupImportConfirmDialogConfirm,
-            )
-        }
+        ConfirmBackupImportDialog(
+            isVisible = shouldShowBackupImportConfirmDialog,
+            onDismiss = onBackupImportConfirmDialogDismiss,
+            onConfirm = onBackupImportConfirmDialogConfirm,
+        )
     }
 }
 

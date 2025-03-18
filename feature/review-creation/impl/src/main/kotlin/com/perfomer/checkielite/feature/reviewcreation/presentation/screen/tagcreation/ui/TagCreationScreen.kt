@@ -166,19 +166,17 @@ internal fun TagCreationScreen(
         }
     }
 
-    if (isConfirmDeleteDialogShown) {
-        ConfirmDeleteDialog(
-            onDismiss = onDeleteDialogDismiss,
-            onConfirm = onDeleteDialogConfirm
-        )
-    }
+    ConfirmDeleteDialog(
+        isVisible = isConfirmDeleteDialogShown,
+        onDismiss = onDeleteDialogDismiss,
+        onConfirm = onDeleteDialogConfirm
+    )
 
-    if (isConfirmExitDialogShown) {
-        ConfirmExitDialog(
-            onDismiss = onExitDialogDismiss,
-            onConfirm = onExitDialogConfirm,
-        )
-    }
+    ConfirmExitDialog(
+        isVisible = isConfirmExitDialogShown,
+        onDismiss = onExitDialogDismiss,
+        onConfirm = onExitDialogConfirm,
+    )
 }
 
 @Composable

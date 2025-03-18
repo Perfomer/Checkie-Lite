@@ -8,10 +8,12 @@ import com.perfomer.checkielite.feature.reviewdetails.R
 
 @Composable
 internal fun ConfirmDeleteDialog(
+    isVisible: Boolean,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
 ) {
     CuiAlertDialog(
+        isVisible = isVisible,
         title = stringResource(R.string.reviewdetails_dialog_confirmdelete_title),
         text = stringResource(R.string.reviewdetails_dialog_confirmdelete_message),
         confirmText = stringResource(R.string.reviewdetails_dialog_confirmdelete_confirm),

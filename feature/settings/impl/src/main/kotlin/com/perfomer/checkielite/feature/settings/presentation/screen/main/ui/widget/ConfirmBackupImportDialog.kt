@@ -10,10 +10,12 @@ import com.perfomer.checkielite.feature.settings.R
 
 @Composable
 internal fun ConfirmBackupImportDialog(
+    isVisible: Boolean,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
 ) {
     CuiAlertDialog(
+        isVisible = isVisible,
         title = stringResource(CommonString.common_warning),
         text = annotatedStringResource(R.string.settings_backup_dialog_confirmimport_message),
         confirmText = stringResource(CommonString.common_proceed),

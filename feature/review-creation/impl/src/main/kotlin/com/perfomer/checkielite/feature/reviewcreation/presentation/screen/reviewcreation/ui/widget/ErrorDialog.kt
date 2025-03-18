@@ -8,10 +8,12 @@ import com.perfomer.checkielite.feature.reviewcreation.R
 
 @Composable
 internal fun ErrorDialog(
+    isVisible: Boolean,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
 ) {
     CuiAlertDialog(
+        isVisible = isVisible,
         title = stringResource(CommonString.common_error_title),
         text = stringResource(CommonString.common_error_message),
         confirmText = stringResource(R.string.reviewcreation_dialog_confirmexit_confirm),

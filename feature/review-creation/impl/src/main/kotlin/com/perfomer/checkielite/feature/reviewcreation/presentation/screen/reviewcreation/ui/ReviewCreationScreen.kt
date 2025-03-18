@@ -118,19 +118,17 @@ internal fun ReviewCreationScreen(
         }
     }
 
-    if (showExitDialog) {
-        ConfirmExitDialog(
-            onDismiss = onExitDialogDismiss,
-            onConfirm = onExitDialogConfirm,
-        )
-    }
+    ConfirmExitDialog(
+        isVisible = showExitDialog,
+        onDismiss = onExitDialogDismiss,
+        onConfirm = onExitDialogConfirm,
+    )
 
-    if (showErrorDialog) {
-        ErrorDialog(
-            onDismiss = { /* Do nothing */ },
-            onConfirm = onErrorDialogConfirm,
-        )
-    }
+    ErrorDialog(
+        isVisible = showErrorDialog,
+        onDismiss = { /* Do nothing */ },
+        onConfirm = onErrorDialogConfirm,
+    )
 }
 
 @ScreenPreview

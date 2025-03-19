@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -184,11 +185,12 @@ class AppActivity : AppCompatActivity() {
         content: @Composable () -> Unit,
     ) = with(navigationHost) {
         val backProgress by registerPredictiveBackHandler(onBack = ::back)
+        val animatedBackProgress by animateFloatAsState(targetValue = backProgress, label = "OverlayBackProgress")
 
         Box(
             content = { content() },
             modifier = Modifier.graphicsLayer {
-                alpha = 1F - backProgress
+                alpha = 1F - animatedBackProgress
             }
         )
     }

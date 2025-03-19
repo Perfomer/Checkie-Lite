@@ -87,7 +87,9 @@ class AppActivity : AppCompatActivity() {
             ClearFocusOnKeyboardClose()
         }
 
-        checkForUpdates()
+        if (savedInstanceState == null) {
+            checkForUpdates()
+        }
     }
 
     private fun initializeApplication() {

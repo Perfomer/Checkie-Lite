@@ -4,6 +4,7 @@ package com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -91,7 +92,9 @@ internal fun GalleryScreen(
 ) {
     val systemUiController = rememberSystemUiController()
     val isSystemInDarkTheme = isSystemInDarkTheme()
+
     val backProgress by registerPredictiveBackHandler(onBack = onDismiss)
+    val animatedBackProgress by animateFloatAsState(targetValue = backProgress, label = "GalleryBackProgress")
 
     UpdateEffect(state.isUiShown) { systemUiController.isSystemBarsVisible = state.isUiShown }
 
@@ -130,7 +133,7 @@ internal fun GalleryScreen(
                     .fillMaxSize()
                     .alpha(backgroundAlpha)
                     .graphicsLayer {
-                        alpha = 1 - backProgress * 0.3F
+                        alpha = 1 - animatedBackProgress * 0.3F
                     }
                     .background(GalleryPalette.BackgroundColor)
             )
@@ -144,13 +147,13 @@ internal fun GalleryScreen(
                 onDismiss = onDismiss,
                 modifier = Modifier
                     .graphicsLayer {
-                        scaleX = 1 - backProgress * 0.2F
-                        scaleY = 1 - backProgress * 0.2F
+                        scaleX = 1 - animatedBackProgress * 0.2F
+                        scaleY = 1 - animatedBackProgress * 0.2F
                     },
                 pictureModifier = Modifier
                     .graphicsLayer {
                         clip = true
-                        shape = RoundedCornerShape(backProgress * 40.dp)
+                        shape = RoundedCornerShape(animatedBackProgress * 40.dp)
                     }
             )
 
@@ -168,10 +171,10 @@ internal fun GalleryScreen(
                             coroutineScope.launch { mainPagerState.animateScrollToPage(page) }
                         },
                         modifier = Modifier.graphicsLayer {
-                            translationY = 1 - backProgress * -64.dp.toPx()
-                            alpha = 1 - backProgress * 0.5F
-                            scaleX = 1 - backProgress * 0.1F
-                            scaleY = 1 - backProgress * 0.1F
+                            translationY = 1 - animatedBackProgress * -64.dp.toPx()
+                            alpha = 1 - animatedBackProgress * 0.5F
+                            scaleX = 1 - animatedBackProgress * 0.1F
+                            scaleY = 1 - animatedBackProgress * 0.1F
                         }
                     )
                 }

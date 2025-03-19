@@ -116,7 +116,7 @@ private fun CuiAlertDialogInternal(
     content: @Composable () -> Unit,
 ) {
     var backProgress by remember { mutableFloatStateOf(0F) }
-    val animatedBackProgress by animateFloatAsState(backProgress, label = "DialogBackProgressSmooth")
+    val animatedBackProgress by animateFloatAsState(targetValue = backProgress, label = "DialogBackProgressSmooth")
 
     val dialogState = rememberDialogState(initiallyVisible = isVisible)
 

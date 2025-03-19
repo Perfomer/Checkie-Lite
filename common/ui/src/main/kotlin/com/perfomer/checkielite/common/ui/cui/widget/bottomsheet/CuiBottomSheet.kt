@@ -70,7 +70,7 @@ internal fun BaseBottomSheet(
     content: @Composable () -> Unit,
 ) {
     var backProgress by remember { mutableFloatStateOf(0F) }
-    val animatedBackProgress by animateFloatAsState(backProgress, label = "BottomSheetBackProgressSmooth")
+    val animatedBackProgress by animateFloatAsState(targetValue = backProgress, label = "BottomSheetBackProgressSmooth")
 
     LaunchedEffect(sheetState.isIdle) {
         if (sheetState.targetDetent == SheetDetent.Hidden && sheetState.isIdle) {

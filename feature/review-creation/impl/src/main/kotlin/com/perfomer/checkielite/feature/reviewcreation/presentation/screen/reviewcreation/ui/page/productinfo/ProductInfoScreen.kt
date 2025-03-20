@@ -186,13 +186,13 @@ internal fun ProductInfoScreen(
             horizontalArrangement = Arrangement.spacedBy(20.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            AddPicture(
+            AddPictureButton(
                 painter = painterResource(id = CommonDrawable.ic_add_picture_v2),
                 onClick = onAddPictureClick,
                 modifier = Modifier.weight(1F)
             )
 
-            AddPicture(
+            AddPictureButton(
                 painter = painterResource(id = R.drawable.ic_camera),
                 onClick = onTakePhotoClick,
                 modifier = Modifier.weight(1F)
@@ -291,7 +291,7 @@ private fun PicturesFlowRow(
 }
 
 @Composable
-internal fun AddPicture(
+internal fun AddPictureButton(
     painter: Painter,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,

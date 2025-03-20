@@ -9,7 +9,7 @@
     <string name="reviewcreation_productinfo_field_brand">Brand</string>
     <string name="reviewcreation_productinfo_field_price">Price</string>
 
-    <string name="reviewcreation_reviewinfo_title">Review</string>
+    <string name="reviewcreation_reviewinfo_title">Review on</string>
     <string name="reviewcreation_reviewinfo_field_comment">Comment</string>
     <string name="reviewcreation_reviewinfo_field_advantages">Advantages</string>
     <string name="reviewcreation_reviewinfo_field_disadvantages">Disadvantages</string>
@@ -18,7 +18,7 @@
     <string name="reviewcreation_dialog_confirmexit_message">If you exit your changes won\'t be saved.</string>
     <string name="reviewcreation_dialog_confirmexit_confirm">Exit</string>
 
-    <string name="reviewcreation_tags_title">Tags</string>
+    <string name="reviewcreation_tags_title">Tags for</string>
     <string name="reviewcreation_tags_field_search">Enter the tag…</string>
     <string name="reviewcreation_tags_create_tag_generic">Create tag</string>
     <string name="reviewcreation_tags_create_tag_specific">Create \"%s\"</string>

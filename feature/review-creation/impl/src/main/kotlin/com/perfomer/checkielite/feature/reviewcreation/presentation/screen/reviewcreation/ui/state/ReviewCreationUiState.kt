@@ -38,6 +38,8 @@ internal data class ProductInfoPageUiState(
 
 @Immutable
 internal data class TagsPageUiState(
+    val mainPictureUri: String?,
+    val productName: String,
     val searchQuery: String,
     val shouldShowAddTag: Boolean,
     val tags: ImmutableList<Tag>,
@@ -53,6 +55,8 @@ internal data class TagsPageUiState(
 
 @Immutable
 internal data class ReviewInfoPageUiState(
+    val mainPictureUri: String?,
+    val productName: String,
     val rating: Int,
     val comment: String,
     val advantages: String,

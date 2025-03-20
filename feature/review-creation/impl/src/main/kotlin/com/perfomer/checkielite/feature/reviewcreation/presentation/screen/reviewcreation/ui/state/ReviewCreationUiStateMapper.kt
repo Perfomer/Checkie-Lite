@@ -70,6 +70,8 @@ internal class ReviewCreationUiStateMapper(
         }
 
         return TagsPageUiState(
+            mainPictureUri = state.reviewDetails.pictures.firstOrNull()?.uri,
+            productName = state.reviewDetails.productName,
             searchQuery = state.tagsSearchQuery,
             shouldShowAddTag = uiTags.fastAll { it.value != state.tagsSearchQuery },
             tags = uiTags.toPersistentList(),
@@ -78,6 +80,8 @@ internal class ReviewCreationUiStateMapper(
 
     private fun createReviewInfoPageState(state: ReviewCreationState): ReviewInfoPageUiState {
         return ReviewInfoPageUiState(
+            mainPictureUri = state.reviewDetails.pictures.firstOrNull()?.uri,
+            productName = state.reviewDetails.productName,
             rating = state.reviewDetails.rating,
             comment = state.reviewDetails.comment,
             advantages = state.reviewDetails.advantages,

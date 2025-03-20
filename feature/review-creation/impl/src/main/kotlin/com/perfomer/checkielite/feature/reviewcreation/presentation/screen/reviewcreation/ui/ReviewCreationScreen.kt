@@ -144,10 +144,10 @@ private fun ReviewCreationScreenPreview() {
 
 internal val mockUiState = ReviewCreationUiState(
     step = 1,
-    stepsCount = 2,
+    stepsCount = 3,
     currentPage = ReviewCreationPage.PRODUCT_INFO,
     productInfoState = ProductInfoPageUiState(
-        productName = "",
+        productName = "Chips",
         productNameErrorText = null,
         brand = "",
         brandSuggestions = emptyPersistentList(),
@@ -156,11 +156,15 @@ internal val mockUiState = ReviewCreationUiState(
         picturesUri = emptyPersistentList(),
     ),
     tagsState = TagsPageUiState(
+        mainPictureUri = null,
+        productName = "Chips",
         searchQuery = "",
         shouldShowAddTag = true,
         tags = emptyPersistentList(),
     ),
     reviewInfoState = ReviewInfoPageUiState(
+        mainPictureUri = null,
+        productName = "Chips",
         rating = 5,
         comment = "",
         advantages = "",

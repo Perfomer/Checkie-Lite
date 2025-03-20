@@ -11,24 +11,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
 import com.perfomer.checkielite.common.ui.cui.widget.rating.RatingSlider
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
-import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.mockUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewInfoPageUiState
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget.ReviewCreationPageHeader
 
 @Composable
 internal fun ReviewInfoScreen(
@@ -49,14 +47,13 @@ internal fun ReviewInfoScreen(
             .padding(24.dp)
             .padding(bottom = 80.dp)
     ) {
-        Text(
-            text = stringResource(R.string.reviewcreation_reviewinfo_title),
-            fontSize = 24.sp,
-            color = LocalCuiPalette.current.TextPrimary,
-            fontWeight = FontWeight.Bold,
+        ReviewCreationPageHeader(
+            title = stringResource(R.string.reviewcreation_reviewinfo_title),
+            productPictureUri = state.mainPictureUri,
+            productName = state.productName,
         )
 
-        CuiSpacer(8.dp)
+        CuiSpacer(12.dp)
 
         RatingSlider(
             rating = state.rating,
@@ -104,12 +101,6 @@ internal fun ReviewInfoScreen(
 @ScreenPreview
 private fun ReviewInfoScreenPreview() {
     ReviewInfoScreen(
-        state = ReviewInfoPageUiState(
-            rating = 5,
-            comment = "",
-            advantages = "",
-            disadvantages = "",
-            isSaving = false,
-        )
+        state = mockUiState.reviewInfoState,
     )
 }

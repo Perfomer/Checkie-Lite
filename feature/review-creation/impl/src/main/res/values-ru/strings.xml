@@ -9,7 +9,7 @@
     <string name="reviewcreation_productinfo_field_brand">Бренд</string>
     <string name="reviewcreation_productinfo_field_price">Цена</string>
 
-    <string name="reviewcreation_reviewinfo_title">Отзыв</string>
+    <string name="reviewcreation_reviewinfo_title">Отзыв на</string>
     <string name="reviewcreation_reviewinfo_field_comment">Комментарий</string>
     <string name="reviewcreation_reviewinfo_field_advantages">Достоинства</string>
     <string name="reviewcreation_reviewinfo_field_disadvantages">Недостатки</string>
@@ -20,7 +20,7 @@
 
     <string name="reviewcreation_currencyselector_title">Валюты</string>
 
-    <string name="reviewcreation_tags_title">Теги</string>
+    <string name="reviewcreation_tags_title">Теги для</string>
     <string name="reviewcreation_tags_field_search">Введите тег…</string>
     <string name="reviewcreation_tags_create_tag_generic">Создать тег</string>
     <string name="reviewcreation_tags_create_tag_specific">Создать \"%s\"</string>

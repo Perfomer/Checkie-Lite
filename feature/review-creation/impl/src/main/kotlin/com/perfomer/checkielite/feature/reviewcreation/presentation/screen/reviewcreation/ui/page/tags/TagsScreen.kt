@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -22,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -34,7 +32,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
@@ -49,6 +46,7 @@ import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.mockUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.TagsPageUiState
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget.ReviewCreationPageHeader
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -74,28 +72,23 @@ internal fun TagsScreen(
             .padding(horizontal = 24.dp)
             .padding(bottom = 104.dp, top = 16.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = stringResource(R.string.reviewcreation_tags_title),
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1F)
-            )
+        ReviewCreationPageHeader(
+            title = stringResource(R.string.reviewcreation_tags_title),
+            productPictureUri = state.mainPictureUri,
+            productName = state.productName,
+            endIcon = {
+                val targetTagSortAlpha = if (state.searchQuery.isBlank()) 1F else 0F
+                val animatedTagSortAlpha by animateFloatAsState(targetValue = targetTagSortAlpha, label = "TagsSortAlpha")
 
-            val targetTagSortAlpha = if (state.searchQuery.isBlank()) 1F else 0F
-            val animatedTagSortAlpha by animateFloatAsState(targetValue = targetTagSortAlpha, label = "TagsSortAlpha")
+                CuiIconButton(
+                    painter = painterResource(CommonDrawable.ic_sort),
+                    onClick = onTagSortClick,
+                    modifier = Modifier.graphicsLayer { alpha = animatedTagSortAlpha }
+                )
+            }
+        )
 
-            CuiIconButton(
-                painter = painterResource(CommonDrawable.ic_sort),
-                onClick = onTagSortClick,
-                modifier = Modifier.graphicsLayer { alpha = animatedTagSortAlpha }
-            )
-        }
-
-        CuiSpacer(16.dp)
+        CuiSpacer(32.dp)
 
         SearchField(
             searchQuery = state.searchQuery,

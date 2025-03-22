@@ -73,7 +73,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
-import com.perfomer.checkielite.common.ui.util.navigation.registerPredictiveBackHandler
+import com.perfomer.checkielite.common.ui.util.navigation.PredictiveBackHandler
 import com.perfomer.checkielite.common.ui.util.setTransparentSystemBars
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui.state.GalleryUiState
 import kotlinx.collections.immutable.ImmutableList
@@ -93,8 +93,13 @@ internal fun GalleryScreen(
     val systemUiController = rememberSystemUiController()
     val isSystemInDarkTheme = isSystemInDarkTheme()
 
-    val backProgress by registerPredictiveBackHandler(onBack = onDismiss)
+    var backProgress by remember { mutableFloatStateOf(0F) }
     val animatedBackProgress by animateFloatAsState(targetValue = backProgress, label = "GalleryBackProgress")
+
+    PredictiveBackHandler(
+        onBack = onDismiss,
+        onProgress = { backProgress = it },
+    )
 
     UpdateEffect(state.isUiShown) { systemUiController.isSystemBarsVisible = state.isUiShown }
 
@@ -121,7 +126,6 @@ internal fun GalleryScreen(
         },
     ) {
         Box {
-            var backgroundAlpha by remember { mutableFloatStateOf(1F) }
             val coroutineScope = rememberCoroutineScope()
             val mainPagerState = rememberPagerState(
                 pageCount = { state.picturesUri.size },
@@ -131,7 +135,6 @@ internal fun GalleryScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .alpha(backgroundAlpha)
                     .graphicsLayer {
                         alpha = 1 - animatedBackProgress * 0.3F
                     }
@@ -143,17 +146,14 @@ internal fun GalleryScreen(
                 picturesUri = state.picturesUri,
                 onPageChange = onPageChange,
                 onPagerClick = onPagerClick,
-                onDismissProgressChange = { progress -> backgroundAlpha = 1 - progress },
+                onDismissProgressChange = { progress -> backProgress = progress },
                 onDismiss = onDismiss,
-                modifier = Modifier
-                    .graphicsLayer {
-                        scaleX = 1 - animatedBackProgress * 0.2F
-                        scaleY = 1 - animatedBackProgress * 0.2F
-                    },
                 pictureModifier = Modifier
                     .graphicsLayer {
                         clip = true
                         shape = RoundedCornerShape(animatedBackProgress * 40.dp)
+                        scaleX = 1 - animatedBackProgress * 0.2F
+                        scaleY = 1 - animatedBackProgress * 0.2F
                     }
             )
 

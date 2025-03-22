@@ -23,9 +23,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -71,9 +71,9 @@ internal fun PicturesCarousel(
 
                 if (pictureState is AsyncImagePainter.State.Success) {
                     val isSystemInDarkTheme = isSystemInDarkTheme()
-                    val themeCoefficient = if (isSystemInDarkTheme) 0.5F else 0.75F
-                    val alpha = (1F - pagerState.offsetForPage(i).absoluteValue) * themeCoefficient
-                    val interpolatedAlpha = FastOutLinearInEasing.transform(alpha)
+                    val themeCoefficient = if (isSystemInDarkTheme) 0.5F else 0.9F
+                    val targetAlpha = (1F - pagerState.offsetForPage(i).absoluteValue) * themeCoefficient
+                    val interpolatedAlpha = FastOutLinearInEasing.transform(targetAlpha)
                     Image(
                         painter = requireNotNull(pictureState.painter),
                         contentDescription = null,
@@ -82,7 +82,10 @@ internal fun PicturesCarousel(
                             .fillMaxWidth()
                             .aspectRatio(1F)
                             .blur(40.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
-                            .alpha(interpolatedAlpha)
+                            .graphicsLayer {
+                                alpha = interpolatedAlpha
+                                translationY = 40.dp.toPx()
+                            }
                             .clip(RoundedCornerShape(24.dp))
                     )
                 }

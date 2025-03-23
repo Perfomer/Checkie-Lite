@@ -3,7 +3,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 import com.perfomer.checkielite.common.pure.util.toArrayList
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.navigation.DestinationMode
-import com.perfomer.checkielite.core.navigation.ExternalDestination
+import com.perfomer.checkielite.core.navigation.ExternalDestinationWithResult
 import com.perfomer.checkielite.core.navigation.ExternalResult
 import com.perfomer.checkielite.core.navigation.ExternalRouter
 import com.perfomer.checkielite.core.navigation.Router
@@ -69,14 +69,14 @@ internal class ReviewCreationNavigationActor(
     }
 
     private suspend fun openPhotoPicker(): ReviewCreationNavigationEvent? {
-        val result = externalRouter.navigateForResult<List<String>>(ExternalDestination.GALLERY)
+        val result = externalRouter.navigateForResult<List<String>>(ExternalDestinationWithResult.GALLERY)
         if (result !is ExternalResult.Success) return null
 
         return ReviewCreationNavigationEvent.OnPhotosPick(uris = result.result)
     }
 
     private suspend fun openCamera(): ReviewCreationNavigationEvent? {
-        val result = externalRouter.navigateForResult<String>(ExternalDestination.CAMERA)
+        val result = externalRouter.navigateForResult<String>(ExternalDestinationWithResult.CAMERA)
         if (result !is ExternalResult.Success) return null
 
         return ReviewCreationNavigationEvent.OnPhotosPick(uris = listOf(result.result))

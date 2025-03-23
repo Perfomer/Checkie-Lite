@@ -53,6 +53,7 @@ internal fun SettingsScreen(
     onBackupExportClick: () -> Unit = {},
     onBackupImportClick: () -> Unit = {},
     onCheckUpdatesClick: () -> Unit = {},
+    onLanguageSettingsClick: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -85,6 +86,7 @@ internal fun SettingsScreen(
             AppGroup(
                 isCheckUpdatesInProgress = state.isCheckUpdatesInProgress,
                 onCheckUpdatesClick = onCheckUpdatesClick,
+                onLanguageSettingsClick = onLanguageSettingsClick,
             )
         }
 
@@ -159,6 +161,7 @@ private fun BackupGroup(
 private fun AppGroup(
     isCheckUpdatesInProgress: Boolean,
     onCheckUpdatesClick: () -> Unit,
+    onLanguageSettingsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -168,6 +171,12 @@ private fun AppGroup(
         )
 
         CuiSpacer(8.dp)
+
+        SettingsItem(
+            title = stringResource(R.string.settings_group_app_item_language_settings),
+            icon = painterResource(R.drawable.ic_language),
+            onClick = onLanguageSettingsClick,
+        )
 
         SettingsItem(
             title = stringResource(R.string.settings_group_app_item_check_updates),

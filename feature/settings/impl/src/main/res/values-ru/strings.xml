@@ -3,6 +3,7 @@
     <string name="settings_title">Настройки</string>
     <string name="settings_group_app_title">Приложение</string>
     <string name="settings_group_app_item_check_updates">Проверить обновления</string>
+    <string name="settings_group_app_item_language_settings">Выбрать язык</string>
     <string name="settings_group_data_title">Данные</string>
     <string name="settings_group_data_description">Сохраните все данные приложения в одном файле, чтобы не потерять их. Его можно передать на другое устройство или сохранить на облако.</string>
     <string name="settings_group_data_item_import">Восстановить данные</string>

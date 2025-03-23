@@ -10,6 +10,10 @@ applyCommonAndroid()
 android {
     namespace = "com.perfomer.checkielite"
 
+    androidResources {
+        generateLocaleConfig = true
+    }
+
     buildFeatures {
         buildConfig = true
         compose = true

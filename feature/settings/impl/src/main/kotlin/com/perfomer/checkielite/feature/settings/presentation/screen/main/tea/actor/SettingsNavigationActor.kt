@@ -2,6 +2,7 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.a
 
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.navigation.ExternalDestination
+import com.perfomer.checkielite.core.navigation.ExternalDestinationWithResult
 import com.perfomer.checkielite.core.navigation.ExternalResult
 import com.perfomer.checkielite.core.navigation.ExternalRouter
 import com.perfomer.checkielite.core.navigation.Router
@@ -9,6 +10,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.Exit
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.OpenLanguageSettings
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.SelectBackupFile
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent.BackupFileSelection
@@ -32,13 +34,14 @@ internal class SettingsNavigationActor(
         when (command) {
             is Exit -> router.exit()
             is SelectBackupFile -> return selectBackupFile()
+            is OpenLanguageSettings -> externalRouter.navigate(ExternalDestination.LANGUAGE_SETTINGS)
         }
 
         return null
     }
 
     private suspend fun selectBackupFile(): BackupFileSelection {
-        val result = externalRouter.navigateForResult<String?>(ExternalDestination.FILE)
+        val result = externalRouter.navigateForResult<String?>(ExternalDestinationWithResult.FILE)
 
         if (result !is ExternalResult.Success) return BackupFileSelection.Canceled
         val filePath = result.result ?: return BackupFileSelection.Canceled

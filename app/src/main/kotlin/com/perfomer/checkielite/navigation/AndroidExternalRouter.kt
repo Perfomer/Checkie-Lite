@@ -5,7 +5,9 @@ import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
+import android.provider.Settings
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContract
@@ -17,6 +19,7 @@ import com.perfomer.checkielite.common.android.SuspendableActivityResultHandler
 import com.perfomer.checkielite.common.android.permissions.PermissionHelper
 import com.perfomer.checkielite.common.android.util.getRealPath
 import com.perfomer.checkielite.core.navigation.ExternalDestination
+import com.perfomer.checkielite.core.navigation.ExternalDestinationWithResult
 import com.perfomer.checkielite.core.navigation.ExternalResult
 import com.perfomer.checkielite.core.navigation.ExternalRouter
 
@@ -41,13 +44,19 @@ internal class AndroidExternalRouter(
     }
 
     @Suppress("UNCHECKED_CAST")
-    override suspend fun <T> navigateForResult(destination: ExternalDestination): ExternalResult<T> {
+    override suspend fun <T> navigateForResult(destination: ExternalDestinationWithResult): ExternalResult<T> {
         // TODO: Extract camera and gallery logic to separate classes
         return when (destination) {
-            ExternalDestination.GALLERY -> pickPhoto()
-            ExternalDestination.FILE -> pickFile()
-            ExternalDestination.CAMERA -> takePhoto()
+            ExternalDestinationWithResult.GALLERY -> pickPhoto()
+            ExternalDestinationWithResult.FILE -> pickFile()
+            ExternalDestinationWithResult.CAMERA -> takePhoto()
         } as ExternalResult<T>
+    }
+
+    override fun navigate(destination: ExternalDestination) {
+        when (destination) {
+            ExternalDestination.LANGUAGE_SETTINGS -> openLanguageSettings()
+        }
     }
 
     private suspend fun pickPhoto(): ExternalResult<*> {
@@ -118,6 +127,17 @@ internal class AndroidExternalRouter(
         } else {
             ExternalResult.Cancel
         }
+    }
+
+    private fun openLanguageSettings() {
+        val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            Intent(Settings.ACTION_APP_LOCALE_SETTINGS)
+        } else {
+            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        }
+
+        intent.setData(Uri.fromParts("package", activity.packageName, null))
+        activity.startActivity(intent)
     }
 
     private fun <I, O> ActivityResultContract<I, O>.suspendableResultHandler(): SuspendableActivityResultHandler<I, O> {

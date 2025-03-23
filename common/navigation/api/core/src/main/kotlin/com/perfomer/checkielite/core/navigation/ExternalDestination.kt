@@ -1,9 +1,13 @@
 package com.perfomer.checkielite.core.navigation
 
+enum class ExternalDestinationWithResult {
+    CAMERA,
+    GALLERY,
+    FILE,
+}
+
 enum class ExternalDestination {
-	CAMERA,
-	GALLERY,
-	FILE,
+    LANGUAGE_SETTINGS,
 }
 
 sealed class ExternalResult<T> {
@@ -15,5 +19,7 @@ sealed class ExternalResult<T> {
 
 interface ExternalRouter {
 
-	suspend fun <T> navigateForResult(destination: ExternalDestination): ExternalResult<T>
+	suspend fun <T> navigateForResult(destination: ExternalDestinationWithResult): ExternalResult<T>
+
+    fun navigate(destination: ExternalDestination)
 }

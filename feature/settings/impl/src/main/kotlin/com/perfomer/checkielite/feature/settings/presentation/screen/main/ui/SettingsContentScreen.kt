@@ -23,6 +23,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackupImportClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackupImportConfirmClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnCheckUpdatesClick
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnLanguageSettingsClick
 
 internal class SettingsContentScreen(private val store: SettingsStore) : Screen {
 
@@ -59,6 +60,7 @@ internal class SettingsContentScreen(private val store: SettingsStore) : Screen 
             onBackupExportClick = acceptable(OnBackupExportClick),
             onBackupImportClick = acceptable(OnBackupImportClick),
             onCheckUpdatesClick = acceptable(OnCheckUpdatesClick),
+            onLanguageSettingsClick = acceptable(OnLanguageSettingsClick),
         )
     }
 }

@@ -54,7 +54,6 @@ private val presentationModule = module {
 
 internal fun createSettingsStore(
     componentContext: ComponentContext,
-    destination: SettingsDestination,
     context: Context,
     router: Router,
     externalRouter: ExternalRouter,
@@ -65,7 +64,6 @@ internal fun createSettingsStore(
 ): SettingsStore {
     return SettingsStore(
         componentContext = componentContext,
-        destination = destination,
         reducer = SettingsReducer(),
         uiStateMapper = SettingsUiStateMapper(context),
         actors = setOf(

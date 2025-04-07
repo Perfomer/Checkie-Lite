@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.search.presentation.screen.tags.tea
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.impl.ComponentStore
+import com.perfomer.checkielite.common.ui.util.tea.LogUnhandledExceptionHandler
 import com.perfomer.checkielite.feature.search.presentation.navigation.TagsDestination
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core.TagsCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core.TagsEffect
@@ -26,4 +27,5 @@ internal class TagsStore(
     actors = actors,
     initialState = TagsState(selectedTagsIds = destination.selectedTagsIds),
     initialEvents = listOf(Initialize),
+    unhandledExceptionHandler = LogUnhandledExceptionHandler("TagsStore"),
 )

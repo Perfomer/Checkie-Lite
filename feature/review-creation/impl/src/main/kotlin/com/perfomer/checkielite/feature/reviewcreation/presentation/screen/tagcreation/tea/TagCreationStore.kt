@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagc
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.impl.ComponentStore
+import com.perfomer.checkielite.common.ui.util.tea.LogUnhandledExceptionHandler
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationDestination
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect
@@ -26,4 +27,5 @@ internal class TagCreationStore(
     actors = actors,
     initialState = TagCreationState(mode = destination.mode),
     initialEvents = listOf(Initialize),
+    unhandledExceptionHandler = LogUnhandledExceptionHandler("TagCreationStore"),
 )

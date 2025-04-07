@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.impl.ComponentStore
+import com.perfomer.checkielite.common.ui.util.tea.LogUnhandledExceptionHandler
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryDestination
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryCommand
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryEffect
@@ -28,4 +29,5 @@ internal class GalleryStore(
         picturesUri = destination.picturesUri.toPersistentList(),
         currentPicturePosition = destination.currentPicturePosition,
     ),
+    unhandledExceptionHandler = LogUnhandledExceptionHandler("GalleryStore"),
 )

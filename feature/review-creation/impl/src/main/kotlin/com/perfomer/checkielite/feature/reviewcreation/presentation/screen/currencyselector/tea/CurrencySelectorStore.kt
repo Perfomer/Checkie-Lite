@@ -4,6 +4,7 @@ import android.icu.util.Currency
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.impl.ComponentStore
+import com.perfomer.checkielite.common.ui.util.tea.LogUnhandledExceptionHandler
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorDestination
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.tea.core.CurrencySelectorEffect
@@ -29,4 +30,5 @@ internal class CurrencySelectorStore(
         selectedCurrency = Currency.getInstance(destination.currentCurrency.code),
     ),
     initialEvents = listOf(Initialize),
+    unhandledExceptionHandler = LogUnhandledExceptionHandler("CurrencySelectorStore"),
 )

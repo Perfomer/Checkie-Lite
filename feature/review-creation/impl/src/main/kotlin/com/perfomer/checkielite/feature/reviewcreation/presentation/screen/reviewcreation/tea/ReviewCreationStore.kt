@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.impl.ComponentStore
+import com.perfomer.checkielite.common.ui.util.tea.LogUnhandledExceptionHandler
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationDestination
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect
@@ -26,4 +27,5 @@ internal class ReviewCreationStore(
     actors = actors,
     initialState = ReviewCreationState(mode = destination.mode),
     initialEvents = listOf(Initialize),
+    unhandledExceptionHandler = LogUnhandledExceptionHandler("ReviewCreationStore"),
 )

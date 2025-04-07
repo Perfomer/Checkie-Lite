@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.search.presentation.screen.search.tea
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.impl.ComponentStore
+import com.perfomer.checkielite.common.ui.util.tea.LogUnhandledExceptionHandler
 import com.perfomer.checkielite.core.domain.entity.search.SearchFilters
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand
@@ -31,4 +32,5 @@ internal class SearchStore(
     uiStateMapper = uiStateMapper,
     actors = actors,
     initialEvents = listOf(Initialize),
+    unhandledExceptionHandler = LogUnhandledExceptionHandler("SearchStore"),
 )

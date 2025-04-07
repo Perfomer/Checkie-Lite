@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.impl.ComponentStore
+import com.perfomer.checkielite.common.ui.util.tea.LogUnhandledExceptionHandler
 import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupDestination
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect
@@ -26,4 +27,5 @@ internal class BackupStore(
     actors = actors,
     initialState = BackupState(mode = destination.mode),
     initialEvents = listOf(Initialize),
+    unhandledExceptionHandler = LogUnhandledExceptionHandler("BackupStore"),
 )

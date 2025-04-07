@@ -3,7 +3,7 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.impl.ComponentStore
-import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsDestination
+import com.perfomer.checkielite.common.ui.util.tea.LogUnhandledExceptionHandler
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
@@ -15,7 +15,6 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.sta
 
 internal class SettingsStore(
     componentContext: ComponentContext,
-    destination: SettingsDestination,
     reducer: SettingsReducer,
     uiStateMapper: SettingsUiStateMapper,
     actors: Set<Actor<SettingsCommand, SettingsEvent>>,
@@ -26,4 +25,5 @@ internal class SettingsStore(
     actors = actors,
     initialState = SettingsState(),
     initialEvents = listOf(Initialize),
+    unhandledExceptionHandler = LogUnhandledExceptionHandler("SettingsStore"),
 )

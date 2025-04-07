@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tags
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.impl.ComponentStore
+import com.perfomer.checkielite.common.ui.util.tea.LogUnhandledExceptionHandler
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagSortDestination
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagsort.tea.core.TagSortCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagsort.tea.core.TagSortEffect
@@ -26,4 +27,5 @@ internal class TagSortStore(
     initialState = TagSortState(
         currentOption = destination.currentOption,
     ),
+    unhandledExceptionHandler = LogUnhandledExceptionHandler("TagSortStore"),
 )

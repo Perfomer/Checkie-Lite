@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detai
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.impl.ComponentStore
+import com.perfomer.checkielite.common.ui.util.tea.LogUnhandledExceptionHandler
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect
@@ -25,5 +26,6 @@ internal class ReviewDetailsStore(
     uiStateMapper = uiStateMapper,
     actors = actors,
     initialState = ReviewDetailsState(destination.reviewId),
-    initialEvents = listOf(Initialize)
+    initialEvents = listOf(Initialize),
+    unhandledExceptionHandler = LogUnhandledExceptionHandler("ReviewDetailsStore"),
 )

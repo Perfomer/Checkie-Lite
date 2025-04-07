@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.search.presentation.screen.sort.tea
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.impl.ComponentStore
+import com.perfomer.checkielite.common.ui.util.tea.LogUnhandledExceptionHandler
 import com.perfomer.checkielite.feature.search.presentation.navigation.SortDestination
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortEffect
@@ -26,4 +27,5 @@ internal class SortStore(
     initialState = SortState(
         currentOption = destination.sorting,
     ),
+    unhandledExceptionHandler = LogUnhandledExceptionHandler("SortStore"),
 )

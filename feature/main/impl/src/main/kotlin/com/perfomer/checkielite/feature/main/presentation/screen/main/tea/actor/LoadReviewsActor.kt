@@ -4,7 +4,7 @@ import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.onCatchReturn
 import com.perfomer.checkielite.common.pure.util.startWith
 import com.perfomer.checkielite.common.tea.component.Actor
-import com.perfomer.checkielite.feature.main.domain.repository.ReviewsRepository
+import com.perfomer.checkielite.core.data.repository.ReviewRepository
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand.LoadReviews
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 internal class LoadReviewsActor(
-    private val repository: ReviewsRepository,
+    private val repository: ReviewRepository,
 ) : Actor<MainCommand, MainEvent> {
 
     override fun act(commands: Flow<MainCommand>): Flow<MainEvent> {
@@ -24,7 +24,7 @@ internal class LoadReviewsActor(
     }
 
     private fun handleCommand(command: LoadReviews): Flow<ReviewsLoading> {
-        return repository.getCheckies()
+        return repository.getReviews()
             .map(ReviewsLoading::Succeed)
             .startWith(ReviewsLoading.Started)
             .onCatchLog(TAG, "Failed to load reviews")

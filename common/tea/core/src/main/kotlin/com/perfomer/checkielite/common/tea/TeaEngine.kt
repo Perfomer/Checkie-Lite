@@ -3,6 +3,8 @@ package com.perfomer.checkielite.common.tea
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.component.Reducer
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
+import com.perfomer.checkielite.common.tea.exception.UnhandledExceptionHandler
+import com.perfomer.checkielite.common.tea.util.runSafeWith
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +15,7 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -37,7 +39,7 @@ internal class TeaEngine<Command : Any, Effect : Any, Event : Any, UiEvent : Eve
     private val reducer: Reducer<Command, Effect, Event, State>,
     private val uiStateMapper: UiStateMapper<State, UiState>? = null,
     private val actor: Actor<Command, Event>,
-    // TODO: Add UnhandledExceptionHandler for Store
+    private val unhandledExceptionHandler: UnhandledExceptionHandler? = null,
 ) : Store<Effect, UiEvent, UiState> {
 
     override val effects: Flow<Effect>
@@ -72,7 +74,9 @@ internal class TeaEngine<Command : Any, Effect : Any, Event : Any, UiEvent : Eve
 
     private fun setupStateFlow() {
         stateFlow
-            .map { it.toUiState() }
+            .mapNotNull { state ->
+                runSafeWith(unhandledExceptionHandler) { state.toUiState() }
+            }
             .onEach(uiStateFlow::emit)
             .launchIn(scope = storeScope)
     }
@@ -85,7 +89,9 @@ internal class TeaEngine<Command : Any, Effect : Any, Event : Any, UiEvent : Eve
 
     private fun setupEventsFlow(reducer: Reducer<Command, Effect, Event, State>) {
         eventsFlow
-            .map { event -> reducer.reduce(stateFlow.value, event) }
+            .mapNotNull { event ->
+                runSafeWith(unhandledExceptionHandler) { reducer.reduce(stateFlow.value, event) }
+            }
             .onEach { update -> update.state?.let { stateFlow.emit(it) } }
             .onEach { update -> update.commands.forEach { commandsFlow.emit(it) } }
             .onEach { update -> update.effects.forEach { effectsChannel.send(it) } }

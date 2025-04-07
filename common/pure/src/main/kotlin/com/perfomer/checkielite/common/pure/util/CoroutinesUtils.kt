@@ -41,7 +41,7 @@ fun <T> CancellableContinuation<T>.safeResumeWithException(error: Throwable) {
     if (isActive) resumeWithException(error)
 }
 
-suspend inline fun <R> runSuspendCatching(block: () -> R): Result<R> {
+inline fun <R> runSuspendCatching(block: () -> R): Result<R> {
     return try {
         Result.success(block())
     } catch (t: TimeoutCancellationException) {

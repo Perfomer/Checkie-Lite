@@ -34,6 +34,7 @@ import com.composables.core.Sheet
 import com.composables.core.SheetDetent
 import com.composables.core.rememberModalBottomSheetState
 import com.perfomer.checkielite.common.ui.cui.widget.sheet.CuiDragAnchor
+import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastHost
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
 import com.perfomer.checkielite.common.ui.util.DialogTransparentNavBar
@@ -117,5 +118,7 @@ internal fun BaseBottomSheet(
                 content()
             }
         }
+
+        ToastHost()
     }
 }

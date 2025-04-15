@@ -40,12 +40,18 @@ fun PaddingValues.add(
     start: Dp = 0.dp,
     end: Dp = 0.dp,
 ): PaddingValues {
-    return plus(
-        PaddingValues(
-            top = top,
-            bottom = bottom,
-            start = start,
-            end = end,
-        )
-    )
+    return plus(PaddingValues(top = top, bottom = bottom, start = start, end = end))
+}
+
+@Composable
+fun PaddingValues.add(
+    vertical: Dp = 0.dp,
+    horizontal: Dp = 0.dp,
+): PaddingValues {
+    return plus(PaddingValues(top = vertical, bottom = vertical, start = horizontal, end = horizontal))
+}
+
+@Composable
+fun PaddingValues.add(all: Dp = 0.dp): PaddingValues {
+    return add(top = all, bottom = all, start = all, end = all)
 }

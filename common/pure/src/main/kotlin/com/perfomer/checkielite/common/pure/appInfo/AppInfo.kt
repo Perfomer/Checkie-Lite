@@ -1,6 +1,16 @@
 package com.perfomer.checkielite.common.pure.appInfo
 
-class AppInfo(
-    val versionName: String,
-    val versionCode: Int,
-)
+interface AppInfo {
+
+    val versionCode: Int
+    val versionName: String
+    val isDebug: Boolean
+
+    companion object : AppInfo by MutableAppInfoHolder
+}
+
+object MutableAppInfoHolder : AppInfo {
+    override var versionCode: Int = 0
+    override var versionName: String = "Unknown"
+    override var isDebug: Boolean = false
+}

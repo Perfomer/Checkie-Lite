@@ -3,7 +3,7 @@ package com.perfomer.checkielite.core.data.datasource.file
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import com.perfomer.checkielite.common.pure.appInfo.AppInfoProvider
+import com.perfomer.checkielite.common.pure.appInfo.AppInfo
 import com.perfomer.checkielite.common.pure.util.getFormattedDate
 import com.perfomer.checkielite.common.pure.util.randomUuid
 import com.perfomer.checkielite.core.data.datasource.database.room.CheckieDatabase
@@ -58,7 +58,6 @@ internal interface FileDataSource {
 
 internal class FileDataSourceImpl(
     private val context: Context,
-    private val appInfoProvider: AppInfoProvider,
     private val backupMetadataParser: BackupMetadataParser,
 ) : FileDataSource {
 
@@ -97,7 +96,7 @@ internal class FileDataSourceImpl(
         val metadata = BackupMetadata(
             backupVersion = CURRENT_BACKUP_VERSION,
             backupTimestamp = getFormattedDate(),
-            appVersionCode = appInfoProvider.getAppInfo().versionCode,
+            appVersionCode = AppInfo.versionCode,
             databaseVersion = databaseVersion,
         )
 

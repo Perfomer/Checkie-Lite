@@ -1,7 +1,7 @@
 package com.perfomer.checkielite
 
 import android.app.Application
-import com.perfomer.checkielite.common.ui.util.app.AppInfoHolder
+import com.perfomer.checkielite.appinfo.AppInfoInitializer
 import com.perfomer.checkielite.core.data.repository.AppRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +22,7 @@ class App : Application() {
 
         setupKoin()
 
-        AppInfoHolder.initialize(this)
+        AppInfoInitializer.initialize(this)
 
         appScope.launch {
             runCatching {

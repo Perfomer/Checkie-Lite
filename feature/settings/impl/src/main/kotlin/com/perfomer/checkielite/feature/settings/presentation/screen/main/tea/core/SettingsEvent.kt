@@ -26,6 +26,8 @@ internal sealed interface SettingsUiEvent : SettingsEvent {
     data object OnCheckUpdatesClick : SettingsUiEvent
 
     data object OnLanguageSettingsClick : SettingsUiEvent
+
+    data object OnLibrariesClick : SettingsUiEvent
 }
 
 internal sealed interface SettingsNavigationEvent : SettingsEvent {

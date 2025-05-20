@@ -1,7 +1,8 @@
 plugins {
 	alias(libs.plugins.android.library)
-	alias(libs.plugins.kotlin.android)
 	alias(libs.plugins.compose.compiler)
+	alias(libs.plugins.kotlin.android)
+	alias(libs.plugins.kotlinx.serialization)
 }
 
 applyCommonAndroid()
@@ -22,6 +23,8 @@ dependencies {
 	implementation(projects.core.datasource.local.api)
 	implementation(projects.feature.main.api)
 
+	implementation(libs.aboutLibraries.compose.m3)
+	implementation(libs.aboutLibraries.core)
 	implementation(libs.androidx.activity.compose)
 	implementation(libs.androidx.compose.material3)
 	implementation(libs.androidx.compose.ui)

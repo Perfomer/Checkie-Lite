@@ -1,4 +1,5 @@
 [versions]
+aboutLibraries = "12.1.0"
 accompanist-systemuicontroller = "0.34.0"
 agp = "8.9.2"
 androidx-activity = "1.10.1"
@@ -29,6 +30,9 @@ test-mockk = "1.13.5"
 zoomable = "1.7.0"
 
 [libraries]
+aboutLibraries-compose-core = { module = "com.mikepenz:aboutlibraries-compose-core", version.ref = "aboutLibraries" }
+aboutLibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutLibraries" }
+aboutLibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutLibraries" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist-systemuicontroller" }
 androidx-activity = { module = "androidx.activity:activity", version.ref = "androidx-activity" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -66,6 +70,7 @@ test-mockk = { module = "io.mockk:mockk", version.ref = "test-mockk" }
 zoomable = { module = "com.mxalbert.zoomable:zoomable", version.ref = "zoomable" }
 
 [plugins]
+aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibraries" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

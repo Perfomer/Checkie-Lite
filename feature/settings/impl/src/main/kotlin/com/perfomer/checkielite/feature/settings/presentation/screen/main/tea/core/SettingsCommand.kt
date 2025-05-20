@@ -24,4 +24,6 @@ internal sealed interface SettingsNavigationCommand : SettingsCommand {
     data object SelectBackupFile : SettingsNavigationCommand
 
     data object OpenLanguageSettings : SettingsNavigationCommand
+
+    data object OpenLibraries : SettingsNavigationCommand
 }

@@ -1,16 +1,19 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor
 
 import com.perfomer.checkielite.common.tea.component.Actor
+import com.perfomer.checkielite.core.navigation.DestinationMode
 import com.perfomer.checkielite.core.navigation.ExternalDestination
 import com.perfomer.checkielite.core.navigation.ExternalDestinationWithResult
 import com.perfomer.checkielite.core.navigation.ExternalResult
 import com.perfomer.checkielite.core.navigation.ExternalRouter
 import com.perfomer.checkielite.core.navigation.Router
+import com.perfomer.checkielite.feature.settings.presentation.navigation.LibrariesDestination
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.Exit
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.OpenLanguageSettings
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.OpenLibraries
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.SelectBackupFile
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationEvent.BackupFileSelection
@@ -35,6 +38,7 @@ internal class SettingsNavigationActor(
             is Exit -> router.exit()
             is SelectBackupFile -> return selectBackupFile()
             is OpenLanguageSettings -> externalRouter.navigate(ExternalDestination.LANGUAGE_SETTINGS)
+            is OpenLibraries -> router.navigate(LibrariesDestination, DestinationMode.BOTTOM_SHEET)
         }
 
         return null

@@ -54,6 +54,7 @@ internal fun SettingsScreen(
     onBackupImportClick: () -> Unit = {},
     onCheckUpdatesClick: () -> Unit = {},
     onLanguageSettingsClick: () -> Unit = {},
+    onLibrariesClick: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -87,6 +88,7 @@ internal fun SettingsScreen(
                 isCheckUpdatesInProgress = state.isCheckUpdatesInProgress,
                 onCheckUpdatesClick = onCheckUpdatesClick,
                 onLanguageSettingsClick = onLanguageSettingsClick,
+                onLibrariesClick = onLibrariesClick,
             )
         }
 
@@ -162,6 +164,7 @@ private fun AppGroup(
     isCheckUpdatesInProgress: Boolean,
     onCheckUpdatesClick: () -> Unit,
     onLanguageSettingsClick: () -> Unit,
+    onLibrariesClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -176,6 +179,14 @@ private fun AppGroup(
             title = stringResource(R.string.settings_group_app_item_language_settings),
             icon = painterResource(R.drawable.ic_language),
             onClick = onLanguageSettingsClick,
+            endIcon = {
+                Icon(
+                    painter = painterResource(CommonDrawable.ic_chevron_right),
+                    tint = LocalCuiPalette.current.IconAccent,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
         )
 
         SettingsItem(
@@ -194,6 +205,20 @@ private fun AppGroup(
                     )
                 }
             },
+        )
+
+        SettingsItem(
+            title = stringResource(R.string.settings_group_app_item_libraries),
+            icon = painterResource(CommonDrawable.ic_info),
+            onClick = onLibrariesClick,
+            endIcon = {
+                Icon(
+                    painter = painterResource(CommonDrawable.ic_chevron_right),
+                    tint = LocalCuiPalette.current.IconAccent,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
         )
     }
 }

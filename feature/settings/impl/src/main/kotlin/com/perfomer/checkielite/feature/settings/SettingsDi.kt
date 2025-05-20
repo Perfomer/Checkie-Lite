@@ -12,6 +12,7 @@ import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
 import com.perfomer.checkielite.core.navigation.navigation
 import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupDestination
+import com.perfomer.checkielite.feature.settings.presentation.navigation.LibrariesDestination
 import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsDestination
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.BackupReducer
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.BackupStore
@@ -21,6 +22,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor.ObserveBackupProgressActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.BackupContentScreen
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.state.BackupUiStateMapper
+import com.perfomer.checkielite.feature.settings.presentation.screen.libraries.ui.LibrariesContentScreen
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.SettingsReducer
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.SettingsStore
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.CheckHasReviewsActor
@@ -43,6 +45,7 @@ private val presentationModule = module {
     navigation {
         associate<SettingsDestination, SettingsContentScreen>()
         associate<BackupDestination, BackupContentScreen>()
+        associate<LibrariesDestination, LibrariesContentScreen>()
     }
 
     factoryOf(::createSettingsStore)
@@ -50,6 +53,8 @@ private val presentationModule = module {
 
     factoryOf(::createBackupStore)
     factoryOf(::BackupContentScreen)
+
+    factoryOf(::LibrariesContentScreen)
 }
 
 internal fun createSettingsStore(

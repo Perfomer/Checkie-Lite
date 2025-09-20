@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.common.tea.impl
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.perfomer.checkielite.common.tea.Store
 import com.perfomer.checkielite.common.tea.TeaEngine
 import com.perfomer.checkielite.common.tea.component.Actor
@@ -11,6 +12,7 @@ import com.perfomer.checkielite.common.tea.util.combineActors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 
@@ -48,6 +50,10 @@ abstract class ComponentStore<Command : Any, Effect : Any, Event : Any, UiEvent 
             yield()
 
             engine.launch(coroutineScope)
+        }
+
+        lifecycle.doOnDestroy {
+            coroutineScope.cancel()
         }
     }
 }

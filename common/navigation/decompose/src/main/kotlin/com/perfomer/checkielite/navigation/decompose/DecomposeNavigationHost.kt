@@ -34,9 +34,9 @@ internal class DecomposeNavigationHost(
     @Stable
     private var root: DecomposeRootComponent by DecomposeRootComponentHolder
 
-    context(ComponentActivity)
+    context(activity: ComponentActivity)
     override fun initialize(startDestination: Destination) {
-        root = retainedComponent { componentContext ->
+        root = activity.retainedComponent { componentContext ->
             DecomposeRootComponent(
                 componentContext = componentContext,
                 startDestination = startDestination,

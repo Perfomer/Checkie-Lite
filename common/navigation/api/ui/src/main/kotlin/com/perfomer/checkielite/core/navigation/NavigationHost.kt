@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 
 interface NavigationHost {
 
-    context(ComponentActivity)
+    context(_: ComponentActivity)
     fun initialize(startDestination: Destination)
 
     fun back()

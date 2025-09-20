@@ -9,7 +9,7 @@ interface AppRestarter {
 
     fun restart(vararg actions: RestartAction)
 
-    context(Activity)
+    context(_: Activity)
     fun extractStartActions(): List<RestartAction>
 }
 
@@ -28,9 +28,10 @@ internal class AppRestarterImpl(
         exitProcess(0)
     }
 
-    context(Activity)
+    context(activity: Activity)
     @Suppress("DEPRECATION")
     override fun extractStartActions(): List<RestartAction> {
+        val intent = activity.intent
         val startActions = intent.getParcelableArrayListExtra<RestartAction>(EXTRA_START_ACTIONS)
             .orEmpty()
 

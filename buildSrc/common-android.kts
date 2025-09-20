@@ -24,7 +24,7 @@ android {
     kotlinOptions {
         jvmTarget = "21"
         freeCompilerArgs += "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
-        freeCompilerArgs += "-Xcontext-receivers"
+        freeCompilerArgs += "-Xcontext-parameters"
     }
 
     buildTypes {

@@ -148,5 +148,17 @@ private fun CuiToastPreview() = CheckieLiteTheme {
             onClick = {},
             onSwipeOut = {},
         )
+
+        CuiToast(
+            data = ToastData(
+                message = "Backup has been exported successfully",
+                icon = painterResource(CommonDrawable.ic_success),
+                iconTint = LocalCuiPalette.current.IconPositive,
+                backgroundColor = LocalCuiPalette.current.BackgroundPositiveSecondary,
+                durationMs = 1000L,
+            ),
+            onClick = {},
+            onSwipeOut = {},
+        )
     }
 }

@@ -20,9 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -35,23 +34,24 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.core.text.HtmlCompat
+import androidx.core.text.toHtml
 
 @Composable
 @ReadOnlyComposable
 private fun resources(): Resources {
-    LocalConfiguration.current
-    return LocalContext.current.resources
+    return LocalResources.current
 }
 
 fun Spanned.toHtmlWithoutParagraphs(): String {
-    return HtmlCompat.toHtml(this, HtmlCompat.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE)
+    return this.toHtml()
         .substringAfter("<p dir=\"ltr\">").substringBeforeLast("</p>")
 }
 
 fun Resources.getText(@StringRes id: Int, vararg args: Any): CharSequence {
-    val escapedArgs = args.map {
-        if (it is Spanned) it.toHtmlWithoutParagraphs() else it
-    }.toTypedArray()
+    val escapedArgs = args
+        .map { if (it is Spanned) it.toHtmlWithoutParagraphs() else it }
+        .toTypedArray()
+
     val resource = SpannedString(getText(id))
     val htmlResource = resource.toHtmlWithoutParagraphs()
     val formattedHtml = String.format(htmlResource, *escapedArgs)
@@ -80,7 +80,7 @@ fun annotatedStringResource(@StringRes id: Int): AnnotatedString {
 
 private fun spannableStringToAnnotatedString(
     text: CharSequence,
-    density: Density
+    density: Density,
 ): AnnotatedString {
     return if (text is Spanned) {
         with(density) {

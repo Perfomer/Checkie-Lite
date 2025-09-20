@@ -25,6 +25,15 @@ suspend fun <T, R> Iterable<T>.mapAsync(
         .awaitAll()
 }
 
+suspend fun <T> Iterable<T>.filterAsync(
+    predicate: suspend (T) -> Boolean,
+): List<T> = coroutineScope {
+    this@filterAsync
+        .mapAsync { it to predicate(it) }
+        .filter { it.second }
+        .map { it.first }
+}
+
 suspend fun <T> Iterable<T>.forEachAsync(
     block: suspend (T) -> Unit
 ): Unit = coroutineScope {

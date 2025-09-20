@@ -1,3 +1,5 @@
+includeBuild("build-logic")
+
 pluginManagement {
     repositories {
         google()
@@ -5,6 +7,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -14,6 +17,7 @@ dependencyResolutionManagement {
         maven { url = uri("https://artifactory-external.vkpartner.ru/artifactory/maven") }
     }
 }
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "CheckieLite"

@@ -1,9 +1,8 @@
 plugins {
 	alias(libs.plugins.android.library)
 	alias(libs.plugins.kotlin.android)
+	id("checkie.android.common")
 }
-
-applyCommonAndroid()
 
 android {
 	namespace = "com.perfomer.checkielite.common.update.rustore"

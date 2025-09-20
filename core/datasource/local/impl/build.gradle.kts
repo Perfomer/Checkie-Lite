@@ -3,13 +3,12 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.ksp)
+    id("checkie.android.common")
 }
 
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
-
-applyCommonAndroid()
 
 android {
     namespace = "com.perfomer.checkielite.core.data.datasource"

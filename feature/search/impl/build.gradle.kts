@@ -3,9 +3,8 @@ plugins {
 	alias(libs.plugins.kotlin.android)
 	alias(libs.plugins.compose.compiler)
 	alias(libs.plugins.kotlinx.serialization)
+	id("checkie.android.common")
 }
-
-applyCommonAndroid()
 
 android {
 	namespace = "com.perfomer.checkielite.feature.search"

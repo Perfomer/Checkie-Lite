@@ -2,9 +2,8 @@ plugins {
 	alias(libs.plugins.android.library)
 	alias(libs.plugins.compose.compiler)
 	alias(libs.plugins.kotlin.android)
+	id("checkie.android.common")
 }
-
-applyCommonAndroid()
 
 android {
 	namespace = "com.perfomer.checkielite.navigation"

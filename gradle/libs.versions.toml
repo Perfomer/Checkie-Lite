@@ -1,32 +1,31 @@
 [versions]
-aboutLibraries = "12.1.0"
-accompanist-systemuicontroller = "0.34.0"
+aboutLibraries = "12.2.4"
+accompanist-systemuicontroller = "0.36.0"
 agp = "8.13.0"
-androidx-activity = "1.10.1"
+androidx-activity = "1.11.0"
 androidx-appcompat = "1.7.1"
 androidx-compose-bom = "2025.06.00"
-androidx-core = "1.16.0"
-androidx-core-ktx = "1.16.0"
+androidx-core = "1.17.0"
 androidx-core-ktx-splashscreen = "1.0.1"
-androidx-lifecycle-ktx = "2.9.1"
-androidx-room = "2.7.1"
-coil = "3.1.0"
-composables-core = "1.20.1"
+androidx-lifecycle-ktx = "2.9.4"
+androidx-room = "2.8.0"
+coil = "3.3.0"
+composables-core = "1.43.1"
 compressor = "3.0.1"
 decompose = "3.3.0"
-dragAndDrop = "0.2.0" # 0.3.0 brokes second time dnd
+dragAndDrop = "0.4.0"
 fadingEdges = "1.0.4"
-googleFonts = "1.8.2"
-koin = "4.0.4"
+googleFonts = "1.9.1"
+koin = "4.1.1"
 kotlin = "2.1.20"
-kotlinx-collections-immutable = "0.3.8"
+kotlinx-collections-immutable = "0.4.0"
 kotlinx-coroutines = "1.10.2"
-kotlinx-serialization = "1.8.1"
+kotlinx-serialization = "1.9.0"
 ksp = "2.1.20-2.0.0"
 rustore-appupdate = "3.0.0"
-test-junitJupiter = "5.9.2"
-test-kotest-assertions = "5.6.2"
-test-mockk = "1.13.5"
+test-junitJupiter = "5.13.4"
+test-kotest-assertions = "6.0.3"
+test-mockk = "1.14.5"
 zoomable = "1.7.0"
 
 [libraries]
@@ -42,7 +41,7 @@ androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-core = { module = "androidx.core:core", version.ref = "androidx-core" }
-androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core-ktx" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-core-ktx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-core-ktx-splashscreen" }
 androidx-lifecycle-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-ktx" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }

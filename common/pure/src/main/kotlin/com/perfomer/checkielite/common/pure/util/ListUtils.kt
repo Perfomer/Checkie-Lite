@@ -22,8 +22,7 @@ fun <T> List<T>.replace(index: Int, valueProvider: (T) -> T): List<T> {
 }
 
 fun <T> List<T>.toArrayList(): ArrayList<T> {
-    return if (this is ArrayList<T>) this
-    else ArrayList<T>().apply { addAll(this@toArrayList) }
+    return this as? ArrayList<T> ?: ArrayList(this)
 }
 
 fun <T> List<T>.swap(from: Int, to: Int): List<T> {

@@ -5,6 +5,7 @@ import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
@@ -12,17 +13,20 @@ class AndroidCommonConventionPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         with(target) {
+            val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
+            val javaVersion = libs.findVersion("java").get().requiredVersion.toInt()
+
             extensions.findByType(ApplicationExtension::class.java)?.let { ext ->
-                ext.configureCommonAndroid()
+                ext.configureCommonAndroid(javaVersion)
             }
 
             extensions.findByType(LibraryExtension::class.java)?.let { ext ->
-                ext.configureCommonAndroid()
+                ext.configureCommonAndroid(javaVersion)
             }
 
             extensions.findByType(KotlinAndroidProjectExtension::class.java)?.apply {
                 compilerOptions {
-                    jvmTarget.set(JvmTarget.JVM_21)
+                    jvmTarget.set(JvmTarget.fromTarget(javaVersion.toString()))
                     freeCompilerArgs.addAll(
                         "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                         "-Xcontext-parameters",
@@ -32,7 +36,7 @@ class AndroidCommonConventionPlugin : Plugin<Project> {
         }
     }
 
-    private fun ApplicationExtension.configureCommonAndroid() {
+    private fun ApplicationExtension.configureCommonAndroid(javaVersion: Int) {
         compileSdk = 36
 
         defaultConfig {
@@ -46,12 +50,12 @@ class AndroidCommonConventionPlugin : Plugin<Project> {
         packaging.resources.excludes.add("META-INF/*.kotlin_module")
 
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_21
-            targetCompatibility = JavaVersion.VERSION_21
+            sourceCompatibility = JavaVersion.toVersion(javaVersion)
+            targetCompatibility = JavaVersion.toVersion(javaVersion)
         }
     }
 
-    private fun LibraryExtension.configureCommonAndroid() {
+    private fun LibraryExtension.configureCommonAndroid(javaVersion: Int) {
         compileSdk = 36
 
         defaultConfig {
@@ -65,8 +69,8 @@ class AndroidCommonConventionPlugin : Plugin<Project> {
         packaging.resources.excludes.add("META-INF/*.kotlin_module")
 
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_21
-            targetCompatibility = JavaVersion.VERSION_21
+            sourceCompatibility = JavaVersion.toVersion(javaVersion)
+            targetCompatibility = JavaVersion.toVersion(javaVersion)
         }
     }
 }

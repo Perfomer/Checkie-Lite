@@ -5,7 +5,6 @@ import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
@@ -13,8 +12,7 @@ class AndroidCommonConventionPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         with(target) {
-            val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
-            val javaVersion = libs.findVersion("java").get().requiredVersion.toInt()
+            val javaVersion = libs.getVersion("java").toInt()
 
             extensions.findByType(ApplicationExtension::class.java)?.let { ext ->
                 ext.configureCommonAndroid(javaVersion)

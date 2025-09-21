@@ -10,6 +10,11 @@ plugins {
 android {
     namespace = "com.perfomer.checkielite"
 
+    defaultConfig {
+        versionCode = 9
+        versionName = "1.6.0"
+    }
+
     androidResources {
         generateLocaleConfig = true
     }

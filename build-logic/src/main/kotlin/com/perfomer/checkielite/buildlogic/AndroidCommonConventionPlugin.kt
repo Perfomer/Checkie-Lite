@@ -14,11 +14,6 @@ class AndroidCommonConventionPlugin : Plugin<Project> {
         with(target) {
             extensions.findByType(ApplicationExtension::class.java)?.let { ext ->
                 ext.configureCommonAndroid()
-
-                ext.defaultConfig.apply {
-                    versionCode = 9
-                    versionName = "1.6.0"
-                }
             }
 
             extensions.findByType(LibraryExtension::class.java)?.let { ext ->
@@ -54,17 +49,6 @@ class AndroidCommonConventionPlugin : Plugin<Project> {
             sourceCompatibility = JavaVersion.VERSION_21
             targetCompatibility = JavaVersion.VERSION_21
         }
-
-        buildTypes {
-            maybeCreate("debug").apply {
-                isMinifyEnabled = false
-            }
-            maybeCreate("release").apply {
-                // After AGP 8.4.0 minification should be enabled only for `:app` module.
-                // https://stackoverflow.com/a/78794247/5328992
-                isMinifyEnabled = false
-            }
-        }
     }
 
     private fun LibraryExtension.configureCommonAndroid() {
@@ -83,17 +67,6 @@ class AndroidCommonConventionPlugin : Plugin<Project> {
         compileOptions {
             sourceCompatibility = JavaVersion.VERSION_21
             targetCompatibility = JavaVersion.VERSION_21
-        }
-
-        buildTypes {
-            maybeCreate("debug").apply {
-                isMinifyEnabled = false
-            }
-            maybeCreate("release").apply {
-                // After AGP 8.4.0 minification should be enabled only for `:app` module.
-                // https://stackoverflow.com/a/78794247/5328992
-                isMinifyEnabled = false
-            }
         }
     }
 }

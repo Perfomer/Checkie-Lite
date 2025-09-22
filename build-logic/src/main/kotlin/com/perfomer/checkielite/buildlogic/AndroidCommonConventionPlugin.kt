@@ -5,6 +5,7 @@ import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.findByType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
@@ -14,15 +15,13 @@ class AndroidCommonConventionPlugin : Plugin<Project> {
         with(target) {
             val javaVersion = libs.getVersion("java").toInt()
 
-            extensions.findByType(ApplicationExtension::class.java)?.let { ext ->
-                ext.configureCommonAndroid(javaVersion)
-            }
+            extensions.findByType<ApplicationExtension>()
+                ?.configureCommonAndroid(javaVersion)
 
-            extensions.findByType(LibraryExtension::class.java)?.let { ext ->
-                ext.configureCommonAndroid(javaVersion)
-            }
+            extensions.findByType<LibraryExtension>()
+                ?.configureCommonAndroid(javaVersion)
 
-            extensions.findByType(KotlinAndroidProjectExtension::class.java)?.apply {
+            extensions.findByType<KotlinAndroidProjectExtension>()?.apply {
                 compilerOptions {
                     jvmTarget.set(JvmTarget.fromTarget(javaVersion.toString()))
                     freeCompilerArgs.addAll(

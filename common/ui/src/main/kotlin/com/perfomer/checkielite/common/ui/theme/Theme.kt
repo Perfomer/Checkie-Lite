@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.common.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -13,12 +12,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CheckieLiteTheme(
+    darkTheme: Boolean = false,
     content: @Composable () -> Unit,
 ) {
-    val isDarkTheme = isSystemInDarkTheme()
-
-    val colorScheme = if (isDarkTheme) DarkAndroidColorScheme else LightAndroidColorScheme
-    val palette = if (isDarkTheme) CuiPalette.Dark else CuiPalette.Light
+    val colorScheme = if (darkTheme) DarkAndroidColorScheme else LightAndroidColorScheme
+    val palette = if (darkTheme) CuiPalette.Dark else CuiPalette.Light
 
     MaterialTheme(
         colorScheme = colorScheme,

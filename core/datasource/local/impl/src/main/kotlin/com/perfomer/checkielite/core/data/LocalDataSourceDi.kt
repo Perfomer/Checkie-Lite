@@ -25,6 +25,8 @@ import com.perfomer.checkielite.core.data.repository.SearchRepository
 import com.perfomer.checkielite.core.data.repository.SearchRepositoryImpl
 import com.perfomer.checkielite.core.data.repository.TagRepository
 import com.perfomer.checkielite.core.data.repository.TagRepositoryImpl
+import com.perfomer.checkielite.core.data.repository.ThemeRepository
+import com.perfomer.checkielite.core.data.repository.ThemeRepositoryImpl
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -44,6 +46,7 @@ val localDataSourceModule = module {
     singleOf(::ReviewRepositoryImpl) bind ReviewRepository::class
     singleOf(::SearchRepositoryImpl) bind SearchRepository::class
     singleOf(::TagRepositoryImpl) bind TagRepository::class
+    singleOf(::ThemeRepositoryImpl) bind ThemeRepository::class
 
     singleOf(CheckieDatabase::getInstance)
 }

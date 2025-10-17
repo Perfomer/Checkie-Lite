@@ -14,6 +14,7 @@ import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.BackupNavigationManager
 import com.perfomer.checkielite.navigation.StartScreenProvider
 import com.perfomer.checkielite.navigation.di.navigationModule
+import com.performer.checkielite.core.theme.themeModule
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -32,6 +33,7 @@ private val appModule = module {
 private val coreModules
     get() = listOf(
         localDataSourceModule,
+        themeModule,
     )
 
 private val commonModules

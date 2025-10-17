@@ -59,4 +59,6 @@ include(
     ":core:datasource:local:api",
     ":core:datasource:local:impl",
     ":core:entity",
+    ":core:theme:api",
+    ":core:theme:impl",
 )

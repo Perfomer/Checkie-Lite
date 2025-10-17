@@ -61,6 +61,8 @@ dependencies {
     implementation(projects.common.ui)
     implementation(projects.common.update.rustore)
     implementation(projects.core.datasource.local.impl)
+    implementation(projects.core.theme.api)
+    implementation(projects.core.theme.impl)
     implementation(projects.feature.gallery.impl)
     implementation(projects.feature.main.impl)
     implementation(projects.feature.reviewCreation.impl)

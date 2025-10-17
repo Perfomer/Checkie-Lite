@@ -31,7 +31,6 @@ import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalToastController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastHost
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberSuccessToast
-import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
 import com.perfomer.checkielite.common.ui.util.TransparentSystemBars
 import com.perfomer.checkielite.common.ui.util.navigation.DefaultBottomSheetDismissHandlerOwner
@@ -44,6 +43,9 @@ import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.BackupNavigationManager
 import com.perfomer.checkielite.navigation.ComposablesBottomSheetController
 import com.perfomer.checkielite.navigation.StartScreenProvider
+import com.perfomer.checkielite.theme.AppThemedContent
+import com.performer.checkielite.core.theme.holder.ThemeHolder
+import com.performer.checkielite.core.theme.manager.ThemeManager
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
@@ -60,6 +62,8 @@ class AppActivity : AppCompatActivity() {
     private val startScreenProvider: StartScreenProvider by inject()
     private val appRestarter: AppRestarter by inject()
     private val navigationHost: NavigationHost by inject()
+    private val themeManager: ThemeManager by inject()
+    private val themeHolder: ThemeHolder by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -68,13 +72,14 @@ class AppActivity : AppCompatActivity() {
         val restartActions = appRestarter.extractStartActions().toImmutableList()
 
         initializeApplication()
+        setTheme()
 
         enableEdgeToEdge()
 
         setContent {
             TransparentSystemBars()
 
-            CheckieLiteTheme {
+            AppThemedContent(themeHolder = themeHolder) {
                 EnrichCompositionLocal {
                     Content()
 
@@ -187,7 +192,10 @@ class AppActivity : AppCompatActivity() {
         content: @Composable () -> Unit,
     ) = with(navigationHost) {
         val backProgress by registerPredictiveBackHandler(onBack = ::back)
-        val animatedBackProgress by animateFloatAsState(targetValue = backProgress, label = "OverlayBackProgress")
+        val animatedBackProgress by animateFloatAsState(
+            targetValue = backProgress,
+            label = "OverlayBackProgress"
+        )
 
         Box(
             content = { content() },
@@ -199,5 +207,9 @@ class AppActivity : AppCompatActivity() {
 
     private fun checkForUpdates() = lifecycleScope.launch {
         updateManager.updateIfAvailable()
+    }
+
+    private fun setTheme() = lifecycleScope.launch {
+        themeManager.loadThemeMode()
     }
 }

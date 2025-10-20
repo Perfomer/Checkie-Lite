@@ -5,6 +5,7 @@
     <string name="settings_group_app_item_check_updates">Проверить обновления</string>
     <string name="settings_group_app_item_language_settings">Выбрать язык</string>
     <string name="settings_group_app_item_libraries">Библиотеки</string>
+    <string name="settings_group_app_item_theme">Выбрать тему</string>
     <string name="settings_group_data_title">Данные</string>
     <string name="settings_group_data_description">Сохраните все данные приложения в одном файле, чтобы не потерять их. Его можно передать на другое устройство или сохранить на облако.</string>
     <string name="settings_group_data_item_import">Восстановить данные</string>
@@ -24,4 +25,8 @@
     <string name="settings_backup_dialog_confirmimport_message">Все данные приложения будут заменены на те, что находятся в резервной копии, которую вы выберете.\n\nВы уверены, что хотите <b>перезаписать все данные приложения</b>?</string>
     <string name="settings_toast_update_check_succeed">Версия приложения актуальна</string>
     <string name="settings_toast_update_check_failed">Не удалось проверить обновления</string>
+    <string name="settings_theme_title">Тема</string>
+    <string name="settings_theme_option_system">Как в системе</string>
+    <string name="settings_theme_option_light">Светлая</string>
+    <string name="settings_theme_option_dark">Темная</string>
 </resources>

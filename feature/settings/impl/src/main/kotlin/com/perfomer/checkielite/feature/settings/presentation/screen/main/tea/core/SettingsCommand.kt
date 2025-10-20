@@ -1,8 +1,12 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core
 
+import com.perfomer.checkielite.core.domain.entity.theme.ThemeMode
+
 internal sealed interface SettingsCommand {
 
     data object LoadSettings : SettingsCommand
+
+    data object LoadTheme : SettingsCommand
 
     data object CheckSyncing : SettingsCommand
 
@@ -26,4 +30,6 @@ internal sealed interface SettingsNavigationCommand : SettingsCommand {
     data object OpenLanguageSettings : SettingsNavigationCommand
 
     data object OpenLibraries : SettingsNavigationCommand
+
+    class OpenThemeSettings(val currentTheme: ThemeMode) : SettingsNavigationCommand
 }

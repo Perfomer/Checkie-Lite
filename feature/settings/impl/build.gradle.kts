@@ -20,6 +20,7 @@ dependencies {
 	implementation(projects.common.ui)
 	implementation(projects.common.update.api)
 	implementation(projects.core.datasource.local.api)
+	implementation(projects.core.theme.api)
 	implementation(projects.feature.main.api)
 
 	implementation(libs.aboutLibraries.compose.m3)

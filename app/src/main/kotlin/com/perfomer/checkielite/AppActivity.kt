@@ -44,7 +44,6 @@ import com.perfomer.checkielite.navigation.BackupNavigationManager
 import com.perfomer.checkielite.navigation.ComposablesBottomSheetController
 import com.perfomer.checkielite.navigation.StartScreenProvider
 import com.perfomer.checkielite.theme.AppThemedContent
-import com.performer.checkielite.core.theme.holder.ThemeHolder
 import com.performer.checkielite.core.theme.manager.ThemeManager
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -63,7 +62,6 @@ class AppActivity : AppCompatActivity() {
     private val appRestarter: AppRestarter by inject()
     private val navigationHost: NavigationHost by inject()
     private val themeManager: ThemeManager by inject()
-    private val themeHolder: ThemeHolder by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -79,7 +77,7 @@ class AppActivity : AppCompatActivity() {
         setContent {
             TransparentSystemBars()
 
-            AppThemedContent(themeHolder = themeHolder) {
+            AppThemedContent(themeManager = themeManager) {
                 EnrichCompositionLocal {
                     Content()
 

@@ -1,25 +1,31 @@
-package com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.state
+package com.perfomer.checkielite.feature.settings.presentation.screen.theme.ui.state
 
 import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import com.perfomer.checkielite.common.pure.appInfo.AppInfo
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
 import com.perfomer.checkielite.core.domain.entity.theme.ThemeMode
 import com.perfomer.checkielite.feature.settings.R
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsState
+import com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.core.ThemeState
 
-
-internal class SettingsUiStateMapper(
+internal class ThemeUiStateMapper(
     private val context: Context,
-) : UiStateMapper<SettingsState, SettingsUiState> {
+) : UiStateMapper<ThemeState, ThemeUiState> {
 
-    override fun map(state: SettingsState): SettingsUiState {
-        return SettingsUiState(
-            appVersion = AppInfo.versionName,
-            isCheckUpdatesInProgress = state.isCheckUpdatesInProgress,
-            themeIcon = state.currentTheme.icon,
-            themeMode = context.getString(state.currentTheme.label),
+    override fun map(state: ThemeState): ThemeUiState {
+        return ThemeUiState(
+            items = state.themeOptions.map { option ->
+                option.toUi(isSelected = state.currentTheme == option)
+            },
+        )
+    }
+
+    private fun ThemeMode.toUi(isSelected: Boolean): ThemeOption {
+        return ThemeOption(
+            type = this,
+            icon = icon,
+            text = context.getString(label),
+            isSelected = isSelected,
         )
     }
 

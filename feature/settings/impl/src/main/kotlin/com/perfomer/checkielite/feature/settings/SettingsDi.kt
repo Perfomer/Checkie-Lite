@@ -14,6 +14,7 @@ import com.perfomer.checkielite.core.navigation.navigation
 import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupDestination
 import com.perfomer.checkielite.feature.settings.presentation.navigation.LibrariesDestination
 import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsDestination
+import com.perfomer.checkielite.feature.settings.presentation.navigation.ThemeDestination
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.BackupReducer
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.BackupStore
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor.AwaitActor
@@ -30,9 +31,17 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.ac
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.CheckUpdatesActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.ExportBackupActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.ImportBackupActor
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.LoadThemeActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.SettingsNavigationActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.SettingsContentScreen
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.state.SettingsUiStateMapper
+import com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.ThemeReducer
+import com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.ThemeStore
+import com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.actor.SetThemeActor
+import com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.actor.ThemeNavigationActor
+import com.perfomer.checkielite.feature.settings.presentation.screen.theme.ui.ThemeContentScreen
+import com.perfomer.checkielite.feature.settings.presentation.screen.theme.ui.state.ThemeUiStateMapper
+import com.performer.checkielite.core.theme.manager.ThemeManager
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor.LaunchAppUpdateActor as BackupLaunchAppUpdateActor
@@ -46,6 +55,7 @@ private val presentationModule = module {
         associate<SettingsDestination, SettingsContentScreen>()
         associate<BackupDestination, BackupContentScreen>()
         associate<LibrariesDestination, LibrariesContentScreen>()
+        associate<ThemeDestination, ThemeContentScreen>()
     }
 
     factoryOf(::createSettingsStore)
@@ -55,12 +65,17 @@ private val presentationModule = module {
     factoryOf(::BackupContentScreen)
 
     factoryOf(::LibrariesContentScreen)
+
+    factoryOf(::createThemeStore)
+    factoryOf(::ThemeContentScreen)
 }
 
 internal fun createSettingsStore(
     componentContext: ComponentContext,
     router: Router,
+    context: Context,
     externalRouter: ExternalRouter,
+    themeManager: ThemeManager,
     appRepository: AppRepository,
     backupRepository: BackupRepository,
     reviewRepository: ReviewRepository,
@@ -69,7 +84,7 @@ internal fun createSettingsStore(
     return SettingsStore(
         componentContext = componentContext,
         reducer = SettingsReducer(),
-        uiStateMapper = SettingsUiStateMapper(),
+        uiStateMapper = SettingsUiStateMapper(context),
         actors = setOf(
             SettingsNavigationActor(router, externalRouter),
             ExportBackupActor(backupRepository),
@@ -77,6 +92,7 @@ internal fun createSettingsStore(
             CheckSyncingActor(appRepository),
             CheckHasReviewsActor(reviewRepository),
             CheckUpdatesActor(appUpdateManager),
+            LoadThemeActor(themeManager),
             SettingsLaunchAppUpdateActor(appUpdateManager),
         ),
     )
@@ -102,6 +118,25 @@ internal fun createBackupStore(
             AwaitActor(),
             CancelBackupActor(backupRepository),
             BackupLaunchAppUpdateActor(appUpdateManager),
+        ),
+    )
+}
+
+internal fun createThemeStore(
+    componentContext: ComponentContext,
+    destination: ThemeDestination,
+    context: Context,
+    router: Router,
+    themeManager: ThemeManager,
+): ThemeStore {
+    return ThemeStore(
+        componentContext = componentContext,
+        destination = destination,
+        reducer = ThemeReducer(),
+        uiStateMapper = ThemeUiStateMapper(context),
+        actors = setOf(
+            SetThemeActor(themeManager),
+            ThemeNavigationActor(router),
         ),
     )
 }

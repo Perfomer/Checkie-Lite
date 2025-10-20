@@ -6,4 +6,6 @@ import androidx.compose.runtime.Immutable
 internal data class SettingsUiState(
     val appVersion: String,
     val isCheckUpdatesInProgress: Boolean,
+    val themeIcon: Int,
+    val themeMode: String,
 )

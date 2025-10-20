@@ -18,9 +18,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -54,12 +56,16 @@ internal fun SettingsScreen(
     onBackupImportClick: () -> Unit = {},
     onCheckUpdatesClick: () -> Unit = {},
     onLanguageSettingsClick: () -> Unit = {},
+    onThemeSettingsClick: () -> Unit = {},
     onLibrariesClick: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.settings_title), fontSize = 18.sp, fontWeight = FontWeight.Medium) },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent
+                ),
                 navigationIcon = {
                     CuiToolbarNavigationIcon(
                         painter = painterResource(CommonDrawable.ic_cross),
@@ -85,10 +91,12 @@ internal fun SettingsScreen(
             CuiSpacer(20.dp)
 
             AppGroup(
+                state = state,
                 isCheckUpdatesInProgress = state.isCheckUpdatesInProgress,
                 onCheckUpdatesClick = onCheckUpdatesClick,
                 onLanguageSettingsClick = onLanguageSettingsClick,
                 onLibrariesClick = onLibrariesClick,
+                onThemeSettingsClick = onThemeSettingsClick,
             )
         }
 
@@ -161,9 +169,11 @@ private fun BackupGroup(
 
 @Composable
 private fun AppGroup(
+    state: SettingsUiState,
     isCheckUpdatesInProgress: Boolean,
     onCheckUpdatesClick: () -> Unit,
     onLanguageSettingsClick: () -> Unit,
+    onThemeSettingsClick: () -> Unit,
     onLibrariesClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -187,6 +197,13 @@ private fun AppGroup(
                     modifier = Modifier.size(20.dp)
                 )
             }
+        )
+
+        SettingsItem(
+            title = stringResource(R.string.settings_group_app_item_theme),
+            subtitle = state.themeMode,
+            icon = painterResource(state.themeIcon),
+            onClick = onThemeSettingsClick,
         )
 
         SettingsItem(
@@ -321,4 +338,6 @@ private fun SettingsScreenPreview() = CheckieLiteTheme {
 internal val mockUiState = SettingsUiState(
     appVersion = "1.0.0",
     isCheckUpdatesInProgress = false,
+    themeIcon = R.drawable.ic_theme_system,
+    themeMode = "System",
 )

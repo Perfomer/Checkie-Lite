@@ -6,14 +6,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.core.domain.entity.theme.ThemeMode
-import com.performer.checkielite.core.theme.holder.ThemeHolder
+import com.performer.checkielite.core.theme.manager.ThemeManager
 
 @Composable
 fun AppThemedContent(
-    themeHolder: ThemeHolder,
+    themeManager: ThemeManager,
     content: @Composable () -> Unit
 ) {
-    val themeMode by themeHolder.themeMode.collectAsState()
+    val themeMode by themeManager.themeMode.collectAsState()
 
     val darkTheme = when (themeMode) {
         ThemeMode.LIGHT -> false

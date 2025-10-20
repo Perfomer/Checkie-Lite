@@ -25,6 +25,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnCheckUpdatesClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnLanguageSettingsClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnLibrariesClick
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnThemeSettingsClick
 
 internal class SettingsContentScreen(private val store: SettingsStore) : Screen {
 
@@ -62,6 +63,7 @@ internal class SettingsContentScreen(private val store: SettingsStore) : Screen 
             onBackupImportClick = acceptable(OnBackupImportClick),
             onCheckUpdatesClick = acceptable(OnCheckUpdatesClick),
             onLanguageSettingsClick = acceptable(OnLanguageSettingsClick),
+            onThemeSettingsClick = acceptable(OnThemeSettingsClick),
             onLibrariesClick = acceptable(OnLibrariesClick),
         )
     }

@@ -13,7 +13,7 @@ internal sealed interface SettingsEvent {
 
     class UpdatesCheck(val hasUpdates: Lce<Boolean>) : SettingsEvent
 
-    class ThemeLoaded(val theme: ThemeMode) : SettingsEvent
+    class ThemeUpdated(val theme: ThemeMode) : SettingsEvent
 }
 
 internal sealed interface SettingsUiEvent : SettingsEvent {

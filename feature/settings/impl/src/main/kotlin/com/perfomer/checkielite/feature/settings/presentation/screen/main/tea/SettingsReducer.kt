@@ -19,7 +19,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.CheckingHasReviewsStatusUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.Initialize
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.SyncingStatusUpdated
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.ThemeLoaded
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.ThemeUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.UpdatesCheck
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.Exit
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.OpenLanguageSettings
@@ -62,7 +62,7 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
                 effects(ShowToast(Reason.FAILED_TO_CHECK_UPDATES))
             }
         }
-        is ThemeLoaded -> state { copy(currentTheme = event.theme) }
+        is ThemeUpdated -> state { copy(currentTheme = event.theme) }
     }
 
     private fun reduceInitialize() {

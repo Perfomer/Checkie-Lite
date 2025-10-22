@@ -6,7 +6,7 @@ import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.core.ThemeCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.core.ThemeCommand.SetTheme
 import com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.core.ThemeEvent
-import com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.core.ThemeEvent.ThemeSetSuccessfully
+import com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.core.ThemeEvent.ThemeSetSucceed
 import com.performer.checkielite.core.theme.manager.ThemeManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -24,7 +24,7 @@ internal class SetThemeActor(
 
     private fun handleCommand(command: SetTheme): Flow<ThemeEvent> {
         return flowBy { themeManager.setThemeMode(command.themeMode) }
-            .map { ThemeSetSuccessfully(command.themeMode) }
+            .map { ThemeSetSucceed(command.themeMode) }
             .onCatchLog(TAG, "Failed to set selected theme", rethrow = false)
     }
 

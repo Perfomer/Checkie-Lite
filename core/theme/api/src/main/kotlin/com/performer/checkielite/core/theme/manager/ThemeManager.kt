@@ -7,7 +7,7 @@ interface ThemeManager {
 
     val themeMode: StateFlow<ThemeMode>
 
-    suspend fun loadThemeMode()
+    suspend fun warmUpThemeMode()
 
     suspend fun setThemeMode(mode: ThemeMode)
 }

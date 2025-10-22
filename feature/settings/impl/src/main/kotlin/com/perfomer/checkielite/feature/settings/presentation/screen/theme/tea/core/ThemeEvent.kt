@@ -4,7 +4,7 @@ import com.perfomer.checkielite.core.domain.entity.theme.ThemeMode
 
 internal sealed interface ThemeEvent {
 
-    class ThemeSetSuccessfully(val themeMode: ThemeMode) : ThemeEvent
+    class ThemeSetSucceed(val themeMode: ThemeMode) : ThemeEvent
 }
 
 internal sealed interface ThemeUiEvent : ThemeEvent {

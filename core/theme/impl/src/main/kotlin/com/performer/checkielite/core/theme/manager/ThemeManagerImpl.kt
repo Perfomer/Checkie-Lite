@@ -13,7 +13,7 @@ internal class ThemeManagerImpl(
     private val _themeMode = MutableStateFlow(ThemeMode.SYSTEM)
     override val themeMode: StateFlow<ThemeMode> = _themeMode.asStateFlow()
 
-    override suspend fun loadThemeMode() {
+    override suspend fun warmUpThemeMode() {
         val mode = themeRepository.getThemeMode() ?: ThemeMode.SYSTEM
         _themeMode.value = mode
     }

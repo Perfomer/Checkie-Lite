@@ -5,7 +5,7 @@ import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.LoadTheme
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.ThemeLoaded
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.ThemeUpdated
 import com.performer.checkielite.core.theme.manager.ThemeManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -23,7 +23,7 @@ internal class LoadThemeActor(
 
     private fun handleCommand(command: LoadTheme): Flow<SettingsEvent> {
         return themeManager.themeMode
-            .map(::ThemeLoaded)
+            .map(::ThemeUpdated)
             .onCatchLog(TAG, "Failed to load theme", rethrow = false)
     }
 

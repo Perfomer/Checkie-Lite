@@ -70,7 +70,7 @@ class AppActivity : AppCompatActivity() {
         val restartActions = appRestarter.extractStartActions().toImmutableList()
 
         initializeApplication()
-        setTheme()
+        prepareTheme()
 
         enableEdgeToEdge()
 
@@ -190,10 +190,7 @@ class AppActivity : AppCompatActivity() {
         content: @Composable () -> Unit,
     ) = with(navigationHost) {
         val backProgress by registerPredictiveBackHandler(onBack = ::back)
-        val animatedBackProgress by animateFloatAsState(
-            targetValue = backProgress,
-            label = "OverlayBackProgress"
-        )
+        val animatedBackProgress by animateFloatAsState(targetValue = backProgress, label = "OverlayBackProgress")
 
         Box(
             content = { content() },
@@ -207,7 +204,7 @@ class AppActivity : AppCompatActivity() {
         updateManager.updateIfAvailable()
     }
 
-    private fun setTheme() = lifecycleScope.launch {
-        themeManager.loadThemeMode()
+    private fun prepareTheme() = lifecycleScope.launch {
+        themeManager.warmUpThemeMode()
     }
 }

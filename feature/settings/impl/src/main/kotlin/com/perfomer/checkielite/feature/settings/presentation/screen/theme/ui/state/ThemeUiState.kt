@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.theme.ui.state
 
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
 import com.perfomer.checkielite.core.domain.entity.theme.ThemeMode
 
@@ -10,7 +11,7 @@ internal data class ThemeUiState(
 
 internal data class ThemeOption(
     val type: ThemeMode,
-    val icon: Int,
+    @DrawableRes val icon: Int,
     val text: String,
     val isSelected: Boolean,
 )

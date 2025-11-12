@@ -122,6 +122,7 @@ private fun Content(
     ) {
         item {
             ReviewDetailsHeader(
+                id = state.id,
                 productName = state.productName,
                 brandName = state.brandName,
             )
@@ -188,6 +189,7 @@ private fun ReviewDetailsScreenPreview() = CheckieLiteTheme {
 }
 
 internal val mockUiState = ReviewDetailsUiState.Content(
+    id = "",
     productName = "Chicken toasts with poached eggs",
     brandName = "LUI BIDON",
     picturesUri = persistentListOf(

@@ -13,12 +13,14 @@ android {
 dependencies {
 	api(projects.common.navigation.api.ui)
 	implementation(projects.common.android)
+	implementation(projects.common.ui)
 
 	api(libs.decompose)
 	implementation(libs.androidx.activity.compose)
 	implementation(libs.androidx.compose.material3)
 	implementation(libs.androidx.compose.ui)
 	implementation(libs.decompose.extensions.compose)
+	implementation(libs.decompose.extensions.compose.experimantal)
 	implementation(libs.koin.core)
 	implementation(libs.kotlinx.coroutines)
 	implementation(platform(libs.androidx.compose.bom))

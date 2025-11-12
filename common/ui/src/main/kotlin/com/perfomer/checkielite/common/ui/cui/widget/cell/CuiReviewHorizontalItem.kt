@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.common.ui.cui.widget.cell
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.perfomer.checkielite.common.ui.R
+import com.perfomer.checkielite.common.ui.cui.modifier.localSharedElement
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRating
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.cui.widget.text.CuiFadedText
@@ -43,11 +45,12 @@ data class ReviewItem(
     val isSyncing: Boolean,
 )
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CuiReviewHorizontalItem(
     item: ReviewItem,
     onClick: (id: String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -69,12 +72,14 @@ fun CuiReviewHorizontalItem(
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
+                        .localSharedElement(item.imageUri)
                         .fillMaxSize()
                         .border(
                             width = 1.dp,
                             shape = RoundedCornerShape(16.dp),
                             color = LocalCuiPalette.current.OutlinePicture,
                         )
+                        .clip(RoundedCornerShape(16.dp)),
                 )
             } else {
                 Icon(
@@ -95,7 +100,9 @@ fun CuiReviewHorizontalItem(
                 text = item.title,
                 fontSize = 16.sp,
                 maxLines = 1,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .localSharedElement(item.id + item.title)
+                    .fillMaxWidth(),
             )
 
             if (item.brand != null) {
@@ -105,7 +112,9 @@ fun CuiReviewHorizontalItem(
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     color = LocalCuiPalette.current.TextAccent,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .localSharedElement(item.id + item.brand)
+                        .fillMaxWidth(),
                 )
             }
         }

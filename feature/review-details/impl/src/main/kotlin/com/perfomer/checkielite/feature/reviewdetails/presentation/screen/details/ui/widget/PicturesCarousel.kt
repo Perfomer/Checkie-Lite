@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
+import com.perfomer.checkielite.common.ui.cui.modifier.localSharedElement
 import com.perfomer.checkielite.common.ui.cui.modifier.offsetForPage
 import com.perfomer.checkielite.common.ui.cui.modifier.scaleHorizontalNeighbors
 import com.perfomer.checkielite.common.ui.cui.widget.pager.CuiHorizontalPagerIndicator
@@ -38,6 +40,7 @@ import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import kotlinx.collections.immutable.ImmutableList
 import kotlin.math.absoluteValue
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun PicturesCarousel(
     currentPictureIndex: Int,
@@ -79,6 +82,7 @@ internal fun PicturesCarousel(
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
+                            .localSharedElement(picturesUri[0])
                             .fillMaxWidth()
                             .aspectRatio(1F)
                             .blur(40.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
@@ -96,6 +100,7 @@ internal fun PicturesCarousel(
                     contentScale = ContentScale.Crop,
                     onState = { state -> pictureState = state },
                     modifier = Modifier
+                        .localSharedElement(picturesUri[0])
                         .fillMaxWidth()
                         .aspectRatio(1F)
                         .clip(RoundedCornerShape(24.dp))

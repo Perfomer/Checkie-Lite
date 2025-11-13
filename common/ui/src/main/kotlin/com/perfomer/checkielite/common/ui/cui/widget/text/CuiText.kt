@@ -97,7 +97,6 @@ fun CuiFadedText(
                     text = firstLines,
                     style = style.merge(localStyle),
                     minLines = minLines,
-                    modifier = modifier
                 )
 
                 BasicText(

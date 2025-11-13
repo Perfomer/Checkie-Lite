@@ -13,6 +13,7 @@ internal sealed interface ReviewDetailsUiState {
     }
 
     data class Content(
+        val id: String,
         val brandName: String?,
         val productName: String,
         val date: String,

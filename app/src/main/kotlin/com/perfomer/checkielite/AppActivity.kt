@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
@@ -25,6 +28,7 @@ import com.perfomer.checkielite.common.android.apprestart.AppRestarter
 import com.perfomer.checkielite.common.android.apprestart.RestartAction
 import com.perfomer.checkielite.common.android.apprestart.RestartAction.ShowSuccessBackupImportToast
 import com.perfomer.checkielite.common.android.permissions.PermissionHelper
+import com.perfomer.checkielite.common.ui.cui.modifier.LocalSharedTransitionScope
 import com.perfomer.checkielite.common.ui.cui.widget.bottomsheet.CuiBottomSheet
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.NavBarScrim
 import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalToastController
@@ -63,6 +67,7 @@ class AppActivity : AppCompatActivity() {
     private val navigationHost: NavigationHost by inject()
     private val themeManager: ThemeManager by inject()
 
+    @OptIn(ExperimentalSharedTransitionApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -78,12 +83,16 @@ class AppActivity : AppCompatActivity() {
             TransparentSystemBars()
 
             AppThemedContent(themeManager = themeManager) {
-                EnrichCompositionLocal {
-                    Content()
+                SharedTransitionLayout {
+                    EnrichCompositionLocal(
+                        sharedTransitionScope = this,
+                    ) {
+                        Content()
 
-                    NavBarScrim()
-                    ToastHost()
-                    RestartActionsHandler(restartActions)
+                        NavBarScrim()
+                        ToastHost()
+                        RestartActionsHandler(restartActions)
+                    }
                 }
             }
 
@@ -105,11 +114,16 @@ class AppActivity : AppCompatActivity() {
         navigationHost.initialize(startDestination = startScreenProvider())
     }
 
+    @OptIn(ExperimentalSharedTransitionApi::class)
     @Composable
-    private fun EnrichCompositionLocal(content: @Composable () -> Unit) {
+    private fun EnrichCompositionLocal(
+        sharedTransitionScope: SharedTransitionScope,
+        content: @Composable () -> Unit,
+    ) {
         CompositionLocalProvider(
             LocalToastController provides remember { ToastController() },
             LocalBottomSheetDismissHandlerOwner provides remember { DefaultBottomSheetDismissHandlerOwner() },
+            LocalSharedTransitionScope provides remember { sharedTransitionScope },
             content = content
         )
     }

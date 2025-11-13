@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
+import com.perfomer.checkielite.common.ui.cui.modifier.localSharedElement
 import com.perfomer.checkielite.common.ui.cui.modifier.offsetForPage
 import com.perfomer.checkielite.common.ui.cui.modifier.scaleHorizontalNeighbors
 import com.perfomer.checkielite.common.ui.cui.widget.pager.CuiHorizontalPagerIndicator
@@ -38,6 +40,7 @@ import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import kotlinx.collections.immutable.ImmutableList
 import kotlin.math.absoluteValue
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun PicturesCarousel(
     currentPictureIndex: Int,
@@ -63,6 +66,7 @@ internal fun PicturesCarousel(
                 horizontal = 24.dp,
                 vertical = 24.dp
             ),
+            modifier = Modifier.localSharedElement(picturesUri[0])
         ) { i ->
             Box(
                 modifier = Modifier.scaleHorizontalNeighbors(pagerState = pagerState, page = i)

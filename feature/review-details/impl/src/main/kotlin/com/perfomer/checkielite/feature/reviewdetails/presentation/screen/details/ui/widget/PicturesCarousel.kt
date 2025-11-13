@@ -66,6 +66,7 @@ internal fun PicturesCarousel(
                 horizontal = 24.dp,
                 vertical = 24.dp
             ),
+            modifier = Modifier.localSharedElement(picturesUri[0])
         ) { i ->
             Box(
                 modifier = Modifier.scaleHorizontalNeighbors(pagerState = pagerState, page = i)
@@ -82,7 +83,6 @@ internal fun PicturesCarousel(
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .localSharedElement(picturesUri[0])
                             .fillMaxWidth()
                             .aspectRatio(1F)
                             .blur(40.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
@@ -100,7 +100,6 @@ internal fun PicturesCarousel(
                     contentScale = ContentScale.Crop,
                     onState = { state -> pictureState = state },
                     modifier = Modifier
-                        .localSharedElement(picturesUri[0])
                         .fillMaxWidth()
                         .aspectRatio(1F)
                         .clip(RoundedCornerShape(24.dp))

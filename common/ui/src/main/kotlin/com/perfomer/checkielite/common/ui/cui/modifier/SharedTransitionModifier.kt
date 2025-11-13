@@ -15,6 +15,19 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Rect
 
 @OptIn(ExperimentalSharedTransitionApi::class)
+val LocalSharedTransitionScope = staticCompositionLocalOf<SharedTransitionScope> { error("Not provided") }
+val LocalAnimatedVisibilityScope = staticCompositionLocalOf<AnimatedVisibilityScope> { error("Not provided") }
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+private val defaultBoundsTransform = BoundsTransform { _, _ ->
+    spring(
+        dampingRatio = Spring.DampingRatioNoBouncy,
+        stiffness = Spring.StiffnessMediumLow,
+        visibilityThreshold = Rect.VisibilityThreshold,
+    )
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
 fun Modifier.localSharedElement(
     key: Any,
     boundsTransform: BoundsTransform = defaultBoundsTransform,
@@ -35,17 +48,4 @@ fun Modifier.localSharedElement(
             zIndexInOverlay = zIndexInOverlay,
         )
     }
-}
-
-@OptIn(ExperimentalSharedTransitionApi::class)
-val LocalSharedTransitionScope = staticCompositionLocalOf<SharedTransitionScope> { error("Not provided") }
-val LocalAnimatedVisibilityScope = staticCompositionLocalOf<AnimatedVisibilityScope> { error("Not provided") }
-
-@OptIn(ExperimentalSharedTransitionApi::class)
-private val defaultBoundsTransform = BoundsTransform { _, _ ->
-    spring(
-        dampingRatio = Spring.DampingRatioNoBouncy,
-        stiffness = Spring.StiffnessMediumLow,
-        visibilityThreshold = Rect.VisibilityThreshold,
-    )
 }

@@ -11,14 +11,17 @@ import com.perfomer.checkielite.core.domain.entity.sort.ReviewsSortingStrategy
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.ClearRecentSearches
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.FilterReviews
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.LoadLatestTagSearchSortingStrategy
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.LoadRecentSearches
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.LoadReviews
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.LoadTags
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.RememberRecentSearch
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchCommand.RememberTagSearchSortingStrategy
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEffect
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEffect.ShowKeyboard
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.Initialize
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.LatestTagSearchSortingStrategyStatusUpdated
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.RecentSearchesLoading
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.ReviewsFiltered
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEvent.ReviewsLoading
@@ -51,6 +54,7 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
         is RecentSearchesLoading -> reduceRecentSearchesLoading(event)
         is TagsLoading -> reduceTagsLoading(event)
         is ReviewsLoading -> reduceReviewsLoading(event)
+        is LatestTagSearchSortingStrategyStatusUpdated -> reduceLatestTagSearchSortingStrategyStatusUpdated(event)
         is ReviewsFiltered -> reduceReviewsFiltered(event)
     }
 
@@ -62,6 +66,10 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
         }
 
         commands(LoadRecentSearches, LoadReviews, LoadTags)
+
+        if (state.isTagSearchMode) {
+            commands(LoadLatestTagSearchSortingStrategy)
+        }
     }
 
     private fun reduceUi(event: SearchUiEvent) = when (event) {
@@ -87,9 +95,36 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
     }
 
     private fun reduceNavigation(event: SearchNavigationEvent) = when (event) {
-        is OnTagsUpdated -> updateSearchConditions(filters = state.searchFilters.copy(tagsIds = event.tagsIds))
-        is OnSortUpdated -> updateSearchConditions(sorting = event.sorting)
-        is OnFiltersUpdated -> updateSearchConditions(filters = event.filters, sorting = event.sorting)
+        is OnTagsUpdated -> {
+            reduceOnTagsUpdated(event)
+        }
+        is OnSortUpdated -> {
+            if (state.isTagSearchMode) commands(RememberTagSearchSortingStrategy(event.sorting))
+            updateSearchConditions(sorting = event.sorting)
+        }
+        is OnFiltersUpdated -> {
+            updateSearchConditions(filters = event.filters, sorting = event.sorting)
+        }
+    }
+
+    private fun reduceOnTagsUpdated(event: OnTagsUpdated) {
+        val currentFilters = state.searchFilters
+        val tagsIds = event.tagsIds
+        val entersTagSearchMode = currentFilters.tagsIds.isEmpty() && tagsIds.isNotEmpty()
+        val fallbackTagSorting = ReviewsSortingStrategy.MOST_RATED
+
+        updateSearchConditions(
+            filters = currentFilters.copy(tagsIds = tagsIds),
+            sorting = if (entersTagSearchMode && state.sortingStrategy == ReviewsSortingStrategy.RELEVANCE) {
+                fallbackTagSorting
+            } else {
+                state.sortingStrategy
+            },
+        )
+
+        if (tagsIds.isNotEmpty() && (entersTagSearchMode || state.sortingStrategy != ReviewsSortingStrategy.RELEVANCE)) {
+            commands(LoadLatestTagSearchSortingStrategy)
+        }
     }
 
     private fun reduceTagsLoading(event: TagsLoading) = when (event) {
@@ -127,6 +162,12 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
         state { copy(searchedReviews = event.reviews) }
     }
 
+    private fun reduceLatestTagSearchSortingStrategyStatusUpdated(event: LatestTagSearchSortingStrategyStatusUpdated) {
+        val tagSorting = event.status.content ?: return
+        if (!state.isTagSearchMode) return
+        updateSearchConditions(sorting = tagSorting)
+    }
+
     private fun updateSearchConditions(
         query: String = state.searchQuery,
         filters: SearchFilters = state.searchFilters,
@@ -149,5 +190,4 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
             )
         )
     }
-
 }

@@ -17,6 +17,8 @@ internal data class SearchState(
     val sortingStrategy: ReviewsSortingStrategy = ReviewsSortingStrategy.RELEVANCE,
 ) {
 
+    val isTagSearchMode: Boolean = searchFilters.tagsIds.isNotEmpty()
+
     val hasSearchConditions: Boolean = searchQuery.isNotBlank() || !searchFilters.isEmpty || sortingStrategy != ReviewsSortingStrategy.RELEVANCE
 
     val currentReviews: List<CheckieReview> =

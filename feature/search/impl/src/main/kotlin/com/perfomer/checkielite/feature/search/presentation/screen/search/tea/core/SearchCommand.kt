@@ -14,6 +14,8 @@ internal sealed interface SearchCommand {
 
     data object ClearRecentSearches : SearchCommand
 
+    data object LoadLatestTagSearchSortingStrategy : SearchCommand
+
     class FilterReviews(
         val reviews: List<CheckieReview>,
         val query: String,
@@ -22,6 +24,8 @@ internal sealed interface SearchCommand {
     ) : SearchCommand
 
     class RememberRecentSearch(val reviewId: String) : SearchCommand
+
+    class RememberTagSearchSortingStrategy(val strategy: ReviewsSortingStrategy) : SearchCommand
 }
 
 internal sealed interface SearchNavigationCommand : SearchCommand {

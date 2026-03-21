@@ -3,7 +3,9 @@ package com.perfomer.checkielite.core.data.datasource.preferences
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.perfomer.checkielite.core.domain.entity.price.CheckieCurrency
+import com.perfomer.checkielite.core.domain.entity.sort.ReviewsSortingStrategy
 import com.perfomer.checkielite.core.domain.entity.sort.TagSortingStrategy
 import com.perfomer.checkielite.core.domain.entity.theme.ThemeMode
 import kotlinx.coroutines.Dispatchers
@@ -12,15 +14,15 @@ import kotlinx.coroutines.withContext
 internal interface PreferencesDataSource {
 
     suspend fun getLatestCurrency(): CheckieCurrency?
-
     suspend fun setLatestCurrency(currency: CheckieCurrency)
 
     suspend fun getLatestTagSortingStrategy(): TagSortingStrategy?
-
     suspend fun setLatestTagSortingStrategy(strategy: TagSortingStrategy)
 
-    suspend fun getThemeMode(): ThemeMode?
+    suspend fun getLatestTagSearchSortingStrategy(): ReviewsSortingStrategy
+    suspend fun setLatestTagSearchSortingStrategy(strategy: ReviewsSortingStrategy)
 
+    suspend fun getThemeMode(): ThemeMode?
     suspend fun setThemeMode(themeMode: ThemeMode)
 }
 
@@ -39,24 +41,31 @@ internal class PreferencesDataSourceImpl(
     }
 
     override suspend fun setLatestCurrency(currency: CheckieCurrency) = withContext(Dispatchers.IO) {
-        preferences.edit()
-            .putString(KEY_LATEST_CURRENCY, currency.code)
-            .commit()
-
-        Unit
+        preferences.edit(commit = true) {
+            putString(KEY_LATEST_CURRENCY, currency.code)
+        }
     }
 
-    override suspend fun getLatestTagSortingStrategy(): TagSortingStrategy?  = withContext(Dispatchers.IO) {
+    override suspend fun getLatestTagSortingStrategy(): TagSortingStrategy? = withContext(Dispatchers.IO) {
         val value = preferences.getString(KEY_LATEST_TAG_SORT, null) ?: return@withContext null
         return@withContext TagSortingStrategy.valueOf(value)
     }
 
-    override suspend fun setLatestTagSortingStrategy(strategy: TagSortingStrategy)  = withContext(Dispatchers.IO) {
-        preferences.edit()
-            .putString(KEY_LATEST_TAG_SORT, strategy.name)
-            .commit()
+    override suspend fun setLatestTagSortingStrategy(strategy: TagSortingStrategy) = withContext(Dispatchers.IO) {
+        preferences.edit(commit = true) {
+            putString(KEY_LATEST_TAG_SORT, strategy.name)
+        }
+    }
 
-        Unit
+    override suspend fun getLatestTagSearchSortingStrategy(): ReviewsSortingStrategy = withContext(Dispatchers.IO) {
+        val value = preferences.getString(KEY_LATEST_TAG_SEARCH_SORT, null) ?: return@withContext ReviewsSortingStrategy.MOST_RATED
+        return@withContext ReviewsSortingStrategy.valueOf(value)
+    }
+
+    override suspend fun setLatestTagSearchSortingStrategy(strategy: ReviewsSortingStrategy) = withContext(Dispatchers.IO) {
+        preferences.edit(commit = true) {
+            putString(KEY_LATEST_TAG_SEARCH_SORT, strategy.name)
+        }
     }
 
     override suspend fun getThemeMode(): ThemeMode? = withContext(Dispatchers.IO) {
@@ -66,11 +75,9 @@ internal class PreferencesDataSourceImpl(
     }
 
     override suspend fun setThemeMode(themeMode: ThemeMode) = withContext(Dispatchers.IO) {
-        preferences.edit()
-            .putString(KEY_THEME_MODE, themeMode.name)
-            .commit()
-
-        Unit
+        preferences.edit(commit = true) {
+            putString(KEY_THEME_MODE, themeMode.name)
+        }
     }
 
     private companion object {
@@ -79,6 +86,7 @@ internal class PreferencesDataSourceImpl(
 
         private const val KEY_LATEST_CURRENCY = "latest_currency"
         private const val KEY_LATEST_TAG_SORT = "latest_tag_sort"
+        private const val KEY_LATEST_TAG_SEARCH_SORT = "latest_tag_search_sort"
         private const val KEY_THEME_MODE = "theme_mode"
     }
 }

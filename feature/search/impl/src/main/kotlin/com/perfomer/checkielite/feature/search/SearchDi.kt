@@ -15,9 +15,11 @@ import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.Se
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.SearchStore
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.ClearRecentSearchesActor
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.FilterReviewsActor
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.LoadLatestTagSearchSortingStrategyActor
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.LoadRecentSearchesActor
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.LoadReviewsActor
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.RememberRecentSearchActor
+import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.RememberTagSearchSortingStrategyActor
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.actor.SearchNavigationActor
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.SearchContentScreen
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.SearchUiStateMapper
@@ -76,7 +78,9 @@ internal fun createSearchStore(
             SearchLoadTagsActor(tagRepository),
             LoadReviewsActor(reviewRepository),
             LoadRecentSearchesActor(searchRepository),
+            LoadLatestTagSearchSortingStrategyActor(searchRepository),
             RememberRecentSearchActor(searchRepository),
+            RememberTagSearchSortingStrategyActor(searchRepository),
             ClearRecentSearchesActor(searchRepository),
         ),
     )

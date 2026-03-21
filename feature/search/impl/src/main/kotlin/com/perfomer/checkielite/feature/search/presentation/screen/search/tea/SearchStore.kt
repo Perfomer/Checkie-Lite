@@ -26,7 +26,7 @@ internal class SearchStore(
     initialState = SearchState(
         searchFilters = SearchFilters(
             tagsIds = listOfNotNull(destination.tagId),
-        )
+        ),
     ),
     reducer = reducer,
     uiStateMapper = uiStateMapper,

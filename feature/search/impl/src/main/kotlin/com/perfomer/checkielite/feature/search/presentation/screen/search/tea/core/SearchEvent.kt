@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core
 
+import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
 import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
 import com.perfomer.checkielite.core.domain.entity.search.SearchFilters
@@ -29,6 +30,10 @@ internal sealed interface SearchEvent {
         class Succeed(val tags: List<CheckieTag>) : TagsLoading
         class Failed(val error: Throwable) : TagsLoading
     }
+
+    class LatestTagSearchSortingStrategyStatusUpdated(
+        val status: Lce<ReviewsSortingStrategy>,
+    ) : SearchEvent
 }
 
 internal sealed interface SearchUiEvent : SearchEvent {

@@ -14,7 +14,7 @@ internal object LocalCheckieCurrency {
     }
 
     fun getLocalCurrencyCode(default: String = DEFAULT_CURRENCY_CODE): String {
-        val localCurrencyCode = AndroidCurrency.getAvailableCurrencyCodes(Locale.getDefault(), Date()).firstOrNull()
+        val localCurrencyCode = AndroidCurrency.getAvailableCurrencyCodes(Locale.getDefault(), Date())?.firstOrNull()
         return localCurrencyCode ?: default
     }
 }

@@ -20,6 +20,7 @@
 
     <string name="reviewcreation_tags_title">Tags for</string>
     <string name="reviewcreation_tags_field_search">Enter the tag…</string>
+    <string name="reviewcreation_tags_recommended_title">Recommended tags</string>
     <string name="reviewcreation_tags_create_tag_generic">Create tag</string>
     <string name="reviewcreation_tags_create_tag_specific">Create \"%s\"</string>
 

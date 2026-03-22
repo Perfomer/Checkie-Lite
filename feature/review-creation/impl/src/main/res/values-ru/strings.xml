@@ -54,4 +54,5 @@
     <string name="tagcreation_emoji_category_smiles">Смайлы и эмоции</string>
     <string name="tagcreation_emoji_category_symbols">Символы</string>
     <string name="tagcreation_emoji_category_travel">Путешествия и места</string>
+    <string name="reviewcreation_tags_recommended_title">Рекомендованные теги</string>
 </resources>

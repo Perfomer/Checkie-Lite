@@ -27,6 +27,7 @@ import com.perfomer.checkielite.core.data.repository.TagRepository
 import com.perfomer.checkielite.core.data.repository.TagRepositoryImpl
 import com.perfomer.checkielite.core.data.repository.ThemeRepository
 import com.perfomer.checkielite.core.data.repository.ThemeRepositoryImpl
+import com.perfomer.checkielite.core.data.repository.util.TagRecommendationRanker
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -49,4 +50,5 @@ val localDataSourceModule = module {
     singleOf(::ThemeRepositoryImpl) bind ThemeRepository::class
 
     singleOf(CheckieDatabase::getInstance)
+    singleOf(::TagRecommendationRanker)
 }

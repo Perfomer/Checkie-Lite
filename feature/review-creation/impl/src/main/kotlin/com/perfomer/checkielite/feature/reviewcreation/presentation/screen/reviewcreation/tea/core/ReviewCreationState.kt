@@ -23,7 +23,8 @@ internal data class ReviewCreationState(
     val currentPriceFieldValue: String = reviewDetails.price?.toString().orEmpty(),
 
     val tagsSearchQuery: String = "",
-    val tagsSuggestions: List<CheckieTag> = emptyList(),
+    val tags: List<CheckieTag> = emptyList(),
+    val recommendedTags: List<CheckieTag> = emptyList(),
     val tagSorting: TagSortingStrategy = TagSortingStrategy.entries.first(),
 
     val suggestedBrands: List<String> = emptyList(),

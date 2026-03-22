@@ -17,6 +17,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.CreateReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadLatestCurrency
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadLatestTagSortStrategy
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadRecommendedTags
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadTags
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.RememberTagSortStrategy
@@ -38,6 +39,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.Initialize
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.LatestCurrencyLoading
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.LatestTagSortStrategyLoading
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.RecommendedTagsLoading
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.ReviewLoading
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.ReviewSaving
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent.TagsLoading
@@ -79,6 +81,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         is ReviewLoading -> reduceReviewLoading(event)
         is ReviewSaving -> reduceReviewsCreation(event)
         is TagsLoading -> reduceTagsLoading(event)
+        is RecommendedTagsLoading -> reduceRecommendedTagsLoading(event)
         is LatestCurrencyLoading -> reduceLatestCurrencyLoading(event)
         is LatestTagSortStrategyLoading -> reduceLatestTagSortStrategyLoading(event)
 
@@ -91,10 +94,10 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
 
         commands(
             LoadTags(sort = state.tagSorting),
-            WarmUpCurrencies,
-            WarmUpEmojis,
             LoadLatestCurrency,
             LoadLatestTagSortStrategy,
+            WarmUpCurrencies,
+            WarmUpEmojis,
         )
 
         when (state.mode.startAction) {
@@ -186,6 +189,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
         }
         is ProductInfo.OnBrandTextInput -> {
             state { copy(reviewDetails = reviewDetails.copy(productBrand = event.text)) }
+            loadRecommendedTags()
 
             if (event.text.isBlank()) state { copy(suggestedBrands = emptyList()) }
             else commands(SearchBrands(event.text.trim()))
@@ -278,6 +282,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                     )
                 )
             }
+            loadRecommendedTags()
             onTagsSearchQueryUpdate("")
         }
         is Tags.OnTagLongClick -> {
@@ -326,7 +331,6 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                     ),
                 )
             }
-
             onTagsSearchQueryUpdate("")
         }
         is OnTagDeleted -> {
@@ -335,6 +339,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                     reviewDetails = reviewDetails.copy(
                         tagsIds = reviewDetails.tagsIds - event.tagId,
                     ),
+                    recommendedTags = recommendedTags.filter { it.id != event.tagId },
                 )
             }
         }
@@ -365,7 +370,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
 
     private fun reduceReviewLoading(event: ReviewLoading) = when (event) {
         is ReviewLoading.Started -> state { copy(isReviewLoading = true) }
-        is ReviewLoading.Succeed -> state {
+        is ReviewLoading.Succeed -> {
             val initialReviewDetails = ReviewDetails(
                 productName = event.review.productName,
                 productBrand = event.review.productBrand.orEmpty(),
@@ -378,13 +383,17 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                 rating = event.review.rating,
             )
 
-            copy(
-                isReviewLoading = false,
-                initialReviewDetails = initialReviewDetails,
-                reviewDetails = initialReviewDetails,
-                currentPriceFieldValue = initialReviewDetails.price?.value?.toString().orEmpty(),
-                currentPriceCurrency = initialReviewDetails.price?.currency ?: currentPriceCurrency,
-            )
+            state {
+                copy(
+                    isReviewLoading = false,
+                    initialReviewDetails = initialReviewDetails,
+                    reviewDetails = initialReviewDetails,
+                    currentPriceFieldValue = initialReviewDetails.price?.value?.toString().orEmpty(),
+                    currentPriceCurrency = initialReviewDetails.price?.currency ?: currentPriceCurrency,
+                )
+            }
+
+            loadRecommendedTags()
         }
 
         is ReviewLoading.Failed -> {
@@ -396,9 +405,15 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
     private fun reduceTagsLoading(event: TagsLoading) = when (event) {
         is TagsLoading.Started -> Unit
         is TagsLoading.Succeed -> {
-            state { copy(tagsSuggestions = event.tags) }
+            state { copy(tags = event.tags) }
         }
         is TagsLoading.Failed -> Unit
+    }
+
+    private fun reduceRecommendedTagsLoading(event: RecommendedTagsLoading) = when (event) {
+        is RecommendedTagsLoading.Started -> Unit
+        is RecommendedTagsLoading.Succeed -> state { copy(recommendedTags = event.tags) }
+        is RecommendedTagsLoading.Failed -> state { copy(recommendedTags = emptyList()) }
     }
 
     private fun reduceLatestCurrencyLoading(event: LatestCurrencyLoading) = when (event) {
@@ -418,5 +433,15 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             onTagsSearchQueryUpdate(sort = strategy)
         }
         is LatestTagSortStrategyLoading.Failed -> Unit
+    }
+
+    private fun loadRecommendedTags() {
+        commands(
+            LoadRecommendedTags(
+                reviewId = (state.mode as? ReviewCreationMode.Modification)?.reviewId,
+                selectedTagIds = state.reviewDetails.tagsIds,
+                productBrand = state.reviewDetails.productBrand.trim(),
+            )
+        )
     }
 }

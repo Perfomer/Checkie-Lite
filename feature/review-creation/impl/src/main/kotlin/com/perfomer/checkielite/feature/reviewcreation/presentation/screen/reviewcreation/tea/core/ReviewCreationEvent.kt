@@ -35,6 +35,12 @@ internal sealed interface ReviewCreationEvent {
         class Failed(val error: Throwable) : TagsLoading
     }
 
+    sealed interface RecommendedTagsLoading : ReviewCreationEvent {
+        data object Started : RecommendedTagsLoading
+        class Succeed(val tags: List<CheckieTag>) : RecommendedTagsLoading
+        class Failed(val error: Throwable) : RecommendedTagsLoading
+    }
+
     sealed interface ReviewSaving : ReviewCreationEvent {
         data object Started : ReviewSaving
         data object Succeed : ReviewSaving

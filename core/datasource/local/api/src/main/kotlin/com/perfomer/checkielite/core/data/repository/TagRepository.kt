@@ -11,6 +11,13 @@ interface TagRepository {
         maxCount: Int = Int.MAX_VALUE
     ): Flow<List<CheckieTag>>
 
+    fun getRecommendedTags(
+        reviewId: String?,
+        selectedTagIds: Set<String>,
+        productBrand: String,
+        maxCount: Int,
+    ): Flow<List<CheckieTag>>
+
     suspend fun getTag(id: String): CheckieTag
 
     suspend fun getTagByName(name: String): CheckieTag?

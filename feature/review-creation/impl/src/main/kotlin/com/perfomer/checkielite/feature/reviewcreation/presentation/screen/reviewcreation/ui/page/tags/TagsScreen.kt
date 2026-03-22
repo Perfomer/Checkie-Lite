@@ -99,8 +99,6 @@ internal fun TagsScreen(
             },
         )
 
-        CuiSpacer(16.dp)
-
         @Composable
         fun TagChip(tag: TagsPageUiState.Tag) {
             CuiTagChip(
@@ -113,6 +111,30 @@ internal fun TagsScreen(
                     onTagLongClick(tag.id)
                 },
             )
+        }
+
+        if (state.recommendedTags.isNotEmpty()) {
+            CuiSpacer(16.dp)
+
+            Text(
+                text = stringResource(R.string.reviewcreation_tags_recommended_title),
+                color = LocalCuiPalette.current.TextPrimary,
+            )
+
+            CuiSpacer(12.dp)
+
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                for (tag in state.recommendedTags) {
+                    TagChip(tag)
+                }
+            }
+
+            CuiSpacer(24.dp)
+        } else {
+            CuiSpacer(16.dp)
         }
 
         FlowRow(

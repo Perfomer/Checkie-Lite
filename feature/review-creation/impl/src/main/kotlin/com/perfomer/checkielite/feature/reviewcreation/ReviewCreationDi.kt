@@ -27,6 +27,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.CreateReviewActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.LoadLatestCurrencyActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.LoadLatestTagSortStrategyActor
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.LoadRecommendedTagsActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.LoadReviewActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.LoadTagsActor
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.actor.RememberTagSortStrategyActor
@@ -103,6 +104,7 @@ internal fun createReviewCreationStore(
             UpdateReviewActor(reviewRepository),
             LoadReviewActor(reviewRepository),
             LoadTagsActor(tagRepository),
+            LoadRecommendedTagsActor(tagRepository),
             SearchBrandsActor(brandRepository),
             WarmUpCurrenciesActor(currencyRepository),
             WarmUpEmojisActor(emojiRepository),

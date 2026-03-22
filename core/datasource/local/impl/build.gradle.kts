@@ -25,4 +25,6 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.kotlinx.serialization.json)
     ksp(libs.androidx.room.compiler)
+
+    testImplementation(libs.test.junitJupiter)
 }

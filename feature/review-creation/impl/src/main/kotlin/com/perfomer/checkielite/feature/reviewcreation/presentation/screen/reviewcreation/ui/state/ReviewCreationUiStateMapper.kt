@@ -5,6 +5,7 @@ import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastMap
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
 import com.perfomer.checkielite.core.domain.entity.price.CurrencySymbol
+import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationState
@@ -60,21 +61,21 @@ internal class ReviewCreationUiStateMapper(
     }
 
     private fun createTagsPageState(state: ReviewCreationState): TagsPageUiState {
-        val uiTags = state.tagsSuggestions.fastMap { tag ->
-            TagsPageUiState.Tag(
-                id = tag.id,
-                value = tag.value,
-                emoji = tag.emoji,
-                isSelected = state.reviewDetails.tagsIds.any { tagId -> tagId == tag.id },
-            )
+        val tags = state.tags.fastMap { tag ->
+            tag.toUi(isSelected = state.reviewDetails.tagsIds.any { tagId -> tagId == tag.id })
         }
+        val recommendedTags = state.recommendedTags
+            .takeIf { state.tagsSearchQuery.isBlank() }
+            .orEmpty()
+            .fastMap { tag -> tag.toUi() }
 
         return TagsPageUiState(
             mainPictureUri = state.reviewDetails.pictures.firstOrNull()?.uri,
             productName = state.reviewDetails.productName,
             searchQuery = state.tagsSearchQuery,
-            shouldShowAddTag = uiTags.fastAll { it.value != state.tagsSearchQuery },
-            tags = uiTags.toPersistentList(),
+            shouldShowAddTag = tags.fastAll { it.value != state.tagsSearchQuery },
+            recommendedTags = recommendedTags.toPersistentList(),
+            tags = tags.toPersistentList(),
         )
     }
 
@@ -88,5 +89,17 @@ internal class ReviewCreationUiStateMapper(
             disadvantages = state.reviewDetails.disadvantages,
             isSaving = state.isSavingInProgress,
         )
+    }
+
+    private companion object {
+
+        private fun CheckieTag.toUi(isSelected: Boolean = false): TagsPageUiState.Tag {
+            return TagsPageUiState.Tag(
+                id = id,
+                value = value,
+                emoji = emoji,
+                isSelected = isSelected,
+            )
+        }
     }
 }

@@ -42,6 +42,7 @@ internal data class TagsPageUiState(
     val productName: String,
     val searchQuery: String,
     val shouldShowAddTag: Boolean,
+    val recommendedTags: ImmutableList<Tag>,
     val tags: ImmutableList<Tag>,
 ) {
     @Immutable

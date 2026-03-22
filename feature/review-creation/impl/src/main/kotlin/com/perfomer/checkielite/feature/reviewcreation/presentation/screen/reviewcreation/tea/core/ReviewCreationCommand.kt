@@ -43,6 +43,12 @@ internal sealed interface ReviewCreationCommand {
         val sort: TagSortingStrategy,
     ) : ReviewCreationCommand
 
+    class LoadRecommendedTags(
+        val reviewId: String?,
+        val selectedTagIds: Set<String>,
+        val productBrand: String,
+    ) : ReviewCreationCommand
+
     data object WarmUpCurrencies : ReviewCreationCommand
 
     data object WarmUpEmojis : ReviewCreationCommand

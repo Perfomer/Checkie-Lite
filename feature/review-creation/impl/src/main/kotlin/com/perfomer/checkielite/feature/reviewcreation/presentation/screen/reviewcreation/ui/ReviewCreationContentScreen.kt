@@ -135,6 +135,7 @@ internal class ReviewCreationContentScreen(
                     state = state.tagsState,
                     scrollState = tagsScrollState,
                     onTagSortClick = acceptable(Tags.OnTagSortClick),
+                    onSelectedTagsClearClick = acceptable(Tags.OnSelectedTagsClearClick),
                     onCreateTagClick = acceptable(Tags.OnCreateTagClick),
                     onTagClick = acceptable(Tags::OnTagClick),
                     onTagLongClick = acceptable(Tags::OnTagLongClick),

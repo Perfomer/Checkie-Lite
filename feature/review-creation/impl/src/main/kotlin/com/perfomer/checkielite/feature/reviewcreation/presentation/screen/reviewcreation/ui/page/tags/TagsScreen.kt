@@ -31,8 +31,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -51,6 +53,7 @@ internal fun TagsScreen(
     state: TagsPageUiState,
     scrollState: LazyListState = rememberLazyListState(),
     onTagSortClick: () -> Unit = {},
+    onSelectedTagsClearClick: () -> Unit = {},
     onCreateTagClick: () -> Unit = {},
     onTagClick: (id: String) -> Unit = {},
     onTagLongClick: (id: String) -> Unit = {},
@@ -88,6 +91,7 @@ internal fun TagsScreen(
                     state = state,
                     selectedTagsCount = selectedTagsCount,
                     sectionBorderColor = sectionBorderColor,
+                    onSelectedTagsClearClick = onSelectedTagsClearClick,
                 )
             }
 
@@ -169,6 +173,7 @@ private fun TagsHeader(
     state: TagsPageUiState,
     selectedTagsCount: Int,
     sectionBorderColor: Color,
+    onSelectedTagsClearClick: () -> Unit,
 ) {
     val palette = LocalCuiPalette.current
 
@@ -188,6 +193,8 @@ private fun TagsHeader(
                 backgroundColor = palette.BackgroundAccentTertiary,
                 borderColor = palette.OutlineAccentSecondary,
                 textColor = palette.TextAccent,
+                trailingPainter = painterResource(CommonDrawable.ic_cross).takeIf { selectedTagsCount > 0 },
+                onClick = onSelectedTagsClearClick.takeIf { selectedTagsCount > 0 },
             )
 
             TagsStatPill(

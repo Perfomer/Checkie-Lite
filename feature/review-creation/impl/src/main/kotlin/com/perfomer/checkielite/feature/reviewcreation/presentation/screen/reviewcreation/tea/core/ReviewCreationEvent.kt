@@ -83,6 +83,8 @@ internal sealed interface ReviewCreationUiEvent : ReviewCreationEvent {
 
         data object OnSearchQueryClearClick : Tags
 
+        data object OnSelectedTagsClearClick : Tags
+
         data object OnCreateTagClick : Tags
 
         class OnTagClick(val tagId: String) : Tags

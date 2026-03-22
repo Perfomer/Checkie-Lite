@@ -266,6 +266,11 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             commands(OpenTagCreation(TagCreationMode.Creation(state.tagsSearchQuery.trim())))
             onTagsSearchQueryUpdate("")
         }
+        is Tags.OnSelectedTagsClearClick -> {
+            state { copy(reviewDetails = reviewDetails.copy(tagsIds = emptySet())) }
+            loadRecommendedTags()
+            onTagsSearchQueryUpdate("")
+        }
         is Tags.OnSearchQueryClearClick -> onTagsSearchQueryUpdate("")
         is Tags.OnSearchQueryInput -> onTagsSearchQueryUpdate(event.query)
         is Tags.OnTagSortClick -> commands(ReviewCreationNavigationCommand.OpenTagSort(state.tagSorting))

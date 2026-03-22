@@ -44,6 +44,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget.ConfirmExitDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget.ErrorDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget.ProgressAppBar
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun ReviewCreationScreen(
@@ -160,8 +161,19 @@ internal val mockUiState = ReviewCreationUiState(
         productName = "Chips",
         searchQuery = "",
         shouldShowAddTag = true,
-        recommendedTags = emptyPersistentList(),
-        tags = emptyPersistentList(),
+        recommendedTags = persistentListOf(
+            TagsPageUiState.Tag("", "tag1", null, false),
+            TagsPageUiState.Tag("", "tag2", "\uD83C\uDF47", false),
+            TagsPageUiState.Tag("", "tag3", null, false),
+        ),
+        tags = persistentListOf(
+            TagsPageUiState.Tag("", "tag1", null, false),
+            TagsPageUiState.Tag("", "tag2", "\uD83C\uDF47", false),
+            TagsPageUiState.Tag("", "tag3", null, false),
+            TagsPageUiState.Tag("", "tag4", null, true),
+            TagsPageUiState.Tag("", "tag5", "\uD83C\uDF47", true),
+            TagsPageUiState.Tag("", "tag6", null, false),
+        ),
     ),
     reviewInfoState = ReviewInfoPageUiState(
         mainPictureUri = null,

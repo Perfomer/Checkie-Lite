@@ -54,10 +54,10 @@
     <string name="tagcreation_emoji_category_smiles">Смайлы и эмоции</string>
     <string name="tagcreation_emoji_category_symbols">Символы</string>
     <string name="tagcreation_emoji_category_travel">Путешествия и места</string>
-    <string name="reviewcreation_tags_recommended_title">Рекомендованные теги</string>
-    <string name="reviewcreation_tags_recommended_subtitle">Нажать для выбора, держать для редактирования</string>
+    <string name="reviewcreation_tags_recommended_title">Рекомендованные</string>
+    <string name="reviewcreation_tags_recommended_subtitle">На основе бренда и выбранных тегов</string>
     <string name="reviewcreation_tags_library_title">Библиотека тегов</string>
-    <string name="reviewcreation_tags_library_subtitle">На основе бренда и выбранных тегов</string>
+    <string name="reviewcreation_tags_library_subtitle">Нажать для выбора, удерживать для редактирования</string>
     <string name="reviewcreation_tags_badge_selected">%d выбрано</string>
     <string name="reviewcreation_tags_badge_total">%d всего</string>
     <string name="reviewcreation_tags_badge_recommended">%d рек.</string>

@@ -1,11 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,11 +17,12 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -70,7 +67,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 @Composable
 internal fun TagsScreen(
     state: TagsPageUiState,
-    scrollState: ScrollState = rememberScrollState(),
+    scrollState: LazyListState = rememberLazyListState(),
     onTagSortClick: () -> Unit = {},
     onCreateTagClick: () -> Unit = {},
     onTagClick: (id: String) -> Unit = {},
@@ -128,84 +125,64 @@ internal fun TagsScreen(
                 .background(Color(0xFFFCE2AE).copy(alpha = 0.28F))
         )
 
-        Column(
+        LazyColumn(
+            state = scrollState,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(
+                start = 24.dp, end = 24.dp,
+                top = 16.dp, bottom = 104.dp,
+            ),
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState)
                 .navigationBarsPadding()
                 .imePadding()
-                .padding(horizontal = 24.dp)
-                .padding(bottom = 104.dp, top = 16.dp)
         ) {
-            ReviewCreationPageHeader(
-                title = stringResource(R.string.reviewcreation_tags_title),
-                productPictureUri = state.mainPictureUri,
-                productName = state.productName,
-                endIcon = {
-                    val targetTagSortAlpha = if (state.searchQuery.isBlank()) 1F else 0F
-                    val animatedTagSortAlpha by animateFloatAsState(targetValue = targetTagSortAlpha, label = "TagsSortAlpha")
+            item(key = "header") {
+                Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
+                    ReviewCreationPageHeader(
+                        title = stringResource(R.string.reviewcreation_tags_title),
+                        productPictureUri = state.mainPictureUri,
+                        productName = state.productName,
+                        endIcon = {
+                            val targetTagSortAlpha = if (state.searchQuery.isBlank()) 1F else 0F
+                            val animatedTagSortAlpha by animateFloatAsState(targetValue = targetTagSortAlpha, label = "TagsSortAlpha")
 
-                    CuiIconButton(
-                        painter = painterResource(CommonDrawable.ic_sort),
-                        onClick = onTagSortClick,
-                        modifier = Modifier.graphicsLayer { alpha = animatedTagSortAlpha }
+                            CuiIconButton(
+                                painter = painterResource(CommonDrawable.ic_sort),
+                                onClick = onTagSortClick,
+                                modifier = Modifier.graphicsLayer { alpha = animatedTagSortAlpha }
+                            )
+                        }
                     )
+
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        StatPill(
+                            text = stringResource(R.string.reviewcreation_tags_badge_selected, selectedTagsCount),
+                            backgroundColor = palette.BackgroundAccentTertiary,
+                            borderColor = palette.OutlineAccentSecondary,
+                            textColor = palette.TextAccent,
+                        )
+
+                        StatPill(
+                            text = stringResource(R.string.reviewcreation_tags_badge_total, state.tags.size),
+                            backgroundColor = palette.BackgroundPrimary.copy(alpha = 0.92F),
+                            borderColor = sectionBorderColor,
+                            textColor = palette.TextSecondary,
+                        )
+
+                        if (state.recommendedTags.isNotEmpty()) {
+                            StatPill(
+                                text = stringResource(R.string.reviewcreation_tags_badge_recommended, state.recommendedTags.size),
+                                backgroundColor = Color(0xFFFFE3D2),
+                                borderColor = Color.White.copy(alpha = 0.6F),
+                                textColor = Color(0xFFD55A2B),
+                            )
+                        }
+                    }
                 }
-            )
-
-            CuiSpacer(24.dp)
-
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                StatPill(
-                    text = stringResource(R.string.reviewcreation_tags_badge_selected, selectedTagsCount),
-                    backgroundColor = palette.BackgroundAccentTertiary,
-                    borderColor = palette.OutlineAccentSecondary,
-                    textColor = palette.TextAccent,
-                )
-
-                StatPill(
-                    text = stringResource(R.string.reviewcreation_tags_badge_total, state.tags.size),
-                    backgroundColor = palette.BackgroundPrimary.copy(alpha = 0.92F),
-                    borderColor = sectionBorderColor,
-                    textColor = palette.TextSecondary,
-                )
-
-                if (state.recommendedTags.isNotEmpty()) {
-                    StatPill(
-                        text = stringResource(R.string.reviewcreation_tags_badge_recommended, state.recommendedTags.size),
-                        backgroundColor = Color(0xFFFFE3D2),
-                        borderColor = Color.White.copy(alpha = 0.6F),
-                        textColor = Color(0xFFD55A2B),
-                    )
-                }
-            }
-
-            CuiSpacer(18.dp)
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(sectionShape)
-                    .background(palette.BackgroundPrimary.copy(alpha = 0.88F))
-                    .border(
-                        width = 1.dp,
-                        color = sectionBorderColor,
-                        shape = sectionShape,
-                    )
-                    .padding(horizontal = 14.dp)
-                    .padding(top = 14.dp)
-            ) {
-                SearchField(
-                    searchQuery = state.searchQuery,
-                    onSearchQueryInput = onSearchQueryInput,
-                    onSearchQueryClearClick = {
-                        onSearchQueryClearClick()
-                        focusManager.clearFocus()
-                    },
-                )
             }
 
             @Composable
@@ -273,16 +250,11 @@ internal fun TagsScreen(
                 }
             }
 
-            AnimatedVisibility(
-                visible = state.recommendedTags.isNotEmpty(),
-                enter = fadeIn(),
-                exit = fadeOut(),
-            ) {
-                Column {
-                    CuiSpacer(18.dp)
-
+            if (state.recommendedTags.isNotEmpty()) {
+                item(key = "recommendations") {
                     Box(
                         modifier = Modifier
+                            .animateItem()
                             .fillMaxWidth()
                             .clip(recommendationCardShape)
                             .background(recommendationGradient)
@@ -307,7 +279,6 @@ internal fun TagsScreen(
                                     )
                                 }
                             }
-                            .animateContentSize()
                             .padding(horizontal = 18.dp, vertical = 16.dp)
                     ) {
                         Column {
@@ -337,12 +308,14 @@ internal fun TagsScreen(
                                     }
 
                                     Column(
-                                        Modifier.offset(y = 4.dp)
+                                        verticalArrangement = Arrangement.spacedBy(2.dp),
+                                        modifier = Modifier.padding(end = 8.dp)
                                     ) {
                                         Text(
                                             text = stringResource(R.string.reviewcreation_tags_recommended_title),
                                             fontSize = 18.sp,
                                             color = CuiColorToken.White1,
+                                            lineHeight = 16.sp,
                                             fontWeight = FontWeight.SemiBold,
                                         )
 
@@ -350,7 +323,7 @@ internal fun TagsScreen(
                                             text = stringResource(R.string.reviewcreation_tags_recommended_subtitle),
                                             fontSize = 12.sp,
                                             color = CuiColorToken.White1.copy(alpha = 0.86F),
-                                            modifier = Modifier.offset(y = (-4).dp)
+                                            lineHeight = 16.sp,
                                         )
                                     }
                                 }
@@ -378,71 +351,98 @@ internal fun TagsScreen(
                 }
             }
 
-            CuiSpacer(16.dp)
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(sectionShape)
-                    .background(palette.BackgroundPrimary.copy(alpha = 0.86F))
-                    .border(
-                        width = 1.dp,
-                        color = sectionBorderColor,
-                        shape = sectionShape,
-                    )
-                    .padding(horizontal = 16.dp, vertical = 16.dp)
-            ) {
-                Column {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .weight(1F)
-                                .padding(start = 4.dp)
-                                .offset(y = 1.dp)
-                        ) {
-                            Text(
-                                text = stringResource(R.string.reviewcreation_tags_library_title),
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = palette.TextPrimary,
-                            )
-                            Text(
-                                text = stringResource(R.string.reviewcreation_tags_library_subtitle),
-                                fontSize = 12.sp,
-                                color = palette.TextSecondary,
-                                modifier = Modifier.offset(y = (-2).dp)
-                            )
-                        }
-
-                        StatPill(
-                            text = stringResource(R.string.reviewcreation_tags_badge_total, state.tags.size),
-                            backgroundColor = palette.BackgroundSecondary,
-                            borderColor = sectionBorderColor,
-                            textColor = palette.TextSecondary,
+            item(key = "search") {
+                Box(
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                        .clip(sectionShape)
+                        .background(palette.BackgroundPrimary.copy(alpha = 0.88F))
+                        .border(
+                            width = 1.dp,
+                            color = sectionBorderColor,
+                            shape = sectionShape,
                         )
-                    }
+                        .padding(horizontal = 14.dp)
+                        .padding(top = 14.dp)
+                ) {
+                    SearchField(
+                        searchQuery = state.searchQuery,
+                        onSearchQueryInput = onSearchQueryInput,
+                        onSearchQueryClearClick = {
+                            onSearchQueryClearClick()
+                            focusManager.clearFocus()
+                        },
+                    )
+                }
+            }
 
-                    CuiSpacer(16.dp)
+            item(key = "library") {
+                Box(
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                        .clip(sectionShape)
+                        .background(palette.BackgroundPrimary.copy(alpha = 0.86F))
+                        .border(
+                            width = 1.dp,
+                            color = sectionBorderColor,
+                            shape = sectionShape,
+                        )
+                        .padding(horizontal = 16.dp, vertical = 16.dp)
+                ) {
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(2.dp),
+                                modifier = Modifier
+                                    .weight(1F)
+                                    .padding(start = 4.dp)
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.reviewcreation_tags_library_title),
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = palette.TextPrimary,
+                                )
+                                Text(
+                                    text = stringResource(R.string.reviewcreation_tags_library_subtitle),
+                                    fontSize = 12.sp,
+                                    color = palette.TextSecondary,
+                                    lineHeight = 16.sp,
+                                )
+                            }
 
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        if (state.shouldShowAddTag) {
-                            AddTagChip(
-                                searchQuery = state.searchQuery.takeIf { it.isNotBlank() },
-                                onCreateTagClick = {
-                                    focusManager.clearFocus()
-                                    onCreateTagClick()
-                                },
+                            StatPill(
+                                text = stringResource(R.string.reviewcreation_tags_badge_total, state.tags.size),
+                                backgroundColor = palette.BackgroundSecondary,
+                                borderColor = sectionBorderColor,
+                                textColor = palette.TextSecondary,
                             )
                         }
 
-                        for (tag in state.tags) {
-                            TagChip(tag)
+                        CuiSpacer(16.dp)
+
+                        FlowRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            if (state.shouldShowAddTag) {
+                                AddTagChip(
+                                    searchQuery = state.searchQuery.takeIf { it.isNotBlank() },
+                                    onCreateTagClick = {
+                                        focusManager.clearFocus()
+                                        onCreateTagClick()
+                                    },
+                                )
+                            }
+
+                            for (tag in state.tags) {
+                                TagChip(tag)
+                            }
                         }
                     }
                 }

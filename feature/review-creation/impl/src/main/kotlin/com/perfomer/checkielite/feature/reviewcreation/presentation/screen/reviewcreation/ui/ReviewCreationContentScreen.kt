@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
@@ -79,17 +80,17 @@ internal class ReviewCreationContentScreen(
         )
 
         val productInfoScrollState = rememberScrollState()
-        val tagsScrollState = rememberScrollState()
+        val tagsScrollState = rememberLazyListState()
         val reviewInfoScrollState = rememberScrollState()
 
-        val currentPageScrollState by remember(pagerState.currentPage) {
+        val shouldShowTopDivider by remember(pagerState.currentPage) {
             derivedStateOf {
                 val currentPage = ReviewCreationPage.entries[pagerState.currentPage]
 
                 when (currentPage) {
-                    ReviewCreationPage.PRODUCT_INFO -> productInfoScrollState
-                    ReviewCreationPage.TAGS -> tagsScrollState
-                    ReviewCreationPage.REVIEW_INFO -> reviewInfoScrollState
+                    ReviewCreationPage.PRODUCT_INFO -> productInfoScrollState.canScrollBackward
+                    ReviewCreationPage.TAGS -> tagsScrollState.canScrollBackward
+                    ReviewCreationPage.REVIEW_INFO -> reviewInfoScrollState.canScrollBackward
                 }
             }
         }
@@ -97,7 +98,7 @@ internal class ReviewCreationContentScreen(
         ReviewCreationScreen(
             state = state,
             pagerState = pagerState,
-            currentPageScrollState = currentPageScrollState,
+            shouldShowTopDivider = shouldShowTopDivider,
             showExitDialog = isConfirmExitDialogShown,
             onExitDialogDismiss = { isConfirmExitDialogShown = false },
             onExitDialogConfirm = acceptable(OnConfirmExitClick),

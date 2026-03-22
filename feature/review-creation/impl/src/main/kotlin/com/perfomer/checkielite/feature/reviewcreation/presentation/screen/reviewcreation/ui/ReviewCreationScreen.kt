@@ -5,7 +5,6 @@ package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,11 +16,8 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -50,7 +46,7 @@ import kotlinx.collections.immutable.persistentListOf
 internal fun ReviewCreationScreen(
     state: ReviewCreationUiState,
     pagerState: PagerState,
-    currentPageScrollState: ScrollState,
+    shouldShowTopDivider: Boolean,
 
     showExitDialog: Boolean = false,
     onExitDialogDismiss: () -> Unit = {},
@@ -65,17 +61,13 @@ internal fun ReviewCreationScreen(
 ) {
     Box(modifier = Modifier.background(LocalCuiPalette.current.BackgroundPrimary)) {
         Column(modifier = Modifier.fillMaxSize()) {
-            val shouldShowDivider by remember(currentPageScrollState) {
-                derivedStateOf { currentPageScrollState.canScrollBackward }
-            }
-
             ProgressAppBar(
                 pagerState = pagerState,
                 navigationIconPainter = painterResource(CommonDrawable.ic_arrow_back),
                 firstStepNavigationIconPainter = painterResource(CommonDrawable.ic_cross),
                 onBackPress = onBackPress,
                 modifier = Modifier.bottomStrokeOnScroll(
-                    show = shouldShowDivider,
+                    show = shouldShowTopDivider,
                     strokeColor = LocalCuiPalette.current.OutlineSecondary,
                 )
             )
@@ -138,7 +130,7 @@ private fun ReviewCreationScreenPreview() {
     ReviewCreationScreen(
         state = mockUiState,
         pagerState = rememberPagerState { 1 },
-        currentPageScrollState = rememberScrollState(),
+        shouldShowTopDivider = false,
         content = {},
     )
 }

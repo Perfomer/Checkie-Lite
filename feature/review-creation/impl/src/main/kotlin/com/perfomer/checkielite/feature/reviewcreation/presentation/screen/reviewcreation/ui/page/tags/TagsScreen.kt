@@ -28,7 +28,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -51,6 +53,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 @Composable
 internal fun TagsScreen(
     state: TagsPageUiState,
+    decorationAlpha: Float = 1F,
     scrollState: LazyListState = rememberLazyListState(),
     onTagSortClick: () -> Unit = {},
     onSelectedTagsClearClick: () -> Unit = {},
@@ -71,82 +74,90 @@ internal fun TagsScreen(
     val bottomContentPadding = 104.dp + if (isImeVisible) 0.dp else navigationBarsBottomPadding
 
     Box(modifier = Modifier.fillMaxSize()) {
-        BackgroundDecoration()
-
-        LazyColumn(
-            state = scrollState,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(
-                start = 24.dp,
-                end = 24.dp,
-                top = 16.dp,
-                bottom = bottomContentPadding,
-            ),
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .imePadding()
+                .clipToBounds()
         ) {
-            item(key = "header") {
-                TagsHeader(
-                    state = state,
-                    selectedTagsCount = selectedTagsCount,
-                    sectionBorderColor = sectionBorderColor,
-                    onSelectedTagsClearClick = onSelectedTagsClearClick,
-                )
-            }
+            BackgroundDecoration(
+                modifier = Modifier.graphicsLayer { alpha = decorationAlpha }
+            )
 
-            if (state.recommendedTags.isNotEmpty()) {
-                item(key = "recommendations") {
-                    TagsRecommendationCard(
-                        recommendedTags = state.recommendedTags,
+            LazyColumn(
+                state = scrollState,
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                contentPadding = PaddingValues(
+                    start = 24.dp,
+                    end = 24.dp,
+                    top = 16.dp,
+                    bottom = bottomContentPadding,
+                ),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .imePadding()
+            ) {
+                item(key = "header") {
+                    TagsHeader(
+                        state = state,
+                        selectedTagsCount = selectedTagsCount,
+                        sectionBorderColor = sectionBorderColor,
+                        onSelectedTagsClearClick = onSelectedTagsClearClick,
+                    )
+                }
+
+                if (state.recommendedTags.isNotEmpty()) {
+                    item(key = "recommendations") {
+                        TagsRecommendationCard(
+                            recommendedTags = state.recommendedTags,
+                            palette = palette,
+                            onTagClick = onTagClick,
+                            onTagLongClick = onTagLongClick,
+                            modifier = Modifier.animateItem()
+                        )
+                    }
+                }
+
+                item(key = "search") {
+                    SearchSection(
+                        searchQuery = state.searchQuery,
+                        sectionShape = sectionShape,
+                        sectionBorderColor = sectionBorderColor,
+                        onSearchQueryInput = onSearchQueryInput,
+                        onSearchQueryClearClick = {
+                            onSearchQueryClearClick()
+                            focusManager.clearFocus()
+                        },
+                        modifier = Modifier.animateItem()
+                    )
+                }
+
+                item(key = "library") {
+                    TagsLibrarySection(
+                        tags = state.tags,
+                        searchQuery = state.searchQuery,
+                        shouldShowAddTag = state.shouldShowAddTag,
                         palette = palette,
+                        sectionShape = sectionShape,
+                        sectionBorderColor = sectionBorderColor,
+                        onCreateTagClick = {
+                            focusManager.clearFocus()
+                            onCreateTagClick()
+                        },
+                        onTagSortClick = onTagSortClick,
                         onTagClick = onTagClick,
                         onTagLongClick = onTagLongClick,
                         modifier = Modifier.animateItem()
                     )
                 }
             }
-
-            item(key = "search") {
-                SearchSection(
-                    searchQuery = state.searchQuery,
-                    sectionShape = sectionShape,
-                    sectionBorderColor = sectionBorderColor,
-                    onSearchQueryInput = onSearchQueryInput,
-                    onSearchQueryClearClick = {
-                        onSearchQueryClearClick()
-                        focusManager.clearFocus()
-                    },
-                    modifier = Modifier.animateItem()
-                )
-            }
-
-            item(key = "library") {
-                TagsLibrarySection(
-                    tags = state.tags,
-                    searchQuery = state.searchQuery,
-                    shouldShowAddTag = state.shouldShowAddTag,
-                    palette = palette,
-                    sectionShape = sectionShape,
-                    sectionBorderColor = sectionBorderColor,
-                    onCreateTagClick = {
-                        focusManager.clearFocus()
-                        onCreateTagClick()
-                    },
-                    onTagSortClick = onTagSortClick,
-                    onTagClick = onTagClick,
-                    onTagLongClick = onTagLongClick,
-                    modifier = Modifier.animateItem()
-                )
-            }
         }
     }
 }
 
 @Composable
-private fun BackgroundDecoration() {
+private fun BackgroundDecoration(modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         Box(
             modifier = Modifier

@@ -4,6 +4,7 @@ import com.perfomer.checkielite.common.android.commonAndroidModule
 import com.perfomer.checkielite.common.update.updateModule
 import com.perfomer.checkielite.core.data.localDataSourceModule
 import com.perfomer.checkielite.core.navigation.ExternalRouter
+import com.perfomer.checkielite.core.theme.themeModule
 import com.perfomer.checkielite.feature.gallery.galleryModules
 import com.perfomer.checkielite.feature.main.mainModules
 import com.perfomer.checkielite.feature.reviewcreation.reviewCreationModules
@@ -14,7 +15,6 @@ import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.BackupNavigationManager
 import com.perfomer.checkielite.navigation.StartScreenProvider
 import com.perfomer.checkielite.navigation.di.navigationModule
-import com.performer.checkielite.core.theme.themeModule
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind

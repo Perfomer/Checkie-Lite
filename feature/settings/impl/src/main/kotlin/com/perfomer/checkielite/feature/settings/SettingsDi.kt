@@ -11,6 +11,7 @@ import com.perfomer.checkielite.core.navigation.ExternalRouter
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
 import com.perfomer.checkielite.core.navigation.navigation
+import com.perfomer.checkielite.core.theme.manager.ThemeManager
 import com.perfomer.checkielite.feature.settings.presentation.navigation.BackupDestination
 import com.perfomer.checkielite.feature.settings.presentation.navigation.LibrariesDestination
 import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsDestination
@@ -41,7 +42,6 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.a
 import com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.actor.ThemeNavigationActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.theme.ui.ThemeContentScreen
 import com.perfomer.checkielite.feature.settings.presentation.screen.theme.ui.state.ThemeUiStateMapper
-import com.performer.checkielite.core.theme.manager.ThemeManager
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.actor.LaunchAppUpdateActor as BackupLaunchAppUpdateActor

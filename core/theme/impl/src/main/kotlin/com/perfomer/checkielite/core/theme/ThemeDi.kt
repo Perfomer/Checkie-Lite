@@ -1,7 +1,7 @@
-package com.performer.checkielite.core.theme
+package com.perfomer.checkielite.core.theme
 
-import com.performer.checkielite.core.theme.manager.ThemeManager
-import com.performer.checkielite.core.theme.manager.ThemeManagerImpl
+import com.perfomer.checkielite.core.theme.manager.ThemeManager
+import com.perfomer.checkielite.core.theme.manager.ThemeManagerImpl
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

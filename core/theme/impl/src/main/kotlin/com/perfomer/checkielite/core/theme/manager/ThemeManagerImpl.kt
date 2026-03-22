@@ -1,4 +1,4 @@
-package com.performer.checkielite.core.theme.manager
+package com.perfomer.checkielite.core.theme.manager
 
 import com.perfomer.checkielite.core.data.repository.ThemeRepository
 import com.perfomer.checkielite.core.domain.entity.theme.ThemeMode

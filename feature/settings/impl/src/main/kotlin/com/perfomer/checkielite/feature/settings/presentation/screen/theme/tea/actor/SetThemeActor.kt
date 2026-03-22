@@ -3,11 +3,11 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.
 import com.perfomer.checkielite.common.android.util.onCatchLog
 import com.perfomer.checkielite.common.pure.util.flowBy
 import com.perfomer.checkielite.common.tea.component.Actor
+import com.perfomer.checkielite.core.theme.manager.ThemeManager
 import com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.core.ThemeCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.core.ThemeCommand.SetTheme
 import com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.core.ThemeEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.core.ThemeEvent.ThemeSetSucceed
-import com.performer.checkielite.core.theme.manager.ThemeManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapLatest

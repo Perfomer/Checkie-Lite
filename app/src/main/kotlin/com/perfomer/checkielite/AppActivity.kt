@@ -39,12 +39,12 @@ import com.perfomer.checkielite.common.ui.util.navigation.registerPredictiveBack
 import com.perfomer.checkielite.common.update.api.AppUpdateManager
 import com.perfomer.checkielite.common.update.api.updateIfAvailable
 import com.perfomer.checkielite.core.navigation.NavigationHost
+import com.perfomer.checkielite.core.theme.manager.ThemeManager
 import com.perfomer.checkielite.navigation.AndroidExternalRouter
 import com.perfomer.checkielite.navigation.BackupNavigationManager
 import com.perfomer.checkielite.navigation.ComposablesBottomSheetController
 import com.perfomer.checkielite.navigation.StartScreenProvider
 import com.perfomer.checkielite.theme.AppThemedContent
-import com.performer.checkielite.core.theme.manager.ThemeManager
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay

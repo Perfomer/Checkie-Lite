@@ -6,7 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.core.domain.entity.theme.ThemeMode
-import com.performer.checkielite.core.theme.manager.ThemeManager
+import com.perfomer.checkielite.core.theme.manager.ThemeManager
 
 @Composable
 fun AppThemedContent(

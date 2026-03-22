@@ -30,7 +30,12 @@ internal interface CheckieReviewDao {
     @Query("SELECT * FROM CheckieReviewDb WHERE id = :id")
     fun getReview(id: String): Flow<CheckieReviewDetailedDb>
 
-    @Query("SELECT DISTINCT brandName FROM CheckieReviewDb")
+    @Query(
+        """
+        SELECT DISTINCT brandName FROM CheckieReviewDb
+        WHERE brandName IS NOT NULL AND TRIM(brandName) != ''
+        """
+    )
     suspend fun getAllBrands(): List<String>
 
     @Insert

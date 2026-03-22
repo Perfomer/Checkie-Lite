@@ -5,5 +5,6 @@ enum class ReviewCreationStartAction(val targetPage: ReviewCreationPage) {
     SET_PRICE(ReviewCreationPage.PRODUCT_INFO),
     ADD_PICTURES(ReviewCreationPage.PRODUCT_INFO),
     ADD_TAGS(ReviewCreationPage.TAGS),
+    SET_RATING(ReviewCreationPage.REVIEW_INFO),
     ADD_REVIEW_COMMENT(ReviewCreationPage.REVIEW_INFO),
 }

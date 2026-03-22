@@ -29,6 +29,8 @@ internal sealed interface ReviewDetailsUiEvent : ReviewDetailsEvent {
 
     data object OnEmptyImageClick : ReviewDetailsUiEvent
 
+    data object OnRatingClick : ReviewDetailsUiEvent
+
     data object OnEmptyPriceClick : ReviewDetailsUiEvent
 
     data object OnEmptyReviewTextClick : ReviewDetailsUiEvent

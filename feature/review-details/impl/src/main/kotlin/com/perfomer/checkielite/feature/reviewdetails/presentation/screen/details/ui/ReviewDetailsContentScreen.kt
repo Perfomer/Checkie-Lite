@@ -26,6 +26,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnEmptyReviewTextClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnPictureClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnPictureSelect
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnRatingClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnRecommendationClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnTagClick
 
@@ -60,6 +61,7 @@ internal class ReviewDetailsContentScreen(
             onDeleteClick = acceptable(OnDeleteClick),
             onPictureClick = acceptable(OnPictureClick),
             onEmptyImageClick = acceptable(OnEmptyImageClick),
+            onRatingClick = acceptable(OnRatingClick),
             onEmptyPriceClick = acceptable(OnEmptyPriceClick),
             onEmptyReviewTextClick = acceptable(OnEmptyReviewTextClick),
             onAddTagsClick = acceptable(OnAddTagsClick),

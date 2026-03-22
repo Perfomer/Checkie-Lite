@@ -47,6 +47,7 @@ internal fun ReviewDetailsInfo(
     date: String,
     rating: Int,
     price: Price?,
+    onRatingClick: () -> Unit,
     onEmptyPriceClick: () -> Unit,
 ) {
     Spacer(Modifier.height(20.dp))
@@ -93,6 +94,7 @@ internal fun ReviewDetailsInfo(
                 )
             },
             fromLeft = true,
+            onClick = onRatingClick,
             modifier = Modifier.weight(1F)
         )
 

@@ -32,6 +32,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnEmptyReviewTextClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnPictureClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnPictureSelect
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnRatingClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnRecommendationClick
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent.OnTagClick
 
@@ -49,6 +50,7 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
         is OnDeleteClick -> effects(ShowConfirmDeleteDialog)
         is OnConfirmDeleteClick -> commands(DeleteReview(state.reviewId))
         is OnEmptyImageClick -> reduceOnEditClick(startAction = ReviewCreationStartAction.ADD_PICTURES)
+        is OnRatingClick -> reduceOnEditClick(startAction = ReviewCreationStartAction.SET_RATING)
         is OnEmptyPriceClick -> reduceOnEditClick(startAction = ReviewCreationStartAction.SET_PRICE)
         is OnEmptyReviewTextClick -> reduceOnEditClick(startAction = ReviewCreationStartAction.ADD_REVIEW_COMMENT)
         is OnEditClick -> reduceOnEditClick(startAction = ReviewCreationStartAction.NONE)

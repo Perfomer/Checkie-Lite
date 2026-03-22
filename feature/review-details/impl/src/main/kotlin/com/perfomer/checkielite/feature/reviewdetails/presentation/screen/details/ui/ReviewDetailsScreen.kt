@@ -43,6 +43,7 @@ internal fun ReviewDetailsScreen(
     onDeleteClick: () -> Unit = {},
     onPictureClick: () -> Unit = {},
     onEmptyImageClick: () -> Unit = {},
+    onRatingClick: () -> Unit = {},
     onEmptyPriceClick: () -> Unit = {},
     onEmptyReviewTextClick: () -> Unit = {},
     onPageChange: (pageIndex: Int) -> Unit = {},
@@ -72,6 +73,7 @@ internal fun ReviewDetailsScreen(
                 scrollableState = scrollState,
                 onPictureClick = onPictureClick,
                 onEmptyImageClick = onEmptyImageClick,
+                onRatingClick = onRatingClick,
                 onEmptyPriceClick = onEmptyPriceClick,
                 onEmptyReviewTextClick = onEmptyReviewTextClick,
                 onPageChange = onPageChange,
@@ -109,6 +111,7 @@ private fun Content(
     scrollableState: LazyListState,
     onPictureClick: () -> Unit,
     onEmptyImageClick: () -> Unit,
+    onRatingClick: () -> Unit,
     onEmptyPriceClick: () -> Unit,
     onEmptyReviewTextClick: () -> Unit,
     onPageChange: (pageIndex: Int) -> Unit,
@@ -142,6 +145,7 @@ private fun Content(
                 date = state.date,
                 rating = state.rating,
                 price = state.price,
+                onRatingClick = onRatingClick,
                 onEmptyPriceClick = onEmptyPriceClick,
             )
         }

@@ -56,6 +56,7 @@
     <string name="tagcreation_emoji_category_travel">Путешествия и места</string>
     <string name="reviewcreation_tags_recommended_title">Рекомендованные</string>
     <string name="reviewcreation_tags_recommended_subtitle">На основе бренда и выбранных тегов</string>
+    <string name="reviewcreation_tags_recommended_subtitle_no_brand">На основе выбранных тегов</string>
     <string name="reviewcreation_tags_library_title">Библиотека тегов</string>
     <string name="reviewcreation_tags_library_subtitle">Нажать для выбора, удерживать для редактирования</string>
     <string name="reviewcreation_tags_badge_selected">%d выбрано</string>

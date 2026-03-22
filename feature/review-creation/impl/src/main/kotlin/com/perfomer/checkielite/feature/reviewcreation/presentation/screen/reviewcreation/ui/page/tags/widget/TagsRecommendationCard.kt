@@ -36,6 +36,7 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 @Composable
 internal fun TagsRecommendationCard(
     modifier: Modifier = Modifier,
+    hasBrand: Boolean,
     recommendedTags: List<TagsPageUiState.Tag>,
     palette: CuiPalette,
     onTagClick: (String) -> Unit,
@@ -123,7 +124,10 @@ internal fun TagsRecommendationCard(
                         )
 
                         Text(
-                            text = stringResource(R.string.reviewcreation_tags_recommended_subtitle),
+                            text = stringResource(
+                                if (hasBrand) R.string.reviewcreation_tags_recommended_subtitle
+                                else R.string.reviewcreation_tags_recommended_subtitle_no_brand
+                            ),
                             fontSize = 12.sp,
                             color = CuiColorToken.White1.copy(alpha = 0.86F),
                             lineHeight = 16.sp,

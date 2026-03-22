@@ -151,6 +151,7 @@ internal val mockUiState = ReviewCreationUiState(
     tagsState = TagsPageUiState(
         mainPictureUri = null,
         productName = "Chips",
+        hasBrand = false,
         searchQuery = "",
         shouldShowAddTag = true,
         recommendedTags = persistentListOf(

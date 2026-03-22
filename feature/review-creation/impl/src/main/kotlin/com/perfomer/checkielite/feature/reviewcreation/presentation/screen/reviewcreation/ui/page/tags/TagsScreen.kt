@@ -108,6 +108,7 @@ internal fun TagsScreen(
                 if (state.recommendedTags.isNotEmpty()) {
                     item(key = "recommendations") {
                         TagsRecommendationCard(
+                            hasBrand = state.hasBrand,
                             recommendedTags = state.recommendedTags,
                             palette = palette,
                             onTagClick = onTagClick,

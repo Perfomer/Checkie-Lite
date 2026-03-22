@@ -72,6 +72,7 @@ internal class ReviewCreationUiStateMapper(
         return TagsPageUiState(
             mainPictureUri = state.reviewDetails.pictures.firstOrNull()?.uri,
             productName = state.reviewDetails.productName,
+            hasBrand = state.reviewDetails.productBrand.isNotBlank(),
             searchQuery = state.tagsSearchQuery,
             shouldShowAddTag = tags.fastAll { it.value != state.tagsSearchQuery },
             recommendedTags = recommendedTags.toPersistentList(),

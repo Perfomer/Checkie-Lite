@@ -40,6 +40,7 @@ internal data class ProductInfoPageUiState(
 internal data class TagsPageUiState(
     val mainPictureUri: String?,
     val productName: String,
+    val hasBrand: Boolean,
     val searchQuery: String,
     val shouldShowAddTag: Boolean,
     val recommendedTags: ImmutableList<Tag>,

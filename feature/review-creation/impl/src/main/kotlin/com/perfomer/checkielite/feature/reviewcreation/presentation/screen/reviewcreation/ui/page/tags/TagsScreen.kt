@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -58,6 +62,10 @@ internal fun TagsScreen(
     val sectionShape = remember { RoundedCornerShape(30.dp) }
     val sectionBorderColor = remember(palette) { palette.OutlineSecondary.copy(alpha = 0.72F) }
     val selectedTagsCount = remember(state.tags) { state.tags.count(TagsPageUiState.Tag::isSelected) }
+    val density = LocalDensity.current
+    val navigationBarsBottomPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+    val isImeVisible = WindowInsets.ime.getBottom(density) > 0
+    val bottomContentPadding = 104.dp + if (isImeVisible) 0.dp else navigationBarsBottomPadding
 
     Box(modifier = Modifier.fillMaxSize()) {
         BackgroundDecoration()
@@ -69,11 +77,10 @@ internal fun TagsScreen(
                 start = 24.dp,
                 end = 24.dp,
                 top = 16.dp,
-                bottom = 104.dp,
+                bottom = bottomContentPadding,
             ),
             modifier = Modifier
                 .fillMaxSize()
-                .navigationBarsPadding()
                 .imePadding()
         ) {
             item(key = "header") {

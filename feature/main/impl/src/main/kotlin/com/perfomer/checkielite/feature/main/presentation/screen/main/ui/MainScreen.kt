@@ -59,9 +59,9 @@ import com.perfomer.checkielite.common.ui.util.pxToDp
 import com.perfomer.checkielite.feature.main.R
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiState
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.Tag
+import com.perfomer.checkielite.feature.main.presentation.util.TagRowUiBalancer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 internal fun MainScreen(
@@ -257,17 +257,7 @@ private fun TagsRow(
     tags: ImmutableList<Tag>,
     onTagClick: (id: String) -> Unit,
 ) {
-    val shouldShowSecondRow = tags.size >= 10
-
-    val firstRow = remember(tags) {
-        if (shouldShowSecondRow) tags.filterIndexed { index, _ -> index % 2 == 0 }.toPersistentList()
-        else tags
-    }
-
-    val secondRow = remember(tags) {
-        if (shouldShowSecondRow) tags.filterIndexed { index, _ -> index % 2 != 0 }.toPersistentList()
-        else null
-    }
+    val rows = remember(tags) { TagRowUiBalancer.split(tags) }
 
     @Composable
     fun SingleRow(tags: ImmutableList<Tag>) {
@@ -289,11 +279,9 @@ private fun TagsRow(
             .horizontalScroll(rememberScrollState())
             .padding(horizontal = 20.dp)
     ) {
-        SingleRow(tags = firstRow)
+        SingleRow(tags = rows.first)
 
-        if (secondRow != null) {
-            SingleRow(tags = secondRow)
-        }
+        rows.second?.let { SingleRow(tags = it) }
     }
 }
 

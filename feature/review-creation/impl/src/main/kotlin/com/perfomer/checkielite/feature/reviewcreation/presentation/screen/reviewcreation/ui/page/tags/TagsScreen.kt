@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -22,19 +21,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.perfomer.checkielite.common.ui.CommonDrawable
-import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -87,7 +81,6 @@ internal fun TagsScreen(
                     state = state,
                     selectedTagsCount = selectedTagsCount,
                     sectionBorderColor = sectionBorderColor,
-                    onTagSortClick = onTagSortClick,
                 )
             }
 
@@ -129,6 +122,7 @@ internal fun TagsScreen(
                         focusManager.clearFocus()
                         onCreateTagClick()
                     },
+                    onTagSortClick = onTagSortClick,
                     onTagClick = onTagClick,
                     onTagLongClick = onTagLongClick,
                     modifier = Modifier.animateItem()
@@ -168,7 +162,6 @@ private fun TagsHeader(
     state: TagsPageUiState,
     selectedTagsCount: Int,
     sectionBorderColor: Color,
-    onTagSortClick: () -> Unit,
 ) {
     val palette = LocalCuiPalette.current
 
@@ -177,19 +170,6 @@ private fun TagsHeader(
             title = stringResource(R.string.reviewcreation_tags_title),
             productPictureUri = state.mainPictureUri,
             productName = state.productName,
-            endIcon = {
-                val targetTagSortAlpha = if (state.searchQuery.isBlank()) 1F else 0F
-                val animatedTagSortAlpha by animateFloatAsState(
-                    targetValue = targetTagSortAlpha,
-                    label = "TagsSortAlpha",
-                )
-
-                CuiIconButton(
-                    painter = painterResource(CommonDrawable.ic_sort),
-                    onClick = onTagSortClick,
-                    modifier = Modifier.graphicsLayer { alpha = animatedTagSortAlpha }
-                )
-            }
         )
 
         FlowRow(

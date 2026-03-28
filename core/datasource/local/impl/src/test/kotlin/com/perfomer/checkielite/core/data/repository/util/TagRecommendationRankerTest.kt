@@ -72,6 +72,39 @@ internal class TagRecommendationRankerTest {
     }
 
     @Test
+    fun `GIVEN mutually exclusive tags in selected context WHEN ranking THEN keep coherent recommendations only`() {
+        val result = ranker.rank(
+            reviews = listOf(
+                review("1", tags = listOf(tagRestaurant, tagAlcohol)),
+                review("2", tags = listOf(tagRestaurant, tagAlcohol)),
+                review("3", tags = listOf(tagRestaurant, tagFood)),
+                review("4", tags = listOf(tagRestaurant, tagFood)),
+            ),
+            selectedTagIds = setOf(tagRestaurant.id),
+            productBrand = "",
+            maxCount = 5,
+        )
+
+        assertEquals(listOf(tagAlcohol), result)
+    }
+
+    @Test
+    fun `GIVEN several selected tags WHEN ranking THEN require exact cooccurrence with whole combination`() {
+        val result = ranker.rank(
+            reviews = listOf(
+                review("1", tags = listOf(tagRestaurant, tagSpicy)),
+                review("2", tags = listOf(tagMeat, tagSpicy)),
+                review("3", tags = listOf(tagRestaurant, tagMeat, tagDessert)),
+            ),
+            selectedTagIds = setOf(tagRestaurant.id, tagMeat.id),
+            productBrand = "",
+            maxCount = 5,
+        )
+
+        assertEquals(listOf(tagDessert), result)
+    }
+
+    @Test
     fun `GIVEN max count WHEN ranking THEN trim result`() {
         val result = ranker.rank(
             reviews = listOf(
@@ -108,6 +141,8 @@ internal class TagRecommendationRankerTest {
     )
 
     private companion object {
+        val tagAlcohol = CheckieTag(id = "alcohol", value = "Alcohol", emoji = null)
+        val tagDessert = CheckieTag(id = "dessert", value = "Dessert", emoji = null)
         val tagMeat = CheckieTag(id = "meat", value = "Meat", emoji = null)
         val tagFood = CheckieTag(id = "food", value = "Food", emoji = null)
         val tagRestaurant = CheckieTag(id = "restaurant", value = "Restaurant", emoji = null)

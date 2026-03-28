@@ -30,20 +30,30 @@ object CuiOutlinedFieldDefaults {
 
     @Composable
     fun colors(
-        unfocusedBorderColor: Color = LocalCuiPalette.current.OutlinePrimary,
+        focusedBorderColor: Color = LocalCuiPalette.current.BackgroundAccentPrimary,
+        unfocusedBorderColor: Color = LocalCuiPalette.current.OutlineSecondary.copy(alpha = 0.88F),
         errorBorderColor: Color = LocalCuiPalette.current.BackgroundNegativePrimary,
         focusedLabelColor: Color = LocalCuiPalette.current.TextAccent,
         unfocusedLabelColor: Color = LocalCuiPalette.current.TextSecondary,
-        unfocusedPlaceholderColor: Color = LocalCuiPalette.current.TextSecondary,
-        focusedPlaceholderColor: Color = LocalCuiPalette.current.TextSecondary,
+        focusedPlaceholderColor: Color = LocalCuiPalette.current.TextSecondary.copy(alpha = 0.64F),
+        unfocusedPlaceholderColor: Color = LocalCuiPalette.current.TextSecondary.copy(alpha = 0.82F),
+        focusedContainerColor: Color = LocalCuiPalette.current.BackgroundPrimary.copy(alpha = 0.96F),
+        unfocusedContainerColor: Color = LocalCuiPalette.current.BackgroundPrimary.copy(alpha = 0.84F),
+        errorContainerColor: Color = LocalCuiPalette.current.BackgroundPrimary.copy(alpha = 0.96F),
+        cursorColor: Color = LocalCuiPalette.current.TextAccent,
     ): TextFieldColors {
         return OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = focusedBorderColor,
             unfocusedBorderColor = unfocusedBorderColor,
             errorBorderColor = errorBorderColor,
             focusedLabelColor = focusedLabelColor,
             unfocusedLabelColor = unfocusedLabelColor,
-            unfocusedPlaceholderColor = unfocusedPlaceholderColor,
             focusedPlaceholderColor = focusedPlaceholderColor,
+            unfocusedPlaceholderColor = unfocusedPlaceholderColor,
+            focusedContainerColor = focusedContainerColor,
+            unfocusedContainerColor = unfocusedContainerColor,
+            errorContainerColor = errorContainerColor,
+            cursorColor = cursorColor,
         )
     }
 }

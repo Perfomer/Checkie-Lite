@@ -14,7 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.stack.Children
-import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.androidPredictiveBackAnimatable
+import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.androidPredictiveBackAnimatableV2
 import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.predictiveBackAnimation
 import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
@@ -75,7 +75,7 @@ internal class DecomposeNavigationHost(
             animation = predictiveBackAnimation(
                 backHandler = root.backHandler,
                 fallbackAnimation = stackAnimation(slide()),
-                selector = { backEvent, _, _ -> androidPredictiveBackAnimatable(backEvent) },
+                selector = { backEvent, _, _ -> androidPredictiveBackAnimatableV2(backEvent) },
                 onBack = ::back,
             ),
             content = { child -> child.instance.Screen() },

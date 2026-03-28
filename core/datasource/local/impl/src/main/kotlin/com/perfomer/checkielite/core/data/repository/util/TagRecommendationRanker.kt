@@ -2,6 +2,7 @@ package com.perfomer.checkielite.core.data.repository.util
 
 import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
 import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
+import kotlin.math.min
 
 internal class TagRecommendationRanker {
 
@@ -13,65 +14,44 @@ internal class TagRecommendationRanker {
     ): List<CheckieTag> {
         if (selectedTagIds.isEmpty() && productBrand.isBlank()) return emptyList()
 
-        val scoreByTagId = linkedMapOf<String, Double>()
-        val supportByTagId = linkedMapOf<String, Int>()
-        val tagById = linkedMapOf<String, CheckieTag>()
+        val tagById = reviews
+            .asSequence()
+            .flatMap { review -> review.tags.asSequence() }
+            .associateBy(CheckieTag::id)
+
         val reviewsWithAllSelectedTags = reviews.filter { review ->
             review.containsAllTags(selectedTagIds)
         }
-
-        if (selectedTagIds.isNotEmpty()) {
-            val reviewsBySelectedTagId = selectedTagIds.associateWith { selectedTagId ->
-                reviews.filter { review -> review.tags.any { tag -> tag.id == selectedTagId } }
-            }
-
-            for ((_, matchedReviews) in reviewsBySelectedTagId) {
-                val matchedReviewsCount = matchedReviews.size
-                if (matchedReviewsCount == 0) continue
-
-                val candidateCounts = linkedMapOf<CheckieTag, Int>()
-                for (review in matchedReviews) {
-                    for (tag in review.tags) {
-                        if (tag.id in selectedTagIds) continue
-                        candidateCounts[tag] = (candidateCounts[tag] ?: 0) + 1
-                    }
-                }
-
-                for ((tag, count) in candidateCounts) {
-                    tagById[tag.id] = tag
-                    scoreByTagId[tag.id] = (scoreByTagId[tag.id] ?: 0.0) + (count.toDouble() / matchedReviewsCount)
-                    supportByTagId[tag.id] = (supportByTagId[tag.id] ?: 0) + count
-                }
-            }
+        val reviewsWithAnySelectedTags = reviews.filter { review ->
+            review.containsAnyTags(selectedTagIds)
+        }
+        val reviewsWithBrand = reviews.filter { review ->
+            productBrand.isNotBlank() && review.productBrand == productBrand
+        }
+        val reviewsWithBrandAndAllSelectedTags = reviewsWithAllSelectedTags.filter { review ->
+            productBrand.isNotBlank() && review.productBrand == productBrand
+        }
+        val reviewsWithBrandAndAnySelectedTags = reviewsWithAnySelectedTags.filter { review ->
+            productBrand.isNotBlank() && review.productBrand == productBrand
+        }
+        val reviewsBySelectedTagId = selectedTagIds.associateWith { selectedTagId ->
+            reviews.filter { review -> review.containsTag(selectedTagId) }
         }
 
-        if (productBrand.isNotBlank()) {
-            val reviewsWithBrand = reviews.filter { it.productBrand == productBrand }
-            val reviewsWithBrandCount = reviewsWithBrand.size
-
-            if (reviewsWithBrandCount > 0) {
-                val candidateCounts = linkedMapOf<CheckieTag, Int>()
-                for (review in reviewsWithBrand) {
-                    for (tag in review.tags) {
-                        if (tag.id in selectedTagIds) continue
-                        candidateCounts[tag] = (candidateCounts[tag] ?: 0) + 1
-                    }
-                }
-
-                for ((tag, count) in candidateCounts) {
-                    tagById[tag.id] = tag
-                    scoreByTagId[tag.id] = (scoreByTagId[tag.id] ?: 0.0) + ((count.toDouble() / reviewsWithBrandCount) * BRAND_WEIGHT)
-                    supportByTagId[tag.id] = (supportByTagId[tag.id] ?: 0) + count
-                }
-            }
-        }
-
-        val exactSupportByTagId = reviewsWithAllSelectedTags.countSupportByTagId(
-            excludedTagIds = selectedTagIds,
-        )
-        val coherenceContextReviews = reviews.resolveCoherenceContext(
+        val recommendationTiers = buildRecommendationTiers(
+            tagById = tagById,
+            selectedTagIds = selectedTagIds,
             reviewsWithAllSelectedTags = reviewsWithAllSelectedTags,
-            productBrand = productBrand,
+            reviewsWithBrandAndAllSelectedTags = reviewsWithBrandAndAllSelectedTags,
+            reviewsBySelectedTagId = reviewsBySelectedTagId,
+            reviewsWithBrand = reviewsWithBrand,
+        )
+        val coherenceContextReviews = resolveCoherenceContext(
+            reviewsWithBrandAndAllSelectedTags = reviewsWithBrandAndAllSelectedTags,
+            reviewsWithAllSelectedTags = reviewsWithAllSelectedTags,
+            reviewsWithBrandAndAnySelectedTags = reviewsWithBrandAndAnySelectedTags,
+            reviewsWithAnySelectedTags = reviewsWithAnySelectedTags,
+            reviewsWithBrand = reviewsWithBrand,
         )
         val coherenceSupportByTagId = coherenceContextReviews.countSupportByTagId(
             excludedTagIds = selectedTagIds,
@@ -80,53 +60,171 @@ internal class TagRecommendationRanker {
             excludedTagIds = selectedTagIds,
         )
 
-        return scoreByTagId.keys
-            .sortedWith(
-                compareByDescending<String> { scoreByTagId.getValue(it) }
-                    .thenByDescending { supportByTagId[it] ?: 0 }
-                    .thenBy { tagById.getValue(it).value.lowercase() }
-            )
-            .filter { tagId ->
-                selectedTagIds.size <= 1 || (exactSupportByTagId[tagId] ?: 0) > 0
-            }
-            .fold(mutableListOf<String>()) { acceptedTagIds, candidateTagId ->
+        return recommendationTiers
+            .asSequence()
+            .flatMap { tier -> tier.asSequence() }
+            .distinctBy(CandidateRecommendation::tagId)
+            .fold(mutableListOf<CandidateRecommendation>()) { acceptedRecommendations, candidate ->
+                if (acceptedRecommendations.size >= maxCount) return@fold acceptedRecommendations
+
                 if (
-                    acceptedTagIds.none { acceptedTagId ->
+                    acceptedRecommendations.none { acceptedRecommendation ->
                         hasStrongContradiction(
-                            firstTagId = acceptedTagId,
-                            secondTagId = candidateTagId,
+                            firstTagId = acceptedRecommendation.tagId,
+                            secondTagId = candidate.tagId,
                             supportByTagId = coherenceSupportByTagId,
                             pairSupportByTagIds = coherencePairSupportByTagIds,
                         )
                     }
                 ) {
-                    acceptedTagIds += candidateTagId
+                    acceptedRecommendations += candidate
                 }
 
-                acceptedTagIds
+                acceptedRecommendations
             }
-            .take(maxCount)
-            .map(tagById::getValue)
+            .map { recommendation -> tagById.getValue(recommendation.tagId) }
     }
 
-    private companion object {
-        private const val BRAND_WEIGHT = 1.25
-        private const val MIN_SUPPORT_FOR_CONTRADICTION = 2
-    }
-
-    private fun List<CheckieReview>.resolveCoherenceContext(
+    private fun buildRecommendationTiers(
+        tagById: Map<String, CheckieTag>,
+        selectedTagIds: Set<String>,
         reviewsWithAllSelectedTags: List<CheckieReview>,
-        productBrand: String,
-    ): List<CheckieReview> {
-        if (productBrand.isBlank()) return reviewsWithAllSelectedTags
+        reviewsWithBrandAndAllSelectedTags: List<CheckieReview>,
+        reviewsBySelectedTagId: Map<String, List<CheckieReview>>,
+        reviewsWithBrand: List<CheckieReview>,
+    ): List<List<CandidateRecommendation>> {
+        val recommendationTiers = mutableListOf<List<CandidateRecommendation>>()
 
-        val reviewsWithSelectedTagsAndBrand = reviewsWithAllSelectedTags.filter { review ->
-            review.productBrand == productBrand
+        if (selectedTagIds.isNotEmpty() && reviewsWithBrandAndAllSelectedTags.isNotEmpty()) {
+            recommendationTiers += collectContextTierCandidates(
+                tagById = tagById,
+                contextReviews = reviewsWithBrandAndAllSelectedTags,
+                excludedTagIds = selectedTagIds,
+                confidenceThreshold = STRICT_CONFIDENCE_THRESHOLD,
+                matchedSignalsCount = selectedTagIds.size + 1,
+            )
         }
-        if (reviewsWithSelectedTagsAndBrand.isNotEmpty()) return reviewsWithSelectedTagsAndBrand
-        if (reviewsWithAllSelectedTags.isNotEmpty()) return reviewsWithAllSelectedTags
 
-        return filter { review -> review.productBrand == productBrand }
+        if (selectedTagIds.isNotEmpty()) {
+            recommendationTiers += collectContextTierCandidates(
+                tagById = tagById,
+                contextReviews = reviewsWithAllSelectedTags,
+                excludedTagIds = selectedTagIds,
+                confidenceThreshold = STRICT_CONFIDENCE_THRESHOLD,
+                matchedSignalsCount = selectedTagIds.size,
+            )
+            recommendationTiers += collectSelectedFallbackTierCandidates(
+                tagById = tagById,
+                selectedTagIds = selectedTagIds,
+                reviewsBySelectedTagId = reviewsBySelectedTagId,
+            )
+        }
+
+        if (reviewsWithBrand.isNotEmpty()) {
+            recommendationTiers += collectContextTierCandidates(
+                tagById = tagById,
+                contextReviews = reviewsWithBrand,
+                excludedTagIds = selectedTagIds,
+                confidenceThreshold = FALLBACK_CONFIDENCE_THRESHOLD,
+                matchedSignalsCount = 1,
+            )
+        }
+
+        return recommendationTiers.filter { tier -> tier.isNotEmpty() }
+    }
+
+    private fun collectContextTierCandidates(
+        tagById: Map<String, CheckieTag>,
+        contextReviews: List<CheckieReview>,
+        excludedTagIds: Set<String>,
+        confidenceThreshold: Double,
+        matchedSignalsCount: Int,
+    ): List<CandidateRecommendation> {
+        if (contextReviews.isEmpty()) return emptyList()
+
+        val contextReviewsCount = contextReviews.size
+
+        return contextReviews.countSupportByTagId(excludedTagIds)
+            .mapNotNull { (tagId, support) ->
+                val confidence = support.toDouble() / contextReviewsCount
+                CandidateRecommendation(
+                    tagId = tagId,
+                    confidence = confidence,
+                    support = support,
+                    matchedSignalsCount = matchedSignalsCount,
+                ).takeIf { confidence >= confidenceThreshold }
+            }
+            .sortedWith(candidateRecommendationComparator(tagById))
+    }
+
+    private fun collectSelectedFallbackTierCandidates(
+        tagById: Map<String, CheckieTag>,
+        selectedTagIds: Set<String>,
+        reviewsBySelectedTagId: Map<String, List<CheckieReview>>,
+    ): List<CandidateRecommendation> {
+        if (selectedTagIds.isEmpty()) return emptyList()
+
+        val requiredSelectedMatches = min(
+            SELECTED_FALLBACK_REQUIRED_MATCHES,
+            selectedTagIds.size,
+        )
+        val confidenceByCandidateTagId = linkedMapOf<String, MutableList<Double>>()
+        val supportByCandidateTagId = linkedMapOf<String, Int>()
+
+        for ((selectedTagId, matchedReviews) in reviewsBySelectedTagId) {
+            val matchedReviewsCount = matchedReviews.size
+            if (matchedReviewsCount == 0) continue
+
+            val candidateSupportByTagId = matchedReviews.countSupportByTagId(
+                excludedTagIds = setOf(selectedTagId),
+            )
+
+            for ((candidateTagId, support) in candidateSupportByTagId) {
+                if (candidateTagId in selectedTagIds) continue
+
+                confidenceByCandidateTagId.getOrPut(candidateTagId) { mutableListOf() } +=
+                    support.toDouble() / matchedReviewsCount
+                supportByCandidateTagId[candidateTagId] = (supportByCandidateTagId[candidateTagId] ?: 0) + support
+            }
+        }
+
+        return confidenceByCandidateTagId.mapNotNull { (candidateTagId, confidences) ->
+            if (confidences.size < requiredSelectedMatches) return@mapNotNull null
+
+            val strongestConfidences = confidences.sortedDescending().take(requiredSelectedMatches)
+            val weakestRequiredConfidence = strongestConfidences.last()
+
+            CandidateRecommendation(
+                tagId = candidateTagId,
+                confidence = strongestConfidences.average(),
+                support = supportByCandidateTagId.getValue(candidateTagId),
+                matchedSignalsCount = confidences.size,
+            ).takeIf { weakestRequiredConfidence >= FALLBACK_CONFIDENCE_THRESHOLD }
+        }
+            .sortedWith(candidateRecommendationComparator(tagById))
+    }
+
+    private fun candidateRecommendationComparator(
+        tagById: Map<String, CheckieTag>,
+    ): Comparator<CandidateRecommendation> {
+        return compareByDescending<CandidateRecommendation> { recommendation -> recommendation.confidence }
+            .thenByDescending { recommendation -> recommendation.matchedSignalsCount }
+            .thenByDescending { recommendation -> recommendation.support }
+            .thenBy { recommendation -> tagById.getValue(recommendation.tagId).value.lowercase() }
+    }
+
+    private fun resolveCoherenceContext(
+        reviewsWithBrandAndAllSelectedTags: List<CheckieReview>,
+        reviewsWithAllSelectedTags: List<CheckieReview>,
+        reviewsWithBrandAndAnySelectedTags: List<CheckieReview>,
+        reviewsWithAnySelectedTags: List<CheckieReview>,
+        reviewsWithBrand: List<CheckieReview>,
+    ): List<CheckieReview> = when {
+        reviewsWithBrandAndAllSelectedTags.isNotEmpty() -> reviewsWithBrandAndAllSelectedTags
+        reviewsWithAllSelectedTags.isNotEmpty() -> reviewsWithAllSelectedTags
+        reviewsWithBrandAndAnySelectedTags.isNotEmpty() -> reviewsWithBrandAndAnySelectedTags
+        reviewsWithAnySelectedTags.isNotEmpty() -> reviewsWithAnySelectedTags
+        else -> reviewsWithBrand
     }
 
     private fun List<CheckieReview>.countSupportByTagId(
@@ -175,6 +273,15 @@ internal class TagRecommendationRanker {
         return tagIds.all(reviewTagIds::contains)
     }
 
+    private fun CheckieReview.containsAnyTags(tagIds: Set<String>): Boolean {
+        if (tagIds.isEmpty()) return false
+        return tags.any { tag -> tag.id in tagIds }
+    }
+
+    private fun CheckieReview.containsTag(tagId: String): Boolean {
+        return tags.any { tag -> tag.id == tagId }
+    }
+
     private fun hasStrongContradiction(
         firstTagId: String,
         secondTagId: String,
@@ -204,4 +311,18 @@ internal class TagRecommendationRanker {
             secondTagId to firstTagId
         }
     }
+
+    private companion object {
+        private const val STRICT_CONFIDENCE_THRESHOLD = 0.5
+        private const val FALLBACK_CONFIDENCE_THRESHOLD = 0.3333333333333333
+        private const val SELECTED_FALLBACK_REQUIRED_MATCHES = 2
+        private const val MIN_SUPPORT_FOR_CONTRADICTION = 2
+    }
 }
+
+private data class CandidateRecommendation(
+    val tagId: String,
+    val confidence: Double,
+    val support: Int,
+    val matchedSignalsCount: Int,
+)

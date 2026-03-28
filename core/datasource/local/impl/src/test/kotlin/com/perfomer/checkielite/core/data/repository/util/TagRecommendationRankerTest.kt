@@ -89,19 +89,73 @@ internal class TagRecommendationRankerTest {
     }
 
     @Test
-    fun `GIVEN several selected tags WHEN ranking THEN require exact cooccurrence with whole combination`() {
+    fun `GIVEN several selected tags WHEN ranking THEN prioritize exact tier before fallback`() {
         val result = ranker.rank(
             reviews = listOf(
-                review("1", tags = listOf(tagRestaurant, tagSpicy)),
-                review("2", tags = listOf(tagMeat, tagSpicy)),
-                review("3", tags = listOf(tagRestaurant, tagMeat, tagDessert)),
+                review("1", tags = listOf(tagRestaurant, tagMeat, tagDessert)),
+                review("2", tags = listOf(tagRestaurant, tagSpicy)),
+                review("3", tags = listOf(tagRestaurant, tagSpicy)),
+                review("4", tags = listOf(tagMeat, tagSpicy)),
+                review("5", tags = listOf(tagMeat, tagSpicy)),
             ),
             selectedTagIds = setOf(tagRestaurant.id, tagMeat.id),
             productBrand = "",
             maxCount = 5,
         )
 
-        assertEquals(listOf(tagDessert), result)
+        assertEquals(listOf(tagDessert, tagSpicy), result)
+    }
+
+    @Test
+    fun `GIVEN weak candidates WHEN ranking THEN filter out low confidence fallback`() {
+        val result = ranker.rank(
+            reviews = listOf(
+                review("1", tags = listOf(tagMeat, tagAlcohol)),
+                review("2", tags = listOf(tagMeat, tagFood)),
+                review("3", tags = listOf(tagMeat, tagFood)),
+                review("4", tags = listOf(tagMeat, tagDessert)),
+            ),
+            selectedTagIds = setOf(tagMeat.id),
+            productBrand = "",
+            maxCount = 5,
+        )
+
+        assertEquals(listOf(tagFood), result)
+    }
+
+    @Test
+    fun `GIVEN few exact recommendations WHEN ranking THEN fill remaining slots from fallback tiers`() {
+        val result = ranker.rank(
+            reviews = listOf(
+                review("1", tags = listOf(tagRestaurant, tagMeat, tagDessert)),
+                review("2", tags = listOf(tagRestaurant, tagSpicy)),
+                review("3", tags = listOf(tagMeat, tagSpicy)),
+            ),
+            selectedTagIds = setOf(tagRestaurant.id, tagMeat.id),
+            productBrand = "",
+            maxCount = 5,
+        )
+
+        assertEquals(listOf(tagDessert, tagSpicy), result)
+    }
+
+    @Test
+    fun `GIVEN contradictory fallback candidates WHEN ranking THEN keep coherent set`() {
+        val result = ranker.rank(
+            reviews = listOf(
+                review("1", tags = listOf(tagRestaurant, tagAlcohol)),
+                review("2", tags = listOf(tagRestaurant, tagAlcohol)),
+                review("3", tags = listOf(tagMeat, tagAlcohol)),
+                review("4", tags = listOf(tagMeat, tagAlcohol)),
+                review("5", tags = listOf(tagRestaurant, tagFood)),
+                review("6", tags = listOf(tagMeat, tagFood)),
+            ),
+            selectedTagIds = setOf(tagRestaurant.id, tagMeat.id),
+            productBrand = "",
+            maxCount = 5,
+        )
+
+        assertEquals(listOf(tagAlcohol), result)
     }
 
     @Test

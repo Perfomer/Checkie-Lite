@@ -4,10 +4,15 @@
     <string name="reviewcreation_save">Сохранить</string>
 
     <string name="reviewcreation_productinfo_title">Продукт</string>
+    <string name="reviewcreation_productinfo_section_photos">Фотографии</string>
+    <string name="reviewcreation_productinfo_photos_subtitle_empty">Добавь несколько ракурсов</string>
+    <string name="reviewcreation_productinfo_photos_subtitle_sort">Удерживай и перетаскивай для сортировки</string>
     <string name="reviewcreation_productinfo_field_product">Название (обязательно)</string>
     <string name="reviewcreation_productinfo_field_product_error_empty">Название продукта нужно заполнить</string>
     <string name="reviewcreation_productinfo_field_brand">Бренд</string>
     <string name="reviewcreation_productinfo_field_price">Цена</string>
+    <string name="reviewcreation_productinfo_action_gallery">Галерея</string>
+    <string name="reviewcreation_productinfo_action_camera">Камера</string>
 
     <string name="reviewcreation_reviewinfo_title">Отзыв на</string>
     <string name="reviewcreation_reviewinfo_field_comment">Комментарий</string>
@@ -33,7 +38,6 @@
     <string name="tagcreation_modification_title">Редактирование тега</string>
     <string name="tagcreation_description">Напишите название тега и выберите иконку</string>
     <string name="tagcreation_tag_name">Название тега</string>
-
     <string name="tagcreation_tag_name_error_empty">Название тега нужно заполнить</string>
     <string name="tagcreation_tag_name_error_exists">Такой тег уже существует</string>
     <string name="tagcreation_tag_name_error_too_long">Название тега слишком длинное</string>

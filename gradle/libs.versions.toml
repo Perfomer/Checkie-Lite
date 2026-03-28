@@ -17,7 +17,6 @@ coil = "3.4.0"
 composables-core = "1.20.1"
 compressor = "3.0.1"
 decompose = "3.4.0"
-dragAndDrop = "0.4.0"
 fadingEdges = "1.0.4"
 googleFonts = "1.10.5"
 koin = "4.1.1"
@@ -55,7 +54,6 @@ composables-core = { module = "com.composables:core", version.ref = "composables
 compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
 decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
 decompose-extensions-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
-dragAndDrop = { module = "com.mohamedrejeb.dnd:compose-dnd", version.ref = "dragAndDrop" }
 fadingEdges = { module = "com.github.GIGAMOLE:ComposeFadingEdges", version.ref = "fadingEdges" }
 googleFonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "googleFonts" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }

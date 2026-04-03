@@ -81,3 +81,8 @@ google-services.json
 secret.properties
 
 /app/release/
+
+# Claude Code
+.claude/settings.local.json
+.claude/worktrees/
+.openclaude-profile.json

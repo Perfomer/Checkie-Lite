@@ -52,7 +52,7 @@ class CuiReorderableLazyRowState<K : Any> internal constructor(
     private val autoScrollActivationDistancePx: Float,
     private val itemSpacingPx: Float,
 ) {
-    private val itemBounds = mutableStateMapOf<K, CuiReorderableLazyRowItemBounds>()
+    private val itemBounds = mutableStateMapOf<K, CuiReorderableLazyRowItemLayout>()
 
     private var contentStartPx by mutableFloatStateOf(0f)
     private var contentEndPx by mutableFloatStateOf(0f)
@@ -111,12 +111,18 @@ class CuiReorderableLazyRowState<K : Any> internal constructor(
         widthPx: Float,
         heightPx: Float,
     ) {
-        itemBounds[itemKey] = CuiReorderableLazyRowItemBounds(
+        itemBounds[itemKey] = CuiReorderableLazyRowItemLayout(
             leftPx = leftPx,
             topPx = topPx,
             widthPx = widthPx,
             heightPx = heightPx,
         )
+    }
+
+    fun getItemLayout(
+        itemKey: K,
+    ): CuiReorderableLazyRowItemLayout? {
+        return itemBounds[itemKey]
     }
 
     fun findItemIndexAtPosition(
@@ -398,7 +404,7 @@ data class CuiReorderableLazyRowMove(
     val toIndex: Int,
 )
 
-private data class CuiReorderableLazyRowItemBounds(
+data class CuiReorderableLazyRowItemLayout(
     val leftPx: Float,
     val topPx: Float,
     val widthPx: Float,

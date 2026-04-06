@@ -1,13 +1,14 @@
 package com.perfomer.checkielite.common.ui.cui.widget.reorder
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.gestures.scrollBy
-import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
@@ -43,12 +45,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.isActive
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 private const val CuiReorderableLazyRowFloatingItemScale = 1.04F
@@ -67,17 +71,13 @@ fun <T, K : Any> CuiReorderableLazyRow(
     items: List<T>,
     itemKey: (T) -> K,
     onDrop: (itemKey: K, toPosition: Int) -> Unit,
-    itemWidth: Dp,
-    itemHeight: Dp,
-    itemSpacing: Dp,
+    itemSize: DpSize,
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
     reorderState: CuiReorderableLazyRowState<K>? = null,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    rowVerticalPadding: Dp = 0.dp,
+    itemSpacing: Dp = 0.dp,
     scrollAllowed: Boolean = true,
-    shouldScrollToNewItems: Boolean = false,
-    leadingItemsCount: Int = 0,
     floatingItemScale: Float = CuiReorderableLazyRowFloatingItemScale,
     itemPlacementSpec: FiniteAnimationSpec<IntOffset> = spring(
         dampingRatio = Spring.DampingRatioNoBouncy,
@@ -94,7 +94,6 @@ fun <T, K : Any> CuiReorderableLazyRow(
 
     var reorderableItems by remember { mutableStateOf(items) }
     var isAwaitingExternalSync by remember { mutableStateOf(false) }
-    var pendingScrollToEnd by remember { mutableStateOf(false) }
     var containerLeftInRoot by remember { mutableFloatStateOf(0F) }
     var containerTopInRoot by remember { mutableFloatStateOf(0F) }
 
@@ -115,7 +114,6 @@ fun <T, K : Any> CuiReorderableLazyRow(
                 other = items,
                 keySelector = itemKey,
             ) -> {
-                pendingScrollToEnd = shouldScrollToNewItems && items.size > reorderableItems.size
                 reorderableItems = items
                 isAwaitingExternalSync = false
                 resolvedReorderState.resetImmediately()
@@ -140,27 +138,6 @@ fun <T, K : Any> CuiReorderableLazyRow(
             resolvedReorderState.stopAutoScroll()
             listState.animateScrollToItem(0)
         }
-    }
-
-    LaunchedEffect(
-        pendingScrollToEnd,
-        reorderableItems.size,
-        isInteractionActive,
-        scrollAllowed,
-        leadingItemsCount,
-    ) {
-        if (
-            !pendingScrollToEnd ||
-            !scrollAllowed ||
-            isInteractionActive ||
-            reorderableItems.isEmpty()
-        ) {
-            return@LaunchedEffect
-        }
-
-        withFrameNanos { }
-        listState.animateScrollToItem(index = leadingItemsCount + reorderableItems.lastIndex)
-        pendingScrollToEnd = false
     }
 
     LaunchedEffect(
@@ -205,13 +182,11 @@ fun <T, K : Any> CuiReorderableLazyRow(
 
     BoxWithConstraints(
         modifier = modifier
-            .fillMaxWidth()
             .onGloballyPositioned { coordinates ->
                 containerLeftInRoot = coordinates.positionInRoot().x
                 containerTopInRoot = coordinates.positionInRoot().y
             }
     ) {
-        val rowVerticalPaddingPx = with(density) { rowVerticalPadding.roundToPx() }
         val contentStartPx = with(density) {
             contentPadding.calculateStartPadding(layoutDirection).toPx()
         }
@@ -225,6 +200,7 @@ fun <T, K : Any> CuiReorderableLazyRow(
         val floatingItemPosition = remember(floatingItemKey, reorderableItems, itemKey) {
             reorderableItems.indexOfFirst { item -> itemKey(item) == floatingItemKey }
         }
+        val floatingItemLayout = floatingItemKey?.let(resolvedReorderState::getItemLayout)
         val floatingItemOffsetX = remember { Animatable(0f) }
         val animatedFloatingItemScale by animateFloatAsState(
             targetValue = if (floatingItemKey != null) floatingItemScale else 1f,
@@ -255,13 +231,20 @@ fun <T, K : Any> CuiReorderableLazyRow(
 
                 resolvedReorderState.isSettling -> {
                     floatingItemOffsetX.snapTo(resolvedReorderState.settlingFromLeftPx)
-                    floatingItemOffsetX.animateTo(
-                        targetValue = resolvedReorderState.settlingToLeftPx,
-                        animationSpec = spring(
-                            dampingRatio = Spring.DampingRatioNoBouncy,
-                            stiffness = Spring.StiffnessMediumLow,
-                        ),
+                    val settlingDistancePx = abs(
+                        resolvedReorderState.settlingToLeftPx - resolvedReorderState.settlingFromLeftPx,
                     )
+                    if (settlingDistancePx <= 1f) {
+                        floatingItemOffsetX.snapTo(resolvedReorderState.settlingToLeftPx)
+                    } else {
+                        floatingItemOffsetX.animateTo(
+                            targetValue = resolvedReorderState.settlingToLeftPx,
+                            animationSpec = tween(
+                                durationMillis = 140,
+                                easing = FastOutSlowInEasing,
+                            ),
+                        )
+                    }
                     resolvedReorderState.onSettlingFinished()
                 }
 
@@ -339,10 +322,8 @@ fun <T, K : Any> CuiReorderableLazyRow(
                 state = listState,
                 userScrollEnabled = !isInteractionActive && scrollAllowed,
                 contentPadding = contentPadding,
-                horizontalArrangement = spacedBy(itemSpacing),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(itemHeight + rowVerticalPadding * 2),
+                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(itemSpacing),
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 leadingContent()
 
@@ -372,8 +353,7 @@ fun <T, K : Any> CuiReorderableLazyRow(
 
                     Box(
                         modifier = itemModifier
-                            .width(itemWidth)
-                            .height(itemHeight)
+                            .size(itemSize)
                             .onGloballyPositioned { coordinates ->
                                 resolvedReorderState.onItemMeasured(
                                     itemKey = currentItemKeyValue,
@@ -398,17 +378,17 @@ fun <T, K : Any> CuiReorderableLazyRow(
                 trailingContent()
             }
 
-            if (floatingItem != null && floatingItemPosition != -1) {
+            if (floatingItem != null && floatingItemPosition != -1 && floatingItemLayout != null) {
                 Box(
                     modifier = Modifier
                         .offset {
                             IntOffset(
                                 x = (floatingItemLeftPx - containerLeftInRoot).roundToInt(),
-                                y = rowVerticalPaddingPx,
+                                y = (floatingItemLayout.topPx - containerTopInRoot).roundToInt(),
                             )
                         }
-                        .width(itemWidth)
-                        .height(itemHeight)
+                        .width(with(density) { floatingItemLayout.widthPx.toDp() })
+                        .height(with(density) { floatingItemLayout.heightPx.toDp() })
                         .zIndex(2f)
                         .graphicsLayer {
                             scaleX = animatedFloatingItemScale

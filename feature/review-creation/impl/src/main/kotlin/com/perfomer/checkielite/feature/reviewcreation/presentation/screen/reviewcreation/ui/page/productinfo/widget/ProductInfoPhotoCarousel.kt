@@ -6,9 +6,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.cui.widget.reorder.CuiReorderableLazyRow
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.ProductInfoCarouselItemAspectRatio
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.ProductInfoCarouselSpacing
@@ -27,6 +34,16 @@ internal fun ProductInfoPhotoCarousel(
     onPictureDeleteClick: (position: Int) -> Unit,
     onPictureReorder: (pictureId: String, toPosition: Int) -> Unit,
 ) {
+    val listState = rememberLazyListState()
+    var previousPicturesCount by remember { mutableIntStateOf(picturesUri.size) }
+
+    UpdateEffect(picturesUri.size) {
+        if (picturesUri.size > previousPicturesCount && picturesUri.isNotEmpty()) {
+            listState.animateScrollToItem(index = picturesUri.lastIndex + 1)
+        }
+        previousPicturesCount = picturesUri.size
+    }
+
     BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
         val itemWidth = (
             maxWidth -
@@ -34,6 +51,7 @@ internal fun ProductInfoPhotoCarousel(
                 ProductInfoCarouselSpacing * (ProductInfoVisibleItems - 1)
             ) / ProductInfoVisibleItems
         val itemHeight = itemWidth / ProductInfoCarouselItemAspectRatio
+        val itemSize = DpSize(itemWidth, itemHeight)
         val placeholderCount = maxOf(0, ProductInfoVisibleItems - picturesUri.size)
         val rowVerticalPadding = 8.dp
         val scrollAllowed = picturesUri.size > ProductInfoVisibleItems - 1
@@ -42,8 +60,8 @@ internal fun ProductInfoPhotoCarousel(
             items = picturesUri,
             itemKey = ProductInfoPageUiState.Picture::id,
             onDrop = onPictureReorder,
-            itemWidth = itemWidth,
-            itemHeight = itemHeight,
+            itemSize = itemSize,
+            listState = listState,
             itemSpacing = ProductInfoCarouselSpacing,
             contentPadding = PaddingValues(
                 start = ProductInfoContentPadding,
@@ -51,10 +69,7 @@ internal fun ProductInfoPhotoCarousel(
                 top = rowVerticalPadding,
                 bottom = rowVerticalPadding,
             ),
-            rowVerticalPadding = rowVerticalPadding,
             scrollAllowed = scrollAllowed,
-            shouldScrollToNewItems = true,
-            leadingItemsCount = 1,
             floatingItemScale = ProductInfoPhotoDragScale,
             leadingContent = {
                 item(key = "photo-actions") {

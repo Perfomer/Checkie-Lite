@@ -2,6 +2,7 @@ package com.perfomer.checkielite.common.ui.cui.effect
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -12,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
  * The same as [LaunchedEffect] but skips the first invocation
  */
 @Composable
+@NonRestartableComposable
 fun UpdateEffect(key: Any, block: suspend CoroutineScope.() -> Unit) {
 	var isTriggered by remember { mutableStateOf(false) }
 

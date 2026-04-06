@@ -20,10 +20,13 @@ import com.perfomer.checkielite.common.ui.cui.widget.reorder.CuiReorderableLazyR
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.ProductInfoCarouselItemAspectRatio
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.ProductInfoCarouselSpacing
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.ProductInfoContentPadding
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.ProductInfoPhotoCarouselScrollDelayMs
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.ProductInfoPhotoDragScale
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.ProductInfoVisibleItems
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ProductInfoPageUiState
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.delay
+
 
 @Composable
 internal fun ProductInfoPhotoCarousel(
@@ -38,18 +41,21 @@ internal fun ProductInfoPhotoCarousel(
     var previousPicturesCount by remember { mutableIntStateOf(picturesUri.size) }
 
     UpdateEffect(picturesUri.size) {
-        if (picturesUri.size > previousPicturesCount && picturesUri.isNotEmpty()) {
-            listState.animateScrollToItem(index = picturesUri.lastIndex + 1)
-        }
+        val previousCount = previousPicturesCount
         previousPicturesCount = picturesUri.size
+
+        val isScrollAllowed = picturesUri.size > ProductInfoVisibleItems - 1
+        if (picturesUri.size <= previousCount || previousCount == 0 || !isScrollAllowed) {
+            return@UpdateEffect
+        }
+
+        delay(ProductInfoPhotoCarouselScrollDelayMs)
+        listState.animateScrollToItem(index = picturesUri.lastIndex + 1)
     }
 
     BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-        val itemWidth = (
-            maxWidth -
-                ProductInfoContentPadding * 2 -
-                ProductInfoCarouselSpacing * (ProductInfoVisibleItems - 1)
-            ) / ProductInfoVisibleItems
+        val itemWidth =
+            (maxWidth - ProductInfoContentPadding * 2 - ProductInfoCarouselSpacing * (ProductInfoVisibleItems - 1)) / ProductInfoVisibleItems
         val itemHeight = itemWidth / ProductInfoCarouselItemAspectRatio
         val itemSize = DpSize(itemWidth, itemHeight)
         val placeholderCount = maxOf(0, ProductInfoVisibleItems - picturesUri.size)

@@ -11,3 +11,4 @@ internal const val ProductInfoPhotoDeleteButtonAnimationDuration = 110
 internal const val ProductInfoPhotoDeleteButtonAnimationScale = 0.92f
 internal const val ProductInfoCarouselItemAspectRatio = 0.68f
 internal const val ProductInfoVisibleItems = 3
+internal const val ProductInfoPhotoCarouselScrollDelayMs = 180L

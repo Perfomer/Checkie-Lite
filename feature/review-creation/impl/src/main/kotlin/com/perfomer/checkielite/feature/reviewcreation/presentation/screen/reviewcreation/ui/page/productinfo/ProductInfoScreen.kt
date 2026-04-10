@@ -37,8 +37,12 @@ import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.util.focusedFieldScrollContainer
+import com.perfomer.checkielite.common.ui.util.focusedFieldScrollTarget
+import com.perfomer.checkielite.common.ui.util.rememberFocusedFieldScroller
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.ui.widget.CurrencySymbol
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.LocalObstruction
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.input.DecimalInputFilter
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.input.DecimalInputVisualTransformation
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.widget.ProductInfoPhotoSection
@@ -63,16 +67,22 @@ internal fun ProductInfoScreen(
     onPictureDeleteClick: (position: Int) -> Unit = {},
     onPictureReorder: (pictureId: String, toPosition: Int) -> Unit = { _, _ -> },
 ) {
+    val obstruction = LocalObstruction.current
     val brandNameInteractionSource = remember { MutableInteractionSource() }
     val decimalInputFilter = remember { DecimalInputFilter() }
+    val fieldScroller = rememberFocusedFieldScroller<String>(
+        scrollState = scrollState,
+        bottomObstruction = obstruction.calculateBottomPadding(),
+    )
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .focusedFieldScrollContainer(fieldScroller)
             .verticalScroll(scrollState)
             .navigationBarsPadding()
             .imePadding()
-            .padding(top = 24.dp, bottom = 104.dp)
+            .padding(top = 24.dp)
     ) {
         Text(
             text = stringResource(R.string.reviewcreation_productinfo_title),
@@ -108,6 +118,7 @@ internal fun ProductInfoScreen(
                 onValueChange = onProductNameTextInput,
                 modifier = Modifier
                     .focusRequester(productNameFocusRequester)
+                    .focusedFieldScrollTarget("productName", fieldScroller)
                     .shake(productNameShakeController),
             )
 
@@ -126,7 +137,9 @@ internal fun ProductInfoScreen(
                     ),
                     onValueChange = onBrandTextInput,
                     interactionSource = brandNameInteractionSource,
-                    modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable),
+                    modifier = Modifier
+                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
+                        .focusedFieldScrollTarget("brand", fieldScroller),
                 )
             }
 
@@ -153,8 +166,12 @@ internal fun ProductInfoScreen(
                             .offset(x = (-14).dp),
                     )
                 },
-                modifier = Modifier.focusRequester(priceFocusRequester),
+                modifier = Modifier
+                    .focusRequester(priceFocusRequester)
+                    .focusedFieldScrollTarget("price", fieldScroller),
             )
+
+            CuiSpacer(obstruction.calculateBottomPadding() + 24.dp)
         }
     }
 }

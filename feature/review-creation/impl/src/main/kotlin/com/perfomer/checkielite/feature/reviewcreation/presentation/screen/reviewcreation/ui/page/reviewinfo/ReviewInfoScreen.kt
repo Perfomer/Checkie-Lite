@@ -23,7 +23,11 @@ import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
 import com.perfomer.checkielite.common.ui.cui.widget.rating.RatingSlider
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.util.focusedFieldScrollContainer
+import com.perfomer.checkielite.common.ui.util.focusedFieldScrollTarget
+import com.perfomer.checkielite.common.ui.util.rememberFocusedFieldScroller
 import com.perfomer.checkielite.feature.reviewcreation.R
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.LocalObstruction
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.mockUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ReviewInfoPageUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget.ReviewCreationPageHeader
@@ -38,14 +42,20 @@ internal fun ReviewInfoScreen(
     onAdvantagesInput: (String) -> Unit = {},
     onDisadvantagesInput: (String) -> Unit = {},
 ) {
+    val obstruction = LocalObstruction.current
+    val fieldScroller = rememberFocusedFieldScroller<String>(
+        scrollState = scrollState,
+        bottomObstruction = obstruction.calculateBottomPadding(),
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .focusedFieldScrollContainer(fieldScroller)
             .verticalScroll(scrollState)
             .navigationBarsPadding()
             .imePadding()
             .padding(24.dp)
-            .padding(bottom = 80.dp)
     ) {
         ReviewCreationPageHeader(
             title = stringResource(R.string.reviewcreation_reviewinfo_title),
@@ -70,7 +80,9 @@ internal fun ReviewInfoScreen(
             isEnabled = !state.isSaving,
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
             onValueChange = onCommentInput,
-            modifier = Modifier.focusRequester(commentFocusRequester)
+            modifier = Modifier
+                .focusRequester(commentFocusRequester)
+                .focusedFieldScrollTarget("comment", fieldScroller)
         )
 
         CuiSpacer(4.dp)
@@ -82,6 +94,7 @@ internal fun ReviewInfoScreen(
             isEnabled = !state.isSaving,
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
             onValueChange = onAdvantagesInput,
+            modifier = Modifier.focusedFieldScrollTarget("advantages", fieldScroller)
         )
 
         Spacer(Modifier.height(4.dp))
@@ -93,7 +106,10 @@ internal fun ReviewInfoScreen(
             isEnabled = !state.isSaving,
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
             onValueChange = onDisadvantagesInput,
+            modifier = Modifier.focusedFieldScrollTarget("disadvantages", fieldScroller)
         )
+
+        CuiSpacer(obstruction.calculateBottomPadding() + 24.dp)
     }
 }
 

@@ -159,6 +159,80 @@ internal class TagRecommendationRankerTest {
     }
 
     @Test
+    fun `GIVEN candidate contradicts one selected tag WHEN ranking THEN exclude candidate`() {
+        val result = ranker.rank(
+            reviews = listOf(
+                review("1", tags = listOf(tagWine, tagDrinks, tagAlcohol, tagRestaurant, tagMoscow)),
+                review("2", tags = listOf(tagWine, tagDrinks, tagAlcohol, tagRestaurant, tagMoscow)),
+                review("3", tags = listOf(tagWine, tagDrinks, tagAlcohol, tagRestaurant, tagMoscow)),
+                review("4", tags = listOf(tagRestaurant, tagMoscow, tagFood)),
+                review("5", tags = listOf(tagRestaurant, tagMoscow, tagFood)),
+                review("6", tags = listOf(tagRestaurant, tagMoscow, tagFood)),
+            ),
+            selectedTagIds = setOf(tagWine.id, tagDrinks.id, tagAlcohol.id, tagRestaurant.id, tagMoscow.id),
+            productBrand = "",
+            maxCount = 5,
+        )
+
+        assertEquals(emptyList<CheckieTag>(), result)
+    }
+
+    @Test
+    fun `GIVEN candidate complements several selected tags WHEN ranking THEN prefer it over weaker candidate`() {
+        val result = ranker.rank(
+            reviews = listOf(
+                review("1", tags = listOf(tagRestaurant, tagAlcohol, tagWine, tagSnacks)),
+                review("2", tags = listOf(tagRestaurant, tagAlcohol, tagWine, tagSnacks)),
+                review("3", tags = listOf(tagRestaurant, tagAlcohol, tagWine, tagSnacks)),
+                review("4", tags = listOf(tagRestaurant, tagAlcohol, tagWine, tagFood)),
+                review("5", tags = listOf(tagRestaurant, tagAlcohol, tagFood)),
+                review("6", tags = listOf(tagWine, tagSnacks)),
+            ),
+            selectedTagIds = setOf(tagRestaurant.id, tagAlcohol.id, tagWine.id),
+            productBrand = "",
+            maxCount = 5,
+        )
+
+        assertEquals(listOf(tagSnacks, tagFood), result)
+    }
+
+    @Test
+    fun `GIVEN sparse data WHEN ranking THEN do not treat unknown pair as contradiction`() {
+        val result = ranker.rank(
+            reviews = listOf(
+                review("1", tags = listOf(tagWine, tagDrinks, tagAlcohol, tagRestaurant, tagMoscow)),
+                review("2", tags = listOf(tagRestaurant, tagMoscow, tagFood)),
+                review("3", tags = listOf(tagWine, tagSnacks)),
+                review("4", tags = listOf(tagDrinks, tagSnacks)),
+            ),
+            selectedTagIds = setOf(tagWine.id, tagDrinks.id, tagAlcohol.id, tagRestaurant.id, tagMoscow.id),
+            productBrand = "",
+            maxCount = 5,
+        )
+
+        assertEquals(listOf(tagSnacks), result)
+    }
+
+    @Test
+    fun `GIVEN brand supports candidate but selected tags contradict it WHEN ranking THEN reject conflicting brand candidate`() {
+        val result = ranker.rank(
+            reviews = listOf(
+                review("1", brand = "Pairing", tags = listOf(tagWine, tagDrinks, tagAlcohol, tagRestaurant, tagMoscow)),
+                review("2", brand = "Pairing", tags = listOf(tagWine, tagDrinks, tagAlcohol, tagRestaurant, tagMoscow)),
+                review("3", brand = "Pairing", tags = listOf(tagRestaurant, tagMoscow, tagFood)),
+                review("4", brand = "Pairing", tags = listOf(tagRestaurant, tagMoscow, tagFood)),
+                review("5", brand = "Other", tags = listOf(tagWine, tagDrinks, tagAlcohol, tagSnacks)),
+                review("6", brand = "Other", tags = listOf(tagWine, tagDrinks, tagAlcohol, tagSnacks)),
+            ),
+            selectedTagIds = setOf(tagWine.id, tagDrinks.id, tagAlcohol.id),
+            productBrand = "Pairing",
+            maxCount = 5,
+        )
+
+        assertEquals(listOf(tagRestaurant, tagMoscow), result)
+    }
+
+    @Test
     fun `GIVEN max count WHEN ranking THEN trim result`() {
         val result = ranker.rank(
             reviews = listOf(
@@ -202,5 +276,9 @@ internal class TagRecommendationRankerTest {
         val tagRestaurant = CheckieTag(id = "restaurant", value = "Restaurant", emoji = null)
         val tagFastfood = CheckieTag(id = "fastfood", value = "Fast food", emoji = null)
         val tagSpicy = CheckieTag(id = "spicy", value = "Spicy", emoji = null)
+        val tagWine = CheckieTag(id = "wine", value = "Wine", emoji = null)
+        val tagDrinks = CheckieTag(id = "drinks", value = "Drinks", emoji = null)
+        val tagMoscow = CheckieTag(id = "moscow", value = "Moscow", emoji = null)
+        val tagSnacks = CheckieTag(id = "snacks", value = "Snacks", emoji = null)
     }
 }

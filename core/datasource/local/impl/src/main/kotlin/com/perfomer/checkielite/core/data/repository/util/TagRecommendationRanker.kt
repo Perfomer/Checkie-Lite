@@ -59,11 +59,33 @@ internal class TagRecommendationRanker {
         val coherencePairSupportByTagIds = coherenceContextReviews.countPairSupportByTagIds(
             excludedTagIds = selectedTagIds,
         )
+        val globalPairwiseStats = PairwiseStats(
+            supportByTagId = reviews.countSupportByTagId(),
+            pairSupportByTagIds = reviews.countPairSupportByTagIds(),
+        )
+        val brandPairwiseStats = reviewsWithBrand.takeIf(List<CheckieReview>::isNotEmpty)?.let { brandReviews ->
+            PairwiseStats(
+                supportByTagId = brandReviews.countSupportByTagId(),
+                pairSupportByTagIds = brandReviews.countPairSupportByTagIds(),
+            )
+        }
 
         return recommendationTiers
             .asSequence()
+            .mapIndexed { tierPriority, tier ->
+                tier.map { candidate -> candidate.copy(tierPriority = tierPriority) }
+            }
             .flatMap { tier -> tier.asSequence() }
             .distinctBy(CandidateRecommendation::tagId)
+            .map { candidate ->
+                candidate.withSelectedTagContext(
+                    selectedTagIds = selectedTagIds,
+                    preferredPairwiseStats = brandPairwiseStats,
+                    fallbackPairwiseStats = globalPairwiseStats,
+                )
+            }
+            .filterNot(CandidateRecommendation::hasSelectedTagContradiction)
+            .sortedWith(candidateRecommendationComparator(tagById))
             .fold(mutableListOf<CandidateRecommendation>()) { acceptedRecommendations, candidate ->
                 if (acceptedRecommendations.size >= maxCount) return@fold acceptedRecommendations
 
@@ -154,7 +176,7 @@ internal class TagRecommendationRanker {
                     matchedSignalsCount = matchedSignalsCount,
                 ).takeIf { confidence >= confidenceThreshold }
             }
-            .sortedWith(candidateRecommendationComparator(tagById))
+            .sortedWith(baseCandidateRecommendationComparator(tagById))
     }
 
     private fun collectSelectedFallbackTierCandidates(
@@ -201,13 +223,25 @@ internal class TagRecommendationRanker {
                 matchedSignalsCount = confidences.size,
             ).takeIf { weakestRequiredConfidence >= FALLBACK_CONFIDENCE_THRESHOLD }
         }
-            .sortedWith(candidateRecommendationComparator(tagById))
+            .sortedWith(baseCandidateRecommendationComparator(tagById))
+    }
+
+    private fun baseCandidateRecommendationComparator(
+        tagById: Map<String, CheckieTag>,
+    ): Comparator<CandidateRecommendation> {
+        return compareByDescending<CandidateRecommendation> { recommendation -> recommendation.confidence }
+            .thenByDescending { recommendation -> recommendation.matchedSignalsCount }
+            .thenByDescending { recommendation -> recommendation.support }
+            .thenBy { recommendation -> tagById.getValue(recommendation.tagId).value.lowercase() }
     }
 
     private fun candidateRecommendationComparator(
         tagById: Map<String, CheckieTag>,
     ): Comparator<CandidateRecommendation> {
-        return compareByDescending<CandidateRecommendation> { recommendation -> recommendation.confidence }
+        return compareBy<CandidateRecommendation> { recommendation -> recommendation.tierPriority }
+            .thenByDescending { recommendation -> recommendation.selectedTagMatches }
+            .thenByDescending { recommendation -> recommendation.selectedTagCompatibilityScore }
+            .thenByDescending { recommendation -> recommendation.confidence }
             .thenByDescending { recommendation -> recommendation.matchedSignalsCount }
             .thenByDescending { recommendation -> recommendation.support }
             .thenBy { recommendation -> tagById.getValue(recommendation.tagId).value.lowercase() }
@@ -227,8 +261,83 @@ internal class TagRecommendationRanker {
         else -> reviewsWithBrand
     }
 
+    private fun CandidateRecommendation.withSelectedTagContext(
+        selectedTagIds: Set<String>,
+        preferredPairwiseStats: PairwiseStats?,
+        fallbackPairwiseStats: PairwiseStats,
+    ): CandidateRecommendation {
+        if (selectedTagIds.isEmpty()) return this
+
+        val evaluation = evaluateCandidateAgainstSelectedTags(
+            candidateTagId = tagId,
+            selectedTagIds = selectedTagIds,
+            preferredPairwiseStats = preferredPairwiseStats,
+            fallbackPairwiseStats = fallbackPairwiseStats,
+        )
+
+        return copy(
+            selectedTagMatches = evaluation.selectedTagMatches,
+            selectedTagCompatibilityScore = evaluation.selectedTagCompatibilityScore,
+            hasSelectedTagContradiction = evaluation.hasStrongContradiction,
+        )
+    }
+
+    private fun evaluateCandidateAgainstSelectedTags(
+        candidateTagId: String,
+        selectedTagIds: Set<String>,
+        preferredPairwiseStats: PairwiseStats?,
+        fallbackPairwiseStats: PairwiseStats,
+    ): CandidateSelectedContextEvaluation {
+        var selectedTagMatches = 0
+        var selectedTagCompatibilityScore = 0.0
+
+        for (selectedTagId in selectedTagIds) {
+            val pairwiseStats = resolvePairwiseStats(
+                firstTagId = selectedTagId,
+                secondTagId = candidateTagId,
+                preferredPairwiseStats = preferredPairwiseStats,
+                fallbackPairwiseStats = fallbackPairwiseStats,
+            )
+            val relationship = pairwiseStats.resolveRelationship(
+                firstTagId = selectedTagId,
+                secondTagId = candidateTagId,
+            )
+
+            if (relationship.hasStrongContradiction()) {
+                return CandidateSelectedContextEvaluation(hasStrongContradiction = true)
+            }
+
+            if (relationship.isPositive()) {
+                selectedTagMatches += 1
+                selectedTagCompatibilityScore += relationship.overlapConfidence
+            }
+        }
+
+        return CandidateSelectedContextEvaluation(
+            selectedTagMatches = selectedTagMatches,
+            selectedTagCompatibilityScore = if (selectedTagMatches == 0) {
+                0.0
+            } else {
+                selectedTagCompatibilityScore / selectedTagMatches
+            },
+        )
+    }
+
+    private fun resolvePairwiseStats(
+        firstTagId: String,
+        secondTagId: String,
+        preferredPairwiseStats: PairwiseStats?,
+        fallbackPairwiseStats: PairwiseStats,
+    ): PairwiseStats {
+        if (preferredPairwiseStats != null && preferredPairwiseStats.hasEnoughSupport(firstTagId, secondTagId)) {
+            return preferredPairwiseStats
+        }
+
+        return fallbackPairwiseStats
+    }
+
     private fun List<CheckieReview>.countSupportByTagId(
-        excludedTagIds: Set<String>,
+        excludedTagIds: Set<String> = emptySet(),
     ): Map<String, Int> {
         val supportByTagId = linkedMapOf<String, Int>()
 
@@ -243,7 +352,7 @@ internal class TagRecommendationRanker {
     }
 
     private fun List<CheckieReview>.countPairSupportByTagIds(
-        excludedTagIds: Set<String>,
+        excludedTagIds: Set<String> = emptySet(),
     ): Map<Pair<String, String>, Int> {
         val pairSupportByTagIds = linkedMapOf<Pair<String, String>, Int>()
 
@@ -301,22 +410,66 @@ internal class TagRecommendationRanker {
         return (pairSupportByTagIds[normalizedTagIdsPair(firstTagId, secondTagId)] ?: 0) == 0
     }
 
-    private fun normalizedTagIdsPair(
-        firstTagId: String,
-        secondTagId: String,
-    ): Pair<String, String> {
-        return if (firstTagId <= secondTagId) {
-            firstTagId to secondTagId
-        } else {
-            secondTagId to firstTagId
-        }
-    }
-
     private companion object {
         private const val STRICT_CONFIDENCE_THRESHOLD = 0.5
         private const val FALLBACK_CONFIDENCE_THRESHOLD = 0.3333333333333333
         private const val SELECTED_FALLBACK_REQUIRED_MATCHES = 2
+        private const val MIN_SUPPORT_FOR_PAIR_EVALUATION = 2
         private const val MIN_SUPPORT_FOR_CONTRADICTION = 2
+        private const val MIN_POSITIVE_PAIR_OVERLAP_CONFIDENCE = 0.25
+    }
+
+    private data class PairwiseStats(
+        val supportByTagId: Map<String, Int>,
+        val pairSupportByTagIds: Map<Pair<String, String>, Int>,
+    ) {
+
+        fun hasEnoughSupport(firstTagId: String, secondTagId: String): Boolean {
+            val firstTagSupport = supportByTagId[firstTagId] ?: 0
+            val secondTagSupport = supportByTagId[secondTagId] ?: 0
+
+            return firstTagSupport >= MIN_SUPPORT_FOR_PAIR_EVALUATION &&
+                secondTagSupport >= MIN_SUPPORT_FOR_PAIR_EVALUATION
+        }
+
+        fun resolveRelationship(firstTagId: String, secondTagId: String): PairwiseTagRelationship {
+            val firstTagSupport = supportByTagId[firstTagId] ?: 0
+            val secondTagSupport = supportByTagId[secondTagId] ?: 0
+            val pairSupport = pairSupportByTagIds[normalizedTagIdsPair(firstTagId, secondTagId)] ?: 0
+            val overlapConfidence = if (firstTagSupport == 0 || secondTagSupport == 0) {
+                0.0
+            } else {
+                pairSupport.toDouble() / min(firstTagSupport, secondTagSupport)
+            }
+
+            return PairwiseTagRelationship(
+                firstTagSupport = firstTagSupport,
+                secondTagSupport = secondTagSupport,
+                pairSupport = pairSupport,
+                overlapConfidence = overlapConfidence,
+            )
+        }
+    }
+
+    private data class PairwiseTagRelationship(
+        val firstTagSupport: Int,
+        val secondTagSupport: Int,
+        val pairSupport: Int,
+        val overlapConfidence: Double,
+    ) {
+
+        fun hasStrongContradiction(): Boolean {
+            return firstTagSupport >= MIN_SUPPORT_FOR_CONTRADICTION &&
+                secondTagSupport >= MIN_SUPPORT_FOR_CONTRADICTION &&
+                pairSupport == 0
+        }
+
+        fun isPositive(): Boolean {
+            return firstTagSupport >= MIN_SUPPORT_FOR_PAIR_EVALUATION &&
+                secondTagSupport >= MIN_SUPPORT_FOR_PAIR_EVALUATION &&
+                pairSupport > 0 &&
+                overlapConfidence >= MIN_POSITIVE_PAIR_OVERLAP_CONFIDENCE
+        }
     }
 }
 
@@ -325,4 +478,25 @@ private data class CandidateRecommendation(
     val confidence: Double,
     val support: Int,
     val matchedSignalsCount: Int,
+    val tierPriority: Int = Int.MAX_VALUE,
+    val selectedTagMatches: Int = 0,
+    val selectedTagCompatibilityScore: Double = 0.0,
+    val hasSelectedTagContradiction: Boolean = false,
 )
+
+private data class CandidateSelectedContextEvaluation(
+    val selectedTagMatches: Int = 0,
+    val selectedTagCompatibilityScore: Double = 0.0,
+    val hasStrongContradiction: Boolean = false,
+)
+
+private fun normalizedTagIdsPair(
+    firstTagId: String,
+    secondTagId: String,
+): Pair<String, String> {
+    return if (firstTagId <= secondTagId) {
+        firstTagId to secondTagId
+    } else {
+        secondTagId to firstTagId
+    }
+}

@@ -55,7 +55,7 @@ internal class SearchNavigationActor(
     }
 
     private suspend fun openSort(command: OpenSort): SearchNavigationEvent? {
-        val result = router.navigateForResult<SortResult>(
+        val result = router.navigateForResult(
             destination = SortDestination(command.currentSorting),
             mode = DestinationMode.BOTTOM_SHEET,
         )

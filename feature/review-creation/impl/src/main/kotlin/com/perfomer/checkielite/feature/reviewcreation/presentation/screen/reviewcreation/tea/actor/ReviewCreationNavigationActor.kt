@@ -60,6 +60,7 @@ internal class ReviewCreationNavigationActor(
                     mode = DestinationMode.OVERLAY,
                 )
             }
+
             is OpenTagCreation -> return openTagCreation(command)
             is OpenCurrencySelector -> return openCurrencySelector(command)
             is OpenTagSort -> return openTagSort(command)
@@ -83,7 +84,7 @@ internal class ReviewCreationNavigationActor(
     }
 
     private suspend fun openTagCreation(command: OpenTagCreation): ReviewCreationNavigationEvent? {
-        val result = router.navigateForResult<TagCreationResult>(
+        val result = router.navigateForResult(
             destination = TagCreationDestination(mode = command.mode),
             mode = DestinationMode.BOTTOM_SHEET,
         )
@@ -97,7 +98,7 @@ internal class ReviewCreationNavigationActor(
     }
 
     private suspend fun openTagSort(command: OpenTagSort): ReviewCreationNavigationEvent? {
-        val result = router.navigateForResult<TagSortResult>(
+        val result = router.navigateForResult(
             destination = TagSortDestination(command.currentOption),
             mode = DestinationMode.BOTTOM_SHEET,
         )
@@ -109,7 +110,7 @@ internal class ReviewCreationNavigationActor(
     }
 
     private suspend fun openCurrencySelector(command: OpenCurrencySelector): ReviewCreationNavigationEvent? {
-        val result = router.navigateForResult<CurrencySelectorResult>(
+        val result = router.navigateForResult(
             destination = CurrencySelectorDestination(command.currency),
             mode = DestinationMode.BOTTOM_SHEET,
         )

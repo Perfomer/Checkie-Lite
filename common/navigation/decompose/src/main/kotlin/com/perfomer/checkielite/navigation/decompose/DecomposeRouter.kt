@@ -8,6 +8,7 @@ import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.perfomer.checkielite.core.navigation.Destination
 import com.perfomer.checkielite.core.navigation.DestinationMode
+import com.perfomer.checkielite.core.navigation.DestinationWithResult
 import com.perfomer.checkielite.core.navigation.Result
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.navigation.result.NavigationResultEventBus
@@ -47,7 +48,7 @@ internal class DecomposeRouter(
     }
 
     override suspend fun <T : Result> navigateForResult(
-        destination: Destination,
+        destination: DestinationWithResult<T>,
         mode: DestinationMode,
     ): T? {
         navigate(destination, mode)
@@ -55,14 +56,20 @@ internal class DecomposeRouter(
     }
 
     override fun exit() {
-        val resultKey = defineTopDestination().resultKey
-        resultEventBus.cancelResult(resultKey)
+        val topDestination = defineTopDestination()
+        if (topDestination is DestinationWithResult<*>) {
+            val resultKey = topDestination.resultKey
+            resultEventBus.cancelResult(resultKey)
+        }
         exitInternal()
     }
 
     override fun exitWithResult(result: Result) {
-        val resultKey = defineTopDestination().resultKey
-        resultEventBus.sendResult(resultKey, result)
+        val topDestination = defineTopDestination()
+        if (topDestination is DestinationWithResult<*>) {
+            val resultKey = topDestination.resultKey
+            resultEventBus.sendResult(resultKey, result)
+        }
         return exitInternal()
     }
 

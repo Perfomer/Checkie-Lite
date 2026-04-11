@@ -47,7 +47,7 @@ interface Router {
      * @return result or null if screen was closed without result
      */
     suspend fun <T : Result> navigateForResult(
-        destination: Destination,
+        destination: DestinationWithResult<T>,
         mode: DestinationMode = DestinationMode.USUAL,
     ): T?
 

@@ -34,8 +34,8 @@ internal class MainNavigationActor(
     private suspend fun handleCommand(command: MainNavigationCommand): MainEvent? = with(router) {
         when (command) {
             is OpenReviewCreation -> {
-                val result = navigateForResult<ReviewCreationResult>(
-                    ReviewCreationDestination(ReviewCreationMode.Creation),
+                val result = navigateForResult(
+                    destination = ReviewCreationDestination(ReviewCreationMode.Creation),
                 )
 
                 return when (result) {

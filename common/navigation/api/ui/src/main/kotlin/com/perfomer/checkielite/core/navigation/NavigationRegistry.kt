@@ -2,17 +2,28 @@ package com.perfomer.checkielite.core.navigation
 
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.buildClassSerialDescriptor
+import kotlinx.serialization.descriptors.element
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonEncoder
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.jsonPrimitive
 import kotlin.reflect.KClass
 
 object NavigationRegistry {
 
-    private val registry: MutableMap<KClass<out Destination>, KClass<out Screen>> = mutableMapOf()
-    private val serializers: MutableList<KSerializer<out Destination>> = mutableListOf()
+    private const val TYPE_FIELD = "type"
+    private const val PAYLOAD_FIELD = "payload"
+
+    private val registry: MutableMap<KClass<out Destination>, ScreenEntry> = mutableMapOf()
 
     @OptIn(InternalSerializationApi::class)
     fun serializer(): KSerializer<Destination> {
@@ -20,9 +31,7 @@ object NavigationRegistry {
     }
 
     fun obtain(destinationClass: KClass<out Destination>): KClass<out Screen> {
-        return requireNotNull(registry[destinationClass]) {
-            "Destination `${destinationClass.simpleName}` is not registered!"
-        }
+        return requireRegistration(destinationClass).screenClass
     }
 
     fun <T : Destination> register(
@@ -30,28 +39,72 @@ object NavigationRegistry {
         destinationSerializer: KSerializer<T>,
         screenClass: KClass<out Screen>,
     ) {
-        registry[destinationClass] = screenClass
-        serializers += destinationSerializer
+        registry[destinationClass] = ScreenEntry(
+            screenClass = screenClass,
+            serializer = destinationSerializer,
+        )
+    }
+
+    private fun requireRegistration(destinationClass: KClass<out Destination>): ScreenEntry {
+        return requireNotNull(registry[destinationClass]) {
+            "Destination `${destinationClass.simpleName}` is not registered!"
+        }
+    }
+
+    private fun requireRegistration(type: String): ScreenEntry {
+        val entry = registry.entries.firstOrNull { (destinationClass, _) ->
+            destinationClass.qualifiedName == type
+        }
+        return entry?.value ?: throw SerializationException("No serializer found for $type")
     }
 
     private class DestinationSerializer : KSerializer<Destination> {
 
-        private val baseSerializer = PolymorphicSerializer(Destination::class)
-        override val descriptor: SerialDescriptor = baseSerializer.descriptor
+        override val descriptor: SerialDescriptor = buildClassSerialDescriptor("Destination") {
+            element<String>(TYPE_FIELD)
+            element(PAYLOAD_FIELD, JsonElement.serializer().descriptor)
+        }
 
         override fun serialize(encoder: Encoder, value: Destination) {
-            val valueClass = value::class
-            val serializer = registry.keys.zip(serializers)
-                .find { (kClass, _) -> kClass == valueClass }
-                ?.second
-                ?: throw SerializationException("No serializer found for ${valueClass.simpleName}")
+            val jsonEncoder = encoder as? JsonEncoder
+                ?: throw SerializationException("Navigation destinations can only be serialized to JSON")
 
-            encoder.encodeSerializableValue(serializer as KSerializer<Destination>, value)
+            val valueClass = value::class
+            val registration = requireRegistration(valueClass)
+
+            val type = valueClass.qualifiedName ?: throw SerializationException("No qualified name found for ${valueClass.simpleName}")
+            val serializer = registration.serializer.cast()
+
+            jsonEncoder.encodeJsonElement(
+                buildJsonObject {
+                    put(TYPE_FIELD, JsonPrimitive(type))
+                    put(PAYLOAD_FIELD, jsonEncoder.json.encodeToJsonElement(serializer, value))
+                }
+            )
         }
 
         override fun deserialize(decoder: Decoder): Destination {
-            // For deserialization, we delegate to the polymorphic serializer
-            return baseSerializer.deserialize(decoder)
+            val jsonDecoder = decoder as? JsonDecoder
+                ?: throw SerializationException("Navigation destinations can only be deserialized from JSON")
+            val jsonObject = decoder.decodeJsonElement() as? JsonObject
+                ?: throw SerializationException("Expected JSON object for navigation destination")
+            val type = jsonObject[TYPE_FIELD]?.jsonPrimitive?.contentOrNull
+                ?: throw SerializationException("Missing destination type")
+            val payload = jsonObject[PAYLOAD_FIELD]
+                ?: throw SerializationException("Missing destination payload")
+
+            val deserializer = requireRegistration(type).serializer.cast()
+            return jsonDecoder.json.decodeFromJsonElement(deserializer, payload)
         }
     }
+
+    private data class ScreenEntry(
+        val screenClass: KClass<out Screen>,
+        val serializer: KSerializer<out Destination>,
+    )
+}
+
+@Suppress("UNCHECKED_CAST")
+private fun KSerializer<out Destination>.cast(): KSerializer<Destination> {
+    return this as KSerializer<Destination>
 }

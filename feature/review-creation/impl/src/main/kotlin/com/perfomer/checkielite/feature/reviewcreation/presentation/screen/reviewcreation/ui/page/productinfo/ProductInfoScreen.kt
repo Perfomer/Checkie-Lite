@@ -82,7 +82,7 @@ internal fun ProductInfoScreen(
             .verticalScroll(scrollState)
             .navigationBarsPadding()
             .imePadding()
-            .padding(top = 24.dp)
+            .padding(top = 20.dp)
     ) {
         Text(
             text = stringResource(R.string.reviewcreation_productinfo_title),

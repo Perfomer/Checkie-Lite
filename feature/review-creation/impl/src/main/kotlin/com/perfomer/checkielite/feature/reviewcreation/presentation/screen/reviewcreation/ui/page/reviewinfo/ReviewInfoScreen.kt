@@ -55,7 +55,7 @@ internal fun ReviewInfoScreen(
             .verticalScroll(scrollState)
             .navigationBarsPadding()
             .imePadding()
-            .padding(24.dp)
+            .padding(20.dp)
     ) {
         ReviewCreationPageHeader(
             title = stringResource(R.string.reviewcreation_reviewinfo_title),

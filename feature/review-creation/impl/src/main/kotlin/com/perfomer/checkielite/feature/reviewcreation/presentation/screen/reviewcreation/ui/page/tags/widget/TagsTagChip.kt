@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.widget
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -85,10 +86,20 @@ internal fun TagsTagChip(
                 CuiSpacer(4.dp)
             }
 
-            Text(
-                text = tag.value,
-                color = textColor,
-            )
+            Box {
+                Text(
+                    text = tag.value,
+                    color = textColor,
+                )
+
+                // Crutch to keep size reserved for medium font weight
+                // to avoid text flickering after chip become selected
+                Text(
+                    text = tag.value,
+                    color = Color.Transparent,
+                    fontWeight = FontWeight.Medium,
+                )
+            }
         }
     }
 }

@@ -61,28 +61,41 @@ internal class ReviewCreationUiStateMapper(
     }
 
     private fun createTagsPageState(state: ReviewCreationState): TagsPageUiState {
-        val tags = state.tags.fastMap { tag ->
-            tag.toUi(isSelected = state.reviewDetails.tagsIds.any { tagId -> tagId == tag.id })
-        }
-        val recommendedTags = state.recommendedTags
+        val recommendedTagIds = state.recommendedTags
             .takeIf { state.tagsSearchQuery.isBlank() }
             .orEmpty()
-            .fastMap { tag -> tag.toUi() }
+            .map { it.id }
+
+        val tags = state.tags.fastMap { tag ->
+            tag.toUi(
+                isSelected = state.reviewDetails.tagsIds.any { tagId -> tagId == tag.id },
+                isRecommended = tag.id in recommendedTagIds,
+            )
+        }
 
         val selectedTagsSelectionOrder = state.selectedTagsSelectionOrder.filter(state.reviewDetails.tagsIds::contains)
         val tagsBySelectionOrder = selectedTagsSelectionOrder.withIndex().associate { (index, tagId) -> tagId to index }
         val sortedTags = tags.sortedWith(
-            compareBy<TagsPageUiState.Tag> { !it.isSelected }
-                .thenBy { tagsBySelectionOrder[it.id] ?: Int.MAX_VALUE }
+            compareBy<TagsPageUiState.Tag> {
+                when {
+                    it.isSelected -> 0
+                    it.isRecommended -> 1
+                    else -> 2
+                }
+            }.thenBy { tag ->
+                if (tag.isSelected) {
+                    tagsBySelectionOrder[tag.id] ?: Int.MAX_VALUE
+                } else {
+                    0
+                }
+            }
         )
 
         return TagsPageUiState(
             mainPictureUri = state.reviewDetails.pictures.firstOrNull()?.uri,
             productName = state.reviewDetails.productName,
-            hasBrand = state.reviewDetails.productBrand.isNotBlank(),
             searchQuery = state.tagsSearchQuery,
             shouldShowAddTag = sortedTags.fastAll { it.value != state.tagsSearchQuery },
-            recommendedTags = recommendedTags.toPersistentList(),
             tags = sortedTags.toPersistentList(),
         )
     }
@@ -101,12 +114,16 @@ internal class ReviewCreationUiStateMapper(
 
     private companion object {
 
-        private fun CheckieTag.toUi(isSelected: Boolean = false): TagsPageUiState.Tag {
+        private fun CheckieTag.toUi(
+            isSelected: Boolean = false,
+            isRecommended: Boolean = false,
+        ): TagsPageUiState.Tag {
             return TagsPageUiState.Tag(
                 id = id,
                 value = value,
                 emoji = emoji,
                 isSelected = isSelected,
+                isRecommended = isRecommended,
             )
         }
     }

@@ -174,21 +174,15 @@ internal val mockUiState = ReviewCreationUiState(
     tagsState = TagsPageUiState(
         mainPictureUri = null,
         productName = "Chips",
-        hasBrand = false,
         searchQuery = "",
         shouldShowAddTag = true,
-        recommendedTags = persistentListOf(
-            TagsPageUiState.Tag("", "tag1", null, false),
-            TagsPageUiState.Tag("", "tag2", "\uD83C\uDF47", false),
-            TagsPageUiState.Tag("", "tag3", null, false),
-        ),
         tags = persistentListOf(
-            TagsPageUiState.Tag("", "tag1", null, false),
-            TagsPageUiState.Tag("", "tag2", "\uD83C\uDF47", false),
-            TagsPageUiState.Tag("", "tag3", null, false),
-            TagsPageUiState.Tag("", "tag4", null, true),
-            TagsPageUiState.Tag("", "tag5", "\uD83C\uDF47", true),
-            TagsPageUiState.Tag("", "tag6", null, false),
+            TagsPageUiState.Tag("", "tag4", null, true, false),
+            TagsPageUiState.Tag("", "tag5", "\uD83C\uDF47", true, false),
+            TagsPageUiState.Tag("", "tag1", null, false, true),
+            TagsPageUiState.Tag("", "tag2", "\uD83C\uDF47", false, true),
+            TagsPageUiState.Tag("", "tag3", null, false, true),
+            TagsPageUiState.Tag("", "tag6", null, false, false),
         ),
     ),
     reviewInfoState = ReviewInfoPageUiState(

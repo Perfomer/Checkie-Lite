@@ -43,7 +43,6 @@ import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.mockUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.widget.TagsLibrarySection
-import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.widget.TagsRecommendationCard
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.widget.TagsSearchField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.widget.TagsStatPill
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.TagsPageUiState
@@ -68,6 +67,7 @@ internal fun TagsScreen(
     val sectionShape = remember { RoundedCornerShape(30.dp) }
     val sectionBorderColor = remember(palette) { palette.OutlineSecondary.copy(alpha = 0.72F) }
     val selectedTagsCount = remember(state.tags) { state.tags.count(TagsPageUiState.Tag::isSelected) }
+    val recommendedTagsCount = remember(state.tags) { state.tags.count(TagsPageUiState.Tag::isRecommended) }
     val density = LocalDensity.current
     val navigationBarsBottomPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
     val isImeVisible = WindowInsets.ime.getBottom(density) > 0
@@ -100,22 +100,10 @@ internal fun TagsScreen(
                     TagsHeader(
                         state = state,
                         selectedTagsCount = selectedTagsCount,
+                        recommendedTagsCount = recommendedTagsCount,
                         sectionBorderColor = sectionBorderColor,
                         onSelectedTagsClearClick = onSelectedTagsClearClick,
                     )
-                }
-
-                if (state.recommendedTags.isNotEmpty()) {
-                    item(key = "recommendations") {
-                        TagsRecommendationCard(
-                            hasBrand = state.hasBrand,
-                            recommendedTags = state.recommendedTags,
-                            palette = palette,
-                            onTagClick = onTagClick,
-                            onTagLongClick = onTagLongClick,
-                            modifier = Modifier.animateItem()
-                        )
-                    }
                 }
 
                 item(key = "search") {
@@ -184,6 +172,7 @@ private fun BackgroundDecoration(modifier: Modifier = Modifier) {
 private fun TagsHeader(
     state: TagsPageUiState,
     selectedTagsCount: Int,
+    recommendedTagsCount: Int,
     sectionBorderColor: Color,
     onSelectedTagsClearClick: () -> Unit,
 ) {
@@ -216,9 +205,9 @@ private fun TagsHeader(
                 textColor = palette.TextSecondary,
             )
 
-            if (state.recommendedTags.isNotEmpty()) {
+            if (recommendedTagsCount > 0) {
                 TagsStatPill(
-                    text = stringResource(R.string.reviewcreation_tags_badge_recommended, state.recommendedTags.size),
+                    text = stringResource(R.string.reviewcreation_tags_badge_recommended, recommendedTagsCount),
                     backgroundColor = Color(0xFFFFE3D2),
                     borderColor = Color.White.copy(alpha = 0.6F),
                     textColor = Color(0xFFD55A2B),

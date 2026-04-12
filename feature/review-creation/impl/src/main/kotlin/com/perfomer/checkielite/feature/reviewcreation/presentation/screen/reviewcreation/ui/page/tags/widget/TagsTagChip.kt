@@ -31,22 +31,6 @@ internal fun TagsTagChip(
     val hapticFeedback = LocalHapticFeedback.current
 
     val chipStyle = when {
-        isRecommended && tag.isSelected -> CuiChipStyle(
-            iconBackgroundColor = Color.White.copy(alpha = 0.28F),
-            textBackgroundColor = Color.White.copy(alpha = 0.22F),
-            borderColor = Color.White.copy(alpha = 0.62F),
-            borderWidth = 1.dp,
-            fontWeight = FontWeight.Medium,
-        )
-
-        isRecommended -> CuiChipStyle(
-            iconBackgroundColor = Color.White.copy(alpha = 0.92F),
-            textBackgroundColor = Color.White.copy(alpha = 0.94F),
-            borderColor = Color.White.copy(alpha = 0.28F),
-            borderWidth = 1.dp,
-            fontWeight = FontWeight.Medium,
-        )
-
         tag.isSelected -> CuiChipStyle(
             iconBackgroundColor = palette.BackgroundAccentSecondary,
             textBackgroundColor = palette.BackgroundAccentTertiary,
@@ -54,7 +38,13 @@ internal fun TagsTagChip(
             borderWidth = 1.5.dp,
             fontWeight = FontWeight.Medium,
         )
-
+        isRecommended -> CuiChipStyle(
+            iconBackgroundColor = Color.White.copy(alpha = 0.92F),
+            textBackgroundColor = Color.White.copy(alpha = 0.94F),
+            borderColor = Color.White.copy(alpha = 0.28F),
+            borderWidth = 1.dp,
+            fontWeight = FontWeight.Medium,
+        )
         else -> CuiChipStyle(
             iconBackgroundColor = palette.BackgroundPrimary,
             textBackgroundColor = palette.BackgroundPrimary.copy(alpha = 0.96F),

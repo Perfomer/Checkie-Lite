@@ -124,6 +124,7 @@ internal fun TagsLibrarySection(
                                 tag = tag,
                                 palette = palette,
                                 sectionBorderColor = sectionBorderColor,
+                                isRecommended = tag.isRecommended,
                                 onClick = onTagClick,
                                 onLongClick = onTagLongClick,
                                 modifier = Modifier.animateBounds(this@LookaheadScope)

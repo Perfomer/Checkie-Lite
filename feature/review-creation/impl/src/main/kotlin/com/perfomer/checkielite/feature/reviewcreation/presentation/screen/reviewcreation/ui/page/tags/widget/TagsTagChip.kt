@@ -1,12 +1,25 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.widget
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
@@ -14,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
-import com.perfomer.checkielite.common.ui.theme.CuiColorToken
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.TagsPageUiState
 
@@ -29,6 +41,25 @@ internal fun TagsTagChip(
     modifier: Modifier = Modifier
 ) {
     val hapticFeedback = LocalHapticFeedback.current
+    val isAnimatedRecommended = isRecommended && !tag.isSelected
+    val recommendedChipBackgroundColor = palette.BackgroundAccentTertiary.copy(alpha = 0.38F)
+    val recommendedChipIconBackgroundColor = palette.BackgroundAccentTertiary.copy(alpha = 0.52F)
+    val recommendedChipBorderColors = listOf(
+        palette.OutlineAccentPrimary.copy(alpha = 0.68F),
+        palette.OutlineAccentSecondary.copy(alpha = 0.52F),
+    )
+    val recommendedDashProgress = rememberInfiniteTransition(label = "recommendedChipBorder")
+        .animateFloat(
+            initialValue = 0F,
+            targetValue = 1F,
+            animationSpec = infiniteRepeatable(
+                animation = tween(
+                    durationMillis = if (isSystemInDarkTheme()) 7500 else 4500,
+                    easing = LinearEasing,
+                )
+            ),
+            label = "recommendedChipBorderProgress",
+        )
 
     val chipStyle = when {
         tag.isSelected -> CuiChipStyle(
@@ -39,9 +70,9 @@ internal fun TagsTagChip(
             fontWeight = FontWeight.Medium,
         )
         isRecommended -> CuiChipStyle(
-            iconBackgroundColor = Color.White.copy(alpha = 0.92F),
-            textBackgroundColor = Color.White.copy(alpha = 0.94F),
-            borderColor = Color.White.copy(alpha = 0.28F),
+            iconBackgroundColor = recommendedChipIconBackgroundColor,
+            textBackgroundColor = recommendedChipBackgroundColor,
+            borderColor = Color.Transparent,
             borderWidth = 1.dp,
             fontWeight = FontWeight.Medium,
         )
@@ -55,9 +86,8 @@ internal fun TagsTagChip(
     }
 
     val textColor = when {
-        isRecommended && tag.isSelected -> CuiColorToken.White1
-        isRecommended -> CuiColorToken.Black1
         tag.isSelected -> palette.TextAccent
+        isRecommended -> palette.TextPrimary
         else -> palette.TextPrimary
     }
 
@@ -68,7 +98,11 @@ internal fun TagsTagChip(
             onLongClick(tag.id)
         },
         style = chipStyle,
-        modifier = modifier,
+        modifier = modifier.recommendedAnimatedBorder(
+            isEnabled = isAnimatedRecommended,
+            progress = recommendedDashProgress.value,
+            colors = recommendedChipBorderColors,
+        ),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             if (tag.emoji != null) {
@@ -90,6 +124,44 @@ internal fun TagsTagChip(
                     fontWeight = FontWeight.Medium,
                 )
             }
+        }
+    }
+}
+
+private fun Modifier.recommendedAnimatedBorder(
+    isEnabled: Boolean,
+    progress: Float,
+    colors: List<Color>,
+): Modifier {
+    if (!isEnabled) return this
+
+    return drawWithCache {
+        val outline = CircleShape.createOutline(size, layoutDirection, this)
+        val path = when (outline) {
+            is Outline.Generic -> outline.path
+            is Outline.Rounded -> Path().apply { addRoundRect(outline.roundRect) }
+            is Outline.Rectangle -> Path().apply { addRect(outline.rect) }
+        }
+        val dashLength = 12.dp.toPx()
+        val gapLength = 10.dp.toPx()
+        val patternLength = dashLength + gapLength
+        val dashPathEffect = PathEffect.dashPathEffect(
+            intervals = floatArrayOf(dashLength, gapLength),
+            phase = -patternLength * progress,
+        )
+        val borderStrokeWidth = 1.25.dp.toPx()
+        val borderBrush = Brush.linearGradient(colors = colors)
+
+        onDrawWithContent {
+            drawContent()
+            drawPath(
+                path = path,
+                brush = borderBrush,
+                style = Stroke(
+                    width = borderStrokeWidth,
+                    pathEffect = dashPathEffect,
+                )
+            )
         }
     }
 }

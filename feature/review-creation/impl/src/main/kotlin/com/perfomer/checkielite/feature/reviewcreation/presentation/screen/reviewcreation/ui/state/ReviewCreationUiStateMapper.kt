@@ -69,14 +69,21 @@ internal class ReviewCreationUiStateMapper(
             .orEmpty()
             .fastMap { tag -> tag.toUi() }
 
+        val selectedTagsSelectionOrder = state.selectedTagsSelectionOrder.filter(state.reviewDetails.tagsIds::contains)
+        val tagsBySelectionOrder = selectedTagsSelectionOrder.withIndex().associate { (index, tagId) -> tagId to index }
+        val sortedTags = tags.sortedWith(
+            compareBy<TagsPageUiState.Tag> { !it.isSelected }
+                .thenBy { tagsBySelectionOrder[it.id] ?: Int.MAX_VALUE }
+        )
+
         return TagsPageUiState(
             mainPictureUri = state.reviewDetails.pictures.firstOrNull()?.uri,
             productName = state.reviewDetails.productName,
             hasBrand = state.reviewDetails.productBrand.isNotBlank(),
             searchQuery = state.tagsSearchQuery,
-            shouldShowAddTag = tags.fastAll { it.value != state.tagsSearchQuery },
+            shouldShowAddTag = sortedTags.fastAll { it.value != state.tagsSearchQuery },
             recommendedTags = recommendedTags.toPersistentList(),
-            tags = tags.toPersistentList(),
+            tags = sortedTags.toPersistentList(),
         )
     }
 

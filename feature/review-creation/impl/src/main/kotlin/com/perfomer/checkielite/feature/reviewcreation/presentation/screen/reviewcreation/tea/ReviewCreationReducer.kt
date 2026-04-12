@@ -267,7 +267,12 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
             onTagsSearchQueryUpdate("")
         }
         is Tags.OnSelectedTagsClearClick -> {
-            state { copy(reviewDetails = reviewDetails.copy(tagsIds = emptySet())) }
+            state {
+                copy(
+                    reviewDetails = reviewDetails.copy(tagsIds = emptySet()),
+                    selectedTagsSelectionOrder = emptyList(),
+                )
+            }
             loadRecommendedTags()
             onTagsSearchQueryUpdate("")
         }
@@ -284,7 +289,12 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                         } else {
                             reviewDetails.tagsIds + event.tagId
                         }
-                    )
+                    ),
+                    selectedTagsSelectionOrder = if (isTagSelected) {
+                        selectedTagsSelectionOrder - event.tagId
+                    } else {
+                        selectedTagsSelectionOrder + event.tagId
+                    },
                 )
             }
             loadRecommendedTags()
@@ -334,6 +344,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                     reviewDetails = reviewDetails.copy(
                         tagsIds = reviewDetails.tagsIds + event.tagId,
                     ),
+                    selectedTagsSelectionOrder = selectedTagsSelectionOrder + event.tagId,
                 )
             }
             onTagsSearchQueryUpdate("")
@@ -345,6 +356,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                         tagsIds = reviewDetails.tagsIds - event.tagId,
                     ),
                     recommendedTags = recommendedTags.filter { it.id != event.tagId },
+                    selectedTagsSelectionOrder = selectedTagsSelectionOrder - event.tagId,
                 )
             }
         }
@@ -395,6 +407,7 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
                     reviewDetails = initialReviewDetails,
                     currentPriceFieldValue = initialReviewDetails.price?.value?.toString().orEmpty(),
                     currentPriceCurrency = initialReviewDetails.price?.currency ?: currentPriceCurrency,
+                    selectedTagsSelectionOrder = emptyList(),
                 )
             }
 

@@ -25,6 +25,7 @@ internal data class ReviewCreationState(
     val tagsSearchQuery: String = "",
     val tags: List<CheckieTag> = emptyList(),
     val recommendedTags: List<CheckieTag> = emptyList(),
+    val selectedTagsSelectionOrder: List<String> = emptyList(),
     val tagSorting: TagSortingStrategy = TagSortingStrategy.entries.first(),
 
     val suggestedBrands: List<String> = emptyList(),

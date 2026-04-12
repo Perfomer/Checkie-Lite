@@ -310,7 +310,7 @@ private fun SelectedEmoji(
                 .padding(top = 8.dp)
                 .size(56.dp)
                 .clip(CircleShape)
-                .border(1.dp, LocalCuiPalette.current.OutlinePrimary, CircleShape)
+                .border(1.dp, LocalCuiPalette.current.OutlineSecondary.copy(alpha = 0.88F), CircleShape)
         ) {
             AnimatedContent(
                 targetState = selectedEmoji,

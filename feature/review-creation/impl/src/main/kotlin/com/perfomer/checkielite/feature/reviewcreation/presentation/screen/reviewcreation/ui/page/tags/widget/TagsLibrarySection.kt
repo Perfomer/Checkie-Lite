@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.widget
 
+import androidx.compose.animation.animateBounds
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,12 +15,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.LookaheadScope
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -103,25 +106,30 @@ internal fun TagsLibrarySection(
 
             CuiSpacer(16.dp)
 
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                if (shouldShowAddTag) {
-                    TagsAddTagChip(
-                        searchQuery = searchQuery.takeIf { it.isNotBlank() },
-                        onClick = onCreateTagClick,
-                    )
-                }
+            LookaheadScope {
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    if (shouldShowAddTag) {
+                        TagsAddTagChip(
+                            searchQuery = searchQuery.takeIf { it.isNotBlank() },
+                            onClick = onCreateTagClick,
+                        )
+                    }
 
-                for (tag in tags) {
-                    TagsTagChip(
-                        tag = tag,
-                        palette = palette,
-                        sectionBorderColor = sectionBorderColor,
-                        onClick = onTagClick,
-                        onLongClick = onTagLongClick,
-                    )
+                    for (tag in tags) {
+                        key(tag.id) {
+                            TagsTagChip(
+                                tag = tag,
+                                palette = palette,
+                                sectionBorderColor = sectionBorderColor,
+                                onClick = onTagClick,
+                                onLongClick = onTagLongClick,
+                                modifier = Modifier.animateBounds(this@LookaheadScope)
+                            )
+                        }
+                    }
                 }
             }
         }

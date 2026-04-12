@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -24,6 +25,7 @@ internal fun TagsTagChip(
     isRecommended: Boolean = false,
     onClick: (String) -> Unit,
     onLongClick: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val hapticFeedback = LocalHapticFeedback.current
 
@@ -75,6 +77,7 @@ internal fun TagsTagChip(
             onLongClick(tag.id)
         },
         style = chipStyle,
+        modifier = modifier,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             if (tag.emoji != null) {

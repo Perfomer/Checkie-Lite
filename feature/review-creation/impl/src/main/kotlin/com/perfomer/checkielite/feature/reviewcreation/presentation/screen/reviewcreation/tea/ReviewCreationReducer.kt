@@ -430,7 +430,17 @@ internal class ReviewCreationReducer : DslReducer<ReviewCreationCommand, ReviewC
 
     private fun reduceRecommendedTagsLoading(event: RecommendedTagsLoading) = when (event) {
         is RecommendedTagsLoading.Started -> Unit
-        is RecommendedTagsLoading.Succeed -> state { copy(recommendedTags = event.tags) }
+        is RecommendedTagsLoading.Succeed -> {
+            val selectedRecommendedTags = state.recommendedTags.filter { tag ->
+                tag.id in state.reviewDetails.tagsIds
+            }
+            state {
+                copy(
+                    recommendedTags = (selectedRecommendedTags + event.tags)
+                        .distinctBy { tag -> tag.id }
+                )
+            }
+        }
         is RecommendedTagsLoading.Failed -> state { copy(recommendedTags = emptyList()) }
     }
 

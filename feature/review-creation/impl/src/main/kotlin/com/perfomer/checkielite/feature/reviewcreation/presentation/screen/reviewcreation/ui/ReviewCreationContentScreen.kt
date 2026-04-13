@@ -16,7 +16,6 @@ import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.cui.modifier.ShakeConfig
-import com.perfomer.checkielite.common.ui.cui.modifier.offsetForPage
 import com.perfomer.checkielite.common.ui.cui.modifier.rememberShakeController
 import com.perfomer.checkielite.common.ui.util.VibratorPattern
 import com.perfomer.checkielite.common.ui.util.rememberVibrator
@@ -41,7 +40,6 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.ProductInfoScreen
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.reviewinfo.ReviewInfoScreen
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.TagsScreen
-import kotlin.math.absoluteValue
 
 internal class ReviewCreationContentScreen(
     private val store: ReviewCreationStore,
@@ -111,7 +109,6 @@ internal class ReviewCreationContentScreen(
             onPrimaryButtonClick = acceptable(OnPrimaryButtonClick),
             onBackPress = acceptable(OnBackPress),
         ) { pageIndex ->
-            val decorationAlpha = (1F - pagerState.offsetForPage(pageIndex).absoluteValue * 1.35F).coerceIn(0F, 1F)
             val reviewCreationPage by remember(pageIndex) {
                 derivedStateOf { ReviewCreationPage.entries[pageIndex] }
             }
@@ -137,7 +134,6 @@ internal class ReviewCreationContentScreen(
                 ReviewCreationPage.TAGS -> TagsScreen(
                     state = state.tagsState,
                     scrollState = tagsScrollState,
-                    decorationAlpha = decorationAlpha,
                     onTagSortClick = acceptable(Tags.OnTagSortClick),
                     onSelectedTagsClearClick = acceptable(Tags.OnSelectedTagsClearClick),
                     onCreateTagClick = acceptable(Tags.OnCreateTagClick),

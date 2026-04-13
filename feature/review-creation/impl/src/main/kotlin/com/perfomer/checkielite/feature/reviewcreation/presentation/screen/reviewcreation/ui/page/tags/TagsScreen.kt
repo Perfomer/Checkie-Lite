@@ -1,7 +1,6 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags
 
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,20 +14,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
@@ -52,7 +45,6 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 @Composable
 internal fun TagsScreen(
     state: TagsPageUiState,
-    decorationAlpha: Float = 1F,
     scrollState: LazyListState = rememberLazyListState(),
     onTagSortClick: () -> Unit = {},
     onSelectedTagsClearClick: () -> Unit = {},
@@ -72,96 +64,61 @@ internal fun TagsScreen(
     val isImeVisible = WindowInsets.ime.getBottom(density) > 0
     val bottomContentPadding = 104.dp + if (isImeVisible) 0.dp else navigationBarsBottomPadding
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .clipToBounds()
-        ) {
-            BackgroundDecoration(
-                modifier = Modifier.graphicsLayer { alpha = decorationAlpha }
-            )
-
-            LazyColumn(
-                state = scrollState,
+    LazyColumn(
+        state = scrollState,
+        contentPadding = PaddingValues(
+            top = 16.dp,
+            bottom = bottomContentPadding,
+        ),
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding()
+    ) {
+        item(key = "content") {
+            Column(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(
-                    top = 16.dp,
-                    bottom = bottomContentPadding,
-                ),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .imePadding()
+                modifier = Modifier.fillMaxWidth()
             ) {
-                item(key = "header") {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 24.dp)
-                    ) {
-                        TagsHeader(
-                            state = state,
-                            selectedTagsCount = selectedTagsCount,
-                            recommendedTagsCount = recommendedTagsCount,
-                            sectionBorderColor = sectionBorderColor,
-                            searchQuery = state.searchQuery,
-                            onTagSortClick = onTagSortClick,
-                            onSelectedTagsClearClick = onSelectedTagsClearClick,
-                        )
-                    }
-                }
-
-                item(key = "library") {
-                    TagsLibrarySection(
-                        tags = state.tags,
-                        searchQuery = state.searchQuery,
-                        shouldShowAddTag = state.shouldShowAddTag,
-                        palette = palette,
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+                ) {
+                    TagsHeader(
+                        state = state,
+                        selectedTagsCount = selectedTagsCount,
+                        recommendedTagsCount = recommendedTagsCount,
                         sectionBorderColor = sectionBorderColor,
-                        onSearchQueryInput = onSearchQueryInput,
-                        onSearchQueryClearClick = {
-                            onSearchQueryClearClick()
-                            focusManager.clearFocus()
-                        },
-                        onCreateTagClick = {
-                            focusManager.clearFocus()
-                            onCreateTagClick()
-                        },
-                        onTagClick = onTagClick,
-                        onTagLongClick = onTagLongClick,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .animateItem()
+                        searchQuery = state.searchQuery,
+                        onTagSortClick = onTagSortClick,
+                        onSelectedTagsClearClick = onSelectedTagsClearClick,
                     )
                 }
+
+                TagsLibrarySection(
+                    tags = state.tags,
+                    searchQuery = state.searchQuery,
+                    shouldShowAddTag = state.shouldShowAddTag,
+                    palette = palette,
+                    sectionBorderColor = sectionBorderColor,
+                    onSearchQueryInput = onSearchQueryInput,
+                    onSearchQueryClearClick = {
+                        onSearchQueryClearClick()
+                        focusManager.clearFocus()
+                    },
+                    onCreateTagClick = {
+                        focusManager.clearFocus()
+                        onCreateTagClick()
+                    },
+                    onTagClick = onTagClick,
+                    onTagLongClick = onTagLongClick,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }
 }
 
-@Composable
-private fun BackgroundDecoration(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier.fillMaxSize()
-    ) {
-        Box(
-            modifier = Modifier
-                .offset(x = (-72).dp, y = 52.dp)
-                .size(220.dp)
-                .clip(CircleShape)
-                .background(Color(0xFFF7B896).copy(alpha = 0.16F))
-        )
-
-        Box(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .offset(x = 78.dp, y = 210.dp)
-                .size(180.dp)
-                .clip(CircleShape)
-                .background(Color(0xFFFCE2AE).copy(alpha = 0.28F))
-        )
-    }
-}
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

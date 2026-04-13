@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -132,6 +133,17 @@ private fun TagsHeader(
     onSelectedTagsClearClick: () -> Unit,
 ) {
     val palette = LocalCuiPalette.current
+    val isDarkTheme = isSystemInDarkTheme()
+    val hotPillBackgroundColor = remember(palette, isDarkTheme) {
+        if (isDarkTheme) palette.BackgroundAccentSecondary else palette.BackgroundAccentTertiary
+    }
+    val hotPillBorderColor = remember(palette, isDarkTheme) {
+        if (isDarkTheme) palette.OutlineAccentSecondary.copy(alpha = 0.72F)
+        else palette.OutlineAccentSecondary.copy(alpha = 0.32F)
+    }
+    val hotPillTextColor = remember(palette, isDarkTheme) {
+        if (isDarkTheme) palette.TextAccent else palette.TextAccent.copy(alpha = 0.92F)
+    }
     val targetTagSortAlpha = if (searchQuery.isBlank()) 1F else 0F
     val animatedTagSortAlpha by animateFloatAsState(
         targetValue = targetTagSortAlpha,
@@ -179,9 +191,9 @@ private fun TagsHeader(
             if (recommendedTagsCount > 0) {
                 TagsStatPill(
                     text = stringResource(R.string.reviewcreation_tags_badge_recommended, recommendedTagsCount),
-                    backgroundColor = Color(0xFFFFE3D2),
-                    borderColor = Color.White.copy(alpha = 0.6F),
-                    textColor = Color(0xFFD55A2B),
+                    backgroundColor = hotPillBackgroundColor,
+                    borderColor = hotPillBorderColor,
+                    textColor = hotPillTextColor,
                 )
             }
         }

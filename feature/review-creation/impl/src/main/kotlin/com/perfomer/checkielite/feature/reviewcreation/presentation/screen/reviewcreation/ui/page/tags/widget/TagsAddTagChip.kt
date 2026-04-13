@@ -20,6 +20,7 @@ import com.perfomer.checkielite.feature.reviewcreation.R
 internal fun TagsAddTagChip(
     searchQuery: String?,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val palette = LocalCuiPalette.current
     val style = remember(palette) {
@@ -48,6 +49,7 @@ internal fun TagsAddTagChip(
         },
         style = style,
         onClick = onClick,
+        modifier = modifier
     ) {
         Text(text = text, color = palette.TextAccent)
     }

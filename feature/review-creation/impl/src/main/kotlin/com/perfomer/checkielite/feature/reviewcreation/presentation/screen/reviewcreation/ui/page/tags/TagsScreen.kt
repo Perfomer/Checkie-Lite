@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,8 +22,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,13 +37,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.mockUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.widget.TagsLibrarySection
-import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.widget.TagsSearchField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.widget.TagsStatPill
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.TagsPageUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget.ReviewCreationPageHeader
@@ -64,7 +64,6 @@ internal fun TagsScreen(
 ) {
     val focusManager = LocalFocusManager.current
     val palette = LocalCuiPalette.current
-    val sectionShape = remember { RoundedCornerShape(30.dp) }
     val sectionBorderColor = remember(palette) { palette.OutlineSecondary.copy(alpha = 0.72F) }
     val selectedTagsCount = remember(state.tags) { state.tags.count(TagsPageUiState.Tag::isSelected) }
     val recommendedTagsCount = remember(state.tags) { state.tags.count(TagsPageUiState.Tag::isRecommended) }
@@ -87,8 +86,6 @@ internal fun TagsScreen(
                 state = scrollState,
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 contentPadding = PaddingValues(
-                    start = 24.dp,
-                    end = 24.dp,
                     top = 16.dp,
                     bottom = bottomContentPadding,
                 ),
@@ -97,27 +94,21 @@ internal fun TagsScreen(
                     .imePadding()
             ) {
                 item(key = "header") {
-                    TagsHeader(
-                        state = state,
-                        selectedTagsCount = selectedTagsCount,
-                        recommendedTagsCount = recommendedTagsCount,
-                        sectionBorderColor = sectionBorderColor,
-                        onSelectedTagsClearClick = onSelectedTagsClearClick,
-                    )
-                }
-
-                item(key = "search") {
-                    SearchSection(
-                        searchQuery = state.searchQuery,
-                        sectionShape = sectionShape,
-                        sectionBorderColor = sectionBorderColor,
-                        onSearchQueryInput = onSearchQueryInput,
-                        onSearchQueryClearClick = {
-                            onSearchQueryClearClick()
-                            focusManager.clearFocus()
-                        },
-                        modifier = Modifier.animateItem()
-                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp)
+                    ) {
+                        TagsHeader(
+                            state = state,
+                            selectedTagsCount = selectedTagsCount,
+                            recommendedTagsCount = recommendedTagsCount,
+                            sectionBorderColor = sectionBorderColor,
+                            searchQuery = state.searchQuery,
+                            onTagSortClick = onTagSortClick,
+                            onSelectedTagsClearClick = onSelectedTagsClearClick,
+                        )
+                    }
                 }
 
                 item(key = "library") {
@@ -126,16 +117,21 @@ internal fun TagsScreen(
                         searchQuery = state.searchQuery,
                         shouldShowAddTag = state.shouldShowAddTag,
                         palette = palette,
-                        sectionShape = sectionShape,
                         sectionBorderColor = sectionBorderColor,
+                        onSearchQueryInput = onSearchQueryInput,
+                        onSearchQueryClearClick = {
+                            onSearchQueryClearClick()
+                            focusManager.clearFocus()
+                        },
                         onCreateTagClick = {
                             focusManager.clearFocus()
                             onCreateTagClick()
                         },
-                        onTagSortClick = onTagSortClick,
                         onTagClick = onTagClick,
                         onTagLongClick = onTagLongClick,
-                        modifier = Modifier.animateItem()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItem()
                     )
                 }
             }
@@ -174,15 +170,33 @@ private fun TagsHeader(
     selectedTagsCount: Int,
     recommendedTagsCount: Int,
     sectionBorderColor: Color,
+    searchQuery: String,
+    onTagSortClick: () -> Unit,
     onSelectedTagsClearClick: () -> Unit,
 ) {
     val palette = LocalCuiPalette.current
+    val targetTagSortAlpha = if (searchQuery.isBlank()) 1F else 0F
+    val animatedTagSortAlpha by animateFloatAsState(
+        targetValue = targetTagSortAlpha,
+        label = "TagsHeaderSortAlpha",
+    )
 
     Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
         ReviewCreationPageHeader(
             title = stringResource(R.string.reviewcreation_tags_title),
             productPictureUri = state.mainPictureUri,
             productName = state.productName,
+            endIcon = {
+                CuiIconButton(
+                    painter = painterResource(CommonDrawable.ic_sort),
+                    onClick = onTagSortClick,
+                    modifier = Modifier.graphicsLayer {
+                        alpha = animatedTagSortAlpha
+                        scaleX = animatedTagSortAlpha
+                        scaleY = animatedTagSortAlpha
+                    }
+                )
+            },
         )
 
         FlowRow(
@@ -214,38 +228,6 @@ private fun TagsHeader(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun SearchSection(
-    modifier: Modifier = Modifier,
-    searchQuery: String,
-    sectionShape: RoundedCornerShape,
-    sectionBorderColor: Color,
-    onSearchQueryInput: (String) -> Unit,
-    onSearchQueryClearClick: () -> Unit,
-) {
-    val palette = LocalCuiPalette.current
-
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(sectionShape)
-            .background(palette.BackgroundPrimary.copy(alpha = 0.88F))
-            .border(
-                width = 1.dp,
-                color = sectionBorderColor,
-                shape = sectionShape,
-            )
-            .padding(horizontal = 14.dp)
-            .padding(top = 14.dp)
-    ) {
-        TagsSearchField(
-            searchQuery = searchQuery,
-            onSearchQueryInput = onSearchQueryInput,
-            onSearchQueryClearClick = onSearchQueryClearClick,
-        )
     }
 }
 

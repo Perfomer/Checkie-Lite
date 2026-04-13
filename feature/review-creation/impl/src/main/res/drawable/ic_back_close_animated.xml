@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:drawable="@drawable/ic_back_close">
+
+    <target android:name="line1">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="300"
+                android:interpolator="@android:interpolator/fast_out_slow_in"
+                android:propertyName="pathData"
+                android:valueFrom="M6.7,6.7 L17.3,17.3"
+                android:valueTo="M12.7,5.9 L5.4,12"
+                android:valueType="pathType" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="line2">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="300"
+                android:interpolator="@android:interpolator/fast_out_slow_in"
+                android:propertyName="pathData"
+                android:valueFrom="M17.3,6.7 L6.7,17.3"
+                android:valueTo="M5.4,12 L12.7,18.1"
+                android:valueType="pathType" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="line3">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="300"
+                android:interpolator="@android:interpolator/fast_out_slow_in"
+                android:propertyName="pathData"
+                android:valueFrom="M12,12 L12,12"
+                android:valueTo="M8.2,12 L19,12"
+                android:valueType="pathType" />
+        </aapt:attr>
+    </target>
+</animated-vector>

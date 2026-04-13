@@ -29,11 +29,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
-import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.verticalScrimBrush
@@ -77,8 +75,6 @@ internal fun ReviewCreationScreen(
         Column(modifier = Modifier.fillMaxSize()) {
             ProgressAppBar(
                 pagerState = pagerState,
-                navigationIconPainter = painterResource(CommonDrawable.ic_arrow_back),
-                firstStepNavigationIconPainter = painterResource(CommonDrawable.ic_cross),
                 onBackPress = onBackPress,
                 modifier = Modifier.bottomStrokeOnScroll(
                     show = shouldShowTopDivider,

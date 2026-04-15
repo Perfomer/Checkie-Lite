@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,12 +27,17 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnCheckUpdatesClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnLanguageSettingsClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnLibrariesClick
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnStart
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnThemeSettingsClick
 
 internal class SettingsContentScreen(private val store: SettingsStore) : Screen {
 
     @Composable
     override fun Screen() = TeaComposable(store) { state ->
+        LaunchedEffect(Unit) {
+            accept(OnStart)
+        }
+
         val toastController = LocalToastController.current
         val syncingInProgressToast = rememberWarningToast(message = CommonString.common_toast_syncing)
         val appUpToDateToast = rememberSuccessToast(message = R.string.settings_toast_update_check_succeed)

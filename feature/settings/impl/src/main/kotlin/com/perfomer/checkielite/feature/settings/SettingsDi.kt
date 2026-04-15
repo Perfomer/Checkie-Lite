@@ -32,6 +32,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.ac
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.CheckUpdatesActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.ExportBackupActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.ImportBackupActor
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.LoadCurrentLocaleActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.LoadThemeActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.SettingsNavigationActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.SettingsContentScreen
@@ -92,6 +93,7 @@ internal fun createSettingsStore(
             CheckSyncingActor(appRepository),
             CheckHasReviewsActor(reviewRepository),
             CheckUpdatesActor(appUpdateManager),
+            LoadCurrentLocaleActor(context),
             LoadThemeActor(themeManager),
             SettingsLaunchAppUpdateActor(appUpdateManager),
         ),

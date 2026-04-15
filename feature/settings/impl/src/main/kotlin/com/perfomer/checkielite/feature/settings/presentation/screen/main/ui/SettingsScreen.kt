@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.widget.info.CuiInfoIcon
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
+import com.perfomer.checkielite.common.ui.cui.widget.text.CuiFadedText
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -190,6 +191,7 @@ private fun AppGroup(
 
         SettingsItem(
             title = stringResource(R.string.settings_group_app_item_language_settings),
+            subtitle = state.currentLanguage,
             icon = painterResource(R.drawable.ic_language),
             onClick = onLanguageSettingsClick,
             endIcon = {
@@ -211,6 +213,7 @@ private fun AppGroup(
 
         SettingsItem(
             title = stringResource(R.string.settings_group_app_item_changelog),
+            subtitle = stringResource(R.string.settings_group_app_item_changelog_desc),
             icon = painterResource(CommonDrawable.ic_info),
             onClick = onChangelogClick,
             endIcon = {
@@ -225,6 +228,7 @@ private fun AppGroup(
 
         SettingsItem(
             title = stringResource(R.string.settings_group_app_item_check_updates),
+            subtitle = stringResource(R.string.settings_group_app_item_check_updates_desc),
             icon = painterResource(R.drawable.ic_update),
             onClick = onCheckUpdatesClick,
             endIcon = {
@@ -309,18 +313,20 @@ private fun SettingsItem(
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            Text(
+            CuiFadedText(
                 text = title,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
+                maxLines = 1,
                 modifier = Modifier.fillMaxWidth()
             )
 
             if (subtitle != null) {
-                Text(
+                CuiFadedText(
                     text = subtitle,
                     fontSize = 12.sp,
                     color = LocalCuiPalette.current.TextSecondary,
+                    maxLines = 1,
                     modifier = Modifier
                         .fillMaxWidth()
                         .offset(y = (-2).dp)
@@ -341,6 +347,7 @@ private fun SettingsScreenPreview() = CheckieLiteTheme {
 internal val mockUiState = SettingsUiState(
     appVersion = "1.0.0",
     isCheckUpdatesInProgress = false,
+    currentLanguage = "English",
     themeIcon = R.drawable.ic_theme_system,
     themeMode = "System",
 )

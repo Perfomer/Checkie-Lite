@@ -9,7 +9,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.ExportBackup
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.ImportBackup
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.LaunchAppUpdate
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.LoadSettings
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.LoadCurrentLocale
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.LoadTheme
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowConfirmImportDialog
@@ -17,6 +17,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowToast.Reason
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.CheckingHasReviewsStatusUpdated
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.CurrentLocaleUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.Initialize
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.SyncingStatusUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.ThemeUpdated
@@ -39,6 +40,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnCheckUpdatesClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnLanguageSettingsClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnLibrariesClick
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnStart
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnThemeSettingsClick
 
 internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, SettingsEvent, SettingsState>() {
@@ -64,15 +66,17 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
                 effects(ShowToast(Reason.FAILED_TO_CHECK_UPDATES))
             }
         }
+        is CurrentLocaleUpdated -> state { copy(currentLocale = event.locale) }
         is ThemeUpdated -> state { copy(currentTheme = event.theme) }
     }
 
     private fun reduceInitialize() {
-        commands(LoadSettings, CheckSyncing, CheckHasReviews, LoadTheme)
+        commands(CheckSyncing, CheckHasReviews, LoadCurrentLocale, LoadTheme)
     }
 
     private fun reduceUi(event: SettingsUiEvent) = when (event) {
         is OnBackPress -> commands(Exit)
+        is OnStart -> commands(LoadCurrentLocale)
         is OnBackupExportClick -> {
             when {
                 state.isSyncingInProgress -> effects(ShowToast(Reason.SYNCING_IN_PROGRESS))

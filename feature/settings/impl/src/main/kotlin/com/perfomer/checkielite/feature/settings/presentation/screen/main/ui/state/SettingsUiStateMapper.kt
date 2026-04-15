@@ -4,20 +4,23 @@ import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.perfomer.checkielite.common.pure.appInfo.AppInfo
+import com.perfomer.checkielite.common.pure.util.capitalize
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
 import com.perfomer.checkielite.core.domain.entity.theme.ThemeMode
 import com.perfomer.checkielite.feature.settings.R
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsState
-
 
 internal class SettingsUiStateMapper(
     private val context: Context,
 ) : UiStateMapper<SettingsState, SettingsUiState> {
 
     override fun map(state: SettingsState): SettingsUiState {
+        val currentLocale = state.currentLocale
+
         return SettingsUiState(
             appVersion = AppInfo.versionName,
             isCheckUpdatesInProgress = state.isCheckUpdatesInProgress,
+            currentLanguage = currentLocale.getDisplayLanguage(currentLocale).capitalize(),
             themeIcon = state.currentTheme.icon,
             themeMode = context.getString(state.currentTheme.label),
         )

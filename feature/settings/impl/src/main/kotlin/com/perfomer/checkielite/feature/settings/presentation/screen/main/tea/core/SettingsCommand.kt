@@ -4,7 +4,7 @@ import com.perfomer.checkielite.core.domain.entity.theme.ThemeMode
 
 internal sealed interface SettingsCommand {
 
-    data object LoadSettings : SettingsCommand
+    data object LoadCurrentLocale : SettingsCommand
 
     data object LoadTheme : SettingsCommand
 

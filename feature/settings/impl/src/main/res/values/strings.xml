@@ -3,8 +3,10 @@
     <string name="settings_title">Settings</string>
     <string name="settings_group_app_title">Application</string>
     <string name="settings_group_app_item_check_updates">Check for updates</string>
+    <string name="settings_group_app_item_check_updates_desc">See if a new app version is available</string>
     <string name="settings_group_app_item_language_settings">Choose a language</string>
     <string name="settings_group_app_item_changelog">Changelog</string>
+    <string name="settings_group_app_item_changelog_desc">What’s new in recent versions</string>
     <string name="settings_group_app_item_libraries">Libraries</string>
     <string name="settings_group_app_item_theme">Choose a theme</string>
     <string name="settings_group_data_title">Data</string>

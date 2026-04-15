@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.changelog.data.repository
 
 import android.content.Context
-import androidx.core.os.ConfigurationCompat
+import com.perfomer.checkielite.common.android.util.currentLocale
 import com.perfomer.checkielite.feature.changelog.data.datasource.ChangelogRemoteDataSource
 import com.perfomer.checkielite.feature.changelog.domain.repository.ChangelogContentRepository
 
@@ -11,9 +11,9 @@ internal class ChangelogContentRepositoryImpl(
 ) : ChangelogContentRepository {
 
     override suspend fun loadChangelog(): String {
-        val appLanguage = ConfigurationCompat.getLocales(context.resources.configuration)[0]?.language
+        val appLanguage = context.currentLocale.language
         val targetLanguage = appLanguage
-            ?.takeIf(supportedLanguages::contains)
+            .takeIf(supportedLanguages::contains)
             ?: DEFAULT_LANGUAGE
 
         return remoteDataSource.loadChangelog(language = targetLanguage)

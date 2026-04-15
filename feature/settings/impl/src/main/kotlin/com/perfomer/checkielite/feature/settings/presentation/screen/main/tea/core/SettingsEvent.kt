@@ -2,6 +2,7 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.c
 
 import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.core.domain.entity.theme.ThemeMode
+import java.util.Locale
 
 internal sealed interface SettingsEvent {
 
@@ -13,12 +14,16 @@ internal sealed interface SettingsEvent {
 
     class UpdatesCheck(val hasUpdates: Lce<Boolean>) : SettingsEvent
 
+    class CurrentLocaleUpdated(val locale: Locale) : SettingsEvent
+
     class ThemeUpdated(val theme: ThemeMode) : SettingsEvent
 }
 
 internal sealed interface SettingsUiEvent : SettingsEvent {
 
     data object OnBackPress : SettingsUiEvent
+
+    data object OnStart : SettingsUiEvent
 
     data object OnBackupExportClick : SettingsUiEvent
 

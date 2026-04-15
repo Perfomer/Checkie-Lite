@@ -240,20 +240,6 @@ private fun AppGroup(
                 }
             },
         )
-
-        SettingsItem(
-            title = stringResource(R.string.settings_group_app_item_libraries),
-            icon = painterResource(CommonDrawable.ic_info),
-            onClick = onLibrariesClick,
-            endIcon = {
-                Icon(
-                    painter = painterResource(CommonDrawable.ic_chevron_right),
-                    tint = LocalCuiPalette.current.IconAccent,
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-        )
     }
 }
 

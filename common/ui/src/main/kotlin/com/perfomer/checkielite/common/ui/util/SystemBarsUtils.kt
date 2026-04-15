@@ -2,6 +2,7 @@
 
 package com.perfomer.checkielite.common.ui.util
 
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,6 +34,10 @@ internal fun DialogTransparentNavBar() {
     val window = LocalModalWindow.current
     LaunchedEffect(Unit) {
         window.navigationBarColor = android.graphics.Color.TRANSPARENT
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.isNavigationBarContrastEnforced = false
+        }
+
         with(WindowInsetsControllerCompat(window, window.decorView)) {
             isAppearanceLightNavigationBars = true
         }

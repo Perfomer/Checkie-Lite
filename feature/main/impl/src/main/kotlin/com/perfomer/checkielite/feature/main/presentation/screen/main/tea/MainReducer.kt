@@ -4,15 +4,19 @@ import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.pure.state.toLoadingContentAware
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand.CheckAppUpdatedRecently
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand.HideChangelogBanner
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand.LoadReviews
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand.LoadTags
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEffect
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEffect.ShowToast
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEffect.ShowToast.Reason
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent.AppRecentUpdateChecked
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent.Initialize
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent.ReviewsLoading
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent.TagsLoading
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenChangelog
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenReviewCreation
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenSearch
@@ -26,18 +30,26 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnSearchClick
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnSettingsClick
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnTagClick
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnWhatsNewClick
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnWhatsNewCloseClick
 
 internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, MainState>() {
 
     override fun reduce(event: MainEvent) = when (event) {
-        is Initialize -> commands(LoadReviews, LoadTags)
+        is Initialize -> commands(LoadReviews, LoadTags, CheckAppUpdatedRecently)
         is MainUiEvent -> reduceUi(event)
         is MainNavigationEvent -> reduceNavigation(event)
         is ReviewsLoading -> reduceReviewsLoading(event)
         is TagsLoading -> reduceTagsLoading(event)
+        is AppRecentUpdateChecked -> state { copy(isAppUpdatedRecently = event.isUpdatedRecently) }
     }
 
     private fun reduceUi(event: MainUiEvent) = when (event) {
+        is OnWhatsNewClick -> commands(OpenChangelog)
+        is OnWhatsNewCloseClick -> {
+            state { copy(isAppUpdatedRecently = false) }
+            commands(HideChangelogBanner)
+        }
         is OnFabClick -> commands(OpenReviewCreation)
         is OnReviewClick -> commands(OpenReviewDetails(event.id))
         is OnTagClick -> commands(OpenSearch(tagId = event.id))

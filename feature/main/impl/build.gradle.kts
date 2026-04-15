@@ -23,6 +23,7 @@ dependencies {
     implementation(projects.common.ui)
     implementation(projects.core.datasource.local.api)
     implementation(projects.core.entity)
+    implementation(projects.feature.changelog.api)
     implementation(projects.feature.reviewCreation.api)
     implementation(projects.feature.reviewDetails.api)
     implementation(projects.feature.search.api)
@@ -34,4 +35,5 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
 
     testImplementation(libs.test.junitJupiter)
+    testRuntimeOnly(libs.test.junitPlatformLauncher)
 }

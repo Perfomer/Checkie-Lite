@@ -24,6 +24,9 @@ internal interface PreferencesDataSource {
 
     suspend fun getThemeMode(): ThemeMode?
     suspend fun setThemeMode(themeMode: ThemeMode)
+
+    suspend fun getLastSeenChangelogVersionCode(): Int?
+    suspend fun setLastSeenChangelogVersionCode(versionCode: Int)
 }
 
 @SuppressLint("ApplySharedPref")
@@ -80,6 +83,17 @@ internal class PreferencesDataSourceImpl(
         }
     }
 
+    override suspend fun getLastSeenChangelogVersionCode(): Int? = withContext(Dispatchers.IO) {
+        val value = preferences.getInt(KEY_LAST_SEEN_CHANGELOG_VERSION_CODE, 0)
+        return@withContext value.takeIf { it != 0 }
+    }
+
+    override suspend fun setLastSeenChangelogVersionCode(versionCode: Int) = withContext(Dispatchers.IO) {
+        preferences.edit(commit = true) {
+            putInt(KEY_LAST_SEEN_CHANGELOG_VERSION_CODE, versionCode)
+        }
+    }
+
     private companion object {
 
         private const val PREF_NAME = "checkielite"
@@ -88,5 +102,6 @@ internal class PreferencesDataSourceImpl(
         private const val KEY_LATEST_TAG_SORT = "latest_tag_sort"
         private const val KEY_LATEST_TAG_SEARCH_SORT = "latest_tag_search_sort"
         private const val KEY_THEME_MODE = "theme_mode"
+        private const val KEY_LAST_SEEN_CHANGELOG_VERSION_CODE = "last_seen_changelog_version_code"
     }
 }

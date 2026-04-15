@@ -5,6 +5,7 @@ import com.perfomer.checkielite.common.update.updateModule
 import com.perfomer.checkielite.core.data.localDataSourceModule
 import com.perfomer.checkielite.core.navigation.ExternalRouter
 import com.perfomer.checkielite.core.theme.themeModule
+import com.perfomer.checkielite.feature.changelog.changelogModules
 import com.perfomer.checkielite.feature.gallery.galleryModules
 import com.perfomer.checkielite.feature.main.mainModules
 import com.perfomer.checkielite.feature.reviewcreation.reviewCreationModules
@@ -45,6 +46,7 @@ private val commonModules
 
 private val featureModules
     get() = listOf(
+        changelogModules,
         galleryModules,
         mainModules,
         reviewCreationModules,

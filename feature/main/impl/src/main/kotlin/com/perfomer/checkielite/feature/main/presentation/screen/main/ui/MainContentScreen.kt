@@ -15,6 +15,8 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnSearchClick
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnSettingsClick
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnTagClick
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnWhatsNewClick
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainUiEvent.OnWhatsNewCloseClick
 
 internal class MainContentScreen(private val store: MainStore) : Screen {
 
@@ -38,6 +40,8 @@ internal class MainContentScreen(private val store: MainStore) : Screen {
             onTagClick = acceptable(::OnTagClick),
             onSettingsClick = acceptable(OnSettingsClick),
             onSearchClick = acceptable(OnSearchClick),
+            onChangelogClick = acceptable(OnWhatsNewClick),
+            onChangelogCloseClick = acceptable(OnWhatsNewCloseClick),
             onFabClick = acceptable(OnFabClick),
         )
     }

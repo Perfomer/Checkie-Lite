@@ -1,6 +1,8 @@
 package com.perfomer.checkielite.feature.main
 
+import android.content.Context
 import com.arkivanov.decompose.ComponentContext
+import com.perfomer.checkielite.core.data.repository.ChangelogRepository
 import com.perfomer.checkielite.core.data.repository.ReviewRepository
 import com.perfomer.checkielite.core.data.repository.TagRepository
 import com.perfomer.checkielite.core.navigation.Router
@@ -9,6 +11,8 @@ import com.perfomer.checkielite.core.navigation.navigation
 import com.perfomer.checkielite.feature.main.navigation.MainDestination
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.MainReducer
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.MainStore
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor.CheckAppUpdatedRecentlyActor
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor.HideChangelogBannerActor
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor.LoadReviewsActor
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor.LoadTagsActor
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor.MainNavigationActor
@@ -30,6 +34,8 @@ private val presentationModule = module {
 
 internal fun createMainStore(
     componentContext: ComponentContext,
+    context: Context,
+    changelogRepository: ChangelogRepository,
     reviewRepository: ReviewRepository,
     tagRepository: TagRepository,
     router: Router,
@@ -37,9 +43,11 @@ internal fun createMainStore(
     return MainStore(
         componentContext = componentContext,
         reducer = MainReducer(),
-        uiStateMapper = MainUiStateMapper(),
+        uiStateMapper = MainUiStateMapper(context),
         actors = setOf(
             MainNavigationActor(router),
+            CheckAppUpdatedRecentlyActor(changelogRepository),
+            HideChangelogBannerActor(changelogRepository),
             LoadReviewsActor(reviewRepository),
             LoadTagsActor(tagRepository),
         ),

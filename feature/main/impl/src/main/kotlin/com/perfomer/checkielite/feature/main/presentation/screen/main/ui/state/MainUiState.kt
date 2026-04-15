@@ -12,6 +12,7 @@ internal sealed interface MainUiState {
     data class Content(
         val tags: ImmutableList<Tag>,
         val reviews: ImmutableList<ReviewItem>,
+        val whatsNewBanner: WhatsNewBanner?,
     ) : MainUiState
 
     data object Empty : MainUiState

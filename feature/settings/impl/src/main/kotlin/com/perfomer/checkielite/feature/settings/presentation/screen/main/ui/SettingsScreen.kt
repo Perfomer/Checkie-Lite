@@ -55,6 +55,7 @@ internal fun SettingsScreen(
     onBackupExportClick: () -> Unit = {},
     onBackupImportClick: () -> Unit = {},
     onCheckUpdatesClick: () -> Unit = {},
+    onChangelogClick: () -> Unit = {},
     onLanguageSettingsClick: () -> Unit = {},
     onThemeSettingsClick: () -> Unit = {},
     onLibrariesClick: () -> Unit = {},
@@ -94,6 +95,7 @@ internal fun SettingsScreen(
                 state = state,
                 isCheckUpdatesInProgress = state.isCheckUpdatesInProgress,
                 onCheckUpdatesClick = onCheckUpdatesClick,
+                onChangelogClick = onChangelogClick,
                 onLanguageSettingsClick = onLanguageSettingsClick,
                 onLibrariesClick = onLibrariesClick,
                 onThemeSettingsClick = onThemeSettingsClick,
@@ -172,6 +174,7 @@ private fun AppGroup(
     state: SettingsUiState,
     isCheckUpdatesInProgress: Boolean,
     onCheckUpdatesClick: () -> Unit,
+    onChangelogClick: () -> Unit,
     onLanguageSettingsClick: () -> Unit,
     onThemeSettingsClick: () -> Unit,
     onLibrariesClick: () -> Unit,
@@ -204,6 +207,20 @@ private fun AppGroup(
             subtitle = state.themeMode,
             icon = painterResource(state.themeIcon),
             onClick = onThemeSettingsClick,
+        )
+
+        SettingsItem(
+            title = stringResource(R.string.settings_group_app_item_changelog),
+            icon = painterResource(CommonDrawable.ic_info),
+            onClick = onChangelogClick,
+            endIcon = {
+                Icon(
+                    painter = painterResource(CommonDrawable.ic_chevron_right),
+                    tint = LocalCuiPalette.current.IconAccent,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
         )
 
         SettingsItem(

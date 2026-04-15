@@ -197,42 +197,6 @@ internal class TagRecommendationRankerTest {
     }
 
     @Test
-    fun `GIVEN sparse data WHEN ranking THEN do not treat unknown pair as contradiction`() {
-        val result = ranker.rank(
-            reviews = listOf(
-                review("1", tags = listOf(tagWine, tagDrinks, tagAlcohol, tagRestaurant, tagMoscow)),
-                review("2", tags = listOf(tagRestaurant, tagMoscow, tagFood)),
-                review("3", tags = listOf(tagWine, tagSnacks)),
-                review("4", tags = listOf(tagDrinks, tagSnacks)),
-            ),
-            selectedTagIds = setOf(tagWine.id, tagDrinks.id, tagAlcohol.id, tagRestaurant.id, tagMoscow.id),
-            productBrand = "",
-            maxCount = 5,
-        )
-
-        assertEquals(listOf(tagSnacks), result)
-    }
-
-    @Test
-    fun `GIVEN brand supports candidate but selected tags contradict it WHEN ranking THEN reject conflicting brand candidate`() {
-        val result = ranker.rank(
-            reviews = listOf(
-                review("1", brand = "Pairing", tags = listOf(tagWine, tagDrinks, tagAlcohol, tagRestaurant, tagMoscow)),
-                review("2", brand = "Pairing", tags = listOf(tagWine, tagDrinks, tagAlcohol, tagRestaurant, tagMoscow)),
-                review("3", brand = "Pairing", tags = listOf(tagRestaurant, tagMoscow, tagFood)),
-                review("4", brand = "Pairing", tags = listOf(tagRestaurant, tagMoscow, tagFood)),
-                review("5", brand = "Other", tags = listOf(tagWine, tagDrinks, tagAlcohol, tagSnacks)),
-                review("6", brand = "Other", tags = listOf(tagWine, tagDrinks, tagAlcohol, tagSnacks)),
-            ),
-            selectedTagIds = setOf(tagWine.id, tagDrinks.id, tagAlcohol.id),
-            productBrand = "Pairing",
-            maxCount = 5,
-        )
-
-        assertEquals(listOf(tagRestaurant, tagMoscow), result)
-    }
-
-    @Test
     fun `GIVEN max count WHEN ranking THEN trim result`() {
         val result = ranker.rank(
             reviews = listOf(

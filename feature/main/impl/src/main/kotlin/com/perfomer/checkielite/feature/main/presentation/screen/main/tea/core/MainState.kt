@@ -7,4 +7,5 @@ import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
 internal data class MainState(
     val reviews: Lce<List<CheckieReview>> = Lce.initial(),
     val tags: Lce<List<CheckieTag>> = Lce.initial(),
+    val isAppUpdatedRecently: Boolean = false,
 )

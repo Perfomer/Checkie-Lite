@@ -4,6 +4,7 @@
     <string name="settings_group_app_title">Приложение</string>
     <string name="settings_group_app_item_check_updates">Проверить обновления</string>
     <string name="settings_group_app_item_language_settings">Выбрать язык</string>
+    <string name="settings_group_app_item_changelog">Список изменений</string>
     <string name="settings_group_app_item_libraries">Библиотеки</string>
     <string name="settings_group_app_item_theme">Выбрать тему</string>
     <string name="settings_group_data_title">Данные</string>

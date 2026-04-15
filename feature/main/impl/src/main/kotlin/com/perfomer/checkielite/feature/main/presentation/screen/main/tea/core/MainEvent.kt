@@ -18,9 +18,15 @@ internal sealed interface MainEvent {
         class Succeed(val tags: List<CheckieTag>) : TagsLoading
         class Failed(val error: Throwable) : TagsLoading
     }
+
+    class AppRecentUpdateChecked(val isUpdatedRecently: Boolean) : MainEvent
 }
 
 internal sealed interface MainUiEvent : MainEvent {
+
+    data object OnWhatsNewClick : MainUiEvent
+
+    data object OnWhatsNewCloseClick : MainUiEvent
 
     class OnReviewClick(val id: String) : MainUiEvent
 

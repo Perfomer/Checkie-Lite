@@ -11,4 +11,5 @@ dependencies {
 	api(libs.kotlinx.coroutines)
 
 	testImplementation(libs.test.junitJupiter)
+	testRuntimeOnly(libs.test.junitPlatformLauncher)
 }

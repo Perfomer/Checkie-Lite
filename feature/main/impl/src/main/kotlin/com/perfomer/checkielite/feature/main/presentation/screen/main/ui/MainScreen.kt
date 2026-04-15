@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -39,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
@@ -59,6 +61,7 @@ import com.perfomer.checkielite.common.ui.util.pxToDp
 import com.perfomer.checkielite.feature.main.R
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiState
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.Tag
+import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.WhatsNewBanner
 import com.perfomer.checkielite.feature.main.presentation.util.TagRowUiBalancer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -70,6 +73,8 @@ internal fun MainScreen(
     onSearchClick: () -> Unit = {},
     onReviewClick: (id: String) -> Unit = {},
     onTagClick: (id: String) -> Unit = {},
+    onChangelogClick: () -> Unit = {},
+    onChangelogCloseClick: () -> Unit = {},
     onFabClick: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
@@ -103,6 +108,8 @@ internal fun MainScreen(
                 onSearchClick = onSearchClick,
                 onReviewClick = onReviewClick,
                 onTagClick = onTagClick,
+                onChangelogClick = onChangelogClick,
+                onChangelogCloseClick = onChangelogCloseClick,
             )
 
             is MainUiState.Empty -> Empty()
@@ -120,6 +127,8 @@ private fun Content(
     onSearchClick: () -> Unit = {},
     onReviewClick: (id: String) -> Unit,
     onTagClick: (id: String) -> Unit,
+    onChangelogClick: () -> Unit,
+    onChangelogCloseClick: () -> Unit,
 ) {
     LazyColumn(
         contentPadding = contentPadding,
@@ -142,6 +151,23 @@ private fun Content(
             }
         }
 
+        state.whatsNewBanner?.let { banner ->
+            item {
+                ChangelogBanner(
+                    state = banner,
+                    onClick = onChangelogClick,
+                    onCloseClick = onChangelogCloseClick,
+                    modifier = Modifier.animateItem()
+                )
+
+                Spacer(
+                    modifier = Modifier
+                        .height(8.dp)
+                        .animateItem()
+                )
+            }
+        }
+
         items(
             items = state.reviews,
             key = { item -> item.id },
@@ -152,6 +178,47 @@ private fun Content(
         item {
             Spacer(modifier = Modifier.height(72.dp))
         }
+    }
+}
+
+@Composable
+private fun ChangelogBanner(
+    state: WhatsNewBanner,
+    onClick: () -> Unit,
+    onCloseClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .padding(horizontal = 20.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .background(LocalCuiPalette.current.BackgroundAccentSecondary)
+            .clickable(onClick = onClick)
+            .padding(start = 20.dp, top = 16.dp, end = 8.dp, bottom = 16.dp),
+    ) {
+        Column(modifier = Modifier.weight(1F)) {
+            Text(
+                text = state.title,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = state.subtitle,
+                fontSize = 13.sp,
+                color = LocalCuiPalette.current.TextSecondary,
+                lineHeight = 18.sp,
+            )
+        }
+
+        CuiIconButton(
+            painter = painterResource(CommonDrawable.ic_cross),
+            tint = LocalCuiPalette.current.IconAccent,
+            onClick = onCloseClick,
+        )
     }
 }
 
@@ -341,4 +408,8 @@ internal val mockUiState = MainUiState.Content(
         ),
     ),
     tags = emptyPersistentList(),
+    whatsNewBanner = WhatsNewBanner(
+        title = "What’s new",
+        subtitle = "See what changed in the latest version",
+    ),
 )

@@ -14,6 +14,10 @@ android {
     namespace = "com.perfomer.checkielite.core.data.datasource"
 }
 
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
 dependencies {
     api(projects.core.datasource.local.api)
     implementation(projects.common.pure)
@@ -27,4 +31,5 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.test.junitJupiter)
+    testRuntimeOnly(libs.test.junitPlatformLauncher)
 }

@@ -63,6 +63,7 @@ dependencies {
     implementation(projects.core.datasource.local.impl)
     implementation(projects.core.theme.api)
     implementation(projects.core.theme.impl)
+    implementation(projects.feature.changelog.impl)
     implementation(projects.feature.gallery.impl)
     implementation(projects.feature.main.impl)
     implementation(projects.feature.reviewCreation.impl)
@@ -84,4 +85,5 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
 
     testImplementation(libs.test.junitJupiter)
+    testRuntimeOnly(libs.test.junitPlatformLauncher)
 }

@@ -29,6 +29,8 @@ internal sealed interface SettingsNavigationCommand : SettingsCommand {
 
     data object OpenLanguageSettings : SettingsNavigationCommand
 
+    data object OpenChangelog : SettingsNavigationCommand
+
     data object OpenLibraries : SettingsNavigationCommand
 
     class OpenThemeSettings(val currentTheme: ThemeMode) : SettingsNavigationCommand

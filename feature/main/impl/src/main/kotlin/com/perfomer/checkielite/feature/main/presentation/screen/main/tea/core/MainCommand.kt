@@ -5,9 +5,15 @@ internal sealed interface MainCommand {
     data object LoadReviews : MainCommand
 
     data object LoadTags : MainCommand
+
+    data object CheckAppUpdatedRecently : MainCommand
+
+    data object HideChangelogBanner : MainCommand
 }
 
 internal sealed interface MainNavigationCommand : MainCommand {
+
+    data object OpenChangelog : MainNavigationCommand
 
     class OpenReviewDetails(val reviewId: String) : MainNavigationCommand
 

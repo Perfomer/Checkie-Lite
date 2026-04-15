@@ -7,12 +7,14 @@ import com.perfomer.checkielite.core.navigation.ExternalDestinationWithResult
 import com.perfomer.checkielite.core.navigation.ExternalResult
 import com.perfomer.checkielite.core.navigation.ExternalRouter
 import com.perfomer.checkielite.core.navigation.Router
+import com.perfomer.checkielite.feature.changelog.presentation.navigation.ChangelogDestination
 import com.perfomer.checkielite.feature.settings.presentation.navigation.LibrariesDestination
 import com.perfomer.checkielite.feature.settings.presentation.navigation.ThemeDestination
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.Exit
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.OpenChangelog
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.OpenLanguageSettings
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.OpenLibraries
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsNavigationCommand.OpenThemeSettings
@@ -40,6 +42,7 @@ internal class SettingsNavigationActor(
             is Exit -> router.exit()
             is SelectBackupFile -> return selectBackupFile()
             is OpenLanguageSettings -> externalRouter.navigate(ExternalDestination.LANGUAGE_SETTINGS)
+            is OpenChangelog -> router.navigate(ChangelogDestination)
             is OpenLibraries -> router.navigate(LibrariesDestination, DestinationMode.BOTTOM_SHEET)
             is OpenThemeSettings ->  router.navigate(ThemeDestination(command.currentTheme), DestinationMode.BOTTOM_SHEET)
         }

@@ -2,9 +2,11 @@ package com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor
 
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.navigation.Router
+import com.perfomer.checkielite.feature.changelog.presentation.navigation.ChangelogDestination
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenChangelog
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenReviewCreation
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenSearch
@@ -44,6 +46,7 @@ internal class MainNavigationActor(
                 }
             }
 
+            is OpenChangelog -> navigate(ChangelogDestination)
             is OpenReviewDetails -> navigate(ReviewDetailsDestination(command.reviewId))
             is OpenSearch -> navigate(SearchDestination(tagId = command.tagId))
             is OpenSettings -> navigate(SettingsDestination)

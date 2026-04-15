@@ -32,6 +32,8 @@ internal sealed interface SettingsUiEvent : SettingsEvent {
 
     data object OnLibrariesClick : SettingsUiEvent
 
+    data object OnChangelogClick : SettingsUiEvent
+
     data object OnThemeSettingsClick : SettingsUiEvent
 }
 

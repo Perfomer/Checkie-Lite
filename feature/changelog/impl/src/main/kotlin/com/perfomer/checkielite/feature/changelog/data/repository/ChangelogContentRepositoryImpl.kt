@@ -19,7 +19,7 @@ internal class ChangelogContentRepositoryImpl(
             .takeIf(supportedLanguages::contains)
             ?: DEFAULT_LANGUAGE
 
-        @Suppress("SimplifyBooleanWithConstants", "KotlinConstantConditions")
+        @Suppress("SimplifyBooleanWithConstants", "KotlinConstantConditions", "RedundantSuppression")
         return if (DEBUG_LOAD_LOCAL_CHANGELOG && context.isDebug()) {
             debugDataSource.loadChangelog(language = targetLanguage)
         } else {

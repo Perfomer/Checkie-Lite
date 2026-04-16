@@ -91,7 +91,7 @@ private fun Content(
         modifier = Modifier
             .fillMaxSize()
             .padding(contentPadding)
-            .padding(horizontal = 20.dp, vertical = 20.dp)
+            .padding(horizontal = 20.dp, vertical = 8.dp)
     )
 }
 

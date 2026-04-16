@@ -5,6 +5,8 @@ import com.perfomer.checkielite.core.data.repository.ChangelogRepository
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
 import com.perfomer.checkielite.core.navigation.navigation
+import com.perfomer.checkielite.feature.changelog.data.datasource.ChangelogDebugDataSource
+import com.perfomer.checkielite.feature.changelog.data.datasource.ChangelogDebugDataSourceImpl
 import com.perfomer.checkielite.feature.changelog.data.datasource.ChangelogRemoteDataSource
 import com.perfomer.checkielite.feature.changelog.data.datasource.ChangelogRemoteDataSourceImpl
 import com.perfomer.checkielite.feature.changelog.data.repository.ChangelogContentRepositoryImpl
@@ -38,6 +40,7 @@ private val presentationModule = module {
 
 private val dataModule = module {
     single { HttpClient(Android) }
+    singleOf(::ChangelogDebugDataSourceImpl) bind ChangelogDebugDataSource::class
     singleOf(::ChangelogRemoteDataSourceImpl) bind ChangelogRemoteDataSource::class
     singleOf(::ChangelogContentRepositoryImpl) bind ChangelogContentRepository::class
 }

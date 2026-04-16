@@ -8,6 +8,10 @@ plugins {
 android {
     namespace = "com.perfomer.checkielite.feature.changelog"
     buildFeatures.compose = true
+
+    sourceSets {
+        getByName("debug").assets.srcDir(rootProject.file("changelog"))
+    }
 }
 
 tasks.withType<Test> {

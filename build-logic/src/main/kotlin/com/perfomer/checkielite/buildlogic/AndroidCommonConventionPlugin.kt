@@ -27,6 +27,7 @@ class AndroidCommonConventionPlugin : Plugin<Project> {
                     freeCompilerArgs.addAll(
                         "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                         "-Xcontext-parameters",
+                        "-XXLanguage:+PropertyParamAnnotationDefaultTargetMode"
                     )
                 }
             }

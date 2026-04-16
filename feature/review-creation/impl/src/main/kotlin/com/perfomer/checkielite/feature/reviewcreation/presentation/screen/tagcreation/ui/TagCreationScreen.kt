@@ -7,9 +7,6 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -82,7 +79,10 @@ import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.add
+import com.perfomer.checkielite.common.ui.util.crossfade
 import com.perfomer.checkielite.common.ui.util.keyboardOpenedAsState
+import com.perfomer.checkielite.common.ui.util.plus
+import com.perfomer.checkielite.common.ui.util.scale
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEmojiCategory
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.ui.state.TagCreationUiState
@@ -316,10 +316,7 @@ private fun SelectedEmoji(
                 targetState = selectedEmoji,
                 contentAlignment = Alignment.Center,
                 label = "CurrentEmojiAnimatedContent",
-                transitionSpec = {
-                    (scaleIn(spring()) + fadeIn(spring()))
-                        .togetherWith(scaleOut(spring()) + fadeOut(spring()))
-                },
+                transitionSpec = { crossfade() + scale() },
             ) { currentSelectedEmoji ->
                 if (currentSelectedEmoji != null) {
                     Text(

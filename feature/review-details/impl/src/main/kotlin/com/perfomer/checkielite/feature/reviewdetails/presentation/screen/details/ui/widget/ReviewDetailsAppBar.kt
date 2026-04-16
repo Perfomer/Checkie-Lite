@@ -5,7 +5,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -36,6 +35,7 @@ import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 import com.perfomer.checkielite.common.ui.util.StableInsets
+import com.perfomer.checkielite.common.ui.util.crossfade
 import com.perfomer.checkielite.feature.reviewdetails.R
 
 @Composable
@@ -74,7 +74,7 @@ internal fun ReviewDetailsAppBar(
             AnimatedContent(
                 targetState = isMenuAvailable,
                 contentAlignment = Alignment.Center,
-                transitionSpec = { (fadeIn()).togetherWith(fadeOut()) },
+                transitionSpec = { crossfade() },
                 label = "DropdownAnimatedContent",
             ) { shouldShowMenu ->
                 if (shouldShowMenu) {

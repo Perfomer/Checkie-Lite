@@ -11,4 +11,7 @@
     <string name="main_error_description">If you see this message, do not take steps to fix the error and do not reinstall the application, otherwise you will lose all data.\n\nWait for the app update to fix the problem.</string>
 
     <string name="main_copyright" translatable="false">© 2026 Perfomer Development</string>
+    <string name="main_changelog_badge">Update</string>
+    <string name="main_changelog_action">Open</string>
+    <string name="main_changelog_close">Dismiss changelog banner</string>
 </resources>

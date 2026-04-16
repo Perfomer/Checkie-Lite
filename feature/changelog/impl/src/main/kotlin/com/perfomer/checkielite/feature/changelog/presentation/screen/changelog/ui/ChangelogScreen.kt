@@ -8,17 +8,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -26,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
+import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiOutlineButton
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
@@ -43,24 +48,32 @@ internal fun ChangelogScreen(
     onBackPress: () -> Unit = {},
     onRetryClick: () -> Unit = {},
 ) {
+    val scrollState = rememberScrollState()
+    val shouldShowDivider by remember { derivedStateOf { scrollState.canScrollBackward } }
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.changelog_title), fontSize = 18.sp, fontWeight = FontWeight.Medium) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 navigationIcon = {
                     CuiToolbarNavigationIcon(
                         painter = painterResource(CommonDrawable.ic_cross),
                         color = LocalCuiPalette.current.IconPrimary,
                         onBackPress = onBackPress,
                     )
-                }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .bottomStrokeOnScroll(
+                        show = shouldShowDivider,
+                        strokeColor = LocalCuiPalette.current.OutlineSecondary,
+                    )
             )
         },
     ) { contentPadding ->
         when (state) {
             is ChangelogUiState.Loading -> Loading(contentPadding)
-            is ChangelogUiState.Content -> Content(state.markdown, contentPadding)
+            is ChangelogUiState.Content -> Content(state.markdown, contentPadding, scrollState)
             is ChangelogUiState.Error -> Error(contentPadding, onRetryClick)
         }
     }
@@ -79,20 +92,28 @@ private fun Loading(contentPadding: PaddingValues) {
 private fun Content(
     markdown: String,
     contentPadding: PaddingValues,
+    scrollState: androidx.compose.foundation.ScrollState,
 ) {
-    MarkdownText(
-        markdown = markdown,
-        style = LocalTextStyle.current.copy(
-            color = LocalCuiPalette.current.TextPrimary,
-            fontSize = 16.sp,
-            lineHeight = 24.sp,
-        ),
-        linkColor = LocalCuiPalette.current.TextAccent,
+    Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .padding(contentPadding)
             .padding(horizontal = 20.dp, vertical = 8.dp)
-    )
+    ) {
+        MarkdownText(
+            markdown = markdown,
+            style = LocalTextStyle.current.copy(
+                color = LocalCuiPalette.current.TextPrimary,
+                fontSize = 16.sp,
+                lineHeight = 24.sp,
+            ),
+            isTextSelectable = true,
+            disableLinkMovementMethod = true,
+            linkColor = LocalCuiPalette.current.TextAccent,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
 
 @Composable

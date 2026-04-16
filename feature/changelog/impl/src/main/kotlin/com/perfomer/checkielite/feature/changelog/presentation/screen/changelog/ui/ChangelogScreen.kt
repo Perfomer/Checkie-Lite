@@ -33,6 +33,7 @@ import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiOutlineButton
+import com.perfomer.checkielite.common.ui.cui.widget.state.AnimatedState
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -71,10 +72,12 @@ internal fun ChangelogScreen(
             )
         },
     ) { contentPadding ->
-        when (state) {
-            is ChangelogUiState.Loading -> Loading(contentPadding)
-            is ChangelogUiState.Content -> Content(state.markdown, contentPadding, scrollState)
-            is ChangelogUiState.Error -> Error(contentPadding, onRetryClick)
+        AnimatedState(state) { currentState ->
+            when (currentState) {
+                is ChangelogUiState.Loading -> Loading(contentPadding)
+                is ChangelogUiState.Content -> Content(currentState.markdown, contentPadding, scrollState)
+                is ChangelogUiState.Error -> Error(contentPadding, onRetryClick)
+            }
         }
     }
 }

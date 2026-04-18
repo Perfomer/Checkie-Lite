@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.search.presentation.screen.sort.ui.state
 
 import androidx.compose.runtime.Immutable
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.core.domain.entity.sort.ReviewsSortingStrategy
 
 @Immutable
@@ -11,6 +12,6 @@ internal data class SortUiState(
 @Immutable
 internal data class SortingOption(
     val type: ReviewsSortingStrategy,
-    val text: String,
+    val text: Text,
     val isSelected: Boolean,
 )

@@ -1,6 +1,5 @@
 package com.perfomer.checkielite.feature.main
 
-import android.content.Context
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.core.data.repository.ChangelogRepository
 import com.perfomer.checkielite.core.data.repository.ReviewRepository
@@ -34,7 +33,6 @@ private val presentationModule = module {
 
 internal fun createMainStore(
     componentContext: ComponentContext,
-    context: Context,
     changelogRepository: ChangelogRepository,
     reviewRepository: ReviewRepository,
     tagRepository: TagRepository,
@@ -43,7 +41,7 @@ internal fun createMainStore(
     return MainStore(
         componentContext = componentContext,
         reducer = MainReducer(),
-        uiStateMapper = MainUiStateMapper(context),
+        uiStateMapper = MainUiStateMapper(),
         actors = setOf(
             MainNavigationActor(router),
             CheckAppUpdatedRecentlyActor(changelogRepository),

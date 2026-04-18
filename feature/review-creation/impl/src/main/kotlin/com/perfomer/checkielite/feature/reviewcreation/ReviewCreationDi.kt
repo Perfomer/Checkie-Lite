@@ -84,7 +84,6 @@ private val presentationModule = module {
 internal fun createReviewCreationStore(
     componentContext: ComponentContext,
     destination: ReviewCreationDestination,
-    context: Context,
     brandRepository: BrandRepository,
     currencyRepository: CurrencyRepository,
     emojiRepository: EmojiRepository,
@@ -97,7 +96,7 @@ internal fun createReviewCreationStore(
         componentContext = componentContext,
         destination = destination,
         reducer = ReviewCreationReducer(),
-        uiStateMapper = ReviewCreationUiStateMapper(context),
+        uiStateMapper = ReviewCreationUiStateMapper(),
         actors = setOf(
             ReviewCreationNavigationActor(router, externalRouter),
             CreateReviewActor(reviewRepository),

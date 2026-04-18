@@ -56,6 +56,7 @@ import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.app.appNameSpannable
 import com.perfomer.checkielite.common.ui.util.pxToDp
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.feature.main.R
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiState
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.Tag
@@ -367,7 +368,6 @@ internal val mockUiState = MainUiState.Content(
     ),
     tags = emptyPersistentList(),
     whatsNewBanner = WhatsNewBanner(
-        title = "What’s new in 1.6.0",
-        subtitle = "See what changed in the latest version",
+        title = Text.raw("What’s new in 1.6.0"),
     ),
 )

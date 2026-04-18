@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.search.presentation.screen.tags.ui.stat
 import android.content.Context
 import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.tea.core.TagsState
 
 internal class TagsUiStateMapper(
@@ -16,7 +17,7 @@ internal class TagsUiStateMapper(
             tags = tags.map { tag ->
                 TagsUiState.Tag(
                     tagId = tag.id,
-                    text = tag.value,
+                    text = Text.raw(tag.value),
                     emoji = tag.emoji,
                     isSelected = state.selectedTagsIds.any { it == tag.id },
                 )

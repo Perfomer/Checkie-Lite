@@ -75,6 +75,7 @@ import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.add
+import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.feature.search.R
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.FilterType
@@ -374,7 +375,7 @@ private fun FiltersRow(
 
                             CuiSpacer(4.dp)
 
-                            Text(filter.text)
+                            Text(text(filter.text))
 
                             CuiSpacer(4.dp)
 

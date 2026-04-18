@@ -24,12 +24,14 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.perfomer.checkielite.common.ui.cui.widget.text.CuiFadedText
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.common.ui.util.resource.text.text
 
 @Composable
 internal fun ReviewCreationPageHeader(
     title: String,
     productPictureUri: String?,
-    productName: String,
+    productName: Text,
     endIcon: (@Composable () -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
@@ -58,7 +60,7 @@ internal fun ReviewCreationPageHeader(
                 )
 
                 CuiFadedText(
-                    text = productName,
+                    text = text(productName),
                     fontSize = 16.sp,
                     maxLines = 1,
                     fontWeight = FontWeight.Medium,

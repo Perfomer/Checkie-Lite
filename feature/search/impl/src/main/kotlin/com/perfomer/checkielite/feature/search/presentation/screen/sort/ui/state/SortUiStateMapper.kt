@@ -2,6 +2,7 @@ package com.perfomer.checkielite.feature.search.presentation.screen.sort.ui.stat
 
 import android.content.Context
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.core.domain.entity.sort.ReviewsSortingStrategy
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.tea.core.SortState
 import com.perfomer.checkielite.feature.search.presentation.util.label
@@ -21,7 +22,7 @@ internal class SortUiStateMapper(
     private fun ReviewsSortingStrategy.toUi(isSelected: Boolean): SortingOption {
         return SortingOption(
             type = this,
-            text = context.getString(label),
+            text = Text.resource(label),
             isSelected = isSelected,
         )
     }

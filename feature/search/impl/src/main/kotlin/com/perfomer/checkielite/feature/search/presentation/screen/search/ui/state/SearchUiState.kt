@@ -2,6 +2,7 @@ package com.perfomer.checkielite.feature.search.presentation.screen.search.ui.st
 
 import androidx.compose.runtime.Immutable
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -20,7 +21,7 @@ internal enum class SearchContentType {
 @Immutable
 internal data class Filter(
     val type: FilterType,
-    val text: String,
+    val text: Text,
     val isApplied: Boolean,
     val leadingIcon: LeadingIcon? = null,
 ) {

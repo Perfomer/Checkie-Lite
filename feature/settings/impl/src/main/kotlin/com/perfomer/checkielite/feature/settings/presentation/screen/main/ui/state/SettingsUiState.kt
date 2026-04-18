@@ -2,12 +2,13 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.st
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 
 @Immutable
 internal data class SettingsUiState(
-    val appVersion: String,
+    val appVersion: Text,
     val isCheckUpdatesInProgress: Boolean,
-    val currentLanguage: String,
+    val currentLanguage: Text,
     @DrawableRes val themeIcon: Int,
-    val themeMode: String,
+    val themeMode: Text,
 )

@@ -36,13 +36,15 @@ import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 import com.perfomer.checkielite.common.ui.util.StableInsets
 import com.perfomer.checkielite.common.ui.util.crossfade
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.feature.reviewdetails.R
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 internal fun ReviewDetailsAppBar(
     scrollState: LazyListState,
-    title: String?,
+    title: Text?,
     isMenuAvailable: Boolean,
     onNavigationIconClick: () -> Unit,
     onEditClick: () -> Unit,
@@ -56,7 +58,7 @@ internal fun ReviewDetailsAppBar(
             val shouldShowTitle by remember { derivedStateOf { scrollState.firstVisibleItemIndex > 0 } }
             AnimatedVisibility(visible = shouldShowTitle && title != null, enter = fadeIn(tween(250)), exit = fadeOut(tween(250))) {
                 CuiFadedText(
-                    text = title!!,
+                    text = text(title!!),
                     fontSize = 18.sp,
                     maxLines = 1,
                     modifier = Modifier.fillMaxWidth()

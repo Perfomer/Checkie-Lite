@@ -37,6 +37,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.verticalScrimBrush
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.ProductInfoPageUiState
@@ -164,26 +165,26 @@ internal val mockUiState = ReviewCreationUiState(
         brand = "",
         brandSuggestions = emptyPersistentList(),
         price = "0",
-        priceCurrency = "RUB",
+        priceCurrency = Text.raw("RUB"),
         picturesUri = emptyPersistentList(),
     ),
     tagsState = TagsPageUiState(
         mainPictureUri = null,
-        productName = "Chips",
+        productName = Text.raw("Chips"),
         searchQuery = "",
         shouldShowAddTag = true,
         tags = persistentListOf(
-            TagsPageUiState.Tag("", "tag4", null, true, false),
-            TagsPageUiState.Tag("", "tag5", "\uD83C\uDF47", true, false),
-            TagsPageUiState.Tag("", "tag1", null, false, true),
-            TagsPageUiState.Tag("", "tag2", "\uD83C\uDF47", false, true),
-            TagsPageUiState.Tag("", "tag3", null, false, true),
-            TagsPageUiState.Tag("", "tag6", null, false, false),
+            TagsPageUiState.Tag("", Text.raw("tag4"), null, true, false),
+            TagsPageUiState.Tag("", Text.raw("tag5"), "\uD83C\uDF47", true, false),
+            TagsPageUiState.Tag("", Text.raw("tag1"), null, false, true),
+            TagsPageUiState.Tag("", Text.raw("tag2"), "\uD83C\uDF47", false, true),
+            TagsPageUiState.Tag("", Text.raw("tag3"), null, false, true),
+            TagsPageUiState.Tag("", Text.raw("tag6"), null, false, false),
         ),
     ),
     reviewInfoState = ReviewInfoPageUiState(
         mainPictureUri = null,
-        productName = "Chips",
+        productName = Text.raw("Chips"),
         rating = 5,
         comment = "",
         advantages = "",

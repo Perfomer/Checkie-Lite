@@ -74,6 +74,8 @@ import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigatio
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.navigation.PredictiveBackHandler
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.common.ui.util.setTransparentSystemBars
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui.state.GalleryUiState
 import kotlinx.collections.immutable.ImmutableList
@@ -119,7 +121,7 @@ internal fun GalleryScreen(
         topBar = {
             AnimatedVisibility(visible = state.isUiShown, enter = fadeIn(), exit = fadeOut()) {
                 GalleryTopAppBar(
-                    title = state.titleText,
+                    title = text(state.titleText),
                     onNavigationIconClick = onNavigationIconClick,
                 )
             }
@@ -350,7 +352,7 @@ private fun GalleryScreenPreview() = CheckieLiteTheme {
 }
 
 internal val mockUiState = GalleryUiState(
-    titleText = "3 of 21",
+    titleText = Text.raw("3 of 21"),
     isUiShown = true,
     picturesUri = persistentListOf("", ""),
     currentPicturePosition = 0,

@@ -10,34 +10,35 @@ interface Text {
 
     fun resolve(context: Context): CharSequence
 
-    companion object
-}
+    companion object {
 
-/**
- * Creates an empty [Text].
- */
-fun Text.Companion.empty(): Text = EmptyString
+        /**
+         * Creates an empty [Text].
+         */
+        fun empty(): Text = EmptyString
 
-/**
- * Creates [Text] with a hardcoded value.
- */
-fun Text.Companion.raw(value: CharSequence?): Text = when {
-    value.isNullOrEmpty() -> EmptyString
-    else -> RawString(value)
-}
+        /**
+         * Creates [Text] with a hardcoded value.
+         */
+        fun raw(value: CharSequence?): Text = when {
+            value.isNullOrEmpty() -> empty()
+            else -> RawString(value)
+        }
 
-fun Text.Companion.raw(value: Any?): Text = raw(value?.toString())
+        fun raw(value: Any?): Text = raw(value?.toString())
 
-/**
- * Creates [Text] represented by Android resource string with optional arguments.
- */
-fun Text.Companion.resource(@StringRes resourceId: Int, vararg args: Text): Text {
-    return ResourceString(resourceId, args.toList())
-}
+        /**
+         * Creates [Text] represented by Android resource string with optional arguments.
+         */
+        fun resource(@StringRes resourceId: Int, vararg args: Text): Text {
+            return ResourceString(resourceId, args.toList())
+        }
 
-/**
- * Creates [Text] represented by plural Android resource with optional arguments.
- */
-fun Text.Companion.quantity(@PluralsRes resourceId: Int, quantity: Int, vararg args: Text): Text {
-    return QuantityResourceString(resourceId, quantity, args.toList())
+        /**
+         * Creates [Text] represented by plural Android resource with optional arguments.
+         */
+        fun quantity(@PluralsRes resourceId: Int, quantity: Int, vararg args: Text): Text {
+            return QuantityResourceString(resourceId, quantity, args.toList())
+        }
+    }
 }

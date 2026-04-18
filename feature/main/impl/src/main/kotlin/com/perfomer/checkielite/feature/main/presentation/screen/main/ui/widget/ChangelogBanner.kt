@@ -40,6 +40,8 @@ import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.feature.main.R
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.WhatsNewBanner
 
@@ -235,11 +237,14 @@ private fun ChangelogBannerContent(
                 bottom = BannerDimens.ContentBottomPadding,
             )
     ) {
-        ChangelogBannerBadge(colors = colors)
+        ChangelogBannerBadge(
+            state = state,
+            colors = colors
+        )
 
         Column(verticalArrangement = Arrangement.spacedBy(BannerDimens.TitleSpacing)) {
             Text(
-                text = state.title,
+                text = text(state.title),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 lineHeight = 24.sp,
@@ -249,7 +254,7 @@ private fun ChangelogBannerContent(
             )
 
             Text(
-                text = state.subtitle,
+                text = text(state.subtitle),
                 fontSize = 12.sp,
                 lineHeight = 14.sp,
                 color = colors.subtitleColor,
@@ -262,6 +267,7 @@ private fun ChangelogBannerContent(
 
 @Composable
 private fun ChangelogBannerBadge(
+    state: WhatsNewBanner,
     colors: ChangelogBannerColors,
 ) {
     Row(
@@ -284,7 +290,7 @@ private fun ChangelogBannerBadge(
         )
 
         Text(
-            text = stringResource(R.string.main_changelog_badge),
+            text = text(state.badge),
             fontSize = 11.sp,
             fontWeight = FontWeight.Medium,
             color = colors.badgeTextColor,
@@ -647,8 +653,7 @@ private fun PreviewChip(
 private fun Preview() = CheckieLiteTheme {
     ChangelogBanner(
         state = WhatsNewBanner(
-            title = "What's new in 1.6.0",
-            subtitle = "See what changed in the latest version",
+            title = Text.raw("What's new in 1.6.0"),
         ),
         onCloseClick = {},
         onClick = {},

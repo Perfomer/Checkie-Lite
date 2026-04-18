@@ -20,6 +20,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.add
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.RecommendedReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiState
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ConfirmDeleteDialog
@@ -192,8 +193,8 @@ private fun ReviewDetailsScreenPreview() = CheckieLiteTheme {
 }
 
 internal val mockUiState = ReviewDetailsUiState.Content(
-    productName = "Chicken toasts with poached eggs",
-    brandName = "LUI BIDON",
+    productName = Text.raw("Chicken toasts with poached eggs"),
+    brandName = Text.raw("LUI BIDON"),
     picturesUri = persistentListOf(
         "https://habrastorage.org/r/w780/getpro/habr/upload_files/746/2ab/27c/7462ab27cca552ce31ee9cba01387692.jpeg",
         "https://images.unsplash.com/photo-1483129804960-cb1964499894?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
@@ -201,15 +202,22 @@ internal val mockUiState = ReviewDetailsUiState.Content(
         "https://images.unsplash.com/photo-1548100535-fe8a16c187ef?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1151&q=80"
     ),
     rating = 8,
-    date = "31 May 2023",
+    date = Text.raw("31 May 2023"),
     price = null,
     currentPicturePosition = 0,
-    comment = "Extraordinary. Meets an elite standard by which you judge all other restaurants. The staff is always ready to help, the premises are extremely clean, the atmosphere is lovely, and the food is both delicious and beautifully presented.",
-    advantages = "Great, but not great.",
-    disadvantages = "It's okay.",
+    comment = Text.raw("Extraordinary. Meets an elite standard by which you judge all other restaurants. The staff is always ready to help, the premises are extremely clean, the atmosphere is lovely, and the food is both delicious and beautifully presented."),
+    advantages = Text.raw("Great, but not great."),
+    disadvantages = Text.raw("It's okay."),
     isMenuAvailable = true,
     tags = persistentListOf(),
     recommendations = persistentListOf(
-        RecommendedReview("", "DARKSIDE", "Lemonblast", null, 10, false),
+        RecommendedReview(
+            reviewId = "",
+            brandName = Text.raw("DARKSIDE"),
+            productName = Text.raw("Lemonblast"),
+            pictureUri = null,
+            rating = 10,
+            isSyncing = false,
+        ),
     )
 )

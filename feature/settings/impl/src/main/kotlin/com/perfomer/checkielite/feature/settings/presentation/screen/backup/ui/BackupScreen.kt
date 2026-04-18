@@ -29,6 +29,8 @@ import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.app.appNameSpannable
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.common.ui.util.span.annotatedStringResource
 import com.perfomer.checkielite.feature.settings.R
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.state.BackupProgressBarStyle
@@ -68,7 +70,7 @@ internal fun BackupScreen(
             CuiSpacer(24.dp)
 
             Text(
-                text = state.title,
+                text = text(state.title),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Medium,
                 letterSpacing = 0.sp,
@@ -86,7 +88,7 @@ internal fun BackupScreen(
             CuiSpacer(8.dp)
 
             Text(
-                text = state.progressLabel,
+                text = text(state.progressLabel),
                 fontSize = 14.sp,
                 color = LocalCuiPalette.current.TextSecondary
             )
@@ -130,9 +132,9 @@ private fun BackupScreenPreview() = CheckieLiteTheme {
 }
 
 internal val mockUiState = BackupUiState(
-    title = "Creating backup...",
+    title = Text.raw("Creating backup..."),
     backupProgress = 0.65F,
-    progressLabel = "65%",
+    progressLabel = Text.raw("65%"),
     isCancelAvailable = true,
     progressBarStyle = BackupProgressBarStyle.IN_PROGRESS,
 )

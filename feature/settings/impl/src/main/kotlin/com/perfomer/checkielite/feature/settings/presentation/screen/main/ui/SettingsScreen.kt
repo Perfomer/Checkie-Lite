@@ -39,6 +39,8 @@ import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.app.AppLogo
 import com.perfomer.checkielite.common.ui.util.app.appNameSpannable
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.feature.settings.R
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.state.SettingsUiState
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.widget.ConfirmBackupImportDialog
@@ -112,7 +114,7 @@ internal fun SettingsScreen(
 }
 
 @Composable
-private fun SettingsHeader(version: String) {
+private fun SettingsHeader(version: Text) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -132,7 +134,7 @@ private fun SettingsHeader(version: String) {
         )
 
         Text(
-            text = version,
+            text = text(version),
             color = LocalCuiPalette.current.TextSecondary,
             fontSize = 14.sp,
         )
@@ -191,7 +193,7 @@ private fun AppGroup(
 
         SettingsItem(
             title = stringResource(R.string.settings_group_app_item_language_settings),
-            subtitle = state.currentLanguage,
+            subtitle = text(state.currentLanguage),
             icon = painterResource(R.drawable.ic_language),
             onClick = onLanguageSettingsClick,
             endIcon = {
@@ -206,7 +208,7 @@ private fun AppGroup(
 
         SettingsItem(
             title = stringResource(R.string.settings_group_app_item_theme),
-            subtitle = state.themeMode,
+            subtitle = text(state.themeMode),
             icon = painterResource(state.themeIcon),
             onClick = onThemeSettingsClick,
         )
@@ -345,9 +347,9 @@ private fun SettingsScreenPreview() = CheckieLiteTheme {
 }
 
 internal val mockUiState = SettingsUiState(
-    appVersion = "1.0.0",
+    appVersion = Text.raw("1.0.0"),
     isCheckUpdatesInProgress = false,
-    currentLanguage = "English",
+    currentLanguage = Text.raw("English"),
     themeIcon = R.drawable.ic_theme_system,
-    themeMode = "System",
+    themeMode = Text.raw("System"),
 )

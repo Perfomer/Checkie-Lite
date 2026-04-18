@@ -26,11 +26,13 @@ import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.feature.reviewdetails.R
 
 @Composable
 internal fun ReviewDetailsTextCard(
-    text: String,
+    text: Text,
     header: @Composable () -> Unit,
 ) {
     OutlinedCard(
@@ -46,7 +48,7 @@ internal fun ReviewDetailsTextCard(
 
             SelectionContainer {
                 Text(
-                    text = text,
+                    text = text(text),
                     fontSize = 16.sp,
                 )
             }
@@ -161,17 +163,17 @@ private fun ReviewDetailsTextPreview() = CheckieLiteTheme {
         modifier = Modifier.padding(vertical = 24.dp)
     ) {
         ReviewDetailsTextCard(
-            text = "Extraordinary. Meets an elite standard by which you judge all other restaurants. The staff is always ready to help, the premises are extremely clean, the atmosphere is lovely, and the food is both delicious and beautifully presented.",
+            text = Text.raw("Extraordinary. Meets an elite standard by which you judge all other restaurants. The staff is always ready to help, the premises are extremely clean, the atmosphere is lovely, and the food is both delicious and beautifully presented."),
             header = { ReviewDetailsCommentHeader() },
         )
 
         ReviewDetailsTextCard(
-            text = "Extraordinary. Meets an elite standard by which you judge all other restaurants. The staff is always ready to help, the premises are extremely clean, the atmosphere is lovely, and the food is both delicious and beautifully presented.",
+            text = Text.raw("Extraordinary. Meets an elite standard by which you judge all other restaurants. The staff is always ready to help, the premises are extremely clean, the atmosphere is lovely, and the food is both delicious and beautifully presented."),
             header = { ReviewDetailsAdvantagesHeader() },
         )
 
         ReviewDetailsTextCard(
-            text = "Extraordinary. Meets an elite standard by which you judge all other restaurants. The staff is always ready to help, the premises are extremely clean, the atmosphere is lovely, and the food is both delicious and beautifully presented.",
+            text = Text.raw("Extraordinary. Meets an elite standard by which you judge all other restaurants. The staff is always ready to help, the premises are extremely clean, the atmosphere is lovely, and the food is both delicious and beautifully presented."),
             header = { ReviewDetailsDisadvantagesHeader() },
         )
 

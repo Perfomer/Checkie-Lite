@@ -6,6 +6,7 @@ import androidx.annotation.StringRes
 import com.perfomer.checkielite.common.pure.appInfo.AppInfo
 import com.perfomer.checkielite.common.pure.util.capitalize
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.core.domain.entity.theme.ThemeMode
 import com.perfomer.checkielite.feature.settings.R
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsState
@@ -18,11 +19,11 @@ internal class SettingsUiStateMapper(
         val currentLocale = state.currentLocale
 
         return SettingsUiState(
-            appVersion = AppInfo.versionName,
+            appVersion = Text.raw(AppInfo.versionName),
             isCheckUpdatesInProgress = state.isCheckUpdatesInProgress,
-            currentLanguage = currentLocale.getDisplayLanguage(currentLocale).capitalize(),
+            currentLanguage = Text.raw(currentLocale.getDisplayLanguage(currentLocale).capitalize()),
             themeIcon = state.currentTheme.icon,
-            themeMode = context.getString(state.currentTheme.label),
+            themeMode = Text.resource(state.currentTheme.label),
         )
     }
 

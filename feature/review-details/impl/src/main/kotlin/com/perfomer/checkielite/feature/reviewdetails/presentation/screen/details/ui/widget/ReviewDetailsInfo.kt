@@ -39,12 +39,14 @@ import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.cui.modifier.conditional
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewReaction
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.feature.reviewdetails.R
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.Price
 
 @Composable
 internal fun ReviewDetailsInfo(
-    date: String,
+    date: Text,
     rating: Int,
     price: Price?,
     onRatingClick: () -> Unit,
@@ -66,7 +68,7 @@ internal fun ReviewDetailsInfo(
         )
 
         Text(
-            text = date,
+            text = text(date),
             color = LocalCuiPalette.current.TextSecondary,
             fontSize = 14.sp,
         )
@@ -101,7 +103,7 @@ internal fun ReviewDetailsInfo(
         if (price != null) {
             InfoCell(
                 value = buildAnnotatedString {
-                    append(price.value)
+                    append(text(price.value))
 
                     if (price.fractionalPartIndices != null) {
                         addStyle(SpanStyle(fontSize = 14.sp), price.fractionalPartIndices.first, price.fractionalPartIndices.last)

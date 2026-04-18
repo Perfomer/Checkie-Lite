@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state
 
 import androidx.compose.runtime.Immutable
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import kotlinx.collections.immutable.ImmutableList
 
@@ -21,11 +22,11 @@ internal data class ReviewCreationUiState(
 @Immutable
 internal data class ProductInfoPageUiState(
     val productName: String,
-    val productNameErrorText: String?,
+    val productNameErrorText: Text?,
     val brand: String,
     val brandSuggestions: ImmutableList<String>,
     val price: String,
-    val priceCurrency: String,
+    val priceCurrency: Text,
     val picturesUri: ImmutableList<Picture>,
 ) {
 
@@ -39,7 +40,7 @@ internal data class ProductInfoPageUiState(
 @Immutable
 internal data class TagsPageUiState(
     val mainPictureUri: String?,
-    val productName: String,
+    val productName: Text,
     val searchQuery: String,
     val shouldShowAddTag: Boolean,
     val tags: ImmutableList<Tag>,
@@ -47,7 +48,7 @@ internal data class TagsPageUiState(
     @Immutable
     data class Tag(
         val id: String,
-        val value: String,
+        val value: Text,
         val emoji: String?,
         val isSelected: Boolean,
         val isRecommended: Boolean,
@@ -57,7 +58,7 @@ internal data class TagsPageUiState(
 @Immutable
 internal data class ReviewInfoPageUiState(
     val mainPictureUri: String?,
-    val productName: String,
+    val productName: Text,
     val rating: Int,
     val comment: String,
     val advantages: String,

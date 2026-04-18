@@ -1,9 +1,9 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state
 
-import android.content.Context
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastMap
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.core.domain.entity.price.CurrencySymbol
 import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
 import com.perfomer.checkielite.feature.reviewcreation.R
@@ -11,9 +11,7 @@ import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationPage
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationState
 import kotlinx.collections.immutable.toPersistentList
 
-internal class ReviewCreationUiStateMapper(
-    private val context: Context,
-) : UiStateMapper<ReviewCreationState, ReviewCreationUiState> {
+internal class ReviewCreationUiStateMapper : UiStateMapper<ReviewCreationState, ReviewCreationUiState> {
 
     override fun map(state: ReviewCreationState): ReviewCreationUiState {
         val pages = ReviewCreationPage.entries
@@ -54,8 +52,8 @@ internal class ReviewCreationUiStateMapper(
                 .map { ProductInfoPageUiState.Picture(id = it.id, uri = it.uri) }
                 .toPersistentList(),
             price = state.currentPriceFieldValue,
-            priceCurrency = CurrencySymbol.getSymbol(priceCurrency.code) ?: priceCurrency.symbol,
-            productNameErrorText = context.getString(R.string.reviewcreation_productinfo_field_product_error_empty)
+            priceCurrency = Text.raw(CurrencySymbol.getSymbol(priceCurrency.code) ?: priceCurrency.symbol),
+            productNameErrorText = Text.resource(R.string.reviewcreation_productinfo_field_product_error_empty)
                 .takeUnless { state.isProductNameValid },
         )
     }
@@ -93,9 +91,9 @@ internal class ReviewCreationUiStateMapper(
 
         return TagsPageUiState(
             mainPictureUri = state.reviewDetails.pictures.firstOrNull()?.uri,
-            productName = state.reviewDetails.productName,
+            productName = Text.raw(state.reviewDetails.productName),
             searchQuery = state.tagsSearchQuery,
-            shouldShowAddTag = sortedTags.fastAll { it.value != state.tagsSearchQuery },
+            shouldShowAddTag = sortedTags.fastAll { it.value != Text.raw(state.tagsSearchQuery) },
             tags = sortedTags.toPersistentList(),
         )
     }
@@ -103,7 +101,7 @@ internal class ReviewCreationUiStateMapper(
     private fun createReviewInfoPageState(state: ReviewCreationState): ReviewInfoPageUiState {
         return ReviewInfoPageUiState(
             mainPictureUri = state.reviewDetails.pictures.firstOrNull()?.uri,
-            productName = state.reviewDetails.productName,
+            productName = Text.raw(state.reviewDetails.productName),
             rating = state.reviewDetails.rating,
             comment = state.reviewDetails.comment,
             advantages = state.reviewDetails.advantages,
@@ -120,7 +118,7 @@ internal class ReviewCreationUiStateMapper(
         ): TagsPageUiState.Tag {
             return TagsPageUiState.Tag(
                 id = id,
-                value = value,
+                value = Text.raw(value),
                 emoji = emoji,
                 isSelected = isSelected,
                 isRecommended = isRecommended,

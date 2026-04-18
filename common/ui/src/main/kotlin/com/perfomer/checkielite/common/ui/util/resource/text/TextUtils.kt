@@ -26,3 +26,9 @@ internal fun getArgValues(context: Context, args: List<Text>): Array<CharSequenc
 fun text(text: Text): String {
     return text.resolve(LocalContext.current).toString()
 }
+
+@Composable
+@ReadOnlyComposable
+fun textOrNull(text: Text?): String? {
+    return text?.let { text(it) }
+}

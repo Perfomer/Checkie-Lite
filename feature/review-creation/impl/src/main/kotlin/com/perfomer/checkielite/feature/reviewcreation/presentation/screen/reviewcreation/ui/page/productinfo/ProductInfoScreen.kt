@@ -40,6 +40,9 @@ import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.focusedFieldScrollContainer
 import com.perfomer.checkielite.common.ui.util.focusedFieldScrollTarget
 import com.perfomer.checkielite.common.ui.util.rememberFocusedFieldScroller
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.common.ui.util.resource.text.text
+import com.perfomer.checkielite.common.ui.util.resource.text.textOrNull
 import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.currencyselector.ui.widget.CurrencySymbol
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.LocalObstruction
@@ -108,7 +111,7 @@ internal fun ProductInfoScreen(
         Column(modifier = Modifier.padding(horizontal = ProductInfoContentPadding)) {
             CuiOutlinedField(
                 text = state.productName,
-                errorText = state.productNameErrorText,
+                errorText = textOrNull(state.productNameErrorText),
                 reservePlaceForError = true,
                 title = stringResource(R.string.reviewcreation_productinfo_field_product),
                 keyboardOptions = KeyboardOptions(
@@ -159,7 +162,7 @@ internal fun ProductInfoScreen(
                 visualTransformation = remember { DecimalInputVisualTransformation() },
                 trailingIcon = {
                     CurrencySymbol(
-                        currencySymbol = state.priceCurrency,
+                        currencySymbol = text(state.priceCurrency),
                         onClick = onPriceCurrencyClick,
                         modifier = Modifier
                             .requiredWidthIn(min = 156.dp)
@@ -186,7 +189,7 @@ private fun ProductInfoScreenPreview() = CheckieLiteTheme {
             brand = "Abobov",
             brandSuggestions = emptyPersistentList(),
             price = "0",
-            priceCurrency = "RUB",
+            priceCurrency = Text.raw("RUB"),
             picturesUri = persistentListOf(
                 ProductInfoPageUiState.Picture(id = "1", uri = "https://example.com/1"),
             ),

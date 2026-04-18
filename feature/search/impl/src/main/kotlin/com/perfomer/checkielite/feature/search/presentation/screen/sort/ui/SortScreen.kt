@@ -28,6 +28,8 @@ import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.core.domain.entity.sort.ReviewsSortingStrategy
 import com.perfomer.checkielite.feature.search.R
 import com.perfomer.checkielite.feature.search.presentation.screen.sort.ui.state.SortUiState
@@ -100,7 +102,7 @@ private fun SortingOptionItem(
             .padding(horizontal = 24.dp, vertical = 14.dp)
     ) {
         Text(
-            text = option.text,
+            text = text(option.text),
             fontSize = 16.sp,
             fontWeight = if (option.isSelected) FontWeight.Bold else FontWeight.Normal,
             modifier = Modifier.weight(1F)
@@ -127,12 +129,12 @@ internal val mockUiState = SortUiState(
     items = listOf(
         SortingOption(
             type = ReviewsSortingStrategy.NEWEST,
-            text = "Creation date",
+            text = Text.raw("Creation date"),
             isSelected = true,
         ),
         SortingOption(
             type = ReviewsSortingStrategy.MOST_RATED,
-            text = "Rating",
+            text = Text.raw("Rating"),
             isSelected = false,
         ),
     ),

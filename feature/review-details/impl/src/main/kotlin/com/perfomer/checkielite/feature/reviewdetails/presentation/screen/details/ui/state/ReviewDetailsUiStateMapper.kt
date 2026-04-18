@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detai
 import androidx.compose.ui.util.fastMap
 import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.core.domain.entity.price.CheckiePrice
 import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
 import com.perfomer.checkielite.core.domain.entity.review.CheckieTag
@@ -25,16 +26,16 @@ internal class ReviewDetailsUiStateMapper : UiStateMapper<ReviewDetailsState, Re
                 val review = content.review
 
                 ReviewDetailsUiState.Content(
-                    brandName = review.productBrand?.uppercase(),
-                    productName = review.productName,
-                    date = dateFormat.format(review.creationDate),
+                    brandName = review.productBrand?.uppercase()?.let(Text::raw),
+                    productName = Text.raw(review.productName),
+                    date = Text.raw(dateFormat.format(review.creationDate)),
                     rating = review.rating,
                     price = review.price?.toUi(),
                     picturesUri = review.pictures.fastMap { it.uri }.toPersistentList(),
                     currentPicturePosition = state.currentPicturePosition,
-                    comment = review.comment,
-                    advantages = review.advantages,
-                    disadvantages = review.disadvantages,
+                    comment = review.comment?.let(Text::raw),
+                    advantages = review.advantages?.let(Text::raw),
+                    disadvantages = review.disadvantages?.let(Text::raw),
                     isMenuAvailable = !review.isSyncing,
                     tags = review.tags.fastMap { it.toUi() }.toPersistentList(),
                     recommendations = content.recommendations.fastMap { it.toRecommendation() }.toPersistentList(),
@@ -49,7 +50,7 @@ internal class ReviewDetailsUiStateMapper : UiStateMapper<ReviewDetailsState, Re
     private fun CheckieTag.toUi(): Tag {
         return Tag(
             tagId = id,
-            text = value,
+            text = Text.raw(value),
             emoji = emoji,
         )
     }
@@ -57,8 +58,8 @@ internal class ReviewDetailsUiStateMapper : UiStateMapper<ReviewDetailsState, Re
     private fun CheckieReview.toRecommendation(): RecommendedReview {
         return RecommendedReview(
             reviewId = id,
-            brandName = productBrand?.uppercase(),
-            productName = productName,
+            brandName = productBrand?.uppercase()?.let(Text::raw),
+            productName = Text.raw(productName),
             pictureUri = pictures.firstOrNull()?.uri,
             rating = rating,
             isSyncing = isSyncing,
@@ -93,7 +94,7 @@ internal class ReviewDetailsUiStateMapper : UiStateMapper<ReviewDetailsState, Re
         }
 
         return Price(
-            value = formattedPrice,
+            value = Text.raw(formattedPrice),
             fractionalPartIndices = fractionalPartIndices,
         )
     }

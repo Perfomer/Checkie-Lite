@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.core.domain.entity.theme.ThemeMode
 import com.perfomer.checkielite.feature.settings.R
 import com.perfomer.checkielite.feature.settings.presentation.screen.theme.tea.core.ThemeState
@@ -24,7 +25,7 @@ internal class ThemeUiStateMapper(
         return ThemeOption(
             type = this,
             icon = icon,
-            text = context.getString(label),
+            text = Text.resource(label),
             isSelected = isSelected,
         )
     }

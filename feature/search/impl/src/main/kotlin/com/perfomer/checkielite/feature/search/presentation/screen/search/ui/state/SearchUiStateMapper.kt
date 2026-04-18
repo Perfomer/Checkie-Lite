@@ -4,6 +4,8 @@ import android.content.Context
 import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.common.ui.util.resource.text.plus
 import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
 import com.perfomer.checkielite.core.domain.entity.search.RatingRange
 import com.perfomer.checkielite.core.domain.entity.sort.ReviewsSortingStrategy
@@ -43,11 +45,11 @@ internal class SearchUiStateMapper(
         val isApplied = sorting != ReviewsSortingStrategy.RELEVANCE
 
         val strategyResource = sorting.label
-        val postfix = ": " + context.getString(strategyResource)
+        val postfix = Text.raw(": ") + Text.raw(context.getString(strategyResource))
 
         return Filter(
             type = FilterType.SORT,
-            text = context.getString(R.string.search_sort) + postfix,
+            text = Text.resource(R.string.search_sort) + postfix,
             isApplied = isApplied,
         )
     }
@@ -55,11 +57,11 @@ internal class SearchUiStateMapper(
     private fun createRatingFilter(state: SearchState): Filter {
         val ratingRange = state.searchFilters.ratingRange
         val isApplied = ratingRange != RatingRange.default
-        val postfix = if (isApplied) ": ${ratingRange.min}-${ratingRange.max}" else ""
+        val postfix = if (isApplied) Text.raw(": ${ratingRange.min}-${ratingRange.max}") else Text.empty()
 
         return Filter(
             type = FilterType.RATING,
-            text = context.getString(R.string.search_filter_rating) + postfix,
+            text = Text.resource(R.string.search_filter_rating) + postfix,
             isApplied = isApplied,
         )
     }
@@ -77,8 +79,8 @@ internal class SearchUiStateMapper(
                 else -> LeadingIcon(selectedTagsIds.size.toString(), LeadingIconType.BADGE)
             },
             text = when (selectedTagsIds.size) {
-                1 -> firstSelectedTag.value
-                else -> context.getString(R.string.search_filters_tags)
+                1 -> Text.raw(firstSelectedTag.value)
+                else -> Text.resource(R.string.search_filters_tags)
             },
             isApplied = selectedTagsIds.isNotEmpty(),
         )

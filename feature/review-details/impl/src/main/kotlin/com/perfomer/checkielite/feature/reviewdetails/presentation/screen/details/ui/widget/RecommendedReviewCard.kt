@@ -35,6 +35,8 @@ import com.perfomer.checkielite.common.ui.cui.widget.text.CuiFadedText
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.RecommendedReview
 
 @Composable
@@ -77,7 +79,7 @@ internal fun RecommendedReviewCard(
 
                 if (hasBrand) {
                     CuiFadedText(
-                        text = review.brandName!!,
+                        text = text(review.brandName),
                         maxLines = 1,
                         fontSize = 12.sp,
                         color = LocalCuiPalette.current.TextAccent,
@@ -90,7 +92,7 @@ internal fun RecommendedReviewCard(
                 }
 
                 CuiFadedText(
-                    text = review.productName,
+                    text = text(review.productName),
                     maxLines = if (hasBrand) 1 else 2,
                     fontSize = 14.sp,
                     color = LocalCuiPalette.current.TextPrimary,
@@ -159,7 +161,14 @@ private fun RecommendedReviewPicture(
 @WidgetPreview
 private fun RecommendedReviewCardPreview() = CheckieLiteTheme {
     RecommendedReviewCard(
-        review = RecommendedReview("", "DARKSIDE", "Lemonblast", null, 10, false),
+        review = RecommendedReview(
+            reviewId = "",
+            brandName = Text.raw("DARKSIDE"),
+            productName = Text.raw("Lemonblast"),
+            pictureUri = null,
+            rating = 10,
+            isSyncing = false,
+        ),
         onClick = {},
     )
 }

@@ -2,6 +2,7 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.backup.ui.
 
 import android.content.Context
 import com.perfomer.checkielite.common.tea.component.UiStateMapper
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.core.domain.entity.backup.BackupMode
 import com.perfomer.checkielite.core.domain.entity.backup.BackupProgress
 import com.perfomer.checkielite.feature.settings.R
@@ -16,11 +17,11 @@ internal class BackupUiStateMapper(
 
         return BackupUiState(
             title = when (state.mode) {
-                BackupMode.IMPORT -> context.getString(R.string.settings_backup_title_import)
-                BackupMode.EXPORT -> context.getString(R.string.settings_backup_title_export)
+                BackupMode.IMPORT -> Text.resource(R.string.settings_backup_title_import)
+                BackupMode.EXPORT -> Text.resource(R.string.settings_backup_title_export)
             },
             backupProgress = state.progressValue,
-            progressLabel = "$progressPercent%",
+            progressLabel = Text.raw("$progressPercent%"),
             isCancelAvailable = state.backupProgress is BackupProgress.InProgress,
             progressBarStyle = when (state.backupProgress) {
                 is BackupProgress.None,

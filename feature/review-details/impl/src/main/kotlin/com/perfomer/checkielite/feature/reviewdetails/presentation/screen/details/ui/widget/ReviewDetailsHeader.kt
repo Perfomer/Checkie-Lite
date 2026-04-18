@@ -12,17 +12,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.common.ui.util.resource.text.text
 
 @Composable
 internal fun ReviewDetailsHeader(
-    productName: String,
-    brandName: String?,
+    productName: Text,
+    brandName: Text?,
 ) {
     SelectionContainer {
         Column {
             if (brandName != null) {
                 Text(
-                    text = brandName,
+                    text = text(brandName),
                     color = LocalCuiPalette.current.TextAccent,
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
@@ -33,7 +35,7 @@ internal fun ReviewDetailsHeader(
             }
 
             Text(
-                text = productName,
+                text = text(productName),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(horizontal = 24.dp)

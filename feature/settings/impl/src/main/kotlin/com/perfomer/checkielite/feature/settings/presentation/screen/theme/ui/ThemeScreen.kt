@@ -29,6 +29,8 @@ import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.core.domain.entity.theme.ThemeMode
 import com.perfomer.checkielite.feature.settings.R
 import com.perfomer.checkielite.feature.settings.presentation.screen.theme.ui.state.ThemeOption
@@ -97,7 +99,7 @@ private fun ThemeOptionItem(
         )
 
         Text(
-            text = option.text,
+            text = text(option.text),
             fontSize = 16.sp,
             fontWeight = if (option.isSelected) FontWeight.Bold else FontWeight.Normal,
             modifier = Modifier.weight(1F)
@@ -125,19 +127,19 @@ internal val mockUiState = ThemeUiState(
         ThemeOption(
             type = ThemeMode.SYSTEM,
             icon = R.drawable.ic_theme_system,
-            text = "System",
+            text = Text.raw("System"),
             isSelected = true,
         ),
         ThemeOption(
             type = ThemeMode.LIGHT,
             icon = R.drawable.ic_theme_light,
-            text = "Light",
+            text = Text.raw("Light"),
             isSelected = false,
         ),
         ThemeOption(
             type = ThemeMode.DARK,
             icon = R.drawable.ic_theme_dark,
-            text = "Dark",
+            text = Text.raw("Dark"),
             isSelected = false,
         ),
     ),

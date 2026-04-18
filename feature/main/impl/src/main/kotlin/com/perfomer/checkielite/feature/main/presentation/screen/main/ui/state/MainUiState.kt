@@ -2,6 +2,8 @@ package com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state
 
 import androidx.compose.runtime.Immutable
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.feature.main.R
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -26,3 +28,11 @@ data class Tag(
     val value: String,
     val emoji: String?,
 )
+
+@Immutable
+internal data class WhatsNewBanner(
+    val title: Text,
+) {
+    val subtitle: Text = Text.resource(R.string.main_changelog_subtitle)
+    val badge: Text = Text.resource(R.string.main_changelog_badge)
+}

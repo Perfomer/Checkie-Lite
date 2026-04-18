@@ -28,6 +28,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
+import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.TagsPageUiState
 
 @Composable
@@ -112,14 +113,14 @@ internal fun TagsTagChip(
 
             Box {
                 Text(
-                    text = tag.value,
+                    text = text(tag.value),
                     color = textColor,
                 )
 
                 // Crutch to keep size reserved for medium font weight
                 // to avoid text flickering after chip become selected
                 Text(
-                    text = tag.value,
+                    text = text(tag.value),
                     color = Color.Transparent,
                     fontWeight = FontWeight.Medium,
                 )

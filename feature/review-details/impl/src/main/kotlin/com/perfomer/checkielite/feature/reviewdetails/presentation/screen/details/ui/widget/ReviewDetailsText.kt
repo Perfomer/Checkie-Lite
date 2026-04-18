@@ -5,12 +5,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 
 @Composable
 internal fun ReviewDetailsText(
-    comment: String?,
-    advantages: String?,
-    disadvantages: String?,
+    comment: Text?,
+    advantages: Text?,
+    disadvantages: Text?,
     onEmptyCommentClick: () -> Unit,
 ) {
     if (comment != null) {

@@ -25,6 +25,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiTagChip
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
+import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.feature.reviewdetails.R
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.Tag
 import kotlinx.collections.immutable.ImmutableList
@@ -57,7 +58,7 @@ internal fun ReviewDetailsTags(
         for (tag in tags) {
             key(tag.tagId) {
                 CuiTagChip(
-                    text = tag.text,
+                    text = text(tag.text),
                     emoji = tag.emoji,
                     onClick = { onTagClick(tag.tagId) },
                 )

@@ -53,6 +53,7 @@ import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.pxToDp
+import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.feature.search.R
 import com.perfomer.checkielite.feature.search.presentation.screen.tags.ui.state.TagsUiState
 import kotlinx.coroutines.delay
@@ -113,7 +114,7 @@ internal fun TagsScreen(
                     for (tag in state.tags) {
                         key(tag.tagId) {
                             CuiTagChip(
-                                text = tag.text,
+                                text = text(tag.text),
                                 emoji = tag.emoji,
                                 isSelected = tag.isSelected,
                                 onClick = { onTagClick(tag.tagId) },

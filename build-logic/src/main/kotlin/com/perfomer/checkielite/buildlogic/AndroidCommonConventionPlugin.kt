@@ -57,7 +57,6 @@ class AndroidCommonConventionPlugin : Plugin<Project> {
         compileSdk = 36
 
         defaultConfig {
-            targetSdk = 36
             minSdk = 24
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             vectorDrawables.useSupportLibrary = true

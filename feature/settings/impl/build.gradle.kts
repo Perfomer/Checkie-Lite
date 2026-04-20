@@ -1,7 +1,6 @@
 plugins {
 	alias(libs.plugins.android.library)
 	alias(libs.plugins.compose.compiler)
-	alias(libs.plugins.kotlin.android)
 	alias(libs.plugins.kotlinx.serialization)
 	id("checkie.android.common")
 }

@@ -46,23 +46,21 @@ import com.perfomer.checkielite.feature.main.R
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.WhatsNewBanner
 
 private val BannerShape = RoundedCornerShape(24.dp)
-private val BadgeShape = RoundedCornerShape(20.dp)
+private val BadgeShape = RoundedCornerShape(16.dp)
 private val PreviewCardShape = RoundedCornerShape(20.dp)
 private val PillShape = RoundedCornerShape(100.dp)
 
 private object BannerDimens {
-    val OuterHorizontalPadding = 20.dp
     val ContentStartPadding = 18.dp
     val ContentTopPadding = 16.dp
-    val ContentEndPadding = 110.dp
+    val ContentEndPadding = 120.dp
     val ContentBottomPadding = 24.dp
-    val ContentSpacing = 10.dp
     val TitleSpacing = 4.dp
 
-    val BadgeDotSize = 7.dp
-    val BadgeSpacing = 6.dp
-    val BadgeHorizontalPadding = 10.dp
-    val BadgeVerticalPadding = 6.dp
+    val BadgeDotSize = 5.dp
+    val BadgeSpacing = 8.dp
+    val BadgeHorizontalPadding = 12.dp
+    val BadgeVerticalPadding = 5.dp
 
     val CloseTouchTarget = 36.dp
     val CloseContainerSize = 28.dp
@@ -142,7 +140,6 @@ internal fun ChangelogBanner(
 
     Box(
         modifier = modifier
-            .padding(horizontal = BannerDimens.OuterHorizontalPadding)
             .fillMaxWidth()
             .clip(BannerShape)
             .background(colors.backgroundBrush)
@@ -227,7 +224,6 @@ private fun ChangelogBannerContent(
     colors: ChangelogBannerColors,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(BannerDimens.ContentSpacing),
         modifier = Modifier
             .fillMaxWidth()
             .padding(
@@ -241,6 +237,8 @@ private fun ChangelogBannerContent(
             state = state,
             colors = colors
         )
+
+        Spacer(Modifier.height(6.dp))
 
         Column(verticalArrangement = Arrangement.spacedBy(BannerDimens.TitleSpacing)) {
             Text(
@@ -276,7 +274,7 @@ private fun ChangelogBannerBadge(
         modifier = Modifier
             .clip(BadgeShape)
             .background(colors.badgeBackgroundColor)
-            .border(1.dp, colors.badgeBorderColor, BadgeShape)
+            .border(0.8.dp, colors.badgeBorderColor, BadgeShape)
             .padding(
                 horizontal = BannerDimens.BadgeHorizontalPadding,
                 vertical = BannerDimens.BadgeVerticalPadding,
@@ -291,7 +289,7 @@ private fun ChangelogBannerBadge(
 
         Text(
             text = text(state.badge),
-            fontSize = 11.sp,
+            fontSize = 10.sp,
             fontWeight = FontWeight.Medium,
             color = colors.badgeTextColor,
         )

@@ -138,16 +138,21 @@ private fun Content(
             .imePadding()
     ) {
         item {
-            Spacer(modifier = Modifier.height(4.dp))
-            SearchField(onSearchClick = onSearchClick)
-            Spacer(modifier = Modifier.height(16.dp))
+            SearchField(
+                onSearchClick = onSearchClick,
+                modifier = Modifier.padding(top = 4.dp, bottom = 16.dp)
+            )
         }
 
         if (state.tags.isNotEmpty()) {
             item {
-                Spacer(modifier = Modifier.height(8.dp))
-                TagsRow(tags = state.tags, onTagClick = onTagClick)
-                Spacer(modifier = Modifier.height(16.dp))
+                TagsRow(
+                    tags = state.tags,
+                    onTagClick = onTagClick,
+                    modifier = Modifier
+                        .animateItem()
+                        .padding(top = 8.dp, bottom = 16.dp)
+                )
             }
         }
 
@@ -157,13 +162,10 @@ private fun Content(
                     state = banner,
                     onClick = onChangelogClick,
                     onCloseClick = onChangelogCloseClick,
-                    modifier = Modifier.animateItem()
-                )
-
-                Spacer(
                     modifier = Modifier
-                        .height(8.dp)
                         .animateItem()
+                        .padding(horizontal = 20.dp)
+                        .padding(bottom = 8.dp)
                 )
             }
         }
@@ -172,7 +174,11 @@ private fun Content(
             items = state.reviews,
             key = { item -> item.id },
         ) { item ->
-            CuiReviewHorizontalItem(item, onReviewClick)
+            CuiReviewHorizontalItem(
+                item = item,
+                onClick = onReviewClick,
+                modifier = Modifier.animateItem()
+            )
         }
 
         item {
@@ -252,10 +258,11 @@ private fun TopAppBar(
 @Composable
 private fun SearchField(
     onSearchClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
             .clip(RoundedCornerShape(16.dp))
@@ -282,6 +289,7 @@ private fun SearchField(
 private fun TagsRow(
     tags: ImmutableList<Tag>,
     onTagClick: (id: String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val rows = remember(tags) { TagRowUiBalancer.split(tags) }
 
@@ -300,7 +308,7 @@ private fun TagsRow(
 
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
             .padding(horizontal = 20.dp)

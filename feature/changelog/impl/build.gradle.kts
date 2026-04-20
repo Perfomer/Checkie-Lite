@@ -9,7 +9,9 @@ android {
     buildFeatures.compose = true
 
     sourceSets {
-        getByName("debug").assets.srcDir(rootProject.file("changelog"))
+        getByName("debug") {
+            assets.directories += rootProject.file("changelog").path
+        }
     }
 }
 

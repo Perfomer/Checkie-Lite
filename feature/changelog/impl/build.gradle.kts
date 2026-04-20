@@ -32,8 +32,9 @@ dependencies {
     implementation(libs.compose.markdown)
     implementation(libs.koin.android)
     implementation(libs.koin.core)
-    implementation(libs.ktor.client.android)
-    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.android) {
+        exclude("org.jetbrains.kotlinx", "kotlinx-coroutines-slf4j")
+    }
     implementation(platform(libs.androidx.compose.bom))
 
     testImplementation(libs.test.junitJupiter)

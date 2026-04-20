@@ -9,8 +9,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.android.tools.build:gradle:9.1.1")
-    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:2.3.20")
+    compileOnly(libs.android.gradle.plugin)
+    compileOnly(libs.kotlin.gradle.plugin)
 }
 
 gradlePlugin {

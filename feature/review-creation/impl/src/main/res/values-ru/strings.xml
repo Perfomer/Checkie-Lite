@@ -66,4 +66,5 @@
     <string name="reviewcreation_tags_badge_selected">%d выбрано</string>
     <string name="reviewcreation_tags_badge_total">%d всего</string>
     <string name="reviewcreation_tags_badge_recommended">%d рек.</string>
+    <string name="reviewcreation_tags_recommended_scroll">%d рекомендовано</string>
 </resources>

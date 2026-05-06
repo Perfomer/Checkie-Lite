@@ -33,6 +33,7 @@
     <string name="reviewcreation_tags_badge_selected">%d picked</string>
     <string name="reviewcreation_tags_badge_total">%d total</string>
     <string name="reviewcreation_tags_badge_recommended">%d hot</string>
+    <string name="reviewcreation_tags_recommended_scroll">%d recommended</string>
     <string name="reviewcreation_tags_create_tag_generic">Create tag</string>
     <string name="reviewcreation_tags_create_tag_specific">Create \"%s\"</string>
 

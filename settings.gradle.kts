@@ -41,6 +41,7 @@ include(
 )
 
 include(
+    ":feature:appfunctions:impl",
     ":feature:changelog:api",
     ":feature:changelog:impl",
     ":feature:gallery:api",

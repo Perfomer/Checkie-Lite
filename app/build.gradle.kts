@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.aboutLibraries)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.ksp)
     id("checkie.android.common")
 }
 
@@ -49,6 +50,10 @@ android {
     }
 }
 
+ksp {
+    arg("appfunctions:aggregateAppFunctions", "true")
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }
@@ -62,6 +67,7 @@ dependencies {
     implementation(projects.core.datasource.local.impl)
     implementation(projects.core.theme.api)
     implementation(projects.core.theme.impl)
+    implementation(projects.feature.appfunctions.impl)
     implementation(projects.feature.changelog.impl)
     implementation(projects.feature.gallery.impl)
     implementation(projects.feature.main.impl)
@@ -72,6 +78,8 @@ dependencies {
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appfunctions)
+    implementation(libs.androidx.appfunctions.service)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.ktx.splashscreen)
@@ -82,6 +90,8 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.core)
     implementation(platform(libs.androidx.compose.bom))
+
+    ksp(libs.androidx.appfunctions.compiler)
 
     testImplementation(libs.test.junitJupiter)
     testRuntimeOnly(libs.test.junitPlatformLauncher)

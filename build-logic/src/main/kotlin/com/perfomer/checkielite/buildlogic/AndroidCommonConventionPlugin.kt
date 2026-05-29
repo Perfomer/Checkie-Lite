@@ -35,10 +35,10 @@ class AndroidCommonConventionPlugin : Plugin<Project> {
     }
 
     private fun ApplicationExtension.configureCommonAndroid(javaVersion: Int) {
-        compileSdk = 36
+        compileSdk = 37
 
         defaultConfig {
-            targetSdk = 36
+            targetSdk = 37
             minSdk = 24
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             vectorDrawables.useSupportLibrary = true
@@ -54,7 +54,7 @@ class AndroidCommonConventionPlugin : Plugin<Project> {
     }
 
     private fun LibraryExtension.configureCommonAndroid(javaVersion: Int) {
-        compileSdk = 36
+        compileSdk = 37
 
         defaultConfig {
             minSdk = 24

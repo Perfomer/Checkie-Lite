@@ -8,18 +8,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
-import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalToastController
-import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberErrorToast
-import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberSuccessToast
-import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberWarningToast
-import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.common.ui.cui.widget.toast.showToast
 import com.perfomer.checkielite.core.navigation.Screen
-import com.perfomer.checkielite.feature.settings.R
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.SettingsStore
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowConfirmImportDialog
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowToast
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowToast.Reason
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackupExportClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnBackupImportClick
@@ -40,9 +34,6 @@ internal class SettingsContentScreen(private val store: SettingsStore) : Screen 
         }
 
         val toastController = LocalToastController.current
-        val syncingInProgressToast = rememberWarningToast(Text.resource(CommonString.common_toast_syncing))
-        val appUpToDateToast = rememberSuccessToast(Text.resource(R.string.settings_toast_update_check_succeed))
-        val failedCheckUpdatesToast = rememberErrorToast(Text.resource(R.string.settings_toast_update_check_failed))
 
         var shouldShowBackupImportConfirmDialog by remember { mutableStateOf(false) }
 
@@ -50,11 +41,8 @@ internal class SettingsContentScreen(private val store: SettingsStore) : Screen 
             when (effect) {
                 is ShowConfirmImportDialog -> shouldShowBackupImportConfirmDialog = true
                 is ShowToast -> toastController.showToast(
-                    when (effect.reason) {
-                        Reason.SYNCING_IN_PROGRESS -> syncingInProgressToast
-                        Reason.APP_IS_UP_TO_DATE -> appUpToDateToast
-                        Reason.FAILED_TO_CHECK_UPDATES -> failedCheckUpdatesToast
-                    }
+                    message = effect.text,
+                    style = effect.style,
                 )
             }
         }

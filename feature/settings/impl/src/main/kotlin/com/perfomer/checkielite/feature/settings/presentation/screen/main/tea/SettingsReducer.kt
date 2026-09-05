@@ -2,6 +2,10 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea
 
 import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
+import com.perfomer.checkielite.common.ui.CommonString
+import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastStyle
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.feature.settings.R
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.CheckHasReviews
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.CheckSyncing
@@ -14,7 +18,6 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowConfirmImportDialog
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowToast
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowToast.Reason
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.CheckingHasReviewsStatusUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.CurrentLocaleUpdated
@@ -58,12 +61,25 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
             is Lce.Content -> {
                 state { copy(isCheckUpdatesInProgress = false) }
 
-                if (event.hasUpdates.content) commands(LaunchAppUpdate)
-                else effects(ShowToast(Reason.APP_IS_UP_TO_DATE))
+                if (event.hasUpdates.content) {
+                    commands(LaunchAppUpdate)
+                } else {
+                    effects(
+                        ShowToast(
+                            text = Text.resource(R.string.settings_toast_update_check_succeed),
+                            style = ToastStyle.SUCCESS,
+                        ),
+                    )
+                }
             }
             is Lce.Error -> {
                 state { copy(isCheckUpdatesInProgress = false) }
-                effects(ShowToast(Reason.FAILED_TO_CHECK_UPDATES))
+                effects(
+                    ShowToast(
+                        text = Text.resource(R.string.settings_toast_update_check_failed),
+                        style = ToastStyle.ERROR,
+                    ),
+                )
             }
         }
         is CurrentLocaleUpdated -> state { copy(currentLocale = event.locale) }
@@ -78,14 +94,25 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
         is OnBackPress -> commands(Exit)
         is OnStart -> commands(LoadCurrentLocale)
         is OnBackupExportClick -> {
-            when {
-                state.isSyncingInProgress -> effects(ShowToast(Reason.SYNCING_IN_PROGRESS))
-                else -> commands(ExportBackup)
+            if (state.isSyncingInProgress) {
+                effects(
+                    ShowToast(
+                        text = Text.resource(CommonString.common_toast_syncing),
+                        style = ToastStyle.WARNING,
+                    ),
+                )
+            } else {
+                commands(ExportBackup)
             }
         }
         is OnBackupImportClick -> {
             when {
-                state.isSyncingInProgress -> effects(ShowToast(Reason.SYNCING_IN_PROGRESS))
+                state.isSyncingInProgress -> effects(
+                    ShowToast(
+                        text = Text.resource(CommonString.common_toast_syncing),
+                        style = ToastStyle.WARNING,
+                    ),
+                )
                 state.hasReviews -> effects(ShowConfirmImportDialog)
                 else -> commands(SelectBackupFile)
             }

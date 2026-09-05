@@ -1,6 +1,9 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea
 
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
+import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastStyle
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationCommand
@@ -13,9 +16,9 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcr
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.CollapseTagValueField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.FocusTagValueField
-import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowErrorToast
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowExitConfirmationDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowTagDeleteConfirmationDialog
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowToast
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.VibrateError
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEmojiCategory
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEvent
@@ -155,7 +158,12 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
         }
         is TagSaving.Failed -> {
             state { copy(isSaving = false) }
-            effects(ShowErrorToast.SavingFailed)
+            effects(
+                ShowToast(
+                    text = Text.resource(R.string.tagcreation_error_save),
+                    style = ToastStyle.ERROR,
+                ),
+            )
         }
     }
 
@@ -167,7 +175,12 @@ internal class TagCreationReducer : DslReducer<TagCreationCommand, TagCreationEf
         }
         is TagDeletion.Failed -> {
             state { copy(isDeleting = false) }
-            effects(ShowErrorToast.DeletionFailed)
+            effects(
+                ShowToast(
+                    text = Text.resource(R.string.tagcreation_error_delete),
+                    style = ToastStyle.ERROR,
+                ),
+            )
         }
     }
 

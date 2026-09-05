@@ -30,12 +30,14 @@ import com.perfomer.checkielite.common.ui.cui.widget.scrim.NavBarScrim
 import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalToastController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastHost
-import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberSuccessToast
+import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastStyle
+import com.perfomer.checkielite.common.ui.cui.widget.toast.showToast
 import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
 import com.perfomer.checkielite.common.ui.util.TransparentSystemBars
 import com.perfomer.checkielite.common.ui.util.navigation.DefaultBottomSheetDismissHandlerOwner
 import com.perfomer.checkielite.common.ui.util.navigation.LocalBottomSheetDismissHandlerOwner
 import com.perfomer.checkielite.common.ui.util.navigation.registerPredictiveBackHandler
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.common.update.api.AppUpdateManager
 import com.perfomer.checkielite.common.update.api.updateIfAvailable
 import com.perfomer.checkielite.core.navigation.NavigationHost
@@ -50,6 +52,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import kotlin.time.Duration.Companion.milliseconds
 
 class AppActivity : AppCompatActivity() {
 
@@ -118,14 +121,15 @@ class AppActivity : AppCompatActivity() {
     private fun RestartActionsHandler(restartActions: ImmutableList<RestartAction>) {
         val toastController = LocalToastController.current
 
-        val backupImportSuccessToast = rememberSuccessToast(R.string.settings_backup_success_import)
-
         LaunchedEffect(Unit) {
             restartActions.forEach { restartAction ->
                 when (restartAction) {
                     is ShowSuccessBackupImportToast -> {
-                        delay(1_500L)
-                        toastController.showToast(backupImportSuccessToast)
+                        delay(1_500L.milliseconds)
+                        toastController.showToast(
+                            message = Text.resource(R.string.settings_backup_success_import),
+                            style = ToastStyle.SUCCESS,
+                        )
                     }
                 }
             }

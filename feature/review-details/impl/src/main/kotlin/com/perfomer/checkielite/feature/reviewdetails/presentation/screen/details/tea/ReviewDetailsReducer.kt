@@ -4,7 +4,11 @@ import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.pure.state.requireContent
 import com.perfomer.checkielite.common.pure.state.toLoadingContentAware
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
+import com.perfomer.checkielite.common.ui.CommonString
+import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastStyle
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationStartAction
+import com.perfomer.checkielite.feature.reviewdetails.R
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand.DeleteReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand.LoadReview
@@ -77,7 +81,12 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
             Unit
         }
         is ReviewDeletion.Succeed -> {
-            effects(ShowToast.Deleted)
+            effects(
+                ShowToast(
+                    text = Text.resource(R.string.reviewdetails_toast_deleted),
+                    style = ToastStyle.NEUTRAL,
+                ),
+            )
             commands(Exit)
         }
         is ReviewDeletion.Failed -> {
@@ -87,7 +96,12 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
 
     private fun reduceOnEditClick(startAction: ReviewCreationStartAction) {
         if (state.review.requireContent().review.isSyncing) {
-            effects(ShowToast.Syncing)
+            effects(
+                ShowToast(
+                    text = Text.resource(CommonString.common_toast_syncing),
+                    style = ToastStyle.WARNING,
+                ),
+            )
         } else {
             commands(OpenReviewEdit(reviewId = state.reviewId, startAction = startAction))
         }

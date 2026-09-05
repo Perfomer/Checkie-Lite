@@ -15,10 +15,6 @@ android {
     }
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
-
 dependencies {
     api(projects.feature.changelog.api)
     implementation(projects.common.android)

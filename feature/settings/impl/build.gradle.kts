@@ -10,10 +10,6 @@ android {
 	buildFeatures.compose = true
 }
 
-tasks.withType<Test> {
-	useJUnitPlatform()
-}
-
 dependencies {
 	api(projects.feature.settings.api)
 	implementation(projects.common.android)

@@ -16,6 +16,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberErrorToast
 import com.perfomer.checkielite.common.ui.util.VibratorPattern
 import com.perfomer.checkielite.common.ui.util.navigation.BottomSheetDismissHandler
 import com.perfomer.checkielite.common.ui.util.rememberVibrator
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.common.ui.util.vibrateCompat
 import com.perfomer.checkielite.core.navigation.Screen
 import com.perfomer.checkielite.feature.reviewcreation.R
@@ -55,8 +56,8 @@ internal class TagCreationContentScreen(
         }
 
         val toastController = LocalToastController.current
-        val deleteErrorToast = rememberErrorToast(R.string.tagcreation_error_delete)
-        val saveErrorToast = rememberErrorToast(R.string.tagcreation_error_save)
+        val deleteErrorToast = rememberErrorToast(Text.resource(R.string.tagcreation_error_delete))
+        val saveErrorToast = rememberErrorToast(Text.resource(R.string.tagcreation_error_save))
 
         var isConfirmDeleteDialogShown by remember { mutableStateOf(false) }
         var isConfirmExitDialogShown by remember { mutableStateOf(false) }

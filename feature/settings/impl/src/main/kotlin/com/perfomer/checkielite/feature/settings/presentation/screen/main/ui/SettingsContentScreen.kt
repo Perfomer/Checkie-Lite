@@ -13,6 +13,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalToastController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberErrorToast
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberSuccessToast
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberWarningToast
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.core.navigation.Screen
 import com.perfomer.checkielite.feature.settings.R
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.SettingsStore
@@ -39,9 +40,9 @@ internal class SettingsContentScreen(private val store: SettingsStore) : Screen 
         }
 
         val toastController = LocalToastController.current
-        val syncingInProgressToast = rememberWarningToast(message = CommonString.common_toast_syncing)
-        val appUpToDateToast = rememberSuccessToast(message = R.string.settings_toast_update_check_succeed)
-        val failedCheckUpdatesToast = rememberErrorToast(message = R.string.settings_toast_update_check_failed)
+        val syncingInProgressToast = rememberWarningToast(Text.resource(CommonString.common_toast_syncing))
+        val appUpToDateToast = rememberSuccessToast(Text.resource(R.string.settings_toast_update_check_succeed))
+        val failedCheckUpdatesToast = rememberErrorToast(Text.resource(R.string.settings_toast_update_check_failed))
 
         var shouldShowBackupImportConfirmDialog by remember { mutableStateOf(false) }
 

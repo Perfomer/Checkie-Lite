@@ -8,6 +8,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalToastController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberErrorToast
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberSuccessToast
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberToast
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.core.navigation.Screen
 import com.perfomer.checkielite.feature.settings.R
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.BackupStore
@@ -24,13 +25,13 @@ internal class BackupContentScreen(private val store: BackupStore) : Screen {
 
         val toastController = LocalToastController.current
 
-        val noSpaceLeftToast = rememberErrorToast(R.string.settings_backup_failure_common_no_space)
-        val importFailedCommonToast = rememberErrorToast(R.string.settings_backup_failure_import)
-        val importFailedUpdateRequiredToast = rememberErrorToast(R.string.settings_backup_failure_import_need_update)
-        val importCancelledToast = rememberToast(R.string.settings_backup_cancel_import)
-        val exportFailedCommonToast = rememberErrorToast(R.string.settings_backup_failure_export)
-        val exportSucceedToast = rememberSuccessToast(R.string.settings_backup_success_export)
-        val exportCancelledToast = rememberToast(R.string.settings_backup_cancel_export)
+        val noSpaceLeftToast = rememberErrorToast(Text.resource(R.string.settings_backup_failure_common_no_space))
+        val importFailedCommonToast = rememberErrorToast(Text.resource(R.string.settings_backup_failure_import))
+        val importFailedUpdateRequiredToast = rememberErrorToast(Text.resource(R.string.settings_backup_failure_import_need_update))
+        val importCancelledToast = rememberToast(Text.resource(R.string.settings_backup_cancel_import))
+        val exportFailedCommonToast = rememberErrorToast(Text.resource(R.string.settings_backup_failure_export))
+        val exportSucceedToast = rememberSuccessToast(Text.resource(R.string.settings_backup_success_export))
+        val exportCancelledToast = rememberToast(Text.resource(R.string.settings_backup_cancel_export))
 
         EffectHandler { effect ->
             when (effect) {

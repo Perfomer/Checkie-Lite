@@ -11,6 +11,7 @@ import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalToastController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberToast
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberWarningToast
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.core.navigation.Screen
 import com.perfomer.checkielite.feature.reviewdetails.R
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsStore
@@ -39,8 +40,8 @@ internal class ReviewDetailsContentScreen(
         val toastController = LocalToastController.current
         var isConfirmDeleteDialogShown by remember { mutableStateOf(false) }
 
-        val syncingToast = rememberWarningToast(CommonString.common_toast_syncing)
-        val deletedToast = rememberToast(R.string.reviewdetails_toast_deleted)
+        val syncingToast = rememberWarningToast(Text.resource(CommonString.common_toast_syncing))
+        val deletedToast = rememberToast(Text.resource(R.string.reviewdetails_toast_deleted))
 
         EffectHandler { effect ->
             when (effect) {

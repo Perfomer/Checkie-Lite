@@ -5,6 +5,7 @@ import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalToastController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberSuccessToast
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.core.navigation.Screen
 import com.perfomer.checkielite.feature.main.R
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.MainStore
@@ -24,7 +25,7 @@ internal class MainContentScreen(private val store: MainStore) : Screen {
     override fun Screen() = TeaComposable(store) { state ->
         val toastController = LocalToastController.current
 
-        val reviewCreatedToast = rememberSuccessToast(message = R.string.main_toast_reviewcreated)
+        val reviewCreatedToast = rememberSuccessToast(Text.resource(R.string.main_toast_reviewcreated))
 
         EffectHandler { effect ->
             when (effect) {

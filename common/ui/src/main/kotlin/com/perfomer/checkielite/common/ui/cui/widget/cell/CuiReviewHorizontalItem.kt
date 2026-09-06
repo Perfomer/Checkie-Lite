@@ -52,6 +52,7 @@ fun CuiReviewHorizontalItem(
     contentPadding: PaddingValues = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
     imageCornerRadius: Dp = 16.dp,
     imageSize: Dp = 48.dp,
+    imageRightOffset: Dp = 16.dp,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -93,7 +94,7 @@ fun CuiReviewHorizontalItem(
             SyncingBlock(item.isSyncing)
         }
 
-        CuiSpacer(16.dp)
+        CuiSpacer(imageRightOffset)
 
         Column(modifier = Modifier.weight(1F)) {
             CuiFadedText(

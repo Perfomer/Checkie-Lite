@@ -80,7 +80,7 @@ import com.perfomer.checkielite.feature.main.presentation.util.TagRowUiBalancer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-private val ReviewCardCornerRadius = 20.dp
+private val ReviewCardCornerRadius = 24.dp
 private val ReviewCardImageInset = 8.dp
 
 @Composable
@@ -240,6 +240,7 @@ private fun Content(
                     ),
                     imageCornerRadius = ReviewCardCornerRadius - ReviewCardImageInset,
                     imageSize = 56.dp,
+                    imageRightOffset = 12.dp,
                 )
             }
         }

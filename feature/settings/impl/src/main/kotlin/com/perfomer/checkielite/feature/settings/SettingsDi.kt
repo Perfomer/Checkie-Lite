@@ -34,6 +34,8 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.ac
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.ImportBackupActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.LoadCurrentLocaleActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.LoadThemeActor
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.LoadLiquidGlassActor
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.SetLiquidGlassActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.actor.SettingsNavigationActor
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.SettingsContentScreen
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.ui.state.SettingsUiStateMapper
@@ -95,6 +97,8 @@ internal fun createSettingsStore(
             CheckUpdatesActor(appUpdateManager),
             LoadCurrentLocaleActor(context),
             LoadThemeActor(themeManager),
+            LoadLiquidGlassActor(themeManager),
+            SetLiquidGlassActor(themeManager),
             SettingsLaunchAppUpdateActor(appUpdateManager),
         ),
     )

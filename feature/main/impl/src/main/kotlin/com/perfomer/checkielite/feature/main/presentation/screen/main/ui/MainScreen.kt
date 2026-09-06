@@ -68,6 +68,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiTagChip
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
+import com.perfomer.checkielite.common.ui.theme.LocalLiquidGlassEnabled
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.app.appNameSpannable
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
@@ -187,7 +188,7 @@ private fun Content(
         modifier = Modifier
             .fillMaxSize()
             .imePadding()
-            .thenIf(isRenderEffectSupported()) { layerBackdrop(backdrop) }
+            .thenIf(LocalLiquidGlassEnabled.current && isRenderEffectSupported()) { layerBackdrop(backdrop) }
     ) {
         item(key = "header") {
             MainHeaderBackground(

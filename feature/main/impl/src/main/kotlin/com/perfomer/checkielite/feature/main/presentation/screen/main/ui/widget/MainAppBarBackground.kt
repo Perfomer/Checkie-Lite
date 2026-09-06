@@ -17,6 +17,7 @@ import com.kyant.backdrop.highlight.Highlight
 import com.kyant.backdrop.isRenderEffectSupported
 import com.perfomer.checkielite.common.ui.cui.modifier.thenElse
 import com.perfomer.checkielite.common.ui.cui.modifier.thenIf
+import com.perfomer.checkielite.common.ui.theme.LocalLiquidGlassEnabled
 
 private val GlassShape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)
 
@@ -31,7 +32,7 @@ internal fun MainAppBarBackground(
         modifier = modifier
             // Fade only the glass; toolbar text and touch targets stay fully opaque.
             .graphicsLayer { alpha = progress() }
-            .thenIf(isRenderEffectSupported()) {
+            .thenIf(LocalLiquidGlassEnabled.current && isRenderEffectSupported()) {
                 drawBackdrop(
                     backdrop = backdrop,
                     shape = { GlassShape },
@@ -52,7 +53,7 @@ internal fun MainAppBarBackground(
                 )
             }
             .thenElse {
-                // Preserve the readable scroll background on Android 7–11.
+                // Keep the scroll background readable when glass is off or unsupported.
                 drawBehind { drawRect(backgroundColor) }
             }
     )

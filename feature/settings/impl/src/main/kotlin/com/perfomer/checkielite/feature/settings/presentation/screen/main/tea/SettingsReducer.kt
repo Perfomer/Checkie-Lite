@@ -15,6 +15,8 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.LaunchAppUpdate
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.LoadCurrentLocale
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.LoadTheme
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.LoadLiquidGlass
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.SetLiquidGlass
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowConfirmImportDialog
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowToast
@@ -22,6 +24,9 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.CheckingHasReviewsStatusUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.CurrentLocaleUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.Initialize
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.LiquidGlassUpdated
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.LiquidGlassSaved
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.LiquidGlassSaveFailed
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.SyncingStatusUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.ThemeUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.UpdatesCheck
@@ -42,6 +47,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnChangelogClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnCheckUpdatesClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnLanguageSettingsClick
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnLiquidGlassChanged
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnLibrariesClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnStart
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnThemeSettingsClick
@@ -84,10 +90,23 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
         }
         is CurrentLocaleUpdated -> state { copy(currentLocale = event.locale) }
         is ThemeUpdated -> state { copy(currentTheme = event.theme) }
+        is LiquidGlassUpdated -> state { copy(isLiquidGlassEnabled = event.enabled) }
+        is LiquidGlassSaved -> state {
+            copy(isLiquidGlassEnabled = event.enabled, isLiquidGlassChangeInProgress = false)
+        }
+        is LiquidGlassSaveFailed -> {
+            state { copy(isLiquidGlassChangeInProgress = false) }
+            effects(
+                ShowToast(
+                    text = Text.resource(R.string.settings_toast_liquid_glass_failed),
+                    style = ToastStyle.ERROR,
+                ),
+            )
+        }
     }
 
     private fun reduceInitialize() {
-        commands(CheckSyncing, CheckHasReviews, LoadCurrentLocale, LoadTheme)
+        commands(CheckSyncing, CheckHasReviews, LoadCurrentLocale, LoadTheme, LoadLiquidGlass)
     }
 
     private fun reduceUi(event: SettingsUiEvent) = when (event) {
@@ -123,6 +142,14 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
         is OnLanguageSettingsClick -> commands(OpenLanguageSettings)
         is OnLibrariesClick -> commands(OpenLibraries)
         is OnThemeSettingsClick -> commands(OpenThemeSettings(state.currentTheme))
+        is OnLiquidGlassChanged -> {
+            if (!state.isLiquidGlassChangeInProgress && state.isLiquidGlassEnabled != event.enabled) {
+                state { copy(isLiquidGlassChangeInProgress = true) }
+                commands(SetLiquidGlass(event.enabled))
+            } else {
+                Unit
+            }
+        }
     }
 
     private fun reduceNavigation(event: SettingsNavigationEvent) = when (event) {

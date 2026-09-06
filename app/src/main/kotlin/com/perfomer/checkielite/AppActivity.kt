@@ -209,6 +209,6 @@ class AppActivity : AppCompatActivity() {
     }
 
     private fun prepareTheme() = lifecycleScope.launch {
-        themeManager.warmUpThemeMode()
+        themeManager.warmUp()
     }
 }

@@ -7,4 +7,8 @@ interface ThemeRepository {
     suspend fun getThemeMode(): ThemeMode?
 
     suspend fun setThemeMode(themeMode: ThemeMode)
+
+    suspend fun isLiquidGlassEnabled(): Boolean
+
+    suspend fun setLiquidGlassEnabled(enabled: Boolean)
 }

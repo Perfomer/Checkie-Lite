@@ -32,5 +32,6 @@ dependencies {
 	implementation(platform(libs.androidx.compose.bom))
 
 	testImplementation(libs.test.junitJupiter)
+	testImplementation(libs.test.mockk)
 	testRuntimeOnly(libs.test.junitPlatformLauncher)
 }

@@ -17,6 +17,12 @@ internal sealed interface SettingsEvent {
     class CurrentLocaleUpdated(val locale: Locale) : SettingsEvent
 
     class ThemeUpdated(val theme: ThemeMode) : SettingsEvent
+
+    class LiquidGlassUpdated(val enabled: Boolean) : SettingsEvent
+
+    class LiquidGlassSaved(val enabled: Boolean) : SettingsEvent
+
+    data object LiquidGlassSaveFailed : SettingsEvent
 }
 
 internal sealed interface SettingsUiEvent : SettingsEvent {
@@ -40,6 +46,8 @@ internal sealed interface SettingsUiEvent : SettingsEvent {
     data object OnChangelogClick : SettingsUiEvent
 
     data object OnThemeSettingsClick : SettingsUiEvent
+
+    class OnLiquidGlassChanged(val enabled: Boolean) : SettingsUiEvent
 }
 
 internal sealed interface SettingsNavigationEvent : SettingsEvent {

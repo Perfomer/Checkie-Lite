@@ -21,6 +21,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnChangelogClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnCheckUpdatesClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnLanguageSettingsClick
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnLiquidGlassChanged
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnLibrariesClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnStart
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnThemeSettingsClick
@@ -61,6 +62,7 @@ internal class SettingsContentScreen(private val store: SettingsStore) : Screen 
             onChangelogClick = acceptable(OnChangelogClick),
             onLanguageSettingsClick = acceptable(OnLanguageSettingsClick),
             onThemeSettingsClick = acceptable(OnThemeSettingsClick),
+            onLiquidGlassChanged = { accept(OnLiquidGlassChanged(it)) },
             onLibrariesClick = acceptable(OnLibrariesClick),
         )
     }

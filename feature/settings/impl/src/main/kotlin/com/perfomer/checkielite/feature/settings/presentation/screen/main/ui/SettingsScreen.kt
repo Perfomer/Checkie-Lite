@@ -4,6 +4,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -16,6 +19,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -26,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,6 +66,7 @@ internal fun SettingsScreen(
     onChangelogClick: () -> Unit = {},
     onLanguageSettingsClick: () -> Unit = {},
     onThemeSettingsClick: () -> Unit = {},
+    onLiquidGlassChanged: (Boolean) -> Unit = {},
     onLibrariesClick: () -> Unit = {},
 ) {
     Scaffold(
@@ -84,6 +90,7 @@ internal fun SettingsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
+                .verticalScroll(rememberScrollState())
         ) {
             SettingsHeader(version = state.appVersion)
 
@@ -102,6 +109,7 @@ internal fun SettingsScreen(
                 onLanguageSettingsClick = onLanguageSettingsClick,
                 onLibrariesClick = onLibrariesClick,
                 onThemeSettingsClick = onThemeSettingsClick,
+                onLiquidGlassChanged = onLiquidGlassChanged,
             )
         }
 
@@ -180,6 +188,7 @@ private fun AppGroup(
     onChangelogClick: () -> Unit,
     onLanguageSettingsClick: () -> Unit,
     onThemeSettingsClick: () -> Unit,
+    onLiquidGlassChanged: (Boolean) -> Unit,
     onLibrariesClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -211,6 +220,12 @@ private fun AppGroup(
             subtitle = text(state.themeMode),
             icon = painterResource(state.themeIcon),
             onClick = onThemeSettingsClick,
+        )
+
+        LiquidGlassToggle(
+            checked = state.isLiquidGlassEnabled,
+            enabled = !state.isLiquidGlassChangeInProgress,
+            onCheckedChange = onLiquidGlassChanged,
         )
 
         SettingsItem(
@@ -245,6 +260,58 @@ private fun AppGroup(
                     )
                 }
             },
+        )
+    }
+}
+
+@Composable
+private fun LiquidGlassToggle(
+    checked: Boolean,
+    enabled: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .defaultMinSize(minHeight = 56.dp)
+            .fillMaxWidth()
+            .toggleable(
+                value = checked,
+                enabled = enabled,
+                role = Role.Switch,
+                onValueChange = onCheckedChange,
+            )
+            .padding(horizontal = 20.dp, vertical = 9.dp)
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_liquid_glass),
+            contentDescription = null,
+            tint = LocalCuiPalette.current.IconAccent,
+            modifier = Modifier.size(20.dp)
+        )
+
+        CuiSpacer(16.dp)
+
+        Column(modifier = Modifier.weight(1F)) {
+            Text(
+                text = stringResource(R.string.settings_group_app_item_liquid_glass),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium,
+            )
+            Text(
+                text = stringResource(R.string.settings_group_app_item_liquid_glass_desc),
+                fontSize = 12.sp,
+                lineHeight = 16.sp,
+                color = LocalCuiPalette.current.TextSecondary,
+            )
+        }
+
+        CuiSpacer(12.dp)
+
+        Switch(
+            checked = checked,
+            enabled = enabled,
+            onCheckedChange = null,
         )
     }
 }
@@ -352,4 +419,6 @@ internal val mockUiState = SettingsUiState(
     currentLanguage = Text.raw("English"),
     themeIcon = R.drawable.ic_theme_system,
     themeMode = Text.raw("System"),
+    isLiquidGlassEnabled = true,
+    isLiquidGlassChangeInProgress = false,
 )

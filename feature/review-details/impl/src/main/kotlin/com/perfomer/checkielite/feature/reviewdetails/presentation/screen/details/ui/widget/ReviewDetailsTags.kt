@@ -107,6 +107,7 @@ private fun AddTagChip(onClick: () -> Unit) {
         },
         style = addTagStyle,
         onClick = onClick,
+        modifier = Modifier.softShadow(shape = CircleShape, radius = 8.dp)
     ) {
         Text(stringResource(R.string.reviewdetails_tags_add))
     }

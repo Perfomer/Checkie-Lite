@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.modifier.toolbarDivider
+import com.perfomer.checkielite.common.ui.cui.modifier.thenIf
 import com.perfomer.checkielite.common.ui.cui.modifier.debounced
 import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiDropdownIcon
 import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiDropdownMenuItem
@@ -111,10 +112,12 @@ internal fun ReviewDetailsAppBar(
         windowInsets = StableInsets.statusBars(),
         modifier = modifier
             .fillMaxWidth()
-            .toolbarDivider(
-                show = shouldShowDivider,
-                strokeColor = LocalCuiPalette.current.OutlineSecondary,
-            )
+            .thenIf(shouldShowDivider) {
+                toolbarDivider(
+                    show = true,
+                    strokeColor = LocalCuiPalette.current.OutlineSecondary,
+                )
+            }
     )
 }
 

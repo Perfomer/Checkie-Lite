@@ -131,7 +131,7 @@ fun ReviewRatingGlow(glowWidthFraction: Float = 0.3F, modifier: Modifier = Modif
     )
 }
 
-private fun meshBrush(color: Color, alpha: Float): Brush = Brush.radialGradient(
+internal fun meshBrush(color: Color, alpha: Float): Brush = Brush.radialGradient(
     0F to color.copy(alpha = alpha),
     0.35F to color.copy(alpha = alpha * 0.72F),
     0.7F to color.copy(alpha = alpha * 0.18F),
@@ -140,7 +140,7 @@ private fun meshBrush(color: Color, alpha: Float): Brush = Brush.radialGradient(
     radius = 1F,
 )
 
-private fun DrawScope.drawMeshSpot(
+internal fun DrawScope.drawMeshSpot(
     brush: Brush,
     center: Offset,
     radiusX: Float,

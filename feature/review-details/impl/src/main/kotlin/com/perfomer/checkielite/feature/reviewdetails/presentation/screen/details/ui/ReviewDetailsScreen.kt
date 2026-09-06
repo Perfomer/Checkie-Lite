@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -63,6 +64,7 @@ internal fun ReviewDetailsScreen(
     val scrollState = rememberLazyListState()
     val palette = LocalCuiPalette.current
     val backgroundColor = lerp(palette.BackgroundPrimary, palette.BackgroundAccentTertiary, 0.4F)
+    val toolbarFadeDistance = with(LocalDensity.current) { 24.dp.toPx() }
 
     SharedNavigationContainer(
         contentId = (state as? ReviewDetailsUiState.Content)?.reviewId,
@@ -75,6 +77,13 @@ internal fun ReviewDetailsScreen(
         CuiGlassScaffold(
             containerColor = Color.Transparent,
             toolbarColor = backgroundColor,
+            toolbarBackgroundProgress = {
+                when {
+                    !scrollState.canScrollBackward -> 0F
+                    scrollState.firstVisibleItemIndex > 0 -> 1F
+                    else -> (scrollState.firstVisibleItemScrollOffset / toolbarFadeDistance).coerceIn(0F, 1F)
+                }
+            },
             topBar = {
                 ReviewDetailsAppBar(
                     scrollState = scrollState,

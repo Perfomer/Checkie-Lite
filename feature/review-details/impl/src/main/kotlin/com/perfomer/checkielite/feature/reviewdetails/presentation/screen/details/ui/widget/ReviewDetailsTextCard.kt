@@ -23,8 +23,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
+import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
@@ -37,15 +37,15 @@ internal fun ReviewDetailsTextCard(
     header: @Composable () -> Unit,
 ) {
     Surface(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(20.dp),
         color = LocalCuiPalette.current.BackgroundElevationBase,
         modifier = Modifier
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = 24.dp)
             .fillMaxWidth()
-            .softShadow(shape = RoundedCornerShape(24.dp))
+            .softShadow(shape = RoundedCornerShape(20.dp))
     ) {
         Column(
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
             header()
 
@@ -53,8 +53,6 @@ internal fun ReviewDetailsTextCard(
                 Text(
                     text = text(text),
                     fontSize = 16.sp,
-                    lineHeight = 24.sp,
-                    color = LocalCuiPalette.current.TextPrimary,
                 )
             }
         }
@@ -63,20 +61,19 @@ internal fun ReviewDetailsTextCard(
 
 @Composable
 internal fun ReviewDetailsTextEmptyCard(
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     Surface(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(20.dp),
         color = LocalCuiPalette.current.BackgroundElevationBase,
         onClick = onClick,
         modifier = Modifier
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = 24.dp)
             .fillMaxWidth()
-            .softShadow(shape = RoundedCornerShape(24.dp))
+            .softShadow(shape = RoundedCornerShape(20.dp))
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
             ReviewDetailsTextHeader(
                 title = stringResource(R.string.reviewdetails_comment),
@@ -142,7 +139,7 @@ internal fun ReviewDetailsTextHeader(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 12.dp)
+            .padding(bottom = 8.dp),
     ) {
         Icon(
             painter = icon,
@@ -156,9 +153,8 @@ internal fun ReviewDetailsTextHeader(
 
         Text(
             text = title,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = LocalCuiPalette.current.TextPrimary,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Medium,
             modifier = Modifier.padding(horizontal = 8.dp)
         )
     }

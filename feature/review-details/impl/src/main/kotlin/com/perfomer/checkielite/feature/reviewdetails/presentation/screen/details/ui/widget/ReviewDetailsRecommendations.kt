@@ -1,51 +1,53 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewCard
-import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
-import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
-import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.feature.reviewdetails.R
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.RecommendedReview
 import kotlinx.collections.immutable.ImmutableList
 
-internal fun LazyListScope.reviewDetailsRecommendations(
+@Composable
+internal fun ReviewDetailsRecommendations(
     recommendations: ImmutableList<RecommendedReview>,
     onRecommendationClick: (recommendedReviewId: String) -> Unit,
 ) {
-    if (recommendations.isEmpty()) return
+    if (recommendations.isNotEmpty()) {
+        Spacer(Modifier.height(24.dp))
 
-    item(key = "recommendations") {
         Text(
-            text = stringResource(R.string.reviewdetails_recommendations),
+            text = stringResource(id = R.string.reviewdetails_recommendations),
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
-            color = LocalCuiPalette.current.TextPrimary,
-            modifier = Modifier.padding(horizontal = 20.dp).padding(top = 28.dp, bottom = 16.dp)
+            modifier = Modifier.padding(horizontal = 24.dp)
         )
-    }
-    items(items = recommendations, key = { "recommendation:${it.reviewId}" }) { review ->
-        CuiReviewCard(
-            item = ReviewItem(
-                id = review.reviewId,
-                title = text(review.productName),
-                brand = review.brandName?.let { text(it) },
-                imageUri = review.pictureUri,
-                rating = review.rating,
-                isSyncing = review.isSyncing,
-            ),
-            onClick = onRecommendationClick,
-            // Details-to-details navigation does not request a shared transition.
-            isTransitionEnabled = { false },
-            modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 12.dp)
-        )
+
+        LazyRow(
+            contentPadding = PaddingValues(top = 20.dp, start = 24.dp, end = 24.dp, bottom = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            itemsIndexed(
+                items = recommendations,
+                key = { _, item -> item.reviewId }
+            ) { _, item ->
+                RecommendedReviewCard(
+                    review = item,
+                    onClick = onRecommendationClick,
+                )
+            }
+        }
     }
 }

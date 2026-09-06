@@ -28,7 +28,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-internal fun FloatingDiamond(modifier: Modifier = Modifier) {
+fun FloatingDiamond(modifier: Modifier = Modifier) {
     val isDark = LocalCuiPalette.current.BackgroundElevationBase.luminance() < 0.5F
     val transition = rememberInfiniteTransition(label = "Floating diamond")
     val phase = transition.animateFloat(

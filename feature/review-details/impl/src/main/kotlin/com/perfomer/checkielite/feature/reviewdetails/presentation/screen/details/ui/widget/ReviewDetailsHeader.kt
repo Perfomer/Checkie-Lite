@@ -23,14 +23,16 @@ internal fun ReviewDetailsHeader(
     brandModifier: Modifier = Modifier,
 ) {
     SelectionContainer {
-        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
+        Column {
             if (brandName != null) {
                 Text(
                     text = text(brandName),
                     color = LocalCuiPalette.current.TextAccent,
-                    fontWeight = FontWeight.Medium,
+                    fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
-                    modifier = brandModifier
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .then(brandModifier)
                 )
 
                 Spacer(Modifier.height(8.dp))
@@ -38,11 +40,11 @@ internal fun ReviewDetailsHeader(
 
             Text(
                 text = text(productName),
-                fontSize = 28.sp,
-                lineHeight = 34.sp,
-                color = LocalCuiPalette.current.TextPrimary,
+                fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = titleModifier
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .then(titleModifier)
             )
         }
     }

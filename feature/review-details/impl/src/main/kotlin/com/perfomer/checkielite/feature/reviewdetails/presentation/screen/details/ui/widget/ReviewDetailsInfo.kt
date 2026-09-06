@@ -4,32 +4,42 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
 import com.perfomer.checkielite.common.ui.cui.modifier.thenIf
+import com.perfomer.checkielite.common.ui.cui.widget.cell.FloatingDiamond
+import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRatingGlow
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewReaction
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
@@ -44,144 +54,196 @@ internal fun ReviewDetailsInfo(
     price: Price?,
     onRatingClick: () -> Unit,
     onEmptyPriceClick: () -> Unit,
+    ratingValueModifier: Modifier = Modifier,
+    ratingIconModifier: Modifier = Modifier,
 ) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.padding(horizontal = 20.dp).padding(top = 24.dp)
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(
-                text = stringResource(R.string.reviewdetails_review),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = LocalCuiPalette.current.TextPrimary,
-            )
-            Text(
-                text = text(date),
-                color = LocalCuiPalette.current.TextSecondary,
-                fontSize = 13.sp,
-            )
-        }
+    Spacer(Modifier.height(20.dp))
 
-        // Keep long prices and enlarged text readable on compact screens.
-        BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-            if (maxWidth < 320.dp || LocalDensity.current.fontScale > 1.3F) {
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    RatingCard(rating = rating, onClick = onRatingClick)
-                    PriceCard(price = price, onEmptyPriceClick = onEmptyPriceClick)
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.reviewdetails_review),
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.weight(1F)
+        )
+
+        Text(
+            text = text(date),
+            color = LocalCuiPalette.current.TextSecondary,
+            fontSize = 14.sp,
+        )
+    }
+
+    Spacer(Modifier.height(16.dp))
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    ) {
+        val reviewReaction = remember(rating) { ReviewReaction.createFromRating(rating) }
+        val ratingValue = remember(rating) { "$rating/10" }
+
+        InfoCell(
+            value = AnnotatedString(ratingValue),
+            valueModifier = ratingValueModifier,
+            description = stringResource(R.string.reviewdetails_rating),
+            isPerfectRating = rating == 10,
+            iconBackgroundColor = if (rating == 10) Color.Transparent else LocalCuiPalette.current.BackgroundSecondary,
+            icon = {
+                if (rating == 10) {
+                    FloatingDiamond(modifier = ratingIconModifier.size(26.dp))
+                } else {
+                    Image(
+                        painter = painterResource(reviewReaction.drawable),
+                        contentDescription = stringResource(reviewReaction.contentDescription),
+                        modifier = ratingIconModifier.size(26.dp)
+                    )
                 }
-            } else {
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    RatingCard(rating = rating, onClick = onRatingClick, modifier = Modifier.weight(1F))
-                    PriceCard(price = price, onEmptyPriceClick = onEmptyPriceClick, modifier = Modifier.weight(1F))
-                }
-            }
+            },
+            fromLeft = true,
+            onClick = onRatingClick,
+            modifier = Modifier.weight(1F)
+        )
+
+        if (price != null) {
+            InfoCell(
+                value = buildAnnotatedString {
+                    append(text(price.value))
+
+                    if (price.fractionalPartIndices != null) {
+                        addStyle(SpanStyle(fontSize = 14.sp), price.fractionalPartIndices.first, price.fractionalPartIndices.last)
+                    }
+                },
+                description = stringResource(R.string.reviewdetails_price),
+                icon = {
+                    Icon(
+                        painter = painterResource(R.drawable.reviewdetails_ic_price),
+                        contentDescription = null,
+                        tint = LocalCuiPalette.current.IconSecondary,
+                    )
+                },
+                fromLeft = false,
+                modifier = Modifier.weight(1F)
+            )
+        } else {
+            InfoCell(
+                value = AnnotatedString(stringResource(R.string.reviewdetails_price_specify_value)),
+                valueColor = LocalCuiPalette.current.TextAccent,
+                description = stringResource(R.string.reviewdetails_price_specify_description),
+                descriptionColor = LocalCuiPalette.current.TextAccent,
+                descriptionOffset = (-3).dp,
+                icon = {
+                    Icon(
+                        painter = painterResource(R.drawable.reviewdetails_ic_price),
+                        contentDescription = null,
+                        tint = LocalCuiPalette.current.IconAccent,
+                    )
+                },
+                iconBackgroundColor = LocalCuiPalette.current.BackgroundAccentSecondary,
+                fromLeft = false,
+                onClick = onEmptyPriceClick,
+                modifier = Modifier.weight(1F)
+            )
         }
     }
 }
 
 @Composable
-private fun RatingCard(
-    rating: Int,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val reaction = ReviewReaction.createFromRating(rating)
-    InfoCard(
-        value = buildAnnotatedString {
-            append(rating.toString())
-            pushStyle(SpanStyle(fontSize = 14.sp, color = LocalCuiPalette.current.TextSecondary))
-            append(" / 10")
-            pop()
-        },
-        description = stringResource(R.string.reviewdetails_rating),
-        icon = {
-            Image(
-                painter = painterResource(reaction.drawable),
-                contentDescription = stringResource(reaction.contentDescription),
-                modifier = Modifier.size(32.dp)
-            )
-        },
-        onClick = onClick,
-        modifier = modifier
-    )
-}
-
-@Composable
-private fun PriceCard(
-    price: Price?,
-    onEmptyPriceClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    InfoCard(
-        value = if (price == null) {
-            AnnotatedString(stringResource(R.string.reviewdetails_price_specify_value))
-        } else {
-            buildAnnotatedString {
-                append(text(price.value))
-                price.fractionalPartIndices?.let { indices ->
-                    addStyle(SpanStyle(fontSize = 14.sp), indices.first, indices.last)
-                }
-            }
-        },
-        description = stringResource(R.string.reviewdetails_price),
-        valueColor = if (price == null) LocalCuiPalette.current.TextAccent else LocalCuiPalette.current.TextPrimary,
-        icon = {
-            Icon(
-                painter = painterResource(R.drawable.reviewdetails_ic_price),
-                contentDescription = null,
-                tint = LocalCuiPalette.current.IconAccent,
-                modifier = Modifier
-                    .size(32.dp)
-                    .background(LocalCuiPalette.current.BackgroundAccentSecondary, CircleShape)
-                    .padding(6.dp)
-            )
-        },
-        onClick = if (price == null) onEmptyPriceClick else null,
-        modifier = modifier
-    )
-}
-
-@Composable
-private fun InfoCard(
+private fun InfoCell(
     value: AnnotatedString,
     description: String,
-    icon: @Composable () -> Unit,
-    valueColor: Color = LocalCuiPalette.current.TextPrimary,
+    icon: @Composable BoxScope.() -> Unit,
+    fromLeft: Boolean,
+    modifier: Modifier = Modifier,
+    valueColor: Color = Color.Unspecified,
+    descriptionColor: Color = LocalCuiPalette.current.TextSecondary,
+    iconBackgroundColor: Color = LocalCuiPalette.current.BackgroundSecondary,
+    descriptionOffset: Dp = 0.dp,
     onClick: (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    valueModifier: Modifier = Modifier,
+    isPerfectRating: Boolean = false,
 ) {
-    val shape = RoundedCornerShape(24.dp)
-    Surface(
-        shape = shape,
-        color = LocalCuiPalette.current.BackgroundElevationBase,
-        modifier = modifier.fillMaxWidth().softShadow(shape = shape)
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+    @Composable
+    fun IconBox() {
+        Box(
+            contentAlignment = Alignment.Center,
+            content = icon,
             modifier = Modifier
-                .thenIf(onClick != null) { clickable(onClick = { onClick?.invoke() }) }
-                .padding(16.dp)
+                .size(36.dp)
+                .clip(CircleShape)
+                .background(iconBackgroundColor)
+        )
+    }
+
+    Row(
+        horizontalArrangement = if (fromLeft) Arrangement.Start else Arrangement.End,
+        modifier = modifier
+    ) {
+        val startPadding = if (fromLeft) 8.dp else 12.dp
+        val endPadding = if (fromLeft) 12.dp else 8.dp
+
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(12.dp))
+                .thenIf(onClick != null) { clickable(onClick = onClick!!) }
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                icon()
-                Text(
-                    text = description,
-                    color = LocalCuiPalette.current.TextSecondary,
-                    fontSize = 13.sp,
-                    modifier = Modifier.weight(1F)
+            if (isPerfectRating) {
+                ReviewRatingGlow(
+                    glowWidthFraction = 1F,
+                    modifier = Modifier.matchParentSize().graphicsLayer { scaleX = -1F }
                 )
             }
-            Text(
-                text = value,
-                color = valueColor,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 22.sp,
-                lineHeight = 28.sp,
-            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = if (fromLeft) Arrangement.Start else Arrangement.End,
+                modifier = Modifier
+                    .padding(vertical = 4.dp)
+                    .padding(start = startPadding, end = endPadding)
+            ) {
+                if (fromLeft) {
+                    IconBox()
+                    Spacer(Modifier.width(8.dp))
+                }
+
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = if (fromLeft) Alignment.Start else Alignment.End,
+                ) {
+                    Text(
+                        text = value,
+                        fontSize = 16.sp,
+                        color = valueColor,
+                        fontWeight = FontWeight.Medium,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            platformStyle = PlatformTextStyle(includeFontPadding = false),
+                        ),
+                        modifier = valueModifier
+                    )
+
+                    Text(
+                        text = description,
+                        fontSize = 12.sp,
+                        color = descriptionColor,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            platformStyle = PlatformTextStyle(includeFontPadding = false)
+                        ),
+                        modifier = Modifier.offset(y = descriptionOffset)
+                    )
+                }
+
+                if (!fromLeft) {
+                    Spacer(Modifier.width(8.dp))
+                    IconBox()
+                }
+            }
         }
     }
 }

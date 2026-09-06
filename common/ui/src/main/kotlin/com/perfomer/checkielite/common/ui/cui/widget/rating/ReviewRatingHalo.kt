@@ -68,6 +68,17 @@ fun ReviewRatingHalo(
             val periwinkle = meshBrush(Color(0xFF929BFF), alpha = if (isDark) 0.25F else 0.48F)
             val cyan = meshBrush(Color(0xFF41E3EB), alpha = if (isDark) 0.30F else 0.62F)
             val pearl = meshBrush(Color(0xFFE9FAFF), alpha = if (isDark) 0.06F else 0.88F)
+            val lightRadius = 28.dp.toPx()
+            val lightColor = Color(0xFFF4FCFF)
+            val lightOpacity = if (isDark) 0.58F else 0.98F
+            val diamondLight = Brush.radialGradient(
+                0F to lightColor.copy(alpha = lightOpacity),
+                0.32F to lightColor.copy(alpha = lightOpacity * 0.96F),
+                0.62F to lightColor.copy(alpha = lightOpacity * 0.52F),
+                1F to lightColor.copy(alpha = 0F),
+                center = center,
+                radius = lightRadius,
+            )
 
             onDrawBehind {
                 val driftX = sin(phase.value)
@@ -106,6 +117,8 @@ fun ReviewRatingHalo(
                     }
                     canvas.restore()
                 }
+                // Match the card's steady light above the mesh, unaffected by its moving colors or mask.
+                drawCircle(brush = diamondLight, radius = lightRadius, center = center)
             }
         }
     )

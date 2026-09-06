@@ -40,7 +40,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalDensity
@@ -49,9 +48,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kyant.backdrop.Backdrop
+import com.kyant.backdrop.backdrops.LayerBackdrop
+import com.kyant.backdrop.backdrops.layerBackdrop
+import com.kyant.backdrop.backdrops.rememberLayerBackdrop
+import com.kyant.backdrop.isRenderEffectSupported
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
+import com.perfomer.checkielite.common.ui.cui.modifier.thenIf
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiFloatingActionButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
@@ -69,6 +74,7 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.Tag
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.WhatsNewBanner
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.ChangelogBanner
+import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.MainAppBarBackground
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.MainHeaderBackground
 import com.perfomer.checkielite.feature.main.presentation.util.TagRowUiBalancer
 import kotlinx.collections.immutable.ImmutableList
@@ -91,6 +97,11 @@ internal fun MainScreen(
     val scrollState = rememberLazyListState()
     val palette = LocalCuiPalette.current
     val backgroundColor = lerp(palette.BackgroundPrimary, palette.BackgroundAccentTertiary, 0.4F)
+    val backdrop = rememberLayerBackdrop {
+        // Include the screen color in the gaps between cards when sampling the list.
+        drawRect(backgroundColor)
+        drawContent()
+    }
 
     Scaffold(
         containerColor = backgroundColor,
@@ -119,6 +130,7 @@ internal fun MainScreen(
                     onSearchClick = onSearchClick,
                     scrollState = scrollState,
                     backgroundColor = backgroundColor,
+                    backdrop = backdrop,
                 )
             } else {
                 MainHeaderBackground(content = { TopAppBar(onSettingsClick = onSettingsClick) })
@@ -132,6 +144,7 @@ internal fun MainScreen(
                 state = state,
                 scrollState = scrollState,
                 contentPadding = contentPadding,
+                backdrop = backdrop,
                 onSearchClick = onSearchClick,
                 onReviewClick = onReviewClick,
                 onTagClick = onTagClick,
@@ -151,6 +164,7 @@ private fun Content(
     state: MainUiState.Content,
     scrollState: LazyListState,
     contentPadding: PaddingValues,
+    backdrop: LayerBackdrop,
     onSearchClick: () -> Unit = {},
     onReviewClick: (id: String) -> Unit,
     onTagClick: (id: String) -> Unit,
@@ -164,6 +178,7 @@ private fun Content(
         modifier = Modifier
             .fillMaxSize()
             .imePadding()
+            .thenIf(isRenderEffectSupported()) { layerBackdrop(backdrop) }
     ) {
         item(key = "header") {
             MainHeaderBackground(
@@ -272,6 +287,7 @@ private fun TopAppBar(
     onSearchClick: () -> Unit = {},
     scrollState: LazyListState? = null,
     backgroundColor: Color = Color.Transparent,
+    backdrop: Backdrop? = null,
 ) {
     val searchScrollThreshold = with(LocalDensity.current) { 56.dp.toPx() }
     val showSearch by remember(scrollState, searchScrollThreshold) {
@@ -283,38 +299,55 @@ private fun TopAppBar(
         }
     }
 
-    CenterAlignedTopAppBar(
-        title = { Text(text = appNameSpannable(), fontSize = 20.sp) },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-        actions = {
-            AnimatedVisibility(
-                visible = showSearch,
-                enter = fadeIn(tween(200)),
-                exit = fadeOut(tween(200)),
-            ) {
-                CuiIconButton(
-                    painter = painterResource(CommonDrawable.ic_search),
-                    contentDescription = stringResource(CommonString.common_search),
-                    onClick = onSearchClick,
+    val showBackground by remember(scrollState) {
+        derivedStateOf {
+            scrollState != null && (
+                scrollState.firstVisibleItemIndex > 0 || scrollState.firstVisibleItemScrollOffset > 0
                 )
-            }
+        }
+    }
+    val backgroundScrollThreshold = with(LocalDensity.current) { 24.dp.toPx() }
 
-            CuiIconButton(
-                painter = painterResource(R.drawable.ic_settings),
-                onClick = onSettingsClick,
+    Box {
+        if (showBackground && scrollState != null && backdrop != null) {
+            MainAppBarBackground(
+                backdrop = backdrop,
+                backgroundColor = backgroundColor,
+                progress = {
+                    if (scrollState.firstVisibleItemIndex > 0) {
+                        1F
+                    } else {
+                        (scrollState.firstVisibleItemScrollOffset / backgroundScrollThreshold).coerceIn(0F, 1F)
+                    }
+                },
+                modifier = Modifier.matchParentSize()
             )
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .drawBehind {
-                val backgroundAlpha = when {
-                    scrollState == null -> 0F
-                    scrollState.firstVisibleItemIndex > 0 -> 1F
-                    else -> (scrollState.firstVisibleItemScrollOffset / 24.dp.toPx()).coerceIn(0F, 1F)
+        }
+
+        CenterAlignedTopAppBar(
+            title = { Text(text = appNameSpannable(), fontSize = 20.sp) },
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+            actions = {
+                AnimatedVisibility(
+                    visible = showSearch,
+                    enter = fadeIn(tween(200)),
+                    exit = fadeOut(tween(200)),
+                ) {
+                    CuiIconButton(
+                        painter = painterResource(CommonDrawable.ic_search),
+                        contentDescription = stringResource(CommonString.common_search),
+                        onClick = onSearchClick,
+                    )
                 }
-                drawRect(color = backgroundColor, alpha = backgroundAlpha)
-            }
-    )
+
+                CuiIconButton(
+                    painter = painterResource(R.drawable.ic_settings),
+                    onClick = onSettingsClick,
+                )
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
 
 @Composable

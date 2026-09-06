@@ -26,6 +26,7 @@ dependencies {
 
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
+    implementation(libs.backdrop)
     implementation(libs.koin.core)
     implementation(platform(libs.androidx.compose.bom))
 

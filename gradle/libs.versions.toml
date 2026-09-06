@@ -13,6 +13,7 @@ androidx-core = "1.19.0"
 androidx-core-ktx-splashscreen = "1.2.0"
 androidx-lifecycle-ktx = "2.11.0"
 androidx-room = "2.8.4"
+backdrop = "2.0.1"
 coil = "3.6.2"
 compose-markdown = "0.5.0"
 composables-core = "1.20.1"
@@ -52,6 +53,7 @@ androidx-lifecycle-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", 
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx-room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidx-room" }
+backdrop = { module = "io.github.kyant0:backdrop", version.ref = "backdrop" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 compose-markdown = { module = "com.github.jeziellago:compose-markdown", version.ref = "compose-markdown" }

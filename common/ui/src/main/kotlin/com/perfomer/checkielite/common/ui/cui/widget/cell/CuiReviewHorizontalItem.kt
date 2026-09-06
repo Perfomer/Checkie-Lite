@@ -58,6 +58,7 @@ fun CuiReviewHorizontalItem(
     imageRightOffset: Dp = 16.dp,
     interactionSource: MutableInteractionSource? = null,
     imageContent: (@Composable () -> Unit)? = null,
+    ratingContent: (@Composable () -> Unit)? = null,
     titleModifier: Modifier = Modifier,
     brandModifier: Modifier = Modifier,
     ratingValueModifier: Modifier = Modifier,
@@ -140,11 +141,15 @@ fun CuiReviewHorizontalItem(
 
         CuiSpacer(16.dp)
 
-        ReviewRating(
-            rating = item.rating,
-            valueModifier = ratingValueModifier,
-            iconModifier = ratingIconModifier,
-        )
+        if (ratingContent != null) {
+            ratingContent()
+        } else {
+            ReviewRating(
+                rating = item.rating,
+                valueModifier = ratingValueModifier,
+                iconModifier = ratingIconModifier,
+            )
+        }
     }
 }
 

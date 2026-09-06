@@ -2,6 +2,7 @@ package com.perfomer.checkielite.common.ui.cui.widget.rating
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,7 @@ import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 @Composable
 fun ReviewRating(
     rating: Int,
+    reactionContent: (@Composable () -> Unit)? = null,
     valueModifier: Modifier = Modifier,
     iconModifier: Modifier = Modifier,
     modifier: Modifier = Modifier
@@ -60,11 +62,15 @@ fun ReviewRating(
 
         CuiSpacer(8.dp)
 
-        Image(
-            painter = painterResource(reviewReaction.drawable),
-            contentDescription = stringResource(reviewReaction.contentDescription),
-            modifier = iconModifier.size(28.dp)
-        )
+        if (reactionContent != null) {
+            Box(modifier = iconModifier) { reactionContent() }
+        } else {
+            Image(
+                painter = painterResource(reviewReaction.drawable),
+                contentDescription = stringResource(reviewReaction.contentDescription),
+                modifier = iconModifier.size(28.dp)
+            )
+        }
     }
 }
 

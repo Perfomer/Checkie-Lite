@@ -37,6 +37,7 @@ import com.perfomer.checkielite.common.ui.cui.modifier.sharedNavigationContent
 import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
 import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewHorizontalItem
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
+import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRating
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -92,6 +93,24 @@ internal fun MainReviewCard(
                     // A decorated reaction can differ from the plain icon in details.
                     isSameContent = item.rating != 10,
                 ),
+                ratingContent = if (item.rating == 10) {
+                    {
+                        ReviewRating(
+                            rating = item.rating,
+                            reactionContent = { FloatingDiamond() },
+                            valueModifier = Modifier.sharedNavigationContent(
+                                key = SharedContentKey(item.id, SharedContentPart.Value),
+                                isEnabled = isTransitionEnabled,
+                            ),
+                            iconModifier = Modifier.sharedNavigationContent(
+                                key = SharedContentKey(item.id, SharedContentPart.Icon),
+                                isEnabled = isTransitionEnabled,
+                            ),
+                        )
+                    }
+                } else {
+                    null
+                },
                 imageContent = item.imageUri?.let { uri ->
                     {
                         SharedImage(

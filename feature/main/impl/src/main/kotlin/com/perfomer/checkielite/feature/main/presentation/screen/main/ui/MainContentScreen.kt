@@ -24,10 +24,7 @@ internal class MainContentScreen(private val store: MainStore) : Screen {
 
         EffectHandler { effect ->
             when (effect) {
-                is ShowToast -> toastController.showToast(
-                    message = effect.text,
-                    style = effect.style,
-                )
+                is ShowToast -> toastController.showToast(effect.text, effect.style)
             }
         }
 

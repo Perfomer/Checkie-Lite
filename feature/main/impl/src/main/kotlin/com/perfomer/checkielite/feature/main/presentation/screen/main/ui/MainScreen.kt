@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,11 +30,14 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalRippleConfiguration
+import androidx.compose.material3.RippleConfiguration
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -156,6 +160,7 @@ internal fun MainScreen(
 }
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 private fun Content(
     state: MainUiState.Content,
     scrollState: LazyListState,
@@ -166,6 +171,14 @@ private fun Content(
     onTagClick: (id: String) -> Unit,
     onChangelogClick: () -> Unit,
     onChangelogCloseClick: () -> Unit,
+) = CompositionLocalProvider(
+    LocalRippleConfiguration provides RippleConfiguration(
+        color = lerp(
+            LocalCuiPalette.current.BackgroundAccentPrimary,
+            LocalCuiPalette.current.TextSecondary,
+            0.2F,
+        ),
+    ),
 ) {
     LazyColumn(
         // Keep the decoration behind the pinned toolbar until the header scrolls away.
@@ -338,15 +351,17 @@ private fun SearchField(
     modifier: Modifier = Modifier
 ) {
     val palette = LocalCuiPalette.current
+    val interactionSource = remember { MutableInteractionSource() }
 
     Surface(
         onClick = onSearchClick,
+        interactionSource = interactionSource,
         shape = CircleShape,
         color = palette.BackgroundElevationBase,
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
-            .softShadow(shape = CircleShape)
+            .softShadow(interactionSource = interactionSource, shape = CircleShape)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -391,12 +406,16 @@ private fun TagsRow(
     fun SingleRow(tags: ImmutableList<Tag>) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             for (tag in tags) {
+                val interactionSource = remember(tag.id) { MutableInteractionSource() }
+
                 CuiTagChip(
                     text = tag.value,
                     emoji = tag.emoji,
                     onClick = { onTagClick(tag.id) },
                     style = chipStyle,
+                    interactionSource = interactionSource,
                     modifier = Modifier.softShadow(
+                        interactionSource = interactionSource,
                         shape = CircleShape,
                         radius = 8.dp,
                         offset = DpOffset(x = 0.dp, y = 2.dp),

@@ -3,9 +3,11 @@ package com.perfomer.checkielite.common.ui.cui.widget.cell
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -53,13 +55,18 @@ fun CuiReviewHorizontalItem(
     imageCornerRadius: Dp = 16.dp,
     imageSize: Dp = 48.dp,
     imageRightOffset: Dp = 16.dp,
+    interactionSource: MutableInteractionSource? = null,
     modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onClick(item.id) }
+            .clickable(
+                interactionSource = interactionSource,
+                indication = LocalIndication.current,
+                onClick = { onClick(item.id) },
+            )
             .padding(contentPadding)
     ) {
         Box(

@@ -7,6 +7,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
@@ -38,10 +40,12 @@ internal fun MainReviewCard(
     onClick: (id: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+
     Surface(
         shape = ReviewCardShape,
         color = LocalCuiPalette.current.BackgroundElevationBase,
-        modifier = modifier.softShadow(shape = ReviewCardShape)
+        modifier = modifier.softShadow(interactionSource = interactionSource, shape = ReviewCardShape)
     ) {
         Box {
             if (item.rating == 10) {
@@ -51,6 +55,7 @@ internal fun MainReviewCard(
             CuiReviewHorizontalItem(
                 item = item,
                 onClick = onClick,
+                interactionSource = interactionSource,
                 contentPadding = PaddingValues(start = 8.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
                 imageCornerRadius = 16.dp,
                 imageSize = 56.dp,

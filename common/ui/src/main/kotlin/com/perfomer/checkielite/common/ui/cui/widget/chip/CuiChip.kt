@@ -1,9 +1,11 @@
 package com.perfomer.checkielite.common.ui.cui.widget.chip
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -77,6 +79,7 @@ fun CuiChip(
     onLongClick: (() -> Unit)? = null,
     leadingIcon: (@Composable BoxScope.() -> Unit)? = null,
     style: CuiChipStyle = CuiChipStyle.default(),
+    interactionSource: MutableInteractionSource? = null,
     content: @Composable BoxScope.() -> Unit,
 ) {
     val localTextStyle = LocalTextStyle.current
@@ -91,6 +94,8 @@ fun CuiChip(
             .background(style.textBackgroundColor)
             .border(width = style.borderWidth, color = style.borderColor, shape = CircleShape)
             .combinedClickable(
+                interactionSource = interactionSource,
+                indication = LocalIndication.current,
                 onClick = onClick,
                 onLongClick = onLongClick,
             )

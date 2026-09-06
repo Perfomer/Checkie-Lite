@@ -175,8 +175,8 @@ private fun Content(
     LocalRippleConfiguration provides RippleConfiguration(
         color = lerp(
             LocalCuiPalette.current.BackgroundAccentPrimary,
-            LocalCuiPalette.current.TextSecondary,
-            0.2F,
+            Color.White,
+            0.5F,
         ),
     ),
 ) {

@@ -20,6 +20,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -270,6 +271,8 @@ private fun LiquidGlassToggle(
     enabled: Boolean,
     onCheckedChange: (Boolean) -> Unit,
 ) {
+    val palette = LocalCuiPalette.current
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -286,7 +289,7 @@ private fun LiquidGlassToggle(
         Icon(
             painter = painterResource(R.drawable.ic_liquid_glass),
             contentDescription = null,
-            tint = LocalCuiPalette.current.IconAccent,
+            tint = palette.IconAccent,
             modifier = Modifier.size(20.dp)
         )
 
@@ -302,7 +305,7 @@ private fun LiquidGlassToggle(
                 text = stringResource(R.string.settings_group_app_item_liquid_glass_desc),
                 fontSize = 12.sp,
                 lineHeight = 16.sp,
-                color = LocalCuiPalette.current.TextSecondary,
+                color = palette.TextSecondary,
             )
         }
 
@@ -312,6 +315,14 @@ private fun LiquidGlassToggle(
             checked = checked,
             enabled = enabled,
             onCheckedChange = null,
+            colors = SwitchDefaults.colors(
+                uncheckedThumbColor = palette.IconSecondary,
+                uncheckedTrackColor = palette.BackgroundSecondary,
+                uncheckedBorderColor = palette.OutlinePrimary,
+                disabledUncheckedThumbColor = palette.IconQuaternary,
+                disabledUncheckedTrackColor = palette.BackgroundSecondary,
+                disabledUncheckedBorderColor = palette.OutlineSecondary,
+            ),
         )
     }
 }

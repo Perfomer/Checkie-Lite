@@ -31,6 +31,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -69,7 +70,6 @@ import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.cui.modifier.indicatorOffsetForPage
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.NavBarScrimController
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
-import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassScaffold
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -116,9 +116,8 @@ internal fun GalleryScreen(
         }
     }
 
-    CuiGlassScaffold(
+    Scaffold(
         containerColor = Color.Transparent,
-        toolbarColor = GalleryPalette.BackgroundColor,
         topBar = {
             AnimatedVisibility(visible = state.isUiShown, enter = fadeIn(), exit = fadeOut()) {
                 GalleryTopAppBar(
@@ -324,6 +323,8 @@ private fun GalleryTopAppBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .height(192.dp)
+            .background(GalleryPalette.TopScrim)
     ) {
         TopAppBar(
             title = { Text(text = title, fontSize = 18.sp) },

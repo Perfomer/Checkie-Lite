@@ -24,6 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.cui.modifier.toolbarDivider
 import com.perfomer.checkielite.common.ui.cui.widget.info.CuiInfoIcon
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.cui.widget.text.CuiFadedText
@@ -70,6 +74,9 @@ internal fun SettingsScreen(
     onLiquidGlassChanged: (Boolean) -> Unit = {},
     onLibrariesClick: () -> Unit = {},
 ) {
+    val scrollState = rememberScrollState()
+    val shouldShowDivider by remember { derivedStateOf { scrollState.canScrollBackward } }
+
     CuiGlassScaffold(
         topBar = {
             TopAppBar(
@@ -83,14 +90,18 @@ internal fun SettingsScreen(
                         color = LocalCuiPalette.current.IconPrimary,
                         onBackPress = onNavigationIconClick,
                     )
-                }
+                },
+                modifier = Modifier.toolbarDivider(
+                    show = shouldShowDivider,
+                    strokeColor = LocalCuiPalette.current.OutlineSecondary,
+                )
             )
         },
     ) { contentPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
                 .padding(contentPadding)
         ) {
             SettingsHeader(version = state.appVersion)

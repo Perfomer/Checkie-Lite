@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
-import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
+import com.perfomer.checkielite.common.ui.cui.modifier.toolbarDivider
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiOutlineButton
 import com.perfomer.checkielite.common.ui.cui.widget.state.AnimatedState
@@ -68,7 +68,7 @@ internal fun ChangelogScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .bottomStrokeOnScroll(
+                    .toolbarDivider(
                         show = shouldShowDivider,
                         strokeColor = LocalCuiPalette.current.OutlineSecondary,
                     )

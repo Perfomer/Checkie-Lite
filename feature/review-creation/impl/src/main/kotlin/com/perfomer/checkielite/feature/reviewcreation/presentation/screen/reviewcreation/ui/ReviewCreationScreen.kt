@@ -31,7 +31,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.pure.util.emptyPersistentList
-import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
+import com.perfomer.checkielite.common.ui.cui.modifier.toolbarDivider
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.verticalScrimBrush
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassScaffold
@@ -78,7 +78,7 @@ internal fun ReviewCreationScreen(
                 ProgressAppBar(
                     pagerState = pagerState,
                     onBackPress = onBackPress,
-                    modifier = Modifier.bottomStrokeOnScroll(
+                    modifier = Modifier.toolbarDivider(
                         show = shouldShowTopDivider,
                         strokeColor = LocalCuiPalette.current.OutlineSecondary,
                     )

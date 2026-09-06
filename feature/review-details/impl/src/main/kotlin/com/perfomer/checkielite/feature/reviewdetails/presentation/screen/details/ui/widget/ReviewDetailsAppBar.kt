@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
-import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
+import com.perfomer.checkielite.common.ui.cui.modifier.toolbarDivider
 import com.perfomer.checkielite.common.ui.cui.modifier.debounced
 import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiDropdownIcon
 import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiDropdownMenuItem
@@ -111,7 +111,7 @@ internal fun ReviewDetailsAppBar(
         windowInsets = StableInsets.statusBars(),
         modifier = modifier
             .fillMaxWidth()
-            .bottomStrokeOnScroll(
+            .toolbarDivider(
                 show = shouldShowDivider,
                 strokeColor = LocalCuiPalette.current.OutlineSecondary,
             )

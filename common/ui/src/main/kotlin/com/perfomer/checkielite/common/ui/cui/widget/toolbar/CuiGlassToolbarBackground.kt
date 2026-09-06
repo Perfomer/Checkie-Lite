@@ -19,7 +19,12 @@ import com.perfomer.checkielite.common.ui.cui.modifier.thenElse
 import com.perfomer.checkielite.common.ui.cui.modifier.thenIf
 import com.perfomer.checkielite.common.ui.theme.LocalLiquidGlassEnabled
 
-private val GlassShape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)
+internal val CuiToolbarCornerRadius = 20.dp
+
+private val GlassShape = RoundedCornerShape(
+    bottomStart = CuiToolbarCornerRadius,
+    bottomEnd = CuiToolbarCornerRadius,
+)
 
 @Composable
 fun CuiGlassToolbarBackground(

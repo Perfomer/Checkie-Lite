@@ -41,7 +41,7 @@ class AndroidCommonConventionPlugin : Plugin<Project> {
     }
 
     private fun ApplicationExtension.configureCommonAndroid(javaVersion: Int) {
-        compileSdk = 36
+        compileSdk = 37
 
         defaultConfig {
             targetSdk = 36
@@ -60,7 +60,7 @@ class AndroidCommonConventionPlugin : Plugin<Project> {
     }
 
     private fun LibraryExtension.configureCommonAndroid(javaVersion: Int) {
-        compileSdk = 36
+        compileSdk = 37
 
         defaultConfig {
             minSdk = 24

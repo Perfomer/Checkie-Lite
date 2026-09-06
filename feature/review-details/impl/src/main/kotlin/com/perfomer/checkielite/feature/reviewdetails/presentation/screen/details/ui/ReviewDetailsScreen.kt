@@ -11,17 +11,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.modifier.SharedContentKey
 import com.perfomer.checkielite.common.ui.cui.modifier.SharedContentPart
 import com.perfomer.checkielite.common.ui.cui.modifier.sharedNavigationContent
-import com.perfomer.checkielite.common.ui.CommonDrawable
-import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
+import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationContainer
 import com.perfomer.checkielite.common.ui.presentation.transition.isSharedTransitionItemEligible
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.add
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
@@ -58,44 +61,54 @@ internal fun ReviewDetailsScreen(
 ) {
     val scrollState = rememberLazyListState()
 
-    Scaffold(
-        topBar = {
-            ReviewDetailsAppBar(
-                scrollState = scrollState,
-                title = (state as? ReviewDetailsUiState.Content)?.productName,
-                isMenuAvailable = state.isMenuAvailable,
-                onNavigationIconClick = onNavigationIconClick,
-                onEditClick = onEditClick,
-                onDeleteClick = onDeleteClick,
-            )
-        },
-    ) { contentPadding ->
-        when (state) {
-            is ReviewDetailsUiState.Loading -> Loading()
-            is ReviewDetailsUiState.Content -> Content(
-                state = state,
-                contentPadding = contentPadding,
-                scrollableState = scrollState,
-                onPictureClick = onPictureClick,
-                onEmptyImageClick = onEmptyImageClick,
-                onRatingClick = onRatingClick,
-                onEmptyPriceClick = onEmptyPriceClick,
-                onEmptyReviewTextClick = onEmptyReviewTextClick,
-                onPageChange = onPageChange,
-                onAddTagsClick = onAddTagsClick,
-                onTagClick = onTagClick,
-                onRecommendationClick = onRecommendationClick,
-            )
+    SharedNavigationContainer(
+        contentId = (state as? ReviewDetailsUiState.Content)?.reviewId,
+        cornerRadius = 0.dp,
+        otherCornerRadius = 24.dp,
+        color = LocalCuiPalette.current.BackgroundPrimary,
+        otherColor = LocalCuiPalette.current.BackgroundElevationBase,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Scaffold(
+            containerColor = Color.Transparent,
+            topBar = {
+                ReviewDetailsAppBar(
+                    scrollState = scrollState,
+                    title = (state as? ReviewDetailsUiState.Content)?.productName,
+                    isMenuAvailable = state.isMenuAvailable,
+                    onNavigationIconClick = onNavigationIconClick,
+                    onEditClick = onEditClick,
+                    onDeleteClick = onDeleteClick,
+                )
+            },
+        ) { contentPadding ->
+            when (state) {
+                is ReviewDetailsUiState.Loading -> Loading()
+                is ReviewDetailsUiState.Content -> Content(
+                    state = state,
+                    contentPadding = contentPadding,
+                    scrollableState = scrollState,
+                    onPictureClick = onPictureClick,
+                    onEmptyImageClick = onEmptyImageClick,
+                    onRatingClick = onRatingClick,
+                    onEmptyPriceClick = onEmptyPriceClick,
+                    onEmptyReviewTextClick = onEmptyReviewTextClick,
+                    onPageChange = onPageChange,
+                    onAddTagsClick = onAddTagsClick,
+                    onTagClick = onTagClick,
+                    onRecommendationClick = onRecommendationClick,
+                )
 
-            is ReviewDetailsUiState.Error -> Error()
+                is ReviewDetailsUiState.Error -> Error()
 
+            }
+
+            ConfirmDeleteDialog(
+                isVisible = showDeleteDialog,
+                onDismiss = onDeleteDialogDismiss,
+                onConfirm = onDeleteDialogConfirm,
+            )
         }
-
-        ConfirmDeleteDialog(
-            isVisible = showDeleteDialog,
-            onDismiss = onDeleteDialogDismiss,
-            onConfirm = onDeleteDialogConfirm,
-        )
     }
 }
 
@@ -174,15 +187,6 @@ private fun Content(
                 price = state.price,
                 onRatingClick = onRatingClick,
                 onEmptyPriceClick = onEmptyPriceClick,
-                ratingValueModifier = Modifier.sharedNavigationContent(
-                    key = SharedContentKey(state.reviewId, SharedContentPart.Value),
-                    isEnabled = { isItemEligible("info") },
-                ),
-                ratingIconModifier = Modifier.sharedNavigationContent(
-                    key = SharedContentKey(state.reviewId, SharedContentPart.Icon),
-                    isEnabled = { isItemEligible("info") },
-                    isSameContent = state.rating != 10,
-                ),
             )
         }
 

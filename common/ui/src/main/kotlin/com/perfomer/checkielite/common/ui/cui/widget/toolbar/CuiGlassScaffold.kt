@@ -20,6 +20,7 @@ fun CuiGlassScaffold(
     topBar: @Composable () -> Unit,
     containerColor: Color = LocalCuiPalette.current.BackgroundPrimary,
     toolbarColor: Color = LocalCuiPalette.current.BackgroundPrimary,
+    toolbarBackgroundProgress: () -> Float = { 1F },
     content: @Composable (PaddingValues) -> Unit,
 ) {
     val backdrop = rememberLayerBackdrop {
@@ -35,7 +36,7 @@ fun CuiGlassScaffold(
                 CuiGlassToolbarBackground(
                     backdrop = backdrop,
                     backgroundColor = toolbarColor,
-                    progress = { 1F },
+                    progress = toolbarBackgroundProgress,
                     modifier = Modifier.matchParentSize()
                 )
                 topBar()

@@ -63,6 +63,7 @@ import com.perfomer.checkielite.common.ui.cui.modifier.thenIf
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiFloatingActionButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
+import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewCard
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiTagChip
@@ -80,7 +81,6 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.T
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.WhatsNewBanner
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.ChangelogBanner
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.MainHeaderBackground
-import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.MainReviewCard
 import com.perfomer.checkielite.feature.main.presentation.util.TagRowUiBalancer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -234,7 +234,7 @@ private fun Content(
             items = state.reviews,
             key = { item -> item.id },
         ) { item ->
-            MainReviewCard(
+            CuiReviewCard(
                 item = item,
                 onClick = onReviewClick,
                 isTransitionEnabled = {

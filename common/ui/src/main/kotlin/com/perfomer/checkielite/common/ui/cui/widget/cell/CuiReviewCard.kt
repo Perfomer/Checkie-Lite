@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget
+package com.perfomer.checkielite.common.ui.cui.widget.cell
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -35,8 +35,6 @@ import com.perfomer.checkielite.common.ui.cui.modifier.SharedContentKey
 import com.perfomer.checkielite.common.ui.cui.modifier.SharedContentPart
 import com.perfomer.checkielite.common.ui.cui.modifier.sharedNavigationContent
 import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
-import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewHorizontalItem
-import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRating
 import com.perfomer.checkielite.common.ui.presentation.transition.SharedImage
 import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationContainer
@@ -50,7 +48,7 @@ import kotlin.math.sin
 private val ReviewCardShape = RoundedCornerShape(24.dp)
 
 @Composable
-internal fun MainReviewCard(
+fun CuiReviewCard(
     item: ReviewItem,
     onClick: (id: String) -> Unit,
     isTransitionEnabled: () -> Boolean = { true },
@@ -254,14 +252,14 @@ private fun DrawScope.drawMeshSpot(
 
 @ScreenPreview
 @Composable
-private fun MainReviewCardLightPreview() = MainReviewCardPreview(darkTheme = false)
+private fun CuiReviewCardLightPreview() = CuiReviewCardPreview(darkTheme = false)
 
 @ScreenPreview
 @Composable
-private fun MainReviewCardDarkPreview() = MainReviewCardPreview(darkTheme = true)
+private fun CuiReviewCardDarkPreview() = CuiReviewCardPreview(darkTheme = true)
 
 @Composable
-private fun MainReviewCardPreview(darkTheme: Boolean) = CheckieLiteTheme(darkTheme = darkTheme) {
+private fun CuiReviewCardPreview(darkTheme: Boolean) = CheckieLiteTheme(darkTheme = darkTheme) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier
@@ -269,10 +267,10 @@ private fun MainReviewCardPreview(darkTheme: Boolean) = CheckieLiteTheme(darkThe
             .padding(20.dp)
     ) {
         listOf(10, 9, 10, 0).forEachIndexed { index, rating ->
-            MainReviewCard(
+            CuiReviewCard(
                 item = ReviewItem(
                     id = index.toString(),
-                    title = "Strawberry Kiwi — a very long product name",
+                    title = "Strawberry Kiwi ï¿½ a very long product name",
                     brand = if (index < 2) "Plonq" else null,
                     imageUri = null,
                     rating = rating,

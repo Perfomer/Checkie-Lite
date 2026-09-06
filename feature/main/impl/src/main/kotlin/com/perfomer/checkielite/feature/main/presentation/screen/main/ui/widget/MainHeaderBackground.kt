@@ -39,7 +39,7 @@ internal fun MainHeaderBackground(
         initialValue = 0F,
         targetValue = (2 * PI).toFloat(),
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 28000, easing = LinearEasing),
+            animation = tween(durationMillis = 11000, easing = LinearEasing),
         ),
         label = "Header drift",
     )

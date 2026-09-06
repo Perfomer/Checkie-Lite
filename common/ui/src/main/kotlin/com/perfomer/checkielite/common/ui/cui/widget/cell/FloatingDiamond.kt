@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget
+package com.perfomer.checkielite.common.ui.cui.widget.cell
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode

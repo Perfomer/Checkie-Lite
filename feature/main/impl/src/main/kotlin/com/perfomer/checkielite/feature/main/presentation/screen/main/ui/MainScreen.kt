@@ -4,8 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,55 +14,68 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.perfomer.checkielite.common.pure.util.emptyPersistentList
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
-import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
+import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiFloatingActionButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewHorizontalItem
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
+import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiTagChip
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.app.appNameSpannable
-import com.perfomer.checkielite.common.ui.util.pxToDp
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.feature.main.R
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiState
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.Tag
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.WhatsNewBanner
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.ChangelogBanner
+import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.MainHeaderBackground
 import com.perfomer.checkielite.feature.main.presentation.util.TagRowUiBalancer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+
+private val ReviewCardCornerRadius = 20.dp
+private val ReviewCardImageInset = 8.dp
 
 @Composable
 internal fun MainScreen(
@@ -78,24 +89,40 @@ internal fun MainScreen(
     onFabClick: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
+    val palette = LocalCuiPalette.current
+    val backgroundColor = lerp(palette.BackgroundPrimary, palette.BackgroundAccentTertiary, 0.4F)
 
     Scaffold(
+        containerColor = backgroundColor,
         floatingActionButton = {
             if (state !is MainUiState.Error) {
                 CuiFloatingActionButton(
                     painter = painterResource(id = CommonDrawable.ic_plus),
                     contentDescription = stringResource(R.string.main_add_checkie),
                     onClick = onFabClick,
-                    modifier = Modifier.imePadding()
+                    elevation = FloatingActionButtonDefaults.elevation(
+                        defaultElevation = 0.dp,
+                        pressedElevation = 0.dp,
+                        focusedElevation = 0.dp,
+                        hoveredElevation = 0.dp,
+                    ),
+                    modifier = Modifier
+                        .imePadding()
+                        .softShadow(shape = CircleShape, radius = 16.dp)
                 )
             }
         },
         topBar = {
-            TopAppBar(
-                scrollableState = scrollState,
-                onSettingsClick = onSettingsClick,
-                onSearchClick = onSearchClick,
-            )
+            if (state is MainUiState.Content) {
+                TopAppBar(
+                    onSettingsClick = onSettingsClick,
+                    onSearchClick = onSearchClick,
+                    scrollState = scrollState,
+                    backgroundColor = backgroundColor,
+                )
+            } else {
+                MainHeaderBackground(content = { TopAppBar(onSettingsClick = onSettingsClick) })
+            }
         },
     ) { contentPadding ->
         when (state) {
@@ -112,9 +139,9 @@ internal fun MainScreen(
                 onChangelogCloseClick = onChangelogCloseClick,
             )
 
-            is MainUiState.Empty -> Empty()
+            is MainUiState.Empty -> Box(modifier = Modifier.padding(contentPadding)) { Empty() }
 
-            is MainUiState.Error -> Error()
+            is MainUiState.Error -> Box(modifier = Modifier.padding(contentPadding)) { Error() }
         }
     }
 }
@@ -131,33 +158,37 @@ private fun Content(
     onChangelogCloseClick: () -> Unit,
 ) {
     LazyColumn(
-        contentPadding = contentPadding,
+        // Keep the decoration behind the pinned toolbar until the header scrolls away.
+        contentPadding = PaddingValues(bottom = contentPadding.calculateBottomPadding()),
         state = scrollState,
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .imePadding()
     ) {
-        item {
-            SearchField(
-                onSearchClick = onSearchClick,
-                modifier = Modifier.padding(top = 4.dp, bottom = 16.dp)
+        item(key = "header") {
+            MainHeaderBackground(
+                content = {
+                    Column(modifier = Modifier.padding(top = contentPadding.calculateTopPadding())) {
+                        SearchField(
+                            onSearchClick = onSearchClick,
+                            modifier = Modifier.padding(top = 4.dp, bottom = 12.dp)
+                        )
+
+                        if (state.tags.isNotEmpty()) {
+                            TagsRow(
+                                tags = state.tags,
+                                onTagClick = onTagClick,
+                                modifier = Modifier.padding(bottom = 16.dp)
+                            )
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
-        if (state.tags.isNotEmpty()) {
-            item {
-                TagsRow(
-                    tags = state.tags,
-                    onTagClick = onTagClick,
-                    modifier = Modifier
-                        .animateItem()
-                        .padding(top = 8.dp, bottom = 16.dp)
-                )
-            }
-        }
-
         state.whatsNewBanner?.let { banner ->
-            item {
+            item(key = "changelog") {
                 ChangelogBanner(
                     state = banner,
                     onClick = onChangelogClick,
@@ -174,11 +205,28 @@ private fun Content(
             items = state.reviews,
             key = { item -> item.id },
         ) { item ->
-            CuiReviewHorizontalItem(
-                item = item,
-                onClick = onReviewClick,
-                modifier = Modifier.animateItem()
-            )
+            Surface(
+                shape = RoundedCornerShape(ReviewCardCornerRadius),
+                color = LocalCuiPalette.current.BackgroundElevationBase,
+                modifier = Modifier
+                    .animateItem()
+                    .padding(horizontal = 20.dp)
+                    .padding(bottom = 12.dp)
+                    .softShadow(shape = RoundedCornerShape(ReviewCardCornerRadius))
+            ) {
+                CuiReviewHorizontalItem(
+                    item = item,
+                    onClick = onReviewClick,
+                    contentPadding = PaddingValues(
+                        start = ReviewCardImageInset,
+                        top = ReviewCardImageInset,
+                        end = 12.dp,
+                        bottom = ReviewCardImageInset,
+                    ),
+                    imageCornerRadius = ReviewCardCornerRadius - ReviewCardImageInset,
+                    imageSize = 56.dp,
+                )
+            }
         }
 
         item {
@@ -220,23 +268,33 @@ private fun Error() {
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun TopAppBar(
-    scrollableState: LazyListState,
     onSettingsClick: () -> Unit,
-    onSearchClick: () -> Unit,
+    onSearchClick: () -> Unit = {},
+    scrollState: LazyListState? = null,
+    backgroundColor: Color = Color.Transparent,
 ) {
-    val shouldShowDivider by remember {
+    val searchScrollThreshold = with(LocalDensity.current) { 56.dp.toPx() }
+    val showSearch by remember(scrollState, searchScrollThreshold) {
         derivedStateOf {
-            scrollableState.canScrollBackward && (scrollableState.firstVisibleItemIndex > 0 || scrollableState.firstVisibleItemScrollOffset.pxToDp() > 4)
+            scrollState != null && (
+                scrollState.firstVisibleItemIndex > 0 ||
+                    scrollState.firstVisibleItemScrollOffset >= searchScrollThreshold
+                )
         }
     }
 
     CenterAlignedTopAppBar(
         title = { Text(text = appNameSpannable(), fontSize = 20.sp) },
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
         actions = {
-            val shouldShowSearchIcon by remember { derivedStateOf { scrollableState.firstVisibleItemIndex > 0 } }
-            AnimatedVisibility(visible = shouldShowSearchIcon, enter = fadeIn(tween(250)), exit = fadeOut(tween(250))) {
+            AnimatedVisibility(
+                visible = showSearch,
+                enter = fadeIn(tween(200)),
+                exit = fadeOut(tween(200)),
+            ) {
                 CuiIconButton(
                     painter = painterResource(CommonDrawable.ic_search),
+                    contentDescription = stringResource(CommonString.common_search),
                     onClick = onSearchClick,
                 )
             }
@@ -248,10 +306,14 @@ private fun TopAppBar(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .bottomStrokeOnScroll(
-                show = shouldShowDivider,
-                strokeColor = LocalCuiPalette.current.OutlineSecondary,
-            )
+            .drawBehind {
+                val backgroundAlpha = when {
+                    scrollState == null -> 0F
+                    scrollState.firstVisibleItemIndex > 0 -> 1F
+                    else -> (scrollState.firstVisibleItemScrollOffset / 24.dp.toPx()).coerceIn(0F, 1F)
+                }
+                drawRect(color = backgroundColor, alpha = backgroundAlpha)
+            }
     )
 }
 
@@ -260,28 +322,38 @@ private fun SearchField(
     onSearchClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    val palette = LocalCuiPalette.current
+
+    Surface(
+        onClick = onSearchClick,
+        shape = CircleShape,
+        color = palette.BackgroundElevationBase,
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .border(1.dp, LocalCuiPalette.current.OutlineSecondary, RoundedCornerShape(16.dp))
-            .clickable(onClick = onSearchClick)
-            .padding(horizontal = 20.dp, vertical = 13.dp)
+            .softShadow(shape = CircleShape)
     ) {
-        Text(
-            text = stringResource(CommonString.common_search),
-            fontSize = 14.sp,
-            color = LocalCuiPalette.current.TextSecondary,
-            modifier = Modifier.weight(1F)
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier
+                .heightIn(min = 48.dp)
+                .padding(horizontal = 16.dp, vertical = 10.dp)
+        ) {
+            Icon(
+                painter = painterResource(id = CommonDrawable.ic_search),
+                tint = palette.IconSecondary,
+                contentDescription = null,
+                modifier = Modifier.size(20.dp)
+            )
 
-        Icon(
-            painter = painterResource(id = CommonDrawable.ic_search),
-            tint = LocalCuiPalette.current.IconSecondary,
-            contentDescription = null,
-        )
+            Text(
+                text = stringResource(CommonString.common_search),
+                fontSize = 16.sp,
+                color = palette.TextSecondary,
+                modifier = Modifier.weight(1F)
+            )
+        }
     }
 }
 
@@ -292,6 +364,13 @@ private fun TagsRow(
     modifier: Modifier = Modifier
 ) {
     val rows = remember(tags) { TagRowUiBalancer.split(tags) }
+    val palette = LocalCuiPalette.current
+    val chipStyle = CuiChipStyle.default().copy(
+        iconBackgroundColor = palette.BackgroundElevationBase,
+        textBackgroundColor = palette.BackgroundElevationBase,
+        borderColor = Color.Transparent,
+        borderWidth = 0.dp,
+    )
 
     @Composable
     fun SingleRow(tags: ImmutableList<Tag>) {
@@ -301,6 +380,12 @@ private fun TagsRow(
                     text = tag.value,
                     emoji = tag.emoji,
                     onClick = { onTagClick(tag.id) },
+                    style = chipStyle,
+                    modifier = Modifier.softShadow(
+                        shape = CircleShape,
+                        radius = 8.dp,
+                        offset = DpOffset(x = 0.dp, y = 2.dp),
+                    )
                 )
             }
         }
@@ -311,7 +396,7 @@ private fun TagsRow(
         modifier = modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = 20.dp, vertical = 6.dp)
     ) {
         SingleRow(tags = rows.first)
 
@@ -374,7 +459,14 @@ internal val mockUiState = MainUiState.Content(
             isSyncing = false,
         ),
     ),
-    tags = emptyPersistentList(),
+    tags = persistentListOf(
+        Tag(id = "restaurants", value = "Рестораны", emoji = "🍴"),
+        Tag(id = "food", value = "Еда", emoji = "🥗"),
+        Tag(id = "drinks", value = "Напитки", emoji = "🥤"),
+        Tag(id = "sweets", value = "Сладкое", emoji = "🍬"),
+        Tag(id = "city", value = "Красноярск", emoji = "🏙️"),
+        Tag(id = "snacks", value = "Снеки", emoji = "🍟"),
+    ),
     whatsNewBanner = WhatsNewBanner(
         title = Text.raw("What’s new in 1.6.0"),
     ),

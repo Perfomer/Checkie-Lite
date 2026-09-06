@@ -8,6 +8,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
@@ -47,6 +49,9 @@ data class ReviewItem(
 fun CuiReviewHorizontalItem(
     item: ReviewItem,
     onClick: (id: String) -> Unit,
+    contentPadding: PaddingValues = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
+    imageCornerRadius: Dp = 16.dp,
+    imageSize: Dp = 48.dp,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -54,13 +59,13 @@ fun CuiReviewHorizontalItem(
         modifier = modifier
             .fillMaxWidth()
             .clickable { onClick(item.id) }
-            .padding(horizontal = 20.dp, vertical = 12.dp)
+            .padding(contentPadding)
     ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .size(48.dp)
-                .clip(RoundedCornerShape(16.dp))
+                .size(imageSize)
+                .clip(RoundedCornerShape(imageCornerRadius))
                 .background(LocalCuiPalette.current.BackgroundSecondary)
         ) {
             if (item.imageUri != null) {
@@ -72,7 +77,7 @@ fun CuiReviewHorizontalItem(
                         .fillMaxSize()
                         .border(
                             width = 1.dp,
-                            shape = RoundedCornerShape(16.dp),
+                            shape = RoundedCornerShape(imageCornerRadius),
                             color = LocalCuiPalette.current.OutlinePicture,
                         )
                 )

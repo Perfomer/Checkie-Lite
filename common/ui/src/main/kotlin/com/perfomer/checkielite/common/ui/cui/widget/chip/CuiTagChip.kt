@@ -16,15 +16,17 @@ fun CuiTagChip(
     isSelected: Boolean = false,
     onClick: () -> Unit,
     onLongClick: (() -> Unit)? = null,
+    style: CuiChipStyle? = null,
+    modifier: Modifier = Modifier
 ) {
     val selectedChipStyle = CuiChipStyle.selected()
     val defaultChipStyle = CuiChipStyle.default()
-    val style = if (isSelected) selectedChipStyle else defaultChipStyle
+    val chipStyle = style ?: if (isSelected) selectedChipStyle else defaultChipStyle
 
     CuiChip(
         onClick = onClick,
         onLongClick = onLongClick,
-        style = style,
+        style = chipStyle,
         content = {
             Row {
                 if (emoji != null) {
@@ -47,5 +49,6 @@ fun CuiTagChip(
                 }
             }
         },
+        modifier = modifier
     )
 }

@@ -24,7 +24,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -60,7 +59,6 @@ import com.perfomer.checkielite.common.ui.cui.modifier.thenIf
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiFloatingActionButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
-import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewHorizontalItem
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiTagChip
@@ -76,12 +74,10 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.W
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.ChangelogBanner
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.MainAppBarBackground
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.MainHeaderBackground
+import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.MainReviewCard
 import com.perfomer.checkielite.feature.main.presentation.util.TagRowUiBalancer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-
-private val ReviewCardCornerRadius = 24.dp
-private val ReviewCardImageInset = 8.dp
 
 @Composable
 internal fun MainScreen(
@@ -220,29 +216,14 @@ private fun Content(
             items = state.reviews,
             key = { item -> item.id },
         ) { item ->
-            Surface(
-                shape = RoundedCornerShape(ReviewCardCornerRadius),
-                color = LocalCuiPalette.current.BackgroundElevationBase,
+            MainReviewCard(
+                item = item,
+                onClick = onReviewClick,
                 modifier = Modifier
                     .animateItem()
                     .padding(horizontal = 20.dp)
                     .padding(bottom = 12.dp)
-                    .softShadow(shape = RoundedCornerShape(ReviewCardCornerRadius))
-            ) {
-                CuiReviewHorizontalItem(
-                    item = item,
-                    onClick = onReviewClick,
-                    contentPadding = PaddingValues(
-                        start = ReviewCardImageInset,
-                        top = ReviewCardImageInset,
-                        end = 12.dp,
-                        bottom = ReviewCardImageInset,
-                    ),
-                    imageCornerRadius = ReviewCardCornerRadius - ReviewCardImageInset,
-                    imageSize = 56.dp,
-                    imageRightOffset = 12.dp,
-                )
-            }
+            )
         }
 
         item {

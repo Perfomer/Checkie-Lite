@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import kotlin.math.PI
@@ -32,6 +33,7 @@ internal fun MainHeaderBackground(
 ) {
     val accent = LocalCuiPalette.current.BackgroundAccentPrimary
     val softAccent = LocalCuiPalette.current.BackgroundAccentSecondary
+    val shapeAccent = lerp(softAccent, accent, 0.3F)
     val transition = rememberInfiniteTransition(label = "Header shapes")
     val phase = transition.animateFloat(
         initialValue = 0F,
@@ -94,7 +96,7 @@ internal fun MainHeaderBackground(
                         style = ringStroke,
                     )
                     drawCircle(
-                        color = softAccent.copy(alpha = 0.4F),
+                        color = shapeAccent.copy(alpha = 0.4F),
                         radius = 56.dp.toPx(),
                         center = Offset(size.width + 12.dp.toPx(), 24.dp.toPx()) - squareOffset,
                     )
@@ -102,7 +104,7 @@ internal fun MainHeaderBackground(
                     val squareCenter = squareOrigin + squareOffset
                     rotate(degrees = -18F, pivot = squareCenter) {
                         drawRoundRect(
-                            color = softAccent.copy(alpha = 0.48F),
+                            color = shapeAccent.copy(alpha = 0.65F),
                             topLeft = squareCenter - Offset(squareSize.width / 2F, squareSize.height / 2F),
                             size = squareSize,
                             cornerRadius = squareCorner,
@@ -113,11 +115,11 @@ internal fun MainHeaderBackground(
                     translate(left = pentagonCenter.x, top = pentagonCenter.y) {
                         drawPath(
                             path = pentagon,
-                            color = softAccent.copy(alpha = 0.36F),
+                            color = shapeAccent.copy(alpha = 0.6F),
                         )
                     }
                     drawCircle(
-                        color = softAccent.copy(alpha = 0.5F),
+                        color = shapeAccent.copy(alpha = 0.75F),
                         radius = 16.dp.toPx(),
                         center = smallRingOrigin - pentagonOffset,
                         style = smallRingStroke,

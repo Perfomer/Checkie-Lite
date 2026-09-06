@@ -26,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -39,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.cui.modifier.thenIf
 import com.perfomer.checkielite.common.ui.cui.widget.cell.FloatingDiamond
-import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRatingGlow
+import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRatingHalo
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewReaction
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
@@ -189,15 +188,11 @@ private fun InfoCell(
         val startPadding = if (fromLeft) 8.dp else 12.dp
         val endPadding = if (fromLeft) 12.dp else 8.dp
 
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(12.dp))
-                .thenIf(onClick != null) { clickable(onClick = onClick!!) }
-        ) {
+        Box {
             if (isPerfectRating) {
-                ReviewRatingGlow(
-                    glowWidthFraction = 1F,
-                    modifier = Modifier.matchParentSize().graphicsLayer { scaleX = -1F }
+                ReviewRatingHalo(
+                    centerFromStart = startPadding + 18.dp,
+                    modifier = Modifier.matchParentSize()
                 )
             }
 
@@ -205,6 +200,8 @@ private fun InfoCell(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = if (fromLeft) Arrangement.Start else Arrangement.End,
                 modifier = Modifier
+                    .clip(RoundedCornerShape(12.dp))
+                    .thenIf(onClick != null) { clickable(onClick = onClick!!) }
                     .padding(vertical = 4.dp)
                     .padding(start = startPadding, end = endPadding)
             ) {

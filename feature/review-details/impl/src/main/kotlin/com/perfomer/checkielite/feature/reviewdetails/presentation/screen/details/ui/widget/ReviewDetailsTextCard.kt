@@ -11,7 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
+import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
@@ -35,14 +36,16 @@ internal fun ReviewDetailsTextCard(
     text: Text,
     header: @Composable () -> Unit,
 ) {
-    OutlinedCard(
-        shape = RoundedCornerShape(20.dp),
+    Surface(
+        shape = RoundedCornerShape(24.dp),
+        color = LocalCuiPalette.current.BackgroundElevationBase,
         modifier = Modifier
-            .padding(horizontal = 24.dp)
+            .padding(horizontal = 20.dp)
             .fillMaxWidth()
+            .softShadow(shape = RoundedCornerShape(24.dp))
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(20.dp)
         ) {
             header()
 
@@ -50,6 +53,8 @@ internal fun ReviewDetailsTextCard(
                 Text(
                     text = text(text),
                     fontSize = 16.sp,
+                    lineHeight = 24.sp,
+                    color = LocalCuiPalette.current.TextPrimary,
                 )
             }
         }
@@ -58,17 +63,20 @@ internal fun ReviewDetailsTextCard(
 
 @Composable
 internal fun ReviewDetailsTextEmptyCard(
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
-    OutlinedCard(
-        shape = RoundedCornerShape(20.dp),
+    Surface(
+        shape = RoundedCornerShape(24.dp),
+        color = LocalCuiPalette.current.BackgroundElevationBase,
         onClick = onClick,
         modifier = Modifier
-            .padding(horizontal = 24.dp)
+            .padding(horizontal = 20.dp)
             .fillMaxWidth()
+            .softShadow(shape = RoundedCornerShape(24.dp))
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier.padding(20.dp)
         ) {
             ReviewDetailsTextHeader(
                 title = stringResource(R.string.reviewdetails_comment),
@@ -134,7 +142,7 @@ internal fun ReviewDetailsTextHeader(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 8.dp),
+            .padding(bottom = 12.dp)
     ) {
         Icon(
             painter = icon,
@@ -148,8 +156,9 @@ internal fun ReviewDetailsTextHeader(
 
         Text(
             text = title,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Medium,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = LocalCuiPalette.current.TextPrimary,
             modifier = Modifier.padding(horizontal = 8.dp)
         )
     }

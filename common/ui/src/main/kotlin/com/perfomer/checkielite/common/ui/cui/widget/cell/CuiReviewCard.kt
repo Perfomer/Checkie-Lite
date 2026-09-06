@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.cui.modifier.SharedContentKey
 import com.perfomer.checkielite.common.ui.cui.modifier.SharedContentPart
@@ -61,7 +62,11 @@ fun CuiReviewCard(
         cornerRadius = 24.dp,
         otherCornerRadius = 0.dp,
         color = LocalCuiPalette.current.BackgroundElevationBase,
-        otherColor = LocalCuiPalette.current.BackgroundPrimary,
+        otherColor = lerp(
+            LocalCuiPalette.current.BackgroundPrimary,
+            LocalCuiPalette.current.BackgroundAccentTertiary,
+            0.4F,
+        ),
         isEnabled = isTransitionEnabled,
         modifier = modifier.softShadow(interactionSource = interactionSource, shape = ReviewCardShape)
     ) {

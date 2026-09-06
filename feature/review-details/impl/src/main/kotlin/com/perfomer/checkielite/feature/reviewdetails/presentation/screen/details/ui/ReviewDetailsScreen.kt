@@ -8,12 +8,16 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.modifier.SharedContentKey
@@ -30,12 +34,14 @@ import com.perfomer.checkielite.common.ui.util.add
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.RecommendedReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiState
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.Price
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.Tag
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ConfirmDeleteDialog
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsAppBar
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsHeader
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsImage
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsInfo
-import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsRecommendations
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.reviewDetailsRecommendations
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsTags
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsText
 import kotlinx.collections.immutable.persistentListOf
@@ -60,17 +66,20 @@ internal fun ReviewDetailsScreen(
     onRecommendationClick: (recommendedReviewId: String) -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
+    val palette = LocalCuiPalette.current
+    val backgroundColor = lerp(palette.BackgroundPrimary, palette.BackgroundAccentTertiary, 0.4F)
 
     SharedNavigationContainer(
         contentId = (state as? ReviewDetailsUiState.Content)?.reviewId,
         cornerRadius = 0.dp,
         otherCornerRadius = 24.dp,
-        color = LocalCuiPalette.current.BackgroundPrimary,
+        color = backgroundColor,
         otherColor = LocalCuiPalette.current.BackgroundElevationBase,
         modifier = Modifier.fillMaxSize()
     ) {
         CuiGlassScaffold(
             containerColor = Color.Transparent,
+            toolbarColor = backgroundColor,
             topBar = {
                 ReviewDetailsAppBar(
                     scrollState = scrollState,
@@ -152,6 +161,7 @@ private fun Content(
     LazyColumn(
         state = scrollableState,
         contentPadding = contentPadding.add(bottom = 24.dp),
+        modifier = Modifier.fillMaxSize()
     ) {
         item(key = "header") {
             ReviewDetailsHeader(
@@ -190,7 +200,7 @@ private fun Content(
             )
         }
 
-        item {
+        item(key = "text") {
             ReviewDetailsText(
                 comment = state.comment,
                 advantages = state.advantages,
@@ -199,7 +209,7 @@ private fun Content(
             )
         }
 
-        item {
+        item(key = "tags") {
             ReviewDetailsTags(
                 tags = state.tags,
                 onAddTagsClick = onAddTagsClick,
@@ -207,12 +217,10 @@ private fun Content(
             )
         }
 
-        item {
-            ReviewDetailsRecommendations(
-                recommendations = state.recommendations,
-                onRecommendationClick = onRecommendationClick,
-            )
-        }
+        reviewDetailsRecommendations(
+            recommendations = state.recommendations,
+            onRecommendationClick = onRecommendationClick,
+        )
     }
 }
 
@@ -231,6 +239,42 @@ private fun ReviewDetailsScreenPreview() = CheckieLiteTheme {
     ReviewDetailsScreen(state = mockUiState)
 }
 
+@ScreenPreview
+@Composable
+private fun ReviewDetailsScreenDarkPreview() = CheckieLiteTheme(darkTheme = true) {
+    ReviewDetailsScreen(state = mockUiState)
+}
+
+@ScreenPreview
+@Composable
+private fun ReviewDetailsScreenEmptyPreview() = CheckieLiteTheme {
+    ReviewDetailsScreen(
+        state = mockUiState.copy(
+            brandName = null,
+            picturesUri = persistentListOf(),
+            comment = null,
+            advantages = null,
+            disadvantages = null,
+            tags = persistentListOf(),
+            recommendations = persistentListOf(),
+        ),
+    )
+}
+
+@ScreenPreview
+@Composable
+private fun ReviewDetailsScreenLargeTextPreview() = CheckieLiteTheme {
+    CompositionLocalProvider(LocalDensity provides Density(LocalDensity.current.density, fontScale = 1.5F)) {
+        ReviewDetailsScreen(
+            state = mockUiState.copy(
+                picturesUri = persistentListOf(),
+                rating = 10,
+                price = Price(value = Text.raw("123 456,78 ₽"), fractionalPartIndices = null),
+            ),
+        )
+    }
+}
+
 internal val mockUiState = ReviewDetailsUiState.Content(
     reviewId = "preview",
     productName = Text.raw("Chicken toasts with poached eggs"),
@@ -239,7 +283,7 @@ internal val mockUiState = ReviewDetailsUiState.Content(
         "https://habrastorage.org/r/w780/getpro/habr/upload_files/746/2ab/27c/7462ab27cca552ce31ee9cba01387692.jpeg",
         "https://images.unsplash.com/photo-1483129804960-cb1964499894?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
         "https://images.unsplash.com/photo-1620447875063-19be4e4604bc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=796&q=80",
-        "https://images.unsplash.com/photo-1548100535-fe8a16c187ef?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1151&q=80"
+        "https://images.unsplash.com/photo-1548100535-fe8a16c187ef?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1151&q=80",
     ),
     rating = 8,
     date = Text.raw("31 May 2023"),
@@ -249,7 +293,10 @@ internal val mockUiState = ReviewDetailsUiState.Content(
     advantages = Text.raw("Great, but not great."),
     disadvantages = Text.raw("It's okay."),
     isMenuAvailable = true,
-    tags = persistentListOf(),
+    tags = persistentListOf(
+        Tag(tagId = "breakfast", text = Text.raw("Breakfast"), emoji = "🥐"),
+        Tag(tagId = "favorite", text = Text.raw("Favorites"), emoji = "❤️"),
+    ),
     recommendations = persistentListOf(
         RecommendedReview(
             reviewId = "",
@@ -259,5 +306,5 @@ internal val mockUiState = ReviewDetailsUiState.Content(
             rating = 10,
             isSyncing = false,
         ),
-    )
+    ),
 )

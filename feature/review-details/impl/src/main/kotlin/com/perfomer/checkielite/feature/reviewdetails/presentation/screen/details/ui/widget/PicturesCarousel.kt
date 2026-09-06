@@ -1,45 +1,25 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget
 
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.EnterExitState
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.BlurredEdgeTreatment
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImagePainter
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
-import com.perfomer.checkielite.common.ui.cui.modifier.offsetForPage
 import com.perfomer.checkielite.common.ui.cui.modifier.scaleHorizontalNeighbors
+import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
 import com.perfomer.checkielite.common.ui.cui.widget.pager.CuiHorizontalPagerIndicator
-import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.presentation.transition.SharedImage
-import com.perfomer.checkielite.common.ui.presentation.transition.LocalNavigationAnimatedVisibilityScope
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import kotlinx.collections.immutable.ImmutableList
-import kotlin.math.absoluteValue
 
 @Composable
 internal fun PicturesCarousel(
@@ -50,85 +30,40 @@ internal fun PicturesCarousel(
     onPictureClick: () -> Unit,
     isTransitionEnabled: () -> Boolean,
 ) {
-    val visibilityScope = LocalNavigationAnimatedVisibilityScope.current
-    val atmosphereAlpha = visibilityScope?.transition?.animateFloat(
-        transitionSpec = {
-            if (targetState == EnterExitState.Visible) {
-                tween(durationMillis = 250, delayMillis = 150)
-            } else {
-                tween(durationMillis = 150)
-            }
-        },
-        label = "Carousel atmosphere",
-    ) { if (it == EnterExitState.Visible) 1F else 0F }
+    val pagerState = rememberPagerState(
+        initialPage = currentPictureIndex,
+        pageCount = { picturesUri.size },
+    )
+    UpdateEffect(pagerState.currentPage) { onPageChange(pagerState.currentPage) }
 
-    Box(
-        contentAlignment = Alignment.BottomCenter,
-        modifier = Modifier.fillMaxSize()
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()
     ) {
-        val pagerState = rememberPagerState(
-            initialPage = currentPictureIndex,
-            pageCount = { picturesUri.size },
-        )
-
-        UpdateEffect(pagerState.currentPage) { onPageChange(pagerState.currentPage) }
-
         HorizontalPager(
             state = pagerState,
             key = { picturesUri[it] },
             pageSpacing = 12.dp,
-            contentPadding = PaddingValues(
-                horizontal = 24.dp,
-                vertical = 24.dp,
-            ),
-        ) { i ->
-            Box(
-                modifier = Modifier.scaleHorizontalNeighbors(pagerState = pagerState, page = i)
-            ) {
-                var pictureState: AsyncImagePainter.State by remember(picturesUri[i]) { mutableStateOf(AsyncImagePainter.State.Empty) }
-
-                if (pictureState is AsyncImagePainter.State.Success) {
-                    val isSystemInDarkTheme = isSystemInDarkTheme()
-                    val themeCoefficient = if (isSystemInDarkTheme) 0.5F else 0.9F
-                    val targetAlpha = (1F - pagerState.offsetForPage(i).absoluteValue) * themeCoefficient
-                    val interpolatedAlpha = FastOutLinearInEasing.transform(targetAlpha)
-                    Image(
-                        painter = requireNotNull(pictureState.painter),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1F)
-                            .blur(40.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
-                            .graphicsLayer {
-                                alpha = interpolatedAlpha * (atmosphereAlpha?.value ?: 1F)
-                                translationY = 40.dp.toPx()
-                            }
-                            .clip(RoundedCornerShape(24.dp))
-                    )
-                }
-
-                SharedImage(
-                    contentId = reviewId,
-                    imageUri = picturesUri[i],
-                    cornerRadius = 24.dp,
-                    otherCornerRadius = 16.dp,
-                    // A retained/prefetched cover must not fly in from outside the viewport.
-                    isTransitionEnabled = {
-                        i == 0 && pagerState.currentPage == i &&
-                            pagerState.currentPageOffsetFraction == 0F && isTransitionEnabled()
-                    },
-                    onState = { state -> pictureState = state },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1F)
-                        .clickable(onClick = onPictureClick)
-                )
-            }
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+        ) { page ->
+            SharedImage(
+                contentId = reviewId,
+                imageUri = picturesUri[page],
+                cornerRadius = 24.dp,
+                otherCornerRadius = 16.dp,
+                // Only the visible cover participates in the transition from the main list.
+                isTransitionEnabled = {
+                    page == 0 && pagerState.currentPage == page &&
+                        pagerState.currentPageOffsetFraction == 0F && isTransitionEnabled()
+                },
+                modifier = Modifier
+                    .scaleHorizontalNeighbors(pagerState = pagerState, page = page)
+                    .fillMaxWidth()
+                    .aspectRatio(1F)
+                    .softShadow(shape = RoundedCornerShape(24.dp))
+                    .clickable(onClick = onPictureClick)
+            )
         }
-
-        Spacer(Modifier.height(20.dp))
-
         if (pagerState.pageCount > 1) {
             CuiHorizontalPagerIndicator(
                 state = pagerState,
@@ -136,6 +71,7 @@ internal fun PicturesCarousel(
                 defaultWidth = 6.dp,
                 selectedColor = LocalCuiPalette.current.BackgroundAccentPrimary,
                 defaultColor = LocalCuiPalette.current.BackgroundTertiary,
+                modifier = Modifier.padding(bottom = 4.dp)
             )
         }
     }

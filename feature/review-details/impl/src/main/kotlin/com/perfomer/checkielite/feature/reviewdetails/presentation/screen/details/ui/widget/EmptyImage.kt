@@ -5,9 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.feature.reviewdetails.R
 
@@ -32,19 +33,21 @@ internal fun EmptyImage(onEmptyImageClick: () -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .padding(top = 24.dp)
-            .padding(horizontal = 24.dp)
+            .padding(top = 16.dp)
+            .padding(horizontal = 20.dp)
             .fillMaxWidth()
-            .aspectRatio(1F)
+            .heightIn(min = 160.dp)
+            .softShadow(shape = RoundedCornerShape(24.dp))
             .clip(RoundedCornerShape(24.dp))
-            .background(LocalCuiPalette.current.BackgroundSecondary)
+            .background(LocalCuiPalette.current.BackgroundElevationBase)
             .clickable(onClick = onEmptyImageClick)
+            .padding(24.dp)
     ) {
         Icon(
             painter = painterResource(id = CommonDrawable.ic_add_picture),
             tint = LocalCuiPalette.current.IconAccent,
             contentDescription = null,
-            modifier = Modifier.size(64.dp),
+            modifier = Modifier.size(40.dp)
         )
 
         Spacer(Modifier.height(16.dp))

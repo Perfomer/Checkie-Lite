@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
+import com.perfomer.checkielite.common.ui.presentation.transition.isSharedTransitionItemEligible
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.add
@@ -124,20 +125,32 @@ private fun Content(
         state = scrollableState,
         contentPadding = contentPadding.add(bottom = 24.dp),
     ) {
-        item {
+        item(key = "header") {
             ReviewDetailsHeader(
                 productName = state.productName,
                 brandName = state.brandName,
             )
         }
 
-        item {
+        item(key = "pictures") {
             ReviewDetailsImage(
+                reviewId = state.reviewId,
                 picturesUri = state.picturesUri,
                 currentPicturePosition = state.currentPicturePosition,
                 onEmptyImageClick = onEmptyImageClick,
                 onPictureClick = onPictureClick,
-                onPageChange = onPageChange
+                onPageChange = onPageChange,
+                isTransitionEnabled = {
+                    val layout = scrollableState.layoutInfo
+                    val pictures = layout.visibleItemsInfo.firstOrNull { it.key == "pictures" }
+                    isSharedTransitionItemEligible(
+                        totalItemsCount = layout.totalItemsCount,
+                        itemOffset = pictures?.offset,
+                        itemSize = pictures?.size,
+                        viewportStartOffset = 0,
+                        viewportEndOffset = layout.viewportEndOffset,
+                    )
+                },
             )
         }
 
@@ -193,6 +206,7 @@ private fun ReviewDetailsScreenPreview() = CheckieLiteTheme {
 }
 
 internal val mockUiState = ReviewDetailsUiState.Content(
+    reviewId = "preview",
     productName = Text.raw("Chicken toasts with poached eggs"),
     brandName = Text.raw("LUI BIDON"),
     picturesUri = persistentListOf(

@@ -25,7 +25,7 @@ internal class ReviewDetailsStore(
     reducer = reducer,
     uiStateMapper = uiStateMapper,
     actors = actors,
-    initialState = ReviewDetailsState(destination.reviewId),
+    initialState = destination.toInitialState(),
     initialEvents = listOf(Initialize),
     unhandledExceptionHandler = LogUnhandledExceptionHandler("ReviewDetailsStore"),
 )

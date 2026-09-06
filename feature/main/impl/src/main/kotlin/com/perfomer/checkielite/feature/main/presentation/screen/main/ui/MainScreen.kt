@@ -70,6 +70,7 @@ import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.LocalLiquidGlassEnabled
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.presentation.transition.isSharedTransitionItemEligible
 import com.perfomer.checkielite.common.ui.util.app.appNameSpannable
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.feature.main.R
@@ -181,6 +182,9 @@ private fun Content(
         ),
     ),
 ) {
+    val density = LocalDensity.current
+    val toolbarBottom = with(density) { contentPadding.calculateTopPadding().roundToPx() }
+
     LazyColumn(
         // Keep the decoration behind the pinned toolbar until the header scrolls away.
         contentPadding = PaddingValues(bottom = contentPadding.calculateBottomPadding()),
@@ -233,6 +237,17 @@ private fun Content(
             MainReviewCard(
                 item = item,
                 onClick = onReviewClick,
+                isImageTransitionEnabled = {
+                    val layout = scrollState.layoutInfo
+                    val card = layout.visibleItemsInfo.firstOrNull { it.key == item.id }
+                    isSharedTransitionItemEligible(
+                        totalItemsCount = layout.totalItemsCount,
+                        itemOffset = card?.offset,
+                        itemSize = card?.size,
+                        viewportStartOffset = toolbarBottom,
+                        viewportEndOffset = layout.viewportEndOffset,
+                    )
+                },
                 modifier = Modifier
                     .animateItem()
                     .padding(horizontal = 20.dp)

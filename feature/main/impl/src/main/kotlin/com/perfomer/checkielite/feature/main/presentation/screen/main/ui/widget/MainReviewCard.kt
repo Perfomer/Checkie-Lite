@@ -7,11 +7,13 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
@@ -32,6 +34,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import com.perfomer.checkielite.common.ui.presentation.transition.SharedImage
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -42,6 +45,7 @@ private val ReviewCardShape = RoundedCornerShape(24.dp)
 internal fun MainReviewCard(
     item: ReviewItem,
     onClick: (id: String) -> Unit,
+    isImageTransitionEnabled: () -> Boolean = { true },
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -64,6 +68,24 @@ internal fun MainReviewCard(
                 imageCornerRadius = 16.dp,
                 imageSize = 56.dp,
                 imageRightOffset = 12.dp,
+                imageContent = item.imageUri?.let { uri ->
+                    {
+                        SharedImage(
+                            contentId = item.id,
+                            imageUri = uri,
+                            cornerRadius = 16.dp,
+                            otherCornerRadius = 24.dp,
+                            isTransitionEnabled = isImageTransitionEnabled,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .border(
+                                    width = 1.dp,
+                                    color = LocalCuiPalette.current.OutlinePicture,
+                                    shape = RoundedCornerShape(16.dp),
+                                )
+                        )
+                    }
+                },
             )
         }
     }

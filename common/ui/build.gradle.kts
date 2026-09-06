@@ -16,6 +16,7 @@ dependencies {
 	api(libs.coil.compose)
 	api(libs.coil.network.okhttp)
 	api(libs.fadingEdges)
+	api(libs.androidx.compose.animation)
 	implementation(libs.accompanist.systemuicontroller)
 	implementation(libs.androidx.activity.compose)
 	implementation(libs.androidx.appcompat)
@@ -27,4 +28,7 @@ dependencies {
 	implementation(libs.koin.core)
 	implementation(libs.kotlinx.coroutines)
 	implementation(platform(libs.androidx.compose.bom))
+
+	testImplementation(libs.test.junitJupiter)
+	testRuntimeOnly(libs.test.junitPlatformLauncher)
 }

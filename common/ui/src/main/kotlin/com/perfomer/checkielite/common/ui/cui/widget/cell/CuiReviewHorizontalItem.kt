@@ -56,6 +56,7 @@ fun CuiReviewHorizontalItem(
     imageSize: Dp = 48.dp,
     imageRightOffset: Dp = 16.dp,
     interactionSource: MutableInteractionSource? = null,
+    imageContent: (@Composable () -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -76,7 +77,9 @@ fun CuiReviewHorizontalItem(
                 .clip(RoundedCornerShape(imageCornerRadius))
                 .background(LocalCuiPalette.current.BackgroundSecondary)
         ) {
-            if (item.imageUri != null) {
+            if (imageContent != null) {
+                imageContent()
+            } else if (item.imageUri != null) {
                 AsyncImage(
                     model = item.imageUri,
                     contentDescription = null,

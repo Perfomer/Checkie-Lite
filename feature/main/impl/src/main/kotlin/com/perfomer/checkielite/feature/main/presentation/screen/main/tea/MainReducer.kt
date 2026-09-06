@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.main.presentation.screen.main.tea
 
 import com.perfomer.checkielite.common.pure.state.Lce
+import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.common.pure.state.toLoadingContentAware
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
 import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastStyle
@@ -53,7 +54,12 @@ internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, Main
             commands(HideChangelogBanner)
         }
         is OnFabClick -> commands(OpenReviewCreation)
-        is OnReviewClick -> commands(OpenReviewDetails(event.id))
+        is OnReviewClick -> commands(
+            OpenReviewDetails(
+                reviewId = event.id,
+                initialReview = state.reviews.content?.firstOrNull { it.id == event.id },
+            ),
+        )
         is OnTagClick -> commands(OpenSearch(tagId = event.id))
         is OnSearchClick -> commands(OpenSearch())
         is OnSettingsClick -> commands(OpenSettings)

@@ -47,7 +47,12 @@ internal class MainNavigationActor(
             }
 
             is OpenChangelog -> navigate(ChangelogDestination)
-            is OpenReviewDetails -> navigate(ReviewDetailsDestination(command.reviewId))
+            is OpenReviewDetails -> navigate(
+                ReviewDetailsDestination(
+                    reviewId = command.reviewId,
+                    initialReview = command.initialReview,
+                ),
+            )
             is OpenSearch -> navigate(SearchDestination(tagId = command.tagId))
             is OpenSettings -> navigate(SettingsDestination)
         }

@@ -2,24 +2,33 @@ package com.perfomer.checkielite.navigation.decompose
 
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.arkivanov.decompose.ExperimentalDecomposeApi
-import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.extensions.compose.experimental.stack.ChildStack
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.PredictiveBackParams
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.slide
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.androidPredictiveBackAnimatableV2
-import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.predictiveBackAnimation
-import com.arkivanov.decompose.extensions.compose.stack.animation.slide
-import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.retainedComponent
+import com.perfomer.checkielite.common.ui.presentation.transition.LocalNavigationAnimatedVisibilityScope
+import com.perfomer.checkielite.common.ui.presentation.transition.LocalSharedTransitionScope
+import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationTransitionDurationMillis
 import com.perfomer.checkielite.core.navigation.BottomSheetController
 import com.perfomer.checkielite.core.navigation.Destination
 import com.perfomer.checkielite.core.navigation.NavigationHost
@@ -69,17 +78,59 @@ internal class DecomposeNavigationHost(
     @Composable
     private fun MainRoot() {
         val mainNavigationStack by root.mainNavigationStack.subscribeAsState()
+        val animationScope = rememberCoroutineScope()
+        val sharedBackHandler = remember(root, animationScope) {
+            SharedTransitionBackHandler(delegate = root.backHandler, scope = animationScope)
+        }
 
-        Children(
-            stack = mainNavigationStack,
-            animation = predictiveBackAnimation(
-                backHandler = root.backHandler,
-                fallbackAnimation = stackAnimation(slide()),
-                selector = { backEvent, _, _ -> androidPredictiveBackAnimatableV2(backEvent) },
-                onBack = ::back,
-            ),
-            content = { child -> child.instance.Screen() },
-        )
+        val animation = remember(root, sharedBackHandler) {
+            val sharedAnimator = fade(
+                animationSpec = tween(
+                    durationMillis = SharedNavigationTransitionDurationMillis,
+                    easing = FastOutSlowInEasing,
+                ),
+            )
+            val defaultAnimator = slide()
+
+            stackAnimation<Destination, Screen>(
+                predictiveBackParams = { stack ->
+                    val previousDestination = stack.backStack.lastOrNull()?.configuration
+                    val isSharedTransition = previousDestination?.let {
+                        stack.active.configuration.hasSharedTransitionWith(it)
+                    } == true
+
+                    PredictiveBackParams(
+                        backHandler = if (isSharedTransition) sharedBackHandler else root.backHandler,
+                        onBack = ::back,
+                        animatable = { backEvent ->
+                            // Decompose seeks AnimatedVisibility only without a custom animatable.
+                            // This lets the same shared image follow and reverse the back gesture.
+                            if (isSharedTransition) null else androidPredictiveBackAnimatableV2(backEvent)
+                        },
+                    )
+                },
+                selector = { child, otherChild, _, _ ->
+                    if (child.configuration.hasSharedTransitionWith(otherChild.configuration)) {
+                        sharedAnimator
+                    } else {
+                        defaultAnimator
+                    }
+                },
+            )
+        }
+
+        SharedTransitionLayout {
+            CompositionLocalProvider(LocalSharedTransitionScope provides this) {
+                ChildStack(
+                    stack = mainNavigationStack,
+                    animation = animation,
+                ) { child ->
+                    CompositionLocalProvider(LocalNavigationAnimatedVisibilityScope provides this) {
+                        child.instance.Screen()
+                    }
+                }
+            }
+        }
     }
 
     @Composable

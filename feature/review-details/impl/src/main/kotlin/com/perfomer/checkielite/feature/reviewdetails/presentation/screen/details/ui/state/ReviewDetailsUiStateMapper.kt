@@ -26,6 +26,7 @@ internal class ReviewDetailsUiStateMapper : UiStateMapper<ReviewDetailsState, Re
                 val review = content.review
 
                 ReviewDetailsUiState.Content(
+                    reviewId = state.reviewId,
                     brandName = review.productBrand?.uppercase()?.let(Text::raw),
                     productName = Text.raw(review.productName),
                     date = Text.raw(dateFormat.format(review.creationDate)),

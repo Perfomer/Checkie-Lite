@@ -5,4 +5,5 @@ plugins {
 
 dependencies {
 	implementation(projects.common.navigation.api.core)
+	api(projects.core.entity)
 }

@@ -9,12 +9,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +26,7 @@ import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiSecondaryButton
 import com.perfomer.checkielite.common.ui.cui.widget.progress.CuiProgressBar
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
+import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassScaffold
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -51,7 +53,7 @@ internal fun BackupScreen(
         }
     }
 
-    Scaffold(
+    CuiGlassScaffold(
         topBar = { BackupTopAppBar() },
     ) { contentPadding ->
         Column(
@@ -120,6 +122,7 @@ internal fun BackupScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 private fun BackupTopAppBar() {
     CenterAlignedTopAppBar(
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
         title = { Text(text = appNameSpannable(), fontSize = 20.sp) },
         modifier = Modifier.fillMaxWidth()
     )

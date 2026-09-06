@@ -13,6 +13,7 @@ dependencies {
 	implementation(projects.common.pure)
 	implementation(projects.common.tea.compose)
 
+	api(libs.backdrop)
 	api(libs.coil.compose)
 	api(libs.coil.network.okhttp)
 	api(libs.fadingEdges)

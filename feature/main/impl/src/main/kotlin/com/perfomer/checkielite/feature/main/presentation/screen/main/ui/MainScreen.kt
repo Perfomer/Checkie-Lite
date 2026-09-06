@@ -66,11 +66,12 @@ import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiTagChip
+import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassToolbarBackground
+import com.perfomer.checkielite.common.ui.presentation.transition.isSharedTransitionItemEligible
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.LocalLiquidGlassEnabled
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
-import com.perfomer.checkielite.common.ui.presentation.transition.isSharedTransitionItemEligible
 import com.perfomer.checkielite.common.ui.util.app.appNameSpannable
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.feature.main.R
@@ -78,7 +79,6 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.Tag
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.WhatsNewBanner
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.ChangelogBanner
-import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.MainAppBarBackground
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.MainHeaderBackground
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.MainReviewCard
 import com.perfomer.checkielite.feature.main.presentation.util.TagRowUiBalancer
@@ -321,7 +321,7 @@ private fun TopAppBar(
 
     Box {
         if (showBackground && scrollState != null && backdrop != null) {
-            MainAppBarBackground(
+            CuiGlassToolbarBackground(
                 backdrop = backdrop,
                 backgroundColor = backgroundColor,
                 progress = {

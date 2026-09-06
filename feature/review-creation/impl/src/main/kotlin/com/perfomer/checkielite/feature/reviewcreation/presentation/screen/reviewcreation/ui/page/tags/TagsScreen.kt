@@ -56,15 +56,16 @@ import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.LocalObstruction
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.mockUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.widget.TagsLibrarySection
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.widget.TagsSearchField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.widget.TagsStatPill
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.TagsPageUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget.ReviewCreationPageHeader
-import kotlinx.coroutines.launch
 import kotlin.math.max
 import kotlin.math.min
+import kotlinx.coroutines.launch
 
 private const val SEARCH_ITEM_KEY = "search"
 private const val SEARCH_ITEM_INDEX = 1
@@ -112,7 +113,7 @@ internal fun TagsScreen(
         LazyColumn(
             state = scrollState,
             contentPadding = PaddingValues(
-                top = 16.dp,
+                top = LocalObstruction.current.calculateTopPadding() + 16.dp,
                 bottom = bottomContentPadding,
             ),
             modifier = Modifier

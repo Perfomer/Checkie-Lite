@@ -4,9 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -15,10 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -39,6 +38,7 @@ import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.widget.info.CuiInfoIcon
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.cui.widget.text.CuiFadedText
+import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassScaffold
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -70,7 +70,7 @@ internal fun SettingsScreen(
     onLiquidGlassChanged: (Boolean) -> Unit = {},
     onLibrariesClick: () -> Unit = {},
 ) {
-    Scaffold(
+    CuiGlassScaffold(
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.settings_title), fontSize = 18.sp, fontWeight = FontWeight.Medium) },
@@ -90,8 +90,8 @@ internal fun SettingsScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(contentPadding)
                 .verticalScroll(rememberScrollState())
+                .padding(contentPadding)
         ) {
             SettingsHeader(version = state.appVersion)
 

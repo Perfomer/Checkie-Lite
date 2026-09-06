@@ -33,7 +33,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -70,6 +69,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField2
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.HorizontalScrim
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
+import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassScaffold
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -105,7 +105,7 @@ internal fun SearchScreen(
         }
     }
 
-    Scaffold(
+    CuiGlassScaffold(
         topBar = {
             SearchTopAppBar(
                 scrollableState = scrollState,
@@ -267,7 +267,6 @@ private fun SearchTopAppBar(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .background(LocalCuiPalette.current.BackgroundPrimary)
             .statusBarsPadding()
             .bottomStrokeOnScroll(
                 show = shouldShowDivider,

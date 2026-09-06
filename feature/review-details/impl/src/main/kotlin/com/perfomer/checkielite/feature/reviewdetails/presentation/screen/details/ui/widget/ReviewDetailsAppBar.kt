@@ -14,12 +14,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -54,6 +56,7 @@ internal fun ReviewDetailsAppBar(
     val shouldShowDivider by remember { derivedStateOf { scrollState.canScrollBackward } }
 
     TopAppBar(
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
         title = {
             val shouldShowTitle by remember { derivedStateOf { scrollState.firstVisibleItemIndex > 0 } }
             AnimatedVisibility(visible = shouldShowTitle && title != null, enter = fadeIn(tween(250)), exit = fadeOut(tween(250))) {

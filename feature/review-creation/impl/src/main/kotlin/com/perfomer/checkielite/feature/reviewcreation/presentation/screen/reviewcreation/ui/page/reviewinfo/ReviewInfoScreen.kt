@@ -55,6 +55,7 @@ internal fun ReviewInfoScreen(
             .verticalScroll(scrollState)
             .navigationBarsPadding()
             .imePadding()
+            .padding(top = obstruction.calculateTopPadding())
             .padding(20.dp)
     ) {
         ReviewCreationPageHeader(

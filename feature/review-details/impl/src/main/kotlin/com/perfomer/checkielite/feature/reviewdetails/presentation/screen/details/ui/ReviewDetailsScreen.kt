@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +20,7 @@ import com.perfomer.checkielite.common.ui.cui.modifier.SharedContentKey
 import com.perfomer.checkielite.common.ui.cui.modifier.SharedContentPart
 import com.perfomer.checkielite.common.ui.cui.modifier.sharedNavigationContent
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
+import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassScaffold
 import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationContainer
 import com.perfomer.checkielite.common.ui.presentation.transition.isSharedTransitionItemEligible
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
@@ -69,7 +69,7 @@ internal fun ReviewDetailsScreen(
         otherColor = LocalCuiPalette.current.BackgroundElevationBase,
         modifier = Modifier.fillMaxSize()
     ) {
-        Scaffold(
+        CuiGlassScaffold(
             containerColor = Color.Transparent,
             topBar = {
                 ReviewDetailsAppBar(

@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget
+package com.perfomer.checkielite.common.ui.cui.widget.toolbar
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,7 +22,7 @@ import com.perfomer.checkielite.common.ui.theme.LocalLiquidGlassEnabled
 private val GlassShape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)
 
 @Composable
-internal fun MainAppBarBackground(
+fun CuiGlassToolbarBackground(
     backdrop: Backdrop,
     backgroundColor: Color,
     progress: () -> Float,

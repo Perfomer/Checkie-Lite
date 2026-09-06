@@ -90,6 +90,7 @@ internal fun TagsScreen(
     val selectedTagsCount = remember(state.tags) { state.tags.count(TagsPageUiState.Tag::isSelected) }
     val recommendedTagsCount = remember(state.tags) { state.tags.count(TagsPageUiState.Tag::isRecommended) }
     val density = LocalDensity.current
+    val toolbarTopPadding = LocalObstruction.current.calculateTopPadding()
     val navigationBarsBottomPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
     val isImeVisible = WindowInsets.ime.getBottom(density) > 0
     val bottomContentPadding = 104.dp + if (isImeVisible) 0.dp else navigationBarsBottomPadding
@@ -113,7 +114,7 @@ internal fun TagsScreen(
         LazyColumn(
             state = scrollState,
             contentPadding = PaddingValues(
-                top = LocalObstruction.current.calculateTopPadding() + 16.dp,
+                top = toolbarTopPadding + 16.dp,
                 bottom = bottomContentPadding,
             ),
             modifier = Modifier
@@ -186,6 +187,8 @@ internal fun TagsScreen(
             visible = shouldShowRecommendedTagsButton,
             enter = slideInVertically(initialOffsetY = { -it / 2 }) + fadeIn(),
             exit = slideOutVertically(targetOffsetY = { -it / 2 }) + fadeOut(),
+            // The pager fills the screen; only the floating button stays below the toolbar.
+            modifier = Modifier.padding(top = toolbarTopPadding)
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 RecommendedTagsButton(

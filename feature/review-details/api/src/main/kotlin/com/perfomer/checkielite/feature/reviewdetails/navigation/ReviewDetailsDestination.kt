@@ -14,6 +14,12 @@ data class ReviewDetailsDestination(
     @Transient val initialReview: CheckieReview? = null,
 ) : Destination(), SharedTransitionDestination {
 
+    // The transient snapshot must not change navigation identity before/after restoration.
+    override fun equals(other: Any?): Boolean =
+        other is ReviewDetailsDestination && reviewId == other.reviewId
+
+    override fun hashCode(): Int = reviewId.hashCode()
+
     override val sharedTransitionGroup: String
         get() = "review"
 }

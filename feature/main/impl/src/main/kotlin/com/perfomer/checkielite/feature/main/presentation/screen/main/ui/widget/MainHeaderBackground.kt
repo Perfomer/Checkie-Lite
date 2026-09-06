@@ -74,6 +74,10 @@ internal fun MainHeaderBackground(
                     close()
                 }
                 val drift = 5.dp.toPx()
+                // Anchor decorations above search, independently of the number of tag rows.
+                val squareOrigin = Offset(size.width * 0.1F, 48.dp.toPx())
+                val pentagonOrigin = Offset(size.width * 0.81F, 50.dp.toPx())
+                val smallRingOrigin = Offset(size.width * 0.24F, 22.dp.toPx())
 
                 onDrawBehind {
                     // Read animation state only while drawing, keeping layout and composition still.
@@ -92,10 +96,10 @@ internal fun MainHeaderBackground(
                     drawCircle(
                         color = softAccent.copy(alpha = 0.4F),
                         radius = 56.dp.toPx(),
-                        center = Offset(size.width + 12.dp.toPx(), size.height * 0.24F) - squareOffset,
+                        center = Offset(size.width + 12.dp.toPx(), 24.dp.toPx()) - squareOffset,
                     )
 
-                    val squareCenter = Offset(size.width * 0.1F, size.height * 0.25F) + squareOffset
+                    val squareCenter = squareOrigin + squareOffset
                     rotate(degrees = -18F, pivot = squareCenter) {
                         drawRoundRect(
                             color = softAccent.copy(alpha = 0.48F),
@@ -105,7 +109,7 @@ internal fun MainHeaderBackground(
                         )
                     }
 
-                    val pentagonCenter = Offset(size.width * 0.84F, size.height * 0.67F) + pentagonOffset
+                    val pentagonCenter = pentagonOrigin + pentagonOffset
                     translate(left = pentagonCenter.x, top = pentagonCenter.y) {
                         drawPath(
                             path = pentagon,
@@ -115,7 +119,7 @@ internal fun MainHeaderBackground(
                     drawCircle(
                         color = softAccent.copy(alpha = 0.5F),
                         radius = 16.dp.toPx(),
-                        center = Offset(size.width * 0.26F, size.height * 0.84F) - pentagonOffset,
+                        center = smallRingOrigin - pentagonOffset,
                         style = smallRingStroke,
                     )
                 }

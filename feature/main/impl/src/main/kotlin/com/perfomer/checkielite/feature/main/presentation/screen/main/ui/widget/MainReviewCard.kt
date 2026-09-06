@@ -1,6 +1,6 @@
 package com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget
 
-import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -22,7 +22,8 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
@@ -31,6 +32,9 @@ import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
 
 private val ReviewCardShape = RoundedCornerShape(24.dp)
 
@@ -68,66 +72,114 @@ internal fun MainReviewCard(
 @Composable
 private fun DiamondGlow(modifier: Modifier = Modifier) {
     val isDark = LocalCuiPalette.current.BackgroundElevationBase.luminance() < 0.5F
-    val transition = rememberInfiniteTransition(label = "Diamond glow")
-    val glow = transition.animateFloat(
+    val transition = rememberInfiniteTransition(label = "Diamond mesh")
+    val phase = transition.animateFloat(
         initialValue = 0F,
-        targetValue = 1F,
+        targetValue = (2 * PI).toFloat(),
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 4500, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse,
+            animation = tween(durationMillis = 14000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart,
         ),
-        label = "Diamond light breathing",
+        label = "Diamond mesh drift",
     )
 
     Box(
         modifier = modifier.drawWithCache {
             // Keep the light around the rating even on wide cards and at large font scales.
             val glowWidth = minOf(164.dp.toPx(), size.width * 0.58F)
-            val sky = Color(0xFF63CDFF)
-            val blue = Color(0xFF448AFF)
-            val ice = Color(0xFFBCF6FF)
-            val skyGlow = Brush.radialGradient(
-                0F to sky.copy(alpha = if (isDark) 0.30F else 0.44F),
-                0.45F to sky.copy(alpha = if (isDark) 0.18F else 0.24F),
-                1F to sky.copy(alpha = 0F),
-                center = Offset(size.width, size.height * 0.12F),
-                radius = glowWidth,
-            )
-            val blueGlow = Brush.radialGradient(
-                0F to blue.copy(alpha = if (isDark) 0.34F else 0.32F),
-                0.4F to blue.copy(alpha = if (isDark) 0.18F else 0.16F),
-                1F to blue.copy(alpha = 0F),
-                center = Offset(size.width - 16.dp.toPx(), size.height * 1.1F),
-                radius = glowWidth * 0.78F,
-            )
-            val iceGlow = Brush.radialGradient(
-                colors = listOf(ice.copy(alpha = if (isDark) 0.16F else 0.60F), ice.copy(alpha = 0F)),
-                center = Offset(size.width - 24.dp.toPx(), size.height * 0.32F),
-                radius = glowWidth * 0.48F,
-            )
-            val facet = Path().apply {
-                moveTo(size.width - glowWidth * 0.72F, 0F)
-                lineTo(size.width - glowWidth * 0.4F, 0F)
-                lineTo(size.width - glowWidth * 0.05F, size.height)
-                lineTo(size.width - glowWidth * 0.15F, size.height)
-                close()
-            }
-            val facetLight = Brush.linearGradient(
-                colors = listOf(Color.White.copy(alpha = 0F), ice.copy(alpha = if (isDark) 0.08F else 0.24F)),
-                start = Offset(size.width - glowWidth * 0.6F, 0F),
-                end = Offset(size.width, size.height),
+            // Unit gradients are cached, then stretched into overlapping, moving mesh lobes.
+            val sky = meshBrush(Color(0xFF79CEFF), alpha = if (isDark) 0.22F else 0.48F)
+            val azure = meshBrush(Color(0xFF397DF6), alpha = if (isDark) 0.40F else 0.66F)
+            val periwinkle = meshBrush(Color(0xFF929BFF), alpha = if (isDark) 0.25F else 0.48F)
+            val cyan = meshBrush(Color(0xFF41E3EB), alpha = if (isDark) 0.30F else 0.62F)
+            val pearl = meshBrush(Color(0xFFE9FAFF), alpha = if (isDark) 0.06F else 0.88F)
+            // The reaction is 28 dp wide with 12 dp of trailing card padding.
+            val diamondCenter = Offset(size.width - 26.dp.toPx(), size.height / 2F)
+            val haloColor = Color(0xFFF4FCFF)
+            val haloOpacity = if (isDark) 0.58F else 0.98F
+            val diamondHalo = Brush.radialGradient(
+                0F to haloColor.copy(alpha = haloOpacity),
+                0.32F to haloColor.copy(alpha = haloOpacity * 0.96F),
+                0.62F to haloColor.copy(alpha = haloOpacity * 0.52F),
+                1F to haloColor.copy(alpha = 0F),
+                center = diamondCenter,
+                radius = 28.dp.toPx(),
             )
 
             onDrawBehind {
                 // Read animation state only while drawing: text and layout stay untouched.
-                val progress = glow.value
-                drawRect(brush = skyGlow)
-                drawRect(brush = blueGlow, alpha = 0.78F + progress * 0.22F)
-                drawRect(brush = iceGlow, alpha = 0.55F + progress * 0.45F)
-                drawPath(path = facet, brush = facetLight, alpha = 0.5F + progress * 0.5F)
+                val driftX = sin(phase.value)
+                val driftY = cos(phase.value)
+                drawMeshSpot(
+                    brush = sky,
+                    center = Offset(size.width - glowWidth * 0.18F, size.height * 0.45F),
+                    radiusX = glowWidth * 0.94F,
+                    radiusY = size.height * 1.35F,
+                )
+                drawMeshSpot(
+                    brush = periwinkle,
+                    center = Offset(
+                        size.width - glowWidth * (0.48F + driftX * 0.10F),
+                        size.height * (0.83F + driftY * 0.14F),
+                    ),
+                    radiusX = glowWidth * 0.58F,
+                    radiusY = size.height * 0.86F,
+                )
+                drawMeshSpot(
+                    brush = azure,
+                    center = Offset(
+                        size.width - glowWidth * (0.14F + driftY * 0.10F),
+                        size.height * (0.10F + driftX * 0.16F),
+                    ),
+                    radiusX = glowWidth * 0.59F,
+                    radiusY = size.height * 0.90F,
+                )
+                drawMeshSpot(
+                    brush = cyan,
+                    center = Offset(
+                        size.width - glowWidth * (0.02F - driftX * 0.08F),
+                        size.height * (0.92F - driftY * 0.16F),
+                    ),
+                    radiusX = glowWidth * 0.56F,
+                    radiusY = size.height * 0.84F,
+                )
+                drawMeshSpot(
+                    brush = pearl,
+                    center = Offset(
+                        size.width - glowWidth * (0.40F - driftY * 0.12F),
+                        size.height * (0.30F - driftX * 0.16F),
+                    ),
+                    radiusX = glowWidth * 0.46F,
+                    radiusY = size.height * 0.68F,
+                )
+                // A stationary light separates the diamond from the drifting colors behind it.
+                drawRect(brush = diamondHalo)
             }
         }
     )
+}
+
+private fun meshBrush(color: Color, alpha: Float): Brush = Brush.radialGradient(
+    0F to color.copy(alpha = alpha),
+    0.35F to color.copy(alpha = alpha * 0.72F),
+    0.7F to color.copy(alpha = alpha * 0.18F),
+    1F to color.copy(alpha = 0F),
+    center = Offset.Zero,
+    radius = 1F,
+)
+
+private fun DrawScope.drawMeshSpot(
+    brush: Brush,
+    center: Offset,
+    radiusX: Float,
+    radiusY: Float,
+) {
+    withTransform({
+        translate(left = center.x, top = center.y)
+        scale(scaleX = radiusX, scaleY = radiusY, pivot = Offset.Zero)
+    }) {
+        drawCircle(brush = brush, radius = 1F, center = Offset.Zero)
+    }
 }
 
 @ScreenPreview

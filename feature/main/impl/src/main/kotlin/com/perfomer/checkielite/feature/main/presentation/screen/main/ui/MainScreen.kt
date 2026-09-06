@@ -237,7 +237,7 @@ private fun Content(
             MainReviewCard(
                 item = item,
                 onClick = onReviewClick,
-                isImageTransitionEnabled = {
+                isTransitionEnabled = {
                     val layout = scrollState.layoutInfo
                     val card = layout.visibleItemsInfo.firstOrNull { it.key == item.id }
                     isSharedTransitionItemEligible(

@@ -30,7 +30,9 @@ import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 @Composable
 fun ReviewRating(
     rating: Int,
-    modifier: Modifier = Modifier,
+    valueModifier: Modifier = Modifier,
+    iconModifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val reviewReaction = remember(rating) { ReviewReaction.createFromRating(rating) }
 
@@ -38,25 +40,30 @@ fun ReviewRating(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
     ) {
-        Text(
-            text = rating.toString(),
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium,
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = valueModifier
+        ) {
+            Text(
+                text = rating.toString(),
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+            )
 
-        Text(
-            text = "/10",
-            fontSize = 10.sp,
-            fontWeight = FontWeight.Medium,
-            color = LocalCuiPalette.current.TextSecondary,
-        )
+            Text(
+                text = "/10",
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Medium,
+                color = LocalCuiPalette.current.TextSecondary,
+            )
+        }
 
         CuiSpacer(8.dp)
 
         Image(
             painter = painterResource(reviewReaction.drawable),
             contentDescription = stringResource(reviewReaction.contentDescription),
-            modifier = Modifier.size(28.dp)
+            modifier = iconModifier.size(28.dp)
         )
     }
 }

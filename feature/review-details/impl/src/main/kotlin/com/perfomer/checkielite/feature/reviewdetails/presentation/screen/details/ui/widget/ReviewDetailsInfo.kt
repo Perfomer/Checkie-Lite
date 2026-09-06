@@ -51,6 +51,8 @@ internal fun ReviewDetailsInfo(
     price: Price?,
     onRatingClick: () -> Unit,
     onEmptyPriceClick: () -> Unit,
+    ratingValueModifier: Modifier = Modifier,
+    ratingIconModifier: Modifier = Modifier,
 ) {
     Spacer(Modifier.height(20.dp))
 
@@ -87,12 +89,13 @@ internal fun ReviewDetailsInfo(
 
         InfoCell(
             value = AnnotatedString(ratingValue),
+            valueModifier = ratingValueModifier,
             description = stringResource(R.string.reviewdetails_rating),
             icon = {
                 Image(
                     painter = painterResource(reviewReaction.drawable),
                     contentDescription = stringResource(reviewReaction.contentDescription),
-                    modifier = Modifier.size(26.dp)
+                    modifier = ratingIconModifier.size(26.dp)
                 )
             },
             fromLeft = true,
@@ -155,6 +158,7 @@ private fun InfoCell(
     iconBackgroundColor: Color = LocalCuiPalette.current.BackgroundSecondary,
     descriptionOffset: Dp = 0.dp,
     onClick: (() -> Unit)? = null,
+    valueModifier: Modifier = Modifier,
 ) {
     @Composable
     fun IconBox() {
@@ -199,8 +203,9 @@ private fun InfoCell(
                     color = valueColor,
                     fontWeight = FontWeight.Medium,
                     style = MaterialTheme.typography.bodySmall.copy(
-                        platformStyle = PlatformTextStyle(includeFontPadding = false)
+                        platformStyle = PlatformTextStyle(includeFontPadding = false),
                     ),
+                    modifier = valueModifier
                 )
 
                 Text(

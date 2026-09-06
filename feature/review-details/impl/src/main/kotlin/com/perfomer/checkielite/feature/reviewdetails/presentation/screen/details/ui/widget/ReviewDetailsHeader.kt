@@ -19,6 +19,8 @@ import com.perfomer.checkielite.common.ui.util.resource.text.text
 internal fun ReviewDetailsHeader(
     productName: Text,
     brandName: Text?,
+    titleModifier: Modifier = Modifier,
+    brandModifier: Modifier = Modifier,
 ) {
     SelectionContainer {
         Column {
@@ -28,7 +30,9 @@ internal fun ReviewDetailsHeader(
                     color = LocalCuiPalette.current.TextAccent,
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
-                    modifier = Modifier.padding(horizontal = 24.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .then(brandModifier)
                 )
 
                 Spacer(Modifier.height(8.dp))
@@ -38,7 +42,9 @@ internal fun ReviewDetailsHeader(
                 text = text(productName),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = 24.dp)
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .then(titleModifier)
             )
         }
     }

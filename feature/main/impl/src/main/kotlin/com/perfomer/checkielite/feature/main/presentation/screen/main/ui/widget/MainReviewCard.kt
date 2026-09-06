@@ -31,6 +31,9 @@ import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.dp
+import com.perfomer.checkielite.common.ui.cui.modifier.SharedContentKey
+import com.perfomer.checkielite.common.ui.cui.modifier.SharedContentPart
+import com.perfomer.checkielite.common.ui.cui.modifier.sharedNavigationContent
 import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
 import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewHorizontalItem
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
@@ -48,7 +51,7 @@ private val ReviewCardShape = RoundedCornerShape(24.dp)
 internal fun MainReviewCard(
     item: ReviewItem,
     onClick: (id: String) -> Unit,
-    isImageTransitionEnabled: () -> Boolean = { true },
+    isTransitionEnabled: () -> Boolean = { true },
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -71,6 +74,24 @@ internal fun MainReviewCard(
                 imageCornerRadius = 16.dp,
                 imageSize = 56.dp,
                 imageRightOffset = 12.dp,
+                titleModifier = Modifier.sharedNavigationContent(
+                    key = SharedContentKey(item.id, SharedContentPart.Title),
+                    isEnabled = isTransitionEnabled,
+                ),
+                brandModifier = Modifier.sharedNavigationContent(
+                    key = SharedContentKey(item.id, SharedContentPart.Subtitle),
+                    isEnabled = isTransitionEnabled,
+                ),
+                ratingValueModifier = Modifier.sharedNavigationContent(
+                    key = SharedContentKey(item.id, SharedContentPart.Value),
+                    isEnabled = isTransitionEnabled,
+                ),
+                ratingIconModifier = Modifier.sharedNavigationContent(
+                    key = SharedContentKey(item.id, SharedContentPart.Icon),
+                    isEnabled = isTransitionEnabled,
+                    // A decorated reaction can differ from the plain icon in details.
+                    isSameContent = item.rating != 10,
+                ),
                 imageContent = item.imageUri?.let { uri ->
                     {
                         SharedImage(
@@ -78,7 +99,7 @@ internal fun MainReviewCard(
                             imageUri = uri,
                             cornerRadius = 16.dp,
                             otherCornerRadius = 24.dp,
-                            isTransitionEnabled = isImageTransitionEnabled,
+                            isTransitionEnabled = isTransitionEnabled,
                             modifier = Modifier
                                 .fillMaxSize()
                                 .border(

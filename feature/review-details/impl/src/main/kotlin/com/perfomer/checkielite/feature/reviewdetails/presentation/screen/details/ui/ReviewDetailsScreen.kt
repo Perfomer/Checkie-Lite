@@ -14,6 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.perfomer.checkielite.common.ui.cui.modifier.SharedContentKey
+import com.perfomer.checkielite.common.ui.cui.modifier.SharedContentPart
+import com.perfomer.checkielite.common.ui.cui.modifier.sharedNavigationContent
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
@@ -121,6 +124,18 @@ private fun Content(
     onTagClick: (tagId: String) -> Unit,
     onRecommendationClick: (recommendedReviewId: String) -> Unit,
 ) {
+    fun isItemEligible(key: String): Boolean {
+        val layout = scrollableState.layoutInfo
+        val item = layout.visibleItemsInfo.firstOrNull { it.key == key }
+        return isSharedTransitionItemEligible(
+            totalItemsCount = layout.totalItemsCount,
+            itemOffset = item?.offset,
+            itemSize = item?.size,
+            viewportStartOffset = 0,
+            viewportEndOffset = layout.viewportEndOffset,
+        )
+    }
+
     LazyColumn(
         state = scrollableState,
         contentPadding = contentPadding.add(bottom = 24.dp),
@@ -129,6 +144,14 @@ private fun Content(
             ReviewDetailsHeader(
                 productName = state.productName,
                 brandName = state.brandName,
+                titleModifier = Modifier.sharedNavigationContent(
+                    key = SharedContentKey(state.reviewId, SharedContentPart.Title),
+                    isEnabled = { isItemEligible("header") },
+                ),
+                brandModifier = Modifier.sharedNavigationContent(
+                    key = SharedContentKey(state.reviewId, SharedContentPart.Subtitle),
+                    isEnabled = { isItemEligible("header") },
+                ),
             )
         }
 
@@ -140,27 +163,26 @@ private fun Content(
                 onEmptyImageClick = onEmptyImageClick,
                 onPictureClick = onPictureClick,
                 onPageChange = onPageChange,
-                isTransitionEnabled = {
-                    val layout = scrollableState.layoutInfo
-                    val pictures = layout.visibleItemsInfo.firstOrNull { it.key == "pictures" }
-                    isSharedTransitionItemEligible(
-                        totalItemsCount = layout.totalItemsCount,
-                        itemOffset = pictures?.offset,
-                        itemSize = pictures?.size,
-                        viewportStartOffset = 0,
-                        viewportEndOffset = layout.viewportEndOffset,
-                    )
-                },
+                isTransitionEnabled = { isItemEligible("pictures") },
             )
         }
 
-        item {
+        item(key = "info") {
             ReviewDetailsInfo(
                 date = state.date,
                 rating = state.rating,
                 price = state.price,
                 onRatingClick = onRatingClick,
                 onEmptyPriceClick = onEmptyPriceClick,
+                ratingValueModifier = Modifier.sharedNavigationContent(
+                    key = SharedContentKey(state.reviewId, SharedContentPart.Value),
+                    isEnabled = { isItemEligible("info") },
+                ),
+                ratingIconModifier = Modifier.sharedNavigationContent(
+                    key = SharedContentKey(state.reviewId, SharedContentPart.Icon),
+                    isEnabled = { isItemEligible("info") },
+                    isSameContent = state.rating != 10,
+                ),
             )
         }
 

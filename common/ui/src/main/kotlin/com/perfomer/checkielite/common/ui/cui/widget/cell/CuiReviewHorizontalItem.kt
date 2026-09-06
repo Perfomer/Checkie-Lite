@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -57,6 +58,10 @@ fun CuiReviewHorizontalItem(
     imageRightOffset: Dp = 16.dp,
     interactionSource: MutableInteractionSource? = null,
     imageContent: (@Composable () -> Unit)? = null,
+    titleModifier: Modifier = Modifier,
+    brandModifier: Modifier = Modifier,
+    ratingValueModifier: Modifier = Modifier,
+    ratingIconModifier: Modifier = Modifier,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -111,7 +116,11 @@ fun CuiReviewHorizontalItem(
                 text = item.title,
                 fontSize = 16.sp,
                 maxLines = 1,
-                modifier = Modifier.fillMaxWidth()
+                // Reserve the column width, but share only the measured text bounds.
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.Start)
+                    .then(titleModifier)
             )
 
             if (item.brand != null) {
@@ -121,14 +130,21 @@ fun CuiReviewHorizontalItem(
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     color = LocalCuiPalette.current.TextAccent,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.Start)
+                        .then(brandModifier)
                 )
             }
         }
 
         CuiSpacer(16.dp)
 
-        ReviewRating(rating = item.rating)
+        ReviewRating(
+            rating = item.rating,
+            valueModifier = ratingValueModifier,
+            iconModifier = ratingIconModifier,
+        )
     }
 }
 

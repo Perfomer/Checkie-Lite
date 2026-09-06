@@ -7,7 +7,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalRippleConfiguration
+import androidx.compose.material3.RippleConfiguration
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -136,6 +140,7 @@ private fun Loading() {
 }
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 private fun Content(
     state: ReviewDetailsUiState.Content,
     contentPadding: PaddingValues,
@@ -149,6 +154,14 @@ private fun Content(
     onAddTagsClick: () -> Unit,
     onTagClick: (tagId: String) -> Unit,
     onRecommendationClick: (recommendedReviewId: String) -> Unit,
+) = CompositionLocalProvider(
+    LocalRippleConfiguration provides RippleConfiguration(
+        color = lerp(
+            LocalCuiPalette.current.BackgroundAccentPrimary,
+            Color.White,
+            0.5F,
+        ),
+    ),
 ) {
     fun isItemEligible(key: String): Boolean {
         val layout = scrollableState.layoutInfo

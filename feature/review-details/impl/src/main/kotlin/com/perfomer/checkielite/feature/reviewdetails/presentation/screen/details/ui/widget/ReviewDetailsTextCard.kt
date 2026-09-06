@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,16 +63,19 @@ internal fun ReviewDetailsTextCard(
 
 @Composable
 internal fun ReviewDetailsTextEmptyCard(
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+
     Surface(
         shape = RoundedCornerShape(20.dp),
         color = LocalCuiPalette.current.BackgroundElevationBase,
         onClick = onClick,
+        interactionSource = interactionSource,
         modifier = Modifier
             .padding(horizontal = 24.dp)
             .fillMaxWidth()
-            .softShadow(shape = RoundedCornerShape(20.dp))
+            .softShadow(interactionSource = interactionSource, shape = RoundedCornerShape(20.dp))
     ) {
         Column(
             modifier = Modifier.padding(16.dp)

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
-class SharedTransitionVisibilityTest {
+internal class SharedTransitionVisibilityTest {
 
     @Test
     fun `incoming element is eligible before the first lazy layout`() {

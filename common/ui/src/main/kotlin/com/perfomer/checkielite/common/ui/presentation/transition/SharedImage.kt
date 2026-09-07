@@ -1,17 +1,13 @@
 package com.perfomer.checkielite.common.ui.presentation.transition
 
 import androidx.compose.animation.EnterExitState
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.animateDp
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -24,9 +20,14 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import coil3.size.SizeResolver
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
+import com.perfomer.checkielite.core.navigation.transition.LocalNavigationAnimatedVisibilityScope
+import com.perfomer.checkielite.core.navigation.transition.LocalSharedNavigationContent
+import com.perfomer.checkielite.core.navigation.transition.LocalSharedTransitionScope
+import com.perfomer.checkielite.core.navigation.transition.rememberSharedContentConfig
+import com.perfomer.checkielite.core.navigation.transition.sharedNavigationTween
 
 @Immutable
-private data class SharedImageKey(val contentId: String, val imageUri: String)
+private data class SharedImageKey(val contentId: Any, val imageUri: String)
 
 /**
  * Both endpoints use the same crop, cache entry and clipping order. The size resolver lives
@@ -34,16 +35,15 @@ private data class SharedImageKey(val contentId: String, val imageUri: String)
  */
 @Composable
 fun SharedImage(
-    contentId: String,
     imageUri: String,
     cornerRadius: Dp,
-    otherCornerRadius: Dp,
-    isTransitionEnabled: () -> Boolean = { true },
+    overlayCornerRadius: Dp,
     onState: (AsyncImagePainter.State) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val sharedScope = LocalSharedTransitionScope.current
     val visibilityScope = LocalNavigationAnimatedVisibilityScope.current
+    val sharedContent = LocalSharedNavigationContent.current
     val context = LocalPlatformContext.current
     val sizeResolver = rememberConstraintsSizeResolver()
     // AsyncImage updates a ConstraintsSizeResolver from its own animated measurement. Hide the
@@ -59,26 +59,20 @@ fun SharedImage(
             .build()
     }
 
-    val imageModifier = if (sharedScope != null && visibilityScope != null) {
-        val enabled by rememberUpdatedState(isTransitionEnabled)
-        val config = remember {
-            object : SharedTransitionScope.SharedContentConfig {
-                override val SharedTransitionScope.SharedContentState.isEnabled: Boolean
-                    get() = enabled()
-            }
-        }
+    val imageModifier = if (sharedScope != null && visibilityScope != null && sharedContent != null) {
+        val config = rememberSharedContentConfig(sharedContent)
         val radius by visibilityScope.transition.animateDp(
             transitionSpec = {
-                tween(SharedNavigationTransitionDurationMillis, easing = FastOutSlowInEasing)
+                sharedNavigationTween()
             },
             label = "Shared image corners",
         ) { state ->
-            if (state == EnterExitState.Visible) cornerRadius else otherCornerRadius
+            if (state == EnterExitState.Visible) cornerRadius else overlayCornerRadius
         }
 
         with(sharedScope) {
             val sharedContentState = rememberSharedContentState(
-                key = SharedImageKey(contentId, imageUri),
+                key = SharedImageKey(sharedContent.id, imageUri),
                 config = config,
             )
             Modifier
@@ -86,16 +80,17 @@ fun SharedImage(
                 .sharedElement(
                     sharedContentState = sharedContentState,
                     animatedVisibilityScope = visibilityScope,
-                    boundsTransform = { _, _ ->
-                        tween(SharedNavigationTransitionDurationMillis, easing = FastOutSlowInEasing)
-                    },
+                    boundsTransform = { _, _ -> sharedNavigationTween() },
                     zIndexInOverlay = 1F,
                 )
                 .then(modifier)
                 .clip(RoundedCornerShape(if (sharedContentState.isMatchFound) radius else cornerRadius))
         }
     } else {
-        modifier.then(sizeResolver).clip(RoundedCornerShape(cornerRadius))
+        Modifier
+            .then(sizeResolver)
+            .then(modifier)
+            .clip(RoundedCornerShape(cornerRadius))
     }
 
     AsyncImage(

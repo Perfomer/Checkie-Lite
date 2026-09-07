@@ -26,14 +26,15 @@ import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.s
 import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.androidPredictiveBackAnimatableV2
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.retainedComponent
-import com.perfomer.checkielite.common.ui.presentation.transition.LocalNavigationAnimatedVisibilityScope
-import com.perfomer.checkielite.common.ui.presentation.transition.LocalSharedTransitionScope
-import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationTransitionDurationMillis
 import com.perfomer.checkielite.core.navigation.BottomSheetController
 import com.perfomer.checkielite.core.navigation.Destination
 import com.perfomer.checkielite.core.navigation.NavigationHost
+import com.perfomer.checkielite.core.navigation.NavigationRegistry
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.Screen
+import com.perfomer.checkielite.core.navigation.transition.LocalNavigationAnimatedVisibilityScope
+import com.perfomer.checkielite.core.navigation.transition.LocalSharedTransitionScope
+import com.perfomer.checkielite.core.navigation.transition.SharedNavigationTransitionDurationMillis
 
 @OptIn(ExperimentalDecomposeApi::class)
 internal class DecomposeNavigationHost(
@@ -96,7 +97,10 @@ internal class DecomposeNavigationHost(
                 predictiveBackParams = { stack ->
                     val previousDestination = stack.backStack.lastOrNull()?.configuration
                     val isSharedTransition = previousDestination?.let {
-                        stack.active.configuration.hasSharedTransitionWith(it)
+                        NavigationRegistry.hasSharedTransition(
+                            source = it,
+                            target = stack.active.configuration,
+                        )
                     } == true
 
                     PredictiveBackParams(
@@ -109,8 +113,8 @@ internal class DecomposeNavigationHost(
                         },
                     )
                 },
-                selector = { child, otherChild, _, _ ->
-                    if (child.configuration.hasSharedTransitionWith(otherChild.configuration)) {
+                selector = { child, otherChild, direction, _ ->
+                    if (child.configuration.hasSharedTransitionWith(otherChild.configuration, direction)) {
                         sharedAnimator
                     } else {
                         defaultAnimator

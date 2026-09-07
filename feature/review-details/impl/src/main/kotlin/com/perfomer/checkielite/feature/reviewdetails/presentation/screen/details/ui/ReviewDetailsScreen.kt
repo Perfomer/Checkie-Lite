@@ -22,18 +22,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
-import com.perfomer.checkielite.common.ui.cui.modifier.SharedContentKey
-import com.perfomer.checkielite.common.ui.cui.modifier.SharedContentPart
-import com.perfomer.checkielite.common.ui.cui.modifier.sharedNavigationContent
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassScaffold
+import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationLazyListItem
 import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationContainer
-import com.perfomer.checkielite.common.ui.presentation.transition.isSharedTransitionItemEligible
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.add
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.core.navigation.transition.SharedNavigationContent
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.RecommendedReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiState
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ConfirmDeleteDialog
@@ -70,61 +68,63 @@ internal fun ReviewDetailsScreen(
     val backgroundColor = lerp(palette.BackgroundPrimary, palette.BackgroundAccentTertiary, 0.4F)
     val toolbarFadeDistance = with(LocalDensity.current) { 24.dp.toPx() }
 
-    SharedNavigationContainer(
-        contentId = (state as? ReviewDetailsUiState.Content)?.reviewId,
-        cornerRadius = 0.dp,
-        otherCornerRadius = 24.dp,
-        color = backgroundColor,
-        otherColor = LocalCuiPalette.current.BackgroundElevationBase,
-        modifier = Modifier.fillMaxSize()
+    SharedNavigationContent(
+        id = (state as? ReviewDetailsUiState.Content)?.reviewId,
     ) {
-        CuiGlassScaffold(
-            containerColor = Color.Transparent,
-            toolbarColor = backgroundColor,
-            toolbarBackgroundProgress = {
-                when {
-                    !scrollState.canScrollBackward -> 0F
-                    scrollState.firstVisibleItemIndex > 0 -> 1F
-                    else -> (scrollState.firstVisibleItemScrollOffset / toolbarFadeDistance).coerceIn(0F, 1F)
+        SharedNavigationContainer(
+            cornerRadius = 0.dp,
+            overlayCornerRadius = 0.dp,
+            color = backgroundColor,
+            overlayColor = backgroundColor,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            CuiGlassScaffold(
+                containerColor = Color.Transparent,
+                toolbarColor = backgroundColor,
+                toolbarBackgroundProgress = {
+                    when {
+                        !scrollState.canScrollBackward -> 0F
+                        scrollState.firstVisibleItemIndex > 0 -> 1F
+                        else -> (scrollState.firstVisibleItemScrollOffset / toolbarFadeDistance).coerceIn(0F, 1F)
+                    }
+                },
+                topBar = {
+                    ReviewDetailsAppBar(
+                        scrollState = scrollState,
+                        title = (state as? ReviewDetailsUiState.Content)?.productName,
+                        isMenuAvailable = state.isMenuAvailable,
+                        onNavigationIconClick = onNavigationIconClick,
+                        onEditClick = onEditClick,
+                        onDeleteClick = onDeleteClick,
+                    )
+                },
+            ) { contentPadding ->
+                when (state) {
+                    is ReviewDetailsUiState.Loading -> Loading()
+                    is ReviewDetailsUiState.Content -> Content(
+                        state = state,
+                        contentPadding = contentPadding,
+                        scrollableState = scrollState,
+                        onPictureClick = onPictureClick,
+                        onEmptyImageClick = onEmptyImageClick,
+                        onRatingClick = onRatingClick,
+                        onEmptyPriceClick = onEmptyPriceClick,
+                        onEmptyReviewTextClick = onEmptyReviewTextClick,
+                        onPageChange = onPageChange,
+                        onAddTagsClick = onAddTagsClick,
+                        onTagClick = onTagClick,
+                        onRecommendationClick = onRecommendationClick,
+                    )
+
+                    is ReviewDetailsUiState.Error -> Error()
                 }
-            },
-            topBar = {
-                ReviewDetailsAppBar(
-                    scrollState = scrollState,
-                    title = (state as? ReviewDetailsUiState.Content)?.productName,
-                    isMenuAvailable = state.isMenuAvailable,
-                    onNavigationIconClick = onNavigationIconClick,
-                    onEditClick = onEditClick,
-                    onDeleteClick = onDeleteClick,
-                )
-            },
-        ) { contentPadding ->
-            when (state) {
-                is ReviewDetailsUiState.Loading -> Loading()
-                is ReviewDetailsUiState.Content -> Content(
-                    state = state,
-                    contentPadding = contentPadding,
-                    scrollableState = scrollState,
-                    onPictureClick = onPictureClick,
-                    onEmptyImageClick = onEmptyImageClick,
-                    onRatingClick = onRatingClick,
-                    onEmptyPriceClick = onEmptyPriceClick,
-                    onEmptyReviewTextClick = onEmptyReviewTextClick,
-                    onPageChange = onPageChange,
-                    onAddTagsClick = onAddTagsClick,
-                    onTagClick = onTagClick,
-                    onRecommendationClick = onRecommendationClick,
-                )
 
-                is ReviewDetailsUiState.Error -> Error()
-
+                ConfirmDeleteDialog(
+                    isVisible = showDeleteDialog,
+                    onDismiss = onDeleteDialogDismiss,
+                    onConfirm = onDeleteDialogConfirm,
+                )
             }
-
-            ConfirmDeleteDialog(
-                isVisible = showDeleteDialog,
-                onDismiss = onDeleteDialogDismiss,
-                onConfirm = onDeleteDialogConfirm,
-            )
         }
     }
 }
@@ -163,47 +163,37 @@ private fun Content(
         ),
     ),
 ) {
-    fun isItemEligible(key: String): Boolean {
-        val layout = scrollableState.layoutInfo
-        val item = layout.visibleItemsInfo.firstOrNull { it.key == key }
-        return isSharedTransitionItemEligible(
-            totalItemsCount = layout.totalItemsCount,
-            itemOffset = item?.offset,
-            itemSize = item?.size,
-            viewportStartOffset = 0,
-            viewportEndOffset = layout.viewportEndOffset,
-        )
-    }
-
     LazyColumn(
         state = scrollableState,
         contentPadding = contentPadding.add(bottom = 24.dp),
     ) {
         item(key = "header") {
-            ReviewDetailsHeader(
-                productName = state.productName,
-                brandName = state.brandName,
-                titleModifier = Modifier.sharedNavigationContent(
-                    key = SharedContentKey(state.reviewId, SharedContentPart.Title),
-                    isEnabled = { isItemEligible("header") },
-                ),
-                brandModifier = Modifier.sharedNavigationContent(
-                    key = SharedContentKey(state.reviewId, SharedContentPart.Subtitle),
-                    isEnabled = { isItemEligible("header") },
-                ),
-            )
+            SharedNavigationLazyListItem(
+                id = state.reviewId,
+                listState = scrollableState,
+                itemKey = "header",
+            ) {
+                ReviewDetailsHeader(
+                    productName = state.productName,
+                    brandName = state.brandName,
+                )
+            }
         }
 
         item(key = "pictures") {
-            ReviewDetailsImage(
-                reviewId = state.reviewId,
-                picturesUri = state.picturesUri,
-                currentPicturePosition = state.currentPicturePosition,
-                onEmptyImageClick = onEmptyImageClick,
-                onPictureClick = onPictureClick,
-                onPageChange = onPageChange,
-                isTransitionEnabled = { isItemEligible("pictures") },
-            )
+            SharedNavigationLazyListItem(
+                id = state.reviewId,
+                listState = scrollableState,
+                itemKey = "pictures",
+            ) {
+                ReviewDetailsImage(
+                    picturesUri = state.picturesUri,
+                    currentPicturePosition = state.currentPicturePosition,
+                    onEmptyImageClick = onEmptyImageClick,
+                    onPictureClick = onPictureClick,
+                    onPageChange = onPageChange,
+                )
+            }
         }
 
         item(key = "info") {

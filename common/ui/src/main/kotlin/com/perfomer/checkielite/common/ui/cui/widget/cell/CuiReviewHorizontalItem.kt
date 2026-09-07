@@ -25,18 +25,19 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
 import com.perfomer.checkielite.common.ui.R
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRating
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.cui.widget.text.CuiFadedText
+import com.perfomer.checkielite.common.ui.presentation.transition.ReviewSharedElement
+import com.perfomer.checkielite.common.ui.presentation.transition.SharedImage
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
+import com.perfomer.checkielite.core.navigation.transition.sharedNavigationElement
 
 @Immutable
 data class ReviewItem(
@@ -57,12 +58,6 @@ fun CuiReviewHorizontalItem(
     imageSize: Dp = 48.dp,
     imageRightOffset: Dp = 16.dp,
     interactionSource: MutableInteractionSource? = null,
-    imageContent: (@Composable () -> Unit)? = null,
-    ratingContent: (@Composable () -> Unit)? = null,
-    titleModifier: Modifier = Modifier,
-    brandModifier: Modifier = Modifier,
-    ratingValueModifier: Modifier = Modifier,
-    ratingIconModifier: Modifier = Modifier,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -83,13 +78,11 @@ fun CuiReviewHorizontalItem(
                 .clip(RoundedCornerShape(imageCornerRadius))
                 .background(LocalCuiPalette.current.BackgroundSecondary)
         ) {
-            if (imageContent != null) {
-                imageContent()
-            } else if (item.imageUri != null) {
-                AsyncImage(
-                    model = item.imageUri,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
+            if (item.imageUri != null) {
+                SharedImage(
+                    imageUri = item.imageUri,
+                    cornerRadius = imageCornerRadius,
+                    overlayCornerRadius = 24.dp,
                     modifier = Modifier
                         .fillMaxSize()
                         .border(
@@ -121,7 +114,7 @@ fun CuiReviewHorizontalItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.Start)
-                    .then(titleModifier)
+                    .sharedNavigationElement(ReviewSharedElement.Title)
             )
 
             if (item.brand != null) {
@@ -134,22 +127,21 @@ fun CuiReviewHorizontalItem(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentWidth(Alignment.Start)
-                        .then(brandModifier)
+                        .sharedNavigationElement(ReviewSharedElement.Subtitle)
                 )
             }
         }
 
         CuiSpacer(16.dp)
 
-        if (ratingContent != null) {
-            ratingContent()
-        } else {
-            ReviewRating(
-                rating = item.rating,
-                valueModifier = ratingValueModifier,
-                iconModifier = ratingIconModifier,
-            )
-        }
+        ReviewRating(
+            rating = item.rating,
+            reactionContent = if (item.rating == 10) {
+                { FloatingDiamond() }
+            } else {
+                null
+            },
+        )
     }
 }
 

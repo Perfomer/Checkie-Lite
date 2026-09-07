@@ -6,10 +6,12 @@ import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.perfomer.checkielite.core.navigation.Destination
+import com.perfomer.checkielite.core.navigation.NavigationData
 import com.perfomer.checkielite.core.navigation.NavigationRegistry
 import com.perfomer.checkielite.core.navigation.Screen
 import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
+import java.util.IdentityHashMap
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -22,6 +24,7 @@ internal class DecomposeRootComponent(
     val mainNavigator: StackNavigation<Destination> = StackNavigation()
     val bottomSheetNavigator: SlotNavigation<Destination> = SlotNavigation()
     val overlayNavigator: SlotNavigation<Destination> = SlotNavigation()
+    private val pendingNavigationData = IdentityHashMap<Destination, NavigationData>()
 
     val mainNavigationStack = childStack(
         source = mainNavigator,
@@ -47,7 +50,26 @@ internal class DecomposeRootComponent(
 
     private fun createScreen(destination: Destination, context: ComponentContext): Screen {
         val screenClass = NavigationRegistry.obtain(destination::class)
-        return getKoin().get(screenClass, null) { parametersOf(context, destination) }
+        val navigationData = pendingNavigationData.remove(destination) ?: NavigationData.Empty
+        return getKoin().get(screenClass, null) { parametersOf(context, destination, navigationData) }
+    }
+
+    fun withNavigationData(
+        destination: Destination,
+        navigationData: NavigationData,
+        navigate: () -> Unit,
+    ) {
+        if (navigationData.isEmpty) {
+            navigate()
+            return
+        }
+
+        pendingNavigationData[destination] = navigationData
+        try {
+            navigate()
+        } finally {
+            pendingNavigationData.remove(destination)
+        }
     }
 }
 

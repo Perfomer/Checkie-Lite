@@ -11,16 +11,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.perfomer.checkielite.common.ui.presentation.transition.ReviewSharedElement
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.common.ui.util.resource.text.text
+import com.perfomer.checkielite.core.navigation.transition.sharedNavigationElement
 
 @Composable
 internal fun ReviewDetailsHeader(
     productName: Text,
     brandName: Text?,
-    titleModifier: Modifier = Modifier,
-    brandModifier: Modifier = Modifier,
 ) {
     SelectionContainer {
         Column {
@@ -32,7 +32,7 @@ internal fun ReviewDetailsHeader(
                     fontSize = 14.sp,
                     modifier = Modifier
                         .padding(horizontal = 24.dp)
-                        .then(brandModifier)
+                        .sharedNavigationElement(ReviewSharedElement.Subtitle)
                 )
 
                 Spacer(Modifier.height(8.dp))
@@ -44,7 +44,7 @@ internal fun ReviewDetailsHeader(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .padding(horizontal = 24.dp)
-                    .then(titleModifier)
+                    .sharedNavigationElement(ReviewSharedElement.Title)
             )
         }
     }

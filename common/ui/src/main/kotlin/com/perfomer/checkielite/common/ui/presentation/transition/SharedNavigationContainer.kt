@@ -3,9 +3,7 @@ package com.perfomer.checkielite.common.ui.presentation.transition
 import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDp
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -16,30 +14,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
+import com.perfomer.checkielite.core.navigation.transition.LocalNavigationAnimatedVisibilityScope
+import com.perfomer.checkielite.core.navigation.transition.LocalSharedNavigationContent
+import com.perfomer.checkielite.core.navigation.transition.LocalSharedTransitionScope
+import com.perfomer.checkielite.core.navigation.transition.rememberSharedContentConfig
+import com.perfomer.checkielite.core.navigation.transition.sharedNavigationTween
 
 @Immutable
-private data class SharedContainerKey(val contentId: String, val isSurface: Boolean)
+private data class SharedContainerKey(val contentId: Any, val isSurface: Boolean)
 
 /** Expands the surface while keeping both endpoint layouts at their original size and position. */
 @Composable
 fun SharedNavigationContainer(
-    contentId: String?,
     cornerRadius: Dp,
-    otherCornerRadius: Dp,
+    overlayCornerRadius: Dp,
     color: Color,
-    otherColor: Color,
-    isEnabled: () -> Boolean = { true },
+    overlayColor: Color,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     val sharedScope = LocalSharedTransitionScope.current
     val visibilityScope = LocalNavigationAnimatedVisibilityScope.current
-    if (contentId == null || sharedScope == null || visibilityScope == null) {
+    val sharedContent = LocalSharedNavigationContent.current
+    if (sharedContent == null || sharedScope == null || visibilityScope == null) {
         val shape = RoundedCornerShape(cornerRadius)
         Box(modifier = modifier.background(color, shape).clip(shape)) {
             content()
@@ -47,25 +48,19 @@ fun SharedNavigationContainer(
         return
     }
 
-    val enabled by rememberUpdatedState(isEnabled)
-    val config = remember {
-        object : SharedTransitionScope.SharedContentConfig {
-            override val SharedTransitionScope.SharedContentState.isEnabled: Boolean
-                get() = enabled()
-        }
-    }
+    val config = rememberSharedContentConfig(sharedContent)
     val radius by visibilityScope.transition.animateDp(
-        transitionSpec = { tween(SharedNavigationTransitionDurationMillis, easing = FastOutSlowInEasing) },
+        transitionSpec = { sharedNavigationTween() },
         label = "Container corners",
-    ) { if (it == EnterExitState.Visible) cornerRadius else otherCornerRadius }
+    ) { if (it == EnterExitState.Visible) cornerRadius else overlayCornerRadius }
     val backgroundColor by visibilityScope.transition.animateColor(
-        transitionSpec = { tween(SharedNavigationTransitionDurationMillis, easing = FastOutSlowInEasing) },
+        transitionSpec = { sharedNavigationTween() },
         label = "Container color",
-    ) { if (it == EnterExitState.Visible) color else otherColor }
+    ) { if (it == EnterExitState.Visible) color else overlayColor }
 
     with(sharedScope) {
-        val surfaceState = rememberSharedContentState(SharedContainerKey(contentId, isSurface = true), config)
-        val contentState = rememberSharedContentState(SharedContainerKey(contentId, isSurface = false), config)
+        val surfaceState = rememberSharedContentState(SharedContainerKey(sharedContent.id, isSurface = true), config)
+        val contentState = rememberSharedContentState(SharedContainerKey(sharedContent.id, isSurface = false), config)
         val shape = RoundedCornerShape(if (surfaceState.isMatchFound) radius else cornerRadius)
         Box(modifier = modifier) {
             // One opaque surface sits below both endpoint contents, so neither can cover the other.
@@ -75,9 +70,7 @@ fun SharedNavigationContainer(
                     .sharedElement(
                         sharedContentState = surfaceState,
                         animatedVisibilityScope = visibilityScope,
-                        boundsTransform = { _, _ ->
-                            tween(SharedNavigationTransitionDurationMillis, easing = FastOutSlowInEasing)
-                        },
+                        boundsTransform = { _, _ -> sharedNavigationTween() },
                         clipInOverlayDuringTransition = OverlayClip(shape),
                         zIndexInOverlay = 0F,
                     )
@@ -88,11 +81,9 @@ fun SharedNavigationContainer(
                     .sharedBounds(
                         sharedContentState = contentState,
                         animatedVisibilityScope = visibilityScope,
-                        enter = fadeIn(tween(SharedNavigationTransitionDurationMillis)),
-                        exit = fadeOut(tween(SharedNavigationTransitionDurationMillis)),
-                        boundsTransform = { _, _ ->
-                            tween(SharedNavigationTransitionDurationMillis, easing = FastOutSlowInEasing)
-                        },
+                        enter = fadeIn(sharedNavigationTween()),
+                        exit = fadeOut(sharedNavigationTween()),
+                        boundsTransform = { _, _ -> sharedNavigationTween() },
                         resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds,
                         clipInOverlayDuringTransition = OverlayClip(shape),
                         zIndexInOverlay = 0.1F,

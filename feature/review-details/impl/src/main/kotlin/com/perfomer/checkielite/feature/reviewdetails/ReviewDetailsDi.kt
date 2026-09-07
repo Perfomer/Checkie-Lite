@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.reviewdetails
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.core.data.repository.BrandRepository
 import com.perfomer.checkielite.core.data.repository.ReviewRepository
+import com.perfomer.checkielite.core.navigation.NavigationData
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
 import com.perfomer.checkielite.core.navigation.navigation
@@ -32,6 +33,7 @@ private val presentationModule = module {
 internal fun createReviewDetailsStore(
     componentContext: ComponentContext,
     destination: ReviewDetailsDestination,
+    navigationData: NavigationData,
     reviewRepository: ReviewRepository,
     brandRepository: BrandRepository,
     router: Router,
@@ -39,6 +41,7 @@ internal fun createReviewDetailsStore(
     return ReviewDetailsStore(
         componentContext = componentContext,
         destination = destination,
+        navigationData = navigationData,
         reducer = ReviewDetailsReducer(),
         uiStateMapper = ReviewDetailsUiStateMapper(),
         actors = setOf(

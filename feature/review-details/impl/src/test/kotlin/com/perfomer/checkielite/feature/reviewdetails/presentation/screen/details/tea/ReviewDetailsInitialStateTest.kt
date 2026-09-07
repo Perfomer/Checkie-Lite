@@ -23,7 +23,7 @@ internal class ReviewDetailsInitialStateTest {
     @Test
     fun `matching snapshot provides first frame image and review identity`() {
         val review = review()
-        val state = ReviewDetailsDestination(reviewId = review.id, initialReview = review).toInitialState()
+        val state = ReviewDetailsDestination(reviewId = review.id).toInitialState(review)
         val uiState = ReviewDetailsUiStateMapper().map(state) as ReviewDetailsUiState.Content
 
         assertSame(review, state.review.requireContent().review)
@@ -36,7 +36,7 @@ internal class ReviewDetailsInitialStateTest {
 
     @Test
     fun `destination without snapshot starts loading`() {
-        val state = ReviewDetailsDestination(reviewId = "review").toInitialState()
+        val state = ReviewDetailsDestination(reviewId = "review").toInitialState(initialReview = null)
 
         assertEquals("review", state.reviewId)
         assertEquals(Lce.initial(), state.review)
@@ -45,20 +45,20 @@ internal class ReviewDetailsInitialStateTest {
     @Test
     fun `restoring destination drops the temporary card snapshot`() {
         val review = review()
-        val destination = ReviewDetailsDestination(reviewId = review.id, initialReview = review)
+        val destination = ReviewDetailsDestination(reviewId = review.id)
         val encoded = Json.encodeToString(ReviewDetailsDestination.serializer(), destination)
         val restored = Json.decodeFromString(ReviewDetailsDestination.serializer(), encoded)
 
         assertEquals(ReviewDetailsDestination(reviewId = review.id), restored)
-        assertEquals(Lce.initial(), restored.toInitialState().review)
+        assertEquals(
+            Lce.initial(),
+            restored.toInitialState(initialReview = null).review,
+        )
     }
 
     @Test
     fun `snapshot for another review is ignored`() {
-        val state = ReviewDetailsDestination(
-            reviewId = "selected",
-            initialReview = review(),
-        ).toInitialState()
+        val state = ReviewDetailsDestination(reviewId = "selected").toInitialState(review())
 
         assertEquals("selected", state.reviewId)
         assertEquals(Lce.initial(), state.review)
@@ -67,7 +67,7 @@ internal class ReviewDetailsInitialStateTest {
     @Test
     fun `seeded destination still subscribes to the repository`() {
         val review = review()
-        val state = ReviewDetailsDestination(reviewId = review.id, initialReview = review).toInitialState()
+        val state = ReviewDetailsDestination(reviewId = review.id).toInitialState(review)
         val update = ReviewDetailsReducer().reduce(
             currentState = state,
             event = ReviewDetailsEvent.Initialize,
@@ -82,7 +82,7 @@ internal class ReviewDetailsInitialStateTest {
     @Test
     fun `starting repository loading keeps the shared image visible`() {
         val review = review()
-        val state = ReviewDetailsDestination(reviewId = review.id, initialReview = review).toInitialState()
+        val state = ReviewDetailsDestination(reviewId = review.id).toInitialState(review)
         val update = ReviewDetailsReducer().reduce(
             currentState = state,
             event = ReviewDetailsEvent.ReviewLoading.Started,
@@ -95,7 +95,7 @@ internal class ReviewDetailsInitialStateTest {
     @Test
     fun `repository result replaces snapshot and includes recommendations`() {
         val review = review()
-        val state = ReviewDetailsDestination(reviewId = review.id, initialReview = review).toInitialState()
+        val state = ReviewDetailsDestination(reviewId = review.id).toInitialState(review)
         val latest = ReviewDetails(
             review = review.copy(productName = "Updated product", rating = 9),
             recommendations = listOf(review.copy(id = "recommendation")),

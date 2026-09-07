@@ -57,6 +57,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewCard
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassScaffold
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
+import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationLazyListItem
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -146,6 +147,8 @@ private fun Content(
     onReviewClick: (id: String) -> Unit,
     onRecentSearchesClearClick: () -> Unit,
 ) {
+    val toolbarBottom = with(LocalDensity.current) { contentPadding.calculateTopPadding().roundToPx() }
+
     LazyColumn(
         contentPadding = contentPadding.add(start = 20.dp, top = 4.dp, end = 20.dp, bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -167,11 +170,17 @@ private fun Content(
             key = { item -> item.id },
             contentType = { "review" },
         ) { item ->
-            CuiReviewCard(
-                item = item,
-                onClick = onReviewClick,
-                modifier = Modifier.animateItem()
-            )
+            SharedNavigationLazyListItem(
+                id = item.id,
+                listState = scrollState,
+                viewportStartOffset = toolbarBottom,
+            ) {
+                CuiReviewCard(
+                    item = item,
+                    onClick = onReviewClick,
+                    modifier = Modifier.animateItem()
+                )
+            }
         }
     }
 }

@@ -1,59 +1,66 @@
 package com.perfomer.checkielite.navigation.decompose
 
+import com.arkivanov.decompose.extensions.compose.stack.animation.Direction
 import com.perfomer.checkielite.core.navigation.Destination
-import com.perfomer.checkielite.core.navigation.SharedTransitionDestination
+import com.perfomer.checkielite.core.navigation.NavigationRegistry
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
-class SharedTransitionUtilsTest {
+internal class SharedTransitionUtilsTest {
 
     @Test
-    fun `destinations in the same group share a transition in both directions`() {
-        val list = SharedDestination("review")
-        val details = SharedDestination("review")
+    fun `registered edge animates both sides of forward navigation`() {
+        val source = SourceDestination()
+        val target = TargetDestination()
 
-        assertTrue(list.hasSharedTransitionWith(details))
-        assertTrue(details.hasSharedTransitionWith(list))
+        assertTrue(source.hasSharedTransitionWith(target, Direction.EXIT_BACK))
+        assertTrue(target.hasSharedTransitionWith(source, Direction.ENTER_FRONT))
     }
 
     @Test
-    fun `different groups retain the default navigation animation`() {
-        assertFalse(SharedDestination("review").hasSharedTransitionWith(SharedDestination("gallery")))
+    fun `registered edge animates both sides of back navigation`() {
+        val source = SourceDestination()
+        val target = TargetDestination()
+
+        assertTrue(source.hasSharedTransitionWith(target, Direction.ENTER_BACK))
+        assertTrue(target.hasSharedTransitionWith(source, Direction.EXIT_FRONT))
     }
 
     @Test
-    fun `destinations with a compatible group share a transition`() {
-        val search = SharedDestination("search")
-        val details = SharedDestination("review", setOf("review", "search"))
+    fun `registration remains directional`() {
+        val source = SourceDestination()
+        val target = TargetDestination()
 
-        assertTrue(search.hasSharedTransitionWith(details))
-        assertTrue(details.hasSharedTransitionWith(search))
+        assertFalse(target.hasSharedTransitionWith(source, Direction.EXIT_BACK))
+        assertFalse(source.hasSharedTransitionWith(target, Direction.ENTER_FRONT))
     }
 
     @Test
-    fun `compatibility does not make unrelated groups share a transition`() {
-        val main = SharedDestination("review")
-        val search = SharedDestination("search")
-
-        assertFalse(main.hasSharedTransitionWith(search))
-        assertFalse(search.hasSharedTransitionWith(main))
-    }
-
-    @Test
-    fun `both destinations must opt in to shared transitions`() {
-        val shared = SharedDestination("review")
+    fun `unregistered destinations retain default navigation animation`() {
+        val source = SourceDestination()
         val regular = RegularDestination()
 
-        assertFalse(shared.hasSharedTransitionWith(regular))
-        assertFalse(regular.hasSharedTransitionWith(shared))
-        assertFalse(regular.hasSharedTransitionWith(RegularDestination()))
+        assertFalse(source.hasSharedTransitionWith(regular, Direction.EXIT_BACK))
+        assertFalse(regular.hasSharedTransitionWith(source, Direction.ENTER_FRONT))
     }
 
-    private class SharedDestination(
-        override val sharedTransitionGroup: String,
-        override val sharedTransitionGroups: Set<String> = setOf(sharedTransitionGroup),
-    ) : Destination(), SharedTransitionDestination
+    private class SourceDestination : Destination()
+
+    private class TargetDestination : Destination()
 
     private class RegularDestination : Destination()
+
+    companion object {
+
+        @JvmStatic
+        @BeforeAll
+        fun registerTransition() {
+            NavigationRegistry.registerSharedTransition(
+                source = SourceDestination::class,
+                target = TargetDestination::class,
+            )
+        }
+    }
 }

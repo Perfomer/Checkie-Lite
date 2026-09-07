@@ -18,12 +18,14 @@ import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonPrimitive
 import kotlin.reflect.KClass
 
+@NavigationDsl
 object NavigationRegistry {
 
     private const val TYPE_FIELD = "type"
     private const val PAYLOAD_FIELD = "payload"
 
     private val registry: MutableMap<KClass<out Destination>, ScreenEntry> = mutableMapOf()
+    private val sharedTransitions: MutableSet<SharedTransitionEdge> = mutableSetOf()
 
     @OptIn(InternalSerializationApi::class)
     fun serializer(): KSerializer<Destination> {
@@ -44,6 +46,18 @@ object NavigationRegistry {
             serializer = destinationSerializer,
         )
     }
+
+    fun registerSharedTransition(
+        source: KClass<out Destination>,
+        target: KClass<out Destination>,
+    ) {
+        sharedTransitions += SharedTransitionEdge(source = source, target = target)
+    }
+
+    fun hasSharedTransition(
+        source: Destination,
+        target: Destination,
+    ): Boolean = SharedTransitionEdge(source::class, target::class) in sharedTransitions
 
     private fun requireRegistration(destinationClass: KClass<out Destination>): ScreenEntry {
         return requireNotNull(registry[destinationClass]) {
@@ -101,6 +115,11 @@ object NavigationRegistry {
     private data class ScreenEntry(
         val screenClass: KClass<out Screen>,
         val serializer: KSerializer<out Destination>,
+    )
+
+    private data class SharedTransitionEdge(
+        val source: KClass<out Destination>,
+        val target: KClass<out Destination>,
     )
 }
 

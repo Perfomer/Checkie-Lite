@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.common.ui.cui.widget.cell
+package com.perfomer.checkielite.common.ui.cui.widget.rating
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewReaction
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import kotlin.math.PI
 import kotlin.math.cos

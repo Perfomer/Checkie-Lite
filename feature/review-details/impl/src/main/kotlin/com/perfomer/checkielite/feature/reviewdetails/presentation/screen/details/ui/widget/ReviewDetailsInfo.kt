@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.cui.modifier.thenIf
-import com.perfomer.checkielite.common.ui.cui.widget.cell.FloatingDiamond
+import com.perfomer.checkielite.common.ui.cui.widget.rating.FloatingDiamond
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRatingHalo
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewReaction
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette

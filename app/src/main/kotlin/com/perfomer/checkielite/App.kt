@@ -3,7 +3,6 @@ package com.perfomer.checkielite
 import android.app.Application
 import com.perfomer.checkielite.appinfo.AppInfoInitializer
 import com.perfomer.checkielite.core.data.repository.AppRepository
-import com.perfomer.checkielite.navigation.registerNavigationTransitions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -21,7 +20,6 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        registerNavigationTransitions()
         setupKoin()
 
         AppInfoInitializer.initialize(this)

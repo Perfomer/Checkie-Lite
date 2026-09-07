@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.perfomer.checkielite.common.ui.presentation.transition.ReviewSharedElement
+import com.perfomer.checkielite.common.ui.presentation.transition.ReviewSharedTextElement
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.common.ui.util.resource.text.text
@@ -32,7 +32,7 @@ internal fun ReviewDetailsHeader(
                     fontSize = 14.sp,
                     modifier = Modifier
                         .padding(horizontal = 24.dp)
-                        .sharedNavigationElement(ReviewSharedElement.Subtitle)
+                        .sharedNavigationElement(ReviewSharedTextElement.Subtitle)
                 )
 
                 Spacer(Modifier.height(8.dp))
@@ -44,7 +44,7 @@ internal fun ReviewDetailsHeader(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .padding(horizontal = 24.dp)
-                    .sharedNavigationElement(ReviewSharedElement.Title)
+                    .sharedNavigationElement(ReviewSharedTextElement.Title)
             )
         }
     }

@@ -7,6 +7,7 @@ import com.perfomer.checkielite.core.navigation.NavigationData
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
 import com.perfomer.checkielite.core.navigation.navigation
+import com.perfomer.checkielite.core.navigation.sharedTransition
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsReducer
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsStore
@@ -24,6 +25,7 @@ val reviewDetailsModules
 private val presentationModule = module {
     navigation {
         associate<ReviewDetailsDestination, ReviewDetailsContentScreen>()
+        sharedTransition<ReviewDetailsDestination, ReviewDetailsDestination>()
     }
 
     factoryOf(::createReviewDetailsStore)

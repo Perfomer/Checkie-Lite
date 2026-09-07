@@ -2,7 +2,6 @@ package com.perfomer.checkielite.common.ui.cui.widget.rating
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,7 +30,6 @@ import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 @Composable
 fun ReviewRating(
     rating: Int,
-    reactionContent: (@Composable () -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val reviewReaction = remember(rating) { ReviewReaction.createFromRating(rating) }
@@ -57,8 +55,8 @@ fun ReviewRating(
 
         CuiSpacer(8.dp)
 
-        if (reactionContent != null) {
-            Box { reactionContent() }
+        if (rating == 10) {
+            FloatingDiamond()
         } else {
             Image(
                 painter = painterResource(reviewReaction.drawable),

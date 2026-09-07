@@ -35,7 +35,7 @@ import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRatingVertical
 import com.perfomer.checkielite.common.ui.cui.widget.text.CuiFadedText
-import com.perfomer.checkielite.common.ui.presentation.transition.ReviewSharedElement
+import com.perfomer.checkielite.common.ui.presentation.transition.ReviewSharedTextElement
 import com.perfomer.checkielite.common.ui.presentation.transition.SharedImage
 import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationContainer
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
@@ -131,7 +131,7 @@ private fun RecommendedReviewCardContent(
                         modifier = Modifier
                             .fillMaxWidth()
                             .sharedNavigationElement(
-                                element = ReviewSharedElement.Subtitle,
+                                element = ReviewSharedTextElement.Subtitle,
                             )
                     )
                 }
@@ -148,7 +148,7 @@ private fun RecommendedReviewCardContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .sharedNavigationElement(
-                            element = ReviewSharedElement.Title,
+                            element = ReviewSharedTextElement.Title,
                         )
                 )
             }

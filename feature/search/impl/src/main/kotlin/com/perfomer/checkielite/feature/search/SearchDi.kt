@@ -8,6 +8,8 @@ import com.perfomer.checkielite.core.data.repository.TagRepository
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
 import com.perfomer.checkielite.core.navigation.navigation
+import com.perfomer.checkielite.core.navigation.sharedTransition
+import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination
 import com.perfomer.checkielite.feature.search.presentation.navigation.SortDestination
 import com.perfomer.checkielite.feature.search.presentation.navigation.TagsDestination
@@ -44,6 +46,7 @@ val searchModules
 private val presentationModule = module {
     navigation {
         associate<SearchDestination, SearchContentScreen>()
+        sharedTransition<SearchDestination, ReviewDetailsDestination>()
         associate<SortDestination, SortContentScreen>()
         associate<TagsDestination, TagsContentScreen>()
     }

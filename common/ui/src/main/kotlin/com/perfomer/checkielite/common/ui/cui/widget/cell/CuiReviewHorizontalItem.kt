@@ -34,7 +34,7 @@ import com.perfomer.checkielite.common.ui.R
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRating
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.cui.widget.text.CuiFadedText
-import com.perfomer.checkielite.common.ui.presentation.transition.ReviewSharedElement
+import com.perfomer.checkielite.common.ui.presentation.transition.ReviewSharedTextElement
 import com.perfomer.checkielite.common.ui.presentation.transition.SharedImage
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.core.navigation.transition.sharedNavigationElement
@@ -114,7 +114,7 @@ fun CuiReviewHorizontalItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.Start)
-                    .sharedNavigationElement(ReviewSharedElement.Title)
+                    .sharedNavigationElement(ReviewSharedTextElement.Title)
             )
 
             if (item.brand != null) {
@@ -127,21 +127,14 @@ fun CuiReviewHorizontalItem(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentWidth(Alignment.Start)
-                        .sharedNavigationElement(ReviewSharedElement.Subtitle)
+                        .sharedNavigationElement(ReviewSharedTextElement.Subtitle)
                 )
             }
         }
 
         CuiSpacer(16.dp)
 
-        ReviewRating(
-            rating = item.rating,
-            reactionContent = if (item.rating == 10) {
-                { FloatingDiamond() }
-            } else {
-                null
-            },
-        )
+        ReviewRating(rating = item.rating)
     }
 }
 

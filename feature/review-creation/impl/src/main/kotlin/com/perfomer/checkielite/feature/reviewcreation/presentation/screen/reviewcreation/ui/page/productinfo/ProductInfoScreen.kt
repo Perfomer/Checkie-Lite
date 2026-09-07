@@ -33,6 +33,7 @@ import com.perfomer.checkielite.common.ui.cui.modifier.rememberShakeController
 import com.perfomer.checkielite.common.ui.cui.modifier.shake
 import com.perfomer.checkielite.common.ui.cui.widget.dropdown.CuiSuggestionsBox
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
+import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedFieldDefaults
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -110,6 +111,7 @@ internal fun ProductInfoScreen(
 
         Column(modifier = Modifier.padding(horizontal = ProductInfoContentPadding)) {
             CuiOutlinedField(
+                colors = CuiOutlinedFieldDefaults.surfaceColors(),
                 text = state.productName,
                 errorText = textOrNull(state.productNameErrorText),
                 reservePlaceForError = true,
@@ -132,6 +134,7 @@ internal fun ProductInfoScreen(
                 onSuggestionSelected = onBrandTextInput,
             ) {
                 CuiOutlinedField(
+                    colors = CuiOutlinedFieldDefaults.surfaceColors(),
                     text = state.brand,
                     title = stringResource(R.string.reviewcreation_productinfo_field_brand),
                     keyboardOptions = KeyboardOptions(
@@ -149,6 +152,7 @@ internal fun ProductInfoScreen(
             CuiSpacer(4.dp)
 
             CuiOutlinedField(
+                colors = CuiOutlinedFieldDefaults.surfaceColors(),
                 text = state.price,
                 title = stringResource(R.string.reviewcreation_productinfo_field_price),
                 keyboardOptions = KeyboardOptions(

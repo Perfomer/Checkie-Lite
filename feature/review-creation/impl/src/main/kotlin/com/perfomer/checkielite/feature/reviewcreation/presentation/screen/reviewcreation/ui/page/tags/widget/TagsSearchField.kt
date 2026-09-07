@@ -34,7 +34,7 @@ internal fun TagsSearchField(
         ),
         singleLine = true,
         onValueChange = onSearchQueryInput,
-        colors = CuiOutlinedFieldDefaults.colors(),
+        colors = CuiOutlinedFieldDefaults.surfaceColors(),
         trailingIcon = {
             if (searchQuery.isBlank()) {
                 Icon(

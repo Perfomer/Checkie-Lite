@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -44,6 +45,8 @@ import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.cui.widget.text.CuiFadedText
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassScaffold
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
+import com.perfomer.checkielite.common.ui.presentation.theme.CuiSurfaceContent
+import com.perfomer.checkielite.common.ui.presentation.theme.CuiSurfaceStyle
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -73,14 +76,20 @@ internal fun SettingsScreen(
     onThemeSettingsClick: () -> Unit = {},
     onLiquidGlassChanged: (Boolean) -> Unit = {},
     onLibrariesClick: () -> Unit = {},
-) {
+) = CuiSurfaceContent {
     val scrollState = rememberScrollState()
     val shouldShowDivider by remember { derivedStateOf { scrollState.canScrollBackward } }
 
+    val backgroundColor = CuiSurfaceStyle.background
+    val toolbarThreshold = with(LocalDensity.current) { 24.dp.toPx() }
+
     CuiGlassScaffold(
+        containerColor = backgroundColor,
+        toolbarColor = backgroundColor,
+        toolbarBackgroundProgress = { (scrollState.value / toolbarThreshold).coerceIn(0F, 1F) },
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.settings_title), fontSize = 18.sp, fontWeight = FontWeight.Medium) },
+                title = { Text(stringResource(R.string.settings_title), fontSize = 20.sp, fontWeight = FontWeight.Medium) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent
                 ),
@@ -402,7 +411,7 @@ private fun SettingsItem(
         CuiSpacer(16.dp)
 
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1F)
         ) {
             CuiFadedText(
                 text = title,

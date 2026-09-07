@@ -35,6 +35,8 @@ import com.perfomer.checkielite.common.ui.cui.modifier.toolbarDivider
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiPrimaryButton
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.verticalScrimBrush
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassScaffold
+import com.perfomer.checkielite.common.ui.presentation.theme.CuiSurfaceContent
+import com.perfomer.checkielite.common.ui.presentation.theme.CuiSurfaceStyle
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
@@ -56,6 +58,7 @@ internal fun ReviewCreationScreen(
     state: ReviewCreationUiState,
     pagerState: PagerState,
     shouldShowTopDivider: Boolean,
+    toolbarBackgroundProgress: () -> Float = { if (shouldShowTopDivider) 1F else 0F },
 
     showExitDialog: Boolean = false,
     onExitDialogDismiss: () -> Unit = {},
@@ -67,13 +70,18 @@ internal fun ReviewCreationScreen(
     onPrimaryButtonClick: () -> Unit = {},
     onBackPress: () -> Unit = {},
     content: @Composable PagerScope.(page: Int) -> Unit,
-) {
+) = CuiSurfaceContent {
     val density = LocalDensity.current
     var bottomButtonHeightPx by remember { mutableIntStateOf(0) }
     val obstruction = with(density) { PaddingValues(bottom = bottomButtonHeightPx.toDp()) }
 
-    Box(modifier = Modifier.background(LocalCuiPalette.current.BackgroundPrimary)) {
+    val backgroundColor = CuiSurfaceStyle.background
+
+    Box(modifier = Modifier.background(backgroundColor)) {
         CuiGlassScaffold(
+            containerColor = backgroundColor,
+            toolbarColor = backgroundColor,
+            toolbarBackgroundProgress = toolbarBackgroundProgress,
             topBar = {
                 ProgressAppBar(
                     pagerState = pagerState,
@@ -106,7 +114,7 @@ internal fun ReviewCreationScreen(
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .imePadding()
-                .background(verticalScrimBrush())
+                .background(verticalScrimBrush(color = backgroundColor))
                 .padding(bottom = 20.dp)
                 .navigationBarsPadding()
         ) {
@@ -132,6 +140,7 @@ internal fun ReviewCreationScreen(
                     onClick = onPrimaryButtonClick,
                     activeButtonColor = animatedColor,
                     loading = state.isPrimaryButtonLoading,
+                    useSoftShadow = true,
                     modifier = Modifier.fillMaxWidth()
                 )
             }

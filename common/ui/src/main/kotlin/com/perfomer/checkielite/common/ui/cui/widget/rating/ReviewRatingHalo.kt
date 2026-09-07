@@ -32,6 +32,7 @@ import kotlin.math.sin
 @Composable
 fun ReviewRatingHalo(
     centerFromStart: Dp,
+    radius: Dp = 40.dp,
     modifier: Modifier = Modifier
 ) {
     val isDark = LocalCuiPalette.current.BackgroundElevationBase.luminance() < 0.5F
@@ -53,7 +54,7 @@ fun ReviewRatingHalo(
                 x = if (layoutDirection == LayoutDirection.Ltr) centerFromStart.toPx() else size.width - centerFromStart.toPx(),
                 y = size.height / 2F,
             )
-            val radius = 40.dp.toPx()
+            val radius = radius.toPx()
             val bounds = Rect(center = center, radius = radius)
             val layerPaint = Paint()
             val fadeStops = Array(17) { index ->
@@ -68,7 +69,7 @@ fun ReviewRatingHalo(
             val periwinkle = meshBrush(Color(0xFF929BFF), alpha = if (isDark) 0.25F else 0.48F)
             val cyan = meshBrush(Color(0xFF41E3EB), alpha = if (isDark) 0.30F else 0.62F)
             val pearl = meshBrush(Color(0xFFE9FAFF), alpha = if (isDark) 0.06F else 0.88F)
-            val lightRadius = 28.dp.toPx()
+            val lightRadius = minOf(28.dp.toPx(), radius * 0.7F)
             val lightColor = Color(0xFFF4FCFF)
             val lightOpacity = if (isDark) 0.58F else 0.98F
             val diamondLight = Brush.radialGradient(
@@ -83,7 +84,7 @@ fun ReviewRatingHalo(
             onDrawBehind {
                 val driftX = sin(phase.value)
                 val driftY = cos(phase.value)
-                // The layer covers the full 80 dp halo, including the area outside the button.
+                // The layer covers the full halo, including the area outside the control.
                 // Apply the mask only to the mesh, so it cannot erase the screen or the ripple.
                 drawIntoCanvas { canvas ->
                     canvas.saveLayer(bounds, layerPaint)

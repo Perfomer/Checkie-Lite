@@ -47,6 +47,15 @@ data class CuiChipStyle(
 
         @Composable
         @ReadOnlyComposable
+        fun elevated(palette: CuiPalette = LocalCuiPalette.current): CuiChipStyle = default(palette).copy(
+            iconBackgroundColor = palette.BackgroundElevationBase,
+            textBackgroundColor = palette.BackgroundElevationBase,
+            borderColor = Color.Transparent,
+            borderWidth = 0.dp,
+        )
+
+        @Composable
+        @ReadOnlyComposable
         fun default(palette: CuiPalette = LocalCuiPalette.current): CuiChipStyle {
             return CuiChipStyle(
                 iconBackgroundColor = palette.BackgroundSecondary,

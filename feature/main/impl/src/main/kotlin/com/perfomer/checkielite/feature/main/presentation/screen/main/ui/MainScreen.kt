@@ -30,21 +30,17 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalRippleConfiguration
-import androidx.compose.material3.RippleConfiguration
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -68,6 +64,8 @@ import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiTagChip
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassToolbarBackground
+import com.perfomer.checkielite.common.ui.presentation.theme.CuiSurfaceContent
+import com.perfomer.checkielite.common.ui.presentation.theme.CuiSurfaceStyle
 import com.perfomer.checkielite.common.ui.presentation.transition.isSharedTransitionItemEligible
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -95,10 +93,9 @@ internal fun MainScreen(
     onChangelogClick: () -> Unit = {},
     onChangelogCloseClick: () -> Unit = {},
     onFabClick: () -> Unit = {},
-) {
+) = CuiSurfaceContent {
     val scrollState = rememberLazyListState()
-    val palette = LocalCuiPalette.current
-    val backgroundColor = lerp(palette.BackgroundPrimary, palette.BackgroundAccentTertiary, 0.4F)
+    val backgroundColor = CuiSurfaceStyle.background
     val backdrop = rememberLayerBackdrop {
         // Include the screen color in the gaps between cards when sampling the list.
         drawRect(backgroundColor)
@@ -173,14 +170,6 @@ private fun Content(
     onTagClick: (id: String) -> Unit,
     onChangelogClick: () -> Unit,
     onChangelogCloseClick: () -> Unit,
-) = CompositionLocalProvider(
-    LocalRippleConfiguration provides RippleConfiguration(
-        color = lerp(
-            LocalCuiPalette.current.BackgroundAccentPrimary,
-            Color.White,
-            0.5F,
-        ),
-    ),
 ) {
     val density = LocalDensity.current
     val toolbarBottom = with(density) { contentPadding.calculateTopPadding().roundToPx() }
@@ -411,12 +400,7 @@ private fun TagsRow(
 ) {
     val rows = remember(tags) { TagRowUiBalancer.split(tags) }
     val palette = LocalCuiPalette.current
-    val chipStyle = CuiChipStyle.default().copy(
-        iconBackgroundColor = palette.BackgroundElevationBase,
-        textBackgroundColor = palette.BackgroundElevationBase,
-        borderColor = Color.Transparent,
-        borderWidth = 0.dp,
-    )
+    val chipStyle = CuiChipStyle.elevated(palette)
 
     @Composable
     fun SingleRow(tags: ImmutableList<Tag>) {

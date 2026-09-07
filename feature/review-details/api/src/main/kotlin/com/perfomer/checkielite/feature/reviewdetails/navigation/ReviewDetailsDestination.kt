@@ -22,4 +22,7 @@ data class ReviewDetailsDestination(
 
     override val sharedTransitionGroup: String
         get() = "review"
+
+    override val sharedTransitionGroups: Set<String>
+        get() = setOf(sharedTransitionGroup, "search")
 }

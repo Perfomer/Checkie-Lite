@@ -23,6 +23,24 @@ class SharedTransitionUtilsTest {
     }
 
     @Test
+    fun `destinations with a compatible group share a transition`() {
+        val search = SharedDestination("search")
+        val details = SharedDestination("review", setOf("review", "search"))
+
+        assertTrue(search.hasSharedTransitionWith(details))
+        assertTrue(details.hasSharedTransitionWith(search))
+    }
+
+    @Test
+    fun `compatibility does not make unrelated groups share a transition`() {
+        val main = SharedDestination("review")
+        val search = SharedDestination("search")
+
+        assertFalse(main.hasSharedTransitionWith(search))
+        assertFalse(search.hasSharedTransitionWith(main))
+    }
+
+    @Test
     fun `both destinations must opt in to shared transitions`() {
         val shared = SharedDestination("review")
         val regular = RegularDestination()
@@ -34,6 +52,7 @@ class SharedTransitionUtilsTest {
 
     private class SharedDestination(
         override val sharedTransitionGroup: String,
+        override val sharedTransitionGroups: Set<String> = setOf(sharedTransitionGroup),
     ) : Destination(), SharedTransitionDestination
 
     private class RegularDestination : Destination()

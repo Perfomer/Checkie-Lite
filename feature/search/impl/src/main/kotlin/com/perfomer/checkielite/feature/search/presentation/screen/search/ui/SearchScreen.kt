@@ -170,8 +170,6 @@ private fun Content(
             CuiReviewCard(
                 item = item,
                 onClick = onReviewClick,
-                // Search keeps its existing navigation; shared transitions belong to the main flow.
-                isTransitionEnabled = { false },
                 modifier = Modifier.animateItem()
             )
         }

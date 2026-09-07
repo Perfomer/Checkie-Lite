@@ -50,7 +50,12 @@ internal class ReviewDetailsNavigationActor(
             }
 
             is OpenReviewDetails -> {
-                navigate(ReviewDetailsDestination(reviewId = command.reviewId))
+                navigate(
+                    ReviewDetailsDestination(
+                        reviewId = command.reviewId,
+                        initialReview = command.initialReview,
+                    ),
+                )
             }
 
             is OpenGallery -> {

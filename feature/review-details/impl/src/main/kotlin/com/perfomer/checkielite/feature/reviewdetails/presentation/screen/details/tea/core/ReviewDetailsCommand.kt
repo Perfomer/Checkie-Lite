@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core
 
+import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationStartAction
 
 internal sealed interface ReviewDetailsCommand {
@@ -18,7 +19,10 @@ internal sealed interface ReviewDetailsNavigationCommand : ReviewDetailsCommand 
         val startAction: ReviewCreationStartAction,
     ) : ReviewDetailsNavigationCommand
 
-    class OpenReviewDetails(val reviewId: String) : ReviewDetailsNavigationCommand
+    class OpenReviewDetails(
+        val reviewId: String,
+        val initialReview: CheckieReview?,
+    ) : ReviewDetailsNavigationCommand
 
     class OpenSearch(val tagId: String) : ReviewDetailsNavigationCommand
 

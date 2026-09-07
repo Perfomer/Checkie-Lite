@@ -4,4 +4,7 @@ package com.perfomer.checkielite.core.navigation
 interface SharedTransitionDestination {
 
     val sharedTransitionGroup: String
+
+    val sharedTransitionGroups: Set<String>
+        get() = setOf(sharedTransitionGroup)
 }

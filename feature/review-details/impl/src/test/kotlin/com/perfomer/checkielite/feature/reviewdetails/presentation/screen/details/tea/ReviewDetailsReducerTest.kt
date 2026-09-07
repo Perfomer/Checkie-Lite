@@ -10,14 +10,38 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect.ShowToast
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand.OpenReviewDetails
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsState
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsUiEvent
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.util.Date
 
 internal class ReviewDetailsReducerTest {
+
+    @Test
+    fun `opening a recommendation passes its snapshot`() {
+        val review = review(id = "review")
+        val recommendation = review(id = "recommendation")
+        val update = ReviewDetailsReducer().reduce(
+            currentState = ReviewDetailsState(
+                reviewId = review.id,
+                review = Lce.Content(
+                    ReviewDetails(
+                        review = review,
+                        recommendations = listOf(recommendation),
+                    ),
+                ),
+            ),
+            event = ReviewDetailsUiEvent.OnRecommendationClick(recommendation.id),
+        )
+        val command = update.commands.single() as OpenReviewDetails
+
+        assertEquals(recommendation.id, command.reviewId)
+        assertSame(recommendation, command.initialReview)
+    }
 
     @Test
     fun `deleted review produces neutral toast and exits`() {
@@ -34,21 +58,7 @@ internal class ReviewDetailsReducerTest {
 
     @Test
     fun `editing syncing review produces warning without navigation`() {
-        val review = CheckieReview(
-            id = "review",
-            productName = "Product",
-            productBrand = null,
-            price = null,
-            rating = 5,
-            pictures = emptyList(),
-            tags = emptyList(),
-            comment = null,
-            advantages = null,
-            disadvantages = null,
-            creationDate = Date(0L),
-            modificationDate = Date(0L),
-            isSyncing = true,
-        )
+        val review = review(id = "review", isSyncing = true)
         val update = ReviewDetailsReducer().reduce(
             currentState = ReviewDetailsState(
                 reviewId = review.id,
@@ -62,4 +72,23 @@ internal class ReviewDetailsReducerTest {
         assertEquals(ToastStyle.WARNING, toast.style)
         assertTrue(update.commands.isEmpty())
     }
+
+    private fun review(
+        id: String,
+        isSyncing: Boolean = false,
+    ) = CheckieReview(
+        id = id,
+        productName = "Product",
+        productBrand = null,
+        price = null,
+        rating = 5,
+        pictures = emptyList(),
+        tags = emptyList(),
+        comment = null,
+        advantages = null,
+        disadvantages = null,
+        creationDate = Date(0L),
+        modificationDate = Date(0L),
+        isSyncing = isSyncing,
+    )
 }

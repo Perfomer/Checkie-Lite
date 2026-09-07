@@ -6,4 +6,4 @@ import com.perfomer.checkielite.core.navigation.SharedTransitionDestination
 internal fun Destination.hasSharedTransitionWith(other: Destination): Boolean =
     this is SharedTransitionDestination &&
         other is SharedTransitionDestination &&
-        sharedTransitionGroup == other.sharedTransitionGroup
+        sharedTransitionGroups.any(other.sharedTransitionGroups::contains)

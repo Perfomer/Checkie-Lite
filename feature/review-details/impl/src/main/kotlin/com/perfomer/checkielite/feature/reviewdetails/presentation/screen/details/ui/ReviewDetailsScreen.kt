@@ -233,7 +233,7 @@ private fun Content(
             )
         }
 
-        item {
+        item(key = "recommendations") {
             ReviewDetailsRecommendations(
                 recommendations = state.recommendations,
                 onRecommendationClick = onRecommendationClick,

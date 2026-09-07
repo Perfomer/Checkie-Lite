@@ -24,17 +24,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
+import com.perfomer.checkielite.common.ui.cui.modifier.SharedContentKey
+import com.perfomer.checkielite.common.ui.cui.modifier.SharedContentPart
+import com.perfomer.checkielite.common.ui.cui.modifier.sharedNavigationContent
 import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRatingVertical
 import com.perfomer.checkielite.common.ui.cui.widget.text.CuiFadedText
+import com.perfomer.checkielite.common.ui.presentation.transition.SharedImage
+import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationContainer
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
@@ -46,70 +51,97 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 internal fun RecommendedReviewCard(
     review: RecommendedReview,
     onClick: (reviewId: String) -> Unit,
-    modifier: Modifier = Modifier,
+    isTransitionEnabled: () -> Boolean = { true },
+    modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 
-    Card(
-        onClick = { onClick(review.reviewId) },
-        interactionSource = interactionSource,
-        shape = RoundedCornerShape(20.dp),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 0.dp,
-            pressedElevation = 0.dp,
+    SharedNavigationContainer(
+        contentId = review.reviewId,
+        cornerRadius = 20.dp,
+        otherCornerRadius = 0.dp,
+        color = LocalCuiPalette.current.BackgroundElevationBase,
+        otherColor = lerp(
+            LocalCuiPalette.current.BackgroundPrimary,
+            LocalCuiPalette.current.BackgroundAccentTertiary,
+            0.4F,
         ),
         modifier = modifier
             .size(width = 148.dp, height = 200.dp)
             .softShadow(interactionSource = interactionSource, shape = RoundedCornerShape(20.dp))
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            RecommendedReviewPicture(
-                pictureUri = review.pictureUri,
-                isSyncing = review.isSyncing,
-            )
+        Card(
+            onClick = { onClick(review.reviewId) },
+            interactionSource = interactionSource,
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 0.dp,
+                pressedElevation = 0.dp,
+            ),
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                RecommendedReviewPicture(
+                    reviewId = review.reviewId,
+                    pictureUri = review.pictureUri,
+                    isSyncing = review.isSyncing,
+                    isTransitionEnabled = isTransitionEnabled,
+                )
 
-            ReviewRatingVertical(
-                rating = review.rating,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(8.dp)
-            )
+                ReviewRatingVertical(
+                    rating = review.rating,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(8.dp)
+                )
 
-            Column(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(LocalCuiPalette.current.BackgroundElevationContent)
-                    .padding(12.dp)
-            ) {
-                val hasBrand = review.brandName != null
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(LocalCuiPalette.current.BackgroundElevationContent)
+                        .padding(12.dp)
+                ) {
+                    val hasBrand = review.brandName != null
 
-                if (hasBrand) {
+                    if (hasBrand) {
+                        CuiFadedText(
+                            text = text(review.brandName),
+                            maxLines = 1,
+                            fontSize = 12.sp,
+                            color = LocalCuiPalette.current.TextAccent,
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                platformStyle = PlatformTextStyle(includeFontPadding = false)
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .sharedNavigationContent(
+                                    key = SharedContentKey(review.reviewId, SharedContentPart.Subtitle),
+                                    isEnabled = isTransitionEnabled,
+                                )
+                        )
+                    }
+
                     CuiFadedText(
-                        text = text(review.brandName),
-                        maxLines = 1,
-                        fontSize = 12.sp,
-                        color = LocalCuiPalette.current.TextAccent,
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.bodySmall.copy(
+                        text = text(review.productName),
+                        maxLines = if (hasBrand) 1 else 2,
+                        fontSize = 14.sp,
+                        color = LocalCuiPalette.current.TextPrimary,
+                        style = MaterialTheme.typography.bodyMedium.copy(
                             platformStyle = PlatformTextStyle(includeFontPadding = false)
                         ),
-                        modifier = Modifier.fillMaxWidth()
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .sharedNavigationContent(
+                                key = SharedContentKey(review.reviewId, SharedContentPart.Title),
+                                isEnabled = isTransitionEnabled,
+                            )
                     )
                 }
-
-                CuiFadedText(
-                    text = text(review.productName),
-                    maxLines = if (hasBrand) 1 else 2,
-                    fontSize = 14.sp,
-                    color = LocalCuiPalette.current.TextPrimary,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        platformStyle = PlatformTextStyle(includeFontPadding = false)
-                    ),
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.fillMaxWidth()
-                )
             }
         }
     }
@@ -117,8 +149,10 @@ internal fun RecommendedReviewCard(
 
 @Composable
 private fun RecommendedReviewPicture(
+    reviewId: String,
     pictureUri: String?,
     isSyncing: Boolean,
+    isTransitionEnabled: () -> Boolean,
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -135,10 +169,12 @@ private fun RecommendedReviewPicture(
                 modifier = Modifier.size(48.dp)
             )
         } else {
-            AsyncImage(
-                model = pictureUri,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
+            SharedImage(
+                contentId = reviewId,
+                imageUri = pictureUri,
+                cornerRadius = 20.dp,
+                otherCornerRadius = 24.dp,
+                isTransitionEnabled = isTransitionEnabled,
                 modifier = Modifier
                     .fillMaxSize()
                     .border(

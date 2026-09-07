@@ -47,7 +47,12 @@ internal class SearchNavigationActor(
     }
 
     private fun openReviewDetails(command: OpenReviewDetails) {
-        router.navigate(ReviewDetailsDestination(command.reviewId))
+        router.navigate(
+            ReviewDetailsDestination(
+                reviewId = command.reviewId,
+                initialReview = command.initialReview,
+            ),
+        )
     }
 
     private suspend fun openAllFilters(command: OpenAllFilters): SearchNavigationEvent {

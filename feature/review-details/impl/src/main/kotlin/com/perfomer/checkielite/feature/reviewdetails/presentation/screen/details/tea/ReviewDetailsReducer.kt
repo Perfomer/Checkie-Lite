@@ -60,7 +60,13 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
         is OnEditClick -> reduceOnEditClick(startAction = ReviewCreationStartAction.NONE)
         is OnAddTagsClick -> reduceOnEditClick(startAction = ReviewCreationStartAction.ADD_TAGS)
         is OnTagClick -> commands(OpenSearch(tagId = event.tagId))
-        is OnRecommendationClick -> commands(OpenReviewDetails(event.recommendedReviewId))
+        is OnRecommendationClick -> commands(
+            OpenReviewDetails(
+                reviewId = event.recommendedReviewId,
+                initialReview = state.review.requireContent().recommendations
+                    .firstOrNull { it.id == event.recommendedReviewId },
+            ),
+        )
         is OnPictureSelect -> state { copy(currentPicturePosition = event.position) }
         is OnPictureClick -> commands(
             OpenGallery(

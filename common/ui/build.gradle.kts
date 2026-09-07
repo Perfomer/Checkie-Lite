@@ -10,6 +10,7 @@ android {
 }
 
 dependencies {
+	implementation(projects.common.navigation.api.ui)
 	implementation(projects.common.pure)
 	implementation(projects.common.tea.compose)
 

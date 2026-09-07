@@ -15,7 +15,7 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.M
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationDestination
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
+import com.perfomer.checkielite.feature.reviewdetails.navigation.navigateToReviewDetails
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination
 import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsDestination
 import kotlinx.coroutines.flow.Flow
@@ -47,11 +47,9 @@ internal class MainNavigationActor(
             }
 
             is OpenChangelog -> navigate(ChangelogDestination)
-            is OpenReviewDetails -> navigate(
-                ReviewDetailsDestination(
-                    reviewId = command.reviewId,
-                    initialReview = command.initialReview,
-                ),
+            is OpenReviewDetails -> navigateToReviewDetails(
+                reviewId = command.reviewId,
+                initialReview = command.initialReview,
             )
             is OpenSearch -> navigate(SearchDestination(tagId = command.tagId))
             is OpenSettings -> navigate(SettingsDestination)

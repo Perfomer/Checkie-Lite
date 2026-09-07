@@ -11,8 +11,9 @@ android {
 
 dependencies {
 	api(projects.common.navigation.api.core)
+	api(libs.androidx.compose.animation)
+	api(libs.androidx.compose.ui)
 
 	implementation(libs.androidx.activity)
-	implementation(libs.androidx.compose.ui)
 	implementation(platform(libs.androidx.compose.bom))
 }

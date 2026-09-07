@@ -1,7 +1,7 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget
 
-import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.EnterExitState
+import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -35,22 +35,23 @@ import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.cui.modifier.offsetForPage
 import com.perfomer.checkielite.common.ui.cui.modifier.scaleHorizontalNeighbors
 import com.perfomer.checkielite.common.ui.cui.widget.pager.CuiHorizontalPagerIndicator
-import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.presentation.transition.SharedImage
-import com.perfomer.checkielite.common.ui.presentation.transition.LocalNavigationAnimatedVisibilityScope
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
+import com.perfomer.checkielite.core.navigation.transition.LocalNavigationAnimatedVisibilityScope
+import com.perfomer.checkielite.core.navigation.transition.LocalSharedNavigationContent
+import com.perfomer.checkielite.core.navigation.transition.SharedNavigationContent
 import kotlinx.collections.immutable.ImmutableList
 import kotlin.math.absoluteValue
 
 @Composable
 internal fun PicturesCarousel(
-    reviewId: String,
     currentPictureIndex: Int,
     picturesUri: ImmutableList<String>,
     onPageChange: (pageIndex: Int) -> Unit,
     onPictureClick: () -> Unit,
-    isTransitionEnabled: () -> Boolean,
 ) {
     val visibilityScope = LocalNavigationAnimatedVisibilityScope.current
+    val sharedContent = LocalSharedNavigationContent.current
     val atmosphereAlpha = visibilityScope?.transition?.animateFloat(
         transitionSpec = {
             if (targetState == EnterExitState.Visible) {
@@ -108,22 +109,25 @@ internal fun PicturesCarousel(
                     )
                 }
 
-                SharedImage(
-                    contentId = reviewId,
-                    imageUri = picturesUri[i],
-                    cornerRadius = 24.dp,
-                    otherCornerRadius = 16.dp,
-                    // A retained/prefetched cover must not fly in from outside the viewport.
-                    isTransitionEnabled = {
-                        i == 0 && pagerState.currentPage == i &&
-                            pagerState.currentPageOffsetFraction == 0F && isTransitionEnabled()
+                SharedNavigationContent(
+                    id = sharedContent?.id,
+                    isEnabled = {
+                        sharedContent?.isEnabled?.invoke() == true &&
+                            i == 0 && pagerState.currentPage == i &&
+                            pagerState.currentPageOffsetFraction == 0F
                     },
-                    onState = { state -> pictureState = state },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1F)
-                        .clickable(onClick = onPictureClick)
-                )
+                ) {
+                    SharedImage(
+                        imageUri = picturesUri[i],
+                        cornerRadius = 24.dp,
+                        overlayCornerRadius = 24.dp,
+                        onState = { state -> pictureState = state },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1F)
+                            .clickable(onClick = onPictureClick)
+                    )
+                }
             }
         }
 

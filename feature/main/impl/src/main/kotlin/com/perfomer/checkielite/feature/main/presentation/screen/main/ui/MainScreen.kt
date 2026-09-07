@@ -66,7 +66,7 @@ import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiTagChip
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassToolbarBackground
 import com.perfomer.checkielite.common.ui.presentation.theme.CuiSurfaceContent
 import com.perfomer.checkielite.common.ui.presentation.theme.CuiSurfaceStyle
-import com.perfomer.checkielite.common.ui.presentation.transition.isSharedTransitionItemEligible
+import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationLazyListItem
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.LocalLiquidGlassEnabled
@@ -223,25 +223,20 @@ private fun Content(
             items = state.reviews,
             key = { item -> item.id },
         ) { item ->
-            CuiReviewCard(
-                item = item,
-                onClick = onReviewClick,
-                isTransitionEnabled = {
-                    val layout = scrollState.layoutInfo
-                    val card = layout.visibleItemsInfo.firstOrNull { it.key == item.id }
-                    isSharedTransitionItemEligible(
-                        totalItemsCount = layout.totalItemsCount,
-                        itemOffset = card?.offset,
-                        itemSize = card?.size,
-                        viewportStartOffset = toolbarBottom,
-                        viewportEndOffset = layout.viewportEndOffset,
-                    )
-                },
-                modifier = Modifier
-                    .animateItem()
-                    .padding(horizontal = 20.dp)
-                    .padding(bottom = 12.dp)
-            )
+            SharedNavigationLazyListItem(
+                id = item.id,
+                listState = scrollState,
+                viewportStartOffset = toolbarBottom,
+            ) {
+                CuiReviewCard(
+                    item = item,
+                    onClick = onReviewClick,
+                    modifier = Modifier
+                        .animateItem()
+                        .padding(horizontal = 20.dp)
+                        .padding(bottom = 12.dp)
+                )
+            }
         }
 
         item {

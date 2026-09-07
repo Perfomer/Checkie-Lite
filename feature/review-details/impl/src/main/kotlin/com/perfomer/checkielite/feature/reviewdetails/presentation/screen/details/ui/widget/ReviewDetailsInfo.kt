@@ -54,8 +54,6 @@ internal fun ReviewDetailsInfo(
     price: Price?,
     onRatingClick: () -> Unit,
     onEmptyPriceClick: () -> Unit,
-    ratingValueModifier: Modifier = Modifier,
-    ratingIconModifier: Modifier = Modifier,
 ) {
     Spacer(Modifier.height(20.dp))
 
@@ -92,7 +90,6 @@ internal fun ReviewDetailsInfo(
 
         InfoCell(
             value = AnnotatedString(ratingValue),
-            valueModifier = ratingValueModifier,
             description = stringResource(R.string.reviewdetails_rating),
             isPerfectRating = rating == 10,
             iconBackgroundColor = if (rating == 10) {
@@ -106,12 +103,12 @@ internal fun ReviewDetailsInfo(
             },
             icon = {
                 if (rating == 10) {
-                    FloatingDiamond(modifier = ratingIconModifier.size(26.dp))
+                    FloatingDiamond(modifier = Modifier.size(26.dp))
                 } else {
                     Image(
                         painter = painterResource(reviewReaction.drawable),
                         contentDescription = stringResource(reviewReaction.contentDescription),
-                        modifier = ratingIconModifier.size(26.dp)
+                        modifier = Modifier.size(26.dp)
                     )
                 }
             },
@@ -169,14 +166,13 @@ private fun InfoCell(
     description: String,
     icon: @Composable BoxScope.() -> Unit,
     fromLeft: Boolean,
-    modifier: Modifier = Modifier,
     valueColor: Color = Color.Unspecified,
     descriptionColor: Color = LocalCuiPalette.current.TextSecondary,
     iconBackgroundColor: Color = LocalCuiPalette.current.BackgroundSecondary,
     descriptionOffset: Dp = 0.dp,
     onClick: (() -> Unit)? = null,
-    valueModifier: Modifier = Modifier,
     isPerfectRating: Boolean = false,
+    modifier: Modifier = Modifier
 ) {
     @Composable
     fun IconBox() {
@@ -231,7 +227,6 @@ private fun InfoCell(
                         style = MaterialTheme.typography.bodySmall.copy(
                             platformStyle = PlatformTextStyle(includeFontPadding = false),
                         ),
-                        modifier = valueModifier
                     )
 
                     Text(

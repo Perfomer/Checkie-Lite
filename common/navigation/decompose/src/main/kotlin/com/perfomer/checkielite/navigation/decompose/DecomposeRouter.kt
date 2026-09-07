@@ -9,6 +9,7 @@ import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.perfomer.checkielite.core.navigation.Destination
 import com.perfomer.checkielite.core.navigation.DestinationMode
 import com.perfomer.checkielite.core.navigation.DestinationWithResult
+import com.perfomer.checkielite.core.navigation.NavigationData
 import com.perfomer.checkielite.core.navigation.Result
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.navigation.result.NavigationResultEventBus
@@ -19,39 +20,54 @@ internal class DecomposeRouter(
 
     private val root: DecomposeRootComponent by DecomposeRootComponentHolder
 
-    override fun navigate(destination: Destination, mode: DestinationMode) = with(root) {
-        when (mode) {
-            DestinationMode.USUAL -> mainNavigator.pushToFront(destination)
-            DestinationMode.OVERLAY -> overlayNavigator.activate(destination)
-            DestinationMode.BOTTOM_SHEET -> bottomSheetNavigator.activate(destination)
+    override fun navigate(
+        destination: Destination,
+        mode: DestinationMode,
+        navigationData: NavigationData,
+    ) = with(root) {
+        withNavigationData(destination, navigationData) {
+            when (mode) {
+                DestinationMode.USUAL -> mainNavigator.pushToFront(destination)
+                DestinationMode.OVERLAY -> overlayNavigator.activate(destination)
+                DestinationMode.BOTTOM_SHEET -> bottomSheetNavigator.activate(destination)
+            }
         }
     }
 
-    override fun replace(destination: Destination, mode: DestinationMode) = with(root) {
+    override fun replace(
+        destination: Destination,
+        mode: DestinationMode,
+        navigationData: NavigationData,
+    ) = with(root) {
         if (defineTopDestinationMode() != mode) {
             exit()
-            navigate(destination, mode)
+            navigate(destination, mode, navigationData)
             return@with
         }
 
-        when (mode) {
-            DestinationMode.USUAL -> mainNavigator.replaceCurrent(destination)
-            DestinationMode.OVERLAY -> overlayNavigator.activate(destination)
-            DestinationMode.BOTTOM_SHEET -> bottomSheetNavigator.activate(destination)
+        withNavigationData(destination, navigationData) {
+            when (mode) {
+                DestinationMode.USUAL -> mainNavigator.replaceCurrent(destination)
+                DestinationMode.OVERLAY -> overlayNavigator.activate(destination)
+                DestinationMode.BOTTOM_SHEET -> bottomSheetNavigator.activate(destination)
+            }
         }
     }
 
-    override fun replaceStack(destination: Destination) = with(root) {
+    override fun replaceStack(destination: Destination, navigationData: NavigationData) = with(root) {
         bottomSheetNavigator.dismiss()
         overlayNavigator.dismiss()
-        mainNavigator.replaceAll(destination)
+        withNavigationData(destination, navigationData) {
+            mainNavigator.replaceAll(destination)
+        }
     }
 
     override suspend fun <T : Result> navigateForResult(
         destination: DestinationWithResult<T>,
         mode: DestinationMode,
+        navigationData: NavigationData,
     ): T? {
-        navigate(destination, mode)
+        navigate(destination, mode, navigationData)
         return resultEventBus.awaitResult(destination.resultKey)
     }
 

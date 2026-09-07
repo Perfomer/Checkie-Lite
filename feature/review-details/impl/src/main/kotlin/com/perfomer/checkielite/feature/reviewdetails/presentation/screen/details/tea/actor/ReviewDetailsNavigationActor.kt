@@ -7,7 +7,7 @@ import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryDestination
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationDestination
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
+import com.perfomer.checkielite.feature.reviewdetails.navigation.navigateToReviewDetails
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand
@@ -50,11 +50,9 @@ internal class ReviewDetailsNavigationActor(
             }
 
             is OpenReviewDetails -> {
-                navigate(
-                    ReviewDetailsDestination(
-                        reviewId = command.reviewId,
-                        initialReview = command.initialReview,
-                    ),
+                navigateToReviewDetails(
+                    reviewId = command.reviewId,
+                    initialReview = command.initialReview,
                 )
             }
 

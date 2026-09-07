@@ -41,10 +41,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import com.perfomer.checkielite.common.ui.cui.modifier.conditional
@@ -157,7 +154,6 @@ fun RatingSlider(
             }
     ) {
         RatingSlideCanvas(
-            width = width,
             offsetX = actualOffset,
             lastSelectedRating = lastSelectedRating,
             colors = colors,
@@ -167,7 +163,6 @@ fun RatingSlider(
 
 @Composable
 private fun RatingSlideCanvas(
-    width: Float,
     offsetX: Float,
     lastSelectedRating: Int,
     colors: RatingSliderColors,
@@ -190,46 +185,29 @@ private fun RatingSlideCanvas(
         (AppCompatResources.getDrawable(context, reviewReaction.drawable) as BitmapDrawable).bitmap
     }
 
-    val density = LocalDensity.current
-    val layoutDirection = LocalLayoutDirection.current
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        ProgressLines(
+            offsetX = offsetX,
+            emptyLineColor = colors.emptyLineColor,
+            fillLineColor = colors.fillLineColor,
+            pointBackgroundColor = colors.pointBackgroundColor,
+            pointSelectedBorderColor = colors.pointSelectedBorderColor,
+            pointUnselectedBorderColor = colors.pointUnselectedBorderColor,
+        )
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            ProgressLines(
-                offsetX = offsetX,
-                emptyLineColor = colors.emptyLineColor,
-                fillLineColor = colors.fillLineColor,
-                pointBackgroundColor = colors.pointBackgroundColor,
-                pointSelectedBorderColor = colors.pointSelectedBorderColor,
-                pointUnselectedBorderColor = colors.pointUnselectedBorderColor,
-            )
+        RatingNumbers(
+            offsetX = offsetX,
+            paint = ratingNumberTextPaint,
+            selectedTextColor = colors.selectedTextColor,
+            unselectedTextColor = colors.unselectedTextColor,
+        )
 
-            RatingNumbers(
-                offsetX = offsetX,
-                paint = ratingNumberTextPaint,
-                selectedTextColor = colors.selectedTextColor,
-                unselectedTextColor = colors.unselectedTextColor,
-            )
-        }
-
-        if (lastSelectedRating == 10) {
-            ReviewRatingHalo(
-                centerFromStart = with(density) {
-                    (if (layoutDirection == LayoutDirection.Ltr) offsetX else width - offsetX).toDp()
-                },
-                radius = 28.dp,
-                modifier = Modifier.matchParentSize()
-            )
-        }
-
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            SlidingEmoji(
-                emoji = reactionBitmap,
-                offsetX = offsetX,
-                pointBackgroundColor = colors.pointBackgroundColor,
-                pointEmojiBorderColor = colors.pointEmojiBorderColor,
-            )
-        }
+        SlidingEmoji(
+            emoji = reactionBitmap,
+            offsetX = offsetX,
+            pointBackgroundColor = colors.pointBackgroundColor,
+            pointEmojiBorderColor = colors.pointEmojiBorderColor,
+        )
     }
 }
 

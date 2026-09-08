@@ -1,13 +1,9 @@
 package com.perfomer.checkielite.navigation.decompose
 
 import androidx.activity.ComponentActivity
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -33,6 +29,7 @@ import com.perfomer.checkielite.core.navigation.NavigationRegistry
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.Screen
 import com.perfomer.checkielite.core.navigation.transition.LocalNavigationAnimatedVisibilityScope
+import com.perfomer.checkielite.core.navigation.transition.LocalSharedNavigationImageScope
 import com.perfomer.checkielite.core.navigation.transition.LocalSharedTransitionScope
 import com.perfomer.checkielite.core.navigation.transition.SharedNavigationTransitionDurationMillis
 
@@ -64,16 +61,27 @@ internal class DecomposeNavigationHost(
         bottomSheetContent: @Composable (@Composable () -> Unit) -> Unit,
         overlayContent: @Composable (@Composable () -> Unit) -> Unit,
     ) {
-        MainRoot()
-
-        BottomSheetRoot(
-            controller = bottomSheetController,
-            content = bottomSheetContent,
-        )
-
-        OverlayRoot(
-            content = overlayContent,
-        )
+        val stack by root.mainNavigationStack.subscribeAsState()
+        val overlay by root.overlaySlot.subscribeAsState()
+        SharedTransitionLayout {
+            CompositionLocalProvider(LocalSharedTransitionScope provides this) {
+                OverlayNavigation(
+                    source = stack.active.configuration,
+                    overlay = overlay.child,
+                    onBack = ::back,
+                    mainContent = {
+                        MainRoot()
+                        CompositionLocalProvider(LocalSharedNavigationImageScope provides null) {
+                            BottomSheetRoot(
+                                controller = bottomSheetController,
+                                content = bottomSheetContent,
+                            )
+                        }
+                    },
+                    overlayContent = overlayContent,
+                )
+            }
+        }
     }
 
     @Composable
@@ -123,16 +131,18 @@ internal class DecomposeNavigationHost(
             )
         }
 
-        SharedTransitionLayout {
-            CompositionLocalProvider(LocalSharedTransitionScope provides this) {
-                ChildStack(
-                    stack = mainNavigationStack,
-                    animation = animation,
-                ) { child ->
-                    CompositionLocalProvider(LocalNavigationAnimatedVisibilityScope provides this) {
-                        child.instance.Screen()
-                    }
-                }
+        val imageScope = LocalSharedNavigationImageScope.current
+        ChildStack(
+            stack = mainNavigationStack,
+            animation = animation,
+        ) { child ->
+            CompositionLocalProvider(
+                LocalNavigationAnimatedVisibilityScope provides this,
+                LocalSharedNavigationImageScope provides imageScope.takeIf {
+                    child.configuration === mainNavigationStack.active.configuration
+                },
+            ) {
+                child.instance.Screen()
             }
         }
     }
@@ -161,43 +171,6 @@ internal class DecomposeNavigationHost(
 
         content {
             localScreen?.Screen()
-        }
-    }
-
-    @Composable
-    private fun OverlayRoot(
-        content: @Composable (@Composable () -> Unit) -> Unit,
-    ) {
-        val overlaySlot by root.overlaySlot.subscribeAsState()
-
-        var localScreen: Screen? by remember { mutableStateOf(null) }
-        val visibleState = remember { MutableTransitionState(false) }
-
-        LaunchedEffect(overlaySlot.child?.configuration) {
-            val child = overlaySlot.child
-
-            if (child != null) {
-                localScreen = child.instance
-                visibleState.targetState = true
-            } else {
-                visibleState.targetState = false
-            }
-        }
-
-        LaunchedEffect(visibleState.currentState) {
-            if (!visibleState.currentState) {
-                localScreen = null
-            }
-        }
-
-        AnimatedVisibility(
-            visibleState = visibleState,
-            enter = fadeIn(),
-            exit = fadeOut(),
-        ) {
-            content {
-                localScreen?.Screen()
-            }
         }
     }
 }

@@ -57,9 +57,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
 import coil3.compose.AsyncImage
-import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
+import coil3.request.crossfade
 import coil3.size.Size
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.mxalbert.zoomable.OverZoomConfig
@@ -73,10 +73,10 @@ import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
-import com.perfomer.checkielite.common.ui.util.navigation.PredictiveBackHandler
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.common.ui.util.setTransparentSystemBars
+import com.perfomer.checkielite.core.navigation.transition.sharedNavigationImage
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui.state.GalleryUiState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -97,11 +97,6 @@ internal fun GalleryScreen(
 
     var backProgress by remember { mutableFloatStateOf(0F) }
     val animatedBackProgress by animateFloatAsState(targetValue = backProgress, label = "GalleryBackProgress")
-
-    PredictiveBackHandler(
-        onBack = onDismiss,
-        onProgress = { backProgress = it },
-    )
 
     UpdateEffect(state.isUiShown) { systemUiController.isSystemBarsVisible = state.isUiShown }
 
@@ -270,6 +265,10 @@ private fun MainHorizontalPager(
         ) {
             MainGalleryPicture(
                 pictureUri = picturesUri[page],
+                isSharedImageEnabled = {
+                    page == pagerState.currentPage && pagerState.currentPageOffsetFraction == 0F &&
+                        zoomableState.scale == 1F && zoomableState.dismissDragProgress == 0F
+                },
                 modifier = pictureModifier
             )
         }
@@ -290,28 +289,30 @@ private fun MainHorizontalPager(
 @Composable
 private fun MainGalleryPicture(
     pictureUri: String,
+    isSharedImageEnabled: () -> Boolean,
     modifier: Modifier = Modifier
 ) {
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
             .data(pictureUri)
+            .memoryCacheKey(pictureUri)
+            .placeholderMemoryCacheKey(pictureUri)
+            .crossfade(false)
             .size(Size.ORIGINAL)
             .build()
     )
 
     val imageState by painter.state.collectAsState()
 
-    if (imageState is AsyncImagePainter.State.Success) {
-        val size = painter.intrinsicSize
-
-        Image(
-            painter = painter,
-            contentDescription = null,
-            modifier = modifier
-                .aspectRatio(size.width / size.height)
-                .fillMaxSize()
-        )
-    }
+    val size = imageState.painter?.intrinsicSize ?: painter.intrinsicSize
+    Image(
+        painter = painter,
+        contentDescription = null,
+        modifier = modifier
+            .sharedNavigationImage(pictureUri, isSharedImageEnabled)
+            .aspectRatio(if (size.width > 0F && size.height > 0F) size.width / size.height else 1F)
+            .fillMaxSize()
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

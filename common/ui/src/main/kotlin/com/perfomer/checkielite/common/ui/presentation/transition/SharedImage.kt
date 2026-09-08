@@ -21,6 +21,8 @@ import coil3.request.crossfade
 import coil3.size.SizeResolver
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.core.navigation.transition.LocalNavigationAnimatedVisibilityScope
+import com.perfomer.checkielite.core.navigation.transition.LocalSharedNavigationImageScope
+import com.perfomer.checkielite.core.navigation.transition.sharedNavigationImage
 import com.perfomer.checkielite.core.navigation.transition.LocalSharedNavigationContent
 import com.perfomer.checkielite.core.navigation.transition.LocalSharedTransitionScope
 import com.perfomer.checkielite.core.navigation.transition.rememberSharedContentConfig
@@ -59,7 +61,13 @@ fun SharedImage(
             .build()
     }
 
-    val imageModifier = if (sharedScope != null && visibilityScope != null && sharedContent != null) {
+    val imageModifier = if (LocalSharedNavigationImageScope.current != null) {
+        Modifier
+            .then(sizeResolver)
+            .sharedNavigationImage(imageUri) { sharedContent?.isEnabled?.invoke() != false }
+            .then(modifier)
+            .clip(RoundedCornerShape(cornerRadius))
+    } else if (sharedScope != null && visibilityScope != null && sharedContent != null) {
         val config = rememberSharedContentConfig(sharedContent)
         val radius by visibilityScope.transition.animateDp(
             transitionSpec = {

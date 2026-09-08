@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.perfomer.checkielite.core.navigation.transition.sharedNavigationImage
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -116,7 +117,9 @@ internal fun PhotoCard(
                 model = pictureUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .sharedNavigationImage(pictureUrl)
+                    .fillMaxSize()
             )
 
             Box(

@@ -4,7 +4,6 @@ import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 import java.util.Date
@@ -33,10 +32,9 @@ internal class ReviewDetailsDestinationTest {
     @Test
     fun `initial review is carried separately from the route`() {
         val review = review()
-        val data = reviewDetailsNavigationData(review)
+        val content = ReviewDetailsInitialContent(review)
 
-        assertSame(review, data.reviewDetailsInitialReview())
-        assertNull(reviewDetailsNavigationData(initialReview = null).reviewDetailsInitialReview())
+        assertSame(review, content.review)
     }
 
     private fun review() = CheckieReview(

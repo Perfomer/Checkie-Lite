@@ -1,0 +1,246 @@
+# Shared transitions в Checkie Lite
+
+Shared transition связывает два представления одного объекта на разных экранах: например, карточку отзыва в списке и открытые детали. Фон карточки расширяется до поверхности экрана, изображение перемещается и меняет размер, а заголовок и бренд переходят между своими положениями.
+
+Приложение использует Jetpack Compose для отрисовки, Decompose для стека экранов и Koin для создания экранов и их зависимостей. Поддержка переходов разделена между навигационным фреймворком и UI-компонентами. Бизнес-логика не управляет кадрами анимации.
+
+## Основные принципы
+
+- **Один способ навигации.** Вызывающая сторона использует обычный `Router.navigate`. Специального метода открытия «анимированного» экрана нет.
+- **Маршрут описывает экран, а не анимацию.** `Destination` содержит параметры, необходимые для открытия и восстановления экрана. Снимки данных, ключи UI и Compose scopes в него не входят.
+- **Политика перехода задаётся декларативно.** Пара типов экранов регистрируется рядом с их навигационными связями в DI.
+- **Идентичность содержимого задаётся на границе UI.** Потомки получают её через composition local, без передачи дополнительных параметров через все промежуточные виджеты.
+- **Анимация — улучшение, а не условие работоспособности.** Экран должен открываться без начального снимка данных; UI-компоненты должны отображаться и вне shared-transition окружения.
+- **Источник истины — repository.** Переданные данные нужны для первого кадра, но не заменяют дальнейшую загрузку и подписку на изменения.
+
+## Три независимых механизма
+
+| Механизм | На какой вопрос отвечает | API |
+| --- | --- | --- |
+| Пара экранов | Как анимировать изменение стека? | `sharedTransition<Source, Target>()` |
+| Идентичность UI | Какие элементы на двух экранах соответствуют друг другу? | `SharedNavigationContent`, `sharedNavigationElement` |
+| Начальное содержимое | Что показать до получения данных из repository? | `InitialContent<D>`, `InitialContentHolder<C>` |
+
+Регистрация пары сама по себе не связывает все элементы экранов. Для связывания нужны совпадающие ключи и доступные для анимации элементы на обеих сторонах. Передача `initialContent` сама по себе также не включает анимацию: этот механизм можно использовать независимо от shared transitions.
+
+## Где находится реализация
+
+Пути ниже указаны относительно `common/navigation`.
+
+| Модуль | Ответственность и исходники |
+| --- | --- |
+| `common:navigation:api:core` | [Router](api/core/src/main/kotlin/com/perfomer/checkielite/core/navigation/Router.kt), [InitialContent](api/core/src/main/kotlin/com/perfomer/checkielite/core/navigation/InitialContent.kt), [InitialContentHolder](api/core/src/main/kotlin/com/perfomer/checkielite/core/navigation/InitialContentHolder.kt). Контракты без Compose и доменных моделей отзывов. |
+| `common:navigation:api:ui` | [Регистрация экранов и переходов](api/ui/src/main/kotlin/com/perfomer/checkielite/core/navigation/NavigationRegistryDsl.kt), [контекст содержимого](api/ui/src/main/kotlin/com/perfomer/checkielite/core/navigation/transition/SharedNavigationTransition.kt), [модификатор элемента](api/ui/src/main/kotlin/com/perfomer/checkielite/core/navigation/transition/SharedNavigationElement.kt). |
+| `common:navigation:decompose` | [Navigation host](decompose/src/main/kotlin/com/perfomer/checkielite/navigation/decompose/DecomposeNavigationHost.kt): стек, Compose scopes и выбор анимации. [Root component](decompose/src/main/kotlin/com/perfomer/checkielite/navigation/decompose/DecomposeRootComponent.kt): создание экранов и передача начального содержимого в Koin. |
+| `common:ui` | [UI-примитивы переходов](../ui/src/main/kotlin/com/perfomer/checkielite/common/ui/presentation/transition): контейнер, изображение и правила видимости элементов списка. Здесь же находится используемый виджетами отзывов `ReviewSharedTextElement`. |
+| `feature:*` | Регистрация конкретных пар экранов, выбор ID содержимого и подготовка первого состояния экрана. |
+
+Навигационный фреймворк не знает, что такое отзыв, бренд или карточка Checkie. Специфичные для отзыва данные определены в `feature:review-details:api`; роли его текстовых элементов — в UI-слое, а не в навигационном ядре.
+
+## 1. Регистрация пары экранов
+
+Пример из `MainDi`:
+
+```kotlin
+navigation {
+    associate<MainDestination, MainContentScreen>()
+    sharedTransition<MainDestination, ReviewDetailsDestination>()
+}
+```
+
+Регистрируется **направленная** пара типов: открытие `ReviewDetailsDestination` из `MainDestination`. При возврате по стеку используется та же пара; отдельно регистрировать её для Back не нужно. Но новое прямое открытие `MainDestination` из деталей — другое направление, эта регистрация его не описывает.
+
+Сейчас зарегистрированы:
+
+- `MainDestination → ReviewDetailsDestination`;
+- `SearchDestination → ReviewDetailsDestination`;
+- `ReviewDetailsDestination → ReviewDetailsDestination` — открытие рекомендованного отзыва.
+
+Пары задаются явно, без неявных групп и транзитивности: наличие `A → B` и `B → C` не включает `A → C`.
+
+Для зарегистрированной пары host выбирает fade экранов длительностью 300 мс; перемещение shared-элементов выполняет Compose внутри общего `SharedTransitionLayout`. Для остальных пар выбирается обычный slide. Отсутствие совпавшего элемента не переключает зарегистрированную пару обратно на slide: экранный fade и сопоставление элементов — разные решения.
+
+## 2. Идентичность содержимого и элементов
+
+Оба представления отзыва получают один и тот же `reviewId`:
+
+```kotlin
+SharedNavigationContent(id = reviewId) {
+    // Карточка или содержимое экрана деталей.
+}
+```
+
+Этот блок ничего не рисует и не меняет layout. Он предоставляет потомкам контекст идентичности и условие `isEnabled`.
+
+Ключи элементов составные:
+
+| Элемент | Ключ сопоставления |
+| --- | --- |
+| Текст и другие именованные элементы | ID содержимого + значение `SharedNavigationElement` |
+| Изображение | ID содержимого + URI изображения |
+| Контейнер | ID содержимого + роль слоя: поверхность или содержимое |
+
+Поэтому два отзыва с одинаковым заголовком или фотографией не должны связываться друг с другом, если у них разные ID. ID должен быть стабильным и одинаковым на обоих экранах. Для новых видов сущностей с пересекающимися ID используйте отдельный тип ключа, например `data class ProductContentId(val id: String)`.
+
+Роли задаются типизированными значениями, а не строковыми именами:
+
+```kotlin
+enum class ProductElement : SharedNavigationElement {
+    Title,
+    Subtitle,
+}
+
+// Внутри SharedNavigationContent на обеих сторонах перехода:
+Text(
+    text = title,
+    modifier = Modifier.sharedNavigationElement(ProductElement.Title)
+)
+```
+
+`ProductElement` — пример расширения; виджеты отзывов используют существующий `ReviewSharedTextElement.Title` и `Subtitle`. Определение ролей должно быть доступно обеим сторонам без зависимости на чужой `feature:*:impl`.
+
+По умолчанию модификатор использует `sharedBounds`: содержимое двух сторон плавно сменяется внутри движущихся границ. Это подходит для текста, у которого на карточке и в деталях отличаются стиль, ширина или переносы. `isSameContent = true` выбирает `sharedElement` для действительно одинакового визуального содержимого.
+
+Не создавайте несколько конкурирующих элементов с одним полным ключом на одной стороне перехода. Для вложенных карточек задавайте их собственный ID, чтобы они не наследовали ID родительского отзыва.
+
+Если нужных Compose scopes или контекста содержимого нет, модификатор возвращает исходный `Modifier`. `SharedNavigationContent(id = null)` не создаёт новый контекст, но и не сбрасывает уже существующий родительский. Чтобы отключить участие внутри существующего контекста, задайте непустой ID и `isEnabled = { false }`.
+
+## 3. Подключение карточек в списке
+
+`CuiReviewCard` уже использует контейнер, shared-изображение и роли текста. Вызывающей стороне не нужно передавать в него scopes, ключи отдельных элементов или параметры навигационной анимации.
+
+В списке вместо простого `SharedNavigationContent` используется `SharedNavigationLazyListItem`:
+
+```kotlin
+items(
+    items = state.reviews,
+    key = { it.id },
+) { item ->
+    SharedNavigationLazyListItem(
+        id = item.id,
+        listState = scrollState,
+        viewportStartOffset = toolbarBottom,
+    ) {
+        CuiReviewCard(
+            item = item,
+            onClick = onReviewClick,
+        )
+    }
+}
+```
+
+Это фрагмент содержимого `LazyColumn`; `toolbarBottom` — граница перекрывающего список toolbar в пикселях и в системе координат списка.
+
+После измерения списка элемент участвует в shared transition только целиком видимым: его начало не выше разрешённой границы, а конец не ниже `viewportEndOffset`. Отсутствующий или обрезанный элемент исключается из сопоставления. До первого измерения (`totalItemsCount == 0`) участие разрешено, чтобы входящий экран мог сформировать пару уже в первой композиции.
+
+По умолчанию `itemKey` совпадает с ID содержимого. Если lazy item имеет другой ключ, передавайте его явно. Например, заголовок деталей находится в `item(key = "header")`, но его content ID всё равно равен `reviewId`:
+
+```kotlin
+SharedNavigationLazyListItem(
+    id = state.reviewId,
+    listState = scrollState,
+    itemKey = "header",
+) {
+    ReviewDetailsHeader(
+        productName = state.productName,
+        brandName = state.brandName,
+    )
+}
+```
+
+## 4. Первый кадр без ожидания repository
+
+Для связывания элементов важно, чтобы целевой экран уже мог показать их при старте перехода. Если он сначала отображает только загрузку, соответствующего изображения и текста ещё нет. Когда вызывающая сторона располагает отзывом, она может передать снимок данных:
+
+```kotlin
+router.navigate(
+    destination = ReviewDetailsDestination(reviewId = review.id),
+    initialContent = ReviewDetailsInitialContent(review),
+)
+```
+
+Открытие без снимка остаётся полноценным сценарием:
+
+```kotlin
+router.navigate(
+    destination = ReviewDetailsDestination(reviewId = reviewId),
+)
+```
+
+Контракты разделены:
+
+```kotlin
+@Serializable
+data class ReviewDetailsDestination(
+    val reviewId: String,
+) : Destination()
+
+data class ReviewDetailsInitialContent(
+    val review: CheckieReview,
+) : InitialContent<ReviewDetailsDestination>
+```
+
+`InitialContent<D>` инвариантен по `D`: обычный типизированный вызов Router не позволяет передать содержимое одного типа destination другому. При этом соответствие конкретных ID — отдельная проверка: `ReviewDetailsDestination.toInitialState` игнорирует снимок, если `review.id != reviewId`.
+
+Снимок не является полем `Destination`, не влияет на его равенство и не сериализуется вместе со стеком. При создании экрана из восстановленного маршрута его может не быть. Store формирует начальное состояние из подходящего снимка либо начинает с загрузки; событие `Initialize` отправляется в обоих случаях, чтобы получать актуальные данные из repository.
+
+### Передача через Koin
+
+Навигационный host всегда предоставляет non-null `InitialContentHolder<C>`, даже если его `value` равен `null`. Поэтому DI сохраняет обычную регистрацию:
+
+```kotlin
+factoryOf(::createReviewDetailsStore)
+```
+
+Фабрика принимает `initialContent: InitialContentHolder<ReviewDetailsInitialContent>` и передаёт в Store `initialContent.value`. Сама бизнес-логика Store не зависит от обёртки.
+
+Обёртка нужна на границе создания зависимостей: используемый `factoryOf` разрешает аргументы через `get()`, в том числе для nullable-параметров. Отсутствие определения nullable-типа не означает автоматическую передачу `null`. Непустая обёртка устраняет необходимость в ручной фабрике с `getOrNull()`.
+
+Типизация Router не заменяет корректную DI-конфигурацию: Koin разрешает класс holder с учётом стирания generic-параметров. Тип содержимого в фабрике должен соответствовать контракту её destination.
+
+### Время жизни снимка
+
+1. Router временно связывает снимок с конкретным экземпляром destination в `IdentityHashMap`.
+2. При создании navigation entry root забирает снимок из этой карты и передаёт holder вместе с destination и `ComponentContext` в Koin.
+3. По завершении операции навигации неиспользованная запись удаляется в `finally`, в том числе при ошибке.
+
+Это передача при создании, а не кэш и не канал обновлений уже открытого экрана. Если навигация переиспользовала существующий entry, снимок не доставляется ему как новое событие. Экран может сохранить полученные данные в собственном состоянии, но повторное создание без новой передачи не должно рассчитывать на прежний holder.
+
+## Как устроена отрисовка
+
+`SharedNavigationContainer` разделяет поверхность и содержимое на два слоя. Поверхность меняет границы, цвет и скругление; содержимое двух экранов плавно сменяется. Во время найденного перехода `skipToLookaheadSize` и `skipToLookaheadPosition` удерживают layout каждого конца в его целевом размере и положении. Это не даёт `LazyColumn` и scaffold перестраиваться вслед за каждым промежуточным размером контейнера.
+
+Порядок слоёв overlay: поверхность (`0F`), содержимое (`0.1F`), изображение (`1F`), именованные элементы (`2F`). Скругление и clipping применяются согласованно с движущимися границами.
+
+`SharedImage` использует одинаковый `ContentScale.Crop` на обеих сторонах, ключи memory cache по URI и отключённый Coil crossfade. Size resolver расположен снаружи анимируемых границ, чтобы изменение размера в каждом кадре не перезапускало декодирование изображения. При добавлении shared-фотографий используйте этот компонент на обоих концах, а не две независимо настроенные загрузки.
+
+В карусели деталей участвует только первая фотография, когда выбрана именно она и pager не находится между страницами. Дополнительно учитывается видимость содержащего её lazy item. Переход со второй фотографии к первой картинке карточки намеренно не создаётся.
+
+## Возврат и predictive back
+
+Host определяет shared-пару по предыдущему и активному destination в стеке. Для неё Decompose управляет прогрессом `AnimatedVisibility`, поэтому shared-элементы следуют за жестом возврата. Для обычных переходов сохраняется стандартный Android predictive-back animatable.
+
+[SharedTransitionBackHandler](decompose/src/main/kotlin/com/perfomer/checkielite/navigation/decompose/SharedTransitionBackHandler.kt) плавно возвращает прогресс к нулю при отмене жеста (220 мс), дожидается кадра и только затем завершает отмену в Decompose. События следующего жеста ставятся в очередь до завершения отката. Экранам не нужно реализовывать эту механику самостоятельно.
+
+## Границы поддержки и проверка
+
+Shared-transition окружение сейчас создаётся для **основного стека**. Bottom sheet и overlay имеют отдельные корни и не получают это окружение от `MainRoot`; одна регистрация пары не добавляет shared transitions между этими корнями.
+
+Без подходящего снимка экран работает, но наличие shared-анимации первого кадра не гарантируется. Аналогично, отсутствие изображения, несовпадение URI или невидимый элемент могут исключить отдельный элемент из перехода. Это не должно ломать саму навигацию.
+
+При подключении нового экрана:
+
+1. Зарегистрируйте нужную направленную пару в `navigation {}`.
+2. Задайте одинаковую стабильную идентичность содержимого на обоих концах и согласуйте роли элементов.
+3. Используйте существующие UI-примитивы; для lazy items задайте правильные ключи и границы видимости.
+4. Если данные уже доступны, передайте типизированный `InitialContent`. Обеспечьте загрузку без него и проверьте соответствие ID.
+5. Проверьте реальное открытие экрана с данными и без них, обычный Back, завершение и отмену predictive back, быстрый повтор жеста, обрезанную карточку и пролистанную карусель.
+6. Отдельно проверьте создание из восстановленного состояния: успешная компиляция и обычный переход не подтверждают этот сценарий.
+
+Текущие автоматические проверки находятся в [тестах Decompose](decompose/src/test/kotlin/com/perfomer/checkielite/navigation/decompose), [тестах UI-видимости](../ui/src/test/kotlin/com/perfomer/checkielite/common/ui/presentation/transition) и [тестах review-details](../../feature/review-details/impl/src/test/kotlin/com/perfomer/checkielite/feature/reviewdetails). Они покрывают выбор направления, откат жеста, правила видимости, передачу начальных данных через вложенный `factoryOf` и начальное состояние деталей. Они не заменяют визуальную проверку на устройстве.
+
+Запуск из корня репозитория в PowerShell:
+
+```powershell
+.\gradlew.bat :common:navigation:decompose:testDebugUnitTest :common:ui:testDebugUnitTest :feature:review-details:impl:testDebugUnitTest
+```

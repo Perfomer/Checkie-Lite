@@ -3,12 +3,12 @@ package com.perfomer.checkielite.feature.reviewdetails
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.core.data.repository.BrandRepository
 import com.perfomer.checkielite.core.data.repository.ReviewRepository
-import com.perfomer.checkielite.core.navigation.NavigationData
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
 import com.perfomer.checkielite.core.navigation.navigation
 import com.perfomer.checkielite.core.navigation.sharedTransition
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
+import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsInitialContent
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsReducer
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsStore
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.actor.DeleteReviewActor
@@ -28,14 +28,23 @@ private val presentationModule = module {
         sharedTransition<ReviewDetailsDestination, ReviewDetailsDestination>()
     }
 
-    factoryOf(::createReviewDetailsStore)
+    factory {
+        createReviewDetailsStore(
+            componentContext = get(),
+            destination = get(),
+            initialContent = getOrNull(),
+            reviewRepository = get(),
+            brandRepository = get(),
+            router = get(),
+        )
+    }
     factoryOf(::ReviewDetailsContentScreen)
 }
 
 internal fun createReviewDetailsStore(
     componentContext: ComponentContext,
     destination: ReviewDetailsDestination,
-    navigationData: NavigationData,
+    initialContent: ReviewDetailsInitialContent?,
     reviewRepository: ReviewRepository,
     brandRepository: BrandRepository,
     router: Router,
@@ -43,7 +52,7 @@ internal fun createReviewDetailsStore(
     return ReviewDetailsStore(
         componentContext = componentContext,
         destination = destination,
-        navigationData = navigationData,
+        initialContent = initialContent,
         reducer = ReviewDetailsReducer(),
         uiStateMapper = ReviewDetailsUiStateMapper(),
         actors = setOf(

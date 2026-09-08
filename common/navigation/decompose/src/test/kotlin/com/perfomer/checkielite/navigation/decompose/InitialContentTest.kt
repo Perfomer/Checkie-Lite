@@ -7,6 +7,7 @@ import com.arkivanov.decompose.router.stack.pushToFront
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.perfomer.checkielite.core.navigation.Destination
 import com.perfomer.checkielite.core.navigation.InitialContent
+import com.perfomer.checkielite.core.navigation.InitialContentHolder
 import com.perfomer.checkielite.core.navigation.NavigationRegistry
 import com.perfomer.checkielite.core.navigation.Screen
 import kotlinx.serialization.KSerializer
@@ -30,7 +31,7 @@ internal class InitialContentTest {
         NavigationRegistry.register(TestDestination::class, TestDestinationSerializer, TestScreen::class)
         startKoin {
             modules(module {
-                factory { TestStore(getOrNull()) }
+                factoryOf(::TestStore)
                 factoryOf(::TestScreen)
             })
         }
@@ -75,13 +76,13 @@ internal class InitialContentTest {
     )
 
     private fun DecomposeRootComponent.activeContent(): TestContent? =
-        (mainNavigationStack.value.active.instance as TestScreen).store.content
+        (mainNavigationStack.value.active.instance as TestScreen).store.content.value
 
     private data class TestDestination(val id: Int) : Destination()
 
     private class TestContent : InitialContent<TestDestination>
 
-    private class TestStore(val content: TestContent?)
+    private class TestStore(val content: InitialContentHolder<TestContent>)
 
     private class TestScreen(val store: TestStore) : Screen {
         @Composable

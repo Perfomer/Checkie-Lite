@@ -7,6 +7,7 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.perfomer.checkielite.core.navigation.Destination
 import com.perfomer.checkielite.core.navigation.InitialContent
+import com.perfomer.checkielite.core.navigation.InitialContentHolder
 import com.perfomer.checkielite.core.navigation.NavigationRegistry
 import com.perfomer.checkielite.core.navigation.Screen
 import org.koin.core.component.KoinComponent
@@ -50,7 +51,7 @@ internal class DecomposeRootComponent(
 
     private fun createScreen(destination: Destination, context: ComponentContext): Screen {
         val screenClass = NavigationRegistry.obtain(destination::class)
-        val initialContent = pendingInitialContent.remove(destination)
+        val initialContent = InitialContentHolder(pendingInitialContent.remove(destination))
         return getKoin().get(screenClass, null) { parametersOf(context, destination, initialContent) }
     }
 

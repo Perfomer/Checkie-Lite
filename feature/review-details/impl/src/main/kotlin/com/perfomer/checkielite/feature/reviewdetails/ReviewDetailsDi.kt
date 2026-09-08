@@ -3,6 +3,7 @@ package com.perfomer.checkielite.feature.reviewdetails
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.core.data.repository.BrandRepository
 import com.perfomer.checkielite.core.data.repository.ReviewRepository
+import com.perfomer.checkielite.core.navigation.InitialContentHolder
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
 import com.perfomer.checkielite.core.navigation.navigation
@@ -28,23 +29,14 @@ private val presentationModule = module {
         sharedTransition<ReviewDetailsDestination, ReviewDetailsDestination>()
     }
 
-    factory {
-        createReviewDetailsStore(
-            componentContext = get(),
-            destination = get(),
-            initialContent = getOrNull(),
-            reviewRepository = get(),
-            brandRepository = get(),
-            router = get(),
-        )
-    }
+    factoryOf(::createReviewDetailsStore)
     factoryOf(::ReviewDetailsContentScreen)
 }
 
 internal fun createReviewDetailsStore(
     componentContext: ComponentContext,
     destination: ReviewDetailsDestination,
-    initialContent: ReviewDetailsInitialContent?,
+    initialContent: InitialContentHolder<ReviewDetailsInitialContent>,
     reviewRepository: ReviewRepository,
     brandRepository: BrandRepository,
     router: Router,
@@ -52,7 +44,7 @@ internal fun createReviewDetailsStore(
     return ReviewDetailsStore(
         componentContext = componentContext,
         destination = destination,
-        initialContent = initialContent,
+        initialContent = initialContent.value,
         reducer = ReviewDetailsReducer(),
         uiStateMapper = ReviewDetailsUiStateMapper(),
         actors = setOf(

@@ -11,6 +11,7 @@ fun SharedNavigationLazyListItem(
     listState: LazyListState,
     itemKey: Any? = id,
     viewportStartOffset: Int = 0,
+    isEnabled: () -> Boolean = { true },
     content: @Composable () -> Unit,
 ) {
     SharedNavigationContent(
@@ -18,7 +19,7 @@ fun SharedNavigationLazyListItem(
         isEnabled = {
             val layout = listState.layoutInfo
             val item = layout.visibleItemsInfo.firstOrNull { it.key == itemKey }
-            isSharedTransitionItemEligible(
+            isEnabled() && isSharedTransitionItemEligible(
                 totalItemsCount = layout.totalItemsCount,
                 itemOffset = item?.offset,
                 itemSize = item?.size,

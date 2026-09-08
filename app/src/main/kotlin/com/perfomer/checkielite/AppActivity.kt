@@ -4,15 +4,10 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -36,7 +31,6 @@ import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
 import com.perfomer.checkielite.common.ui.util.TransparentSystemBars
 import com.perfomer.checkielite.common.ui.util.navigation.DefaultBottomSheetDismissHandlerOwner
 import com.perfomer.checkielite.common.ui.util.navigation.LocalBottomSheetDismissHandlerOwner
-import com.perfomer.checkielite.common.ui.util.navigation.registerPredictiveBackHandler
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.common.update.api.AppUpdateManager
 import com.perfomer.checkielite.common.update.api.updateIfAvailable
@@ -165,9 +159,7 @@ class AppActivity : AppCompatActivity() {
                 )
             },
             overlayContent = { content ->
-                OverlayRoot(
-                    content = content,
-                )
+                content()
             },
         )
     }
@@ -186,21 +178,6 @@ class AppActivity : AppCompatActivity() {
                 }
             },
             content = content,
-        )
-    }
-
-    @Composable
-    private fun OverlayRoot(
-        content: @Composable () -> Unit,
-    ) = with(navigationHost) {
-        val backProgress by registerPredictiveBackHandler(onBack = ::back)
-        val animatedBackProgress by animateFloatAsState(targetValue = backProgress, label = "OverlayBackProgress")
-
-        Box(
-            content = { content() },
-            modifier = Modifier.graphicsLayer {
-                alpha = 1F - animatedBackProgress
-            }
         )
     }
 

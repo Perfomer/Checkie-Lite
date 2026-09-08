@@ -113,7 +113,7 @@ internal fun PicturesCarousel(
                     id = sharedContent?.id,
                     isEnabled = {
                         sharedContent?.isEnabled?.invoke() == true &&
-                            i == 0 && pagerState.currentPage == i &&
+                            pagerState.currentPage == i &&
                             pagerState.currentPageOffsetFraction == 0F
                     },
                 ) {

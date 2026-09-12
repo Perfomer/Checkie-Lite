@@ -65,6 +65,7 @@ import com.mxalbert.zoomable.Zoomable
 import com.mxalbert.zoomable.rememberZoomableState
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
+import com.perfomer.checkielite.common.ui.cui.modifier.fitContentSize
 import com.perfomer.checkielite.common.ui.cui.modifier.indicatorOffsetForPage
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.NavBarScrimController
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
@@ -303,8 +304,10 @@ private fun MainGalleryPicture(
     Image(
         painter = painter,
         contentDescription = null,
-        contentScale = ContentScale.Fit,
+        // Fit the layout to the photo, then crop within the changing shared container.
+        contentScale = ContentScale.Crop,
         modifier = modifier
+            .fitContentSize { painter.intrinsicSize }
             .sharedNavigationImage(pictureUri, cornerRadius, isSharedImageEnabled)
             .fillMaxSize()
     )

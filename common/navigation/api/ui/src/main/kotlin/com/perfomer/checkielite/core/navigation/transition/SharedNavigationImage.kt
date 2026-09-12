@@ -4,18 +4,13 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
@@ -28,11 +23,8 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.addOutline
 import androidx.compose.ui.graphics.drawscope.clipPath
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
@@ -83,14 +75,17 @@ val LocalSharedNavigationImageScope = compositionLocalOf<SharedNavigationImageSc
 
 private data class ImageKey(val registry: SharedNavigationImageRegistry, val uri: String)
 
-/** Shares a visible image only with an unambiguous counterpart in the active navigation pair. */
+/**
+ * Shares a visible image only with an unambiguous counterpart in the active navigation pair.
+ * Both endpoints must center-crop the image to their measured bounds; letterboxing belongs outside.
+ */
 @Composable
 fun Modifier.sharedNavigationImage(
     imageUri: String,
     cornerRadius: Dp = 0.dp,
     isEnabled: () -> Boolean = { true },
 ): Modifier {
-    val restingShape = remember(cornerRadius) { ImageClipShape(cornerRadius, IntSize.Zero) }
+    val restingShape = remember(cornerRadius) { ImageClipShape(cornerRadius) }
     val shared = LocalSharedTransitionScope.current ?: return clip(restingShape)
     val scope = LocalSharedNavigationImageScope.current ?: return clip(restingShape)
     val content = LocalSharedNavigationContent.current
@@ -114,67 +109,46 @@ fun Modifier.sharedNavigationImage(
         val side = if (state == EnterExitState.Visible) scope.isTarget else !scope.isTarget
         if (side) 1F else 0F
     }
-    var contentSize by remember { mutableStateOf(IntSize.Zero) }
     // Resolve endpoints during drawing, after both DisposableEffects have registered them.
     // Animating Dp directly can capture a missing counterpart's fallback on the first frame.
-    val overlayClip = remember(scope, imageUri) {
-        object : SharedTransitionScope.OverlayClip {
-            private val path = Path()
-
-            override fun getClipPath(
-                sharedContentState: SharedTransitionScope.SharedContentState,
-                bounds: Rect,
-                layoutDirection: LayoutDirection,
-                density: Density,
-            ): Path {
+    val animatedShape = remember(scope, imageUri) {
+        object : Shape {
+            override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
                 val source = scope.registry.cornerRadius(imageUri, isTarget = false) ?: currentRadius.value
                 val target = scope.registry.cornerRadius(imageUri, isTarget = true) ?: currentRadius.value
-                val shape = ImageClipShape(lerp(source, target, progress.value), contentSize)
-                path.reset()
-                path.addOutline(shape.createOutline(bounds.size, layoutDirection, density))
-                path.translate(bounds.topLeft)
-                return path
+                return ImageClipShape(lerp(source, target, progress.value)).createOutline(size, layoutDirection, density)
             }
         }
     }
     return with(shared) {
         val contentState = rememberSharedContentState(ImageKey(scope.registry, imageUri), config)
-        sharedBounds(
+        // Both endpoints crop the same image into the same animated container. Render it once.
+        sharedElement(
             sharedContentState = contentState,
             animatedVisibilityScope = scope.visibilityScope,
             boundsTransform = { _, _ -> sharedNavigationTween() },
-            enter = fadeIn(sharedNavigationTween()),
-            exit = fadeOut(sharedNavigationTween()),
-            resizeMode = SharedTransitionScope.ResizeMode.scaleToBounds(ContentScale.FillWidth),
             zIndexInOverlay = 3F,
-            clipInOverlayDuringTransition = overlayClip,
-        ).onSizeChanged { contentSize = it }
+            clipInOverlayDuringTransition = OverlayClip(animatedShape),
+        )
             .drawWithCache {
-                val restingPath = Path().apply {
-                    addOutline(restingShape.createOutline(size, layoutDirection, this@drawWithCache))
+                val shape = if (contentState.isMatchFound) animatedShape else restingShape
+                val path = Path().apply {
+                    addOutline(shape.createOutline(size, layoutDirection, this@drawWithCache))
                 }
                 onDrawWithContent {
-                    // SharedBounds sets this immediately before drawing its child. An active
-                    // transition alone does not guarantee that this frame is already in overlay.
-                    if (contentState.clipPathInOverlay == null) {
-                        clipPath(restingPath) { this@onDrawWithContent.drawContent() }
-                    } else {
-                        drawContent()
-                    }
+                    // Remeasurement keeps local and overlay geometry identical. Keep clipping
+                    // throughout the handoff rather than exposing an unclipped child for a frame.
+                    clipPath(path) { this@onDrawWithContent.drawContent() }
                 }
             }
     }
 }
 
-/** FillWidth centers each endpoint's content inside the shared bounds; clip its visible extent. */
-internal data class ImageClipShape(val radius: Dp, val contentSize: IntSize) : Shape {
+/** The image and its clipping share the same animated container, with radius in screen pixels. */
+internal data class ImageClipShape(val radius: Dp) : Shape {
     override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
-        val height = if (contentSize.width == 0) size.height else {
-            (size.width * contentSize.height / contentSize.width).coerceAtMost(size.height)
-        }
-        val top = (size.height - height) / 2F
-        val bounds = Rect(0F, top, size.width, top + height)
-        val corner = with(density) { radius.toPx() }.coerceAtMost(minOf(size.width, height) / 2F)
+        val bounds = Rect(0F, 0F, size.width, size.height)
+        val corner = with(density) { radius.toPx() }.coerceAtMost(minOf(size.width, size.height) / 2F)
         return Outline.Rounded(RoundRect(bounds, CornerRadius(corner)))
     }
 }

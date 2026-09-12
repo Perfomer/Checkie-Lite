@@ -16,4 +16,7 @@ dependencies {
 
 	implementation(libs.androidx.activity)
 	implementation(platform(libs.androidx.compose.bom))
+
+	testImplementation(libs.test.junitJupiter)
+	testRuntimeOnly(libs.test.junitPlatformLauncher)
 }

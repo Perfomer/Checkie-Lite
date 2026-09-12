@@ -63,6 +63,50 @@ internal class SharedTransitionVisibilityTest {
         )
     }
 
+    @Test
+    fun `first two search cards below toolbar are eligible with content padding`() {
+        // Toolbar 160 + extra padding 4; section 40 + spacing 12 precedes the cards.
+        for (offset in listOf(52, 144)) {
+            assertTrue(isSearchItemEligible(offset))
+        }
+    }
+
+    @Test
+    fun `padded search card at toolbar edge is eligible but clipped card is not`() {
+        assertTrue(isSearchItemEligible(-4))
+        assertFalse(isSearchItemEligible(-5))
+    }
+
+    @Test
+    fun `padded search card clipped at bottom is not eligible`() {
+        assertTrue(isSearchItemEligible(520))
+        assertFalse(isSearchItemEligible(521))
+    }
+
+    @Test
+    fun `omitted viewport start preserves padded content boundary`() {
+        assertFalse(
+            isSharedTransitionItemEligible(
+                totalItemsCount = 7,
+                itemOffset = -1,
+                itemSize = 80,
+                viewportStartOffset = null,
+                viewportEndOffset = 600,
+                layoutViewportStartOffset = -164,
+            ),
+        )
+    }
+
+    private fun isSearchItemEligible(itemOffset: Int): Boolean =
+        isSharedTransitionItemEligible(
+            totalItemsCount = 7,
+            itemOffset = itemOffset,
+            itemSize = 80,
+            viewportStartOffset = 160,
+            viewportEndOffset = 600,
+            layoutViewportStartOffset = -164,
+        )
+
     private fun isEligible(itemOffset: Int?, itemSize: Int?): Boolean =
         isSharedTransitionItemEligible(
             totalItemsCount = 7,

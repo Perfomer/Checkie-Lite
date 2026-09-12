@@ -4,13 +4,17 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import com.perfomer.checkielite.core.navigation.transition.SharedNavigationContent
 
-/** Shares content only while its lazy-list item is fully visible. */
+/**
+ * Shares content only while its lazy-list item is fully visible.
+ * [viewportStartOffset] is the unobscured start measured from the list's outer edge (e.g. a toolbar).
+ * When omitted, the start of the padded content is used.
+ */
 @Composable
 fun SharedNavigationLazyListItem(
     id: Any?,
     listState: LazyListState,
     itemKey: Any? = id,
-    viewportStartOffset: Int = 0,
+    viewportStartOffset: Int? = null,
     isEnabled: () -> Boolean = { true },
     content: @Composable () -> Unit,
 ) {
@@ -25,6 +29,7 @@ fun SharedNavigationLazyListItem(
                 itemSize = item?.size,
                 viewportStartOffset = viewportStartOffset,
                 viewportEndOffset = layout.viewportEndOffset,
+                layoutViewportStartOffset = layout.viewportStartOffset,
             )
         },
         content = content,
@@ -40,11 +45,14 @@ internal fun isSharedTransitionItemEligible(
     totalItemsCount: Int,
     itemOffset: Int?,
     itemSize: Int?,
-    viewportStartOffset: Int,
+    viewportStartOffset: Int?,
     viewportEndOffset: Int,
+    layoutViewportStartOffset: Int = 0,
 ): Boolean {
     if (totalItemsCount == 0) return true
     if (itemOffset == null || itemSize == null) return false
 
-    return itemOffset >= viewportStartOffset && itemOffset + itemSize <= viewportEndOffset
+    // Lazy item offsets exclude beforeContentPadding; the outer viewport starts at its negative.
+    val visibleStart = viewportStartOffset?.plus(layoutViewportStartOffset) ?: 0
+    return itemOffset >= visibleStart && itemOffset + itemSize <= viewportEndOffset
 }

@@ -46,6 +46,7 @@ internal class DecomposeRootComponent(
         source = overlayNavigator,
         serializer = NavigationRegistry.serializer(),
         key = "Overlay",
+        handleBackButton = true,
         childFactory = ::createScreen,
     )
 

@@ -12,6 +12,7 @@ androidx-compose-bom = "2026.08.00"
 androidx-core = "1.19.0"
 androidx-core-ktx-splashscreen = "1.2.0"
 androidx-lifecycle-ktx = "2.11.0"
+androidx-navigationevent = "1.0.2"
 androidx-room = "2.8.4"
 backdrop = "2.0.1"
 coil = "3.6.2"
@@ -51,6 +52,7 @@ androidx-core = { module = "androidx.core:core", version.ref = "androidx-core" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-core-ktx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-core-ktx-splashscreen" }
 androidx-lifecycle-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-ktx" }
+androidx-navigationevent-compose = { module = "androidx.navigationevent:navigationevent-compose", version.ref = "androidx-navigationevent" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx-room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidx-room" }

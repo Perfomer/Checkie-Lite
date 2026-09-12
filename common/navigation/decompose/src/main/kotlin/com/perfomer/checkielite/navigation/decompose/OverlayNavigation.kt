@@ -22,6 +22,8 @@ import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.navigationevent.compose.LocalNavigationEventDispatcherOwner
+import androidx.navigationevent.compose.rememberNavigationEventDispatcherOwner
 import com.arkivanov.decompose.Child
 import com.perfomer.checkielite.core.navigation.Destination
 import com.perfomer.checkielite.core.navigation.NavigationRegistry
@@ -96,8 +98,12 @@ internal fun OverlayNavigation(
         if (it) 1F else 0F
     }
 
+    val mainBackOwner = rememberNavigationEventDispatcherOwner(enabled = displayed == null)
     Box {
-        CompositionLocalProvider(LocalSharedNavigationImageScope provides sourceScope.takeIf { shared }) {
+        CompositionLocalProvider(
+            LocalNavigationEventDispatcherOwner provides mainBackOwner,
+            LocalSharedNavigationImageScope provides sourceScope.takeIf { shared },
+        ) {
             mainContent()
         }
     }
@@ -113,8 +119,8 @@ internal fun OverlayNavigation(
         }
     }
 
-    // Android dispatches Back to the last registered enabled handler. Register after the
-    // underlying screens and keep consuming Back while the closing overlay is still visible.
+    // The underlying branch is disabled while the overlay is displayed, including its exit.
+    // Registration order alone cannot protect us from handlers in newly composed screens.
     PredictiveBackHandler(enabled = displayed != null) { events ->
         backGestureMutex.withLock {
             val entry = currentOverlay

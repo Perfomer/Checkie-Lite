@@ -3,7 +3,7 @@ package com.perfomer.checkielite.core.navigation.transition
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
@@ -18,13 +18,16 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.addOutline
+import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.Density
@@ -32,6 +35,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
 
 /** Identities are local to two navigation entries, never global image-cache keys. */
 @Stable
@@ -103,15 +107,36 @@ fun Modifier.sharedNavigationImage(
                 get() = enabled.value() && !scope.registry.isAmbiguous(imageUri)
         }
     }
-    val radius by scope.visibilityScope.transition.animateDp(
+    val progress = scope.visibilityScope.transition.animateFloat(
         transitionSpec = { sharedNavigationTween() },
         label = "Shared navigation image corners",
     ) { state ->
         val side = if (state == EnterExitState.Visible) scope.isTarget else !scope.isTarget
-        scope.registry.cornerRadius(imageUri, side) ?: cornerRadius
+        if (side) 1F else 0F
     }
     var contentSize by remember { mutableStateOf(IntSize.Zero) }
-    val overlayShape = remember(radius, contentSize) { ImageClipShape(radius, contentSize) }
+    // Resolve endpoints during drawing, after both DisposableEffects have registered them.
+    // Animating Dp directly can capture a missing counterpart's fallback on the first frame.
+    val overlayClip = remember(scope, imageUri) {
+        object : SharedTransitionScope.OverlayClip {
+            private val path = Path()
+
+            override fun getClipPath(
+                sharedContentState: SharedTransitionScope.SharedContentState,
+                bounds: Rect,
+                layoutDirection: LayoutDirection,
+                density: Density,
+            ): Path {
+                val source = scope.registry.cornerRadius(imageUri, isTarget = false) ?: currentRadius.value
+                val target = scope.registry.cornerRadius(imageUri, isTarget = true) ?: currentRadius.value
+                val shape = ImageClipShape(lerp(source, target, progress.value), contentSize)
+                path.reset()
+                path.addOutline(shape.createOutline(bounds.size, layoutDirection, density))
+                path.translate(bounds.topLeft)
+                return path
+            }
+        }
+    }
     return with(shared) {
         val contentState = rememberSharedContentState(ImageKey(scope.registry, imageUri), config)
         sharedBounds(
@@ -122,10 +147,22 @@ fun Modifier.sharedNavigationImage(
             exit = fadeOut(sharedNavigationTween()),
             resizeMode = SharedTransitionScope.ResizeMode.scaleToBounds(ContentScale.FillWidth),
             zIndexInOverlay = 3F,
-            clipInOverlayDuringTransition = OverlayClip(overlayShape),
+            clipInOverlayDuringTransition = overlayClip,
         ).onSizeChanged { contentSize = it }
-            // Clip in transition coordinates, without scaling or truncating the animated radius.
-            .clip(if (contentState.isMatchFound && isTransitionActive) RectangleShape else restingShape)
+            .drawWithCache {
+                val restingPath = Path().apply {
+                    addOutline(restingShape.createOutline(size, layoutDirection, this@drawWithCache))
+                }
+                onDrawWithContent {
+                    // SharedBounds sets this immediately before drawing its child. An active
+                    // transition alone does not guarantee that this frame is already in overlay.
+                    if (contentState.clipPathInOverlay == null) {
+                        clipPath(restingPath) { this@onDrawWithContent.drawContent() }
+                    } else {
+                        drawContent()
+                    }
+                }
+            }
     }
 }
 

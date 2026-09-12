@@ -8,18 +8,30 @@ import org.junit.jupiter.api.Test
 internal class SharedNavigationImageRegistryTest {
 
     @Test
-    fun `only one eligible image at each endpoint can match`() {
+    fun `an endpoint stays enabled before its counterpart is composed`() {
+        val registry = SharedNavigationImageRegistry()
+        assertFalse(registry.isAmbiguous("photo"))
+        registry.register(Any(), "photo", false) { true }
+        assertFalse(registry.isAmbiguous("photo"))
+        registry.register(Any(), "photo", true) { true }
+        assertFalse(registry.isAmbiguous("photo"))
+        registry.register(Any(), "photo", true) { true }
+        assertTrue(registry.isAmbiguous("photo"))
+    }
+
+    @Test
+    fun `removing a duplicate enables the remaining pair`() {
         val registry = SharedNavigationImageRegistry()
         registry.register(Any(), "photo", false) { true }
-        assertFalse(registry.isUnique("photo"))
+        assertFalse(registry.isAmbiguous("photo"))
         registry.register(Any(), "photo", true) { true }
-        assertTrue(registry.isUnique("photo"))
+        assertFalse(registry.isAmbiguous("photo"))
 
         val duplicate = Any()
         registry.register(duplicate, "photo", false) { true }
-        assertFalse(registry.isUnique("photo"))
+        assertTrue(registry.isAmbiguous("photo"))
         registry.unregister(duplicate)
-        assertTrue(registry.isUnique("photo"))
+        assertFalse(registry.isAmbiguous("photo"))
     }
 
     @Test
@@ -27,24 +39,25 @@ internal class SharedNavigationImageRegistryTest {
         val registry = SharedNavigationImageRegistry()
         var visible = true
         registry.register(Any(), "photo", false) { visible }
+        registry.register(Any(), "photo", false) { true }
         registry.register(Any(), "photo", true) { true }
-        assertTrue(registry.isUnique("photo"))
+        assertTrue(registry.isAmbiguous("photo"))
         visible = false
-        assertFalse(registry.isUnique("photo"))
+        assertFalse(registry.isAmbiguous("photo"))
         visible = true
-        assertTrue(registry.isUnique("photo"))
+        assertTrue(registry.isAmbiguous("photo"))
     }
 
     @Test
-    fun `different photos and different navigation pairs never match`() {
+    fun `different photos and navigation pairs do not create ambiguity`() {
         val first = SharedNavigationImageRegistry()
         val second = SharedNavigationImageRegistry()
         first.register(Any(), "photo", false) { true }
         first.register(Any(), "other", true) { true }
         second.register(Any(), "photo", true) { true }
-        assertFalse(first.isUnique("photo"))
-        assertFalse(first.isUnique("other"))
-        assertFalse(second.isUnique("photo"))
+        assertFalse(first.isAmbiguous("photo"))
+        assertFalse(first.isAmbiguous("other"))
+        assertFalse(second.isAmbiguous("photo"))
     }
 
     @Test
@@ -54,6 +67,6 @@ internal class SharedNavigationImageRegistryTest {
         registry.register(Any(), "photo", true) { true }
         registry.register(Any(), "photo", false) { false }
         registry.register(Any(), "photo", true) { false }
-        assertTrue(registry.isUnique("photo"))
+        assertFalse(registry.isAmbiguous("photo"))
     }
 }

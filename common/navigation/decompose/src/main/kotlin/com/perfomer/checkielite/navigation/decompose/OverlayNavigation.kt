@@ -78,24 +78,6 @@ internal fun OverlayNavigation(
         }
     }
 
-    PredictiveBackHandler(enabled = overlay != null) { events ->
-        // A second gesture must not interrupt the previous gesture's rollback.
-        backGestureMutex.withLock {
-            val entry = currentOverlay ?: return@withLock
-            try {
-                events.collect { state.seekTo(it.progress, targetState = false) }
-                state.animateTo(false, animationSpec = sharedNavigationTween())
-                if (currentOverlay === entry) onBack()
-            } catch (_: CancellationException) {
-                if (currentOverlay != null && currentOverlay === entry) {
-                    withContext(NonCancellable) {
-                        state.animateTo(true, animationSpec = sharedNavigationTween())
-                    }
-                }
-            }
-        }
-    }
-
     val shared = displayed?.let { NavigationRegistry.hasSharedTransition(origin, it.configuration) } == true &&
         source === origin
     val sourceTransition = transition.createChildTransition(label = "Overlay source") {
@@ -127,6 +109,29 @@ internal fun OverlayNavigation(
                     .graphicsLayer { alpha = overlayAlpha }
             ) {
                 overlayContent { child.instance.Screen() }
+            }
+        }
+    }
+
+    // Android dispatches Back to the last registered enabled handler. Register after the
+    // underlying screens and keep consuming Back while the closing overlay is still visible.
+    PredictiveBackHandler(enabled = displayed != null) { events ->
+        backGestureMutex.withLock {
+            val entry = currentOverlay
+            try {
+                events.collect {
+                    if (entry != null) state.seekTo(it.progress, targetState = false)
+                }
+                if (entry != null && currentOverlay === entry) {
+                    state.animateTo(false, animationSpec = sharedNavigationTween())
+                    if (currentOverlay === entry) onBack()
+                }
+            } catch (_: CancellationException) {
+                if (entry != null && currentOverlay === entry) {
+                    withContext(NonCancellable) {
+                        state.animateTo(true, animationSpec = sharedNavigationTween())
+                    }
+                }
             }
         }
     }

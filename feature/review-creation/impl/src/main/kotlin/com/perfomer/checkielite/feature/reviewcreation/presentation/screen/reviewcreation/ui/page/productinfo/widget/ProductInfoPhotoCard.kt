@@ -48,6 +48,7 @@ import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.ProductInfoPhotoDeleteButtonAnimationDuration
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.ProductInfoPhotoDeleteButtonAnimationScale
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.ProductInfoPhotoCornerRadius
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.ProductInfoPhotoShape
 
 @Composable
@@ -118,7 +119,7 @@ internal fun PhotoCard(
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .sharedNavigationImage(pictureUrl)
+                    .sharedNavigationImage(pictureUrl, cornerRadius = ProductInfoPhotoCornerRadius)
                     .fillMaxSize()
             )
 

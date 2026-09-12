@@ -50,6 +50,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
@@ -144,10 +145,6 @@ internal fun GalleryScreen(
                 // Shared bounds capture layout size, not an ancestor's graphicsLayer scale.
                 pictureModifier = Modifier
                     .fillMaxSize(1F - backProgress * 0.2F)
-                    .graphicsLayer {
-                        clip = true
-                        shape = RoundedCornerShape(backProgress * 40.dp)
-                    }
             )
 
             if (state.picturesUri.size > 1) {
@@ -263,6 +260,7 @@ private fun MainHorizontalPager(
             Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                 MainGalleryPicture(
                     pictureUri = picturesUri[page],
+                    cornerRadius = zoomableState.dismissDragProgress.coerceIn(0F, 1F) * 40.dp,
                     isSharedImageEnabled = {
                         page == pagerState.currentPage && pagerState.currentPageOffsetFraction == 0F &&
                             zoomableState.scale == 1F
@@ -288,6 +286,7 @@ private fun MainHorizontalPager(
 @Composable
 private fun MainGalleryPicture(
     pictureUri: String,
+    cornerRadius: Dp,
     isSharedImageEnabled: () -> Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -306,7 +305,7 @@ private fun MainGalleryPicture(
         contentDescription = null,
         contentScale = ContentScale.Fit,
         modifier = modifier
-            .sharedNavigationImage(pictureUri, isSharedImageEnabled)
+            .sharedNavigationImage(pictureUri, cornerRadius, isSharedImageEnabled)
             .fillMaxSize()
     )
 }

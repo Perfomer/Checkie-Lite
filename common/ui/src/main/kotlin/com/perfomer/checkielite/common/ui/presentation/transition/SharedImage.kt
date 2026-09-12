@@ -64,9 +64,8 @@ fun SharedImage(
     val imageModifier = if (LocalSharedNavigationImageScope.current != null) {
         Modifier
             .then(sizeResolver)
-            .sharedNavigationImage(imageUri) { sharedContent?.isEnabled?.invoke() != false }
+            .sharedNavigationImage(imageUri, cornerRadius) { sharedContent?.isEnabled?.invoke() != false }
             .then(modifier)
-            .clip(RoundedCornerShape(cornerRadius))
     } else if (sharedScope != null && visibilityScope != null && sharedContent != null) {
         val config = rememberSharedContentConfig(sharedContent)
         val radius by visibilityScope.transition.animateDp(

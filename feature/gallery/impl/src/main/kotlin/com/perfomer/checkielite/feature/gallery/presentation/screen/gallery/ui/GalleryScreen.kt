@@ -4,7 +4,6 @@ package com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -94,7 +93,6 @@ internal fun GalleryScreen(
     val isSystemInDarkTheme = isSystemInDarkTheme()
 
     var backProgress by remember { mutableFloatStateOf(0F) }
-    val animatedBackProgress by animateFloatAsState(targetValue = backProgress, label = "GalleryBackProgress")
 
     UpdateEffect(state.isUiShown) { systemUiController.isSystemBarsVisible = state.isUiShown }
 
@@ -131,7 +129,7 @@ internal fun GalleryScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .graphicsLayer {
-                        alpha = 1 - animatedBackProgress * 0.3F
+                        alpha = 1 - backProgress * 0.3F
                     }
                     .background(GalleryPalette.BackgroundColor)
             )
@@ -143,12 +141,12 @@ internal fun GalleryScreen(
                 onPagerClick = onPagerClick,
                 onDismissProgressChange = { progress -> backProgress = progress },
                 onDismiss = onDismiss,
+                // Shared bounds capture layout size, not an ancestor's graphicsLayer scale.
                 pictureModifier = Modifier
+                    .fillMaxSize(1F - backProgress * 0.2F)
                     .graphicsLayer {
                         clip = true
-                        shape = RoundedCornerShape(animatedBackProgress * 40.dp)
-                        scaleX = 1 - animatedBackProgress * 0.2F
-                        scaleY = 1 - animatedBackProgress * 0.2F
+                        shape = RoundedCornerShape(backProgress * 40.dp)
                     }
             )
 
@@ -166,10 +164,10 @@ internal fun GalleryScreen(
                             coroutineScope.launch { mainPagerState.animateScrollToPage(page) }
                         },
                         modifier = Modifier.graphicsLayer {
-                            translationY = 1 - animatedBackProgress * -64.dp.toPx()
-                            alpha = 1 - animatedBackProgress * 0.5F
-                            scaleX = 1 - animatedBackProgress * 0.1F
-                            scaleY = 1 - animatedBackProgress * 0.1F
+                            translationY = 1 - backProgress * -64.dp.toPx()
+                            alpha = 1 - backProgress * 0.5F
+                            scaleX = 1 - backProgress * 0.1F
+                            scaleY = 1 - backProgress * 0.1F
                         }
                     )
                 }
@@ -262,14 +260,16 @@ private fun MainHorizontalPager(
             onDismiss = { onDismiss(); true },
             dismissGestureEnabled = true,
         ) {
-            MainGalleryPicture(
-                pictureUri = picturesUri[page],
-                isSharedImageEnabled = {
-                    page == pagerState.currentPage && pagerState.currentPageOffsetFraction == 0F &&
-                        zoomableState.scale == 1F && zoomableState.dismissDragProgress == 0F
-                },
-                modifier = pictureModifier
-            )
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                MainGalleryPicture(
+                    pictureUri = picturesUri[page],
+                    isSharedImageEnabled = {
+                        page == pagerState.currentPage && pagerState.currentPageOffsetFraction == 0F &&
+                            zoomableState.scale == 1F
+                    },
+                    modifier = pictureModifier
+                )
+            }
         }
 
         // Reset zoom state when the page is moved out of the window.

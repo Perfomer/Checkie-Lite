@@ -52,10 +52,11 @@ internal fun OverlayNavigation(
     // Compose both endpoints before changing their visibility. Starting animateTo in the same
     // effect that inserts the target loses its initial bounds and produces a late match.
     val displayed = overlay ?: retained
-    val placement = remember(displayed) { CompletableDeferred<Unit>() }
+    val placement = remember(displayed, overlay != null) { CompletableDeferred<Unit>() }
     val state = remember(displayed) { SeekableTransitionState(false) }
     val transition = rememberTransition(state, label = "Overlay navigation")
-    val registry = remember(displayed) { SharedNavigationImageRegistry() }
+    // A closing pair must capture the visible endpoint again: a gesture may have moved it.
+    val registry = remember(displayed, overlay != null) { SharedNavigationImageRegistry() }
     val currentOverlay by rememberUpdatedState(overlay)
     val backGestureMutex = remember { Mutex() }
 
@@ -68,6 +69,10 @@ internal fun OverlayNavigation(
             withFrameNanos { }
             state.animateTo(true, animationSpec = sharedNavigationTween())
         } else {
+            if (retained != null) {
+                placement.await()
+                withFrameNanos { }
+            }
             state.animateTo(false, animationSpec = sharedNavigationTween())
             retained = null
         }

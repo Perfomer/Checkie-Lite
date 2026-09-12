@@ -1,15 +1,15 @@
 package com.perfomer.checkielite.navigation.decompose
 
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.withFrameNanos
 import com.arkivanov.essenty.backhandler.BackCallback
 import com.arkivanov.essenty.backhandler.BackEvent
 import com.arkivanov.essenty.backhandler.BackHandler
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 
 /** Smooths Decompose's immediate predictive cancellation while retaining its seekable transition. */
@@ -18,6 +18,7 @@ internal class SharedTransitionBackHandler(
     private val scope: CoroutineScope,
     private val animateCancellation: suspend (BackEvent, (BackEvent) -> Unit) -> Unit = ::animateBackCancellation,
     private val awaitFrame: suspend () -> Unit = { withFrameNanos {} },
+    private val prepareTransition: suspend () -> Unit = {},
 ) : BackHandler {
 
     private val callbacks = mutableMapOf<BackCallback, AnimatedCallback>()
@@ -51,6 +52,7 @@ internal class SharedTransitionBackHandler(
             for (event in events) {
                 when (event) {
                     is GestureEvent.Started -> {
+                        prepareTransition()
                         lastEvent = event.value
                         callback.onBackStarted(event.value)
                     }

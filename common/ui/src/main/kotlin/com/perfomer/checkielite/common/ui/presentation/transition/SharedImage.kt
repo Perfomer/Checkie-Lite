@@ -1,31 +1,31 @@
 package com.perfomer.checkielite.common.ui.presentation.transition
 
-import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.EnterExitState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import coil3.compose.LocalPlatformContext
 import coil3.compose.rememberConstraintsSizeResolver
-import coil3.request.ImageRequest
 import coil3.request.crossfade
+import coil3.request.ImageRequest
 import coil3.size.SizeResolver
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.core.navigation.transition.LocalNavigationAnimatedVisibilityScope
-import com.perfomer.checkielite.core.navigation.transition.LocalSharedNavigationImageScope
-import com.perfomer.checkielite.core.navigation.transition.sharedNavigationImage
 import com.perfomer.checkielite.core.navigation.transition.LocalSharedNavigationContent
+import com.perfomer.checkielite.core.navigation.transition.LocalSharedNavigationImageScope
 import com.perfomer.checkielite.core.navigation.transition.LocalSharedTransitionScope
 import com.perfomer.checkielite.core.navigation.transition.rememberSharedContentConfig
+import com.perfomer.checkielite.core.navigation.transition.sharedNavigationImage
 import com.perfomer.checkielite.core.navigation.transition.sharedNavigationTween
 
 @Immutable
@@ -80,7 +80,7 @@ fun SharedImage(
 
         with(sharedScope) {
             val sharedContentState = rememberSharedContentState(
-                key = SharedImageKey(sharedContent.id, imageUri),
+                key = SharedImageKey(sharedContent.key, imageUri),
                 config = config,
             )
             Modifier

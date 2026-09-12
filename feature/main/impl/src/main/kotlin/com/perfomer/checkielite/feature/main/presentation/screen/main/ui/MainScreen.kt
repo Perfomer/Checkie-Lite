@@ -9,19 +9,19 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -39,17 +39,17 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.sp
 import com.kyant.backdrop.Backdrop
-import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.layerBackdrop
+import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.backdrop.isRenderEffectSupported
 import com.perfomer.checkielite.common.ui.CommonDrawable
@@ -67,19 +67,23 @@ import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassToolbarBack
 import com.perfomer.checkielite.common.ui.presentation.theme.CuiSurfaceContent
 import com.perfomer.checkielite.common.ui.presentation.theme.CuiSurfaceStyle
 import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationLazyListItem
+import com.perfomer.checkielite.common.ui.presentation.transition.sharedSearchField
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.LocalLiquidGlassEnabled
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.app.appNameSpannable
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
-import com.perfomer.checkielite.feature.main.R
+import com.perfomer.checkielite.core.navigation.transition.SharedNavigationContent
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiState
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.Tag
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.WhatsNewBanner
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.ChangelogBanner
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.MainHeaderBackground
 import com.perfomer.checkielite.feature.main.presentation.util.TagRowUiBalancer
+import com.perfomer.checkielite.feature.main.R
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewContent
+import com.perfomer.checkielite.feature.search.presentation.transition.SearchFieldContent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -225,6 +229,7 @@ private fun Content(
         ) { item ->
             SharedNavigationLazyListItem(
                 id = item.id,
+                group = ReviewContent,
                 listState = scrollState,
                 viewportStartOffset = toolbarBottom,
             ) {
@@ -349,7 +354,7 @@ private fun TopAppBar(
 private fun SearchField(
     onSearchClick: () -> Unit,
     modifier: Modifier = Modifier
-) {
+) = SharedNavigationContent(group = SearchFieldContent, id = Unit) {
     val palette = LocalCuiPalette.current
     val interactionSource = remember { MutableInteractionSource() }
 
@@ -361,6 +366,7 @@ private fun SearchField(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
+            .sharedSearchField()
             .softShadow(interactionSource = interactionSource, shape = CircleShape)
     ) {
         Row(

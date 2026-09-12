@@ -1,15 +1,15 @@
 package com.perfomer.checkielite.core.navigation.transition
 
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.Modifier
 
 interface SharedNavigationElement
 
@@ -27,6 +27,10 @@ private data class SharedNavigationElementKey(
 fun Modifier.sharedNavigationElement(
     element: SharedNavigationElement,
     isSameContent: Boolean = false,
+    resizeMode: SharedTransitionScope.ResizeMode = SharedTransitionScope.ResizeMode.scaleToBounds(
+        contentScale = ContentScale.Fit,
+        alignment = Alignment.TopStart,
+    ),
 ): Modifier {
     val sharedScope = LocalSharedTransitionScope.current ?: return this
     val visibilityScope = LocalNavigationAnimatedVisibilityScope.current ?: return this
@@ -35,7 +39,7 @@ fun Modifier.sharedNavigationElement(
 
     return with(sharedScope) {
         val state = rememberSharedContentState(
-            key = SharedNavigationElementKey(content.id, element),
+            key = SharedNavigationElementKey(content.key, element),
             config = config,
         )
         if (isSameContent) {
@@ -52,10 +56,7 @@ fun Modifier.sharedNavigationElement(
                 enter = fadeIn(sharedNavigationTween()),
                 exit = fadeOut(sharedNavigationTween()),
                 boundsTransform = { _, _ -> sharedNavigationTween() },
-                resizeMode = SharedTransitionScope.ResizeMode.scaleToBounds(
-                    contentScale = ContentScale.Fit,
-                    alignment = Alignment.TopStart,
-                ),
+                resizeMode = resizeMode,
                 zIndexInOverlay = 2F,
             )
         }

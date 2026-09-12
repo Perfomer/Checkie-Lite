@@ -3,9 +3,9 @@ package com.perfomer.checkielite.feature.search.presentation.screen.search.ui.wi
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
@@ -18,8 +18,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,7 +31,10 @@ import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
+import com.perfomer.checkielite.common.ui.presentation.transition.sharedSearchField
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
+import com.perfomer.checkielite.core.navigation.transition.SharedNavigationContent
+import com.perfomer.checkielite.feature.search.presentation.transition.SearchFieldContent
 
 @Composable
 internal fun SearchField(
@@ -39,7 +42,7 @@ internal fun SearchField(
     onSearchQueryInput: (query: String) -> Unit,
     onSearchQueryClearClick: () -> Unit,
     modifier: Modifier = Modifier,
-) {
+) = SharedNavigationContent(group = SearchFieldContent, id = Unit) {
     val palette = LocalCuiPalette.current
     val interactionSource = remember { MutableInteractionSource() }
     val focusManager = LocalFocusManager.current
@@ -94,6 +97,8 @@ internal fun SearchField(
                 }
             }
         },
-        modifier = modifier.softShadow(interactionSource = interactionSource, shape = CircleShape)
+        modifier = modifier
+            .sharedSearchField()
+            .softShadow(interactionSource = interactionSource, shape = CircleShape)
     )
 }

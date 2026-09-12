@@ -1,22 +1,23 @@
 package com.perfomer.checkielite.core.navigation
 
-import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerializationException
-import kotlinx.serialization.descriptors.SerialDescriptor
+import com.perfomer.checkielite.core.navigation.transition.SharedContentGroup
+import kotlin.reflect.KClass
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.descriptors.element
+import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonEncoder
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonPrimitive
-import kotlin.reflect.KClass
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerializationException
 
 @NavigationDsl
 object NavigationRegistry {
@@ -25,7 +26,7 @@ object NavigationRegistry {
     private const val PAYLOAD_FIELD = "payload"
 
     private val registry: MutableMap<KClass<out Destination>, ScreenEntry> = mutableMapOf()
-    private val sharedTransitions: MutableSet<SharedTransitionEdge> = mutableSetOf()
+    private val sharedTransitions: MutableMap<SharedTransitionEdge, Set<SharedContentGroup>> = mutableMapOf()
 
     @OptIn(InternalSerializationApi::class)
     fun serializer(): KSerializer<Destination> {
@@ -50,9 +51,14 @@ object NavigationRegistry {
     fun registerSharedTransition(
         source: KClass<out Destination>,
         target: KClass<out Destination>,
+        groups: Set<SharedContentGroup> = setOf(SharedContentGroup.Default),
     ) {
-        sharedTransitions += SharedTransitionEdge(source = source, target = target)
+        require(groups.isNotEmpty()) { "A shared transition must allow at least one content group" }
+        sharedTransitions[SharedTransitionEdge(source = source, target = target)] = groups.toSet()
     }
+
+    fun sharedTransitionGroups(source: Destination, target: Destination): Set<SharedContentGroup> =
+        sharedTransitions[SharedTransitionEdge(source::class, target::class)].orEmpty()
 
     fun hasSharedTransition(
         source: Destination,

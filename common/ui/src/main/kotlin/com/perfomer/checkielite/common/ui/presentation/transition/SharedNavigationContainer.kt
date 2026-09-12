@@ -1,21 +1,21 @@
 package com.perfomer.checkielite.common.ui.presentation.transition
 
-import androidx.compose.animation.EnterExitState
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import com.perfomer.checkielite.core.navigation.transition.LocalNavigationAnimatedVisibilityScope
 import com.perfomer.checkielite.core.navigation.transition.LocalSharedNavigationContent
@@ -61,8 +61,8 @@ fun SharedNavigationContainer(
     ) { if (it == EnterExitState.Visible) color else overlayColor }
 
     with(sharedScope) {
-        val surfaceState = rememberSharedContentState(SharedContainerKey(sharedContent.id, isSurface = true), config)
-        val contentState = rememberSharedContentState(SharedContainerKey(sharedContent.id, isSurface = false), config)
+        val surfaceState = rememberSharedContentState(SharedContainerKey(sharedContent.key, isSurface = true), config)
+        val contentState = rememberSharedContentState(SharedContainerKey(sharedContent.key, isSurface = false), config)
         val shape = RoundedCornerShape(if (surfaceState.isMatchFound) radius else cornerRadius)
         Box(modifier = modifier) {
             // One opaque surface sits below both endpoint contents, so neither can cover the other.

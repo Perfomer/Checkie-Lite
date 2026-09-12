@@ -1,8 +1,8 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -13,9 +13,9 @@ import androidx.compose.material3.RippleConfiguration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -24,8 +24,8 @@ import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassScaffold
-import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationLazyListItem
 import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationContainer
+import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationLazyListItem
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -42,6 +42,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsRecommendations
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsTags
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsText
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewContent
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
@@ -69,6 +70,7 @@ internal fun ReviewDetailsScreen(
     val toolbarFadeDistance = with(LocalDensity.current) { 24.dp.toPx() }
 
     SharedNavigationContent(
+        group = ReviewContent,
         id = (state as? ReviewDetailsUiState.Content)?.reviewId,
     ) {
         SharedNavigationContainer(

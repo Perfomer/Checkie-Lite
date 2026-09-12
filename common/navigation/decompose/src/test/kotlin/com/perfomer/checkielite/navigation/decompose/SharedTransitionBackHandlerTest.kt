@@ -15,6 +15,30 @@ import org.junit.jupiter.api.Test
 class SharedTransitionBackHandlerTest {
 
     @Test
+    fun `gesture progress waits for prepared source bounds`() = runTest {
+        val dispatcher = BackDispatcher()
+        val events = mutableListOf<String>()
+        val callback = recordingCallback(events)
+        val handler = SharedTransitionBackHandler(
+            delegate = dispatcher,
+            scope = backgroundScope,
+            prepareTransition = {
+                events += "prepare"
+                delay(32L)
+            },
+        )
+        handler.register(callback)
+        dispatcher.startPredictiveBack(BackEvent())
+        dispatcher.progressPredictiveBack(BackEvent(progress = 0.5F))
+        runCurrent()
+        assertEquals(listOf("prepare"), events)
+        advanceTimeBy(32L)
+        runCurrent()
+        assertEquals(listOf("prepare", "start", "progress:0.5"), events)
+        handler.unregister(callback)
+    }
+
+    @Test
     fun `cancellation seeks back to zero before resetting the transition`() = runTest {
         val dispatcher = BackDispatcher()
         val events = mutableListOf<String>()

@@ -3,21 +3,22 @@ package com.perfomer.checkielite.feature.reviewdetails
 import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.core.data.repository.BrandRepository
 import com.perfomer.checkielite.core.data.repository.ReviewRepository
-import com.perfomer.checkielite.core.navigation.InitialContentHolder
-import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
+import com.perfomer.checkielite.core.navigation.InitialContentHolder
 import com.perfomer.checkielite.core.navigation.navigation
+import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.sharedTransition
 import com.perfomer.checkielite.feature.gallery.navigation.GalleryDestination
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsInitialContent
-import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsReducer
-import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsStore
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.actor.DeleteReviewActor
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.actor.LoadReviewActor
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.actor.ReviewDetailsNavigationActor
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsReducer
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsStore
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.ReviewDetailsContentScreen
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiStateMapper
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewContent
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
@@ -27,7 +28,7 @@ val reviewDetailsModules
 private val presentationModule = module {
     navigation {
         associate<ReviewDetailsDestination, ReviewDetailsContentScreen>()
-        sharedTransition<ReviewDetailsDestination, ReviewDetailsDestination>()
+        sharedTransition<ReviewDetailsDestination, ReviewDetailsDestination>(ReviewContent)
         sharedTransition<ReviewDetailsDestination, GalleryDestination>()
     }
 

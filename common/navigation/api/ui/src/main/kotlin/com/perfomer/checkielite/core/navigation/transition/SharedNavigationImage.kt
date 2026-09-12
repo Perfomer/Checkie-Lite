@@ -2,6 +2,8 @@ package com.perfomer.checkielite.core.navigation.transition
 
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterExitState
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.runtime.Composable
@@ -122,11 +124,15 @@ fun Modifier.sharedNavigationImage(
     }
     return with(shared) {
         val contentState = rememberSharedContentState(ImageKey(scope.registry, imageUri), config)
-        // Both endpoints crop the same image into the same animated container. Render it once.
-        sharedElement(
+        // Keep the outgoing renderer until the bounds arrive; sharedElement switches to the
+        // incoming thumbnail at the start, which can already contain its final crop.
+        sharedBounds(
             sharedContentState = contentState,
             animatedVisibilityScope = scope.visibilityScope,
             boundsTransform = { _, _ -> sharedNavigationTween() },
+            resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds,
+            enter = EnterTransition.None,
+            exit = ExitTransition.None,
             zIndexInOverlay = 3F,
             clipInOverlayDuringTransition = OverlayClip(animatedShape),
         )
@@ -138,11 +144,17 @@ fun Modifier.sharedNavigationImage(
                 onDrawWithContent {
                     // Remeasurement keeps local and overlay geometry identical. Keep clipping
                     // throughout the handoff rather than exposing an unclipped child for a frame.
-                    clipPath(path) { this@onDrawWithContent.drawContent() }
+                    if (shouldDrawSharedImage(contentState.isMatchFound, scope.visibilityScope.transition.currentState)) {
+                        clipPath(path) { this@onDrawWithContent.drawContent() }
+                    }
                 }
             }
     }
 }
+
+/** Visibility changes only after the transition finishes, including a cancelled/reversed seek. */
+internal fun shouldDrawSharedImage(isMatchFound: Boolean, currentState: EnterExitState): Boolean =
+    !isMatchFound || currentState == EnterExitState.Visible
 
 /** The image and its clipping share the same animated container, with radius in screen pixels. */
 internal data class ImageClipShape(val radius: Dp) : Shape {

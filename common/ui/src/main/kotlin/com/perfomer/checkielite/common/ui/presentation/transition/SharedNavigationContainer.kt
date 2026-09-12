@@ -13,7 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -27,7 +26,10 @@ import com.perfomer.checkielite.core.navigation.transition.sharedNavigationTween
 @Immutable
 private data class SharedContainerKey(val contentId: Any, val isSurface: Boolean)
 
-/** Expands the surface while keeping both endpoint layouts at their original size and position. */
+/**
+ * Expands the surface while keeping both endpoint layouts at their original size and position.
+ * Reports an active transition to content only when this container has a shared counterpart.
+ */
 @Composable
 fun SharedNavigationContainer(
     cornerRadius: Dp,
@@ -35,7 +37,7 @@ fun SharedNavigationContainer(
     color: Color,
     overlayColor: Color,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
+    content: @Composable (isTransitionActive: Boolean) -> Unit,
 ) {
     val sharedScope = LocalSharedTransitionScope.current
     val visibilityScope = LocalNavigationAnimatedVisibilityScope.current
@@ -43,7 +45,7 @@ fun SharedNavigationContainer(
     if (sharedContent == null || sharedScope == null || visibilityScope == null) {
         val shape = RoundedCornerShape(cornerRadius)
         Box(modifier = modifier.background(color, shape).clip(shape)) {
-            content()
+            content(false)
         }
         return
     }
@@ -93,7 +95,7 @@ fun SharedNavigationContainer(
                     .skipToLookaheadSize { contentState.isMatchFound && isTransitionActive }
                     .skipToLookaheadPosition { contentState.isMatchFound && isTransitionActive }
             ) {
-                content()
+                content(contentState.isMatchFound && isTransitionActive)
             }
         }
     }

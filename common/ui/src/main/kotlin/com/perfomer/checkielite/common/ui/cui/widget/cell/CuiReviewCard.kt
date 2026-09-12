@@ -1,5 +1,8 @@
 package com.perfomer.checkielite.common.ui.cui.widget.cell
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
@@ -42,11 +46,22 @@ fun CuiReviewCard(
             0.4F,
         ),
         modifier = modifier.softShadow(interactionSource = interactionSource, shape = ReviewCardShape)
-    ) {
+    ) { isTransitionActive ->
         Surface(shape = ReviewCardShape, color = Color.Transparent) {
             Box {
                 if (item.rating == 10) {
-                    ReviewRatingGlow(modifier = Modifier.matchParentSize())
+                    val glowOpacity = animateFloatAsState(
+                        targetValue = if (isTransitionActive) 0F else 1F,
+                        animationSpec = if (isTransitionActive) snap() else tween(600),
+                        label = "Review rating glow opacity",
+                    )
+                    ReviewRatingGlow(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .graphicsLayer {
+                                alpha = if (isTransitionActive) 0F else glowOpacity.value
+                            }
+                    )
                 }
 
                 CuiReviewHorizontalItem(

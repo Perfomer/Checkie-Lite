@@ -62,10 +62,11 @@ fun SharedImage(
     }
 
     val imageModifier = if (LocalSharedNavigationImageScope.current != null) {
-        Modifier
+        // Endpoint sizing belongs outside shared bounds. An aspectRatio/size modifier inside
+        // would override animated constraints and keep the image at its preview proportions.
+        modifier
             .then(sizeResolver)
             .sharedNavigationImage(imageUri, cornerRadius) { sharedContent?.isEnabled?.invoke() != false }
-            .then(modifier)
     } else if (sharedScope != null && visibilityScope != null && sharedContent != null) {
         val config = rememberSharedContentConfig(sharedContent)
         val radius by visibilityScope.transition.animateDp(

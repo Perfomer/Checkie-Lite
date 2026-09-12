@@ -55,6 +55,10 @@ class SharedNavigationImageRegistry {
         participants.values.count { it.key == key && it.isTarget == side && it.isEnabled() } > 1
     }
 
+    internal fun hasMatch(key: String): Boolean = listOf(false, true).all { side ->
+        participants.values.count { it.key == key && it.isTarget == side && it.isEnabled() } == 1
+    }
+
     fun cornerRadius(key: String, isTarget: Boolean): Dp? = participants.values
         .singleOrNull { it.key == key && it.isTarget == isTarget && it.isEnabled() }
         ?.cornerRadius?.invoke()
@@ -76,6 +80,15 @@ class SharedNavigationImageScope(
 val LocalSharedNavigationImageScope = compositionLocalOf<SharedNavigationImageScope?> { null }
 
 private data class ImageKey(val registry: SharedNavigationImageRegistry, val uri: String)
+
+/** Whether this image has an enabled counterpart in the active shared navigation pair. */
+@Composable
+fun isSharedNavigationImageTransitionActive(imageUri: String): Boolean {
+    val shared = LocalSharedTransitionScope.current ?: return false
+    val scope = LocalSharedNavigationImageScope.current ?: return false
+    val content = LocalSharedNavigationContent.current
+    return shared.isTransitionActive && content?.isEnabled?.invoke() != false && scope.registry.hasMatch(imageUri)
+}
 
 /**
  * Shares a visible image only with an unambiguous counterpart in the active navigation pair.

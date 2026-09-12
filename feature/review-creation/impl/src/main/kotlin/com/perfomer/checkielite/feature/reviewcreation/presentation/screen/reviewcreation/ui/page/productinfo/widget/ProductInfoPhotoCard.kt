@@ -1,6 +1,8 @@
 package com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.widget
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -34,6 +36,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -43,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.perfomer.checkielite.core.navigation.transition.sharedNavigationImage
+import com.perfomer.checkielite.core.navigation.transition.isSharedNavigationImageTransitionActive
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -92,6 +96,12 @@ internal fun PhotoCard(
     }
     val interactionSource = remember { MutableInteractionSource() }
     val badgeText = remember(position) { (position + 1).toString().padStart(2, '0') }
+    val isTransitionActive = isSharedNavigationImageTransitionActive(pictureUrl)
+    val badgesOpacity = animateFloatAsState(
+        targetValue = if (isTransitionActive) 0F else 1F,
+        animationSpec = if (isTransitionActive) snap() else tween(200),
+        label = "Photo badges opacity",
+    )
 
     Box(modifier = modifier) {
         Box(
@@ -125,17 +135,24 @@ internal fun PhotoCard(
 
             Box(
                 modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(14.dp),
+                    .fillMaxSize()
+                    .graphicsLayer {
+                        alpha = if (isTransitionActive) 0F else badgesOpacity.value
+                    }
             ) {
-                PicturePositionBadge(text = badgeText)
-            }
+                PicturePositionBadge(
+                    text = badgeText,
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(14.dp)
+                )
 
-            DragHandleBadge(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 12.dp),
-            )
+                DragHandleBadge(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 12.dp)
+                )
+            }
         }
 
         AnimatedVisibility(

@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -26,6 +27,9 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigationevent.compose.LocalNavigationEventDispatcherOwner
+import androidx.navigationevent.findViewTreeNavigationEventDispatcherOwner
+import com.composables.core.LocalModalWindow
 import com.composables.core.ModalBottomSheet
 import com.composables.core.ModalBottomSheetState
 import com.composables.core.ModalSheetProperties
@@ -84,41 +88,46 @@ internal fun BaseBottomSheet(
         onDismiss = onDismiss,
         properties = ModalSheetProperties(dismissOnBackPress = false),
     ) {
-        PredictiveBackHandler(
-            enabled = sheetState.targetDetent != SheetDetent.Hidden,
-            onBack = onDismiss,
-            onProgress = { backProgress = it },
-        )
+        // Modal inherits the parent's composition, including the main/overlay Back scope.
+        // Back events arrive at the dialog window, so its handlers must use that window's owner.
+        val backOwner = requireNotNull(LocalModalWindow.current.decorView.findViewTreeNavigationEventDispatcherOwner())
+        CompositionLocalProvider(LocalNavigationEventDispatcherOwner provides backOwner) {
+            PredictiveBackHandler(
+                enabled = sheetState.targetDetent != SheetDetent.Hidden,
+                onBack = onDismiss,
+                onProgress = { backProgress = it },
+            )
 
-        DialogTransparentNavBar()
-        ClearFocusOnKeyboardClose()
+            DialogTransparentNavBar()
+            ClearFocusOnKeyboardClose()
 
-        Scrim(scrimColor = scrimColor, enter = fadeIn(), exit = fadeOut())
+            Scrim(scrimColor = scrimColor, enter = fadeIn(), exit = fadeOut())
 
-        Sheet(
-            modifier = modifier
-                .graphicsLayer {
-                    transformOrigin = TransformOrigin(pivotFractionX = 0.5F, pivotFractionY = 1.0F)
-                    translationY = animatedBackProgress * 72.dp.toPx()
-                    scaleX = 1 - animatedBackProgress * 0.05F
-                    scaleY = 1 - animatedBackProgress * 0.05F
-                }
-                .statusBarsPadding()
-                .shadow(sheetElevation, shape)
-                .clip(shape)
-                .background(containerColor)
-                .fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier
+            Sheet(
+                modifier = modifier
+                    .graphicsLayer {
+                        transformOrigin = TransformOrigin(pivotFractionX = 0.5F, pivotFractionY = 1.0F)
+                        translationY = animatedBackProgress * 72.dp.toPx()
+                        scaleX = 1 - animatedBackProgress * 0.05F
+                        scaleY = 1 - animatedBackProgress * 0.05F
+                    }
+                    .statusBarsPadding()
+                    .shadow(sheetElevation, shape)
+                    .clip(shape)
+                    .background(containerColor)
                     .fillMaxWidth()
-                    .imePadding()
             ) {
-                dragHandle?.invoke()
-                content()
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .imePadding()
+                ) {
+                    dragHandle?.invoke()
+                    content()
+                }
             }
-        }
 
-        ToastHost()
+            ToastHost()
+        }
     }
 }

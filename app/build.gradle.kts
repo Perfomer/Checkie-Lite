@@ -49,10 +49,6 @@ android {
     }
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
-
 dependencies {
     implementation(projects.common.android)
     implementation(projects.common.navigation.decompose)

@@ -1,26 +1,37 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalRippleConfiguration
+import androidx.compose.material3.RippleConfiguration
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
+import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassScaffold
+import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationContainer
+import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationLazyListItem
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
+import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.add
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.core.navigation.transition.SharedNavigationContent
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.RecommendedReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiState
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ConfirmDeleteDialog
@@ -31,6 +42,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsRecommendations
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsTags
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsText
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewContent
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
@@ -53,45 +65,69 @@ internal fun ReviewDetailsScreen(
     onRecommendationClick: (recommendedReviewId: String) -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
+    val palette = LocalCuiPalette.current
+    val backgroundColor = lerp(palette.BackgroundPrimary, palette.BackgroundAccentTertiary, 0.4F)
+    val toolbarFadeDistance = with(LocalDensity.current) { 24.dp.toPx() }
 
-    Scaffold(
-        topBar = {
-            ReviewDetailsAppBar(
-                scrollState = scrollState,
-                title = (state as? ReviewDetailsUiState.Content)?.productName,
-                isMenuAvailable = state.isMenuAvailable,
-                onNavigationIconClick = onNavigationIconClick,
-                onEditClick = onEditClick,
-                onDeleteClick = onDeleteClick,
-            )
-        },
-    ) { contentPadding ->
-        when (state) {
-            is ReviewDetailsUiState.Loading -> Loading()
-            is ReviewDetailsUiState.Content -> Content(
-                state = state,
-                contentPadding = contentPadding,
-                scrollableState = scrollState,
-                onPictureClick = onPictureClick,
-                onEmptyImageClick = onEmptyImageClick,
-                onRatingClick = onRatingClick,
-                onEmptyPriceClick = onEmptyPriceClick,
-                onEmptyReviewTextClick = onEmptyReviewTextClick,
-                onPageChange = onPageChange,
-                onAddTagsClick = onAddTagsClick,
-                onTagClick = onTagClick,
-                onRecommendationClick = onRecommendationClick,
-            )
+    SharedNavigationContent(
+        group = ReviewContent,
+        id = (state as? ReviewDetailsUiState.Content)?.reviewId,
+    ) {
+        SharedNavigationContainer(
+            cornerRadius = 0.dp,
+            overlayCornerRadius = 0.dp,
+            color = backgroundColor,
+            overlayColor = backgroundColor,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            CuiGlassScaffold(
+                containerColor = Color.Transparent,
+                toolbarColor = backgroundColor,
+                toolbarBackgroundProgress = {
+                    when {
+                        !scrollState.canScrollBackward -> 0F
+                        scrollState.firstVisibleItemIndex > 0 -> 1F
+                        else -> (scrollState.firstVisibleItemScrollOffset / toolbarFadeDistance).coerceIn(0F, 1F)
+                    }
+                },
+                topBar = {
+                    ReviewDetailsAppBar(
+                        scrollState = scrollState,
+                        title = (state as? ReviewDetailsUiState.Content)?.productName,
+                        isMenuAvailable = state.isMenuAvailable,
+                        onNavigationIconClick = onNavigationIconClick,
+                        onEditClick = onEditClick,
+                        onDeleteClick = onDeleteClick,
+                    )
+                },
+            ) { contentPadding ->
+                when (state) {
+                    is ReviewDetailsUiState.Loading -> Loading()
+                    is ReviewDetailsUiState.Content -> Content(
+                        state = state,
+                        contentPadding = contentPadding,
+                        scrollableState = scrollState,
+                        onPictureClick = onPictureClick,
+                        onEmptyImageClick = onEmptyImageClick,
+                        onRatingClick = onRatingClick,
+                        onEmptyPriceClick = onEmptyPriceClick,
+                        onEmptyReviewTextClick = onEmptyReviewTextClick,
+                        onPageChange = onPageChange,
+                        onAddTagsClick = onAddTagsClick,
+                        onTagClick = onTagClick,
+                        onRecommendationClick = onRecommendationClick,
+                    )
 
-            is ReviewDetailsUiState.Error -> Error()
+                    is ReviewDetailsUiState.Error -> Error()
+                }
 
+                ConfirmDeleteDialog(
+                    isVisible = showDeleteDialog,
+                    onDismiss = onDeleteDialogDismiss,
+                    onConfirm = onDeleteDialogConfirm,
+                )
+            }
         }
-
-        ConfirmDeleteDialog(
-            isVisible = showDeleteDialog,
-            onDismiss = onDeleteDialogDismiss,
-            onConfirm = onDeleteDialogConfirm,
-        )
     }
 }
 
@@ -106,6 +142,7 @@ private fun Loading() {
 }
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 private fun Content(
     state: ReviewDetailsUiState.Content,
     contentPadding: PaddingValues,
@@ -119,29 +156,49 @@ private fun Content(
     onAddTagsClick: () -> Unit,
     onTagClick: (tagId: String) -> Unit,
     onRecommendationClick: (recommendedReviewId: String) -> Unit,
+) = CompositionLocalProvider(
+    LocalRippleConfiguration provides RippleConfiguration(
+        color = lerp(
+            LocalCuiPalette.current.BackgroundAccentPrimary,
+            Color.White,
+            0.5F,
+        ),
+    ),
 ) {
     LazyColumn(
         state = scrollableState,
         contentPadding = contentPadding.add(bottom = 24.dp),
     ) {
-        item {
-            ReviewDetailsHeader(
-                productName = state.productName,
-                brandName = state.brandName,
-            )
+        item(key = "header") {
+            SharedNavigationLazyListItem(
+                id = state.reviewId,
+                listState = scrollableState,
+                itemKey = "header",
+            ) {
+                ReviewDetailsHeader(
+                    productName = state.productName,
+                    brandName = state.brandName,
+                )
+            }
         }
 
-        item {
-            ReviewDetailsImage(
-                picturesUri = state.picturesUri,
-                currentPicturePosition = state.currentPicturePosition,
-                onEmptyImageClick = onEmptyImageClick,
-                onPictureClick = onPictureClick,
-                onPageChange = onPageChange
-            )
+        item(key = "pictures") {
+            SharedNavigationLazyListItem(
+                id = state.reviewId,
+                listState = scrollableState,
+                itemKey = "pictures",
+            ) {
+                ReviewDetailsImage(
+                    picturesUri = state.picturesUri,
+                    currentPicturePosition = state.currentPicturePosition,
+                    onEmptyImageClick = onEmptyImageClick,
+                    onPictureClick = onPictureClick,
+                    onPageChange = onPageChange,
+                )
+            }
         }
 
-        item {
+        item(key = "info") {
             ReviewDetailsInfo(
                 date = state.date,
                 rating = state.rating,
@@ -168,7 +225,7 @@ private fun Content(
             )
         }
 
-        item {
+        item(key = "recommendations") {
             ReviewDetailsRecommendations(
                 recommendations = state.recommendations,
                 onRecommendationClick = onRecommendationClick,
@@ -193,6 +250,7 @@ private fun ReviewDetailsScreenPreview() = CheckieLiteTheme {
 }
 
 internal val mockUiState = ReviewDetailsUiState.Content(
+    reviewId = "preview",
     productName = Text.raw("Chicken toasts with poached eggs"),
     brandName = Text.raw("LUI BIDON"),
     picturesUri = persistentListOf(

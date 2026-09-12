@@ -9,4 +9,6 @@ internal data class SettingsState(
     val isCheckUpdatesInProgress: Boolean = false,
     val currentLocale: Locale = Locale.getDefault(),
     val currentTheme: ThemeMode = ThemeMode.SYSTEM,
+    val isLiquidGlassEnabled: Boolean = true,
+    val isLiquidGlassChangeInProgress: Boolean = false,
 )

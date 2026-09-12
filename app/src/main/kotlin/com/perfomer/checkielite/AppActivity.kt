@@ -4,15 +4,10 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -30,12 +25,13 @@ import com.perfomer.checkielite.common.ui.cui.widget.scrim.NavBarScrim
 import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalToastController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastHost
-import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberSuccessToast
+import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastStyle
+import com.perfomer.checkielite.common.ui.cui.widget.toast.showToast
 import com.perfomer.checkielite.common.ui.util.ClearFocusOnKeyboardClose
 import com.perfomer.checkielite.common.ui.util.TransparentSystemBars
 import com.perfomer.checkielite.common.ui.util.navigation.DefaultBottomSheetDismissHandlerOwner
 import com.perfomer.checkielite.common.ui.util.navigation.LocalBottomSheetDismissHandlerOwner
-import com.perfomer.checkielite.common.ui.util.navigation.registerPredictiveBackHandler
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.common.update.api.AppUpdateManager
 import com.perfomer.checkielite.common.update.api.updateIfAvailable
 import com.perfomer.checkielite.core.navigation.NavigationHost
@@ -50,6 +46,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import kotlin.time.Duration.Companion.milliseconds
 
 class AppActivity : AppCompatActivity() {
 
@@ -118,14 +115,15 @@ class AppActivity : AppCompatActivity() {
     private fun RestartActionsHandler(restartActions: ImmutableList<RestartAction>) {
         val toastController = LocalToastController.current
 
-        val backupImportSuccessToast = rememberSuccessToast(R.string.settings_backup_success_import)
-
         LaunchedEffect(Unit) {
             restartActions.forEach { restartAction ->
                 when (restartAction) {
                     is ShowSuccessBackupImportToast -> {
-                        delay(1_500L)
-                        toastController.showToast(backupImportSuccessToast)
+                        delay(1_500L.milliseconds)
+                        toastController.showToast(
+                            message = Text.resource(R.string.settings_backup_success_import),
+                            style = ToastStyle.SUCCESS,
+                        )
                     }
                 }
             }
@@ -161,9 +159,7 @@ class AppActivity : AppCompatActivity() {
                 )
             },
             overlayContent = { content ->
-                OverlayRoot(
-                    content = content,
-                )
+                content()
             },
         )
     }
@@ -185,26 +181,11 @@ class AppActivity : AppCompatActivity() {
         )
     }
 
-    @Composable
-    private fun OverlayRoot(
-        content: @Composable () -> Unit,
-    ) = with(navigationHost) {
-        val backProgress by registerPredictiveBackHandler(onBack = ::back)
-        val animatedBackProgress by animateFloatAsState(targetValue = backProgress, label = "OverlayBackProgress")
-
-        Box(
-            content = { content() },
-            modifier = Modifier.graphicsLayer {
-                alpha = 1F - animatedBackProgress
-            }
-        )
-    }
-
     private fun checkForUpdates() = lifecycleScope.launch {
         updateManager.updateIfAvailable()
     }
 
     private fun prepareTheme() = lifecycleScope.launch {
-        themeManager.warmUpThemeMode()
+        themeManager.warmUp()
     }
 }

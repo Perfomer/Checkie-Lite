@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -36,7 +37,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.perfomer.checkielite.common.ui.cui.modifier.conditional
+import com.perfomer.checkielite.common.ui.cui.modifier.thenIf
+import com.perfomer.checkielite.common.ui.cui.widget.rating.FloatingDiamond
+import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRatingHalo
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewReaction
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
@@ -88,12 +91,26 @@ internal fun ReviewDetailsInfo(
         InfoCell(
             value = AnnotatedString(ratingValue),
             description = stringResource(R.string.reviewdetails_rating),
-            icon = {
-                Image(
-                    painter = painterResource(reviewReaction.drawable),
-                    contentDescription = stringResource(reviewReaction.contentDescription),
-                    modifier = Modifier.size(26.dp)
+            isPerfectRating = rating == 10,
+            iconBackgroundColor = if (rating == 10) {
+                Color.Transparent
+            } else {
+                lerp(
+                    LocalCuiPalette.current.BackgroundSecondary,
+                    LocalCuiPalette.current.BackgroundAccentTertiary,
+                    0.65F,
                 )
+            },
+            icon = {
+                if (rating == 10) {
+                    FloatingDiamond(modifier = Modifier.size(26.dp))
+                } else {
+                    Image(
+                        painter = painterResource(reviewReaction.drawable),
+                        contentDescription = stringResource(reviewReaction.contentDescription),
+                        modifier = Modifier.size(26.dp)
+                    )
+                }
             },
             fromLeft = true,
             onClick = onRatingClick,
@@ -149,12 +166,13 @@ private fun InfoCell(
     description: String,
     icon: @Composable BoxScope.() -> Unit,
     fromLeft: Boolean,
-    modifier: Modifier = Modifier,
     valueColor: Color = Color.Unspecified,
     descriptionColor: Color = LocalCuiPalette.current.TextSecondary,
     iconBackgroundColor: Color = LocalCuiPalette.current.BackgroundSecondary,
     descriptionOffset: Dp = 0.dp,
     onClick: (() -> Unit)? = null,
+    isPerfectRating: Boolean = false,
+    modifier: Modifier = Modifier
 ) {
     @Composable
     fun IconBox() {
@@ -175,48 +193,57 @@ private fun InfoCell(
         val startPadding = if (fromLeft) 8.dp else 12.dp
         val endPadding = if (fromLeft) 12.dp else 8.dp
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = if (fromLeft) Arrangement.Start else Arrangement.End,
-            modifier = Modifier
-                .clip(RoundedCornerShape(12.dp))
-                .conditional(onClick != null) { clickable(onClick = onClick!!) }
-                .padding(vertical = 4.dp)
-                .padding(start = startPadding, end = endPadding)
-        ) {
-            if (fromLeft) {
-                IconBox()
-                Spacer(Modifier.width(8.dp))
+        Box {
+            if (isPerfectRating) {
+                ReviewRatingHalo(
+                    centerFromStart = startPadding + 18.dp,
+                    modifier = Modifier.matchParentSize()
+                )
             }
 
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = if (fromLeft) Alignment.Start else Alignment.End,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = if (fromLeft) Arrangement.Start else Arrangement.End,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(12.dp))
+                    .thenIf(onClick != null) { clickable(onClick = onClick!!) }
+                    .padding(vertical = 4.dp)
+                    .padding(start = startPadding, end = endPadding)
             ) {
-                Text(
-                    text = value,
-                    fontSize = 16.sp,
-                    color = valueColor,
-                    fontWeight = FontWeight.Medium,
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        platformStyle = PlatformTextStyle(includeFontPadding = false)
-                    ),
-                )
+                if (fromLeft) {
+                    IconBox()
+                    Spacer(Modifier.width(8.dp))
+                }
 
-                Text(
-                    text = description,
-                    fontSize = 12.sp,
-                    color = descriptionColor,
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        platformStyle = PlatformTextStyle(includeFontPadding = false)
-                    ),
-                    modifier = Modifier.offset(y = descriptionOffset)
-                )
-            }
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = if (fromLeft) Alignment.Start else Alignment.End,
+                ) {
+                    Text(
+                        text = value,
+                        fontSize = 16.sp,
+                        color = valueColor,
+                        fontWeight = FontWeight.Medium,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            platformStyle = PlatformTextStyle(includeFontPadding = false),
+                        ),
+                    )
 
-            if (!fromLeft) {
-                Spacer(Modifier.width(8.dp))
-                IconBox()
+                    Text(
+                        text = description,
+                        fontSize = 12.sp,
+                        color = descriptionColor,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            platformStyle = PlatformTextStyle(includeFontPadding = false)
+                        ),
+                        modifier = Modifier.offset(y = descriptionOffset)
+                    )
+                }
+
+                if (!fromLeft) {
+                    Spacer(Modifier.width(8.dp))
+                    IconBox()
+                }
             }
         }
     }

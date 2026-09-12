@@ -4,19 +4,24 @@ import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.core.data.repository.ChangelogRepository
 import com.perfomer.checkielite.core.data.repository.ReviewRepository
 import com.perfomer.checkielite.core.data.repository.TagRepository
-import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
 import com.perfomer.checkielite.core.navigation.navigation
+import com.perfomer.checkielite.core.navigation.Router
+import com.perfomer.checkielite.core.navigation.sharedTransition
 import com.perfomer.checkielite.feature.main.navigation.MainDestination
-import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.MainReducer
-import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.MainStore
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor.CheckAppUpdatedRecentlyActor
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor.HideChangelogBannerActor
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor.LoadReviewsActor
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor.LoadTagsActor
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.actor.MainNavigationActor
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.MainReducer
+import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.MainStore
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.MainContentScreen
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiStateMapper
+import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewContent
+import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination
+import com.perfomer.checkielite.feature.search.presentation.transition.SearchFieldContent
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
@@ -25,7 +30,12 @@ val mainModules
 
 
 private val presentationModule = module {
-    navigation { associate<MainDestination, MainContentScreen>() }
+    navigation {
+        associate<MainDestination, MainContentScreen>()
+
+        sharedTransition<MainDestination, ReviewDetailsDestination>(ReviewContent)
+        sharedTransition<MainDestination, SearchDestination>(SearchFieldContent)
+    }
 
     factoryOf(::MainContentScreen)
     factoryOf(::createMainStore)

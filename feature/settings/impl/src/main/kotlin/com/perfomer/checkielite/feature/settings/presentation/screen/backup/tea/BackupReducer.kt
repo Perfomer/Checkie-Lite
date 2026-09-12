@@ -1,9 +1,12 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea
 
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
+import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastStyle
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.core.domain.entity.backup.BackupException
 import com.perfomer.checkielite.core.domain.entity.backup.BackupMode
 import com.perfomer.checkielite.core.domain.entity.backup.BackupProgress
+import com.perfomer.checkielite.feature.settings.R
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.Await
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.CancelBackup
@@ -11,7 +14,6 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand.ObserveBackupProgress
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect.ShowToast
-import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEffect.ShowToast.Reason
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent.AwaitCompleted
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent.BackupProgressUpdated
@@ -60,7 +62,12 @@ internal class BackupReducer : DslReducer<BackupCommand, BackupEffect, BackupEve
 
                 when (state.mode) {
                     BackupMode.EXPORT -> {
-                        effects(ShowToast(Reason.EXPORT_SUCCESS))
+                        effects(
+                            ShowToast(
+                                text = Text.resource(R.string.settings_backup_success_export),
+                                style = ToastStyle.SUCCESS,
+                            ),
+                        )
                         commands(Await(durationMs = DELAY_AFTER_FINISH_MS, reason = Await.Reason.OPEN_MAIN))
                     }
                     BackupMode.IMPORT -> {
@@ -69,33 +76,33 @@ internal class BackupReducer : DslReducer<BackupCommand, BackupEffect, BackupEve
                 }
             }
             is BackupProgress.Cancelled -> {
-                val reason = when (state.mode) {
-                    BackupMode.EXPORT -> Reason.EXPORT_CANCELLED
-                    BackupMode.IMPORT -> Reason.IMPORT_CANCELLED
+                val text = when (state.mode) {
+                    BackupMode.EXPORT -> Text.resource(R.string.settings_backup_cancel_export)
+                    BackupMode.IMPORT -> Text.resource(R.string.settings_backup_cancel_import)
                 }
 
                 state { copy(isCancelled = true) }
-                effects(ShowToast(reason))
+                effects(ShowToast(text = text, style = ToastStyle.NEUTRAL))
                 commands(Await(durationMs = DELAY_AFTER_FINISH_MS, reason = Await.Reason.OPEN_MAIN))
             }
             is BackupProgress.Failure -> {
-                val reason = when {
+                val text = when {
                     progress.error.message?.contains(NO_SPACE_MESSAGE) == true -> {
-                        Reason.BACKUP_FAILED_NO_SPACE
+                        Text.resource(R.string.settings_backup_failure_common_no_space)
                     }
                     progress.error is BackupException.DatabaseVersionNotSupported -> {
-                        Reason.IMPORT_FAILED_UPDATE_REQUIRED
+                        Text.resource(R.string.settings_backup_failure_import_need_update)
                     }
                     state.mode == BackupMode.EXPORT -> {
-                        Reason.EXPORT_FAILED_COMMON
+                        Text.resource(R.string.settings_backup_failure_export)
                     }
                     state.mode == BackupMode.IMPORT -> {
-                        Reason.IMPORT_FAILED_COMMON
+                        Text.resource(R.string.settings_backup_failure_import)
                     }
                     else -> null
                 }
 
-                effects(reason?.let(::ShowToast))
+                effects(text?.let { ShowToast(text = it, style = ToastStyle.ERROR) })
 
                 commands(
                     Await(durationMs = DELAY_AFTER_FINISH_MS, reason = Await.Reason.OPEN_MAIN),

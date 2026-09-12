@@ -2,6 +2,10 @@ package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea
 
 import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
+import com.perfomer.checkielite.common.ui.CommonString
+import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastStyle
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.feature.settings.R
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.CheckHasReviews
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.CheckSyncing
@@ -11,14 +15,18 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.LaunchAppUpdate
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.LoadCurrentLocale
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.LoadTheme
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.LoadLiquidGlass
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsCommand.SetLiquidGlass
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowConfirmImportDialog
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowToast
-import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEffect.ShowToast.Reason
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.CheckingHasReviewsStatusUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.CurrentLocaleUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.Initialize
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.LiquidGlassUpdated
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.LiquidGlassSaved
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.LiquidGlassSaveFailed
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.SyncingStatusUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.ThemeUpdated
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsEvent.UpdatesCheck
@@ -39,6 +47,7 @@ import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.co
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnChangelogClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnCheckUpdatesClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnLanguageSettingsClick
+import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnLiquidGlassChanged
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnLibrariesClick
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnStart
 import com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core.SettingsUiEvent.OnThemeSettingsClick
@@ -58,34 +67,71 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
             is Lce.Content -> {
                 state { copy(isCheckUpdatesInProgress = false) }
 
-                if (event.hasUpdates.content) commands(LaunchAppUpdate)
-                else effects(ShowToast(Reason.APP_IS_UP_TO_DATE))
+                if (event.hasUpdates.content) {
+                    commands(LaunchAppUpdate)
+                } else {
+                    effects(
+                        ShowToast(
+                            text = Text.resource(R.string.settings_toast_update_check_succeed),
+                            style = ToastStyle.SUCCESS,
+                        ),
+                    )
+                }
             }
             is Lce.Error -> {
                 state { copy(isCheckUpdatesInProgress = false) }
-                effects(ShowToast(Reason.FAILED_TO_CHECK_UPDATES))
+                effects(
+                    ShowToast(
+                        text = Text.resource(R.string.settings_toast_update_check_failed),
+                        style = ToastStyle.ERROR,
+                    ),
+                )
             }
         }
         is CurrentLocaleUpdated -> state { copy(currentLocale = event.locale) }
         is ThemeUpdated -> state { copy(currentTheme = event.theme) }
+        is LiquidGlassUpdated -> state { copy(isLiquidGlassEnabled = event.enabled) }
+        is LiquidGlassSaved -> state {
+            copy(isLiquidGlassEnabled = event.enabled, isLiquidGlassChangeInProgress = false)
+        }
+        is LiquidGlassSaveFailed -> {
+            state { copy(isLiquidGlassChangeInProgress = false) }
+            effects(
+                ShowToast(
+                    text = Text.resource(R.string.settings_toast_liquid_glass_failed),
+                    style = ToastStyle.ERROR,
+                ),
+            )
+        }
     }
 
     private fun reduceInitialize() {
-        commands(CheckSyncing, CheckHasReviews, LoadCurrentLocale, LoadTheme)
+        commands(CheckSyncing, CheckHasReviews, LoadCurrentLocale, LoadTheme, LoadLiquidGlass)
     }
 
     private fun reduceUi(event: SettingsUiEvent) = when (event) {
         is OnBackPress -> commands(Exit)
         is OnStart -> commands(LoadCurrentLocale)
         is OnBackupExportClick -> {
-            when {
-                state.isSyncingInProgress -> effects(ShowToast(Reason.SYNCING_IN_PROGRESS))
-                else -> commands(ExportBackup)
+            if (state.isSyncingInProgress) {
+                effects(
+                    ShowToast(
+                        text = Text.resource(CommonString.common_toast_syncing),
+                        style = ToastStyle.WARNING,
+                    ),
+                )
+            } else {
+                commands(ExportBackup)
             }
         }
         is OnBackupImportClick -> {
             when {
-                state.isSyncingInProgress -> effects(ShowToast(Reason.SYNCING_IN_PROGRESS))
+                state.isSyncingInProgress -> effects(
+                    ShowToast(
+                        text = Text.resource(CommonString.common_toast_syncing),
+                        style = ToastStyle.WARNING,
+                    ),
+                )
                 state.hasReviews -> effects(ShowConfirmImportDialog)
                 else -> commands(SelectBackupFile)
             }
@@ -96,6 +142,14 @@ internal class SettingsReducer : DslReducer<SettingsCommand, SettingsEffect, Set
         is OnLanguageSettingsClick -> commands(OpenLanguageSettings)
         is OnLibrariesClick -> commands(OpenLibraries)
         is OnThemeSettingsClick -> commands(OpenThemeSettings(state.currentTheme))
+        is OnLiquidGlassChanged -> {
+            if (!state.isLiquidGlassChangeInProgress && state.isLiquidGlassEnabled != event.enabled) {
+                state { copy(isLiquidGlassChangeInProgress = true) }
+                commands(SetLiquidGlass(event.enabled))
+            } else {
+                Unit
+            }
+        }
     }
 
     private fun reduceNavigation(event: SettingsNavigationEvent) = when (event) {

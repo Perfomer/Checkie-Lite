@@ -7,7 +7,11 @@ interface ThemeManager {
 
     val themeMode: StateFlow<ThemeMode>
 
-    suspend fun warmUpThemeMode()
+    val isLiquidGlassEnabled: StateFlow<Boolean>
+
+    suspend fun warmUp()
 
     suspend fun setThemeMode(mode: ThemeMode)
+
+    suspend fun setLiquidGlassEnabled(enabled: Boolean)
 }

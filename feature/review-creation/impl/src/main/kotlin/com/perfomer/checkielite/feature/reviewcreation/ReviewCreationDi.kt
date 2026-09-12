@@ -11,6 +11,8 @@ import com.perfomer.checkielite.core.navigation.ExternalRouter
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
 import com.perfomer.checkielite.core.navigation.navigation
+import com.perfomer.checkielite.core.navigation.sharedTransition
+import com.perfomer.checkielite.feature.gallery.navigation.GalleryDestination
 import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationDestination
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorDestination
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationDestination
@@ -62,6 +64,7 @@ val reviewCreationModules
 
 private val presentationModule = module {
     navigation {
+        sharedTransition<ReviewCreationDestination, GalleryDestination>()
         associate<ReviewCreationDestination, ReviewCreationContentScreen>()
         associate<CurrencySelectorDestination, CurrencySelectorContentScreen>()
         associate<TagCreationDestination, TagCreationContentScreen>()

@@ -28,4 +28,7 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.koin.core)
     implementation(platform(libs.androidx.compose.bom))
+
+    testImplementation(libs.test.junitJupiter)
+    testRuntimeOnly(libs.test.junitPlatformLauncher)
 }

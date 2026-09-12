@@ -4,65 +4,86 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.sp
-import com.perfomer.checkielite.common.pure.util.emptyPersistentList
+import com.kyant.backdrop.Backdrop
+import com.kyant.backdrop.backdrops.layerBackdrop
+import com.kyant.backdrop.backdrops.LayerBackdrop
+import com.kyant.backdrop.backdrops.rememberLayerBackdrop
+import com.kyant.backdrop.isRenderEffectSupported
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
-import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
+import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
+import com.perfomer.checkielite.common.ui.cui.modifier.thenIf
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiFloatingActionButton
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
-import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewHorizontalItem
+import com.perfomer.checkielite.common.ui.cui.widget.cell.CuiReviewCard
 import com.perfomer.checkielite.common.ui.cui.widget.cell.ReviewItem
+import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiTagChip
+import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassToolbarBackground
+import com.perfomer.checkielite.common.ui.presentation.theme.CuiSurfaceContent
+import com.perfomer.checkielite.common.ui.presentation.theme.CuiSurfaceStyle
+import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationLazyListItem
+import com.perfomer.checkielite.common.ui.presentation.transition.sharedSearchField
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
+import com.perfomer.checkielite.common.ui.theme.LocalLiquidGlassEnabled
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.app.appNameSpannable
-import com.perfomer.checkielite.common.ui.util.pxToDp
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
-import com.perfomer.checkielite.feature.main.R
+import com.perfomer.checkielite.core.navigation.transition.SharedNavigationContent
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiState
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.Tag
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.WhatsNewBanner
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.ChangelogBanner
+import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.MainHeaderBackground
 import com.perfomer.checkielite.feature.main.presentation.util.TagRowUiBalancer
+import com.perfomer.checkielite.feature.main.R
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewContent
+import com.perfomer.checkielite.feature.search.presentation.transition.SearchFieldContent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -76,26 +97,47 @@ internal fun MainScreen(
     onChangelogClick: () -> Unit = {},
     onChangelogCloseClick: () -> Unit = {},
     onFabClick: () -> Unit = {},
-) {
+) = CuiSurfaceContent {
     val scrollState = rememberLazyListState()
+    val backgroundColor = CuiSurfaceStyle.background
+    val backdrop = rememberLayerBackdrop {
+        // Include the screen color in the gaps between cards when sampling the list.
+        drawRect(backgroundColor)
+        drawContent()
+    }
 
     Scaffold(
+        containerColor = backgroundColor,
         floatingActionButton = {
             if (state !is MainUiState.Error) {
                 CuiFloatingActionButton(
                     painter = painterResource(id = CommonDrawable.ic_plus),
                     contentDescription = stringResource(R.string.main_add_checkie),
                     onClick = onFabClick,
-                    modifier = Modifier.imePadding()
+                    elevation = FloatingActionButtonDefaults.elevation(
+                        defaultElevation = 0.dp,
+                        pressedElevation = 0.dp,
+                        focusedElevation = 0.dp,
+                        hoveredElevation = 0.dp,
+                    ),
+                    modifier = Modifier
+                        .imePadding()
+                        .softShadow(shape = CircleShape, radius = 16.dp)
                 )
             }
         },
         topBar = {
-            TopAppBar(
-                scrollableState = scrollState,
-                onSettingsClick = onSettingsClick,
-                onSearchClick = onSearchClick,
-            )
+            if (state is MainUiState.Content) {
+                TopAppBar(
+                    onSettingsClick = onSettingsClick,
+                    onSearchClick = onSearchClick,
+                    scrollState = scrollState,
+                    backgroundColor = backgroundColor,
+                    backdrop = backdrop,
+                )
+            } else {
+                MainHeaderBackground(content = { TopAppBar(onSettingsClick = onSettingsClick) })
+            }
         },
     ) { contentPadding ->
         when (state) {
@@ -105,6 +147,7 @@ internal fun MainScreen(
                 state = state,
                 scrollState = scrollState,
                 contentPadding = contentPadding,
+                backdrop = backdrop,
                 onSearchClick = onSearchClick,
                 onReviewClick = onReviewClick,
                 onTagClick = onTagClick,
@@ -112,52 +155,62 @@ internal fun MainScreen(
                 onChangelogCloseClick = onChangelogCloseClick,
             )
 
-            is MainUiState.Empty -> Empty()
+            is MainUiState.Empty -> Box(modifier = Modifier.padding(contentPadding)) { Empty() }
 
-            is MainUiState.Error -> Error()
+            is MainUiState.Error -> Box(modifier = Modifier.padding(contentPadding)) { Error() }
         }
     }
 }
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 private fun Content(
     state: MainUiState.Content,
     scrollState: LazyListState,
     contentPadding: PaddingValues,
+    backdrop: LayerBackdrop,
     onSearchClick: () -> Unit = {},
     onReviewClick: (id: String) -> Unit,
     onTagClick: (id: String) -> Unit,
     onChangelogClick: () -> Unit,
     onChangelogCloseClick: () -> Unit,
 ) {
+    val density = LocalDensity.current
+    val toolbarBottom = with(density) { contentPadding.calculateTopPadding().roundToPx() }
+
     LazyColumn(
-        contentPadding = contentPadding,
+        // Keep the decoration behind the pinned toolbar until the header scrolls away.
+        contentPadding = PaddingValues(bottom = contentPadding.calculateBottomPadding()),
         state = scrollState,
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .imePadding()
+            .thenIf(LocalLiquidGlassEnabled.current && isRenderEffectSupported()) { layerBackdrop(backdrop) }
     ) {
-        item {
-            SearchField(
-                onSearchClick = onSearchClick,
-                modifier = Modifier.padding(top = 4.dp, bottom = 16.dp)
+        item(key = "header") {
+            MainHeaderBackground(
+                content = {
+                    Column(modifier = Modifier.padding(top = contentPadding.calculateTopPadding())) {
+                        SearchField(
+                            onSearchClick = onSearchClick,
+                            modifier = Modifier.padding(top = 4.dp, bottom = 12.dp)
+                        )
+
+                        if (state.tags.isNotEmpty()) {
+                            TagsRow(
+                                tags = state.tags,
+                                onTagClick = onTagClick,
+                                modifier = Modifier.padding(bottom = 16.dp)
+                            )
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
-        if (state.tags.isNotEmpty()) {
-            item {
-                TagsRow(
-                    tags = state.tags,
-                    onTagClick = onTagClick,
-                    modifier = Modifier
-                        .animateItem()
-                        .padding(top = 8.dp, bottom = 16.dp)
-                )
-            }
-        }
-
         state.whatsNewBanner?.let { banner ->
-            item {
+            item(key = "changelog") {
                 ChangelogBanner(
                     state = banner,
                     onClick = onChangelogClick,
@@ -174,11 +227,21 @@ private fun Content(
             items = state.reviews,
             key = { item -> item.id },
         ) { item ->
-            CuiReviewHorizontalItem(
-                item = item,
-                onClick = onReviewClick,
-                modifier = Modifier.animateItem()
-            )
+            SharedNavigationLazyListItem(
+                id = item.id,
+                group = ReviewContent,
+                listState = scrollState,
+                viewportStartOffset = toolbarBottom,
+            ) {
+                CuiReviewCard(
+                    item = item,
+                    onClick = onReviewClick,
+                    modifier = Modifier
+                        .animateItem()
+                        .padding(horizontal = 20.dp)
+                        .padding(bottom = 12.dp)
+                )
+            }
         }
 
         item {
@@ -220,68 +283,113 @@ private fun Error() {
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun TopAppBar(
-    scrollableState: LazyListState,
     onSettingsClick: () -> Unit,
-    onSearchClick: () -> Unit,
+    onSearchClick: () -> Unit = {},
+    scrollState: LazyListState? = null,
+    backgroundColor: Color = Color.Transparent,
+    backdrop: Backdrop? = null,
 ) {
-    val shouldShowDivider by remember {
+    val searchScrollThreshold = with(LocalDensity.current) { 56.dp.toPx() }
+    val showSearch by remember(scrollState, searchScrollThreshold) {
         derivedStateOf {
-            scrollableState.canScrollBackward && (scrollableState.firstVisibleItemIndex > 0 || scrollableState.firstVisibleItemScrollOffset.pxToDp() > 4)
+            scrollState != null && (
+                scrollState.firstVisibleItemIndex > 0 ||
+                    scrollState.firstVisibleItemScrollOffset >= searchScrollThreshold
+                )
         }
     }
 
-    CenterAlignedTopAppBar(
-        title = { Text(text = appNameSpannable(), fontSize = 20.sp) },
-        actions = {
-            val shouldShowSearchIcon by remember { derivedStateOf { scrollableState.firstVisibleItemIndex > 0 } }
-            AnimatedVisibility(visible = shouldShowSearchIcon, enter = fadeIn(tween(250)), exit = fadeOut(tween(250))) {
-                CuiIconButton(
-                    painter = painterResource(CommonDrawable.ic_search),
-                    onClick = onSearchClick,
+    val showBackground by remember(scrollState) {
+        derivedStateOf {
+            scrollState != null && (
+                scrollState.firstVisibleItemIndex > 0 || scrollState.firstVisibleItemScrollOffset > 0
                 )
-            }
+        }
+    }
+    val backgroundScrollThreshold = with(LocalDensity.current) { 24.dp.toPx() }
 
-            CuiIconButton(
-                painter = painterResource(R.drawable.ic_settings),
-                onClick = onSettingsClick,
+    Box {
+        if (showBackground && scrollState != null && backdrop != null) {
+            CuiGlassToolbarBackground(
+                backdrop = backdrop,
+                backgroundColor = backgroundColor,
+                progress = {
+                    if (scrollState.firstVisibleItemIndex > 0) {
+                        1F
+                    } else {
+                        (scrollState.firstVisibleItemScrollOffset / backgroundScrollThreshold).coerceIn(0F, 1F)
+                    }
+                },
+                modifier = Modifier.matchParentSize()
             )
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .bottomStrokeOnScroll(
-                show = shouldShowDivider,
-                strokeColor = LocalCuiPalette.current.OutlineSecondary,
-            )
-    )
+        }
+
+        CenterAlignedTopAppBar(
+            title = { Text(text = appNameSpannable(), fontSize = 20.sp) },
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+            actions = {
+                AnimatedVisibility(
+                    visible = showSearch,
+                    enter = fadeIn(tween(200)),
+                    exit = fadeOut(tween(200)),
+                ) {
+                    CuiIconButton(
+                        painter = painterResource(CommonDrawable.ic_search),
+                        contentDescription = stringResource(CommonString.common_search),
+                        onClick = onSearchClick,
+                    )
+                }
+
+                CuiIconButton(
+                    painter = painterResource(R.drawable.ic_settings),
+                    onClick = onSettingsClick,
+                )
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
 
 @Composable
 private fun SearchField(
     onSearchClick: () -> Unit,
     modifier: Modifier = Modifier
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+) = SharedNavigationContent(group = SearchFieldContent, id = Unit) {
+    val palette = LocalCuiPalette.current
+    val interactionSource = remember { MutableInteractionSource() }
+
+    Surface(
+        onClick = onSearchClick,
+        interactionSource = interactionSource,
+        shape = CircleShape,
+        color = palette.BackgroundElevationBase,
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .border(1.dp, LocalCuiPalette.current.OutlineSecondary, RoundedCornerShape(16.dp))
-            .clickable(onClick = onSearchClick)
-            .padding(horizontal = 20.dp, vertical = 13.dp)
+            .sharedSearchField()
+            .softShadow(interactionSource = interactionSource, shape = CircleShape)
     ) {
-        Text(
-            text = stringResource(CommonString.common_search),
-            fontSize = 14.sp,
-            color = LocalCuiPalette.current.TextSecondary,
-            modifier = Modifier.weight(1F)
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier
+                .heightIn(min = 48.dp)
+                .padding(horizontal = 16.dp, vertical = 10.dp)
+        ) {
+            Icon(
+                painter = painterResource(id = CommonDrawable.ic_search),
+                tint = palette.IconSecondary,
+                contentDescription = null,
+                modifier = Modifier.size(20.dp)
+            )
 
-        Icon(
-            painter = painterResource(id = CommonDrawable.ic_search),
-            tint = LocalCuiPalette.current.IconSecondary,
-            contentDescription = null,
-        )
+            Text(
+                text = stringResource(CommonString.common_search),
+                fontSize = 16.sp,
+                color = palette.TextSecondary,
+                modifier = Modifier.weight(1F)
+            )
+        }
     }
 }
 
@@ -292,15 +400,27 @@ private fun TagsRow(
     modifier: Modifier = Modifier
 ) {
     val rows = remember(tags) { TagRowUiBalancer.split(tags) }
+    val palette = LocalCuiPalette.current
+    val chipStyle = CuiChipStyle.elevated(palette)
 
     @Composable
     fun SingleRow(tags: ImmutableList<Tag>) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             for (tag in tags) {
+                val interactionSource = remember(tag.id) { MutableInteractionSource() }
+
                 CuiTagChip(
                     text = tag.value,
                     emoji = tag.emoji,
                     onClick = { onTagClick(tag.id) },
+                    style = chipStyle,
+                    interactionSource = interactionSource,
+                    modifier = Modifier.softShadow(
+                        interactionSource = interactionSource,
+                        shape = CircleShape,
+                        radius = 8.dp,
+                        offset = DpOffset(x = 0.dp, y = 2.dp),
+                    )
                 )
             }
         }
@@ -311,7 +431,7 @@ private fun TagsRow(
         modifier = modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = 20.dp, vertical = 6.dp)
     ) {
         SingleRow(tags = rows.first)
 
@@ -374,7 +494,14 @@ internal val mockUiState = MainUiState.Content(
             isSyncing = false,
         ),
     ),
-    tags = emptyPersistentList(),
+    tags = persistentListOf(
+        Tag(id = "restaurants", value = "Рестораны", emoji = "🍴"),
+        Tag(id = "food", value = "Еда", emoji = "🥗"),
+        Tag(id = "drinks", value = "Напитки", emoji = "🥤"),
+        Tag(id = "sweets", value = "Сладкое", emoji = "🍬"),
+        Tag(id = "city", value = "Красноярск", emoji = "🏙️"),
+        Tag(id = "snacks", value = "Снеки", emoji = "🍟"),
+    ),
     whatsNewBanner = WhatsNewBanner(
         title = Text.raw("What’s new in 1.6.0"),
     ),

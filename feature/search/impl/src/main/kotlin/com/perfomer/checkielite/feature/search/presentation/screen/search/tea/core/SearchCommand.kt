@@ -32,7 +32,10 @@ internal sealed interface SearchNavigationCommand : SearchCommand {
 
     data object Exit : SearchNavigationCommand
 
-    class OpenReviewDetails(val reviewId: String) : SearchNavigationCommand
+    class OpenReviewDetails(
+        val reviewId: String,
+        val initialReview: CheckieReview?,
+    ) : SearchNavigationCommand
 
     class OpenAllFilters(
         val currentFilters: SearchFilters,

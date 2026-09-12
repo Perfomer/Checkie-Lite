@@ -29,6 +29,14 @@ import com.perfomer.checkielite.common.ui.theme.WidgetPreview
 object CuiOutlinedFieldDefaults {
 
     @Composable
+    fun surfaceColors(): TextFieldColors = colors(
+        focusedContainerColor = LocalCuiPalette.current.BackgroundElevationBase,
+        unfocusedContainerColor = LocalCuiPalette.current.BackgroundElevationBase,
+        errorContainerColor = LocalCuiPalette.current.BackgroundElevationBase,
+    )
+
+
+    @Composable
     fun colors(
         focusedBorderColor: Color = LocalCuiPalette.current.BackgroundAccentPrimary,
         unfocusedBorderColor: Color = LocalCuiPalette.current.OutlineSecondary.copy(alpha = 0.88F),

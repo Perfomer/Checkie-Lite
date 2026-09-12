@@ -5,9 +5,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,40 +20,81 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
 import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
 import com.perfomer.checkielite.common.ui.cui.widget.rating.ReviewRatingVertical
 import com.perfomer.checkielite.common.ui.cui.widget.text.CuiFadedText
+import com.perfomer.checkielite.common.ui.presentation.transition.ReviewSharedTextElement
+import com.perfomer.checkielite.common.ui.presentation.transition.SharedImage
+import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationContainer
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
-import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.common.ui.util.resource.text.text
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.core.navigation.transition.SharedNavigationContent
+import com.perfomer.checkielite.core.navigation.transition.sharedNavigationElement
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.RecommendedReview
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewContent
 
 @Composable
 internal fun RecommendedReviewCard(
     review: RecommendedReview,
     onClick: (reviewId: String) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+
+    SharedNavigationContent(group = ReviewContent, id = review.reviewId) {
+        SharedNavigationContainer(
+            cornerRadius = 20.dp,
+            overlayCornerRadius = 0.dp,
+            color = LocalCuiPalette.current.BackgroundElevationBase,
+            overlayColor = lerp(
+                LocalCuiPalette.current.BackgroundPrimary,
+                LocalCuiPalette.current.BackgroundAccentTertiary,
+                0.4F,
+            ),
+            modifier = modifier
+                .size(width = 148.dp, height = 200.dp)
+                .softShadow(interactionSource = interactionSource, shape = RoundedCornerShape(20.dp))
+        ) {
+            RecommendedReviewCardContent(
+                review = review,
+                interactionSource = interactionSource,
+                onClick = onClick,
+            )
+        }
+    }
+}
+
+@Composable
+private fun RecommendedReviewCardContent(
+    review: RecommendedReview,
+    interactionSource: MutableInteractionSource,
+    onClick: (reviewId: String) -> Unit,
 ) {
     Card(
         onClick = { onClick(review.reviewId) },
+        interactionSource = interactionSource,
         shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = LocalCuiPalette.current.BigElevation,
+            defaultElevation = 0.dp,
             pressedElevation = 0.dp,
         ),
-        modifier = modifier.size(width = 148.dp, height = 200.dp)
+        modifier = Modifier.fillMaxSize()
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             RecommendedReviewPicture(
@@ -87,7 +129,11 @@ internal fun RecommendedReviewCard(
                         style = MaterialTheme.typography.bodySmall.copy(
                             platformStyle = PlatformTextStyle(includeFontPadding = false)
                         ),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .sharedNavigationElement(
+                                element = ReviewSharedTextElement.Subtitle,
+                            )
                     )
                 }
 
@@ -100,7 +146,11 @@ internal fun RecommendedReviewCard(
                         platformStyle = PlatformTextStyle(includeFontPadding = false)
                     ),
                     fontWeight = FontWeight.Medium,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .sharedNavigationElement(
+                            element = ReviewSharedTextElement.Title,
+                        )
                 )
             }
         }
@@ -127,10 +177,10 @@ private fun RecommendedReviewPicture(
                 modifier = Modifier.size(48.dp)
             )
         } else {
-            AsyncImage(
-                model = pictureUri,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
+            SharedImage(
+                imageUri = pictureUri,
+                cornerRadius = 20.dp,
+                overlayCornerRadius = 24.dp,
                 modifier = Modifier
                     .fillMaxSize()
                     .border(

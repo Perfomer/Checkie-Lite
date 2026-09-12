@@ -13,10 +13,6 @@ android {
     namespace = "com.perfomer.checkielite.core.data.datasource"
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
-
 dependencies {
     api(projects.core.datasource.local.api)
     implementation(projects.common.pure)

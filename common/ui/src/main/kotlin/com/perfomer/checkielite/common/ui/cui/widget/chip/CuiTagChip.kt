@@ -1,5 +1,6 @@
 package com.perfomer.checkielite.common.ui.cui.widget.chip
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Text
@@ -16,15 +17,19 @@ fun CuiTagChip(
     isSelected: Boolean = false,
     onClick: () -> Unit,
     onLongClick: (() -> Unit)? = null,
+    style: CuiChipStyle? = null,
+    interactionSource: MutableInteractionSource? = null,
+    modifier: Modifier = Modifier
 ) {
     val selectedChipStyle = CuiChipStyle.selected()
     val defaultChipStyle = CuiChipStyle.default()
-    val style = if (isSelected) selectedChipStyle else defaultChipStyle
+    val chipStyle = style ?: if (isSelected) selectedChipStyle else defaultChipStyle
 
     CuiChip(
         onClick = onClick,
         onLongClick = onLongClick,
-        style = style,
+        style = chipStyle,
+        interactionSource = interactionSource,
         content = {
             Row {
                 if (emoji != null) {
@@ -47,5 +52,6 @@ fun CuiTagChip(
                 }
             }
         },
+        modifier = modifier
     )
 }

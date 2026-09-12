@@ -11,4 +11,6 @@ internal data class SettingsUiState(
     val currentLanguage: Text,
     @DrawableRes val themeIcon: Int,
     val themeMode: Text,
+    val isLiquidGlassEnabled: Boolean,
+    val isLiquidGlassChangeInProgress: Boolean,
 )

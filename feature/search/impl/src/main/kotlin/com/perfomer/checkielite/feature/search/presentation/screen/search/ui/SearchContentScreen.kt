@@ -8,7 +8,6 @@ import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.core.navigation.Screen
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.SearchStore
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchEffect.ShowKeyboard
-import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnAllFiltersClick
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnFilterClick
 import com.perfomer.checkielite.feature.search.presentation.screen.search.tea.core.SearchUiEvent.OnRecentSearchesClearClick
@@ -39,7 +38,6 @@ internal class SearchContentScreen(
             onFilterClick = acceptable(::OnFilterClick),
             onReviewClick = acceptable(::OnReviewClick),
             onRecentSearchesClearClick = acceptable(OnRecentSearchesClearClick),
-            onAllFiltersClick = acceptable(OnAllFiltersClick),
         )
     }
 }

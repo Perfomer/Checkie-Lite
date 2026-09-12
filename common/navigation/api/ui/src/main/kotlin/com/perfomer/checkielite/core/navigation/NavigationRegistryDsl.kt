@@ -1,9 +1,11 @@
 package com.perfomer.checkielite.core.navigation
 
+import com.perfomer.checkielite.core.navigation.transition.SharedContentGroup
 import kotlinx.serialization.serializer
 
 @DslMarker
-private annotation class NavigationDsl
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION, AnnotationTarget.TYPE)
+annotation class NavigationDsl
 
 @NavigationDsl
 fun navigation(block: NavigationRegistry.() -> Unit) = NavigationRegistry.apply(block)
@@ -14,5 +16,19 @@ inline fun <reified D : Destination, reified S : Screen> NavigationRegistry.asso
         destinationClass = D::class,
         destinationSerializer = serializer<D>(),
         screenClass = S::class,
+    )
+}
+
+/** Registers a directional shared transition. The same edge is reused when navigating back. */
+@NavigationDsl
+inline fun <reified Source : Destination, reified Target : Destination> NavigationRegistry.sharedTransition(
+    vararg groups: SharedContentGroup,
+) {
+    registerSharedTransition(
+        source = Source::class,
+        target = Target::class,
+        groups = groups
+            .toSet()
+            .ifEmpty { setOf(SharedContentGroup.Default) },
     )
 }

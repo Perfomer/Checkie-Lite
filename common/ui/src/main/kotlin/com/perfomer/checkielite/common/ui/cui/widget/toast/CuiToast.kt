@@ -25,17 +25,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.cui.widget.text.WrapTextContent
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.WidgetPreview
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.common.ui.util.resource.text.text
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
@@ -45,11 +45,12 @@ fun CuiToast(
     onClick: () -> Unit,
     onSwipeOut: () -> Unit,
 ) {
-    val actualBackgroundColor = if (data.backgroundColor == Color.Unspecified) {
+    val actualBackgroundColor = if (data.style.backgroundColor == Color.Unspecified) {
         LocalCuiPalette.current.BackgroundElevationContent
     } else {
-        data.backgroundColor
+        data.style.backgroundColor
     }
+    val icon = data.style.icon
 
     var swipeOffset by remember { mutableFloatStateOf(0F) }
 
@@ -83,10 +84,10 @@ fun CuiToast(
             .padding(vertical = 13.dp)
             .padding(start = 16.dp, end = 24.dp)
     ) {
-        if (data.icon != null) {
+        if (icon != null) {
             Icon(
-                painter = data.icon,
-                tint = data.iconTint,
+                painter = icon.resolve(),
+                tint = data.style.iconTint,
                 contentDescription = null,
                 modifier = Modifier.size(20.dp)
             )
@@ -97,7 +98,7 @@ fun CuiToast(
         }
 
         WrapTextContent(
-            text = data.message,
+            text = text(data.message),
             color = LocalCuiPalette.current.TextPrimary,
             fontSize = 14.sp,
             lineHeight = 18.sp,
@@ -115,11 +116,8 @@ private fun CuiToastPreview() = CheckieLiteTheme {
     ) {
         CuiToast(
             data = ToastData(
-                message = "Short text",
-                icon = null,
-                iconTint = Color.Unspecified,
-                backgroundColor = LocalCuiPalette.current.BackgroundElevationContent,
-                durationMs = 1000L,
+                message = Text.raw("Short text"),
+                style = ToastStyle.NEUTRAL,
             ),
             onClick = {},
             onSwipeOut = {},
@@ -127,11 +125,8 @@ private fun CuiToastPreview() = CheckieLiteTheme {
 
         CuiToast(
             data = ToastData(
-                message = "Short text",
-                icon = painterResource(CommonDrawable.ic_error),
-                iconTint = LocalCuiPalette.current.IconNegative,
-                backgroundColor = LocalCuiPalette.current.BackgroundNegativeSecondary,
-                durationMs = 1000L,
+                message = Text.raw("Short text"),
+                style = ToastStyle.ERROR,
             ),
             onClick = {},
             onSwipeOut = {},
@@ -139,11 +134,8 @@ private fun CuiToastPreview() = CheckieLiteTheme {
 
         CuiToast(
             data = ToastData(
-                message = "Failed to export backup: Not enough space",
-                icon = painterResource(CommonDrawable.ic_warning),
-                iconTint = LocalCuiPalette.current.IconWarning,
-                backgroundColor = LocalCuiPalette.current.BackgroundWarningSecondary,
-                durationMs = 1000L,
+                message = Text.raw("Failed to export backup: Not enough space"),
+                style = ToastStyle.WARNING,
             ),
             onClick = {},
             onSwipeOut = {},
@@ -151,11 +143,8 @@ private fun CuiToastPreview() = CheckieLiteTheme {
 
         CuiToast(
             data = ToastData(
-                message = "Backup has been exported successfully",
-                icon = painterResource(CommonDrawable.ic_success),
-                iconTint = LocalCuiPalette.current.IconPositive,
-                backgroundColor = LocalCuiPalette.current.BackgroundPositiveSecondary,
-                durationMs = 1000L,
+                message = Text.raw("Backup has been exported successfully"),
+                style = ToastStyle.SUCCESS,
             ),
             onClick = {},
             onSwipeOut = {},

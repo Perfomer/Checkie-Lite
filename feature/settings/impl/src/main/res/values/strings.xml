@@ -9,6 +9,9 @@
     <string name="settings_group_app_item_changelog_desc">What’s new in recent versions</string>
     <string name="settings_group_app_item_libraries">Libraries</string>
     <string name="settings_group_app_item_theme">Choose a theme</string>
+    <string name="settings_group_app_item_liquid_glass">Liquid Glass</string>
+    <string name="settings_group_app_item_liquid_glass_desc">Glass effects throughout the app</string>
+    <string name="settings_toast_liquid_glass_failed">Couldn’t save the Liquid Glass setting</string>
     <string name="settings_group_data_title">Data</string>
     <string name="settings_group_data_description">Save all app data in one file to avoid losing it. You can transfer it to another device or save it to the cloud.</string>
     <string name="settings_group_data_item_import">Import backup</string>

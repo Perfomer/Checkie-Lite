@@ -15,10 +15,16 @@ dependencies {
 
 	api(libs.decompose)
 	implementation(libs.androidx.activity.compose)
+	implementation(libs.androidx.navigationevent.compose)
 	implementation(libs.androidx.compose.material3)
 	implementation(libs.androidx.compose.ui)
 	implementation(libs.decompose.extensions.compose)
+	implementation(libs.decompose.extensions.compose.experimental)
 	implementation(libs.koin.core)
 	implementation(libs.kotlinx.coroutines)
 	implementation(platform(libs.androidx.compose.bom))
+
+	testImplementation(libs.test.junitJupiter)
+	testImplementation(libs.test.kotlinx.coroutines)
+	testRuntimeOnly(libs.test.junitPlatformLauncher)
 }

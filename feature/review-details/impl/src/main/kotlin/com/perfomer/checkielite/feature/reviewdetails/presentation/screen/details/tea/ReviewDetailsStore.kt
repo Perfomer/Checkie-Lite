@@ -5,6 +5,7 @@ import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.impl.ComponentStore
 import com.perfomer.checkielite.common.ui.util.tea.LogUnhandledExceptionHandler
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
+import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsInitialContent
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent
@@ -17,6 +18,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 internal class ReviewDetailsStore(
     componentContext: ComponentContext,
     destination: ReviewDetailsDestination,
+    initialContent: ReviewDetailsInitialContent?,
     reducer: ReviewDetailsReducer,
     uiStateMapper: ReviewDetailsUiStateMapper,
     actors: Set<Actor<ReviewDetailsCommand, ReviewDetailsEvent>>,
@@ -25,7 +27,7 @@ internal class ReviewDetailsStore(
     reducer = reducer,
     uiStateMapper = uiStateMapper,
     actors = actors,
-    initialState = ReviewDetailsState(destination.reviewId),
+    initialState = destination.toInitialState(initialContent?.review),
     initialEvents = listOf(Initialize),
     unhandledExceptionHandler = LogUnhandledExceptionHandler("ReviewDetailsStore"),
 )

@@ -1,8 +1,12 @@
 package com.perfomer.checkielite.feature.main.presentation.screen.main.tea
 
 import com.perfomer.checkielite.common.pure.state.Lce
+import com.perfomer.checkielite.common.pure.state.content
 import com.perfomer.checkielite.common.pure.state.toLoadingContentAware
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
+import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastStyle
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+import com.perfomer.checkielite.feature.main.R
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand.CheckAppUpdatedRecently
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand.HideChangelogBanner
@@ -10,7 +14,6 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainCommand.LoadTags
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEffect
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEffect.ShowToast
-import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEffect.ShowToast.Reason
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent.AppRecentUpdateChecked
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainEvent.Initialize
@@ -51,14 +54,24 @@ internal class MainReducer : DslReducer<MainCommand, MainEffect, MainEvent, Main
             commands(HideChangelogBanner)
         }
         is OnFabClick -> commands(OpenReviewCreation)
-        is OnReviewClick -> commands(OpenReviewDetails(event.id))
+        is OnReviewClick -> commands(
+            OpenReviewDetails(
+                reviewId = event.id,
+                initialReview = state.reviews.content?.firstOrNull { it.id == event.id },
+            ),
+        )
         is OnTagClick -> commands(OpenSearch(tagId = event.id))
         is OnSearchClick -> commands(OpenSearch())
         is OnSettingsClick -> commands(OpenSettings)
     }
 
     private fun reduceNavigation(event: MainNavigationEvent) = when (event) {
-        is ReviewCreated -> effects(ShowToast(Reason.REVIEW_CREATED))
+        is ReviewCreated -> effects(
+            ShowToast(
+                text = Text.resource(R.string.main_toast_reviewcreated),
+                style = ToastStyle.SUCCESS,
+            ),
+        )
     }
 
     private fun reduceReviewsLoading(event: ReviewsLoading) = when (event) {

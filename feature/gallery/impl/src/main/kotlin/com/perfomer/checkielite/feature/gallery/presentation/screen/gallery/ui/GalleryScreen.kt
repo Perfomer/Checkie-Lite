@@ -75,6 +75,7 @@ import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.common.ui.util.setTransparentSystemBars
+import com.perfomer.checkielite.core.navigation.transition.navigationForeground
 import com.perfomer.checkielite.core.navigation.transition.sharedNavigationImage
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui.state.GalleryUiState
 import kotlinx.collections.immutable.ImmutableList
@@ -112,7 +113,12 @@ internal fun GalleryScreen(
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
-            AnimatedVisibility(visible = state.isUiShown, enter = fadeIn(), exit = fadeOut()) {
+            AnimatedVisibility(
+                visible = state.isUiShown,
+                enter = fadeIn(),
+                exit = fadeOut(),
+                modifier = Modifier.navigationForeground()
+            ) {
                 GalleryTopAppBar(
                     title = text(state.titleText),
                     onNavigationIconClick = onNavigationIconClick,
@@ -153,7 +159,9 @@ internal fun GalleryScreen(
                     visible = state.isUiShown,
                     enter = fadeIn(),
                     exit = fadeOut(),
-                    modifier = Modifier.align(Alignment.BottomCenter)
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .navigationForeground()
                 ) {
                     PreviewRow(
                         mainPagerState = mainPagerState,

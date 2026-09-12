@@ -133,7 +133,7 @@ fun Modifier.sharedNavigationImage(
             resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds,
             enter = EnterTransition.None,
             exit = ExitTransition.None,
-            zIndexInOverlay = 3F,
+            zIndexInOverlay = SharedNavigationImageZIndex,
             clipInOverlayDuringTransition = OverlayClip(animatedShape),
         )
             .drawWithCache {

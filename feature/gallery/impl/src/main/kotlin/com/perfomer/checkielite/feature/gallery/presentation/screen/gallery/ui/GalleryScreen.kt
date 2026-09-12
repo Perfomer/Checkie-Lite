@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -38,7 +37,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -249,6 +247,7 @@ private fun MainHorizontalPager(
     ) { page ->
         val zoomableState = rememberZoomableState(
             minScale = 0.9F,
+            initialScale = 1F,
             maxScale = 6F,
             overZoomConfig = OverZoomConfig(1F, 4F),
         )
@@ -302,15 +301,12 @@ private fun MainGalleryPicture(
             .build()
     )
 
-    val imageState by painter.state.collectAsState()
-
-    val size = imageState.painter?.intrinsicSize ?: painter.intrinsicSize
     Image(
         painter = painter,
         contentDescription = null,
+        contentScale = ContentScale.Fit,
         modifier = modifier
             .sharedNavigationImage(pictureUri, isSharedImageEnabled)
-            .aspectRatio(if (size.width > 0F && size.height > 0F) size.width / size.height else 1F)
             .fillMaxSize()
     )
 }

@@ -18,8 +18,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.onGloballyPositioned
 import com.arkivanov.decompose.Child
 import com.perfomer.checkielite.core.navigation.Destination
 import com.perfomer.checkielite.core.navigation.NavigationRegistry
@@ -28,6 +30,7 @@ import com.perfomer.checkielite.core.navigation.transition.LocalSharedNavigation
 import com.perfomer.checkielite.core.navigation.transition.SharedNavigationImageRegistry
 import com.perfomer.checkielite.core.navigation.transition.SharedNavigationImageScope
 import com.perfomer.checkielite.core.navigation.transition.sharedNavigationTween
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -46,9 +49,13 @@ internal fun OverlayNavigation(
 ) {
     var retained by remember { mutableStateOf(overlay) }
     var origin by remember { mutableStateOf(source) }
-    val state = remember { SeekableTransitionState(false) }
+    // Compose both endpoints before changing their visibility. Starting animateTo in the same
+    // effect that inserts the target loses its initial bounds and produces a late match.
+    val displayed = overlay ?: retained
+    val placement = remember(displayed) { CompletableDeferred<Unit>() }
+    val state = remember(displayed) { SeekableTransitionState(false) }
     val transition = rememberTransition(state, label = "Overlay navigation")
-    val registry = remember(retained) { SharedNavigationImageRegistry() }
+    val registry = remember(displayed) { SharedNavigationImageRegistry() }
     val currentOverlay by rememberUpdatedState(overlay)
     val backGestureMutex = remember { Mutex() }
 
@@ -56,6 +63,9 @@ internal fun OverlayNavigation(
         if (overlay != null) {
             origin = source
             retained = overlay
+            placement.await()
+            // Matching is observed after layout; let that snapshot reach Compose before seeking.
+            withFrameNanos { }
             state.animateTo(true, animationSpec = sharedNavigationTween())
         } else {
             state.animateTo(false, animationSpec = sharedNavigationTween())
@@ -81,7 +91,7 @@ internal fun OverlayNavigation(
         }
     }
 
-    val shared = retained?.let { NavigationRegistry.hasSharedTransition(origin, it.configuration) } == true &&
+    val shared = displayed?.let { NavigationRegistry.hasSharedTransition(origin, it.configuration) } == true &&
         source === origin
     val sourceTransition = transition.createChildTransition(label = "Overlay source") {
         if (it) EnterExitState.PostExit else EnterExitState.Visible
@@ -104,9 +114,13 @@ internal fun OverlayNavigation(
             mainContent()
         }
     }
-    retained?.let { child ->
+    displayed?.let { child ->
         CompositionLocalProvider(LocalSharedNavigationImageScope provides targetScope.takeIf { shared }) {
-            Box(modifier = Modifier.graphicsLayer { alpha = overlayAlpha }) {
+            Box(
+                modifier = Modifier
+                    .onGloballyPositioned { placement.complete(Unit) }
+                    .graphicsLayer { alpha = overlayAlpha }
+            ) {
                 overlayContent { child.instance.Screen() }
             }
         }

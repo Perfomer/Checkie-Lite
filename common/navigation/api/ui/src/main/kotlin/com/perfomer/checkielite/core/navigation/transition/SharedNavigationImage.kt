@@ -27,8 +27,9 @@ class SharedNavigationImageRegistry {
         participants.remove(token)
     }
 
-    fun isUnique(key: String): Boolean = listOf(false, true).all { side ->
-        participants.values.count { it.key == key && it.isTarget == side && it.isEnabled() } == 1
+    /** An unmatched element must stay enabled so Compose can record its initial bounds. */
+    fun isAmbiguous(key: String): Boolean = listOf(false, true).any { side ->
+        participants.values.count { it.key == key && it.isTarget == side && it.isEnabled() } > 1
     }
 
     private class Participant(val key: String, val isTarget: Boolean, val isEnabled: () -> Boolean)
@@ -62,7 +63,7 @@ fun Modifier.sharedNavigationImage(
     val config = remember(scope.registry, imageUri) {
         object : SharedTransitionScope.SharedContentConfig {
             override val SharedTransitionScope.SharedContentState.isEnabled: Boolean
-                get() = enabled.value() && scope.registry.isUnique(imageUri)
+                get() = enabled.value() && !scope.registry.isAmbiguous(imageUri)
         }
     }
     return with(shared) {
@@ -72,7 +73,7 @@ fun Modifier.sharedNavigationImage(
             boundsTransform = { _, _ -> sharedNavigationTween() },
             enter = fadeIn(sharedNavigationTween()),
             exit = fadeOut(sharedNavigationTween()),
-            resizeMode = SharedTransitionScope.ResizeMode.scaleToBounds(ContentScale.Crop),
+            resizeMode = SharedTransitionScope.ResizeMode.scaleToBounds(ContentScale.FillWidth),
             zIndexInOverlay = 3F,
         )
     }

@@ -4,6 +4,8 @@ internal sealed interface ReviewDetailsEvent {
 
     data object Initialize : ReviewDetailsEvent
 
+    class GalleryPictureSelected(val position: Int) : ReviewDetailsEvent
+
     sealed interface ReviewLoading : ReviewDetailsEvent {
 
         data object Started : ReviewLoading

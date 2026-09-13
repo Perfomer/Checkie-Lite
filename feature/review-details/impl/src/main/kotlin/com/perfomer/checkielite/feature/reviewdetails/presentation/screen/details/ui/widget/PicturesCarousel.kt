@@ -18,6 +18,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,8 +41,8 @@ import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.core.navigation.transition.LocalNavigationAnimatedVisibilityScope
 import com.perfomer.checkielite.core.navigation.transition.LocalSharedNavigationContent
 import com.perfomer.checkielite.core.navigation.transition.SharedNavigationContent
-import kotlinx.collections.immutable.ImmutableList
 import kotlin.math.absoluteValue
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 internal fun PicturesCarousel(
@@ -71,6 +72,12 @@ internal fun PicturesCarousel(
             initialPage = currentPictureIndex,
             pageCount = { picturesUri.size },
         )
+
+        LaunchedEffect(currentPictureIndex) {
+            if (currentPictureIndex in picturesUri.indices && pagerState.currentPage != currentPictureIndex) {
+                pagerState.scrollToPage(currentPictureIndex)
+            }
+        }
 
         UpdateEffect(pagerState.currentPage) { onPageChange(pagerState.currentPage) }
 

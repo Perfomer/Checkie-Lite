@@ -7,6 +7,7 @@ import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
 import com.perfomer.checkielite.feature.reviewdetails.R
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetails
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect.ShowToast
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand
@@ -20,6 +21,23 @@ import org.junit.jupiter.api.Test
 import java.util.Date
 
 internal class ReviewDetailsReducerTest {
+
+    @Test
+    fun `picture click starts observation and opens gallery immediately`() {
+        val review = review(id = "review")
+        val update = ReviewDetailsReducer().reduce(
+            currentState = ReviewDetailsState(
+                reviewId = review.id,
+                review = Lce.Content(ReviewDetails(review = review, recommendations = emptyList())),
+            ),
+            event = ReviewDetailsUiEvent.OnPictureClick,
+        )
+        assertEquals(2, update.commands.size)
+        assertSame(ReviewDetailsCommand.ObserveGallerySelection, update.commands[0])
+        val openGallery = update.commands[1] as ReviewDetailsNavigationCommand.OpenGallery
+        assertEquals(emptyList<String>(), openGallery.picturesUri)
+        assertEquals(0, openGallery.currentPicturePosition)
+    }
 
     @Test
     fun `opening a recommendation passes its snapshot`() {

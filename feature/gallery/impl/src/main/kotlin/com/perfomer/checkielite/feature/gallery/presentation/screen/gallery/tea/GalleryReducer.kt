@@ -5,6 +5,7 @@ import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryEffect
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryEvent
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryNavigationCommand.Exit
+import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryCommand.NotifyPictureSelected
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryNavigationEvent
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryState
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.core.GalleryUiEvent
@@ -21,7 +22,12 @@ internal class GalleryReducer : DslReducer<GalleryCommand, GalleryEffect, Galler
 
     private fun reduceUi(event: GalleryUiEvent) = when (event) {
         is OnBackPress -> commands(Exit)
-        is OnPictureSelect -> state { copy(currentPicturePosition = event.position) }
+        is OnPictureSelect -> onPictureSelect(event)
         is OnPagerClick -> state { copy(isUiShown = !isUiShown) }
+    }
+
+    private fun onPictureSelect(event: OnPictureSelect) {
+        state { copy(currentPicturePosition = event.position) }
+        commands(NotifyPictureSelected(event.position))
     }
 }

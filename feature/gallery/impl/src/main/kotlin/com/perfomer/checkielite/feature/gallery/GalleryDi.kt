@@ -7,10 +7,15 @@ import com.perfomer.checkielite.core.navigation.navigation
 import com.perfomer.checkielite.feature.gallery.presentation.navigation.GalleryDestination
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.GalleryReducer
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.GalleryStore
+import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.actor.NotifyPictureSelectedActor
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.actor.GalleryNavigationActor
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui.GalleryContentScreen
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui.state.GalleryUiStateMapper
+import com.perfomer.checkielite.feature.gallery.presentation.selection.GallerySelectionChannel
+import com.perfomer.checkielite.feature.gallery.presentation.selection.GallerySelectionChannelImpl
 import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val galleryModules
@@ -23,12 +28,15 @@ private val presentationModule = module {
 
     factoryOf(::createGalleryStore)
     factoryOf(::GalleryContentScreen)
+
+    singleOf(::GallerySelectionChannelImpl) bind GallerySelectionChannel::class
 }
 
 internal fun createGalleryStore(
     componentContext: ComponentContext,
     destination: GalleryDestination,
     router: Router,
+    selectionChannel: GallerySelectionChannel,
 ): GalleryStore {
     return GalleryStore(
         componentContext = componentContext,
@@ -37,6 +45,7 @@ internal fun createGalleryStore(
         uiStateMapper = GalleryUiStateMapper(),
         actors = setOf(
             GalleryNavigationActor(router),
+            NotifyPictureSelectedActor(selectionChannel),
         ),
     )
 }

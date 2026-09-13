@@ -10,4 +10,4 @@ interface SharedContentGroup {
     data object Default : SharedContentGroup
 }
 
-private class OwnedRole(override val group: SharedContentGroup) : SharedContentRole
+private data class OwnedRole(override val group: SharedContentGroup) : SharedContentRole

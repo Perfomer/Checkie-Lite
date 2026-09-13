@@ -16,6 +16,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect.ShowConfirmDeleteDialog
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect.ShowToast
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent.GalleryPictureSelected
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent.Initialize
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent.ReviewDeletion
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent.ReviewLoading
@@ -44,6 +45,7 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
 
     override fun reduce(event: ReviewDetailsEvent) = when (event) {
         is Initialize -> commands(LoadReview(state.reviewId))
+        is GalleryPictureSelected -> state { copy(currentPicturePosition = event.position) }
         is ReviewDetailsUiEvent -> reduceUi(event)
         is ReviewLoading -> reduceReviewLoading(event)
         is ReviewDeletion -> reduceReviewDeletion(event)
@@ -69,6 +71,7 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
         )
         is OnPictureSelect -> state { copy(currentPicturePosition = event.position) }
         is OnPictureClick -> commands(
+            ReviewDetailsCommand.ObserveGallerySelection,
             OpenGallery(
                 picturesUri = state.review.requireContent().review.pictures.map { it.uri },
                 currentPicturePosition = state.currentPicturePosition,

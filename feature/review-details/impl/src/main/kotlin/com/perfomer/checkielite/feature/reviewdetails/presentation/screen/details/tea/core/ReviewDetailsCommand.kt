@@ -5,6 +5,8 @@ import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationStar
 
 internal sealed interface ReviewDetailsCommand {
 
+    data object ObserveGallerySelection : ReviewDetailsCommand
+
     class LoadReview(val reviewId: String) : ReviewDetailsCommand
 
     class DeleteReview(val reviewId: String) : ReviewDetailsCommand

@@ -4,8 +4,8 @@ import com.perfomer.checkielite.core.domain.entity.price.CheckieCurrency
 import com.perfomer.checkielite.core.domain.entity.price.CheckiePrice
 import com.perfomer.checkielite.core.domain.entity.review.CheckiePicture
 import com.perfomer.checkielite.core.domain.entity.sort.TagSortingStrategy
-import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagCreationMode
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.ReviewCreationResult
 
 internal sealed interface ReviewCreationCommand {
 

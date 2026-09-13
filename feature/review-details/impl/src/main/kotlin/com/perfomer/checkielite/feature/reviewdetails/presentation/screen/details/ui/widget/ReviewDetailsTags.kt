@@ -1,26 +1,33 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiTagChip
@@ -37,6 +44,13 @@ internal fun ReviewDetailsTags(
     onAddTagsClick: () -> Unit,
     onTagClick: (tagId: String) -> Unit,
 ) {
+    val palette = LocalCuiPalette.current
+    val chipStyle = CuiChipStyle.default().copy(
+        iconBackgroundColor = palette.BackgroundElevationBase,
+        textBackgroundColor = palette.BackgroundElevationBase,
+        borderColor = Color.Transparent,
+        borderWidth = 0.dp,
+    )
     Spacer(Modifier.height(24.dp))
 
     Text(
@@ -57,45 +71,63 @@ internal fun ReviewDetailsTags(
     ) {
         for (tag in tags) {
             key(tag.tagId) {
+                val interactionSource = remember { MutableInteractionSource() }
                 CuiTagChip(
                     text = text(tag.text),
                     emoji = tag.emoji,
                     onClick = { onTagClick(tag.tagId) },
+                    style = chipStyle,
+                    interactionSource = interactionSource,
+                    modifier = Modifier.softShadow(
+                        interactionSource = interactionSource,
+                        shape = CircleShape,
+                        radius = 8.dp,
+                        offset = DpOffset(x = 0.dp, y = 2.dp),
+                    )
                 )
             }
         }
 
-        AddTagChip(onClick = onAddTagsClick)
+        AddTagChip(onClick = onAddTagsClick, style = chipStyle)
     }
 }
 
 
 @Composable
-private fun AddTagChip(onClick: () -> Unit) {
+private fun AddTagChip(
+    onClick: () -> Unit,
+    style: CuiChipStyle,
+) {
     val palette = LocalCuiPalette.current
-
-    val addTagStyle = remember {
-        CuiChipStyle(
-            iconBackgroundColor = palette.BackgroundAccentSecondary,
-            textBackgroundColor = palette.BackgroundPrimary,
-            borderColor = palette.OutlineAccentSecondary,
-            borderWidth = 1.dp,
-            fontWeight = FontWeight.Medium,
-        )
-    }
+    val interactionSource = remember { MutableInteractionSource() }
 
     CuiChip(
-        leadingIcon = {
+        style = style.copy(fontWeight = FontWeight.Medium),
+        onClick = onClick,
+        interactionSource = interactionSource,
+        modifier = Modifier.softShadow(
+            interactionSource = interactionSource,
+            shape = CircleShape,
+            radius = 8.dp,
+            offset = DpOffset(x = 0.dp, y = 2.dp),
+        )
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
             Icon(
                 painter = painterResource(CommonDrawable.ic_plus),
                 contentDescription = null,
-                tint = palette.TextAccent,
-                modifier = Modifier.size(16.dp),
+                tint = palette.IconAccent,
+                modifier = Modifier.size(16.dp)
             )
-        },
-        style = addTagStyle,
-        onClick = onClick,
-    ) {
-        Text(stringResource(R.string.reviewdetails_tags_add))
+            Text(
+                text = stringResource(R.string.reviewdetails_tags_add),
+                color = palette.TextAccent,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+            )
+        }
     }
 }

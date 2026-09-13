@@ -1,8 +1,10 @@
 package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget
 
+import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -16,6 +18,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,15 +31,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
 import com.perfomer.checkielite.common.ui.cui.modifier.offsetForPage
 import com.perfomer.checkielite.common.ui.cui.modifier.scaleHorizontalNeighbors
 import com.perfomer.checkielite.common.ui.cui.widget.pager.CuiHorizontalPagerIndicator
+import com.perfomer.checkielite.common.ui.presentation.transition.SharedImage
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
-import kotlinx.collections.immutable.ImmutableList
+import com.perfomer.checkielite.core.navigation.transition.LocalNavigationAnimatedVisibilityScope
+import com.perfomer.checkielite.core.navigation.transition.LocalSharedNavigationContent
+import com.perfomer.checkielite.core.navigation.transition.SharedNavigationContent
 import kotlin.math.absoluteValue
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 internal fun PicturesCarousel(
@@ -45,6 +51,19 @@ internal fun PicturesCarousel(
     onPageChange: (pageIndex: Int) -> Unit,
     onPictureClick: () -> Unit,
 ) {
+    val visibilityScope = LocalNavigationAnimatedVisibilityScope.current
+    val sharedContent = LocalSharedNavigationContent.current
+    val atmosphereAlpha = visibilityScope?.transition?.animateFloat(
+        transitionSpec = {
+            if (targetState == EnterExitState.Visible) {
+                tween(durationMillis = 250, delayMillis = 150)
+            } else {
+                tween(durationMillis = 150)
+            }
+        },
+        label = "Carousel atmosphere",
+    ) { if (it == EnterExitState.Visible) 1F else 0F }
+
     Box(
         contentAlignment = Alignment.BottomCenter,
         modifier = Modifier.fillMaxSize()
@@ -54,20 +73,27 @@ internal fun PicturesCarousel(
             pageCount = { picturesUri.size },
         )
 
+        LaunchedEffect(currentPictureIndex) {
+            if (currentPictureIndex in picturesUri.indices && pagerState.currentPage != currentPictureIndex) {
+                pagerState.scrollToPage(currentPictureIndex)
+            }
+        }
+
         UpdateEffect(pagerState.currentPage) { onPageChange(pagerState.currentPage) }
 
         HorizontalPager(
             state = pagerState,
+            key = { picturesUri[it] },
             pageSpacing = 12.dp,
             contentPadding = PaddingValues(
                 horizontal = 24.dp,
-                vertical = 24.dp
+                vertical = 24.dp,
             ),
         ) { i ->
             Box(
                 modifier = Modifier.scaleHorizontalNeighbors(pagerState = pagerState, page = i)
             ) {
-                var pictureState: AsyncImagePainter.State by remember(i) { mutableStateOf(AsyncImagePainter.State.Empty) }
+                var pictureState: AsyncImagePainter.State by remember(picturesUri[i]) { mutableStateOf(AsyncImagePainter.State.Empty) }
 
                 if (pictureState is AsyncImagePainter.State.Success) {
                     val isSystemInDarkTheme = isSystemInDarkTheme()
@@ -83,25 +109,32 @@ internal fun PicturesCarousel(
                             .aspectRatio(1F)
                             .blur(40.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
                             .graphicsLayer {
-                                alpha = interpolatedAlpha
+                                alpha = interpolatedAlpha * (atmosphereAlpha?.value ?: 1F)
                                 translationY = 40.dp.toPx()
                             }
                             .clip(RoundedCornerShape(24.dp))
                     )
                 }
 
-                AsyncImage(
-                    model = picturesUri[i],
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    onState = { state -> pictureState = state },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1F)
-                        .clip(RoundedCornerShape(24.dp))
-                        .background(LocalCuiPalette.current.BackgroundSecondary)
-                        .clickable(onClick = onPictureClick)
-                )
+                SharedNavigationContent(
+                    id = sharedContent?.id,
+                    isEnabled = {
+                        sharedContent?.isEnabled?.invoke() == true &&
+                            pagerState.currentPage == i &&
+                            pagerState.currentPageOffsetFraction == 0F
+                    },
+                ) {
+                    SharedImage(
+                        imageUri = picturesUri[i],
+                        cornerRadius = 24.dp,
+                        overlayCornerRadius = 24.dp,
+                        onState = { state -> pictureState = state },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1F)
+                            .clickable(onClick = onPictureClick)
+                    )
+                }
             }
         }
 

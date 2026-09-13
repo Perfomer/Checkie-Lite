@@ -6,8 +6,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,7 +42,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
@@ -51,20 +52,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
+import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiIconButton
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
 import com.perfomer.checkielite.feature.reviewcreation.R
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.LocalObstruction
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.mockUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.widget.TagsLibrarySection
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.widget.TagsSearchField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.tags.widget.TagsStatPill
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.state.TagsPageUiState
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.widget.ReviewCreationPageHeader
-import kotlinx.coroutines.launch
 import kotlin.math.max
 import kotlin.math.min
+import kotlinx.coroutines.launch
 
 private const val SEARCH_ITEM_KEY = "search"
 private const val SEARCH_ITEM_INDEX = 1
@@ -89,6 +92,7 @@ internal fun TagsScreen(
     val selectedTagsCount = remember(state.tags) { state.tags.count(TagsPageUiState.Tag::isSelected) }
     val recommendedTagsCount = remember(state.tags) { state.tags.count(TagsPageUiState.Tag::isRecommended) }
     val density = LocalDensity.current
+    val toolbarTopPadding = LocalObstruction.current.calculateTopPadding()
     val navigationBarsBottomPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
     val isImeVisible = WindowInsets.ime.getBottom(density) > 0
     val bottomContentPadding = 104.dp + if (isImeVisible) 0.dp else navigationBarsBottomPadding
@@ -112,7 +116,7 @@ internal fun TagsScreen(
         LazyColumn(
             state = scrollState,
             contentPadding = PaddingValues(
-                top = 16.dp,
+                top = toolbarTopPadding + 16.dp,
                 bottom = bottomContentPadding,
             ),
             modifier = Modifier
@@ -163,7 +167,6 @@ internal fun TagsScreen(
                         tags = state.tags,
                         shouldShowAddTag = state.shouldShowAddTag,
                         palette = palette,
-                        sectionBorderColor = sectionBorderColor,
                         searchQuery = state.searchQuery,
                         onCreateTagClick = {
                             focusManager.clearFocus()
@@ -185,6 +188,8 @@ internal fun TagsScreen(
             visible = shouldShowRecommendedTagsButton,
             enter = slideInVertically(initialOffsetY = { -it / 2 }) + fadeIn(),
             exit = slideOutVertically(targetOffsetY = { -it / 2 }) + fadeOut(),
+            // The pager fills the screen; only the floating button stays below the toolbar.
+            modifier = Modifier.padding(top = toolbarTopPadding)
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 RecommendedTagsButton(
@@ -212,18 +217,23 @@ private fun RecommendedTagsButton(
     modifier: Modifier = Modifier,
 ) {
     val palette = LocalCuiPalette.current
+    val interactionSource = remember { MutableInteractionSource() }
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .shadow(
-                elevation = 8.dp,
+            .softShadow(
+                interactionSource = interactionSource,
                 shape = CircleShape,
             )
             .background(palette.BackgroundAccentPrimary, CircleShape)
             .clip(CircleShape)
-            .clickable(onClick = onClick)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = LocalIndication.current,
+                onClick = onClick,
+            )
             .padding(horizontal = 12.dp, vertical = 7.dp)
     ) {
         Text(

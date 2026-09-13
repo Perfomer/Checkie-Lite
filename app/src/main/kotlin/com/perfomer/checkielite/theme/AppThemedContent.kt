@@ -14,6 +14,7 @@ fun AppThemedContent(
     content: @Composable () -> Unit
 ) {
     val themeMode by themeManager.themeMode.collectAsState()
+    val isLiquidGlassEnabled by themeManager.isLiquidGlassEnabled.collectAsState()
 
     val darkTheme = when (themeMode) {
         ThemeMode.LIGHT -> false
@@ -23,6 +24,7 @@ fun AppThemedContent(
 
     CheckieLiteTheme(
         darkTheme = darkTheme,
+        liquidGlassEnabled = isLiquidGlassEnabled,
         content = content
     )
 }

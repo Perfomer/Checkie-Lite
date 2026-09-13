@@ -13,9 +13,9 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.M
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationCommand.OpenSettings
 import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.core.MainNavigationEvent.ReviewCreated
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
-import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationDestination
-import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.ReviewCreationDestination
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.ReviewCreationResult
+import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination
 import com.perfomer.checkielite.feature.settings.presentation.navigation.SettingsDestination
 import kotlinx.coroutines.flow.Flow
@@ -47,7 +47,10 @@ internal class MainNavigationActor(
             }
 
             is OpenChangelog -> navigate(ChangelogDestination)
-            is OpenReviewDetails -> navigate(ReviewDetailsDestination(command.reviewId))
+            is OpenReviewDetails -> navigate(
+                destination = ReviewDetailsDestination(command.reviewId),
+                initialContent = command.initialReview?.let(ReviewDetailsDestination::InitialContent),
+            )
             is OpenSearch -> navigate(SearchDestination(tagId = command.tagId))
             is OpenSettings -> navigate(SettingsDestination)
         }

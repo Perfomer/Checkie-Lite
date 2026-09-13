@@ -5,7 +5,8 @@ import androidx.compose.ui.unit.dp
 
 internal val ProductInfoContentPadding = 24.dp
 internal val ProductInfoCarouselSpacing = 12.dp
-internal val ProductInfoPhotoShape = RoundedCornerShape(30.dp)
+internal val ProductInfoPhotoCornerRadius = 30.dp
+internal val ProductInfoPhotoShape = RoundedCornerShape(ProductInfoPhotoCornerRadius)
 internal const val ProductInfoPhotoDragScale = 1.04f
 internal const val ProductInfoPhotoDeleteButtonAnimationDuration = 110
 internal const val ProductInfoPhotoDeleteButtonAnimationScale = 0.92f

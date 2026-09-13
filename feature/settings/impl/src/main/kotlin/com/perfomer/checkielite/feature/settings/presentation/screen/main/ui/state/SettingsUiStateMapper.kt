@@ -24,6 +24,8 @@ internal class SettingsUiStateMapper(
             currentLanguage = Text.raw(currentLocale.getDisplayLanguage(currentLocale).capitalize()),
             themeIcon = state.currentTheme.icon,
             themeMode = Text.resource(state.currentTheme.label),
+            isLiquidGlassEnabled = state.isLiquidGlassEnabled,
+            isLiquidGlassChangeInProgress = state.isLiquidGlassChangeInProgress,
         )
     }
 

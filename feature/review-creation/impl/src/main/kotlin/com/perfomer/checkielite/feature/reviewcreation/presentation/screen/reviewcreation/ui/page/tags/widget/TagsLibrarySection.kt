@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.LookaheadScope
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.theme.CuiPalette
@@ -19,7 +18,6 @@ internal fun TagsLibrarySection(
     tags: List<TagsPageUiState.Tag>,
     shouldShowAddTag: Boolean,
     palette: CuiPalette,
-    sectionBorderColor: Color,
     searchQuery: String,
     onCreateTagClick: () -> Unit,
     onTagClick: (String) -> Unit,
@@ -44,7 +42,6 @@ internal fun TagsLibrarySection(
                     TagsTagChip(
                         tag = tag,
                         palette = palette,
-                        sectionBorderColor = sectionBorderColor,
                         isRecommended = tag.isRecommended,
                         onClick = onTagClick,
                         onLongClick = onTagLongClick,

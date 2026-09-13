@@ -13,4 +13,10 @@ internal class ThemeRepositoryImpl(
     override suspend fun setThemeMode(themeMode: ThemeMode) {
         preferencesDataSource.setThemeMode(themeMode)
     }
+
+    override suspend fun isLiquidGlassEnabled(): Boolean = preferencesDataSource.isLiquidGlassEnabled()
+
+    override suspend fun setLiquidGlassEnabled(enabled: Boolean) {
+        preferencesDataSource.setLiquidGlassEnabled(enabled)
+    }
 }

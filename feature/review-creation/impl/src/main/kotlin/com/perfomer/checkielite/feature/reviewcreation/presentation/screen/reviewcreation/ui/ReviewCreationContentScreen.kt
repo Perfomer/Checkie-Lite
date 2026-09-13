@@ -11,7 +11,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.tea.compose.TeaComposable
 import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
@@ -95,10 +97,24 @@ internal class ReviewCreationContentScreen(
             }
         }
 
+        val toolbarThreshold = with(LocalDensity.current) { 24.dp.toPx() }
+
         ReviewCreationScreen(
             state = state,
             pagerState = pagerState,
             shouldShowTopDivider = shouldShowTopDivider,
+            toolbarBackgroundProgress = {
+                val offset = when (ReviewCreationPage.entries[pagerState.currentPage]) {
+                    ReviewCreationPage.PRODUCT_INFO -> productInfoScrollState.value.toFloat()
+                    ReviewCreationPage.TAGS -> if (tagsScrollState.firstVisibleItemIndex > 0) {
+                        toolbarThreshold
+                    } else {
+                        tagsScrollState.firstVisibleItemScrollOffset.toFloat()
+                    }
+                    ReviewCreationPage.REVIEW_INFO -> reviewInfoScrollState.value.toFloat()
+                }
+                (offset / toolbarThreshold).coerceIn(0F, 1F)
+            },
             showExitDialog = isConfirmExitDialogShown,
             onExitDialogDismiss = { isConfirmExitDialogShown = false },
             onExitDialogConfirm = acceptable(OnConfirmExitClick),

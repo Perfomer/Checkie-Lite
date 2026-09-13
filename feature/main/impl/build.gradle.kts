@@ -9,10 +9,6 @@ android {
     buildFeatures.compose = true
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
-
 dependencies {
     api(projects.feature.main.api)
     implementation(projects.common.android)
@@ -30,6 +26,7 @@ dependencies {
 
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
+    implementation(libs.backdrop)
     implementation(libs.koin.core)
     implementation(platform(libs.androidx.compose.bom))
 

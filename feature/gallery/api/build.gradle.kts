@@ -4,5 +4,6 @@ plugins {
 }
 
 dependencies {
+	api(libs.kotlinx.coroutines)
 	implementation(projects.common.navigation.api.core)
 }

@@ -4,7 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.impl.ComponentStore
 import com.perfomer.checkielite.common.ui.util.tea.LogUnhandledExceptionHandler
-import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationDestination
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.ReviewCreationDestination
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEffect
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationEvent

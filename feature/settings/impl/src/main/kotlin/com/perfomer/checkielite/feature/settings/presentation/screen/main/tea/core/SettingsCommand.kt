@@ -8,6 +8,10 @@ internal sealed interface SettingsCommand {
 
     data object LoadTheme : SettingsCommand
 
+    data object LoadLiquidGlass : SettingsCommand
+
+    data class SetLiquidGlass(val enabled: Boolean) : SettingsCommand
+
     data object CheckSyncing : SettingsCommand
 
     data object CheckHasReviews : SettingsCommand

@@ -23,4 +23,7 @@ dependencies {
 	implementation(libs.koin.core)
 	implementation(libs.zoomable)
 	implementation(platform(libs.androidx.compose.bom))
+
+	testImplementation(libs.test.junitJupiter)
+	testRuntimeOnly(libs.test.junitPlatformLauncher)
 }

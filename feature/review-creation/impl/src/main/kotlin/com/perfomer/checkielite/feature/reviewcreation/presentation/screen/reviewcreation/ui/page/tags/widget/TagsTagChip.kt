@@ -5,12 +5,14 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -23,7 +25,9 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import com.perfomer.checkielite.common.ui.cui.modifier.softShadow
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChip
 import com.perfomer.checkielite.common.ui.cui.widget.chip.CuiChipStyle
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
@@ -35,12 +39,12 @@ import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.revie
 internal fun TagsTagChip(
     tag: TagsPageUiState.Tag,
     palette: CuiPalette,
-    sectionBorderColor: Color,
     isRecommended: Boolean = false,
     onClick: (String) -> Unit,
     onLongClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     val hapticFeedback = LocalHapticFeedback.current
     val isAnimatedRecommended = isRecommended && !tag.isSelected
     val recommendedChipBackgroundColor = palette.BackgroundAccentTertiary.copy(alpha = 0.38F)
@@ -77,13 +81,7 @@ internal fun TagsTagChip(
             borderWidth = 1.dp,
             fontWeight = FontWeight.Medium,
         )
-        else -> CuiChipStyle(
-            iconBackgroundColor = palette.BackgroundPrimary,
-            textBackgroundColor = palette.BackgroundPrimary.copy(alpha = 0.96F),
-            borderColor = sectionBorderColor,
-            borderWidth = 1.dp,
-            fontWeight = FontWeight.Normal,
-        )
+        else -> CuiChipStyle.elevated(palette)
     }
 
     val textColor = when {
@@ -99,7 +97,13 @@ internal fun TagsTagChip(
             onLongClick(tag.id)
         },
         style = chipStyle,
-        modifier = modifier.recommendedAnimatedBorder(
+        interactionSource = interactionSource,
+        modifier = modifier.softShadow(
+            interactionSource = interactionSource,
+            shape = CircleShape,
+            radius = 8.dp,
+            offset = DpOffset(x = 0.dp, y = 2.dp),
+        ).recommendedAnimatedBorder(
             isEnabled = isAnimatedRecommended,
             progress = recommendedDashProgress.value,
             colors = recommendedChipBorderColors,

@@ -4,7 +4,6 @@ package com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -38,7 +36,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -53,13 +50,14 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
 import coil3.compose.AsyncImage
-import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
+import coil3.request.crossfade
 import coil3.size.Size
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.mxalbert.zoomable.OverZoomConfig
@@ -67,16 +65,18 @@ import com.mxalbert.zoomable.Zoomable
 import com.mxalbert.zoomable.rememberZoomableState
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
+import com.perfomer.checkielite.common.ui.cui.modifier.fitContentSize
 import com.perfomer.checkielite.common.ui.cui.modifier.indicatorOffsetForPage
 import com.perfomer.checkielite.common.ui.cui.widget.scrim.NavBarScrimController
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
-import com.perfomer.checkielite.common.ui.util.navigation.PredictiveBackHandler
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.common.ui.util.setTransparentSystemBars
+import com.perfomer.checkielite.core.navigation.transition.navigationForeground
+import com.perfomer.checkielite.core.navigation.transition.sharedNavigationImage
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.ui.state.GalleryUiState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -96,12 +96,6 @@ internal fun GalleryScreen(
     val isSystemInDarkTheme = isSystemInDarkTheme()
 
     var backProgress by remember { mutableFloatStateOf(0F) }
-    val animatedBackProgress by animateFloatAsState(targetValue = backProgress, label = "GalleryBackProgress")
-
-    PredictiveBackHandler(
-        onBack = onDismiss,
-        onProgress = { backProgress = it },
-    )
 
     UpdateEffect(state.isUiShown) { systemUiController.isSystemBarsVisible = state.isUiShown }
 
@@ -119,7 +113,12 @@ internal fun GalleryScreen(
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
-            AnimatedVisibility(visible = state.isUiShown, enter = fadeIn(), exit = fadeOut()) {
+            AnimatedVisibility(
+                visible = state.isUiShown,
+                enter = fadeIn(),
+                exit = fadeOut(),
+                modifier = Modifier.navigationForeground()
+            ) {
                 GalleryTopAppBar(
                     title = text(state.titleText),
                     onNavigationIconClick = onNavigationIconClick,
@@ -138,7 +137,7 @@ internal fun GalleryScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .graphicsLayer {
-                        alpha = 1 - animatedBackProgress * 0.3F
+                        alpha = 1 - backProgress * 0.3F
                     }
                     .background(GalleryPalette.BackgroundColor)
             )
@@ -150,13 +149,9 @@ internal fun GalleryScreen(
                 onPagerClick = onPagerClick,
                 onDismissProgressChange = { progress -> backProgress = progress },
                 onDismiss = onDismiss,
+                // Shared bounds capture layout size, not an ancestor's graphicsLayer scale.
                 pictureModifier = Modifier
-                    .graphicsLayer {
-                        clip = true
-                        shape = RoundedCornerShape(animatedBackProgress * 40.dp)
-                        scaleX = 1 - animatedBackProgress * 0.2F
-                        scaleY = 1 - animatedBackProgress * 0.2F
-                    }
+                    .fillMaxSize(1F - backProgress * 0.2F)
             )
 
             if (state.picturesUri.size > 1) {
@@ -164,7 +159,9 @@ internal fun GalleryScreen(
                     visible = state.isUiShown,
                     enter = fadeIn(),
                     exit = fadeOut(),
-                    modifier = Modifier.align(Alignment.BottomCenter)
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .navigationForeground()
                 ) {
                     PreviewRow(
                         mainPagerState = mainPagerState,
@@ -173,10 +170,10 @@ internal fun GalleryScreen(
                             coroutineScope.launch { mainPagerState.animateScrollToPage(page) }
                         },
                         modifier = Modifier.graphicsLayer {
-                            translationY = 1 - animatedBackProgress * -64.dp.toPx()
-                            alpha = 1 - animatedBackProgress * 0.5F
-                            scaleX = 1 - animatedBackProgress * 0.1F
-                            scaleY = 1 - animatedBackProgress * 0.1F
+                            translationY = 1 - backProgress * -64.dp.toPx()
+                            alpha = 1 - backProgress * 0.5F
+                            scaleX = 1 - backProgress * 0.1F
+                            scaleY = 1 - backProgress * 0.1F
                         }
                     )
                 }
@@ -254,6 +251,7 @@ private fun MainHorizontalPager(
     ) { page ->
         val zoomableState = rememberZoomableState(
             minScale = 0.9F,
+            initialScale = 1F,
             maxScale = 6F,
             overZoomConfig = OverZoomConfig(1F, 4F),
         )
@@ -268,10 +266,17 @@ private fun MainHorizontalPager(
             onDismiss = { onDismiss(); true },
             dismissGestureEnabled = true,
         ) {
-            MainGalleryPicture(
-                pictureUri = picturesUri[page],
-                modifier = pictureModifier
-            )
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                MainGalleryPicture(
+                    pictureUri = picturesUri[page],
+                    cornerRadius = zoomableState.dismissDragProgress.coerceIn(0F, 1F) * 40.dp,
+                    isSharedImageEnabled = {
+                        page == pagerState.currentPage && pagerState.currentPageOffsetFraction == 0F &&
+                            zoomableState.scale == 1F
+                    },
+                    modifier = pictureModifier
+                )
+            }
         }
 
         // Reset zoom state when the page is moved out of the window.
@@ -290,28 +295,30 @@ private fun MainHorizontalPager(
 @Composable
 private fun MainGalleryPicture(
     pictureUri: String,
+    cornerRadius: Dp,
+    isSharedImageEnabled: () -> Boolean,
     modifier: Modifier = Modifier
 ) {
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
             .data(pictureUri)
+            .memoryCacheKey(pictureUri)
+            .placeholderMemoryCacheKey(pictureUri)
+            .crossfade(false)
             .size(Size.ORIGINAL)
             .build()
     )
 
-    val imageState by painter.state.collectAsState()
-
-    if (imageState is AsyncImagePainter.State.Success) {
-        val size = painter.intrinsicSize
-
-        Image(
-            painter = painter,
-            contentDescription = null,
-            modifier = modifier
-                .aspectRatio(size.width / size.height)
-                .fillMaxSize()
-        )
-    }
+    Image(
+        painter = painter,
+        contentDescription = null,
+        // Fit the layout to the photo, then crop within the changing shared container.
+        contentScale = ContentScale.Crop,
+        modifier = modifier
+            .fitContentSize { painter.intrinsicSize }
+            .sharedNavigationImage(pictureUri, cornerRadius, isSharedImageEnabled)
+            .fillMaxSize()
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

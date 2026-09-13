@@ -4,7 +4,11 @@ import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.common.pure.state.requireContent
 import com.perfomer.checkielite.common.pure.state.toLoadingContentAware
 import com.perfomer.checkielite.common.tea.dsl.DslReducer
+import com.perfomer.checkielite.common.ui.CommonString
+import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastStyle
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationStartAction
+import com.perfomer.checkielite.feature.reviewdetails.R
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand.DeleteReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand.LoadReview
@@ -12,6 +16,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect.ShowConfirmDeleteDialog
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect.ShowToast
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent
+import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent.GalleryPictureSelected
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent.Initialize
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent.ReviewDeletion
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent.ReviewLoading
@@ -40,6 +45,7 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
 
     override fun reduce(event: ReviewDetailsEvent) = when (event) {
         is Initialize -> commands(LoadReview(state.reviewId))
+        is GalleryPictureSelected -> state { copy(currentPicturePosition = event.position) }
         is ReviewDetailsUiEvent -> reduceUi(event)
         is ReviewLoading -> reduceReviewLoading(event)
         is ReviewDeletion -> reduceReviewDeletion(event)
@@ -56,9 +62,16 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
         is OnEditClick -> reduceOnEditClick(startAction = ReviewCreationStartAction.NONE)
         is OnAddTagsClick -> reduceOnEditClick(startAction = ReviewCreationStartAction.ADD_TAGS)
         is OnTagClick -> commands(OpenSearch(tagId = event.tagId))
-        is OnRecommendationClick -> commands(OpenReviewDetails(event.recommendedReviewId))
+        is OnRecommendationClick -> commands(
+            OpenReviewDetails(
+                reviewId = event.recommendedReviewId,
+                initialReview = state.review.requireContent().recommendations
+                    .firstOrNull { it.id == event.recommendedReviewId },
+            ),
+        )
         is OnPictureSelect -> state { copy(currentPicturePosition = event.position) }
         is OnPictureClick -> commands(
+            ReviewDetailsCommand.ObserveGallerySelection,
             OpenGallery(
                 picturesUri = state.review.requireContent().review.pictures.map { it.uri },
                 currentPicturePosition = state.currentPicturePosition,
@@ -77,7 +90,12 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
             Unit
         }
         is ReviewDeletion.Succeed -> {
-            effects(ShowToast.Deleted)
+            effects(
+                ShowToast(
+                    text = Text.resource(R.string.reviewdetails_toast_deleted),
+                    style = ToastStyle.NEUTRAL,
+                ),
+            )
             commands(Exit)
         }
         is ReviewDeletion.Failed -> {
@@ -87,7 +105,12 @@ internal class ReviewDetailsReducer : DslReducer<ReviewDetailsCommand, ReviewDet
 
     private fun reduceOnEditClick(startAction: ReviewCreationStartAction) {
         if (state.review.requireContent().review.isSyncing) {
-            effects(ShowToast.Syncing)
+            effects(
+                ShowToast(
+                    text = Text.resource(CommonString.common_toast_syncing),
+                    style = ToastStyle.WARNING,
+                ),
+            )
         } else {
             commands(OpenReviewEdit(reviewId = state.reviewId, startAction = startAction))
         }

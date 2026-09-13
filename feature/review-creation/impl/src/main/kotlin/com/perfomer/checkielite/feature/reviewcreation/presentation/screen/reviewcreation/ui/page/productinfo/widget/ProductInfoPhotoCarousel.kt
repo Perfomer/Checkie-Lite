@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.cui.effect.UpdateEffect
+import com.perfomer.checkielite.common.ui.presentation.transition.SharedNavigationLazyListItem
 import com.perfomer.checkielite.common.ui.cui.widget.reorder.CuiReorderableLazyRow
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.ProductInfoCarouselItemAspectRatio
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.ui.page.productinfo.ProductInfoCarouselSpacing
@@ -101,14 +102,20 @@ internal fun ProductInfoPhotoCarousel(
                 }
             },
         ) { picture, index, itemState ->
-            PhotoCard(
-                pictureUrl = picture.uri,
-                position = index,
-                onClick = { if (!itemState.isInteractionActive) onPictureClick(index) },
-                onDeleteClick = { onPictureDeleteClick(index) },
-                isDeleteButtonVisible = !itemState.isInteractionActive && !itemState.isFloating,
-                modifier = Modifier.fillMaxSize(),
-            )
+            SharedNavigationLazyListItem(
+                id = picture.id,
+                listState = listState,
+                isEnabled = { !itemState.isInteractionActive && !itemState.isFloating },
+            ) {
+                PhotoCard(
+                    pictureUrl = picture.uri,
+                    position = index,
+                    onClick = { if (!itemState.isInteractionActive) onPictureClick(index) },
+                    onDeleteClick = { onPictureDeleteClick(index) },
+                    isDeleteButtonVisible = !itemState.isInteractionActive && !itemState.isFloating,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
     }
 }

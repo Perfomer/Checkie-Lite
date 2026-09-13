@@ -1,5 +1,8 @@
 package com.perfomer.checkielite.core.navigation
 
+import com.perfomer.checkielite.core.navigation.transition.SharedContentGroup
+import com.perfomer.checkielite.core.navigation.transition.SharedTransitionPolicy
+import kotlin.reflect.KClass
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
@@ -16,14 +19,15 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonPrimitive
-import kotlin.reflect.KClass
 
+@NavigationDsl
 object NavigationRegistry {
 
     private const val TYPE_FIELD = "type"
     private const val PAYLOAD_FIELD = "payload"
 
     private val registry: MutableMap<KClass<out Destination>, ScreenEntry> = mutableMapOf()
+    private val sharedTransitions: MutableMap<SharedTransitionEdge, SharedTransitionPolicy> = mutableMapOf()
 
     @OptIn(InternalSerializationApi::class)
     fun serializer(): KSerializer<Destination> {
@@ -44,6 +48,34 @@ object NavigationRegistry {
             serializer = destinationSerializer,
         )
     }
+
+    fun registerSharedTransition(
+        source: KClass<out Destination>,
+        target: KClass<out Destination>,
+        groups: Set<SharedContentGroup> = setOf(SharedContentGroup.Default),
+    ) {
+        registerSharedTransition(source, target, SharedTransitionPolicy.forGroups(groups))
+    }
+
+    fun registerSharedTransition(
+        source: KClass<out Destination>,
+        target: KClass<out Destination>,
+        policy: SharedTransitionPolicy,
+    ) {
+        require(policy.matches.isNotEmpty()) { "A shared transition must declare at least one match" }
+        sharedTransitions[SharedTransitionEdge(source = source, target = target)] = policy
+    }
+
+    fun sharedTransitionPolicy(source: Destination, target: Destination): SharedTransitionPolicy =
+        sharedTransitions[SharedTransitionEdge(source::class, target::class)] ?: SharedTransitionPolicy(emptySet())
+
+    fun sharedTransitionGroups(source: Destination, target: Destination): Set<SharedContentGroup> =
+        sharedTransitionPolicy(source, target).groups
+
+    fun hasSharedTransition(
+        source: Destination,
+        target: Destination,
+    ): Boolean = SharedTransitionEdge(source::class, target::class) in sharedTransitions
 
     private fun requireRegistration(destinationClass: KClass<out Destination>): ScreenEntry {
         return requireNotNull(registry[destinationClass]) {
@@ -72,7 +104,7 @@ object NavigationRegistry {
             val valueClass = value::class
             val registration = requireRegistration(valueClass)
 
-            val type = valueClass.qualifiedName ?: throw SerializationException("No qualified name found for ${valueClass.simpleName}")
+            val type = requireNotNull(valueClass.qualifiedName)
             val serializer = registration.serializer.cast()
 
             jsonEncoder.encodeJsonElement(
@@ -101,6 +133,11 @@ object NavigationRegistry {
     private data class ScreenEntry(
         val screenClass: KClass<out Screen>,
         val serializer: KSerializer<out Destination>,
+    )
+
+    private data class SharedTransitionEdge(
+        val source: KClass<out Destination>,
+        val target: KClass<out Destination>,
     )
 }
 

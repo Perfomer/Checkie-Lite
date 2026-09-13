@@ -12,19 +12,18 @@ import com.perfomer.checkielite.common.tea.compose.acceptable
 import com.perfomer.checkielite.common.ui.cui.modifier.ShakeConfig
 import com.perfomer.checkielite.common.ui.cui.modifier.rememberShakeController
 import com.perfomer.checkielite.common.ui.cui.widget.toast.LocalToastController
-import com.perfomer.checkielite.common.ui.cui.widget.toast.rememberErrorToast
+import com.perfomer.checkielite.common.ui.cui.widget.toast.showToast
 import com.perfomer.checkielite.common.ui.util.VibratorPattern
 import com.perfomer.checkielite.common.ui.util.navigation.BottomSheetDismissHandler
 import com.perfomer.checkielite.common.ui.util.rememberVibrator
 import com.perfomer.checkielite.common.ui.util.vibrateCompat
 import com.perfomer.checkielite.core.navigation.Screen
-import com.perfomer.checkielite.feature.reviewcreation.R
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.TagCreationStore
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.CollapseTagValueField
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.FocusTagValueField
-import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowErrorToast
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowExitConfirmationDialog
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowTagDeleteConfirmationDialog
+import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.ShowToast
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationEffect.VibrateError
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnBackPress
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.tagcreation.tea.core.TagCreationUiEvent.OnDeleteConfirmClick
@@ -55,16 +54,16 @@ internal class TagCreationContentScreen(
         }
 
         val toastController = LocalToastController.current
-        val deleteErrorToast = rememberErrorToast(R.string.tagcreation_error_delete)
-        val saveErrorToast = rememberErrorToast(R.string.tagcreation_error_save)
 
         var isConfirmDeleteDialogShown by remember { mutableStateOf(false) }
         var isConfirmExitDialogShown by remember { mutableStateOf(false) }
 
         EffectHandler { effect ->
             when (effect) {
-                is ShowErrorToast.DeletionFailed -> toastController.showToast(deleteErrorToast)
-                is ShowErrorToast.SavingFailed -> toastController.showToast(saveErrorToast)
+                is ShowToast -> toastController.showToast(
+                    message = effect.text,
+                    style = effect.style,
+                )
                 is ShowTagDeleteConfirmationDialog -> isConfirmDeleteDialogShown = true
                 is ShowExitConfirmationDialog -> isConfirmExitDialogShown = true
                 is FocusTagValueField -> tagValueFocusRequester.requestFocus()

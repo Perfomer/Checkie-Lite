@@ -26,7 +26,7 @@ fun ToastHost(
 
     LaunchedEffect(controller.show) {
         if (currentToastData != null && controller.show) {
-            delay(currentToastData.durationMs)
+            delay(currentToastData.duration)
             controller.dismiss()
         }
     }

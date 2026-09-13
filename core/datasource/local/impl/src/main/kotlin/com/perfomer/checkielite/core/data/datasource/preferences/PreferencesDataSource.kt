@@ -25,6 +25,9 @@ internal interface PreferencesDataSource {
     suspend fun getThemeMode(): ThemeMode?
     suspend fun setThemeMode(themeMode: ThemeMode)
 
+    suspend fun isLiquidGlassEnabled(): Boolean
+    suspend fun setLiquidGlassEnabled(enabled: Boolean)
+
     suspend fun getLastSeenChangelogVersionCode(): Int?
     suspend fun setLastSeenChangelogVersionCode(versionCode: Int)
 }
@@ -88,6 +91,16 @@ internal class PreferencesDataSourceImpl(
         return@withContext value.takeIf { it != 0 }
     }
 
+    override suspend fun isLiquidGlassEnabled(): Boolean = withContext(Dispatchers.IO) {
+        preferences.getBoolean(KEY_LIQUID_GLASS_ENABLED, true)
+    }
+
+    override suspend fun setLiquidGlassEnabled(enabled: Boolean) = withContext(Dispatchers.IO) {
+        check(preferences.edit().putBoolean(KEY_LIQUID_GLASS_ENABLED, enabled).commit()) {
+            "Failed to save Liquid Glass preference"
+        }
+    }
+
     override suspend fun setLastSeenChangelogVersionCode(versionCode: Int) = withContext(Dispatchers.IO) {
         preferences.edit(commit = true) {
             putInt(KEY_LAST_SEEN_CHANGELOG_VERSION_CODE, versionCode)
@@ -102,6 +115,7 @@ internal class PreferencesDataSourceImpl(
         private const val KEY_LATEST_TAG_SORT = "latest_tag_sort"
         private const val KEY_LATEST_TAG_SEARCH_SORT = "latest_tag_search_sort"
         private const val KEY_THEME_MODE = "theme_mode"
+        private const val KEY_LIQUID_GLASS_ENABLED = "liquid_glass_enabled"
         private const val KEY_LAST_SEEN_CHANGELOG_VERSION_CODE = "last_seen_changelog_version_code"
     }
 }

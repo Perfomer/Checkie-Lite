@@ -15,14 +15,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,10 +31,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.perfomer.checkielite.common.ui.CommonDrawable
 import com.perfomer.checkielite.common.ui.CommonString
-import com.perfomer.checkielite.common.ui.cui.modifier.bottomStrokeOnScroll
+import com.perfomer.checkielite.common.ui.cui.modifier.toolbarDivider
 import com.perfomer.checkielite.common.ui.cui.widget.block.CuiBlock
 import com.perfomer.checkielite.common.ui.cui.widget.button.CuiOutlineButton
 import com.perfomer.checkielite.common.ui.cui.widget.state.AnimatedState
+import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiGlassScaffold
 import com.perfomer.checkielite.common.ui.cui.widget.toolbar.CuiToolbarNavigationIcon
 import com.perfomer.checkielite.common.ui.theme.CheckieLiteTheme
 import com.perfomer.checkielite.common.ui.theme.LocalCuiPalette
@@ -52,9 +54,10 @@ internal fun ChangelogScreen(
     val scrollState = rememberScrollState()
     val shouldShowDivider by remember { derivedStateOf { scrollState.canScrollBackward } }
 
-    Scaffold(
+    CuiGlassScaffold(
         topBar = {
             TopAppBar(
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 title = { Text(stringResource(R.string.changelog_title), fontSize = 18.sp, fontWeight = FontWeight.Medium) },
                 navigationIcon = {
                     CuiToolbarNavigationIcon(
@@ -65,7 +68,7 @@ internal fun ChangelogScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .bottomStrokeOnScroll(
+                    .toolbarDivider(
                         show = shouldShowDivider,
                         strokeColor = LocalCuiPalette.current.OutlineSecondary,
                     )

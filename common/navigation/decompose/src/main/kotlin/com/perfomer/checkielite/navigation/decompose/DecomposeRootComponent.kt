@@ -6,10 +6,13 @@ import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.perfomer.checkielite.core.navigation.Destination
+import com.perfomer.checkielite.core.navigation.InitialContent
+import com.perfomer.checkielite.core.navigation.InitialContentHolder
 import com.perfomer.checkielite.core.navigation.NavigationRegistry
 import com.perfomer.checkielite.core.navigation.Screen
 import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
+import java.util.IdentityHashMap
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -22,6 +25,7 @@ internal class DecomposeRootComponent(
     val mainNavigator: StackNavigation<Destination> = StackNavigation()
     val bottomSheetNavigator: SlotNavigation<Destination> = SlotNavigation()
     val overlayNavigator: SlotNavigation<Destination> = SlotNavigation()
+    private val pendingInitialContent = IdentityHashMap<Destination, InitialContent<*>>()
 
     val mainNavigationStack = childStack(
         source = mainNavigator,
@@ -42,12 +46,32 @@ internal class DecomposeRootComponent(
         source = overlayNavigator,
         serializer = NavigationRegistry.serializer(),
         key = "Overlay",
+        handleBackButton = true,
         childFactory = ::createScreen,
     )
 
     private fun createScreen(destination: Destination, context: ComponentContext): Screen {
         val screenClass = NavigationRegistry.obtain(destination::class)
-        return getKoin().get(screenClass, null) { parametersOf(context, destination) }
+        val initialContent = InitialContentHolder(pendingInitialContent.remove(destination))
+        return getKoin().get(screenClass, null) { parametersOf(context, destination, initialContent) }
+    }
+
+    fun withInitialContent(
+        destination: Destination,
+        initialContent: InitialContent<*>?,
+        navigate: () -> Unit,
+    ) {
+        if (initialContent == null) {
+            navigate()
+            return
+        }
+
+        pendingInitialContent[destination] = initialContent
+        try {
+            navigate()
+        } finally {
+            pendingInitialContent.remove(destination)
+        }
     }
 }
 

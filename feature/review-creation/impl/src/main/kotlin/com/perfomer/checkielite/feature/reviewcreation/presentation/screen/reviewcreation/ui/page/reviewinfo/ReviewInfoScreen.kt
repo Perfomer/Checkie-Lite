@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedField
+import com.perfomer.checkielite.common.ui.cui.widget.field.CuiOutlinedFieldDefaults
 import com.perfomer.checkielite.common.ui.cui.widget.rating.RatingSlider
 import com.perfomer.checkielite.common.ui.cui.widget.spacer.CuiSpacer
 import com.perfomer.checkielite.common.ui.theme.ScreenPreview
@@ -55,6 +56,7 @@ internal fun ReviewInfoScreen(
             .verticalScroll(scrollState)
             .navigationBarsPadding()
             .imePadding()
+            .padding(top = obstruction.calculateTopPadding())
             .padding(20.dp)
     ) {
         ReviewCreationPageHeader(
@@ -74,6 +76,7 @@ internal fun ReviewInfoScreen(
         CuiSpacer(24.dp)
 
         CuiOutlinedField(
+            colors = CuiOutlinedFieldDefaults.surfaceColors(),
             text = state.comment,
             title = stringResource(R.string.reviewcreation_reviewinfo_field_comment),
             singleLine = false,
@@ -88,6 +91,7 @@ internal fun ReviewInfoScreen(
         CuiSpacer(4.dp)
 
         CuiOutlinedField(
+            colors = CuiOutlinedFieldDefaults.surfaceColors(),
             text = state.advantages,
             title = stringResource(R.string.reviewcreation_reviewinfo_field_advantages),
             singleLine = false,
@@ -100,6 +104,7 @@ internal fun ReviewInfoScreen(
         Spacer(Modifier.height(4.dp))
 
         CuiOutlinedField(
+            colors = CuiOutlinedFieldDefaults.surfaceColors(),
             text = state.disadvantages,
             title = stringResource(R.string.reviewcreation_reviewinfo_field_disadvantages),
             singleLine = false,

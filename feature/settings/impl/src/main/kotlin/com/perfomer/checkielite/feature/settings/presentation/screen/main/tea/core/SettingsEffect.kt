@@ -1,14 +1,14 @@
 package com.perfomer.checkielite.feature.settings.presentation.screen.main.tea.core
 
+import com.perfomer.checkielite.common.ui.cui.widget.toast.ToastStyle
+import com.perfomer.checkielite.common.ui.util.resource.text.Text
+
 internal sealed interface SettingsEffect {
 
-    class ShowToast(val reason: Reason) : SettingsEffect {
-        enum class Reason {
-            SYNCING_IN_PROGRESS,
-            APP_IS_UP_TO_DATE,
-            FAILED_TO_CHECK_UPDATES,
-        }
-    }
+    class ShowToast(
+        val text: Text,
+        val style: ToastStyle,
+    ) : SettingsEffect
 
     data object ShowConfirmImportDialog : SettingsEffect
 }

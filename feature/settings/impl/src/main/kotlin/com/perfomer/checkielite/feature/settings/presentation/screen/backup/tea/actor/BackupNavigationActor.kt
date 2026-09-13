@@ -4,7 +4,7 @@ import com.perfomer.checkielite.common.android.apprestart.AppRestarter
 import com.perfomer.checkielite.common.android.apprestart.RestartAction
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.navigation.Router
-import com.perfomer.checkielite.feature.main.navigation.MainDestination
+import com.perfomer.checkielite.feature.main.presentation.navigation.MainDestination
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupCommand
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupEvent
 import com.perfomer.checkielite.feature.settings.presentation.screen.backup.tea.core.BackupNavigationCommand

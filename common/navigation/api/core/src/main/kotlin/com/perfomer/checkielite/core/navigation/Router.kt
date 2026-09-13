@@ -10,10 +10,12 @@ interface Router {
      *
      * @param destination screen
      * @param mode type of navigation
+     * @param initialContent ephemeral data available while the screen is created
      */
-    fun navigate(
-        destination: Destination,
+    fun <D : Destination> navigate(
+        destination: D,
         mode: DestinationMode = DestinationMode.USUAL,
+        initialContent: InitialContent<D>? = null,
     )
 
     /**
@@ -21,18 +23,24 @@ interface Router {
      *
      * @param destination screen
      * @param mode type of navigation
+     * @param initialContent ephemeral data available while the screen is created
      */
-    fun replace(
-        destination: Destination,
+    fun <D : Destination> replace(
+        destination: D,
         mode: DestinationMode = DestinationMode.USUAL,
+        initialContent: InitialContent<D>? = null,
     )
 
     /**
      * Replaces all screens on stack with new screen
      *
      * @param destination screen
+     * @param initialContent ephemeral data available while the screen is created
      */
-    fun replaceStack(destination: Destination)
+    fun <D : Destination> replaceStack(
+        destination: D,
+        initialContent: InitialContent<D>? = null,
+    )
 
     /**
      * Navigates to destination and returns result
@@ -43,12 +51,14 @@ interface Router {
      * @param T type of the result (unsafe cast)
      * @param destination screen
      * @param mode type of navigation
+     * @param initialContent ephemeral data available while the screen is created
      *
      * @return result or null if screen was closed without result
      */
-    suspend fun <T : Result> navigateForResult(
-        destination: DestinationWithResult<T>,
+    suspend fun <T : Result, D : DestinationWithResult<T>> navigateForResult(
+        destination: D,
         mode: DestinationMode = DestinationMode.USUAL,
+        initialContent: InitialContent<D>? = null,
     ): T?
 
     /**

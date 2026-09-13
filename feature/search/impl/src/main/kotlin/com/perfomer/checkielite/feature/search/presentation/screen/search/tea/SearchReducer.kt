@@ -77,7 +77,10 @@ internal class SearchReducer : DslReducer<SearchCommand, SearchEffect, SearchEve
         is OnFilterClick -> reduceOnFilterClick(event)
         is OnReviewClick -> commands(
             RememberRecentSearch(event.reviewId),
-            OpenReviewDetails(event.reviewId),
+            OpenReviewDetails(
+                reviewId = event.reviewId,
+                initialReview = state.currentReviews.firstOrNull { it.id == event.reviewId },
+            ),
         )
         is OnSearchClearClick -> updateSearchConditions(query = "")
         is OnSearchFieldInput -> updateSearchConditions(query = event.text)

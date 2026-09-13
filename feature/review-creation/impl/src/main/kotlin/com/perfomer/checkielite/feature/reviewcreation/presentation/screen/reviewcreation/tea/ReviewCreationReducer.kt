@@ -11,8 +11,8 @@ import com.perfomer.checkielite.core.domain.entity.review.PictureSource
 import com.perfomer.checkielite.core.domain.entity.sort.TagSortingStrategy
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationStartAction
-import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.entity.TagCreationMode
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.ReviewCreationResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.CreateReview
 import com.perfomer.checkielite.feature.reviewcreation.presentation.screen.reviewcreation.tea.core.ReviewCreationCommand.LoadLatestCurrency

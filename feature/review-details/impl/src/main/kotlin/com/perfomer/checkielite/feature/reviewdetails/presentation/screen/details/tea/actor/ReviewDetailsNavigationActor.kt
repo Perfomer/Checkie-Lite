@@ -4,10 +4,10 @@ import com.perfomer.checkielite.common.pure.util.toArrayList
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.navigation.DestinationMode
 import com.perfomer.checkielite.core.navigation.Router
-import com.perfomer.checkielite.feature.gallery.navigation.GalleryDestination
+import com.perfomer.checkielite.feature.gallery.presentation.navigation.GalleryDestination
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
-import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationDestination
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.ReviewCreationDestination
+import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsNavigationCommand
@@ -50,7 +50,10 @@ internal class ReviewDetailsNavigationActor(
             }
 
             is OpenReviewDetails -> {
-                navigate(ReviewDetailsDestination(reviewId = command.reviewId))
+                navigate(
+                    destination = ReviewDetailsDestination(command.reviewId),
+                    initialContent = command.initialReview?.let(ReviewDetailsDestination::InitialContent),
+                )
             }
 
             is OpenGallery -> {

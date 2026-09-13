@@ -3,7 +3,7 @@ package com.perfomer.checkielite.feature.search.presentation.screen.search.tea.a
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.core.navigation.DestinationMode
 import com.perfomer.checkielite.core.navigation.Router
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
+import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination
 import com.perfomer.checkielite.feature.search.presentation.navigation.SortDestination
 import com.perfomer.checkielite.feature.search.presentation.navigation.SortResult
 import com.perfomer.checkielite.feature.search.presentation.navigation.TagsDestination
@@ -47,7 +47,10 @@ internal class SearchNavigationActor(
     }
 
     private fun openReviewDetails(command: OpenReviewDetails) {
-        router.navigate(ReviewDetailsDestination(command.reviewId))
+        router.navigate(
+            destination = ReviewDetailsDestination(command.reviewId),
+            initialContent = command.initialReview?.let(ReviewDetailsDestination::InitialContent),
+        )
     }
 
     private suspend fun openAllFilters(command: OpenAllFilters): SearchNavigationEvent {
@@ -67,7 +70,7 @@ internal class SearchNavigationActor(
     }
 
     private suspend fun openTags(command: OpenTags): SearchNavigationEvent? {
-        val result = router.navigateForResult<TagsResult>(
+        val result = router.navigateForResult(
             destination = TagsDestination(command.selectedTagsIds),
             mode = DestinationMode.BOTTOM_SHEET,
         )

@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.core.navigation
 
 import com.perfomer.checkielite.core.navigation.transition.SharedContentGroup
+import com.perfomer.checkielite.core.navigation.transition.SharedTransitionPolicy
 import kotlin.reflect.KClass
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.descriptors.element
@@ -26,7 +27,7 @@ object NavigationRegistry {
     private const val PAYLOAD_FIELD = "payload"
 
     private val registry: MutableMap<KClass<out Destination>, ScreenEntry> = mutableMapOf()
-    private val sharedTransitions: MutableMap<SharedTransitionEdge, Set<SharedContentGroup>> = mutableMapOf()
+    private val sharedTransitions: MutableMap<SharedTransitionEdge, SharedTransitionPolicy> = mutableMapOf()
 
     @OptIn(InternalSerializationApi::class)
     fun serializer(): KSerializer<Destination> {
@@ -53,12 +54,23 @@ object NavigationRegistry {
         target: KClass<out Destination>,
         groups: Set<SharedContentGroup> = setOf(SharedContentGroup.Default),
     ) {
-        require(groups.isNotEmpty()) { "A shared transition must allow at least one content group" }
-        sharedTransitions[SharedTransitionEdge(source = source, target = target)] = groups.toSet()
+        registerSharedTransition(source, target, SharedTransitionPolicy.forGroups(groups))
     }
 
+    fun registerSharedTransition(
+        source: KClass<out Destination>,
+        target: KClass<out Destination>,
+        policy: SharedTransitionPolicy,
+    ) {
+        require(policy.matches.isNotEmpty()) { "A shared transition must declare at least one match" }
+        sharedTransitions[SharedTransitionEdge(source = source, target = target)] = policy
+    }
+
+    fun sharedTransitionPolicy(source: Destination, target: Destination): SharedTransitionPolicy =
+        sharedTransitions[SharedTransitionEdge(source::class, target::class)] ?: SharedTransitionPolicy(emptySet())
+
     fun sharedTransitionGroups(source: Destination, target: Destination): Set<SharedContentGroup> =
-        sharedTransitions[SharedTransitionEdge(source::class, target::class)].orEmpty()
+        sharedTransitionPolicy(source, target).groups
 
     fun hasSharedTransition(
         source: Destination,

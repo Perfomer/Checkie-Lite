@@ -19,7 +19,8 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.tea.MainSt
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.MainContentScreen
 import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.state.MainUiStateMapper
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
-import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewContent
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewListItem
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewPage
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination
 import com.perfomer.checkielite.feature.search.presentation.transition.SearchFieldContent
 import org.koin.core.module.dsl.factoryOf
@@ -33,7 +34,9 @@ private val presentationModule = module {
     navigation {
         associate<MainDestination, MainContentScreen>()
 
-        sharedTransition<MainDestination, ReviewDetailsDestination>(ReviewContent)
+        sharedTransition<MainDestination, ReviewDetailsDestination> {
+            match(ReviewListItem, ReviewPage)
+        }
         sharedTransition<MainDestination, SearchDestination>(SearchFieldContent)
     }
 

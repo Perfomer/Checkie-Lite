@@ -36,8 +36,8 @@ import com.perfomer.checkielite.core.navigation.NavigationRegistry
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.Screen
 import com.perfomer.checkielite.core.navigation.transition.LocalNavigationAnimatedVisibilityScope
+import com.perfomer.checkielite.core.navigation.transition.LocalSharedNavigationEndpoint
 import com.perfomer.checkielite.core.navigation.transition.LocalSharedNavigationImageScope
-import com.perfomer.checkielite.core.navigation.transition.LocalSharedNavigationPair
 import com.perfomer.checkielite.core.navigation.transition.LocalSharedTransitionScope
 import com.perfomer.checkielite.core.navigation.transition.SharedNavigationTransitionDurationMillis
 import kotlinx.coroutines.flow.first
@@ -110,9 +110,9 @@ internal class DecomposeNavigationHost(
                     previous.backStack.any { it.key == next.active.key }
                 val source = if (isBack) next.active else previous.active
                 val target = if (isBack) previous.active else next.active
-                val groups = NavigationRegistry.sharedTransitionGroups(source.configuration, target.configuration)
-                if (groups.isNotEmpty()) {
-                    pairs.prepare(source.key, target.key, groups)
+                val policy = NavigationRegistry.sharedTransitionPolicy(source.configuration, target.configuration)
+                if (policy.matches.isNotEmpty()) {
+                    pairs.prepare(source.key, target.key, policy)
                     // A changed shared key resets Compose's bounds provider. Place the resting
                     // source with the new key before Decompose changes either visibility state.
                     withFrameNanos { }
@@ -132,7 +132,7 @@ internal class DecomposeNavigationHost(
                         pairs.prepare(
                             source.key,
                             stack.active.key,
-                            NavigationRegistry.sharedTransitionGroups(source.configuration, stack.active.configuration),
+                            NavigationRegistry.sharedTransitionPolicy(source.configuration, stack.active.configuration),
                         )
                         withFrameNanos { }
                         withFrameNanos { }
@@ -168,7 +168,7 @@ internal class DecomposeNavigationHost(
                                 pairs.select(
                                     source = stack.backStack.last().key,
                                     target = stack.active.key,
-                                    groups = NavigationRegistry.sharedTransitionGroups(
+                                    policy = NavigationRegistry.sharedTransitionPolicy(
                                         previousDestination,
                                         stack.active.configuration,
                                     ),
@@ -190,7 +190,7 @@ internal class DecomposeNavigationHost(
                     pairs.select(
                         source = source.key,
                         target = target.key,
-                        groups = NavigationRegistry.sharedTransitionGroups(source.configuration, target.configuration),
+                        policy = NavigationRegistry.sharedTransitionPolicy(source.configuration, target.configuration),
                     )
                     if (child.configuration.hasSharedTransitionWith(otherChild.configuration, direction)) {
                         sharedAnimator
@@ -208,8 +208,8 @@ internal class DecomposeNavigationHost(
         ) { child ->
             // Decompose can select a queued animation before the current one has finished.
             // Bind metadata to its Transition, never to the latest active stack entry.
-            val transitionPair = remember(transition) { pairs.forEntry(child.key) }
-            val pair = if (stackAnimationDirection == null) pairs.forEntry(child.key) else transitionPair
+            val transitionEndpoint = remember(transition) { pairs.endpointForEntry(child.key) }
+            val endpoint = if (stackAnimationDirection == null) pairs.endpointForEntry(child.key) else transitionEndpoint
             val animating = stackAnimationDirection != null
             SideEffect { stackAnimations[child.key] = animating }
             DisposableEffect(child.key) {
@@ -220,7 +220,7 @@ internal class DecomposeNavigationHost(
             }
             CompositionLocalProvider(
                 LocalNavigationAnimatedVisibilityScope provides this,
-                LocalSharedNavigationPair provides pair,
+                LocalSharedNavigationEndpoint provides endpoint,
                 LocalSharedNavigationImageScope provides imageScope.takeIf {
                     child.configuration === mainNavigationStack.active.configuration
                 },

@@ -47,6 +47,7 @@ import com.perfomer.checkielite.core.navigation.transition.SharedNavigationConte
 import com.perfomer.checkielite.core.navigation.transition.sharedNavigationElement
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.RecommendedReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewContent
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewRecommendation
 
 @Composable
 internal fun RecommendedReviewCard(
@@ -56,7 +57,7 @@ internal fun RecommendedReviewCard(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 
-    SharedNavigationContent(group = ReviewContent, id = review.reviewId) {
+    SharedNavigationContent(group = ReviewContent, role = ReviewRecommendation, id = review.reviewId) {
         SharedNavigationContainer(
             cornerRadius = 20.dp,
             overlayCornerRadius = 0.dp,

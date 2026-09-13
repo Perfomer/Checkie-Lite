@@ -3,6 +3,7 @@ package com.perfomer.checkielite.common.ui.presentation.transition
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import com.perfomer.checkielite.core.navigation.transition.SharedContentGroup
+import com.perfomer.checkielite.core.navigation.transition.SharedContentRole
 import com.perfomer.checkielite.core.navigation.transition.SharedNavigationContent
 
 /**
@@ -15,6 +16,7 @@ fun SharedNavigationLazyListItem(
     id: Any?,
     listState: LazyListState,
     group: SharedContentGroup? = null,
+    role: SharedContentRole? = null,
     itemKey: Any? = id,
     viewportStartOffset: Int? = null,
     isEnabled: () -> Boolean = { true },
@@ -23,6 +25,7 @@ fun SharedNavigationLazyListItem(
     SharedNavigationContent(
         id = id,
         group = group,
+        role = role,
         isEnabled = {
             val layout = listState.layoutInfo
             val item = layout.visibleItemsInfo.firstOrNull { it.key == itemKey }

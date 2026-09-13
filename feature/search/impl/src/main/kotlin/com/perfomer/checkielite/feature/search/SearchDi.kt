@@ -10,7 +10,8 @@ import com.perfomer.checkielite.core.navigation.navigation
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.sharedTransition
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
-import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewContent
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewListItem
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewPage
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination
 import com.perfomer.checkielite.feature.search.presentation.navigation.SortDestination
 import com.perfomer.checkielite.feature.search.presentation.navigation.TagsDestination
@@ -50,7 +51,9 @@ private val presentationModule = module {
         associate<SortDestination, SortContentScreen>()
         associate<TagsDestination, TagsContentScreen>()
 
-        sharedTransition<SearchDestination, ReviewDetailsDestination>(ReviewContent)
+        sharedTransition<SearchDestination, ReviewDetailsDestination> {
+            match(ReviewListItem, ReviewPage)
+        }
     }
 
     factoryOf(::createSearchStore)

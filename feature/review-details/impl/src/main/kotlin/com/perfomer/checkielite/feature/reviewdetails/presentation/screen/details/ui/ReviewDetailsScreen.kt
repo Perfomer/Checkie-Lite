@@ -43,6 +43,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsTags
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.widget.ReviewDetailsText
 import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewContent
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewPage
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
@@ -71,6 +72,7 @@ internal fun ReviewDetailsScreen(
 
     SharedNavigationContent(
         group = ReviewContent,
+        role = ReviewPage,
         id = (state as? ReviewDetailsUiState.Content)?.reviewId,
     ) {
         SharedNavigationContainer(

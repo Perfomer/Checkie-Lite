@@ -18,7 +18,8 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.ReviewDetailsStore
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.ReviewDetailsContentScreen
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiStateMapper
-import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewContent
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewPage
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewRecommendation
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
@@ -28,7 +29,9 @@ val reviewDetailsModules
 private val presentationModule = module {
     navigation {
         associate<ReviewDetailsDestination, ReviewDetailsContentScreen>()
-        sharedTransition<ReviewDetailsDestination, ReviewDetailsDestination>(ReviewContent)
+        sharedTransition<ReviewDetailsDestination, ReviewDetailsDestination> {
+            match(ReviewRecommendation, ReviewPage)
+        }
         sharedTransition<ReviewDetailsDestination, GalleryDestination>()
     }
 

@@ -1,9 +1,12 @@
 package com.perfomer.checkielite.feature.main
 
 import com.perfomer.checkielite.core.navigation.NavigationRegistry
+import com.perfomer.checkielite.core.navigation.transition.SharedContentMatch
 import com.perfomer.checkielite.feature.main.navigation.MainDestination
 import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
 import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewContent
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewListItem
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewPage
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination
 import com.perfomer.checkielite.feature.search.presentation.transition.SearchFieldContent
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -32,6 +35,11 @@ internal class MainNavigationTest {
     @Test
     fun `main contributes its review details transition`() {
         mainModules
+
+        assertEquals(
+            setOf(SharedContentMatch(ReviewListItem, ReviewPage)),
+            NavigationRegistry.sharedTransitionPolicy(MainDestination, ReviewDetailsDestination("review")).matches,
+        )
 
         assertEquals(
             setOf(ReviewContent),

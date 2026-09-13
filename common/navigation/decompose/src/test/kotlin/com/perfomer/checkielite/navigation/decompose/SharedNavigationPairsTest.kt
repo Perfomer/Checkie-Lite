@@ -1,6 +1,7 @@
 package com.perfomer.checkielite.navigation.decompose
 
 import com.perfomer.checkielite.core.navigation.transition.SharedContentGroup
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotSame
 import org.junit.jupiter.api.Assertions.assertNull
@@ -26,6 +27,8 @@ internal class SharedNavigationPairsTest {
         val pair = pairs.select("main", "search", setOf(Search))
         pairs.forget("main") // The source leaves composition after opening Search.
         assertSame(pair, pairs.select("main", "search", setOf(Search)))
+        assertEquals(true, pairs.endpointForEntry("main")?.isSource)
+        assertEquals(false, pairs.endpointForEntry("search")?.isSource)
         assertSame(pair, pairs.select("main", "search", setOf(Search)))
     }
 

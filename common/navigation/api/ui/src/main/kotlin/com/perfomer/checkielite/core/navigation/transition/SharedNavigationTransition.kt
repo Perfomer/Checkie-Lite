@@ -21,11 +21,17 @@ class SharedNavigationContentState internal constructor(
     val id: Any,
     val group: SharedContentGroup,
     val pair: SharedNavigationPair?,
+    val role: SharedContentRole = SharedContentRole.Default(group),
+    val isSource: Boolean = true,
     val isEnabled: () -> Boolean,
 ) {
-    val key = SharedNavigationContentKey(pair, group, id)
+    init {
+        require(role.group == group) { "Content role must belong to its content group" }
+    }
 
-    fun isTransitionEnabled(): Boolean = isEnabled() && pair?.allows(group) == true
+    val key = SharedNavigationContentKey(pair, group, id, pair?.match(role, isSource))
+
+    fun isTransitionEnabled(): Boolean = isEnabled() && key.match != null
 }
 
 val LocalSharedNavigationContent = compositionLocalOf<SharedNavigationContentState?> { null }
@@ -35,20 +41,26 @@ val LocalSharedNavigationContent = compositionLocalOf<SharedNavigationContentSta
 fun SharedNavigationContent(
     id: Any?,
     group: SharedContentGroup? = null,
+    role: SharedContentRole? = null,
     isEnabled: () -> Boolean = { true },
     content: @Composable () -> Unit,
 ) {
     if (id == null) {
         content()
     } else {
-        val resolvedGroup = group ?: LocalSharedNavigationContent.current?.group ?: SharedContentGroup.Default
-        val pair = LocalSharedNavigationPair.current
+        val parent = LocalSharedNavigationContent.current
+        val resolvedGroup = group ?: role?.group ?: parent?.group ?: SharedContentGroup.Default
+        val resolvedRole = role ?: parent?.role?.takeIf { it.group == resolvedGroup }
+            ?: SharedContentRole.Default(resolvedGroup)
+        val endpoint = LocalSharedNavigationEndpoint.current
         val enabled by rememberUpdatedState(isEnabled)
-        val state = remember(id, resolvedGroup, pair) {
+        val state = remember(id, resolvedGroup, resolvedRole, endpoint) {
             SharedNavigationContentState(
                 id = id,
                 group = resolvedGroup,
-                pair = pair,
+                pair = endpoint?.pair,
+                role = resolvedRole,
+                isSource = endpoint?.isSource == true,
                 isEnabled = { enabled() },
             )
         }

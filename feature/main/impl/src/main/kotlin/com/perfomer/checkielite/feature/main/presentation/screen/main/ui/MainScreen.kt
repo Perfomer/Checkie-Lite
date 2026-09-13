@@ -83,6 +83,7 @@ import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.widget.
 import com.perfomer.checkielite.feature.main.presentation.util.TagRowUiBalancer
 import com.perfomer.checkielite.feature.main.R
 import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewContent
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewListItem
 import com.perfomer.checkielite.feature.search.presentation.transition.SearchFieldContent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -230,6 +231,7 @@ private fun Content(
             SharedNavigationLazyListItem(
                 id = item.id,
                 group = ReviewContent,
+                role = ReviewListItem,
                 listState = scrollState,
                 viewportStartOffset = toolbarBottom,
             ) {

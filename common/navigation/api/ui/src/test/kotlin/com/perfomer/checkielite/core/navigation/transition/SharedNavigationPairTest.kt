@@ -12,7 +12,7 @@ internal class SharedNavigationPairTest {
         val pair = SharedNavigationPair(setOf(Search))
         assertTrue(content(pair, Search).isTransitionEnabled())
         assertFalse(content(pair, Review).isTransitionEnabled())
-        assertFalse(content(pair, DefaultSharedContentGroup).isTransitionEnabled())
+        assertFalse(content(pair, SharedContentGroup.Default).isTransitionEnabled())
     }
 
     @Test

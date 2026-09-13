@@ -65,6 +65,7 @@ import com.perfomer.checkielite.common.ui.util.add
 import com.perfomer.checkielite.common.ui.util.resource.text.text
 import com.perfomer.checkielite.common.ui.util.resource.text.Text
 import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewContent
+import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewListItem
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.Filter.FilterType
 import com.perfomer.checkielite.feature.search.presentation.screen.search.ui.state.SearchContentType
@@ -174,6 +175,7 @@ private fun Content(
             SharedNavigationLazyListItem(
                 id = item.id,
                 group = ReviewContent,
+                role = ReviewListItem,
                 listState = scrollState,
                 viewportStartOffset = toolbarBottom,
             ) {

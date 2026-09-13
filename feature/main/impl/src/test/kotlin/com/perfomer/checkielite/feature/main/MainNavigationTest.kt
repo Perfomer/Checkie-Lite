@@ -8,14 +8,27 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.Re
 import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination.ReviewContent
 import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination.ReviewContent.ReviewListItem
 import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination.ReviewContent.ReviewPage
+import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination.ReviewContent.ReviewRecommendation
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination.SearchFieldContent
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 internal class MainNavigationTest {
+
+    @Test
+    fun `return from details matches its page but excludes recommendations`() {
+        mainModules
+        // Back keeps the original edge: main is source, details is target.
+        val policy = NavigationRegistry.sharedTransitionPolicy(MainDestination, ReviewDetailsDestination("review"))
+
+        assertNull(policy.match(ReviewRecommendation, isSource = false))
+        assertEquals(SharedContentMatch(ReviewListItem, ReviewPage), policy.match(ReviewPage, isSource = false))
+        assertEquals(policy.match(ReviewListItem, isSource = true), policy.match(ReviewPage, isSource = false))
+    }
 
     @Test
     fun `association registers its screen and serializes its destination`() {

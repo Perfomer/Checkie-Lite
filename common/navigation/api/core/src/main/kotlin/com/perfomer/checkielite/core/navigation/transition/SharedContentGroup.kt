@@ -10,4 +10,5 @@ interface SharedContentGroup {
     data object Default : SharedContentGroup
 }
 
-private data class OwnedRole(override val group: SharedContentGroup) : SharedContentRole
+// Roles in the same group must remain distinct: equality is by identity, not by group.
+private class OwnedRole(override val group: SharedContentGroup) : SharedContentRole

@@ -64,14 +64,14 @@ fun ReviewRatingHalo(
                 position to Color.Black.copy(alpha = alpha)
             }
             val fade = Brush.radialGradient(*fadeStops, center = center, radius = radius)
-            val sky = meshBrush(Color(0xFF79CEFF), alpha = if (isDark) 0.22F else 0.48F)
-            val azure = meshBrush(Color(0xFF397DF6), alpha = if (isDark) 0.40F else 0.66F)
-            val periwinkle = meshBrush(Color(0xFF929BFF), alpha = if (isDark) 0.25F else 0.48F)
-            val cyan = meshBrush(Color(0xFF41E3EB), alpha = if (isDark) 0.30F else 0.62F)
-            val pearl = meshBrush(Color(0xFFE9FAFF), alpha = if (isDark) 0.06F else 0.88F)
+            val sky = meshBrush(if (isDark) Color(0xFF398CCB) else Color(0xFF79CEFF), alpha = if (isDark) 0.32F else 0.48F)
+            val azure = meshBrush(if (isDark) Color(0xFF356AF2) else Color(0xFF397DF6), alpha = if (isDark) 0.64F else 0.66F)
+            val periwinkle = meshBrush(if (isDark) Color(0xFF9563E8) else Color(0xFF929BFF), alpha = if (isDark) 0.52F else 0.48F)
+            val cyan = meshBrush(if (isDark) Color(0xFF20C7BC) else Color(0xFF41E3EB), alpha = if (isDark) 0.52F else 0.62F)
+            val pearl = meshBrush(if (isDark) Color(0xFF599FE6) else Color(0xFFE9FAFF), alpha = if (isDark) 0.26F else 0.88F)
             val lightRadius = minOf(28.dp.toPx(), radius * 0.7F)
-            val lightColor = Color(0xFFF4FCFF)
-            val lightOpacity = if (isDark) 0.58F else 0.98F
+            val lightColor = if (isDark) Color(0xFF4B8DBB) else Color(0xFFF4FCFF)
+            val lightOpacity = if (isDark) 0.18F else 0.98F
             val diamondLight = Brush.radialGradient(
                 0F to lightColor.copy(alpha = lightOpacity),
                 0.32F to lightColor.copy(alpha = lightOpacity * 0.96F),

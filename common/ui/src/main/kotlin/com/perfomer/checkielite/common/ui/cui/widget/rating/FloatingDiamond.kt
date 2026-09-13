@@ -45,10 +45,11 @@ fun FloatingDiamond(modifier: Modifier = Modifier) {
         modifier = modifier
             .size(28.dp)
             .drawWithCache {
+                val shadowColor = if (isDark) Color.Black else Color(0xFF17456B)
                 val shadow = Brush.radialGradient(
-                    0F to Color(0xFF17456B),
-                    0.35F to Color(0xFF17456B).copy(alpha = 0.65F),
-                    1F to Color(0xFF17456B).copy(alpha = 0F),
+                    0F to shadowColor,
+                    0.35F to shadowColor.copy(alpha = 0.65F),
+                    1F to shadowColor.copy(alpha = 0F),
                     center = Offset.Zero,
                     radius = 1F,
                 )
@@ -72,7 +73,7 @@ fun FloatingDiamond(modifier: Modifier = Modifier) {
                             brush = shadow,
                             radius = 1F,
                             center = Offset.Zero,
-                            alpha = (if (isDark) 0.30F else 0.23F) * (1F - lift * 0.4F),
+                            alpha = (if (isDark) 0.38F else 0.23F) * (1F - lift * 0.4F),
                         )
                     }
 

@@ -59,15 +59,15 @@ fun ReviewRatingGlow(glowWidthFraction: Float = 0.3F, modifier: Modifier = Modif
                     endX = size.width - glowWidth + fadeWidth,
                 )
                 // Unit gradients are cached, then stretched into overlapping, moving mesh lobes.
-                val sky = meshBrush(Color(0xFF79CEFF), alpha = if (isDark) 0.22F else 0.48F)
-                val azure = meshBrush(Color(0xFF397DF6), alpha = if (isDark) 0.40F else 0.66F)
-                val periwinkle = meshBrush(Color(0xFF929BFF), alpha = if (isDark) 0.25F else 0.48F)
-                val cyan = meshBrush(Color(0xFF41E3EB), alpha = if (isDark) 0.30F else 0.62F)
-                val pearl = meshBrush(Color(0xFFE9FAFF), alpha = if (isDark) 0.06F else 0.88F)
+                val sky = meshBrush(if (isDark) Color(0xFF398CCB) else Color(0xFF79CEFF), alpha = if (isDark) 0.32F else 0.48F)
+                val azure = meshBrush(if (isDark) Color(0xFF356AF2) else Color(0xFF397DF6), alpha = if (isDark) 0.64F else 0.66F)
+                val periwinkle = meshBrush(if (isDark) Color(0xFF9563E8) else Color(0xFF929BFF), alpha = if (isDark) 0.52F else 0.48F)
+                val cyan = meshBrush(if (isDark) Color(0xFF20C7BC) else Color(0xFF41E3EB), alpha = if (isDark) 0.52F else 0.62F)
+                val pearl = meshBrush(if (isDark) Color(0xFF599FE6) else Color(0xFFE9FAFF), alpha = if (isDark) 0.26F else 0.88F)
                 // The reaction is 28 dp wide with 12 dp of trailing card padding.
                 val diamondCenter = Offset(size.width - 26.dp.toPx(), size.height / 2F)
-                val haloColor = Color(0xFFF4FCFF)
-                val haloOpacity = if (isDark) 0.58F else 0.98F
+                val haloColor = if (isDark) Color(0xFF4B8DBB) else Color(0xFFF4FCFF)
+                val haloOpacity = if (isDark) 0.18F else 0.98F
                 val diamondHalo = Brush.radialGradient(
                     0F to haloColor.copy(alpha = haloOpacity),
                     0.32F to haloColor.copy(alpha = haloOpacity * 0.96F),

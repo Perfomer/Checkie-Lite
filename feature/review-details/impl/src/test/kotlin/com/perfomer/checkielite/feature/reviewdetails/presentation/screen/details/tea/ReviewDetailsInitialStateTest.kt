@@ -5,18 +5,18 @@ import com.perfomer.checkielite.common.pure.state.requireContent
 import com.perfomer.checkielite.core.domain.entity.review.CheckiePicture
 import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
 import com.perfomer.checkielite.core.domain.entity.review.PictureSource
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
+import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetails
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand.LoadReview
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiState
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.ui.state.ReviewDetailsUiStateMapper
+import java.util.Date
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import java.util.Date
 
 internal class ReviewDetailsInitialStateTest {
 

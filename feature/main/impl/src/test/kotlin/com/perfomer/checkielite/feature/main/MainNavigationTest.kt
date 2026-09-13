@@ -2,18 +2,30 @@ package com.perfomer.checkielite.feature.main
 
 import com.perfomer.checkielite.core.navigation.NavigationRegistry
 import com.perfomer.checkielite.core.navigation.transition.SharedContentMatch
-import com.perfomer.checkielite.feature.main.navigation.MainDestination
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
-import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewContent
-import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewListItem
-import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewPage
+import com.perfomer.checkielite.feature.main.presentation.navigation.MainDestination
+import com.perfomer.checkielite.feature.main.presentation.screen.main.ui.MainContentScreen
+import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination
+import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination.ReviewContent
+import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination.ReviewContent.ReviewListItem
+import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination.ReviewContent.ReviewPage
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination
-import com.perfomer.checkielite.feature.search.presentation.transition.SearchFieldContent
+import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination.SearchFieldContent
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 internal class MainNavigationTest {
+
+    @Test
+    fun `association registers its screen and serializes its destination`() {
+        mainModules
+
+        assertEquals(MainContentScreen::class, NavigationRegistry.obtain(MainDestination::class))
+        val serializer = NavigationRegistry.serializer()
+        val encoded = Json.encodeToString(serializer, MainDestination)
+        assertEquals(MainDestination, Json.decodeFromString(serializer, encoded))
+    }
 
     @Test
     fun `main contributes its search transition`() {

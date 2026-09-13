@@ -4,8 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.common.tea.component.Actor
 import com.perfomer.checkielite.common.tea.impl.ComponentStore
 import com.perfomer.checkielite.common.ui.util.tea.LogUnhandledExceptionHandler
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsInitialContent
+import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsCommand
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEffect
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsEvent
@@ -18,7 +17,7 @@ import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detail
 internal class ReviewDetailsStore(
     componentContext: ComponentContext,
     destination: ReviewDetailsDestination,
-    initialContent: ReviewDetailsInitialContent?,
+    initialContent: ReviewDetailsDestination.InitialContent?,
     reducer: ReviewDetailsReducer,
     uiStateMapper: ReviewDetailsUiStateMapper,
     actors: Set<Actor<ReviewDetailsCommand, ReviewDetailsEvent>>,

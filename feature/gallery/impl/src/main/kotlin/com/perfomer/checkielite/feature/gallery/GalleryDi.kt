@@ -4,7 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.perfomer.checkielite.core.navigation.Router
 import com.perfomer.checkielite.core.navigation.associate
 import com.perfomer.checkielite.core.navigation.navigation
-import com.perfomer.checkielite.feature.gallery.navigation.GalleryDestination
+import com.perfomer.checkielite.feature.gallery.presentation.navigation.GalleryDestination
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.GalleryReducer
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.GalleryStore
 import com.perfomer.checkielite.feature.gallery.presentation.screen.gallery.tea.actor.GalleryNavigationActor

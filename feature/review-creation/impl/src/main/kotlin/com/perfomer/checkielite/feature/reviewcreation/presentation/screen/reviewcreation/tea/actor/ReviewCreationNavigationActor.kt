@@ -7,7 +7,7 @@ import com.perfomer.checkielite.core.navigation.ExternalDestinationWithResult
 import com.perfomer.checkielite.core.navigation.ExternalResult
 import com.perfomer.checkielite.core.navigation.ExternalRouter
 import com.perfomer.checkielite.core.navigation.Router
-import com.perfomer.checkielite.feature.gallery.navigation.GalleryDestination
+import com.perfomer.checkielite.feature.gallery.presentation.navigation.GalleryDestination
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorDestination
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.CurrencySelectorResult
 import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.TagCreationDestination

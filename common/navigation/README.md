@@ -17,7 +17,7 @@ Shared transition связывает два представления одно�
 
 | Механизм | На какой вопрос отвечает | API |
 | --- | --- | --- |
-| Пара экранов | Как анимировать изменение стека? | `sharedTransition<Source, Target>()` |
+| Пара экранов | Как анимировать изменение стека? | `associate<Source, Screen> { sharedTransitionWith<Target>() }` |
 | Идентичность UI | Какие элементы на двух экранах соответствуют друг другу? | `SharedNavigationContent`, `sharedNavigationElement` |
 | Начальное содержимое | Что показать до получения данных из repository? | `InitialContent<D>`, `InitialContentHolder<C>` |
 
@@ -45,11 +45,12 @@ UI объявляет группу, роль и ID содержимого, а р
 
 ```kotlin
 navigation {
-    associate<MainDestination, MainContentScreen>()
-    sharedTransition<MainDestination, ReviewDetailsDestination> {
-        match(ReviewListItem, ReviewPage)
+    associate<MainDestination, MainContentScreen> {
+        sharedTransitionWith<ReviewDetailsDestination> {
+            match(ReviewListItem, ReviewPage)
+        }
+        sharedTransitionWith<SearchDestination>(SearchFieldContent)
     }
-    sharedTransition<MainDestination, SearchDestination>(SearchFieldContent)
 }
 ```
 
@@ -64,13 +65,13 @@ navigation {
 
 Пары задаются явно, без транзитивности: наличие `A → B` и `B → C` не включает `A → C`. Группы тоже разрешаются явно: при переходе главная → поиск одинаковые отзывы не сопоставляются, поскольку разрешена только `SearchFieldContent`.
 
-`SharedContentGroup` и `SharedContentRole` — контракты без Compose в `common:navigation:api:core`. Типизированные объекты групп и ролей находятся в `presentation.transition` соответствующих feature API. Каждая роль объявляет свою группу. Фреймворк не зависит от этих объектов.
+`SharedContentGroup` и `SharedContentRole` — контракты без Compose в `common:navigation:api:core`. Группы вложены в соответствующий `Destination` в пакете `presentation.navigation` feature API, а роли — в группу. Например, `ReviewDetailsDestination.ReviewContent.ReviewListItem`. Роль объявляется как `val ReviewListItem = role()`: фабрика группы сохраняет владельца автоматически. Каждый вызов создаёт отдельную идентичность, поэтому роли объявляются в стабильных `val`, а не создаются при композиции. Фреймворк не зависит от этих объектов.
 
 У отзыва три роли: `ReviewListItem` в списке, `ReviewPage` на странице отзыва и `ReviewRecommendation` в рекомендациях. Для переходов главная/поиск → детали регистрируется `match(ReviewListItem, ReviewPage)`, а для детали → детали — `match(ReviewRecommendation, ReviewPage)`. При возврате стороны регистрации сохраняются: `ReviewPage` сопоставляется с исходной карточкой. Рекомендации на странице не участвуют в возврате к списку даже при совпадении ID. Между двумя страницами деталей также не сопоставляются их карусели рекомендаций.
 
 Один переход может содержать несколько `match`, но каждая роль должна иметь ровно одного партнёра на противоположной стороне. Разные группы в одном `match` и неоднозначные правила отклоняются при регистрации. Канал сопоставления входит в ключ, поэтому независимые правила одной группы не конфликтуют при одинаковом ID.
 
-Краткая запись `sharedTransition<A, B>(SomeGroup)` сопоставляет только роли `SharedContentRole.Default(SomeGroup)` на обеих сторонах и не разрешает произвольные роли этой группы. Вызов без аргументов использует `SharedContentGroup.Default`; существующий отдельный протокол изображений галереи сохраняет это поведение.
+Краткая запись `sharedTransitionWith<B>(SomeGroup)` внутри `associate<A, Screen>` сопоставляет только роли `SharedContentRole.Default(SomeGroup)` на обеих сторонах и не разрешает произвольные роли этой группы. Вызов без аргументов использует `SharedContentGroup.Default`; существующий отдельный протокол изображений галереи сохраняет это поведение.
 
 Decompose выбирает `SharedNavigationPair` вместе с аниматором до композиции участников. Оба конца получают один объект пары, привязанный к экземплярам navigation entries. Контекст запоминается для конкретного Compose `Transition`: выбор следующей анимации в очереди не меняет текущую политику. Возврат использует исходное направление регистрации. Predictive back сохраняет пару во время жеста и отката; решение не зависит от смены active destination.
 
@@ -175,7 +176,7 @@ SharedNavigationLazyListItem(
 ```kotlin
 router.navigate(
     destination = ReviewDetailsDestination(reviewId = review.id),
-    initialContent = ReviewDetailsInitialContent(review),
+    initialContent = ReviewDetailsDestination.InitialContent(review),
 )
 ```
 
@@ -187,17 +188,17 @@ router.navigate(
 )
 ```
 
-Контракты разделены:
+Контракты объединены пространством имён; `NavigationInitialContent` — alias импорта интерфейса `InitialContent`:
 
 ```kotlin
 @Serializable
 data class ReviewDetailsDestination(
     val reviewId: String,
-) : Destination()
-
-data class ReviewDetailsInitialContent(
-    val review: CheckieReview,
-) : InitialContent<ReviewDetailsDestination>
+) : Destination() {
+    data class InitialContent(
+        val review: CheckieReview,
+    ) : NavigationInitialContent<ReviewDetailsDestination>
+}
 ```
 
 `InitialContent<D>` инвариантен по `D`: обычный типизированный вызов Router не позволяет передать содержимое одного типа destination другому. При этом соответствие конкретных ID — отдельная проверка: `ReviewDetailsDestination.toInitialState` игнорирует снимок, если `review.id != reviewId`.
@@ -212,7 +213,7 @@ data class ReviewDetailsInitialContent(
 factoryOf(::createReviewDetailsStore)
 ```
 
-Фабрика принимает `initialContent: InitialContentHolder<ReviewDetailsInitialContent>` и передаёт в Store `initialContent.value`. Сама бизнес-логика Store не зависит от обёртки.
+Фабрика принимает `initialContent: InitialContentHolder<ReviewDetailsDestination.InitialContent>` и передаёт в Store `initialContent.value`. Сама бизнес-логика Store не зависит от обёртки.
 
 Обёртка нужна на границе создания зависимостей: используемый `factoryOf` разрешает аргументы через `get()`, в том числе для nullable-параметров. Отсутствие определения nullable-типа не означает автоматическую передачу `null`. Непустая обёртка устраняет необходимость в ручной фабрике с `getOrNull()`.
 
@@ -267,7 +268,7 @@ Shared-transition окружение объединяет **основной с�
 
 ## Галерея и переходы в overlay
 
-Галерея открывается из деталей и из создания/редактирования отзыва. Обе стороны регистрируют `sharedTransition<SourceDestination, GalleryDestination>()`; Router по-прежнему получает обычный `GalleryDestination` и `DestinationMode.OVERLAY`. В destination нет ID отзыва, ключей анимации или ссылок на UI. Список URI и стартовая позиция остаются полноценными параметрами просмотра, поэтому дополнительный `InitialContent` не требуется.
+Галерея открывается из деталей и из создания/редактирования отзыва. Обе стороны регистрируют `sharedTransitionWith<GalleryDestination>()` внутри своего `associate`; Router по-прежнему получает обычный `GalleryDestination` и `DestinationMode.OVERLAY`. В destination нет ID отзыва, ключей анимации или ссылок на UI. Список URI и стартовая позиция остаются полноценными параметрами просмотра, поэтому дополнительный `InitialContent` не требуется.
 
 [OverlayNavigation](decompose/src/main/kotlin/com/perfomer/checkielite/navigation/decompose/OverlayNavigation.kt) удерживает исходный экран и уходящий overlay до завершения анимации. Один seekable transition управляет прозрачностью overlay и противоположными состояниями видимости shared-изображений. Сам исходный экран не удаляется из композиции. Основной стек изолирован своим layout-контейнером, чтобы внутренний z-index его экранов не перекрывал overlay.
 

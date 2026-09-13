@@ -1,9 +1,9 @@
 package com.perfomer.checkielite.feature.reviewcreation
 
 import com.perfomer.checkielite.core.navigation.NavigationRegistry
-import com.perfomer.checkielite.feature.gallery.navigation.GalleryDestination
+import com.perfomer.checkielite.feature.gallery.presentation.navigation.GalleryDestination
 import com.perfomer.checkielite.feature.reviewcreation.entity.ReviewCreationMode
-import com.perfomer.checkielite.feature.reviewcreation.navigation.ReviewCreationDestination
+import com.perfomer.checkielite.feature.reviewcreation.presentation.navigation.ReviewCreationDestination
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 

@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.feature.reviewcreation.navigation
+package com.perfomer.checkielite.feature.reviewcreation.presentation.navigation
 
 import com.perfomer.checkielite.core.navigation.DestinationWithResult
 import com.perfomer.checkielite.core.navigation.Result

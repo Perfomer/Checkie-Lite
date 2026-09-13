@@ -2,10 +2,10 @@ package com.perfomer.checkielite.feature.search
 
 import com.perfomer.checkielite.core.navigation.NavigationRegistry
 import com.perfomer.checkielite.core.navigation.transition.SharedContentMatch
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
-import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewContent
-import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewListItem
-import com.perfomer.checkielite.feature.reviewdetails.presentation.transition.ReviewPage
+import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination
+import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination.ReviewContent
+import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination.ReviewContent.ReviewListItem
+import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination.ReviewContent.ReviewPage
 import com.perfomer.checkielite.feature.search.presentation.navigation.SearchDestination
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue

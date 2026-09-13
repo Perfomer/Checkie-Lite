@@ -2,7 +2,7 @@ package com.perfomer.checkielite.feature.reviewdetails.presentation.screen.detai
 
 import com.perfomer.checkielite.common.pure.state.Lce
 import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
-import com.perfomer.checkielite.feature.reviewdetails.navigation.ReviewDetailsDestination
+import com.perfomer.checkielite.feature.reviewdetails.presentation.navigation.ReviewDetailsDestination
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetails
 import com.perfomer.checkielite.feature.reviewdetails.presentation.screen.details.tea.core.ReviewDetailsState
 

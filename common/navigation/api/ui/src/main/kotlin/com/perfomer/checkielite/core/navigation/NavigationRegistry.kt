@@ -3,22 +3,22 @@ package com.perfomer.checkielite.core.navigation
 import com.perfomer.checkielite.core.navigation.transition.SharedContentGroup
 import com.perfomer.checkielite.core.navigation.transition.SharedTransitionPolicy
 import kotlin.reflect.KClass
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.descriptors.element
-import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonEncoder
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.jsonPrimitive
 
 @NavigationDsl
 object NavigationRegistry {
@@ -104,7 +104,7 @@ object NavigationRegistry {
             val valueClass = value::class
             val registration = requireRegistration(valueClass)
 
-            val type = valueClass.qualifiedName ?: throw SerializationException("No qualified name found for ${valueClass.simpleName}")
+            val type = requireNotNull(valueClass.qualifiedName)
             val serializer = registration.serializer.cast()
 
             jsonEncoder.encodeJsonElement(

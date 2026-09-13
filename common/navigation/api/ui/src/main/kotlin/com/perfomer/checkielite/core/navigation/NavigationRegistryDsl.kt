@@ -4,6 +4,7 @@ import com.perfomer.checkielite.core.navigation.transition.SharedContentGroup
 import com.perfomer.checkielite.core.navigation.transition.SharedContentMatch
 import com.perfomer.checkielite.core.navigation.transition.SharedContentRole
 import com.perfomer.checkielite.core.navigation.transition.SharedTransitionPolicy
+import kotlin.reflect.KClass
 import kotlinx.serialization.serializer
 
 @DslMarker
@@ -21,35 +22,36 @@ class SharedTransitionDsl {
     fun build(): SharedTransitionPolicy = SharedTransitionPolicy(matches)
 }
 
+/** All transitions in this scope originate from the associated destination. */
 @NavigationDsl
-inline fun <reified Source : Destination, reified Target : Destination> NavigationRegistry.sharedTransition(
-    block: SharedTransitionDsl.() -> Unit,
+class DestinationNavigationDsl(
+    @PublishedApi internal val registry: NavigationRegistry,
+    @PublishedApi internal val source: KClass<out Destination>,
 ) {
-    registerSharedTransition(Source::class, Target::class, SharedTransitionDsl().apply(block).build())
+    inline fun <reified Target : Destination> sharedTransitionWith(block: SharedTransitionDsl.() -> Unit) {
+        registry.registerSharedTransition(source, Target::class, SharedTransitionDsl().apply(block).build())
+    }
+
+    inline fun <reified Target : Destination> sharedTransitionWith(vararg groups: SharedContentGroup) {
+        registry.registerSharedTransition(
+            source = source,
+            target = Target::class,
+            groups = groups.toSet().ifEmpty { setOf(SharedContentGroup.Default) },
+        )
+    }
 }
 
 @NavigationDsl
 fun navigation(block: NavigationRegistry.() -> Unit) = NavigationRegistry.apply(block)
 
 @NavigationDsl
-inline fun <reified D : Destination, reified S : Screen> NavigationRegistry.associate() {
+inline fun <reified D : Destination, reified S : Screen> NavigationRegistry.associate(
+    block: DestinationNavigationDsl.() -> Unit = {},
+) {
     register(
         destinationClass = D::class,
         destinationSerializer = serializer<D>(),
         screenClass = S::class,
     )
-}
-
-/** Registers a directional shared transition. The same edge is reused when navigating back. */
-@NavigationDsl
-inline fun <reified Source : Destination, reified Target : Destination> NavigationRegistry.sharedTransition(
-    vararg groups: SharedContentGroup,
-) {
-    registerSharedTransition(
-        source = Source::class,
-        target = Target::class,
-        groups = groups
-            .toSet()
-            .ifEmpty { setOf(SharedContentGroup.Default) },
-    )
+    DestinationNavigationDsl(this, D::class).block()
 }

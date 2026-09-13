@@ -1,4 +1,4 @@
-package com.perfomer.checkielite.feature.reviewdetails.navigation
+package com.perfomer.checkielite.feature.reviewdetails.presentation.navigation
 
 import com.perfomer.checkielite.core.domain.entity.review.CheckieReview
 import kotlinx.serialization.json.Json
@@ -9,6 +9,17 @@ import org.junit.jupiter.api.Test
 import java.util.Date
 
 internal class ReviewDetailsDestinationTest {
+
+    @Test
+    fun `nested roles have stable distinct identities and inherit their group`() {
+        val group = ReviewDetailsDestination.ReviewContent
+        val roles = listOf(group.ReviewListItem, group.ReviewPage, group.ReviewRecommendation)
+
+        assertEquals(3, roles.toSet().size)
+        roles.forEach { assertSame(group, it.group) }
+        assertSame(group.ReviewListItem, ReviewDetailsDestination.ReviewContent.ReviewListItem)
+        assertNotEquals(group.role(), group.role())
+    }
 
     @Test
     fun `review id defines destination identity`() {
@@ -32,7 +43,7 @@ internal class ReviewDetailsDestinationTest {
     @Test
     fun `initial review is carried separately from the route`() {
         val review = review()
-        val content = ReviewDetailsInitialContent(review)
+        val content = ReviewDetailsDestination.InitialContent(review)
 
         assertSame(review, content.review)
     }

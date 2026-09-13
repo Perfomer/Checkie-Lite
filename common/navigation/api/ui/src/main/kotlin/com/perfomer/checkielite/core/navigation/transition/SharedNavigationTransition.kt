@@ -3,14 +3,14 @@ package com.perfomer.checkielite.core.navigation.transition
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.Stable
 
-const val SharedNavigationTransitionDurationMillis: Int = 300
+const val SharedNavigationTransitionDurationMillis: Int = 250
 
 val LocalSharedTransitionScope = compositionLocalOf<SharedTransitionScope?> { null }
 
